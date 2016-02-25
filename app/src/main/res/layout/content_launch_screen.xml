@@ -11,10 +11,7 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/app_bar_launch_screen"
-        tools:context="org.eurofurence.connavigator.LaunchScreenActivity">
+        tools:context="org.eurofurence.connavigator.LaunchScreenActivity"
+    android:id="@+id/mainActivityLayout">
 
-    <TextView
-            android:text="Hello World!"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/events_outlet"/>
 </RelativeLayout>

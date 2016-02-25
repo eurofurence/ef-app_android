@@ -1,5 +1,7 @@
 package org.eurofurence.connavigator
 
+import android.app.Fragment
+import android.app.FragmentTransaction
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.design.widget.FloatingActionButton
@@ -47,13 +49,16 @@ class LaunchScreenActivity : AppCompatActivity(), NavigationView.OnNavigationIte
 
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
         Thread {
-            val t = findViewById(R.id.events_outlet) as TextView
-
             val api: DefaultApi = DefaultApi();
 
             // api.apiClient.dateFormat = ISO8601DateFormat();
             runOnUiThread {
-                t.text = api.eventEntryGet(null).map { e -> "${e.title}\n${e.description}\n" }.joinToString(separator = "\n")
+                val fragment: MainEventFragment = MainEventFragment();
+                fragment.setEventEntry(api.eventEntryGet(null).first())
+
+                fragmentManager.beginTransaction()
+                        .add(R.id.mainActivityLayout, fragment as Fragment, "Hello")
+                        .commit();
             }
         }.start()
     }
