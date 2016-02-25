@@ -1,78 +1,38 @@
 package io.swagger.client.model;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.client.model.EntityBase;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import java.io.Serializable;
+import io.swagger.annotations.*;
+import com.google.gson.annotations.SerializedName;
 
 
-
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-02-24T14:49:45.074+01:00")
-public class Info extends EntityBase implements Serializable {
+@ApiModel(description = "")
+public class Info extends EntityBase {
   
-  private String text = null;
-  private String imageEntryId = null;
-  private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Order")
   private Integer order = null;
+  @SerializedName("IsDeleted")
   private BigDecimal isDeleted = null;
-  private String id = null;
-  private String title = null;
+  @SerializedName("InfoGroupEntryId")
   private String infoGroupEntryId = null;
-
-  
-  /**
-   * Content of the message blob, may contain markup (tbd).
-   **/
-  
-  @ApiModelProperty(value = "Content of the message blob, may contain markup (tbd).")
-  @JsonProperty("Text")
-  public String getText() {
-    return text;
-  }
-  public void setText(String text) {
-    this.text = text;
-  }
-
-  
-  /**
-   **/
-  
-  @ApiModelProperty(value = "")
-  @JsonProperty("ImageEntryId")
-  public String getImageEntryId() {
-    return imageEntryId;
-  }
-  public void setImageEntryId(String imageEntryId) {
-    this.imageEntryId = imageEntryId;
-  }
-
-  
-  /**
-   * Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)
-   **/
-  
-  @ApiModelProperty(required = true, value = "Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)")
-  @JsonProperty("LastChangeDateTimeUtc")
-  public Date getLastChangeDateTimeUtc() {
-    return lastChangeDateTimeUtc;
-  }
-  public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
-    this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
-  }
+  @SerializedName("ImageEntryId")
+  private String imageEntryId = null;
+  @SerializedName("Title")
+  private String title = null;
+  @SerializedName("Text")
+  private String text = null;
+  @SerializedName("Id")
+  private String id = null;
+  @SerializedName("LastChangeDateTimeUtc")
+  private Date lastChangeDateTimeUtc = null;
 
   
   /**
    * Numeric order/position of the element (lower number = display first)
    **/
-  
   @ApiModelProperty(value = "Numeric order/position of the element (lower number = display first)")
-  @JsonProperty("Order")
   public Integer getOrder() {
     return order;
   }
@@ -86,9 +46,7 @@ public class Info extends EntityBase implements Serializable {
    * minimum: 0.0
    * maximum: 1.0
    **/
-  
   @ApiModelProperty(required = true, value = "Numeric flag that, if set to \"1\", indicates that the record has been deleted sine the delta reference specified, and should be removed from the local data store after retrieval.")
-  @JsonProperty("IsDeleted")
   public BigDecimal getIsDeleted() {
     return isDeleted;
   }
@@ -98,25 +56,32 @@ public class Info extends EntityBase implements Serializable {
 
   
   /**
-   * Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000
+   * Id of the InfoGroup this record belongs to.
    **/
-  
-  @ApiModelProperty(required = true, value = "Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000")
-  @JsonProperty("Id")
-  public String getId() {
-    return id;
+  @ApiModelProperty(value = "Id of the InfoGroup this record belongs to.")
+  public String getInfoGroupEntryId() {
+    return infoGroupEntryId;
   }
-  public void setId(String id) {
-    this.id = id;
+  public void setInfoGroupEntryId(String infoGroupEntryId) {
+    this.infoGroupEntryId = infoGroupEntryId;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getImageEntryId() {
+    return imageEntryId;
+  }
+  public void setImageEntryId(String imageEntryId) {
+    this.imageEntryId = imageEntryId;
   }
 
   
   /**
    * Title of the message blob.
    **/
-  
   @ApiModelProperty(value = "Title of the message blob.")
-  @JsonProperty("Title")
   public String getTitle() {
     return title;
   }
@@ -126,70 +91,56 @@ public class Info extends EntityBase implements Serializable {
 
   
   /**
-   * Id of the InfoGroup this record belongs to.
+   * Content of the message blob, may contain markup (tbd).
    **/
-  
-  @ApiModelProperty(value = "Id of the InfoGroup this record belongs to.")
-  @JsonProperty("InfoGroupEntryId")
-  public String getInfoGroupEntryId() {
-    return infoGroupEntryId;
+  @ApiModelProperty(value = "Content of the message blob, may contain markup (tbd).")
+  public String getText() {
+    return text;
   }
-  public void setInfoGroupEntryId(String infoGroupEntryId) {
-    this.infoGroupEntryId = infoGroupEntryId;
+  public void setText(String text) {
+    this.text = text;
   }
 
   
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Info info = (Info) o;
-    return Objects.equals(text, info.text) &&
-        Objects.equals(imageEntryId, info.imageEntryId) &&
-        Objects.equals(lastChangeDateTimeUtc, info.lastChangeDateTimeUtc) &&
-        Objects.equals(order, info.order) &&
-        Objects.equals(isDeleted, info.isDeleted) &&
-        Objects.equals(id, info.id) &&
-        Objects.equals(title, info.title) &&
-        Objects.equals(infoGroupEntryId, info.infoGroupEntryId);
+  /**
+   * Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000
+   **/
+  @ApiModelProperty(required = true, value = "Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000")
+  public String getId() {
+    return id;
+  }
+  public void setId(String id) {
+    this.id = id;
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(text, imageEntryId, lastChangeDateTimeUtc, order, isDeleted, id, title, infoGroupEntryId);
+  
+  /**
+   * Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)
+   **/
+  @ApiModelProperty(required = true, value = "Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)")
+  public Date getLastChangeDateTimeUtc() {
+    return lastChangeDateTimeUtc;
+  }
+  public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
+    this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
   }
 
+  
+
   @Override
-  public String toString() {
+  public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Info {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    text: ").append(toIndentedString(text)).append("\n");
-    sb.append("    imageEntryId: ").append(toIndentedString(imageEntryId)).append("\n");
-    sb.append("    lastChangeDateTimeUtc: ").append(toIndentedString(lastChangeDateTimeUtc)).append("\n");
-    sb.append("    order: ").append(toIndentedString(order)).append("\n");
-    sb.append("    isDeleted: ").append(toIndentedString(isDeleted)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    title: ").append(toIndentedString(title)).append("\n");
-    sb.append("    infoGroupEntryId: ").append(toIndentedString(infoGroupEntryId)).append("\n");
-    sb.append("}");
+    sb.append("  " + super.toString()).append("\n");
+    sb.append("  order: ").append(order).append("\n");
+    sb.append("  isDeleted: ").append(isDeleted).append("\n");
+    sb.append("  infoGroupEntryId: ").append(infoGroupEntryId).append("\n");
+    sb.append("  imageEntryId: ").append(imageEntryId).append("\n");
+    sb.append("  title: ").append(title).append("\n");
+    sb.append("  text: ").append(text).append("\n");
+    sb.append("  id: ").append(id).append("\n");
+    sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("}\n");
     return sb.toString();
   }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
 }
-

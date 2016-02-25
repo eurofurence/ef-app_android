@@ -1,32 +1,28 @@
 package io.swagger.client.model;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.client.model.EndpointConfiguration;
 import io.swagger.client.model.EndpointEntity;
 import java.util.*;
 import java.util.Date;
 
-import java.io.Serializable;
+import io.swagger.annotations.*;
+import com.google.gson.annotations.SerializedName;
 
 
-
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-02-24T14:49:45.074+01:00")
-public class Endpoint  implements Serializable {
+@ApiModel(description = "")
+public class Endpoint  {
   
+  @SerializedName("CurrentDateTimeUtc")
   private Date currentDateTimeUtc = null;
-  private List<EndpointConfiguration> configuration = new ArrayList<EndpointConfiguration>();
-  private List<EndpointEntity> entities = new ArrayList<EndpointEntity>();
+  @SerializedName("Configuration")
+  private List<EndpointConfiguration> configuration = null;
+  @SerializedName("Entities")
+  private List<EndpointEntity> entities = null;
 
   
   /**
    **/
-  
   @ApiModelProperty(value = "")
-  @JsonProperty("CurrentDateTimeUtc")
   public Date getCurrentDateTimeUtc() {
     return currentDateTimeUtc;
   }
@@ -37,9 +33,7 @@ public class Endpoint  implements Serializable {
   
   /**
    **/
-  
   @ApiModelProperty(value = "")
-  @JsonProperty("Configuration")
   public List<EndpointConfiguration> getConfiguration() {
     return configuration;
   }
@@ -50,9 +44,7 @@ public class Endpoint  implements Serializable {
   
   /**
    **/
-  
   @ApiModelProperty(value = "")
-  @JsonProperty("Entities")
   public List<EndpointEntity> getEntities() {
     return entities;
   }
@@ -63,45 +55,14 @@ public class Endpoint  implements Serializable {
   
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Endpoint endpoint = (Endpoint) o;
-    return Objects.equals(currentDateTimeUtc, endpoint.currentDateTimeUtc) &&
-        Objects.equals(configuration, endpoint.configuration) &&
-        Objects.equals(entities, endpoint.entities);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(currentDateTimeUtc, configuration, entities);
-  }
-
-  @Override
-  public String toString() {
+  public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Endpoint {\n");
     
-    sb.append("    currentDateTimeUtc: ").append(toIndentedString(currentDateTimeUtc)).append("\n");
-    sb.append("    configuration: ").append(toIndentedString(configuration)).append("\n");
-    sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
-    sb.append("}");
+    sb.append("  currentDateTimeUtc: ").append(currentDateTimeUtc).append("\n");
+    sb.append("  configuration: ").append(configuration).append("\n");
+    sb.append("  entities: ").append(entities).append("\n");
+    sb.append("}\n");
     return sb.toString();
   }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
 }
-

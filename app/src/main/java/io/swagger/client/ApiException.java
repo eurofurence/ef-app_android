@@ -1,69 +1,29 @@
 package io.swagger.client;
 
-import java.util.Map;
-import java.util.List;
-
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-02-24T14:49:45.074+01:00")
 public class ApiException extends Exception {
-  private int code = 0;
-  private Map<String, List<String>> responseHeaders = null;
-  private String responseBody = null;
+  int code = 0;
+  String message = null;
 
   public ApiException() {}
 
-  public ApiException(Throwable throwable) {
-    super(throwable);
-  }
-
-  public ApiException(String message) {
-    super(message);
-  }
-
-  public ApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders, String responseBody) {
-    super(message, throwable);
-    this.code = code;
-    this.responseHeaders = responseHeaders;
-    this.responseBody = responseBody;
-  }
-
-  public ApiException(String message, int code, Map<String, List<String>> responseHeaders, String responseBody) {
-    this(message, (Throwable) null, code, responseHeaders, responseBody);
-  }
-
-  public ApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders) {
-    this(message, throwable, code, responseHeaders, null);
-  }
-
-  public ApiException(int code, Map<String, List<String>> responseHeaders, String responseBody) {
-    this((String) null, (Throwable) null, code, responseHeaders, responseBody);
-  }
-
   public ApiException(int code, String message) {
-    super(message);
     this.code = code;
-  }
-
-  public ApiException(int code, String message, Map<String, List<String>> responseHeaders, String responseBody) {
-    this(code, message);
-    this.responseHeaders = responseHeaders;
-    this.responseBody = responseBody;
+    this.message = message;
   }
 
   public int getCode() {
     return code;
   }
-
-  /**
-   * Get the HTTP response headers.
-   */
-  public Map<String, List<String>> getResponseHeaders() {
-    return responseHeaders;
+  
+  public void setCode(int code) {
+    this.code = code;
   }
-
-  /**
-   * Get the HTTP response body.
-   */
-  public String getResponseBody() {
-    return responseBody;
+  
+  public String getMessage() {
+    return message;
+  }
+  
+  public void setMessage(String message) {
+    this.message = message;
   }
 }

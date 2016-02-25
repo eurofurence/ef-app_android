@@ -1,32 +1,30 @@
 package io.swagger.client.model;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import java.io.Serializable;
+import io.swagger.annotations.*;
+import com.google.gson.annotations.SerializedName;
 
 
-
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-02-24T14:49:45.074+01:00")
-public class EndpointEntity  implements Serializable {
+@ApiModel(description = "")
+public class EndpointEntity  {
   
+  @SerializedName("Id")
   private String id = null;
+  @SerializedName("Name")
   private String name = null;
+  @SerializedName("TableName")
   private String tableName = null;
+  @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Count")
   private BigDecimal count = null;
 
   
   /**
    **/
-  
   @ApiModelProperty(value = "")
-  @JsonProperty("Id")
   public String getId() {
     return id;
   }
@@ -37,9 +35,7 @@ public class EndpointEntity  implements Serializable {
   
   /**
    **/
-  
   @ApiModelProperty(value = "")
-  @JsonProperty("Name")
   public String getName() {
     return name;
   }
@@ -50,9 +46,7 @@ public class EndpointEntity  implements Serializable {
   
   /**
    **/
-  
   @ApiModelProperty(value = "")
-  @JsonProperty("TableName")
   public String getTableName() {
     return tableName;
   }
@@ -63,9 +57,7 @@ public class EndpointEntity  implements Serializable {
   
   /**
    **/
-  
   @ApiModelProperty(value = "")
-  @JsonProperty("LastChangeDateTimeUtc")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
@@ -77,9 +69,7 @@ public class EndpointEntity  implements Serializable {
   /**
    * Number of records (including deleted ones) in the table.
    **/
-  
   @ApiModelProperty(value = "Number of records (including deleted ones) in the table.")
-  @JsonProperty("Count")
   public BigDecimal getCount() {
     return count;
   }
@@ -90,49 +80,16 @@ public class EndpointEntity  implements Serializable {
   
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    EndpointEntity endpointEntity = (EndpointEntity) o;
-    return Objects.equals(id, endpointEntity.id) &&
-        Objects.equals(name, endpointEntity.name) &&
-        Objects.equals(tableName, endpointEntity.tableName) &&
-        Objects.equals(lastChangeDateTimeUtc, endpointEntity.lastChangeDateTimeUtc) &&
-        Objects.equals(count, endpointEntity.count);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, name, tableName, lastChangeDateTimeUtc, count);
-  }
-
-  @Override
-  public String toString() {
+  public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class EndpointEntity {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    tableName: ").append(toIndentedString(tableName)).append("\n");
-    sb.append("    lastChangeDateTimeUtc: ").append(toIndentedString(lastChangeDateTimeUtc)).append("\n");
-    sb.append("    count: ").append(toIndentedString(count)).append("\n");
-    sb.append("}");
+    sb.append("  id: ").append(id).append("\n");
+    sb.append("  name: ").append(name).append("\n");
+    sb.append("  tableName: ").append(tableName).append("\n");
+    sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  count: ").append(count).append("\n");
+    sb.append("}\n");
     return sb.toString();
   }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
 }
-
