@@ -12,6 +12,12 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat
+import io.swagger.annotations.Api
+import io.swagger.client.ApiClient
+import io.swagger.client.api.DefaultApi
+import io.swagger.client.model.EventEntry
 
 class LaunchScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,6 +38,17 @@ class LaunchScreenActivity : AppCompatActivity(), NavigationView.OnNavigationIte
 
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
+
+        val t = findViewById(R.id.textView) as EditText
+
+        t.text.clear();
+
+        val api: DefaultApi = DefaultApi();
+        api.apiClient.dateFormat = ISO8601DateFormat();
+
+        for (event in api.eventEntryGet(null)) {
+            t.text.append(event.title.toString() + "\n");
+        }
     }
 
     override fun onBackPressed() {
