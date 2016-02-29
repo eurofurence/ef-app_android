@@ -1,6 +1,6 @@
 package org.eurofurence.connavigator
 
-import android.app.Fragment
+import android.support.v4.app.Fragment
 import android.app.FragmentTransaction
 import android.os.Bundle
 import android.os.StrictMode
@@ -54,11 +54,11 @@ class LaunchScreenActivity : AppCompatActivity(), NavigationView.OnNavigationIte
             // api.apiClient.dateFormat = ISO8601DateFormat();
             runOnUiThread {
                 val fragment: MainEventFragment = MainEventFragment();
-                fragment.setEventEntry(api.eventEntryGet(null).first())
 
-                fragmentManager.beginTransaction()
+                supportFragmentManager.beginTransaction()
                         .add(R.id.mainActivityLayout, fragment as Fragment, "Hello")
                         .commit();
+                fragment.setEventEntry(api.eventEntryGet(null).first())
             }
         }.start()
     }

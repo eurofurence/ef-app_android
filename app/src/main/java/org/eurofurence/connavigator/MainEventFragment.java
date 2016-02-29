@@ -12,6 +12,8 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import io.swagger.client.model.EventEntry;
+import roboguice.fragment.RoboFragment;
+import roboguice.inject.InjectView;
 
 
 /**
@@ -22,21 +24,14 @@ import io.swagger.client.model.EventEntry;
  * Use the {@link MainEventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainEventFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
+public class MainEventFragment extends RoboFragment {
     private EventEntry eventEntry;
     private View myFragmentView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private TextView eventTitle;
+    @InjectView(R.id.eventTitle)
+    TextView eventTitle;
 
     public MainEventFragment() {
         // Required empty public constructor
@@ -54,8 +49,6 @@ public class MainEventFragment extends Fragment {
     public static MainEventFragment newInstance(String param1, String param2) {
         MainEventFragment fragment = new MainEventFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,19 +56,12 @@ public class MainEventFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        myFragmentView = inflater.inflate(R.layout.fragment_main_event, container, false);
-        eventTitle = (TextView) myFragmentView.findViewById(R.id.eventTitle);
-        return  myFragmentView;
+        return inflater.inflate(R.layout.fragment_main_event, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -125,9 +111,5 @@ public class MainEventFragment extends Fragment {
 
     private void updateLayout() {
         eventTitle.setText(eventEntry.getTitle());
-
-        TextView timeText = (TextView) this.getView().findViewById(R.id.date);
-
-        timeText.setText(String.format("%s:%s", eventEntry.getStartTime(), eventEntry.getEndTime()));
     }
 }
