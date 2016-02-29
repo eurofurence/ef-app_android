@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '23.0.2'
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "org.eurofurence.connavigator"
@@ -42,8 +42,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     // Enable card views
-
-
     provided 'org.roboguice:roboblender:3.+'
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'

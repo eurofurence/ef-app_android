@@ -9,35 +9,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import io.swagger.client.model.EventEntry;
-import roboguice.fragment.RoboFragment;
+import roboguice.fragment.provided.RoboFragment;
 import roboguice.inject.InjectView;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MainEventFragment.OnFragmentInteractionListener} interface
+ * {@link RegularEventFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MainEventFragment#newInstance} factory method to
+ * Use the {@link RegularEventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainEventFragment extends RoboFragment {
+public class RegularEventFragment extends RoboFragment {
     private EventEntry eventEntry;
 
-    private OnFragmentInteractionListener mListener = new OnFragmentInteractionListener() {
-        @Override
-        public void onFragmentInteraction(Uri uri) {
-            System.out.println(uri);
-        }
-    };
+    public void setEventEntry(EventEntry eventEntry) {
+        this.eventEntry = eventEntry;
+        textView.setText(eventEntry.getTitle());
+    }
 
     @InjectView(R.id.eventTitle)
-    TextView eventTitle;
+    TextView textView;
 
-    public MainEventFragment() {
+    private OnFragmentInteractionListener mListener;
+
+    public RegularEventFragment() {
         // Required empty public constructor
     }
 
@@ -47,11 +45,11 @@ public class MainEventFragment extends RoboFragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MainEventFragment.
+     * @return A new instance of fragment RegularEventFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainEventFragment newInstance(String param1, String param2) {
-        MainEventFragment fragment = new MainEventFragment();
+    public static RegularEventFragment newInstance(String param1, String param2) {
+        RegularEventFragment fragment = new RegularEventFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -65,7 +63,8 @@ public class MainEventFragment extends RoboFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main_event, container, false);
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_regular_event, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,15 +104,5 @@ public class MainEventFragment extends RoboFragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    public void setEventEntry(EventEntry eventEntry) {
-        this.eventEntry = eventEntry;
-
-        updateLayout();
-    }
-
-    private void updateLayout() {
-        eventTitle.setText(eventEntry.getTitle());
     }
 }
