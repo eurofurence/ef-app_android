@@ -53,12 +53,13 @@ class LaunchScreenActivity : AppCompatActivity(), NavigationView.OnNavigationIte
 
             // api.apiClient.dateFormat = ISO8601DateFormat();
             runOnUiThread {
-                val fragment: MainEventFragment = MainEventFragment();
+                val fragment: test = test();
 
                 supportFragmentManager.beginTransaction()
                         .add(R.id.mainActivityLayout, fragment as Fragment, "Hello")
                         .commit();
-                fragment.setEventEntry(api.eventEntryGet(null).first())
+
+                fragment.EditText("hello world")
             }
         }.start()
     }
