@@ -58,6 +58,7 @@ class LaunchScreenActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                 supportFragmentManager.beginTransaction()
                         .add(R.id.mainActivityLayout, fragment as Fragment, "Hello")
                         .commit();
+
                 fragment.setEventEntry(api.eventEntryGet(null).first())
             }
         }.start()
