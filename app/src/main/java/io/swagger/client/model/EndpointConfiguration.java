@@ -1,5 +1,6 @@
 package io.swagger.client.model;
 
+import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class EndpointConfiguration  {
   
   @SerializedName("Id")
-  private String id = null;
+  private UUID id = null;
   @SerializedName("ResourceKey")
   private String resourceKey = null;
   @SerializedName("Value")
@@ -19,10 +20,10 @@ public class EndpointConfiguration  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public String getId() {
+  public UUID getId() {
     return id;
   }
-  public void setId(String id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

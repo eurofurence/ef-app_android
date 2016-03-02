@@ -35,10 +35,6 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        // Add exclusion strategies, since the android bindings of swagger generate instances of a field in every
-        // subclass as well
-        configureGson()
-
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_launch_screen)

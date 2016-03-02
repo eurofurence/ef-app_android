@@ -30,7 +30,7 @@ dependencies {
 	testCompile "junit:junit:$junit_version"
 
 	// Dependency for the code generator only
-	generate "io.swagger:swagger-codegen-cli:2.1.5"
+	generate files("tools/swagger-codegen-cli.jar")
 }
 
 task generateSwagger(type: JavaExec) {

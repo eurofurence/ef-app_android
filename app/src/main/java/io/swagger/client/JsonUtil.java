@@ -39,18 +39,6 @@ public class JsonUtil {
       return new TypeToken<List<EntityBase>>(){}.getType();
     }
     
-    if ("EventEntry".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventEntry>>(){}.getType();
-    }
-    
-    if ("EventConferenceDay".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventConferenceDay>>(){}.getType();
-    }
-    
-    if ("EventConferenceTrack".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventConferenceTrack>>(){}.getType();
-    }
-    
     if ("EventConferenceRoom".equalsIgnoreCase(className)) {
       return new TypeToken<List<EventConferenceRoom>>(){}.getType();
     }
@@ -59,16 +47,24 @@ public class JsonUtil {
       return new TypeToken<List<Endpoint>>(){}.getType();
     }
     
-    if ("EndpointConfiguration".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EndpointConfiguration>>(){}.getType();
-    }
-    
-    if ("EndpointEntity".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EndpointEntity>>(){}.getType();
+    if ("EventEntry".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventEntry>>(){}.getType();
     }
     
     if ("InfoGroup".equalsIgnoreCase(className)) {
       return new TypeToken<List<InfoGroup>>(){}.getType();
+    }
+    
+    if ("EventConferenceTrack".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventConferenceTrack>>(){}.getType();
+    }
+    
+    if ("EventConferenceDay".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventConferenceDay>>(){}.getType();
+    }
+    
+    if ("EndpointConfiguration".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EndpointConfiguration>>(){}.getType();
     }
     
     if ("Info".equalsIgnoreCase(className)) {
@@ -77,6 +73,10 @@ public class JsonUtil {
     
     if ("Image".equalsIgnoreCase(className)) {
       return new TypeToken<List<Image>>(){}.getType();
+    }
+    
+    if ("EndpointEntity".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EndpointEntity>>(){}.getType();
     }
     
     return new TypeToken<List<Object>>(){}.getType();
@@ -89,18 +89,6 @@ public class JsonUtil {
       return new TypeToken<EntityBase>(){}.getType();
     }
     
-    if ("EventEntry".equalsIgnoreCase(className)) {
-      return new TypeToken<EventEntry>(){}.getType();
-    }
-    
-    if ("EventConferenceDay".equalsIgnoreCase(className)) {
-      return new TypeToken<EventConferenceDay>(){}.getType();
-    }
-    
-    if ("EventConferenceTrack".equalsIgnoreCase(className)) {
-      return new TypeToken<EventConferenceTrack>(){}.getType();
-    }
-    
     if ("EventConferenceRoom".equalsIgnoreCase(className)) {
       return new TypeToken<EventConferenceRoom>(){}.getType();
     }
@@ -109,16 +97,24 @@ public class JsonUtil {
       return new TypeToken<Endpoint>(){}.getType();
     }
     
-    if ("EndpointConfiguration".equalsIgnoreCase(className)) {
-      return new TypeToken<EndpointConfiguration>(){}.getType();
-    }
-    
-    if ("EndpointEntity".equalsIgnoreCase(className)) {
-      return new TypeToken<EndpointEntity>(){}.getType();
+    if ("EventEntry".equalsIgnoreCase(className)) {
+      return new TypeToken<EventEntry>(){}.getType();
     }
     
     if ("InfoGroup".equalsIgnoreCase(className)) {
       return new TypeToken<InfoGroup>(){}.getType();
+    }
+    
+    if ("EventConferenceTrack".equalsIgnoreCase(className)) {
+      return new TypeToken<EventConferenceTrack>(){}.getType();
+    }
+    
+    if ("EventConferenceDay".equalsIgnoreCase(className)) {
+      return new TypeToken<EventConferenceDay>(){}.getType();
+    }
+    
+    if ("EndpointConfiguration".equalsIgnoreCase(className)) {
+      return new TypeToken<EndpointConfiguration>(){}.getType();
     }
     
     if ("Info".equalsIgnoreCase(className)) {
@@ -127,6 +123,10 @@ public class JsonUtil {
     
     if ("Image".equalsIgnoreCase(className)) {
       return new TypeToken<Image>(){}.getType();
+    }
+    
+    if ("EndpointEntity".equalsIgnoreCase(className)) {
+      return new TypeToken<EndpointEntity>(){}.getType();
     }
     
     return new TypeToken<Object>(){}.getType();

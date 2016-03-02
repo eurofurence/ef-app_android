@@ -2,6 +2,7 @@ package io.swagger.client.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
 public class EndpointEntity  {
   
   @SerializedName("Id")
-  private String id = null;
+  private UUID id = null;
   @SerializedName("Name")
   private String name = null;
   @SerializedName("TableName")
@@ -25,10 +26,10 @@ public class EndpointEntity  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public String getId() {
+  public UUID getId() {
     return id;
   }
-  public void setId(String id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

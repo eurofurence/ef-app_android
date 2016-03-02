@@ -2,6 +2,7 @@ package io.swagger.client.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
 public class EntityBase  {
   
   @SerializedName("Id")
-  private String id = null;
+  private UUID id = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
   @SerializedName("IsDeleted")
@@ -22,10 +23,10 @@ public class EntityBase  {
    * Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000
    **/
   @ApiModelProperty(required = true, value = "Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000")
-  public String getId() {
+  public UUID getId() {
     return id;
   }
-  public void setId(String id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
