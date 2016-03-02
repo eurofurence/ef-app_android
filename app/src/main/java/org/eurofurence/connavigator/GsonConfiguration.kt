@@ -23,11 +23,9 @@ fun configureGson() {
             try {
                 // If the superclass exposes a field for the given name, skip
                 f.declaringClass.superclass.getMethod("get${toFirstUpper(f.name)}")
-                println("Skipping ${f.name} from ${f.declaringClass}")
                 return true
             } catch(e: NoSuchMethodException) {
                 // The attribute is the first instance in the type hierarchy, serialize
-                println("Serializing ${f.name} from ${f.declaringClass}")
                 return false
             }
         }
@@ -37,7 +35,7 @@ fun configureGson() {
         }
 
     }
-    println("Configuring JSON")
+
     JsonUtil.gsonBuilder.addDeserializationExclusionStrategy(es)
     JsonUtil.gsonBuilder.addSerializationExclusionStrategy(es)
 }

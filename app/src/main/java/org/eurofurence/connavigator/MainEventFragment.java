@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import io.swagger.client.JsonUtil;
 import org.w3c.dom.Text;
 
 import io.swagger.client.model.EventEntry;
@@ -45,27 +46,35 @@ public class MainEventFragment extends RoboFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param eventEntry Event entry
      * @return A new instance of fragment MainEventFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainEventFragment newInstance(String param1, String param2) {
+    public static MainEventFragment newInstance(EventEntry eventEntry) {
         MainEventFragment fragment = new MainEventFragment();
         Bundle args = new Bundle();
+        args.putString("eventEntry", JsonUtil.serialize(eventEntry));
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main_event, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            EventEntry eventEntry = JsonUtil.deserializeToObject(arguments.getString("eventEntry"), EventEntry.class);
+            setEventEntry(eventEntry);
+        } else {
+            System.err.println("Arguments are null");
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -107,7 +116,7 @@ public class MainEventFragment extends RoboFragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void setEventEntry(EventEntry eventEntry) {
+    private void setEventEntry(EventEntry eventEntry) {
         this.eventEntry = eventEntry;
 
         updateLayout();

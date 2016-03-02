@@ -2,6 +2,7 @@ package org.eurofurence.connavigator
 
 import android.support.v4.app.Fragment
 import android.app.FragmentTransaction
+import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.design.widget.FloatingActionButton
@@ -17,12 +18,20 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.TextView
+import com.google.inject.Inject
+import com.google.inject.Provider
 import io.swagger.annotations.Api
 import io.swagger.client.api.DefaultApi
 import io.swagger.client.model.EventEntry
+import roboguice.RoboGuice
+import roboguice.activity.RoboActionBarActivity
+import roboguice.util.RoboContext
 import java.util.concurrent.ForkJoinPool
 
-class LaunchScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
+    override fun onFragmentInteraction(uri: Uri?) {
+        println(uri)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -31,6 +40,7 @@ class LaunchScreenActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         configureGson()
 
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_launch_screen)
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -52,14 +62,13 @@ class LaunchScreenActivity : AppCompatActivity(), NavigationView.OnNavigationIte
             val api: DefaultApi = DefaultApi();
 
             // api.apiClient.dateFormat = ISO8601DateFormat();
+            val events = api.eventEntryGet(null)
             runOnUiThread {
-                val fragment: MainEventFragment = MainEventFragment();
+                val ta = supportFragmentManager.beginTransaction()
+                val fragment: MainEventFragment = MainEventFragment.newInstance(events.first())
 
-                supportFragmentManager.beginTransaction()
-                        .add(R.id.mainActivityLayout, fragment as Fragment, "Hello")
-                        .commit();
-
-                fragment.setEventEntry(api.eventEntryGet(null).first())
+                ta.add(R.id.mainActivityLayout, fragment as Fragment, null)
+                ta.commitAllowingStateLoss()
             }
         }.start()
     }

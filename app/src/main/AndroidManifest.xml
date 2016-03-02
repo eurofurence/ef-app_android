@@ -19,6 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <meta-data
+                android:name="roboguice.modules"
+                android:value="org.eurofurence.connavigator.ConnavigatorModule"/>
+        <meta-data
+                android:name="roboguice.annotations.packages"
+                android:value="roboguice,org.eurofurence.connavigator"/>
     </application>
-
 </manifest>
