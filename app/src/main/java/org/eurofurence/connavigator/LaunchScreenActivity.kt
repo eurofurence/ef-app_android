@@ -7,16 +7,16 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
-import android.view.View
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
-import android.view.Menu
-import android.view.MenuItem
+import android.support.v7.widget.*
+import android.view.*
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ListView
 import android.widget.TextView
 import com.google.inject.Inject
 import com.google.inject.Provider
@@ -25,6 +25,8 @@ import io.swagger.client.api.DefaultApi
 import io.swagger.client.model.EventEntry
 import roboguice.RoboGuice
 import roboguice.activity.RoboActionBarActivity
+import roboguice.inject.ContentView
+import roboguice.inject.InjectView
 import roboguice.util.RoboContext
 import java.util.concurrent.ForkJoinPool
 
@@ -33,8 +35,10 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
         println(uri)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    @InjectView(R.id.eventRecycler)
+    private lateinit var eventsView: RecyclerView
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_launch_screen)
@@ -53,19 +57,52 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
 
+
+        eventsView.setHasFixedSize(true)
+        eventsView.layoutManager = LinearLayoutManager(this)
+        eventsView.itemAnimator = DefaultItemAnimator()
+
+
+        class EventViewHolder(viewItem: View,
+                              val event: CardView = viewItem.findViewById(R.id.eventCard) as CardView,
+                              val title: TextView = viewItem.findViewById(R.id.eventTitle) as TextView,
+                              val date: TextView = viewItem.findViewById(R.id.eventDate) as TextView,
+                              val hosts: TextView = viewItem.findViewById(R.id.eventHosts) as TextView,
+                              val description: TextView = viewItem.findViewById(R.id.eventDescription) as TextView)
+        : RecyclerView.ViewHolder(viewItem) {
+            // No body
+        }
+
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
         Thread {
             val api: DefaultApi = DefaultApi();
 
             // api.apiClient.dateFormat = ISO8601DateFormat();
             val events = api.eventEntryGet(null)
-            runOnUiThread {
-                val ta = supportFragmentManager.beginTransaction()
-                val fragment: MainEventFragment = MainEventFragment.newInstance(events.first())
 
-                ta.add(R.id.mainActivityLayout, fragment as Fragment, null)
-                ta.commitAllowingStateLoss()
+            runOnUiThread {
+                eventsView.adapter = object : RecyclerView.Adapter<EventViewHolder>() {
+
+                    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): EventViewHolder {
+                        return EventViewHolder(LayoutInflater
+                                .from(parent.context)
+                                .inflate(R.layout.fragment_main_event, parent, false))
+                    }
+
+                    override fun getItemCount(): Int {
+                        return events.size
+                    }
+
+                    override fun onBindViewHolder(holder: EventViewHolder, pos: Int) {
+                        val event = events[pos]
+                        holder.title.text = event.title
+                        holder.date.text = event.startTime
+                        holder.hosts.text = event.panelHosts
+                        holder.description.text = event.description
+                    }
+                }
             }
+
         }.start()
     }
 

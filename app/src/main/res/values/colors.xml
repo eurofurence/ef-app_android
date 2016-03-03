@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#006458</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryLight">#009C89</color>
+    <color name="colorPrimaryDark">#004038</color>
     <color name="colorAccent">#FF4081</color>
     <color name="textColor">#dcdcdc</color>
 </resources>
