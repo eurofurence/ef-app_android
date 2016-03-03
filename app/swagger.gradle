@@ -2,8 +2,6 @@ repositories {
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
-configurations { generate }
-
 ext {
 	swagger_annotations_version = "1.5.0"
 	gson_version = "2.6.1"
@@ -29,13 +27,11 @@ dependencies {
 
 	testCompile "junit:junit:$junit_version"
 
-	// Dependency for the code generator only
-	generate files("tools/swagger-codegen-cli.jar")
 }
 
 task generateSwagger(type: JavaExec) {
 	// Run generator
-	classpath = configurations.generate
+	classpath = files("tools/swagger-codegen-cli.jar")
 	main = "io.swagger.codegen.SwaggerCodegen"
 
 	// Skip the build-related files

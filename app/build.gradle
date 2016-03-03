@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'idea'
 
 android {
     compileSdkVersion 23
@@ -32,12 +33,14 @@ android {
         exclude "META-INF/MANIFEST.MF"
         exclude "META-INF/NOTICE"
     }
-	
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 }
 
+
+// TODO : af246303d93af465e00be86403496e82d31c8017
 // Location of the schema file
 ext.backend_commit = "b6c84c871fc14b4f43a501cb454bd67f67d85c9f"
 ext.schema_location = "https://raw.githubusercontent.com/eurofurence/ef-app_backend/$backend_commit/Swagger/ApiDefinition.yml"
@@ -61,6 +64,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.2.0'
     compile 'com.android.support:cardview-v7:23.2.0'
     compile 'com.android.support:recyclerview-v7:23.2.0'
+    compile 'net.danlew:android.joda:2.9.2'
+    compile 'joda-time:joda-time:2.9.2:no-tzdb'
 
     // Robo jews
     compile 'org.roboguice:roboguice:3.0.1'

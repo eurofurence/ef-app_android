@@ -21,19 +21,28 @@ import android.widget.TextView
 import com.google.inject.Inject
 import com.google.inject.Provider
 import io.swagger.annotations.Api
+import io.swagger.client.JsonUtil
 import io.swagger.client.api.DefaultApi
 import io.swagger.client.model.EventEntry
+import org.joda.time.DateTime
+import org.joda.time.Days
 import roboguice.RoboGuice
 import roboguice.activity.RoboActionBarActivity
 import roboguice.inject.ContentView
 import roboguice.inject.InjectView
 import roboguice.util.RoboContext
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.ForkJoinPool
 
 class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri?) {
         println(uri)
     }
+
+    private lateinit var navDays: TextView
+    private lateinit var navTitle: TextView
+    private lateinit var navSubtitle: TextView
 
     @InjectView(R.id.eventRecycler)
     private lateinit var eventsView: RecyclerView
@@ -57,6 +66,10 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
 
+        val header = navigationView.getHeaderView(0)
+        navDays = header.findViewById(R.id.navDays)as TextView
+        navTitle = header.findViewById(R.id.navTitle)as TextView
+        navSubtitle = header.findViewById(R.id.navSubtitle)as TextView
 
         eventsView.setHasFixedSize(true)
         eventsView.layoutManager = LinearLayoutManager(this)
@@ -76,11 +89,22 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
         Thread {
             val api: DefaultApi = DefaultApi();
+            val df = SimpleDateFormat("yyyy-MM-dd")
+            val firstDay = api.eventConferenceDayGet(null)
+                    .map { df.parse(it.date) }
+                    .min()
+
+            val days = Days.daysBetween(DateTime(firstDay), DateTime.now()).days
 
             // api.apiClient.dateFormat = ISO8601DateFormat();
             val events = api.eventEntryGet(null)
 
             runOnUiThread {
+                if (days <= 0)
+                    navDays.text = "Day ${1 - days}"
+                else
+                    navDays.text = "Only $days days left"
+
                 eventsView.adapter = object : RecyclerView.Adapter<EventViewHolder>() {
 
                     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): EventViewHolder {
@@ -105,6 +129,7 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
 
         }.start()
     }
+
 
     override fun onBackPressed() {
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
