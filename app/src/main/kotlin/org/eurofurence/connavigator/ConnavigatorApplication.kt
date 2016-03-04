@@ -9,6 +9,9 @@ import net.danlew.android.joda.JodaTimeAndroid
 class ConnavigatorApplication : Application(){
     override fun onCreate() {
         super.onCreate()
+
+        // This configures the timezone database for JODA time, that way timezone info can be used without having the
+        // impractical database of JODA
         JodaTimeAndroid.init(this)
     }
 }

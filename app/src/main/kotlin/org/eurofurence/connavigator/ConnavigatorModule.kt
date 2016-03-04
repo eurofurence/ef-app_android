@@ -9,6 +9,6 @@ import com.google.inject.AbstractModule
  */
 class ConnavigatorModule : AbstractModule() {
     override fun configure() {
-
+        // Here, Roboguice can be configured
     }
 }
