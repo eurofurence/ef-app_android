@@ -90,11 +90,14 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
         Thread {
             val api: DefaultApi = DefaultApi();
             val df = SimpleDateFormat("yyyy-MM-dd")
-            val firstDay = api.eventConferenceDayGet(null)
-                    .map { df.parse(it.date) }
-                    .min()
+//            val firstDay = api.eventConferenceDayGet(null)
+//                    .map { df.parse(it.date) }
+//                    .min()
 
-            val days = Days.daysBetween(DateTime(firstDay), DateTime.now()).days
+            // Imma dummy, this is now the real date
+            val firstDay = DateTime(2016, 8, 17, 0, 0)
+
+            val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
 
             // api.apiClient.dateFormat = ISO8601DateFormat();
             val events = api.eventEntryGet(null)
