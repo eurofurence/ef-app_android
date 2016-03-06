@@ -1,39 +1,23 @@
 package org.eurofurence.connavigator
 
-import android.support.v4.app.Fragment
-import android.app.FragmentTransaction
 import android.net.Uri
 import android.os.Bundle
-import android.os.StrictMode
 import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ListView
 import android.widget.TextView
-import com.google.inject.Inject
-import com.google.inject.Provider
-import io.swagger.annotations.Api
-import io.swagger.client.JsonUtil
-import io.swagger.client.api.DefaultApi
 import io.swagger.client.model.EventEntry
+import org.eurofurence.connavigator.util.assert
 import org.joda.time.DateTime
 import org.joda.time.Days
-import roboguice.RoboGuice
 import roboguice.activity.RoboActionBarActivity
-import roboguice.inject.ContentView
 import roboguice.inject.InjectView
-import roboguice.util.RoboContext
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.ForkJoinPool
+import java.io.File
 
 class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri?) {
@@ -57,9 +41,6 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        // Find and setup the floating button
-        val fab = findViewById(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener { view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show() }
 
         // Find and populate the main layout manager
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
@@ -97,67 +78,77 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
             // No body
         }
 
-        // Lift threading restrictions, this is testing only
-        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
+        // Setup the database
+        val eventsDbFile = File(cacheDir, "eventsdb.db")
+        val eventsDb = JsonStreamDB(EventEntry::class.java, { it.id.toString() }, eventsDbFile)
 
-        // Create a new thread for a runnable (the closure below)
-        Thread {
-            // Get the Swagger API for querying, network needs to be in it's own thread
-            val api: DefaultApi = DefaultApi();
+        // Query and memorize the events
+        val events = eventsDb.getAll().values.toMutableList()
 
-//            val df = SimpleDateFormat("yyyy-MM-dd")
-//            val firstDay = api.eventConferenceDayGet(null)
-//                    .map { df.parse(it.date) }
-//                    .min()
-
-            // Manually set the first date, since the database is not updated with EF 22
-            val firstDay = DateTime(2016, 8, 17, 0, 0)
-
-            // Calculate the days between, using the current time. Todo: timezones
-            val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
-
-            // Query and memorize the events
-            val events = api.eventEntryGet(null)
-
-            // Go to the UI thread, as we are changing UI parameters
-            runOnUiThread {
-                // On con vs. before con. This should be updated on day changes
-                if (days <= 0)
-                    navDays.text = "Day ${1 - days}"
-                else
-                    navDays.text = "Only $days days left"
-
-                // Assign a new adapter mapping to the previously defined view event holders
-                eventsView.adapter = object : RecyclerView.Adapter<EventViewHolder>() {
-                    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): EventViewHolder {
-                        // To create the view holder, inflate the main event. This can be replaced, but differently
-                        // sized fragments will require the fixed size property of the recycler to be lifted
-                        return EventViewHolder(LayoutInflater
-                                .from(parent.context)
-                                .inflate(R.layout.fragment_main_event, parent, false))
-                    }
-
-                    override fun getItemCount(): Int {
-                        // Fixed size, map to the events
-                        return events.size
-                    }
-
-                    override fun onBindViewHolder(holder: EventViewHolder, pos: Int) {
-                        // Get the event for the position
-                        val event = events[pos]
-
-                        // Assign the properties of the view
-                        holder.title.text = event.title
-                        holder.date.text = event.startTime
-                        holder.hosts.text = event.panelHosts
-                        holder.description.text = event.description
-                    }
-                }
+        // Assign a new adapter mapping to the previously defined view event holders
+        eventsView.adapter = object : RecyclerView.Adapter<EventViewHolder>() {
+            override fun onCreateViewHolder(parent: ViewGroup, p1: Int): EventViewHolder {
+                // To create the view holder, inflate the main event. This can be replaced, but differently
+                // sized fragments will require the fixed size property of the recycler to be lifted
+                return EventViewHolder(LayoutInflater
+                        .from(parent.context)
+                        .inflate(R.layout.fragment_main_event, parent, false))
             }
 
-        }.start()
-    }
+            override fun getItemCount(): Int {
+                // Fixed size, map to the events
+                return events.size
+            }
 
+            override fun onBindViewHolder(holder: EventViewHolder, pos: Int) {
+                // Get the event for the position
+                val event = events[pos]
+
+                // Assign the properties of the view
+                holder.title.text = event.title
+                holder.date.text = event.startTime
+                holder.hosts.text = event.panelHosts
+                holder.description.text = event.description
+            }
+        }
+
+        // Manually set the first date, since the database is not updated with EF 22
+        val firstDay = DateTime(2016, 8, 17, 0, 0)
+
+        // Calculate the days between, using the current time. Todo: timezones
+        val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
+
+        // On con vs. before con. This should be updated on day changes
+        if (days <= 0)
+            navDays.text = "Day ${1 - days}"
+        else
+            navDays.text = "Only $days days left"
+
+
+        // Find and setup the floating button
+        val fab = findViewById(R.id.fab) as FloatingActionButton
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Reloading database", Snackbar.LENGTH_SHORT).show()
+
+            // Query events, feed to scoped receiver
+            queryEventEntry("fromfab")
+        }
+
+        // Create a scoped receiver
+        createEventEntryReceiver("fromfab") {
+            // Reset the events
+            events.clear()
+            events.addAll(it)
+
+            // Write all to the database
+            eventsDb.replaceAll(events)
+
+            // Notify the recycler that its content has changed
+            eventsView.adapter.notifyDataSetChanged()
+            Snackbar.make(findViewById(R.id.fab), "Database reload complete", Snackbar.LENGTH_SHORT).show()
+
+        }.register() assert true
+    }
 
     override fun onBackPressed() {
         // Sample method, maps a press on the back button to either 'close the drawer' or to the default behavior

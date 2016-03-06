@@ -5,9 +5,9 @@ apply plugin: 'idea'
 android {
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
-	
+
     useLibrary 'org.apache.http.legacy'
-	
+
     defaultConfig {
         applicationId "org.eurofurence.connavigator"
         minSdkVersion 16
@@ -15,30 +15,41 @@ android {
         versionCode 1
         versionName "1.0"
     }
-	
-	lintOptions {
-		abortOnError false
-	}
-	
+
+    lintOptions {
+        abortOnError false
+    }
+
     buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-	
+
     packagingOptions {
         exclude "META-INF/DEPENDENCIES"
         exclude "META-INF/LICENSE"
         exclude "META-INF/MANIFEST.MF"
         exclude "META-INF/NOTICE"
+        exclude "META-INF/maven/com.google.guava/guava/pom.xml"
+        exclude "META-INF/maven/com.google.guava/guava/pom.properties"
     }
-
+    defaultConfig {
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
 }
-
 
 // TODO : af246303d93af465e00be86403496e82d31c8017
 // Location of the schema file
@@ -52,10 +63,13 @@ apply from: 'swagger.gradle'
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
     compile 'com.android.support:support-v4:23.2.0'
+    compile 'com.google.guava:guava:19.0'
     // Enable card views
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
