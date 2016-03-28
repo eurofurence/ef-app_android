@@ -15,7 +15,7 @@
 
         <!-- Service providing a detached retrieval of data from the internet. -->
         <service
-                android:name=".QueryService"
+                android:name=".webapi.QueryService"
                 android:exported="false"/>
 
         <!-- Main screen within the application -->

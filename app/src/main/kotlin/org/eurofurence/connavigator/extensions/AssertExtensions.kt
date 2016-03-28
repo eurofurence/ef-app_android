@@ -1,11 +1,11 @@
-package org.eurofurence.connavigator.util
+package org.eurofurence.connavigator.extensions
 
 /**
  * Infix assertion of equality
  */
 infix fun Any?.assert(equalTo: Any?) {
     if (this != equalTo)
-        throw IllegalStateException("$this is supposed to be equal to $equalTo.")
+        throw AssertionError("$this is supposed to be equal to $equalTo.")
 }
 
 /**
@@ -13,5 +13,5 @@ infix fun Any?.assert(equalTo: Any?) {
  */
 infix fun Any?.assertNot(equalTo: Any?) {
     if (this == equalTo)
-        throw IllegalStateException("$this is supposed to be not equal to $equalTo.")
+        throw AssertionError("$this is supposed to be not equal to $equalTo.")
 }

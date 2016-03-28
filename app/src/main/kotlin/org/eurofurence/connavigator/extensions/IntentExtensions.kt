@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.util
+package org.eurofurence.connavigator.extensions
 
 import android.content.Intent
 import java.io.Serializable
@@ -127,6 +127,15 @@ class IntentContextObjects(val intent: Intent) {
      * Gets the corresponding object extra or null if not present.
      */
     operator fun get(key: String) = if (intent has key) intent.getSerializableExtra(key) else null
+
+    /**
+     * Gets the corresponding object extra or null if not present.
+     */
+    operator fun <T : Serializable> get(key: String, classOfT: Class<T>) = get(key).let {
+        if (classOfT.isInstance(it))
+            classOfT.cast(it)
+        else null
+    }
 
     /**
      * Puts a serializable into the intent or removes it if null specified

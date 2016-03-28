@@ -10,27 +10,26 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class Info extends EntityBase {
   
-  @SerializedName("Order")
-  private Integer order = null;
+  @SerializedName("ImageId")
+  private UUID imageId = null;
   @SerializedName("Title")
   private String title = null;
   @SerializedName("Text")
   private String text = null;
-  @SerializedName("InfoGroupEntryId")
-  private UUID infoGroupEntryId = null;
-  @SerializedName("ImageEntryId")
-  private UUID imageEntryId = null;
+  @SerializedName("Position")
+  private Integer position = null;
+  @SerializedName("InfoGroupId")
+  private UUID infoGroupId = null;
 
   
   /**
-   * Numeric order/position of the element (lower number = display first)
    **/
-  @ApiModelProperty(value = "Numeric order/position of the element (lower number = display first)")
-  public Integer getOrder() {
-    return order;
+  @ApiModelProperty(value = "")
+  public UUID getImageId() {
+    return imageId;
   }
-  public void setOrder(Integer order) {
-    this.order = order;
+  public void setImageId(UUID imageId) {
+    this.imageId = imageId;
   }
 
   
@@ -59,25 +58,26 @@ public class Info extends EntityBase {
 
   
   /**
-   * Id of the InfoGroup this record belongs to.
+   * Numeric order/position of the element (lower number = display first)
    **/
-  @ApiModelProperty(value = "Id of the InfoGroup this record belongs to.")
-  public UUID getInfoGroupEntryId() {
-    return infoGroupEntryId;
+  @ApiModelProperty(value = "Numeric order/position of the element (lower number = display first)")
+  public Integer getPosition() {
+    return position;
   }
-  public void setInfoGroupEntryId(UUID infoGroupEntryId) {
-    this.infoGroupEntryId = infoGroupEntryId;
+  public void setPosition(Integer position) {
+    this.position = position;
   }
 
   
   /**
+   * Id of the InfoGroup this record belongs to.
    **/
-  @ApiModelProperty(value = "")
-  public UUID getImageEntryId() {
-    return imageEntryId;
+  @ApiModelProperty(value = "Id of the InfoGroup this record belongs to.")
+  public UUID getInfoGroupId() {
+    return infoGroupId;
   }
-  public void setImageEntryId(UUID imageEntryId) {
-    this.imageEntryId = imageEntryId;
+  public void setInfoGroupId(UUID infoGroupId) {
+    this.infoGroupId = infoGroupId;
   }
 
   
@@ -87,11 +87,11 @@ public class Info extends EntityBase {
     StringBuilder sb = new StringBuilder();
     sb.append("class Info {\n");
     sb.append("  " + super.toString()).append("\n");
-    sb.append("  order: ").append(order).append("\n");
+    sb.append("  imageId: ").append(imageId).append("\n");
     sb.append("  title: ").append(title).append("\n");
     sb.append("  text: ").append(text).append("\n");
-    sb.append("  infoGroupEntryId: ").append(infoGroupEntryId).append("\n");
-    sb.append("  imageEntryId: ").append(imageEntryId).append("\n");
+    sb.append("  position: ").append(position).append("\n");
+    sb.append("  infoGroupId: ").append(infoGroupId).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

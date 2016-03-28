@@ -12,17 +12,19 @@ import android.support.v7.widget.*
 import android.view.*
 import android.widget.TextView
 import io.swagger.client.model.EventEntry
-import org.eurofurence.connavigator.util.assert
+import org.eurofurence.connavigator.db.DBCallback
+import org.eurofurence.connavigator.db.DBService
 import org.joda.time.DateTime
 import org.joda.time.Days
 import roboguice.activity.RoboActionBarActivity
 import roboguice.inject.InjectView
-import java.io.File
 
 class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri?) {
         println(uri)
     }
+
+    val dbservice = DBService(this)
 
     private lateinit var navDays: TextView
     private lateinit var navTitle: TextView
@@ -30,6 +32,8 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
 
     @InjectView(R.id.eventRecycler)
     private lateinit var eventsView: RecyclerView
+
+    private var events: List<EventEntry> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,12 +82,11 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
             // No body
         }
 
-        // Setup the database
-        val eventsDbFile = File(cacheDir, "eventsdb.db")
-        val eventsDb = JsonStreamDB(EventEntry::class.java, { it.id.toString() }, eventsDbFile)
+        // Initialize the database service to listen in this context
+        dbservice.initialize()
 
         // Query and memorize the events
-        val events = eventsDb.getAll().values.toMutableList()
+        events = dbservice.eventEntryDb.elements.toList()
 
         // Assign a new adapter mapping to the previously defined view event holders
         eventsView.adapter = object : RecyclerView.Adapter<EventViewHolder>() {
@@ -130,25 +133,22 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Reloading database", Snackbar.LENGTH_SHORT).show()
 
-            // Query events, feed to scoped receiver
-            queryEventEntry("fromfab")
+            // Update the database
+            dbservice.update (object : DBCallback {
+                override fun gotEvents(values: List<EventEntry>) {
+                    // Notify the recycler that its content has changed
+                    events = values
+                    eventsView.adapter.notifyDataSetChanged()
+                }
+
+                override fun done() {
+                    val cts = dbservice.dateDb.elements.firstOrNull()
+                    Snackbar.make(findViewById(R.id.fab), "Database reload complete, version $cts", Snackbar.LENGTH_SHORT).show()
+                }
+            })
         }
-
-        // Create a scoped receiver
-        createEventEntryReceiver("fromfab") {
-            // Reset the events
-            events.clear()
-            events.addAll(it)
-
-            // Write all to the database
-            eventsDb.replaceAll(events)
-
-            // Notify the recycler that its content has changed
-            eventsView.adapter.notifyDataSetChanged()
-            Snackbar.make(findViewById(R.id.fab), "Database reload complete", Snackbar.LENGTH_SHORT).show()
-
-        }.register() assert true
     }
+
 
     override fun onBackPressed() {
         // Sample method, maps a press on the back button to either 'close the drawer' or to the default behavior
@@ -188,6 +188,20 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
+            for (x in dbservice.eventConferenceDayDb.elements)
+                println(x)
+            for (x in dbservice.eventConferenceRoomDb.elements)
+                println(x)
+            for (x in dbservice.eventConferenceTrackDb.elements)
+                println(x)
+            for (x in dbservice.eventEntryDb.elements)
+                println(x)
+            for (x in dbservice.imageDb.elements)
+                println(x)
+            for (x in dbservice.infoDb.elements)
+                println(x)
+            for (x in dbservice.infoGroupDb.elements)
+                println(x)
 
         } else if (id == R.id.nav_slideshow) {
 

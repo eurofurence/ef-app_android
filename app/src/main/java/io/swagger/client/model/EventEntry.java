@@ -33,6 +33,8 @@ public class EventEntry extends EntityBase {
   private UUID conferenceDayId = null;
   @SerializedName("ConferenceRoomId")
   private UUID conferenceRoomId = null;
+  @SerializedName("ImageId")
+  private UUID imageId = null;
   @SerializedName("ConferenceTrackId")
   private UUID conferenceTrackId = null;
 
@@ -160,6 +162,17 @@ public class EventEntry extends EntityBase {
   
   /**
    **/
+  @ApiModelProperty(value = "")
+  public UUID getImageId() {
+    return imageId;
+  }
+  public void setImageId(UUID imageId) {
+    this.imageId = imageId;
+  }
+
+  
+  /**
+   **/
   @ApiModelProperty(required = true, value = "")
   public UUID getConferenceTrackId() {
     return conferenceTrackId;
@@ -186,6 +199,7 @@ public class EventEntry extends EntityBase {
     sb.append("  slug: ").append(slug).append("\n");
     sb.append("  conferenceDayId: ").append(conferenceDayId).append("\n");
     sb.append("  conferenceRoomId: ").append(conferenceRoomId).append("\n");
+    sb.append("  imageId: ").append(imageId).append("\n");
     sb.append("  conferenceTrackId: ").append(conferenceTrackId).append("\n");
     sb.append("}\n");
     return sb.toString();

@@ -51,9 +51,8 @@ android {
     }
 }
 
-// TODO : af246303d93af465e00be86403496e82d31c8017
 // Location of the schema file
-ext.backend_commit = "b6c84c871fc14b4f43a501cb454bd67f67d85c9f"
+ext.backend_commit = "8c1cfe69eaa0a57a22934d33088c0a1fa4de204e"
 ext.schema_location = "https://raw.githubusercontent.com/eurofurence/ef-app_backend/$backend_commit/Swagger/ApiDefinition.yml"
 
 // Embedded swagger
