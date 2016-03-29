@@ -11,8 +11,8 @@ import android.support.v7.widget.Toolbar
 import android.widget.TextView
 import org.eurofurence.connavigator.MainEventFragment
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.util.viewInHeader
 import org.eurofurence.connavigator.util.view
+import org.eurofurence.connavigator.util.viewInHeader
 
 abstract class BaseActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri?) {

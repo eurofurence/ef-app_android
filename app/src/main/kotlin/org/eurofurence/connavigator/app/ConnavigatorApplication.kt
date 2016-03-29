@@ -1,9 +1,8 @@
 package org.eurofurence.connavigator.app
 
 import android.app.Application
-import io.swagger.client.ApiInvoker
 import net.danlew.android.joda.JodaTimeAndroid
-import org.eurofurence.connavigator.net.volleyService
+import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.webapi.apiService
 
 /**
@@ -18,8 +17,8 @@ class ConnavigatorApplication : Application() {
         JodaTimeAndroid.init(this)
 
         // Initialize the services
-        volleyService.initialize(this)
-        apiService.initialize()
+        imageService.initialize(this)
+        apiService.initialize(this)
 
     }
 }

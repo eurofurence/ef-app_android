@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.db
 
 import io.swagger.client.model.EntityBase
 import org.eurofurence.connavigator.util.not
-import org.eurofurence.connavigator.util.not
 import java.math.BigInteger
 
 /**

@@ -3,10 +3,10 @@ package org.eurofurence.connavigator.webapi
 import android.content.Context
 import android.content.Intent
 import io.swagger.client.model.*
-import org.eurofurence.connavigator.util.objects
-import org.eurofurence.connavigator.util.set
 import org.eurofurence.connavigator.util.Bridge
 import org.eurofurence.connavigator.util.Registered
+import org.eurofurence.connavigator.util.objects
+import org.eurofurence.connavigator.util.set
 import java.util.*
 
 

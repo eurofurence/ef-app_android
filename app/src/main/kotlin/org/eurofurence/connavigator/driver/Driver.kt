@@ -3,7 +3,6 @@ package org.eurofurence.connavigator.driver
 import android.content.Context
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.db.*
-import org.eurofurence.connavigator.extensions.*
 import org.eurofurence.connavigator.util.ifSuccess
 import org.eurofurence.connavigator.webapi.*
 import java.io.File

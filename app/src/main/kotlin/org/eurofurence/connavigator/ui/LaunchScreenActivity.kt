@@ -5,20 +5,19 @@ import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
-import android.support.v7.widget.CardView
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.ImageView
 import android.widget.TextView
-import com.android.volley.toolbox.NetworkImageView
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.driver.Driver
 import org.eurofurence.connavigator.driver.DriverCallback
+import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.util.viewInHolder
-import org.eurofurence.connavigator.net.volleyService
 import org.joda.time.DateTime
 import org.joda.time.Days
 
@@ -51,7 +50,7 @@ class LaunchScreenActivity : BaseActivity() {
 
         // Event view holder finds and memorizes the views in an event card
         class EventViewHolder(viewItem: View) : RecyclerView.ViewHolder(viewItem) {
-            val eventImage by viewInHolder(NetworkImageView::class.java)
+            val eventImage by viewInHolder(ImageView::class.java)
             val eventTitle by viewInHolder(TextView::class.java)
             val eventDate by viewInHolder(TextView::class.java)
             val eventHosts by viewInHolder(TextView::class.java)
@@ -84,9 +83,6 @@ class LaunchScreenActivity : BaseActivity() {
                 holder.eventHosts.text = event.panelHosts
                 holder.eventDescription.text = event.description
 
-                // Default to placeholder
-                holder.eventImage.setDefaultImageResId(R.drawable.placeholder_event)
-
                 // Get the image ID by assigning the first position to the first image
                 val imageId = if (pos == 0 && !driver.imageDb.elements.isEmpty()) driver.imageDb.elements[0].id else null
 
@@ -94,7 +90,7 @@ class LaunchScreenActivity : BaseActivity() {
                 if (imageId != null) {
                     val img = driver.imageDb.elements.firstOrNull { it.id == imageId }
                     if (img != null)
-                        holder.eventImage.setImageUrl(img.url, volleyService.imageLoader)
+                        imageService.load(img, holder.eventImage)
 
                     holder.eventImage.visibility = View.VISIBLE
                 } else {

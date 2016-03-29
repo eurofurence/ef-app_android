@@ -10,12 +10,7 @@ import android.os.PatternMatcher
 import android.support.v4.content.LocalBroadcastManager
 import io.swagger.client.JsonUtil
 import io.swagger.client.api.DefaultApi
-import org.eurofurence.connavigator.util.booleans
-import org.eurofurence.connavigator.util.get
-import org.eurofurence.connavigator.util.objects
-import org.eurofurence.connavigator.util.set
-import org.eurofurence.connavigator.util.Bridge
-import org.eurofurence.connavigator.util.Registered
+import org.eurofurence.connavigator.util.*
 import java.util.*
 
 

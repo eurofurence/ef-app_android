@@ -4,7 +4,7 @@ package org.eurofurence.connavigator.util
  * Function on objects that may occur in singleton or in multiple occurrence.
  */
 interface Bridge<T> {
-    companion object{
+    companion object {
 
         /**
          * Creates a patch function from the method to handle a single object. Multiple items will be fed consecutively.
@@ -33,6 +33,7 @@ interface Bridge<T> {
             }
         }
     }
+
     operator fun invoke(item: T)
 
     operator fun invoke(items: List<T>)

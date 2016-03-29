@@ -96,6 +96,8 @@ dependencies {
     compile "org.apache.httpcomponents:httpclient:$httpclient_version"
     compile "org.apache.httpcomponents:httpmime:$httpclient_version"
     compile "com.mcxiaoke.volley:library-aar:$volley_version"
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
 
     testCompile "junit:junit:$junit_version"
 }
