@@ -1,34 +1,15 @@
 package org.eurofurence.connavigator
 
-import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.*
 import android.view.*
 import android.widget.TextView
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.db.DBCallback
-import org.eurofurence.connavigator.db.DBService
 import org.joda.time.DateTime
 import org.joda.time.Days
-import roboguice.activity.RoboActionBarActivity
-import roboguice.inject.InjectView
 
-class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
-    override fun onFragmentInteraction(uri: Uri?) {
-        println(uri)
-    }
+class LaunchScreenActivity : BaseActity() {
 
-    val dbservice = DBService(this)
-
-    private lateinit var navDays: TextView
-    private lateinit var navTitle: TextView
-    private lateinit var navSubtitle: TextView
 
     @InjectView(R.id.eventRecycler)
     private lateinit var eventsView: RecyclerView
@@ -41,27 +22,8 @@ class LaunchScreenActivity : RoboActionBarActivity(), NavigationView.OnNavigatio
         // Assign the main layout
         setContentView(R.layout.activity_launch_screen)
 
-        // Find and configure the toolbar
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
-
-
-        // Find and populate the main layout manager
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
-        val toggle = ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer.setDrawerListener(toggle)
-        toggle.syncState()
-
-        // Find navigation drawer and add this activity as a listener
-        val navigationView = findViewById(R.id.nav_view) as NavigationView
-        navigationView.setNavigationItemSelectedListener(this)
-
-        // Resolve the header in the navigation drawer, bind the views
-        val header = navigationView.getHeaderView(0)
-        navDays = header.findViewById(R.id.navDays)as TextView
-        navTitle = header.findViewById(R.id.navTitle)as TextView
-        navSubtitle = header.findViewById(R.id.navSubtitle)as TextView
+        // Inject menu navigation
+        injectNavigation()
 
         // Turn this off if there are views of different sizes in the recycler
         eventsView.setHasFixedSize(true)

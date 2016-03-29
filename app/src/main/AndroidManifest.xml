@@ -20,7 +20,7 @@
 
         <!-- Main screen within the application -->
         <activity
-                android:name=".LaunchScreenActivity"
+                android:name="ui/LaunchScreenActivity"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
