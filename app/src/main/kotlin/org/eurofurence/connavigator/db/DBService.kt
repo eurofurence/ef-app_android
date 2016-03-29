@@ -66,23 +66,19 @@ class DBService(val context: Context) {
     private var serverDate: Date = Date(0)
 
     /**
-     * Amount of pending database
+     * Amount of pending database.
      */
     private var requests = 0
+
+    /**
+     * Success status of the current update.
+     */
+    private var success = false
 
     /**
      * True if update is pending.
      */
     val isPending: Boolean get() = requests > 0
-
-    /**
-     * Updates the database status, only listens for completion message
-     */
-    fun update(complete: () -> Unit) = update (object : DBCallback {
-        override fun done() {
-            complete()
-        }
-    })
 
     /**
      * Updates the database status
@@ -117,83 +113,90 @@ class DBService(val context: Context) {
 
         // Main request, this will trigger the sequence of database updates
         context.createEndpointReceiver("updateService") {
-            // Get dates of server and local database
-            serverDate = it.currentDateTimeUtc
-            val dbDate = dateDb.elements.firstOrNull() ?: Date(0)
+            finishWith {
+                // Get dates of server and local database
+                serverDate = it.currentDateTimeUtc
+                val dbDate = dateDb.elements.firstOrNull() ?: Date(0)
 
-            println("Processing a database update, local: $dbDate, server: $serverDate")
+                println("Processing a database update, local: $dbDate, server: $serverDate")
 
-            // Query conference info
-            start(7)
-            context.queryEventConferenceDay("updateService", since = dbDate)
-            context.queryEventConferenceRoom("updateService", since = dbDate)
-            context.queryEventConferenceTrack("updateService", since = dbDate)
-            context.queryEventEntry("updateService", since = dbDate)
-            context.queryImage("updateService", since = dbDate)
-            context.queryInfo("updateService", since = dbDate)
-            context.queryInfoGroup("updateService", since = dbDate)
+                // Query conference info
+                start(7)
+                context.queryEventConferenceDay("updateService", since = dbDate)
+                context.queryEventConferenceRoom("updateService", since = dbDate)
+                context.queryEventConferenceTrack("updateService", since = dbDate)
+                context.queryEventEntry("updateService", since = dbDate)
+                context.queryImage("updateService", since = dbDate)
+                context.queryInfo("updateService", since = dbDate)
+                context.queryInfoGroup("updateService", since = dbDate)
 
-            // Dispatch performed, notify listener
-            effectiveCallback.dispatched()
-
+                // Dispatch performed, notify listener
+                effectiveCallback.dispatched()
+            }
             // Finish the own request
-            finish()
         }.register() assert true
 
         // On receiving the conference days
         context.createEventConferenceDayReceiver("updateService") {
-            // Sync DB and finish request
-            eventConferenceDayDb.syncWith(it)
-            effectiveCallback.gotEventConferenceDays(it)
-            finish()
+            finishWith {
+                // Sync DB and finish request
+                eventConferenceDayDb.syncWith(it)
+                effectiveCallback.gotEventConferenceDays(it)
+            }
         }.register() assert true
 
         // On receiving the conference rooms
         context.createEventConferenceRoomReceiver("updateService") {
-            // Sync DB and finish request
-            eventConferenceRoomDb.syncWith(it)
-            effectiveCallback.gotEventConferenceRooms(it)
-            finish()
+            finishWith {
+                // Sync DB and finish request
+                eventConferenceRoomDb.syncWith(it)
+                effectiveCallback.gotEventConferenceRooms(it)
+            }
         }.register() assert true
 
         // On receiving the conference tracks
         context.createEventConferenceTrackReceiver ("updateService") {
-            // Sync DB and finish request
-            eventConferenceTrackDb.syncWith(it)
-            effectiveCallback.gotEventConferenceTracks(it)
-            finish()
+            finishWith {
+                // Sync DB and finish request
+                eventConferenceTrackDb.syncWith(it)
+                effectiveCallback.gotEventConferenceTracks(it)
+            }
         }.register() assert true
 
         // On receiving the events
         context.createEventEntryReceiver ("updateService") {
-            // Sync DB and finish request
-            eventEntryDb.syncWith(it)
-            effectiveCallback.gotEvents(it)
-            finish()
+            finishWith {
+                // Sync DB and finish request
+                eventEntryDb.syncWith(it)
+                effectiveCallback.gotEvents(it)
+            }
         }.register() assert true
 
         // On receiving the images
         context.createImageReceiver("updateService") {
-            // Sync DB and finish request
-            imageDb.syncWith(it)
-            effectiveCallback.gotImages(it)
-            finish()
+            finishWith {
+                // Sync DB and finish request
+                imageDb.syncWith(it)
+                effectiveCallback.gotImages(it)
+            }
         }.register() assert true
 
         // On receiving the info
         context.createInfoReceiver ("updateService") {
-            // Sync DB and finish request
-            infoDb.syncWith(it)
-            effectiveCallback.gotInfo(it)
-            finish()
+            finishWith {
+                // Sync DB and finish request
+                infoDb.syncWith(it)
+                effectiveCallback.gotInfo(it)
+            }
         }.register() assert true
 
         // On receiving the info groups
         context.createInfoGroupReceiver ("updateService") {
-            // Sync DB and finish request
-            infoGroupDb.syncWith(it)
-            effectiveCallback.gotInfoGroups(it)
-            finish()
+            finishWith {
+                // Sync DB and finish request
+                infoGroupDb.syncWith(it)
+                effectiveCallback.gotInfoGroups(it)
+            }
         }.register() assert true
     }
 
@@ -203,23 +206,35 @@ class DBService(val context: Context) {
      */
     private fun start(times: Int = 1) {
         requests += times
+        success = true
     }
 
     /**
      * Decreases the number of requests by one, if this is the last request, write the new database time
      * @param dbDate The new database time
      */
-    private fun finish(times: Int = 1) {
+    private fun finish(succ: Boolean, times: Int = 1) {
         // If last request to finish, put the new database status
         requests -= times
+        success = success && succ
+
         if ( requests == 0) {
             // Commit server date and reset
             dateDb.elements = listOf(serverDate)
             serverDate = Date(0)
 
             // Call the callbacks done method and reset it
-            effectiveCallback.done()
+            effectiveCallback.done(success)
             effectiveCallback = DBCallback.EMPTY
         }
+    }
+
+    /**
+     * Runs a code block maybe failing in an exception to determine the success level.
+     * @param block The block to run
+     * @param times The amount of requests this block decreases
+     */
+    private fun finishWith(block: () -> Unit) {
+        finish(ifSuccess(block))
     }
 }

@@ -74,7 +74,7 @@ interface DBCallback {
     /**
      * Called when all queries are done.
      */
-    fun done() {
+    fun done(success: Boolean) {
         // Default is no operation
     }
 
@@ -123,9 +123,9 @@ interface DBCallback {
                 right.dispatched()
             }
 
-            override fun done() {
-                left.done()
-                right.done()
+            override fun done(success: Boolean) {
+                left.done(success)
+                right.done(success)
             }
         }
     }

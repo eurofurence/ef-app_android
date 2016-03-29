@@ -1,14 +1,24 @@
-package org.eurofurence.connavigator
+package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.widget.CardView
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.TextView
 import io.swagger.client.model.EventEntry
+import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.db.DBCallback
 import org.joda.time.DateTime
 import org.joda.time.Days
+import roboguice.inject.InjectView
 
-class LaunchScreenActivity : BaseActity() {
+class LaunchScreenActivity : BaseActivity() {
 
 
     @InjectView(R.id.eventRecycler)
@@ -23,7 +33,7 @@ class LaunchScreenActivity : BaseActity() {
         setContentView(R.layout.activity_launch_screen)
 
         // Inject menu navigation
-        injectNavigation()
+        injectNavigation(savedInstanceState)
 
         // Turn this off if there are views of different sizes in the recycler
         eventsView.setHasFixedSize(true)
@@ -103,9 +113,9 @@ class LaunchScreenActivity : BaseActity() {
                     eventsView.adapter.notifyDataSetChanged()
                 }
 
-                override fun done() {
+                override fun done(success: Boolean) {
                     val cts = dbservice.dateDb.elements.firstOrNull()
-                    Snackbar.make(findViewById(R.id.fab), "Database reload complete, version $cts", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $cts", Snackbar.LENGTH_SHORT).show()
                 }
             })
         }
