@@ -34,7 +34,7 @@ interface DB<T> {
 /**
  * Provides [Serializable] databases.
  */
-object sdbProvider : DBProvider {
+object serializableDBs : DBProvider {
     override fun <T> create(from: File, elementClass: Class<T>): DB<T> {
         // Serializable DB can only create DBs for serializable types
         Preconditions.checkArgument(Serializable::class.java.isAssignableFrom(elementClass))
@@ -82,7 +82,7 @@ class SerializableDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
 /**
  * Provides GSON databases.
  */
-object gsdbProvider : DBProvider {
+object gsonDBs : DBProvider {
     override fun <T> create(from: File, elementClass: Class<T>): DB<T> {
         return GsonDB(from, elementClass)
     }

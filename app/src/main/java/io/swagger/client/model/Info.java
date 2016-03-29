@@ -1,15 +1,21 @@
 package io.swagger.client.model;
 
 import io.swagger.client.model.EntityBase;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
+
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
 
 
+
 @ApiModel(description = "")
 public class Info extends EntityBase {
   
+  @SerializedName("InfoGroupId")
+  private UUID infoGroupId = null;
   @SerializedName("ImageId")
   private UUID imageId = null;
   @SerializedName("Title")
@@ -18,8 +24,18 @@ public class Info extends EntityBase {
   private String text = null;
   @SerializedName("Position")
   private Integer position = null;
-  @SerializedName("InfoGroupId")
-  private UUID infoGroupId = null;
+
+  
+  /**
+   * Id of the InfoGroup this record belongs to.
+   **/
+  @ApiModelProperty(value = "Id of the InfoGroup this record belongs to.")
+  public UUID getInfoGroupId() {
+    return infoGroupId;
+  }
+  public void setInfoGroupId(UUID infoGroupId) {
+    this.infoGroupId = infoGroupId;
+  }
 
   
   /**
@@ -69,30 +85,20 @@ public class Info extends EntityBase {
   }
 
   
-  /**
-   * Id of the InfoGroup this record belongs to.
-   **/
-  @ApiModelProperty(value = "Id of the InfoGroup this record belongs to.")
-  public UUID getInfoGroupId() {
-    return infoGroupId;
-  }
-  public void setInfoGroupId(UUID infoGroupId) {
-    this.infoGroupId = infoGroupId;
-  }
-
-  
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Info {\n");
     sb.append("  " + super.toString()).append("\n");
+    sb.append("  infoGroupId: ").append(infoGroupId).append("\n");
     sb.append("  imageId: ").append(imageId).append("\n");
     sb.append("  title: ").append(title).append("\n");
     sb.append("  text: ").append(text).append("\n");
     sb.append("  position: ").append(position).append("\n");
-    sb.append("  infoGroupId: ").append(infoGroupId).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
 }
+
+

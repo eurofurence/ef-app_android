@@ -1,30 +1,23 @@
 package io.swagger.client.model;
 
 import io.swagger.client.model.EntityBase;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.UUID;
+
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
 
 
+
 @ApiModel(description = "")
 public class EventConferenceDay extends EntityBase {
   
-  @SerializedName("Date")
-  private String date = null;
   @SerializedName("Name")
   private String name = null;
-
-  
-  /**
-   * Conference day in date format (YYYY-MM-DD)
-   **/
-  @ApiModelProperty(required = true, value = "Conference day in date format (YYYY-MM-DD)")
-  public String getDate() {
-    return date;
-  }
-  public void setDate(String date) {
-    this.date = date;
-  }
+  @SerializedName("Date")
+  private String date = null;
 
   
   /**
@@ -39,15 +32,29 @@ public class EventConferenceDay extends EntityBase {
   }
 
   
+  /**
+   * Conference day in date format (YYYY-MM-DD)
+   **/
+  @ApiModelProperty(required = true, value = "Conference day in date format (YYYY-MM-DD)")
+  public String getDate() {
+    return date;
+  }
+  public void setDate(String date) {
+    this.date = date;
+  }
+
+  
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class EventConferenceDay {\n");
     sb.append("  " + super.toString()).append("\n");
-    sb.append("  date: ").append(date).append("\n");
     sb.append("  name: ").append(name).append("\n");
+    sb.append("  date: ").append(date).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
 }
+
+

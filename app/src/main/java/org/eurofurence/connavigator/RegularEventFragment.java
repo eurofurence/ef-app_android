@@ -8,10 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import io.swagger.client.model.EventEntry;
-import roboguice.fragment.provided.RoboFragment;
-import roboguice.inject.InjectView;
 
 
 /**
@@ -22,7 +19,7 @@ import roboguice.inject.InjectView;
  * Use the {@link RegularEventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RegularEventFragment extends RoboFragment {
+public class RegularEventFragment extends Fragment {
     private EventEntry eventEntry;
 
     public void setEventEntry(EventEntry eventEntry) {
@@ -30,7 +27,6 @@ public class RegularEventFragment extends RoboFragment {
         textView.setText(eventEntry.getTitle());
     }
 
-    @InjectView(R.id.eventTitle)
     TextView textView;
 
     private OnFragmentInteractionListener mListener;
@@ -64,7 +60,9 @@ public class RegularEventFragment extends RoboFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_regular_event, container, false);
+        View view = inflater.inflate(R.layout.fragment_regular_event, container, false);
+        textView = (TextView) view.findViewById(R.id.eventTitle);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

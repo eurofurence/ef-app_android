@@ -1,12 +1,15 @@
 package io.swagger.client.api;
 
-import io.swagger.client.ApiException;
 import io.swagger.client.ApiInvoker;
+import io.swagger.client.ApiException;
 import io.swagger.client.Pair;
 
 import io.swagger.client.model.*;
 
 import java.util.*;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import io.swagger.client.model.Endpoint;
 import io.swagger.client.model.EventConferenceDay;
@@ -18,11 +21,17 @@ import io.swagger.client.model.Image;
 import io.swagger.client.model.Info;
 import io.swagger.client.model.InfoGroup;
 
+
+import org.apache.http.HttpEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.io.File;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 
 public class DefaultApi {
   String basePath = "https://eurofurencewebapi.azurewebsites.net";
@@ -46,440 +55,1103 @@ public class DefaultApi {
 
   
   /**
+  * 
+  * Gets metadata information about the API Endpoint.
+   * @return Endpoint
+  */
+  public Endpoint endpointGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+     Object postBody = null;
+  
+
+  // create path and map variables
+  String path = "/Endpoint".replaceAll("\\{format\\}","json");
+
+  // query params
+  List<Pair> queryParams = new ArrayList<Pair>();
+      // header params
+      Map<String, String> headerParams = new HashMap<String, String>();
+      // form params
+      Map<String, String> formParams = new HashMap<String, String>();
+
+  
+
+  
+
+      String[] contentTypes = {
+  "application/json"
+      };
+      String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+      if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
+  
+
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
+      } else {
+      // normal form params
+  
+      }
+
+      String[] authNames = new String[] {  };
+
+      try {
+        String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
+        if(localVarResponse != null){
+           return (Endpoint) ApiInvoker.deserialize(localVarResponse, "", Endpoint.class);
+        } else {
+           return null;
+        }
+      } catch (ApiException ex) {
+         throw ex;
+      } catch (InterruptedException ex) {
+         throw ex;
+      } catch (ExecutionException ex) {
+         if(ex.getCause() instanceof VolleyError) {
+            throw new ApiException(((VolleyError) ex.getCause()).networkResponse.statusCode, ((VolleyError) ex.getCause()).getMessage());
+         }
+         throw ex;
+      } catch (TimeoutException ex) {
+         throw ex;
+      }
+  }
+
+      /**
    * 
    * Gets metadata information about the API Endpoint.
-   * @return Endpoint
-   */
-  public Endpoint  endpointGet () throws ApiException {
-    Object localVarPostBody = null;
-    
+
+  */
+  public void endpointGet (final Response.Listener<Endpoint> responseListener, final Response.ErrorListener errorListener) {
+    Object postBody = null;
+
+  
 
     // create path and map variables
-    String localVarPath = "/Endpoint".replaceAll("\\{format\\}","json");
+    String path = "/Endpoint".replaceAll("\\{format\\}","json");
 
     // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> queryParams = new ArrayList<Pair>();
     // header params
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
     // form params
-    Map<String, String> localVarFormParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
 
     
 
     
 
-    String[] localVarContentTypes = {
+    String[] contentTypes = {
       "application/json"
     };
-    String localVarContentType = localVarContentTypes.length > 0 ? localVarContentTypes[0] : "application/json";
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
-    if (localVarContentType.startsWith("multipart/form-data")) {
+    if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
       
 
-      localVarPostBody = localVarBuilder.build();
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
     } else {
       // normal form params
       
     }
 
+      String[] authNames = new String[] {  };
+
     try {
-      String localVarResponse = apiInvoker.invokeAPI(basePath, localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarContentType);
-      if(localVarResponse != null){
-        return (Endpoint) ApiInvoker.deserialize(localVarResponse, "", Endpoint.class);
-      }
-      else {
-        return null;
-      }
+      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String localVarResponse) {
+            
+            try {
+              responseListener.onResponse((Endpoint) ApiInvoker.deserialize(localVarResponse,  "", Endpoint.class));
+              
+              
+            
+            } catch (ApiException exception) {
+               errorListener.onErrorResponse(new VolleyError(exception));
+            }
+            
+          }
+      }, new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            errorListener.onErrorResponse(error);
+          }
+      });
     } catch (ApiException ex) {
-      throw ex;
+      errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   
   /**
+  * 
+  * Retrieves a list of all event conference days.
+   * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
+   * @return List<EventConferenceDay>
+  */
+  public List<EventConferenceDay> eventConferenceDayGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+     Object postBody = null;
+  
+
+  // create path and map variables
+  String path = "/EventConferenceDay".replaceAll("\\{format\\}","json");
+
+  // query params
+  List<Pair> queryParams = new ArrayList<Pair>();
+      // header params
+      Map<String, String> headerParams = new HashMap<String, String>();
+      // form params
+      Map<String, String> formParams = new HashMap<String, String>();
+
+  
+          queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+  
+
+  
+
+      String[] contentTypes = {
+  "application/json"
+      };
+      String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+      if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
+  
+
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
+      } else {
+      // normal form params
+  
+      }
+
+      String[] authNames = new String[] {  };
+
+      try {
+        String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
+        if(localVarResponse != null){
+           return (List<EventConferenceDay>) ApiInvoker.deserialize(localVarResponse, "array", EventConferenceDay.class);
+        } else {
+           return null;
+        }
+      } catch (ApiException ex) {
+         throw ex;
+      } catch (InterruptedException ex) {
+         throw ex;
+      } catch (ExecutionException ex) {
+         if(ex.getCause() instanceof VolleyError) {
+            throw new ApiException(((VolleyError) ex.getCause()).networkResponse.statusCode, ((VolleyError) ex.getCause()).getMessage());
+         }
+         throw ex;
+      } catch (TimeoutException ex) {
+         throw ex;
+      }
+  }
+
+      /**
    * 
    * Retrieves a list of all event conference days.
    * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
-   * @return List<EventConferenceDay>
-   */
-  public List<EventConferenceDay>  eventConferenceDayGet (Date since) throws ApiException {
-    Object localVarPostBody = null;
-    
+  */
+  public void eventConferenceDayGet (Date since, final Response.Listener<List<EventConferenceDay>> responseListener, final Response.ErrorListener errorListener) {
+    Object postBody = null;
+
+  
 
     // create path and map variables
-    String localVarPath = "/EventConferenceDay".replaceAll("\\{format\\}","json");
+    String path = "/EventConferenceDay".replaceAll("\\{format\\}","json");
 
     // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> queryParams = new ArrayList<Pair>();
     // header params
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
     // form params
-    Map<String, String> localVarFormParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
 
     
-    localVarQueryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
     
 
     
 
-    String[] localVarContentTypes = {
+    String[] contentTypes = {
       "application/json"
     };
-    String localVarContentType = localVarContentTypes.length > 0 ? localVarContentTypes[0] : "application/json";
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
-    if (localVarContentType.startsWith("multipart/form-data")) {
+    if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
       
 
-      localVarPostBody = localVarBuilder.build();
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
     } else {
       // normal form params
       
     }
 
+      String[] authNames = new String[] {  };
+
     try {
-      String localVarResponse = apiInvoker.invokeAPI(basePath, localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarContentType);
-      if(localVarResponse != null){
-        return (List<EventConferenceDay>) ApiInvoker.deserialize(localVarResponse, "array", EventConferenceDay.class);
-      }
-      else {
-        return null;
-      }
+      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String localVarResponse) {
+            
+            try {
+              responseListener.onResponse((List<EventConferenceDay>) ApiInvoker.deserialize(localVarResponse,  "array", EventConferenceDay.class));
+              
+              
+            
+            } catch (ApiException exception) {
+               errorListener.onErrorResponse(new VolleyError(exception));
+            }
+            
+          }
+      }, new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            errorListener.onErrorResponse(error);
+          }
+      });
     } catch (ApiException ex) {
-      throw ex;
+      errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   
   /**
+  * 
+  * Retrieves a list of all conference rooms.
+   * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
+   * @return List<EventConferenceRoom>
+  */
+  public List<EventConferenceRoom> eventConferenceRoomGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+     Object postBody = null;
+  
+
+  // create path and map variables
+  String path = "/EventConferenceRoom".replaceAll("\\{format\\}","json");
+
+  // query params
+  List<Pair> queryParams = new ArrayList<Pair>();
+      // header params
+      Map<String, String> headerParams = new HashMap<String, String>();
+      // form params
+      Map<String, String> formParams = new HashMap<String, String>();
+
+  
+          queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+  
+
+  
+
+      String[] contentTypes = {
+  "application/json"
+      };
+      String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+      if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
+  
+
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
+      } else {
+      // normal form params
+  
+      }
+
+      String[] authNames = new String[] {  };
+
+      try {
+        String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
+        if(localVarResponse != null){
+           return (List<EventConferenceRoom>) ApiInvoker.deserialize(localVarResponse, "array", EventConferenceRoom.class);
+        } else {
+           return null;
+        }
+      } catch (ApiException ex) {
+         throw ex;
+      } catch (InterruptedException ex) {
+         throw ex;
+      } catch (ExecutionException ex) {
+         if(ex.getCause() instanceof VolleyError) {
+            throw new ApiException(((VolleyError) ex.getCause()).networkResponse.statusCode, ((VolleyError) ex.getCause()).getMessage());
+         }
+         throw ex;
+      } catch (TimeoutException ex) {
+         throw ex;
+      }
+  }
+
+      /**
    * 
    * Retrieves a list of all conference rooms.
    * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
-   * @return List<EventConferenceRoom>
-   */
-  public List<EventConferenceRoom>  eventConferenceRoomGet (Date since) throws ApiException {
-    Object localVarPostBody = null;
-    
+  */
+  public void eventConferenceRoomGet (Date since, final Response.Listener<List<EventConferenceRoom>> responseListener, final Response.ErrorListener errorListener) {
+    Object postBody = null;
+
+  
 
     // create path and map variables
-    String localVarPath = "/EventConferenceRoom".replaceAll("\\{format\\}","json");
+    String path = "/EventConferenceRoom".replaceAll("\\{format\\}","json");
 
     // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> queryParams = new ArrayList<Pair>();
     // header params
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
     // form params
-    Map<String, String> localVarFormParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
 
     
-    localVarQueryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
     
 
     
 
-    String[] localVarContentTypes = {
+    String[] contentTypes = {
       "application/json"
     };
-    String localVarContentType = localVarContentTypes.length > 0 ? localVarContentTypes[0] : "application/json";
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
-    if (localVarContentType.startsWith("multipart/form-data")) {
+    if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
       
 
-      localVarPostBody = localVarBuilder.build();
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
     } else {
       // normal form params
       
     }
 
+      String[] authNames = new String[] {  };
+
     try {
-      String localVarResponse = apiInvoker.invokeAPI(basePath, localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarContentType);
-      if(localVarResponse != null){
-        return (List<EventConferenceRoom>) ApiInvoker.deserialize(localVarResponse, "array", EventConferenceRoom.class);
-      }
-      else {
-        return null;
-      }
+      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String localVarResponse) {
+            
+            try {
+              responseListener.onResponse((List<EventConferenceRoom>) ApiInvoker.deserialize(localVarResponse,  "array", EventConferenceRoom.class));
+              
+              
+            
+            } catch (ApiException exception) {
+               errorListener.onErrorResponse(new VolleyError(exception));
+            }
+            
+          }
+      }, new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            errorListener.onErrorResponse(error);
+          }
+      });
     } catch (ApiException ex) {
-      throw ex;
+      errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   
   /**
+  * 
+  * Retrieves a list of all event conference tracks.
+   * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
+   * @return List<EventConferenceTrack>
+  */
+  public List<EventConferenceTrack> eventConferenceTrackGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+     Object postBody = null;
+  
+
+  // create path and map variables
+  String path = "/EventConferenceTrack".replaceAll("\\{format\\}","json");
+
+  // query params
+  List<Pair> queryParams = new ArrayList<Pair>();
+      // header params
+      Map<String, String> headerParams = new HashMap<String, String>();
+      // form params
+      Map<String, String> formParams = new HashMap<String, String>();
+
+  
+          queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+  
+
+  
+
+      String[] contentTypes = {
+  "application/json"
+      };
+      String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+      if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
+  
+
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
+      } else {
+      // normal form params
+  
+      }
+
+      String[] authNames = new String[] {  };
+
+      try {
+        String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
+        if(localVarResponse != null){
+           return (List<EventConferenceTrack>) ApiInvoker.deserialize(localVarResponse, "array", EventConferenceTrack.class);
+        } else {
+           return null;
+        }
+      } catch (ApiException ex) {
+         throw ex;
+      } catch (InterruptedException ex) {
+         throw ex;
+      } catch (ExecutionException ex) {
+         if(ex.getCause() instanceof VolleyError) {
+            throw new ApiException(((VolleyError) ex.getCause()).networkResponse.statusCode, ((VolleyError) ex.getCause()).getMessage());
+         }
+         throw ex;
+      } catch (TimeoutException ex) {
+         throw ex;
+      }
+  }
+
+      /**
    * 
    * Retrieves a list of all event conference tracks.
    * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
-   * @return List<EventConferenceTrack>
-   */
-  public List<EventConferenceTrack>  eventConferenceTrackGet (Date since) throws ApiException {
-    Object localVarPostBody = null;
-    
+  */
+  public void eventConferenceTrackGet (Date since, final Response.Listener<List<EventConferenceTrack>> responseListener, final Response.ErrorListener errorListener) {
+    Object postBody = null;
+
+  
 
     // create path and map variables
-    String localVarPath = "/EventConferenceTrack".replaceAll("\\{format\\}","json");
+    String path = "/EventConferenceTrack".replaceAll("\\{format\\}","json");
 
     // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> queryParams = new ArrayList<Pair>();
     // header params
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
     // form params
-    Map<String, String> localVarFormParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
 
     
-    localVarQueryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
     
 
     
 
-    String[] localVarContentTypes = {
+    String[] contentTypes = {
       "application/json"
     };
-    String localVarContentType = localVarContentTypes.length > 0 ? localVarContentTypes[0] : "application/json";
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
-    if (localVarContentType.startsWith("multipart/form-data")) {
+    if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
       
 
-      localVarPostBody = localVarBuilder.build();
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
     } else {
       // normal form params
       
     }
 
+      String[] authNames = new String[] {  };
+
     try {
-      String localVarResponse = apiInvoker.invokeAPI(basePath, localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarContentType);
-      if(localVarResponse != null){
-        return (List<EventConferenceTrack>) ApiInvoker.deserialize(localVarResponse, "array", EventConferenceTrack.class);
-      }
-      else {
-        return null;
-      }
+      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String localVarResponse) {
+            
+            try {
+              responseListener.onResponse((List<EventConferenceTrack>) ApiInvoker.deserialize(localVarResponse,  "array", EventConferenceTrack.class));
+              
+              
+            
+            } catch (ApiException exception) {
+               errorListener.onErrorResponse(new VolleyError(exception));
+            }
+            
+          }
+      }, new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            errorListener.onErrorResponse(error);
+          }
+      });
     } catch (ApiException ex) {
-      throw ex;
+      errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   
   /**
+  * 
+  * Retrieves a list of all events in the event schedule.
+   * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
+   * @return List<EventEntry>
+  */
+  public List<EventEntry> eventEntryGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+     Object postBody = null;
+  
+
+  // create path and map variables
+  String path = "/EventEntry".replaceAll("\\{format\\}","json");
+
+  // query params
+  List<Pair> queryParams = new ArrayList<Pair>();
+      // header params
+      Map<String, String> headerParams = new HashMap<String, String>();
+      // form params
+      Map<String, String> formParams = new HashMap<String, String>();
+
+  
+          queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+  
+
+  
+
+      String[] contentTypes = {
+  "application/json"
+      };
+      String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+      if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
+  
+
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
+      } else {
+      // normal form params
+  
+      }
+
+      String[] authNames = new String[] {  };
+
+      try {
+        String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
+        if(localVarResponse != null){
+           return (List<EventEntry>) ApiInvoker.deserialize(localVarResponse, "array", EventEntry.class);
+        } else {
+           return null;
+        }
+      } catch (ApiException ex) {
+         throw ex;
+      } catch (InterruptedException ex) {
+         throw ex;
+      } catch (ExecutionException ex) {
+         if(ex.getCause() instanceof VolleyError) {
+            throw new ApiException(((VolleyError) ex.getCause()).networkResponse.statusCode, ((VolleyError) ex.getCause()).getMessage());
+         }
+         throw ex;
+      } catch (TimeoutException ex) {
+         throw ex;
+      }
+  }
+
+      /**
    * 
    * Retrieves a list of all events in the event schedule.
    * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
-   * @return List<EventEntry>
-   */
-  public List<EventEntry>  eventEntryGet (Date since) throws ApiException {
-    Object localVarPostBody = null;
-    
+  */
+  public void eventEntryGet (Date since, final Response.Listener<List<EventEntry>> responseListener, final Response.ErrorListener errorListener) {
+    Object postBody = null;
+
+  
 
     // create path and map variables
-    String localVarPath = "/EventEntry".replaceAll("\\{format\\}","json");
+    String path = "/EventEntry".replaceAll("\\{format\\}","json");
 
     // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> queryParams = new ArrayList<Pair>();
     // header params
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
     // form params
-    Map<String, String> localVarFormParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
 
     
-    localVarQueryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
     
 
     
 
-    String[] localVarContentTypes = {
+    String[] contentTypes = {
       "application/json"
     };
-    String localVarContentType = localVarContentTypes.length > 0 ? localVarContentTypes[0] : "application/json";
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
-    if (localVarContentType.startsWith("multipart/form-data")) {
+    if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
       
 
-      localVarPostBody = localVarBuilder.build();
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
     } else {
       // normal form params
       
     }
 
+      String[] authNames = new String[] {  };
+
     try {
-      String localVarResponse = apiInvoker.invokeAPI(basePath, localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarContentType);
-      if(localVarResponse != null){
-        return (List<EventEntry>) ApiInvoker.deserialize(localVarResponse, "array", EventEntry.class);
-      }
-      else {
-        return null;
-      }
+      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String localVarResponse) {
+            
+            try {
+              responseListener.onResponse((List<EventEntry>) ApiInvoker.deserialize(localVarResponse,  "array", EventEntry.class));
+              
+              
+            
+            } catch (ApiException exception) {
+               errorListener.onErrorResponse(new VolleyError(exception));
+            }
+            
+          }
+      }, new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            errorListener.onErrorResponse(error);
+          }
+      });
     } catch (ApiException ex) {
-      throw ex;
+      errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   
   /**
-   * 
-   * tbd
+  * 
+  * tbd
    * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
    * @return List<Image>
-   */
-  public List<Image>  imageGet (Date since) throws ApiException {
-    Object localVarPostBody = null;
-    
+  */
+  public List<Image> imageGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+     Object postBody = null;
+  
+
+  // create path and map variables
+  String path = "/Image".replaceAll("\\{format\\}","json");
+
+  // query params
+  List<Pair> queryParams = new ArrayList<Pair>();
+      // header params
+      Map<String, String> headerParams = new HashMap<String, String>();
+      // form params
+      Map<String, String> formParams = new HashMap<String, String>();
+
+  
+          queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+  
+
+  
+
+      String[] contentTypes = {
+  "application/json"
+      };
+      String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+      if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
+  
+
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
+      } else {
+      // normal form params
+  
+      }
+
+      String[] authNames = new String[] {  };
+
+      try {
+        String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
+        if(localVarResponse != null){
+           return (List<Image>) ApiInvoker.deserialize(localVarResponse, "array", Image.class);
+        } else {
+           return null;
+        }
+      } catch (ApiException ex) {
+         throw ex;
+      } catch (InterruptedException ex) {
+         throw ex;
+      } catch (ExecutionException ex) {
+         if(ex.getCause() instanceof VolleyError) {
+            throw new ApiException(((VolleyError) ex.getCause()).networkResponse.statusCode, ((VolleyError) ex.getCause()).getMessage());
+         }
+         throw ex;
+      } catch (TimeoutException ex) {
+         throw ex;
+      }
+  }
+
+      /**
+   * 
+   * tbd
+   * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
+  */
+  public void imageGet (Date since, final Response.Listener<List<Image>> responseListener, final Response.ErrorListener errorListener) {
+    Object postBody = null;
+
+  
 
     // create path and map variables
-    String localVarPath = "/Image".replaceAll("\\{format\\}","json");
+    String path = "/Image".replaceAll("\\{format\\}","json");
 
     // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> queryParams = new ArrayList<Pair>();
     // header params
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
     // form params
-    Map<String, String> localVarFormParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
 
     
-    localVarQueryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
     
 
     
 
-    String[] localVarContentTypes = {
+    String[] contentTypes = {
       "application/json"
     };
-    String localVarContentType = localVarContentTypes.length > 0 ? localVarContentTypes[0] : "application/json";
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
-    if (localVarContentType.startsWith("multipart/form-data")) {
+    if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
       
 
-      localVarPostBody = localVarBuilder.build();
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
     } else {
       // normal form params
       
     }
 
+      String[] authNames = new String[] {  };
+
     try {
-      String localVarResponse = apiInvoker.invokeAPI(basePath, localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarContentType);
-      if(localVarResponse != null){
-        return (List<Image>) ApiInvoker.deserialize(localVarResponse, "array", Image.class);
-      }
-      else {
-        return null;
-      }
+      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String localVarResponse) {
+            
+            try {
+              responseListener.onResponse((List<Image>) ApiInvoker.deserialize(localVarResponse,  "array", Image.class));
+              
+              
+            
+            } catch (ApiException exception) {
+               errorListener.onErrorResponse(new VolleyError(exception));
+            }
+            
+          }
+      }, new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            errorListener.onErrorResponse(error);
+          }
+      });
     } catch (ApiException ex) {
-      throw ex;
+      errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   
   /**
-   * 
-   * tbd
+  * 
+  * tbd
    * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
    * @return List<Info>
-   */
-  public List<Info>  infoGet (Date since) throws ApiException {
-    Object localVarPostBody = null;
-    
+  */
+  public List<Info> infoGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+     Object postBody = null;
+  
+
+  // create path and map variables
+  String path = "/Info".replaceAll("\\{format\\}","json");
+
+  // query params
+  List<Pair> queryParams = new ArrayList<Pair>();
+      // header params
+      Map<String, String> headerParams = new HashMap<String, String>();
+      // form params
+      Map<String, String> formParams = new HashMap<String, String>();
+
+  
+          queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+  
+
+  
+
+      String[] contentTypes = {
+  "application/json"
+      };
+      String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+      if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
+  
+
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
+      } else {
+      // normal form params
+  
+      }
+
+      String[] authNames = new String[] {  };
+
+      try {
+        String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
+        if(localVarResponse != null){
+           return (List<Info>) ApiInvoker.deserialize(localVarResponse, "array", Info.class);
+        } else {
+           return null;
+        }
+      } catch (ApiException ex) {
+         throw ex;
+      } catch (InterruptedException ex) {
+         throw ex;
+      } catch (ExecutionException ex) {
+         if(ex.getCause() instanceof VolleyError) {
+            throw new ApiException(((VolleyError) ex.getCause()).networkResponse.statusCode, ((VolleyError) ex.getCause()).getMessage());
+         }
+         throw ex;
+      } catch (TimeoutException ex) {
+         throw ex;
+      }
+  }
+
+      /**
+   * 
+   * tbd
+   * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
+  */
+  public void infoGet (Date since, final Response.Listener<List<Info>> responseListener, final Response.ErrorListener errorListener) {
+    Object postBody = null;
+
+  
 
     // create path and map variables
-    String localVarPath = "/Info".replaceAll("\\{format\\}","json");
+    String path = "/Info".replaceAll("\\{format\\}","json");
 
     // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> queryParams = new ArrayList<Pair>();
     // header params
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
     // form params
-    Map<String, String> localVarFormParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
 
     
-    localVarQueryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
     
 
     
 
-    String[] localVarContentTypes = {
+    String[] contentTypes = {
       "application/json"
     };
-    String localVarContentType = localVarContentTypes.length > 0 ? localVarContentTypes[0] : "application/json";
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
-    if (localVarContentType.startsWith("multipart/form-data")) {
+    if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
       
 
-      localVarPostBody = localVarBuilder.build();
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
     } else {
       // normal form params
       
     }
 
+      String[] authNames = new String[] {  };
+
     try {
-      String localVarResponse = apiInvoker.invokeAPI(basePath, localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarContentType);
-      if(localVarResponse != null){
-        return (List<Info>) ApiInvoker.deserialize(localVarResponse, "array", Info.class);
-      }
-      else {
-        return null;
-      }
+      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String localVarResponse) {
+            
+            try {
+              responseListener.onResponse((List<Info>) ApiInvoker.deserialize(localVarResponse,  "array", Info.class));
+              
+              
+            
+            } catch (ApiException exception) {
+               errorListener.onErrorResponse(new VolleyError(exception));
+            }
+            
+          }
+      }, new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            errorListener.onErrorResponse(error);
+          }
+      });
     } catch (ApiException ex) {
-      throw ex;
+      errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   
   /**
+  * 
+  * tbd
+   * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
+   * @return List<InfoGroup>
+  */
+  public List<InfoGroup> infoGroupGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+     Object postBody = null;
+  
+
+  // create path and map variables
+  String path = "/InfoGroup".replaceAll("\\{format\\}","json");
+
+  // query params
+  List<Pair> queryParams = new ArrayList<Pair>();
+      // header params
+      Map<String, String> headerParams = new HashMap<String, String>();
+      // form params
+      Map<String, String> formParams = new HashMap<String, String>();
+
+  
+          queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+  
+
+  
+
+      String[] contentTypes = {
+  "application/json"
+      };
+      String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+      if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
+  
+
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
+      } else {
+      // normal form params
+  
+      }
+
+      String[] authNames = new String[] {  };
+
+      try {
+        String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
+        if(localVarResponse != null){
+           return (List<InfoGroup>) ApiInvoker.deserialize(localVarResponse, "array", InfoGroup.class);
+        } else {
+           return null;
+        }
+      } catch (ApiException ex) {
+         throw ex;
+      } catch (InterruptedException ex) {
+         throw ex;
+      } catch (ExecutionException ex) {
+         if(ex.getCause() instanceof VolleyError) {
+            throw new ApiException(((VolleyError) ex.getCause()).networkResponse.statusCode, ((VolleyError) ex.getCause()).getMessage());
+         }
+         throw ex;
+      } catch (TimeoutException ex) {
+         throw ex;
+      }
+  }
+
+      /**
    * 
    * tbd
    * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
-   * @return List<InfoGroup>
-   */
-  public List<InfoGroup>  infoGroupGet (Date since) throws ApiException {
-    Object localVarPostBody = null;
-    
+  */
+  public void infoGroupGet (Date since, final Response.Listener<List<InfoGroup>> responseListener, final Response.ErrorListener errorListener) {
+    Object postBody = null;
+
+  
 
     // create path and map variables
-    String localVarPath = "/InfoGroup".replaceAll("\\{format\\}","json");
+    String path = "/InfoGroup".replaceAll("\\{format\\}","json");
 
     // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> queryParams = new ArrayList<Pair>();
     // header params
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
     // form params
-    Map<String, String> localVarFormParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
 
     
-    localVarQueryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
     
 
     
 
-    String[] localVarContentTypes = {
+    String[] contentTypes = {
       "application/json"
     };
-    String localVarContentType = localVarContentTypes.length > 0 ? localVarContentTypes[0] : "application/json";
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
-    if (localVarContentType.startsWith("multipart/form-data")) {
+    if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
       
 
-      localVarPostBody = localVarBuilder.build();
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
     } else {
       // normal form params
       
     }
 
+      String[] authNames = new String[] {  };
+
     try {
-      String localVarResponse = apiInvoker.invokeAPI(basePath, localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarContentType);
-      if(localVarResponse != null){
-        return (List<InfoGroup>) ApiInvoker.deserialize(localVarResponse, "array", InfoGroup.class);
-      }
-      else {
-        return null;
-      }
+      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String localVarResponse) {
+            
+            try {
+              responseListener.onResponse((List<InfoGroup>) ApiInvoker.deserialize(localVarResponse,  "array", InfoGroup.class));
+              
+              
+            
+            } catch (ApiException exception) {
+               errorListener.onErrorResponse(new VolleyError(exception));
+            }
+            
+          }
+      }, new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            errorListener.onErrorResponse(error);
+          }
+      });
     } catch (ApiException ex) {
-      throw ex;
+      errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   
 }
+

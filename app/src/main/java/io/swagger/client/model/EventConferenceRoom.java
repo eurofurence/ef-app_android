@@ -1,31 +1,36 @@
 package io.swagger.client.model;
 
 import io.swagger.client.model.EntityBase;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.UUID;
+
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
 
 
+
 @ApiModel(description = "")
 public class EventConferenceRoom extends EntityBase {
   
-  @SerializedName("ImageRoomPositionPoint")
-  private String imageRoomPositionPoint = null;
-  @SerializedName("ImageEntryId")
-  private String imageEntryId = null;
   @SerializedName("Name")
   private String name = null;
+  @SerializedName("ImageEntryId")
+  private String imageEntryId = null;
+  @SerializedName("ImageRoomPositionPoint")
+  private String imageRoomPositionPoint = null;
 
   
   /**
-   * Percentual coordinates on the original image indicating the entrance of the room.
+   * Name of the conference room.
    **/
-  @ApiModelProperty(value = "Percentual coordinates on the original image indicating the entrance of the room.")
-  public String getImageRoomPositionPoint() {
-    return imageRoomPositionPoint;
+  @ApiModelProperty(required = true, value = "Name of the conference room.")
+  public String getName() {
+    return name;
   }
-  public void setImageRoomPositionPoint(String imageRoomPositionPoint) {
-    this.imageRoomPositionPoint = imageRoomPositionPoint;
+  public void setName(String name) {
+    this.name = name;
   }
 
   
@@ -42,14 +47,14 @@ public class EventConferenceRoom extends EntityBase {
 
   
   /**
-   * Name of the conference room.
+   * Percentual coordinates on the original image indicating the entrance of the room.
    **/
-  @ApiModelProperty(required = true, value = "Name of the conference room.")
-  public String getName() {
-    return name;
+  @ApiModelProperty(value = "Percentual coordinates on the original image indicating the entrance of the room.")
+  public String getImageRoomPositionPoint() {
+    return imageRoomPositionPoint;
   }
-  public void setName(String name) {
-    this.name = name;
+  public void setImageRoomPositionPoint(String imageRoomPositionPoint) {
+    this.imageRoomPositionPoint = imageRoomPositionPoint;
   }
 
   
@@ -59,10 +64,12 @@ public class EventConferenceRoom extends EntityBase {
     StringBuilder sb = new StringBuilder();
     sb.append("class EventConferenceRoom {\n");
     sb.append("  " + super.toString()).append("\n");
-    sb.append("  imageRoomPositionPoint: ").append(imageRoomPositionPoint).append("\n");
-    sb.append("  imageEntryId: ").append(imageEntryId).append("\n");
     sb.append("  name: ").append(name).append("\n");
+    sb.append("  imageEntryId: ").append(imageEntryId).append("\n");
+    sb.append("  imageRoomPositionPoint: ").append(imageRoomPositionPoint).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
 }
+
+

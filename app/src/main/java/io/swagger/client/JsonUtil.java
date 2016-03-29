@@ -35,48 +35,48 @@ public class JsonUtil {
   public static Type getListTypeForDeserialization(Class cls) {
     String className = cls.getSimpleName();
     
-    if ("EntityBase".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EntityBase>>(){}.getType();
-    }
-    
-    if ("EventConferenceRoom".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventConferenceRoom>>(){}.getType();
-    }
-    
     if ("Endpoint".equalsIgnoreCase(className)) {
       return new TypeToken<List<Endpoint>>(){}.getType();
-    }
-    
-    if ("EventEntry".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventEntry>>(){}.getType();
-    }
-    
-    if ("InfoGroup".equalsIgnoreCase(className)) {
-      return new TypeToken<List<InfoGroup>>(){}.getType();
-    }
-    
-    if ("EventConferenceTrack".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventConferenceTrack>>(){}.getType();
-    }
-    
-    if ("EventConferenceDay".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventConferenceDay>>(){}.getType();
     }
     
     if ("EndpointConfiguration".equalsIgnoreCase(className)) {
       return new TypeToken<List<EndpointConfiguration>>(){}.getType();
     }
     
-    if ("Info".equalsIgnoreCase(className)) {
-      return new TypeToken<List<Info>>(){}.getType();
+    if ("EndpointEntity".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EndpointEntity>>(){}.getType();
+    }
+    
+    if ("EntityBase".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EntityBase>>(){}.getType();
+    }
+    
+    if ("EventConferenceDay".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventConferenceDay>>(){}.getType();
+    }
+    
+    if ("EventConferenceRoom".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventConferenceRoom>>(){}.getType();
+    }
+    
+    if ("EventConferenceTrack".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventConferenceTrack>>(){}.getType();
+    }
+    
+    if ("EventEntry".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventEntry>>(){}.getType();
     }
     
     if ("Image".equalsIgnoreCase(className)) {
       return new TypeToken<List<Image>>(){}.getType();
     }
     
-    if ("EndpointEntity".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EndpointEntity>>(){}.getType();
+    if ("Info".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Info>>(){}.getType();
+    }
+    
+    if ("InfoGroup".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InfoGroup>>(){}.getType();
     }
     
     return new TypeToken<List<Object>>(){}.getType();
@@ -85,48 +85,48 @@ public class JsonUtil {
   public static Type getTypeForDeserialization(Class cls) {
     String className = cls.getSimpleName();
     
-    if ("EntityBase".equalsIgnoreCase(className)) {
-      return new TypeToken<EntityBase>(){}.getType();
-    }
-    
-    if ("EventConferenceRoom".equalsIgnoreCase(className)) {
-      return new TypeToken<EventConferenceRoom>(){}.getType();
-    }
-    
     if ("Endpoint".equalsIgnoreCase(className)) {
       return new TypeToken<Endpoint>(){}.getType();
-    }
-    
-    if ("EventEntry".equalsIgnoreCase(className)) {
-      return new TypeToken<EventEntry>(){}.getType();
-    }
-    
-    if ("InfoGroup".equalsIgnoreCase(className)) {
-      return new TypeToken<InfoGroup>(){}.getType();
-    }
-    
-    if ("EventConferenceTrack".equalsIgnoreCase(className)) {
-      return new TypeToken<EventConferenceTrack>(){}.getType();
-    }
-    
-    if ("EventConferenceDay".equalsIgnoreCase(className)) {
-      return new TypeToken<EventConferenceDay>(){}.getType();
     }
     
     if ("EndpointConfiguration".equalsIgnoreCase(className)) {
       return new TypeToken<EndpointConfiguration>(){}.getType();
     }
     
-    if ("Info".equalsIgnoreCase(className)) {
-      return new TypeToken<Info>(){}.getType();
+    if ("EndpointEntity".equalsIgnoreCase(className)) {
+      return new TypeToken<EndpointEntity>(){}.getType();
+    }
+    
+    if ("EntityBase".equalsIgnoreCase(className)) {
+      return new TypeToken<EntityBase>(){}.getType();
+    }
+    
+    if ("EventConferenceDay".equalsIgnoreCase(className)) {
+      return new TypeToken<EventConferenceDay>(){}.getType();
+    }
+    
+    if ("EventConferenceRoom".equalsIgnoreCase(className)) {
+      return new TypeToken<EventConferenceRoom>(){}.getType();
+    }
+    
+    if ("EventConferenceTrack".equalsIgnoreCase(className)) {
+      return new TypeToken<EventConferenceTrack>(){}.getType();
+    }
+    
+    if ("EventEntry".equalsIgnoreCase(className)) {
+      return new TypeToken<EventEntry>(){}.getType();
     }
     
     if ("Image".equalsIgnoreCase(className)) {
       return new TypeToken<Image>(){}.getType();
     }
     
-    if ("EndpointEntity".equalsIgnoreCase(className)) {
-      return new TypeToken<EndpointEntity>(){}.getType();
+    if ("Info".equalsIgnoreCase(className)) {
+      return new TypeToken<Info>(){}.getType();
+    }
+    
+    if ("InfoGroup".equalsIgnoreCase(className)) {
+      return new TypeToken<InfoGroup>(){}.getType();
     }
     
     return new TypeToken<Object>(){}.getType();

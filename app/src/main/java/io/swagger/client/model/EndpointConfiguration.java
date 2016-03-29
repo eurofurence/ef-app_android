@@ -2,8 +2,10 @@ package io.swagger.client.model;
 
 import java.util.UUID;
 
+
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+
 
 
 @ApiModel(description = "")
@@ -63,3 +65,5 @@ public class EndpointConfiguration  {
     return sb.toString();
   }
 }
+
+

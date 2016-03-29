@@ -8,13 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import io.swagger.client.JsonUtil;
-import org.w3c.dom.Text;
-
 import io.swagger.client.model.EventEntry;
-import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 
 /**
@@ -25,7 +20,7 @@ import roboguice.inject.InjectView;
  * Use the {@link MainEventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainEventFragment extends RoboFragment {
+public class MainEventFragment extends Fragment {
     private EventEntry eventEntry;
 
     private OnFragmentInteractionListener mListener = new OnFragmentInteractionListener() {
@@ -35,7 +30,6 @@ public class MainEventFragment extends RoboFragment {
         }
     };
 
-    @InjectView(R.id.eventTitle)
     TextView eventTitle;
 
     public MainEventFragment() {
@@ -61,7 +55,9 @@ public class MainEventFragment extends RoboFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main_event, container, false);
+        View view = inflater.inflate(R.layout.fragment_main_event, container, false);
+        eventTitle = (TextView) view.findViewById(R.id.eventTitle);
+        return view;
     }
 
     @Override

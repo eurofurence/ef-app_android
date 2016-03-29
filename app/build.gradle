@@ -1,12 +1,10 @@
+apply plugin: 'idea'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'idea'
 
 android {
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
-
-    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "org.eurofurence.connavigator"
@@ -39,25 +37,38 @@ android {
         exclude "META-INF/maven/com.google.guava/guava/pom.xml"
         exclude "META-INF/maven/com.google.guava/guava/pom.properties"
     }
+
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     testOptions {
         unitTests.returnDefaultValues = true
     }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
+
 }
 
-// Location of the schema file
-ext.backend_commit = "8c1cfe69eaa0a57a22934d33088c0a1fa4de204e"
-ext.schema_location = "https://raw.githubusercontent.com/eurofurence/ef-app_backend/$backend_commit/Swagger/ApiDefinition.yml"
+
+ext {
+    // Location of the schema file
+    backend_commit = "8c1cfe69eaa0a57a22934d33088c0a1fa4de204e"
+    schema_location = "https://raw.githubusercontent.com/eurofurence/ef-app_backend/$backend_commit/Swagger/ApiDefinition.yml"
+
+    // Dependency versions
+    swagger_annotations_version = "1.5.0"
+    gson_version = "2.6.1"
+    httpclient_version = "4.3.3"
+    volley_version = "1.0.1"
+    junit_version = "4.8.1"
+}
 
 // Embedded swagger
 apply from: 'swagger.gradle'
-
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -80,14 +91,12 @@ dependencies {
     compile 'net.danlew:android.joda:2.9.2'
     compile 'joda-time:joda-time:2.9.2:no-tzdb'
 
-    // Robo jews
-    compile 'org.roboguice:roboguice:3.0.1'
-    provided 'org.roboguice:roboblender:3.0.1'
-    kapt 'org.roboguice:roboblender:3.0.1'
-}
-kapt {
-    generateStubs = true
-    arguments {
-        arg("guiceAnnotationDatabasePackageName", 'org.eurofurence.connavigator')
-    }
+    compile "io.swagger:swagger-annotations:$swagger_annotations_version"
+    compile "com.google.code.gson:gson:$gson_version"
+    compile "org.apache.httpcomponents:httpcore:$httpclient_version"
+    compile "org.apache.httpcomponents:httpclient:$httpclient_version"
+    compile "org.apache.httpcomponents:httpmime:$httpclient_version"
+    compile "com.mcxiaoke.volley:library-aar:$volley_version"
+
+    testCompile "junit:junit:$junit_version"
 }

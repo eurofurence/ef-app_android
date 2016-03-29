@@ -1,26 +1,42 @@
 package io.swagger.client.model;
 
 import io.swagger.client.model.EntityBase;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.UUID;
+
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
 
 
+
 @ApiModel(description = "")
 public class Image extends EntityBase {
   
+  @SerializedName("Url")
+  private String url = null;
   @SerializedName("Title")
   private String title = null;
+  @SerializedName("Width")
+  private Integer width = null;
   @SerializedName("Height")
   private Integer height = null;
   @SerializedName("FileSizeInBytes")
   private Integer fileSizeInBytes = null;
-  @SerializedName("Width")
-  private Integer width = null;
-  @SerializedName("Url")
-  private String url = null;
   @SerializedName("MimeType")
   private String mimeType = null;
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getUrl() {
+    return url;
+  }
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
   
   /**
@@ -31,6 +47,17 @@ public class Image extends EntityBase {
   }
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public Integer getWidth() {
+    return width;
+  }
+  public void setWidth(Integer width) {
+    this.width = width;
   }
 
   
@@ -59,28 +86,6 @@ public class Image extends EntityBase {
   /**
    **/
   @ApiModelProperty(value = "")
-  public Integer getWidth() {
-    return width;
-  }
-  public void setWidth(Integer width) {
-    this.width = width;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  public String getUrl() {
-    return url;
-  }
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
   public String getMimeType() {
     return mimeType;
   }
@@ -95,13 +100,15 @@ public class Image extends EntityBase {
     StringBuilder sb = new StringBuilder();
     sb.append("class Image {\n");
     sb.append("  " + super.toString()).append("\n");
+    sb.append("  url: ").append(url).append("\n");
     sb.append("  title: ").append(title).append("\n");
+    sb.append("  width: ").append(width).append("\n");
     sb.append("  height: ").append(height).append("\n");
     sb.append("  fileSizeInBytes: ").append(fileSizeInBytes).append("\n");
-    sb.append("  width: ").append(width).append("\n");
-    sb.append("  url: ").append(url).append("\n");
     sb.append("  mimeType: ").append(mimeType).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
 }
+
+

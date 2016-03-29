@@ -4,7 +4,6 @@ import android.content.Context
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.extensions.*
 import java.io.File
-import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -102,14 +101,14 @@ class DBService(val context: Context) {
      */
     fun initialize() {
         // Late init the databases with the given context
-        dateDb = sdbProvider.create(File(context.cacheDir, "date.db"), Date::class.java)
-        eventConferenceDayDb = efSyncDB(gsdbProvider.create(File(context.cacheDir, "eventconday.db"), EventConferenceDay::class.java))
-        eventConferenceRoomDb = efSyncDB(gsdbProvider.create(File(context.cacheDir, "eventconroom.db"), EventConferenceRoom::class.java))
-        eventConferenceTrackDb = efSyncDB(gsdbProvider.create(File(context.cacheDir, "eventcontrack.db"), EventConferenceTrack::class.java))
-        eventEntryDb = efSyncDB(gsdbProvider.create(File(context.cacheDir, "events.db"), EventEntry::class.java))
-        imageDb = efSyncDB(gsdbProvider.create(File(context.cacheDir, "image.db"), Image::class.java))
-        infoDb = efSyncDB(gsdbProvider.create(File(context.cacheDir, "info.db"), Info::class.java))
-        infoGroupDb = efSyncDB(gsdbProvider.create(File(context.cacheDir, "infogroup.db"), InfoGroup::class.java))
+        dateDb = serializableDBs.create(File(context.cacheDir, "date.db"), Date::class.java)
+        eventConferenceDayDb = efSyncDB(gsonDBs.create(File(context.cacheDir, "eventconday.db"), EventConferenceDay::class.java))
+        eventConferenceRoomDb = efSyncDB(gsonDBs.create(File(context.cacheDir, "eventconroom.db"), EventConferenceRoom::class.java))
+        eventConferenceTrackDb = efSyncDB(gsonDBs.create(File(context.cacheDir, "eventcontrack.db"), EventConferenceTrack::class.java))
+        eventEntryDb = efSyncDB(gsonDBs.create(File(context.cacheDir, "events.db"), EventEntry::class.java))
+        imageDb = efSyncDB(gsonDBs.create(File(context.cacheDir, "image.db"), Image::class.java))
+        infoDb = efSyncDB(gsonDBs.create(File(context.cacheDir, "info.db"), Info::class.java))
+        infoGroupDb = efSyncDB(gsonDBs.create(File(context.cacheDir, "infogroup.db"), InfoGroup::class.java))
 
         // Main request, this will trigger the sequence of database updates
         context.createEndpointReceiver("updateService") {
@@ -117,8 +116,6 @@ class DBService(val context: Context) {
                 // Get dates of server and local database
                 serverDate = it.currentDateTimeUtc
                 val dbDate = dateDb.elements.firstOrNull() ?: Date(0)
-
-                println("Processing a database update, local: $dbDate, server: $serverDate")
 
                 // Query conference info
                 start(7)
@@ -211,12 +208,11 @@ class DBService(val context: Context) {
 
     /**
      * Decreases the number of requests by one, if this is the last request, write the new database time
-     * @param dbDate The new database time
      */
-    private fun finish(succ: Boolean, times: Int = 1) {
+    private fun finish(opSuccess: Boolean, times: Int = 1) {
         // If last request to finish, put the new database status
         requests -= times
-        success = success && succ
+        success = success && opSuccess
 
         if ( requests == 0) {
             // Commit server date and reset
@@ -232,7 +228,6 @@ class DBService(val context: Context) {
     /**
      * Runs a code block maybe failing in an exception to determine the success level.
      * @param block The block to run
-     * @param times The amount of requests this block decreases
      */
     private fun finishWith(block: () -> Unit) {
         finish(ifSuccess(block))

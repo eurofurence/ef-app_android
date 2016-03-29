@@ -5,23 +5,28 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.widget.TextView
 import org.eurofurence.connavigator.MainEventFragment
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.db.DBService
-import roboguice.activity.RoboActionBarActivity
+import org.eurofurence.connavigator.util.android.headerView
+import org.eurofurence.connavigator.util.android.view
 
-abstract class BaseActivity() : RoboActionBarActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
+abstract class BaseActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri?) {
         println(uri)
     }
 
-    val dbservice = DBService(this)
+    val dbService = DBService(this)
 
-    protected lateinit var navDays: TextView
-    protected lateinit var navTitle: TextView
-    protected lateinit var navSubtitle: TextView
+    val eventRecycler: RecyclerView by view(RecyclerView::class.java)
+    val navView: NavigationView by view(NavigationView::class.java)
+    val navDays: TextView by headerView(TextView::class.java, { navView })
+    val navTitle: TextView by headerView(TextView::class.java, { navView })
+    val navSubtitle: TextView by headerView(TextView::class.java, { navView })
 
     /* Inserts the navigation menu and the top bar
      *
@@ -39,13 +44,6 @@ abstract class BaseActivity() : RoboActionBarActivity(), NavigationView.OnNaviga
         toggle.syncState()
 
         // Find navigation drawer and add this activity as a listener
-        val navigationView = findViewById(R.id.nav_view) as NavigationView
-        navigationView.setNavigationItemSelectedListener(this)
-
-        // Resolve the header in the navigation drawer, bind the views
-        val header = navigationView.getHeaderView(0)
-        navDays = header.findViewById(R.id.navDays)as TextView
-        navTitle = header.findViewById(R.id.navTitle)as TextView
-        navSubtitle = header.findViewById(R.id.navSubtitle)as TextView
+        navView.setNavigationItemSelectedListener(this)
     }
 }

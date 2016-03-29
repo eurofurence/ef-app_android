@@ -16,13 +16,9 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.db.DBCallback
 import org.joda.time.DateTime
 import org.joda.time.Days
-import roboguice.inject.InjectView
 
 class LaunchScreenActivity : BaseActivity() {
 
-
-    @InjectView(R.id.eventRecycler)
-    private lateinit var eventsView: RecyclerView
 
     private var events: List<EventEntry> = emptyList()
 
@@ -36,11 +32,11 @@ class LaunchScreenActivity : BaseActivity() {
         injectNavigation(savedInstanceState)
 
         // Turn this off if there are views of different sizes in the recycler
-        eventsView.setHasFixedSize(true)
+        eventRecycler.setHasFixedSize(true)
 
         // Default setup for recycler layout and animation
-        eventsView.layoutManager = LinearLayoutManager(this)
-        eventsView.itemAnimator = DefaultItemAnimator()
+        eventRecycler.layoutManager = LinearLayoutManager(this)
+        eventRecycler.itemAnimator = DefaultItemAnimator()
 
 
         // Event view holder finds and memorizes the views in an event card
@@ -55,13 +51,13 @@ class LaunchScreenActivity : BaseActivity() {
         }
 
         // Initialize the database service to listen in this context
-        dbservice.initialize()
+        dbService.initialize()
 
         // Query and memorize the events
-        events = dbservice.eventEntryDb.elements.toList()
+        events = dbService.eventEntryDb.elements.toList()
 
         // Assign a new adapter mapping to the previously defined view event holders
-        eventsView.adapter = object : RecyclerView.Adapter<EventViewHolder>() {
+        eventRecycler.adapter = object : RecyclerView.Adapter<EventViewHolder>() {
             override fun onCreateViewHolder(parent: ViewGroup, p1: Int): EventViewHolder {
                 // To create the view holder, inflate the main event. This can be replaced, but differently
                 // sized fragments will require the fixed size property of the recycler to be lifted
@@ -106,18 +102,18 @@ class LaunchScreenActivity : BaseActivity() {
             Snackbar.make(view, "Reloading database", Snackbar.LENGTH_SHORT).show()
 
             // Update the database
-            dbservice.update (object : DBCallback {
-                override fun gotEvents(values: List<EventEntry>) {
+            dbService.update (object : DBCallback {
+                override fun gotEvents(delta: List<EventEntry>) {
                     // Notify the recycler that its content has changed
-                    events = values
-                    eventsView.adapter.notifyDataSetChanged()
+                    events = dbService.eventEntryDb.elements
+                    eventRecycler.adapter.notifyDataSetChanged()
                 }
 
                 override fun done(success: Boolean) {
-                    val cts = dbservice.dateDb.elements.firstOrNull()
+                    val cts = dbService.dateDb.elements.firstOrNull()
                     Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $cts", Snackbar.LENGTH_SHORT).show()
                 }
-            })
+            } + DBCallback.OUTPUT)
         }
     }
 
@@ -160,19 +156,19 @@ class LaunchScreenActivity : BaseActivity() {
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            for (x in dbservice.eventConferenceDayDb.elements)
+            for (x in dbService.eventConferenceDayDb.elements)
                 println(x)
-            for (x in dbservice.eventConferenceRoomDb.elements)
+            for (x in dbService.eventConferenceRoomDb.elements)
                 println(x)
-            for (x in dbservice.eventConferenceTrackDb.elements)
+            for (x in dbService.eventConferenceTrackDb.elements)
                 println(x)
-            for (x in dbservice.eventEntryDb.elements)
+            for (x in dbService.eventEntryDb.elements)
                 println(x)
-            for (x in dbservice.imageDb.elements)
+            for (x in dbService.imageDb.elements)
                 println(x)
-            for (x in dbservice.infoDb.elements)
+            for (x in dbService.infoDb.elements)
                 println(x)
-            for (x in dbservice.infoGroupDb.elements)
+            for (x in dbService.infoGroupDb.elements)
                 println(x)
 
         } else if (id == R.id.nav_slideshow) {
