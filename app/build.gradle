@@ -90,7 +90,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.2.0'
     compile 'net.danlew:android.joda:2.9.2'
     compile 'joda-time:joda-time:2.9.2:no-tzdb'
-
     compile "io.swagger:swagger-annotations:$swagger_annotations_version"
     compile "com.google.code.gson:gson:$gson_version"
     compile "org.apache.httpcomponents:httpcore:$httpclient_version"

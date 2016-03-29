@@ -6,7 +6,7 @@
 
     <!-- Main entry point of the application -->
     <application
-            android:name=".ConnavigatorApplication"
+            android:name=".app.ConnavigatorApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -15,7 +15,7 @@
 
         <!-- Service providing a detached retrieval of data from the internet. -->
         <service
-                android:name=".webapi.QueryService"
+                android:name=".webapi.QueryIntentService"
                 android:exported="false"/>
 
         <!-- Main screen within the application -->

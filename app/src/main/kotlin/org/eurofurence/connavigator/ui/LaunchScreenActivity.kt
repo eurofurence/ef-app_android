@@ -11,19 +11,29 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.TextView
+import com.android.volley.toolbox.NetworkImageView
 import io.swagger.client.model.EventEntry
+import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.db.DBCallback
+import org.eurofurence.connavigator.driver.Driver
+import org.eurofurence.connavigator.driver.DriverCallback
+import org.eurofurence.connavigator.util.viewInHolder
+import org.eurofurence.connavigator.net.volleyService
 import org.joda.time.DateTime
 import org.joda.time.Days
 
 class LaunchScreenActivity : BaseActivity() {
-
-
-    private var events: List<EventEntry> = emptyList()
+    /**
+     * The database access, relative to the launch screen activity to support
+     * feedback events.
+     */
+    val driver = Driver(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Initialize the database to listen in this context
+        driver.initialize()
 
         // Assign the main layout
         setContentView(R.layout.activity_launch_screen)
@@ -40,21 +50,14 @@ class LaunchScreenActivity : BaseActivity() {
 
 
         // Event view holder finds and memorizes the views in an event card
-        class EventViewHolder(viewItem: View,
-                              val event: CardView = viewItem.findViewById(R.id.eventCard) as CardView,
-                              val title: TextView = viewItem.findViewById(R.id.eventTitle) as TextView,
-                              val date: TextView = viewItem.findViewById(R.id.eventDate) as TextView,
-                              val hosts: TextView = viewItem.findViewById(R.id.eventHosts) as TextView,
-                              val description: TextView = viewItem.findViewById(R.id.eventDescription) as TextView)
-        : RecyclerView.ViewHolder(viewItem) {
-            // No body
+        class EventViewHolder(viewItem: View) : RecyclerView.ViewHolder(viewItem) {
+            val eventImage by viewInHolder(NetworkImageView::class.java)
+            val eventTitle by viewInHolder(TextView::class.java)
+            val eventDate by viewInHolder(TextView::class.java)
+            val eventHosts by viewInHolder(TextView::class.java)
+            val eventDescription by viewInHolder(TextView::class.java)
         }
 
-        // Initialize the database service to listen in this context
-        dbService.initialize()
-
-        // Query and memorize the events
-        events = dbService.eventEntryDb.elements.toList()
 
         // Assign a new adapter mapping to the previously defined view event holders
         eventRecycler.adapter = object : RecyclerView.Adapter<EventViewHolder>() {
@@ -68,18 +71,35 @@ class LaunchScreenActivity : BaseActivity() {
 
             override fun getItemCount(): Int {
                 // Fixed size, map to the events
-                return events.size
+                return driver.eventEntryDb.elements.size
             }
 
             override fun onBindViewHolder(holder: EventViewHolder, pos: Int) {
                 // Get the event for the position
-                val event = events[pos]
+                val event = driver.eventEntryDb.elements[pos]
 
                 // Assign the properties of the view
-                holder.title.text = event.title
-                holder.date.text = event.startTime
-                holder.hosts.text = event.panelHosts
-                holder.description.text = event.description
+                holder.eventTitle.text = event.title
+                holder.eventDate.text = event.startTime
+                holder.eventHosts.text = event.panelHosts
+                holder.eventDescription.text = event.description
+
+                // Default to placeholder
+                holder.eventImage.setDefaultImageResId(R.drawable.placeholder_event)
+
+                // Get the image ID by assigning the first position to the first image
+                val imageId = if (pos == 0 && !driver.imageDb.elements.isEmpty()) driver.imageDb.elements[0].id else null
+
+                // Assign an image if present
+                if (imageId != null) {
+                    val img = driver.imageDb.elements.firstOrNull { it.id == imageId }
+                    if (img != null)
+                        holder.eventImage.setImageUrl(img.url, volleyService.imageLoader)
+
+                    holder.eventImage.visibility = View.VISIBLE
+                } else {
+                    holder.eventImage.visibility = View.GONE
+                }
             }
         }
 
@@ -102,18 +122,22 @@ class LaunchScreenActivity : BaseActivity() {
             Snackbar.make(view, "Reloading database", Snackbar.LENGTH_SHORT).show()
 
             // Update the database
-            dbService.update (object : DBCallback {
+            driver.update (object : DriverCallback {
+                override fun gotImages(delta: List<Image>) {
+                    // Notify the recycler that its content has changed
+                    eventRecycler.adapter.notifyDataSetChanged()
+                }
+
                 override fun gotEvents(delta: List<EventEntry>) {
                     // Notify the recycler that its content has changed
-                    events = dbService.eventEntryDb.elements
                     eventRecycler.adapter.notifyDataSetChanged()
                 }
 
                 override fun done(success: Boolean) {
-                    val cts = dbService.dateDb.elements.firstOrNull()
+                    val cts = driver.dateDb.elements.firstOrNull()
                     Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $cts", Snackbar.LENGTH_SHORT).show()
                 }
-            } + DBCallback.OUTPUT)
+            } + DriverCallback.OUTPUT)
         }
     }
 
@@ -156,19 +180,19 @@ class LaunchScreenActivity : BaseActivity() {
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            for (x in dbService.eventConferenceDayDb.elements)
+            for (x in driver.eventConferenceDayDb.elements)
                 println(x)
-            for (x in dbService.eventConferenceRoomDb.elements)
+            for (x in driver.eventConferenceRoomDb.elements)
                 println(x)
-            for (x in dbService.eventConferenceTrackDb.elements)
+            for (x in driver.eventConferenceTrackDb.elements)
                 println(x)
-            for (x in dbService.eventEntryDb.elements)
+            for (x in driver.eventEntryDb.elements)
                 println(x)
-            for (x in dbService.imageDb.elements)
+            for (x in driver.imageDb.elements)
                 println(x)
-            for (x in dbService.infoDb.elements)
+            for (x in driver.infoDb.elements)
                 println(x)
-            for (x in dbService.infoGroupDb.elements)
+            for (x in driver.infoGroupDb.elements)
                 println(x)
 
         } else if (id == R.id.nav_slideshow) {

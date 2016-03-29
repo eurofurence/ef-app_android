@@ -10,10 +10,10 @@ import android.os.PatternMatcher
 import android.support.v4.content.LocalBroadcastManager
 import io.swagger.client.JsonUtil
 import io.swagger.client.api.DefaultApi
-import org.eurofurence.connavigator.extensions.booleans
-import org.eurofurence.connavigator.extensions.get
-import org.eurofurence.connavigator.extensions.objects
-import org.eurofurence.connavigator.extensions.set
+import org.eurofurence.connavigator.util.booleans
+import org.eurofurence.connavigator.util.get
+import org.eurofurence.connavigator.util.objects
+import org.eurofurence.connavigator.util.set
 import org.eurofurence.connavigator.util.Bridge
 import org.eurofurence.connavigator.util.Registered
 import java.util.*
@@ -25,7 +25,7 @@ import java.util.*
  * example queryEndpoint and the corresponding createEndpointReceiver method in the query extensions. To start listening with a receiver,
  * call [Registered.register].
  */
-class QueryService(val api: DefaultApi = DefaultApi()) : IntentService("QueryIntentService") {
+class QueryIntentService(val api: DefaultApi = DefaultApi()) : IntentService("QueryIntentService") {
     companion object {
         /**
          * The intent used as a return will be classified by this name

@@ -1,7 +1,8 @@
 package org.eurofurence.connavigator.db
 
 import io.swagger.client.model.EntityBase
-import org.eurofurence.connavigator.extensions.not
+import org.eurofurence.connavigator.util.not
+import org.eurofurence.connavigator.util.not
 import java.math.BigInteger
 
 /**
@@ -35,7 +36,11 @@ class SyncDB<T>(val objectId: (T) -> Any, val deleted: (T) -> Boolean, delegate:
 }
 
 /**
- * Creates a synchronizable database for [EntityBase] objects.
- * @param delegate The delegation database storing and loading the objects
+ * Creates a synchronizable database for arbitrary objects.
  */
-fun <T : EntityBase> efSyncDB(delegate: DB<T>) = SyncDB(EntityBase::getId, { it.isDeleted == BigInteger.ONE }, delegate)
+fun <T> DB<T>.syncDB(objectId: (T) -> Any, deleted: (T) -> Boolean) = SyncDB(objectId, deleted, this)
+
+/**
+ * Creates a synchronizable database for the API's [EntityBase] objects.
+ */
+fun <T : EntityBase> DB<T>.apiSyncDB() = SyncDB(EntityBase::getId, { it.isDeleted == BigInteger.ONE }, this)

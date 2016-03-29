@@ -11,22 +11,19 @@ import android.support.v7.widget.Toolbar
 import android.widget.TextView
 import org.eurofurence.connavigator.MainEventFragment
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.db.DBService
-import org.eurofurence.connavigator.util.android.headerView
-import org.eurofurence.connavigator.util.android.view
+import org.eurofurence.connavigator.util.viewInHeader
+import org.eurofurence.connavigator.util.view
 
 abstract class BaseActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri?) {
         println(uri)
     }
 
-    val dbService = DBService(this)
-
-    val eventRecycler: RecyclerView by view(RecyclerView::class.java)
-    val navView: NavigationView by view(NavigationView::class.java)
-    val navDays: TextView by headerView(TextView::class.java, { navView })
-    val navTitle: TextView by headerView(TextView::class.java, { navView })
-    val navSubtitle: TextView by headerView(TextView::class.java, { navView })
+    val eventRecycler  by view(RecyclerView::class.java)
+    val navView by view(NavigationView::class.java)
+    val navDays by viewInHeader(TextView::class.java, { navView })
+    val navTitle by viewInHeader(TextView::class.java, { navView })
+    val navSubtitle by viewInHeader(TextView::class.java, { navView })
 
     /* Inserts the navigation menu and the top bar
      *

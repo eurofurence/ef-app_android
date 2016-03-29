@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.extensions
+package org.eurofurence.connavigator.util
 
 import java.io.IOException
 
@@ -8,7 +8,7 @@ import java.io.IOException
  * @param block The block to run
  * @return Returns the result of the block or null
  */
-fun <T> sec(block: () -> T): T? = try {
+fun <T> forSuccess(block: () -> T): T? = try {
     // Execute a block that might run into an IO exception
     block()
 } catch(exception: IOException) {

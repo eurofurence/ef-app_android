@@ -24,12 +24,12 @@
                 android:orientation="vertical"
                 android:background="@color/colorPrimary">
 
-            <ImageView
+            <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/eventImage"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:cropToPadding="false"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_event"
                     />
 
             <LinearLayout
