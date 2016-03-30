@@ -103,7 +103,7 @@ class Driver(val context: Context) {
      */
     fun initialize() {
         // Late init the databases with the given context, date DB is an uncached, unsynced local storage
-        dateDb = serializableDBs.create(File(context.cacheDir, "date.db"), Date::class.java)
+        dateDb = serializableDBs.create(File(context.cacheDir, "date.db"), Date::class.java).cachedDB()
 
         // Databases for the API, they are cached and synced
         eventConferenceDayDb = gsonDBs.create(File(context.cacheDir, "eventconday.db"),

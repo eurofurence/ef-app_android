@@ -83,12 +83,9 @@ class LaunchScreenActivity : BaseActivity() {
                 holder.eventHosts.text = event.panelHosts
                 holder.eventDescription.text = event.description
 
-                // Get the image ID by assigning the first position to the first image
-                val imageId = if (pos == 0 && !driver.imageDb.elements.isEmpty()) driver.imageDb.elements[0].id else null
-
                 // Assign an image if present
-                if (imageId != null) {
-                    val img = driver.imageDb.elements.firstOrNull { it.id == imageId }
+                if (event.imageId != null) {
+                    val img = driver.imageDb.elements.firstOrNull { it.id == event.imageId }
                     if (img != null)
                         imageService.load(img, holder.eventImage)
 
