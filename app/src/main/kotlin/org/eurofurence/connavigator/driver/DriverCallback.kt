@@ -1,6 +1,8 @@
 package org.eurofurence.connavigator.driver
 
 import io.swagger.client.model.*
+import org.eurofurence.connavigator.util.logd
+import org.eurofurence.connavigator.util.loge
 
 /**
  * Callback for the [Driver].
@@ -18,42 +20,42 @@ interface DriverCallback {
          */
         val OUTPUT = object : DriverCallback {
             override fun gotEventConferenceDays(delta: List<EventConferenceDay>) {
-                println("gotEventConferenceDays, delta: ${delta.size}")
+                logd("DCB") { "gotEventConferenceDays, delta: ${delta.size}" }
             }
 
             override fun gotEventConferenceRooms(delta: List<EventConferenceRoom>) {
-                println("gotEventConferenceRooms, delta: ${delta.size}")
+                logd("DCB") { "gotEventConferenceRooms, delta: ${delta.size}" }
             }
 
             override fun gotEventConferenceTracks(delta: List<EventConferenceTrack>) {
-                println("gotEventConferenceTracks, delta: ${delta.size}")
+                logd("DCB") { "gotEventConferenceTracks, delta: ${delta.size}" }
             }
 
             override fun gotEvents(delta: List<EventEntry>) {
-                println("gotEvents, delta: ${delta.size}")
+                logd("DCB") { "gotEvents, delta: ${delta.size}" }
             }
 
             override fun gotImages(delta: List<Image>) {
-                println("gotImages, delta: ${delta.size}")
+                logd("DCB") { "gotImages, delta: ${delta.size}" }
             }
 
             override fun gotInfo(delta: List<Info>) {
-                println("gotImages, delta: ${delta.size}")
+                logd("DCB") { "gotImages, delta: ${delta.size}" }
             }
 
             override fun gotInfoGroups(delta: List<InfoGroup>) {
-                println("gotInfoGroups, delta: ${delta.size}")
+                logd("DCB") { "gotInfoGroups, delta: ${delta.size}" }
             }
 
             override fun dispatched() {
-                println("dispatched")
+                logd("DCB") { "dispatched" }
             }
 
             override fun done(success: Boolean) {
                 if (success)
-                    println("done, success: $success")
+                    logd("DCB") { "done, success: $success" }
                 else
-                    System.err?.println("done, success: $success")
+                    loge("DBC") { "done, success: $success" }
             }
         }
     }

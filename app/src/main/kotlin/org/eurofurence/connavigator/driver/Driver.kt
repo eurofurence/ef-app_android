@@ -240,7 +240,5 @@ class Driver(val context: Context) {
      * Runs a code block maybe failing in an exception to determine the success level.
      * @param block The block to run
      */
-    private fun finishWith(block: () -> Unit) {
-        finish(ifSuccess(block))
-    }
+    private fun finishWith(block: () -> Unit) = finish(ifSuccess(block))
 }

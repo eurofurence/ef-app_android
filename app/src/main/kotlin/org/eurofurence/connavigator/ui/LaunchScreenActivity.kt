@@ -14,9 +14,12 @@ import android.widget.TextView
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.app.logService
 import org.eurofurence.connavigator.driver.Driver
 import org.eurofurence.connavigator.driver.DriverCallback
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.util.logd
+import org.eurofurence.connavigator.util.logv
 import org.eurofurence.connavigator.util.viewInHolder
 import org.joda.time.DateTime
 import org.joda.time.Days
@@ -30,6 +33,8 @@ class LaunchScreenActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        logd { "Launch screen creating" }
 
         // Initialize the database to listen in this context
         driver.initialize()
@@ -132,6 +137,8 @@ class LaunchScreenActivity : BaseActivity() {
                 }
             } + DriverCallback.OUTPUT)
         }
+
+        logd { "Launch screen created" }
     }
 
 
@@ -173,23 +180,16 @@ class LaunchScreenActivity : BaseActivity() {
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            for (x in driver.eventConferenceDayDb.elements)
-                println(x)
-            for (x in driver.eventConferenceRoomDb.elements)
-                println(x)
-            for (x in driver.eventConferenceTrackDb.elements)
-                println(x)
-            for (x in driver.eventEntryDb.elements)
-                println(x)
-            for (x in driver.imageDb.elements)
-                println(x)
-            for (x in driver.infoDb.elements)
-                println(x)
-            for (x in driver.infoGroupDb.elements)
-                println(x)
-
+            logv { driver.eventConferenceDayDb.elements.joinToString(System.lineSeparator()) }
+            logv { driver.eventConferenceRoomDb.elements.joinToString(System.lineSeparator()) }
+            logv { driver.eventConferenceTrackDb.elements.joinToString(System.lineSeparator()) }
+            logv { driver.eventEntryDb.elements.joinToString(System.lineSeparator()) }
+            logv { driver.imageDb.elements.joinToString(System.lineSeparator()) }
+            logv { driver.infoDb.elements.joinToString(System.lineSeparator()) }
+            logv { driver.infoGroupDb.elements.joinToString(System.lineSeparator()) }
         } else if (id == R.id.nav_slideshow) {
-
+            for (line in logService.messages())
+                println(line)
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

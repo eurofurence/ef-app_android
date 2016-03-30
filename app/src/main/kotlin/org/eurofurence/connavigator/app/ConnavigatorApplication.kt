@@ -16,9 +16,10 @@ class ConnavigatorApplication : Application() {
         // impractical database of JODA
         JodaTimeAndroid.init(this)
 
-        // Initialize the services
+        // Initialize some services
         imageService.initialize(this)
         apiService.initialize(this)
+        logService.initialize(this)
 
     }
 }
