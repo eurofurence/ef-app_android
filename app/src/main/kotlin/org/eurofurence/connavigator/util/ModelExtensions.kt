@@ -5,8 +5,10 @@ import com.google.common.io.CharSource
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import io.swagger.client.JsonUtil
+import io.swagger.client.model.EntityBase
 import java.io.Reader
 import java.io.Writer
+import java.math.BigDecimal
 
 /**
  * Utilities for model related JSON
@@ -48,3 +50,9 @@ object gson {
      */
     fun writer(sink: CharSink) = writer(sink.openStream())
 }
+
+/**
+ * True if the deleted flag of [EntityBase] is equal to [BigDecimal]s `ONE` value.
+ */
+val EntityBase.deleted: Boolean
+    get() = isDeleted == BigDecimal.ONE
