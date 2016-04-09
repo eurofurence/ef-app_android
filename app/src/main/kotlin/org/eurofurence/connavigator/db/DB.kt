@@ -109,3 +109,4 @@ class GsonDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
             JsonUtil.getGson().toJson(values, JsonUtil.getListTypeForDeserialization(elementClass), jw)
         }
 }
+

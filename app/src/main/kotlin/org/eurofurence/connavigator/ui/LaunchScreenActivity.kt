@@ -52,7 +52,6 @@ class LaunchScreenActivity : BaseActivity() {
         eventRecycler.layoutManager = LinearLayoutManager(this)
         eventRecycler.itemAnimator = DefaultItemAnimator()
 
-
         // Event view holder finds and memorizes the views in an event card
         class EventViewHolder(viewItem: View) : RecyclerView.ViewHolder(viewItem) {
             val eventImage by viewInHolder(ImageView::class.java)

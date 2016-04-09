@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.driver
 import android.content.Context
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.db.*
+import org.eurofurence.connavigator.util.cachedApiDB
 import org.eurofurence.connavigator.util.ifSuccess
 import org.eurofurence.connavigator.webapi.*
 import java.io.File
@@ -24,37 +25,37 @@ class Driver(val context: Context) {
     /**
      * Database of conference days.
      */
-    lateinit var eventConferenceDayDb: SyncDB<EventConferenceDay>
+    lateinit var eventConferenceDayDb: SyncIDB<EventConferenceDay>
 
     /**
      * Database of conference rooms.
      */
-    lateinit var eventConferenceRoomDb: SyncDB<EventConferenceRoom>
+    lateinit var eventConferenceRoomDb: SyncIDB<EventConferenceRoom>
 
     /**
      * Database of conference tracks.
      */
-    lateinit var eventConferenceTrackDb: SyncDB<EventConferenceTrack>
+    lateinit var eventConferenceTrackDb: SyncIDB<EventConferenceTrack>
 
     /**
      * Database of events.
      */
-    lateinit var eventEntryDb: SyncDB<EventEntry>
+    lateinit var eventEntryDb: SyncIDB<EventEntry>
 
     /**
      * Database of images (meta information).
      */
-    lateinit var imageDb: SyncDB<Image>
+    lateinit var imageDb: SyncIDB<Image>
 
     /**
      * Database of infos.
      */
-    lateinit var infoDb: SyncDB<Info>
+    lateinit var infoDb: SyncIDB<Info>
 
     /**
      * Database of info groups.
      */
-    lateinit var infoGroupDb: SyncDB<InfoGroup>
+    lateinit var infoGroupDb: SyncIDB<InfoGroup>
 
     /**
      * The current callback
@@ -102,24 +103,24 @@ class Driver(val context: Context) {
      * Initializes the databases
      */
     fun initialize() {
-        // Late init the databases with the given context, date DB is an uncached, unsynced local storage
-        dateDb = serializableDBs.create(File(context.cacheDir, "date.db"), Date::class.java).cachedDB()
+        // Late init the databases with the given context, date DB is purely serializable
+        dateDb = serializableDBs.create(File(context.cacheDir, "date.db"), Date::class.java).cached()
 
         // Databases for the API, they are cached and synced
         eventConferenceDayDb = gsonDBs.create(File(context.cacheDir, "eventconday.db"),
-                EventConferenceDay::class.java).cachedDB().apiSyncDB()
+                EventConferenceDay::class.java).cachedApiDB()
         eventConferenceRoomDb = gsonDBs.create(File(context.cacheDir, "eventconroom.db"),
-                EventConferenceRoom::class.java).cachedDB().apiSyncDB()
+                EventConferenceRoom::class.java).cachedApiDB()
         eventConferenceTrackDb = gsonDBs.create(File(context.cacheDir, "eventcontrack.db"),
-                EventConferenceTrack::class.java).cachedDB().apiSyncDB()
+                EventConferenceTrack::class.java).cachedApiDB()
         eventEntryDb = gsonDBs.create(File(context.cacheDir, "events.db"),
-                EventEntry::class.java).cachedDB().apiSyncDB()
+                EventEntry::class.java).cachedApiDB()
         imageDb = gsonDBs.create(File(context.cacheDir, "image.db"),
-                Image::class.java).cachedDB().apiSyncDB()
+                Image::class.java).cachedApiDB()
         infoDb = gsonDBs.create(File(context.cacheDir, "info.db"),
-                Info::class.java).cachedDB().apiSyncDB()
+                Info::class.java).cachedApiDB()
         infoGroupDb = gsonDBs.create(File(context.cacheDir, "infogroup.db"),
-                InfoGroup::class.java).cachedDB().apiSyncDB()
+                InfoGroup::class.java).cachedApiDB()
 
         // Main request, this will trigger the sequence of database updates
         context.createEndpointReceiver("updateService") {
