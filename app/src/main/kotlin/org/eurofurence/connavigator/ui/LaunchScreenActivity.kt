@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -14,12 +15,9 @@ import android.widget.TextView
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.app.logService
-import org.eurofurence.connavigator.driver.Driver
 import org.eurofurence.connavigator.driver.DriverCallback
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.util.logd
-import org.eurofurence.connavigator.util.logv
 import org.eurofurence.connavigator.util.viewInHolder
 import org.joda.time.DateTime
 import org.joda.time.Days
@@ -29,7 +27,6 @@ class LaunchScreenActivity : BaseActivity() {
      * The database access, relative to the launch screen activity to support
      * feedback events.
      */
-    val driver = Driver(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,12 +51,22 @@ class LaunchScreenActivity : BaseActivity() {
 
 
         // Event view holder finds and memorizes the views in an event card
-        class EventViewHolder(viewItem: View) : RecyclerView.ViewHolder(viewItem) {
+        class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
             val eventImage by viewInHolder(ImageView::class.java)
             val eventTitle by viewInHolder(TextView::class.java)
             val eventDate by viewInHolder(TextView::class.java)
             val eventHosts by viewInHolder(TextView::class.java)
             val eventDescription by viewInHolder(TextView::class.java)
+            lateinit var eventEntry: EventEntry
+
+            init {
+                eventTitle.setOnClickListener { onClick(it) }
+            }
+
+            override fun onClick(v: View?) {
+                onEventViewPress(eventEntry)
+            }
         }
 
 
@@ -87,6 +94,7 @@ class LaunchScreenActivity : BaseActivity() {
                 holder.eventDate.text = event.startTime
                 holder.eventHosts.text = event.panelHosts
                 holder.eventDescription.text = event.description
+                holder.eventEntry = event
 
                 // Assign an image if present
                 if (event.imageId != null) {
@@ -141,6 +149,13 @@ class LaunchScreenActivity : BaseActivity() {
         logd { "Launch screen created" }
     }
 
+    fun onEventViewPress(eventEntry: EventEntry) {
+        val intent = Intent(this, EventActivity::class.java)
+        intent.putExtra("uid", eventEntry.id.toString())
+
+        startActivity(intent)
+    }
+
 
     override fun onBackPressed() {
         // Sample method, maps a press on the back button to either 'close the drawer' or to the default behavior
@@ -170,36 +185,5 @@ class LaunchScreenActivity : BaseActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        val id = item.itemId
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-            logv { driver.eventConferenceDayDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.eventConferenceRoomDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.eventConferenceTrackDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.eventEntryDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.imageDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.infoDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.infoGroupDb.elements.joinToString(System.lineSeparator()) }
-        } else if (id == R.id.nav_slideshow) {
-            for (line in logService.messages())
-                println(line)
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
-        drawer.closeDrawer(GravityCompat.START)
-        return true
     }
 }
