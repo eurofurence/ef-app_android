@@ -22,20 +22,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:id="@+id/eventImage" android:contentDescription="Event"
-                    android:src="@drawable/placeholder_event"/>
+                    android:src="@drawable/placeholder_event" android:scaleType="centerCrop"/>
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Large Text"
                     android:id="@+id/eventTitle" android:gravity="center_horizontal"
-                    android:background="@color/colorPrimaryLight" android:paddingTop="10dp"
-                    android:paddingBottom="10dp"/>
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp" style="@style/AppTheme.BaseItem"/>
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="New Text"
-                    android:id="@+id/eventDescription" android:background="@color/colorPrimaryLight"/>
+                    android:id="@+id/eventDescription" android:background="@color/colorPrimaryLight"
+                    style="@style/AppTheme.TextView"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

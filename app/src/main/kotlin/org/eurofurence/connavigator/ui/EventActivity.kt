@@ -21,13 +21,11 @@ class EventActivity : BaseActivity() {
 
         id = intent.getStringExtra("uid")
 
-        print(id)
-
         setContentView(R.layout.activity_event_base);
 
-        retrieveEntry()
-
         injectNavigation(savedBundleInstance);
+
+        retrieveEntry()
 
         injectViews()
 
@@ -35,12 +33,12 @@ class EventActivity : BaseActivity() {
     }
 
     private fun retrieveEntry() {
-
+        event = driver.eventEntryDb.elements.filter { it.id.toString().contentEquals(id) }.first()
     }
 
     private fun fillActivity() {
-        eventTitleView.text = id.toString()
-        eventDescriptionView.text = id.toString()
+        eventTitleView.text = event.title
+        eventDescriptionView.text = event.description
     }
 
     private fun injectViews() {

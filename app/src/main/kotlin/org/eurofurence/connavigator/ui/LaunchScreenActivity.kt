@@ -58,6 +58,8 @@ class LaunchScreenActivity : BaseActivity() {
 
             init {
                 eventTitle.setOnClickListener { onClick(it) }
+                eventImage.setOnClickListener { onClick(it) }
+
             }
 
             override fun onClick(v: View?) {
