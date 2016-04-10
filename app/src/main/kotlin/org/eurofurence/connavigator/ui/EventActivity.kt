@@ -48,12 +48,17 @@ class EventActivity : BaseActivity() {
     }
 
     private fun fillActivity() {
+        val database = Database(this)
+
+        val conferenceRoom = database.eventConferenceRoomDb.keyValues[event.conferenceRoomId]
+        val conferenceDay = database.eventConferenceDayDb.keyValues[event.conferenceDayId]
+
         eventTitleView.text = event.title
         eventDescriptionView.text = event.description
         eventTime.text = eventTime.text.toString().format(event.startTime, event.endTime)
         eventOrganizers.text = eventOrganizers.text.toString().format(event.panelHosts)
-        eventDay.text = eventDay.text.toString().format(event.conferenceDayId)
-        eventRoom.text = eventRoom.text.toString().format(event.conferenceRoomId)
+        eventDay.text = eventDay.text.toString().format(conferenceDay?.date)
+        eventRoom.text = eventRoom.text.toString().format(conferenceRoom?.name)
     }
 
     private fun injectViews() {
