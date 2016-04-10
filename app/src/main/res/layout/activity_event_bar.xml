@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="org.eurofurence.connavigator.LaunchScreenActivity">
+        tools:context="org.eurofurence.connavigator.ui.EventActivity">
 
     <android.support.design.widget.AppBarLayout
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_launch_screen"/>
+    <include layout="@layout/activity_event_content"/>
 
     <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

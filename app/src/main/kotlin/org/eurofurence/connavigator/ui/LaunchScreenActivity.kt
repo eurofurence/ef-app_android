@@ -37,7 +37,7 @@ class LaunchScreenActivity : BaseActivity() {
         driver.initialize()
 
         // Assign the main layout
-        setContentView(R.layout.activity_launch_screen)
+        setContentView(R.layout.activity_launch_screen_base)
 
         // Inject menu navigation
         injectNavigation(savedInstanceState)
