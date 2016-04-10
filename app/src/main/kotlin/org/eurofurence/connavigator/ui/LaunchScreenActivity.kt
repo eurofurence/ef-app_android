@@ -93,7 +93,7 @@ class LaunchScreenActivity : BaseActivity() {
                 onEventViewPress(eventEntry)
             }
         }
-        events = driver.eventEntryDb.elements
+        events = database.eventEntryDb.elements
 
         // Assign a new adapter mapping to the previously defined view event holders
         eventRecycler.adapter = object : RecyclerView.Adapter<EventViewHolder>() {
@@ -153,24 +153,6 @@ class LaunchScreenActivity : BaseActivity() {
             // Notify the update to the user
             Snackbar.make(findViewById(R.id.fab), "Updating the database", Snackbar.LENGTH_LONG).show()
 
-            // Update the database
-            driver.update (object : DriverCallback {
-                override fun gotImages(delta: List<Image>) {
-                    // Notify the recycler that its content has changed
-                    eventRecycler.adapter.notifyDataSetChanged()
-                }
-
-                override fun gotEvents(delta: List<EventEntry>) {
-                    // Notify the recycler that its content has changed
-                    eventRecycler.adapter.notifyDataSetChanged()
-                }
-
-                override fun done(success: Boolean) {
-                    val cts = driver.dateDb.elements.firstOrNull()
-                    events = driver.eventEntryDb.elements
-                    Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $cts", Snackbar.LENGTH_SHORT).show()
-                }
-            } + DriverCallback.OUTPUT)
             // Start the update service
             UpdateIntentService.dispatchUpdate(this@LaunchScreenActivity)
         }
@@ -189,6 +171,8 @@ class LaunchScreenActivity : BaseActivity() {
     }
 
     private fun fillViews() {
+
+        val database = Database(this)
         // Create a click listener
         val listener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -203,7 +187,7 @@ class LaunchScreenActivity : BaseActivity() {
         // Set up the rooms in the spinner
         val rooms = ArrayList<String>()
         rooms.add("All")
-        rooms.addAll(driver.eventConferenceRoomDb.elements.map { it.name }.toTypedArray())
+        rooms.addAll(database.eventConferenceRoomDb.elements.map { it.name }.toTypedArray())
         val roomAdapter = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, rooms)
 
         roomSelector.adapter = roomAdapter
@@ -212,7 +196,7 @@ class LaunchScreenActivity : BaseActivity() {
         // Set up con days in the spinner
         val days = ArrayList<String>()
         days.add("All")
-        days.addAll(driver.eventConferenceDayDb.elements.map { it.date }.toTypedArray())
+        days.addAll(database.eventConferenceDayDb.elements.map { it.date }.toTypedArray())
 
         val dayAdapter = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, days)
 
@@ -222,21 +206,22 @@ class LaunchScreenActivity : BaseActivity() {
     }
 
     private fun filterEvents(view: View?) {
+        val database = Database(this)
         if (view == null) {
-            events = driver.eventEntryDb.elements
+            events = database.eventEntryDb.elements
         } else {
             val roomSelected = roomSelector.selectedItem
             val daySelected = daySelector.selectedItem
 
-            var event_set = driver.eventEntryDb.elements
+            var event_set = database.eventEntryDb.elements
 
             if (roomSelected != "All") {
-                val room = driver.eventConferenceRoomDb.elements.filter { it.name == roomSelected }.first()
+                val room = database.eventConferenceRoomDb.elements.filter { it.name == roomSelected }.first()
                 event_set = event_set.filter { it.conferenceRoomId == room.id }
             }
 
             if (daySelected != "All") {
-                val day = driver.eventConferenceDayDb.elements.filter { it.date == daySelected }.first()
+                val day = database.eventConferenceDayDb.elements.filter { it.date == daySelected }.first()
                 event_set = event_set.filter { it.conferenceDayId == day.id }
             }
 
