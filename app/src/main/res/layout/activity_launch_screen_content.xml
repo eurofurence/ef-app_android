@@ -19,19 +19,35 @@
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:weightSum="20" style="@style/AppTheme.TextView">
+                android:layout_height="wrap_content" android:weightSum="20" style="@style/AppTheme.TextView"
+                android:background="@color/colorPrimaryLight">
             <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="Room"
-                    android:id="@+id/roomChoiceText" android:layout_weight="5"/>
+                    android:id="@+id/roomChoiceText" android:layout_weight="8" android:gravity="center_vertical"
+                    style="@style/AppTheme.TextView"/>
             <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/roomChoiceDropdown" android:layout_weight="5"/>
+                    android:id="@+id/roomSelector" android:layout_weight="12" android:spinnerMode="dropdown"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:weightSum="20"
+                android:background="@color/colorPrimaryLight" style="@style/AppTheme.TextView">
+            <TextView style="@style/AppTheme.TextView" android:layout_width="100dp" android:layout_height="wrap_content"
+                      android:text="Day" android:id="@+id/textView" android:layout_weight="8"
+                      android:gravity="center_vertical"/>
+            <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/daySelector" android:layout_weight="12"
+                    android:spinnerMode="dropdown"/>
         </LinearLayout>
         <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
-                                                    android:layout_height="match_parent" android:scrollbars="vertical"
-                                                    android:id="@+id/eventRecycler"/>
+                                                android:layout_height="match_parent" android:scrollbars="vertical"
+                                                android:id="@+id/eventRecycler"/>
     </LinearLayout>
 </RelativeLayout>

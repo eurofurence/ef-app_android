@@ -20,6 +20,7 @@ import org.eurofurence.connavigator.util.logd
 import org.eurofurence.connavigator.util.viewInHolder
 import org.joda.time.DateTime
 import org.joda.time.Days
+import java.util.*
 
 class LaunchScreenActivity : BaseActivity() {
     /**
@@ -28,6 +29,7 @@ class LaunchScreenActivity : BaseActivity() {
      */
 
     lateinit var roomSelector: Spinner
+    lateinit var daySelector: Spinner
 
     var events: List<EventEntry> = emptyList()
 
@@ -158,39 +160,65 @@ class LaunchScreenActivity : BaseActivity() {
     }
 
     private fun fillViews() {
-        val rooms = driver.eventConferenceRoomDb.elements
-
-        val rooms_as_sting = rooms.map { it.name }.toTypedArray()
-
-        val adapter = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, rooms_as_sting)
-
-        roomSelector.adapter = adapter
-
-
-
-        roomSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        // Create a click listener
+        val listener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                filterEventsOnRooms(view)
+                filterEvents(view)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                filterEventsOnRooms(null)
+                filterEvents(null)
             }
         }
+
+        // Set up the rooms in the spinner
+        val rooms = ArrayList<String>()
+        rooms.add("All")
+        rooms.addAll(driver.eventConferenceRoomDb.elements.map { it.name }.toTypedArray())
+        val roomAdapter = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, rooms)
+
+        roomSelector.adapter = roomAdapter
+        roomSelector.onItemSelectedListener = listener
+
+        // Set up con days in the spinner
+        val days = ArrayList<String>()
+        days.add("All")
+        days.addAll(driver.eventConferenceDayDb.elements.map { it.date }.toTypedArray())
+
+        val dayAdapter = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, days)
+
+        daySelector.adapter = dayAdapter
+
+        daySelector.onItemSelectedListener = listener
     }
 
-    private fun filterEventsOnRooms(view: View?) {
+    private fun filterEvents(view: View?) {
         if (view == null) {
             events = driver.eventEntryDb.elements
         } else {
-            val room = driver.eventConferenceRoomDb.elements.filter { it.name == roomSelector.selectedItem.toString() }.first()
-            events = driver.eventEntryDb.elements.filter { it.conferenceRoomId == room.id }
+            val roomSelected = roomSelector.selectedItem
+            val daySelected = daySelector.selectedItem
+
+            var event_set = driver.eventEntryDb.elements
+
+            if (roomSelected != "All") {
+                val room = driver.eventConferenceRoomDb.elements.filter { it.name == roomSelected }.first()
+                event_set = event_set.filter { it.conferenceRoomId == room.id }
+            }
+
+            if (daySelected != "All") {
+                val day = driver.eventConferenceDayDb.elements.filter { it.date == daySelected }.first()
+                event_set = event_set.filter { it.conferenceDayId == day.id }
+            }
+
+            events = event_set
         }
         eventRecycler.adapter.notifyDataSetChanged()
     }
 
     private fun injectViews() {
-        roomSelector = findViewById(R.id.roomChoiceDropdown) as Spinner
+        roomSelector = findViewById(R.id.roomSelector) as Spinner
+        daySelector = findViewById(R.id.daySelector) as Spinner
     }
 
     fun onEventViewPress(eventEntry: EventEntry) {

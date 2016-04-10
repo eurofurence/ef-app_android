@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textViewStyle">@style/AppTheme.TextView</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -23,6 +23,7 @@
     <style name="AppTheme.TextView" parent="AppTheme.BaseItem">
         <item name="android:textSize">14sp</item>
         <item name="android:colorBackground">@color/colorPrimaryLight</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
