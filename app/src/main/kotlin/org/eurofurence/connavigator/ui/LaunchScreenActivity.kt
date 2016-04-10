@@ -33,9 +33,6 @@ class LaunchScreenActivity : BaseActivity() {
 
         logd { "Launch screen creating" }
 
-        // Initialize the database to listen in this context
-        driver.initialize()
-
         // Assign the main layout
         setContentView(R.layout.activity_launch_screen_base)
 

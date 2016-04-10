@@ -79,5 +79,7 @@ abstract class BaseActivity() : AppCompatActivity(), NavigationView.OnNavigation
 
         // Find navigation drawer and add this activity as a listener
         navView.setNavigationItemSelectedListener(this)
+
+        driver.initialize()
     }
 }

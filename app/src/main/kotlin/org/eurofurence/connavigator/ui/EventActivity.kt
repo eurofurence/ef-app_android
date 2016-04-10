@@ -23,8 +23,6 @@ class EventActivity : BaseActivity() {
 
         print(id)
 
-        driver.initialize()
-
         setContentView(R.layout.activity_event_base);
 
         retrieveEntry()
