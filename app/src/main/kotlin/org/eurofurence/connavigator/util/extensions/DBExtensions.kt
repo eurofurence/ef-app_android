@@ -1,10 +1,10 @@
-package org.eurofurence.connavigator.util
+package org.eurofurence.connavigator.util.extensions
 
 import io.swagger.client.model.EntityBase
-import org.eurofurence.connavigator.db.DB
-import org.eurofurence.connavigator.db.IDB
-import org.eurofurence.connavigator.db.SyncIDB
-import org.eurofurence.connavigator.db.cached
+import org.eurofurence.connavigator.store.DB
+import org.eurofurence.connavigator.store.IDB
+import org.eurofurence.connavigator.store.SyncIDB
+import org.eurofurence.connavigator.store.cached
 
 /**
  * Uses the [indexer] function to index the database receiver.
@@ -24,8 +24,8 @@ fun <T> DB<T>.indexBy(indexer: (T) -> Any) = object : IDB<T>() {
             this@indexBy.elements = values.values.toList()
         }
 
-    override val exists: Boolean
-        get() = this@indexBy.exists
+    override val time: Long?
+        get() = this@indexBy.time
 }
 
 /**
@@ -33,8 +33,8 @@ fun <T> DB<T>.indexBy(indexer: (T) -> Any) = object : IDB<T>() {
  */
 infix fun <T, U> IDB<T>.pairWith(second: IDB<U>) =
         object : IDB<Pair<T?, U?>>() {
-            override val exists: Boolean
-                get() = this@pairWith.exists && second.exists
+            override val time: Long?
+                get() = this@pairWith.time max second.time
 
             override fun id(item: Pair<T?, U?>): Any =
                     if (item.first != null)

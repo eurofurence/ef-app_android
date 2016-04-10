@@ -15,7 +15,7 @@
 
         <!-- Service providing a detached retrieval of data from the internet. -->
         <service
-                android:name=".webapi.QueryIntentService"
+                android:name=".database.UpdateIntentService"
                 android:exported="false"/>
 
         <!-- Main screen within the application -->

@@ -11,33 +11,42 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import io.swagger.client.model.EventEntry
-import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.app.logService
-import org.eurofurence.connavigator.driver.Driver
-import org.eurofurence.connavigator.driver.DriverCallback
+import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.util.logd
-import org.eurofurence.connavigator.util.logv
-import org.eurofurence.connavigator.util.viewInHolder
+import org.eurofurence.connavigator.util.delegators.viewInHolder
+import org.eurofurence.connavigator.util.extensions.booleans
+import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.logd
+import org.eurofurence.connavigator.util.extensions.objects
 import org.joda.time.DateTime
 import org.joda.time.Days
+import java.util.*
 
 class LaunchScreenActivity : BaseActivity() {
+
     /**
-     * The database access, relative to the launch screen activity to support
-     * feedback events.
+     * Listens to update responses, since the event recycler holds database related data
      */
-    val driver = Driver(this)
+    val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
+        // Get intent extras
+        val success = it.booleans["success"]
+        val time = it.objects["time", Date::class.java]
+
+        // Update the views
+        eventRecycler.adapter.notifyDataSetChanged()
+
+        // Make a snackbar for the result
+        Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         logd { "Launch screen creating" }
 
-        // Initialize the database to listen in this context
-        driver.initialize()
+        val database = Database(this)
 
         // Assign the main layout
         setContentView(R.layout.activity_launch_screen)
@@ -74,12 +83,12 @@ class LaunchScreenActivity : BaseActivity() {
 
             override fun getItemCount(): Int {
                 // Fixed size, map to the events
-                return driver.eventEntryDb.elements.size
+                return database.eventEntryDb.elements.size
             }
 
             override fun onBindViewHolder(holder: EventViewHolder, pos: Int) {
                 // Get the event for the position
-                val event = driver.eventEntryDb.elements[pos]
+                val event = database.eventEntryDb.elements[pos]
 
                 // Assign the properties of the view
                 holder.eventTitle.text = event.title
@@ -89,7 +98,7 @@ class LaunchScreenActivity : BaseActivity() {
 
                 // Assign an image if present
                 if (event.imageId != null) {
-                    val img = driver.imageDb.elements.firstOrNull { it.id == event.imageId }
+                    val img = database.imageDb.elements.firstOrNull { it.id == event.imageId }
                     if (img != null)
                         imageService.load(img, holder.eventImage)
 
@@ -116,30 +125,25 @@ class LaunchScreenActivity : BaseActivity() {
         // Find and setup the floating button
         val fab = findViewById(R.id.fab) as FloatingActionButton
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Reloading database", Snackbar.LENGTH_SHORT).show()
+            // Notify the update to the user
+            Snackbar.make(findViewById(R.id.fab), "Updating the database", Snackbar.LENGTH_LONG).show()
 
-            // Update the database
-            driver.update (object : DriverCallback {
-                override fun gotImages(delta: List<Image>) {
-                    // Notify the recycler that its content has changed
-                    eventRecycler.adapter.notifyDataSetChanged()
-                }
-
-                override fun gotEvents(delta: List<EventEntry>) {
-                    // Notify the recycler that its content has changed
-                    eventRecycler.adapter.notifyDataSetChanged()
-                }
-
-                override fun done(success: Boolean) {
-                    val cts = driver.dateDb.elements.firstOrNull()
-                    Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $cts", Snackbar.LENGTH_SHORT).show()
-                }
-            } + DriverCallback.OUTPUT)
+            // Start the update service
+            UpdateIntentService.dispatchUpdate(this@LaunchScreenActivity)
         }
 
         logd { "Launch screen created" }
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateReceiver.register()
+    }
+
+    override fun onPause() {
+        updateReceiver.unregister()
+        super.onPause()
+    }
 
     override fun onBackPressed() {
         // Sample method, maps a press on the back button to either 'close the drawer' or to the default behavior
@@ -179,22 +183,16 @@ class LaunchScreenActivity : BaseActivity() {
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            logv { driver.eventConferenceDayDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.eventConferenceRoomDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.eventConferenceTrackDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.eventEntryDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.imageDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.infoDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.infoGroupDb.elements.joinToString(System.lineSeparator()) }
         } else if (id == R.id.nav_slideshow) {
-            for (line in logService.messages())
-                println(line)
         } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_share) {
-
         } else if (id == R.id.nav_send) {
+            // Clear the database
+            Database(this).clear()
 
+            // Notify user and the recycler
+            eventRecycler.adapter.notifyDataSetChanged()
+            Snackbar.make(findViewById(R.id.fab), "Database cleared", Snackbar.LENGTH_SHORT).show()
         }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout

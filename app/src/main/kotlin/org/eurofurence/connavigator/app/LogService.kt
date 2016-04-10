@@ -39,25 +39,31 @@ object logService {
             return
 
         // Log appropriately and get the severity name
+        val m = message()
         val severityName = when (severity) {
             Log.VERBOSE -> {
-                Log.v(tag, message())
+                //Log.v(tag, m)
+                println("VER $tag: $m")
                 "Verbose"
             }
             Log.DEBUG -> {
-                Log.d(tag, message())
+                //Log.d(tag, m)
+                println("DBG $tag: $m")
                 "Debug"
             }
             Log.INFO -> {
-                Log.i(tag, message())
+                //Log.i(tag, m)
+                println("INF $tag: $m")
                 "Info"
             }
             Log.WARN -> {
-                Log.w(tag, message())
+                //Log.w(tag, m)
+                println("WRN $tag: $m")
                 "Warn"
             }
             Log.ERROR -> {
-                Log.e(tag, message())
+                //Log.e(tag, m)
+                println("ERR $tag: $m")
                 "Error"
             }
             else -> "Unknown"
@@ -68,7 +74,7 @@ object logService {
                 .let { PrintWriter(it) }
                 .use {
                     it.println("$severityName $tag ${Date()}")
-                    it.println(message())
+                    it.println(m)
                     it.println()
                 }
     }
@@ -83,25 +89,36 @@ object logService {
             return
 
         // Log appropriately and get the severity name
+        val m = message()
         val severityName = when (severity) {
             Log.VERBOSE -> {
-                Log.v(tag, message(), throwable)
+                //Log.v(tag, m)
+                println("VER $tag: $m")
+                throwable.printStackTrace()
                 "Verbose"
             }
             Log.DEBUG -> {
-                Log.d(tag, message(), throwable)
+                //Log.d(tag, m)
+                println("DBG $tag: $m")
+                throwable.printStackTrace()
                 "Debug"
             }
             Log.INFO -> {
-                Log.i(tag, message(), throwable)
+                //Log.i(tag, m, throwable)
+                println("INF $tag: $m")
+                throwable.printStackTrace()
                 "Info"
             }
             Log.WARN -> {
-                Log.w(tag, message(), throwable)
+                //Log.w(tag, m, throwable)
+                println("WRN $tag: $m")
+                throwable.printStackTrace()
                 "Warn"
             }
             Log.ERROR -> {
-                Log.e(tag, message(), throwable)
+                //Log.e(tag, m, throwable)
+                println("ERR $tag: $m")
+                throwable.printStackTrace()
                 "Error"
             }
             else -> "Unknown"
@@ -112,7 +129,7 @@ object logService {
                 .let { PrintWriter(it) }
                 .use {
                     it.println("$severityName $tag ${Date()}")
-                    it.println(message())
+                    it.println(m)
                     throwable.printStackTrace(it)
                     it.println()
                 }

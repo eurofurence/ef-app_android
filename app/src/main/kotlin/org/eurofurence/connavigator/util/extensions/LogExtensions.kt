@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.util
+package org.eurofurence.connavigator.util.extensions
 
 import android.util.Log
 import org.eurofurence.connavigator.app.logService

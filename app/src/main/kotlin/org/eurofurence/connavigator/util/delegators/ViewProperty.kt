@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.util
+package org.eurofurence.connavigator.util.delegators
 
 import android.app.Activity
 import android.support.design.widget.NavigationView

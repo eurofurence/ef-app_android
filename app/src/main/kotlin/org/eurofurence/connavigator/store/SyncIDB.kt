@@ -1,8 +1,6 @@
-package org.eurofurence.connavigator.db
+package org.eurofurence.connavigator.store
 
-import io.swagger.client.model.EntityBase
-import org.eurofurence.connavigator.util.not
-import java.math.BigInteger
+import org.eurofurence.connavigator.util.extensions.not
 
 /**
  * Synchronizable database.
@@ -12,8 +10,8 @@ import java.math.BigInteger
  *
  */
 class SyncIDB<T>(val deleted: (T) -> Boolean, val synced: IDB<T>) : IDB<T>() {
-    override val exists: Boolean
-        get() = synced.exists
+    override val time: Long?
+        get() = synced.time
 
     override fun id(item: T): Any = synced.id(item)
 
@@ -27,7 +25,7 @@ class SyncIDB<T>(val deleted: (T) -> Boolean, val synced: IDB<T>) : IDB<T>() {
      * Synchronizes a sequence of elements into the database.
      * @param other The other sequence, can contain only a partial delta, in which case all untouched elements remain in the store
      */
-    fun syncWith(other: List<T>) = if (exists) {
+    fun syncWith(other: List<T>) = if (time != null) {
         // Get all keys of objects that were dropped
         val drop = other.filter(deleted).map { id(it) }.toSet()
 
