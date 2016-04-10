@@ -11,9 +11,15 @@ import org.eurofurence.connavigator.R
  */
 class EventActivity : BaseActivity() {
     lateinit var id: String
+
     lateinit var eventTitleView: TextView
     lateinit var eventDescriptionView: TextView
     lateinit var eventImageView: ImageView
+    lateinit var eventOrganizers: TextView
+    lateinit var eventTime: TextView
+    lateinit var eventRoom: TextView
+    lateinit var eventDay: TextView
+
     lateinit var event: EventEntry
 
     override fun onCreate(savedBundleInstance: Bundle?) {
@@ -27,6 +33,10 @@ class EventActivity : BaseActivity() {
 
         retrieveEntry()
 
+        if(event == null) {
+            // If there's no event, we finish the activity and go back
+            finish()
+        }
         injectViews()
 
         fillActivity()
@@ -39,11 +49,19 @@ class EventActivity : BaseActivity() {
     private fun fillActivity() {
         eventTitleView.text = event.title
         eventDescriptionView.text = event.description
+        eventTime.text = eventTime.text.toString().format(event.startTime, event.endTime)
+        eventOrganizers.text = eventOrganizers.text.toString().format(event.panelHosts)
+        eventDay.text = eventDay.text.toString().format(event.conferenceDayId)
+        eventRoom.text = eventRoom.text.toString().format(event.conferenceRoomId)
     }
 
     private fun injectViews() {
         eventTitleView = findViewById(R.id.eventTitle) as TextView
         eventDescriptionView = findViewById(R.id.eventDescription) as TextView
         eventImageView = findViewById(R.id.eventImage) as ImageView
+        eventOrganizers = findViewById(R.id.eventOrganizers) as TextView
+        eventTime = findViewById(R.id.eventTime) as TextView
+        eventRoom = findViewById(R.id.eventRoom) as TextView
+        eventDay = findViewById(R.id.eventDay) as TextView
     }
 }
