@@ -3,20 +3,53 @@ package org.eurofurence.connavigator.ui
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
+import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.widget.TextView
 import org.eurofurence.connavigator.MainEventFragment
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.app.logService
+import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.delegators.viewInHeader
 
 abstract class BaseActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri?) {
         println(uri)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem?): Boolean {
+        // Handle navigation view item clicks here.
+        val id = item?.itemId
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+     } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+            // Clear the database
+            Database(this).clear()
+
+            // Notify user and the recycler
+            eventRecycler.adapter.notifyDataSetChanged()
+            Snackbar.make(findViewById(R.id.fab), "Database cleared", Snackbar.LENGTH_SHORT).show()
+
+
+        }
+
+        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        drawer.closeDrawer(GravityCompat.START)
+        return true
     }
 
     val eventRecycler  by view(RecyclerView::class.java)
