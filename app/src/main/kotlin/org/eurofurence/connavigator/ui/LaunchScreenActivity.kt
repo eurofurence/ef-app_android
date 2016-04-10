@@ -10,8 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
@@ -28,6 +27,10 @@ class LaunchScreenActivity : BaseActivity() {
      * feedback events.
      */
 
+    lateinit var roomSelector: Spinner
+
+    var events: List<EventEntry> = emptyList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,6 +41,12 @@ class LaunchScreenActivity : BaseActivity() {
 
         // Inject menu navigation
         injectNavigation(savedInstanceState)
+
+        // Inject current views
+        injectViews()
+
+        // Fill views
+        fillViews()
 
         // Turn this off if there are views of different sizes in the recycler
         eventRecycler.setHasFixedSize(true)
@@ -66,7 +75,7 @@ class LaunchScreenActivity : BaseActivity() {
                 onEventViewPress(eventEntry)
             }
         }
-
+        events = driver.eventEntryDb.elements
 
         // Assign a new adapter mapping to the previously defined view event holders
         eventRecycler.adapter = object : RecyclerView.Adapter<EventViewHolder>() {
@@ -80,12 +89,12 @@ class LaunchScreenActivity : BaseActivity() {
 
             override fun getItemCount(): Int {
                 // Fixed size, map to the events
-                return driver.eventEntryDb.elements.size
+                return events.size
             }
 
             override fun onBindViewHolder(holder: EventViewHolder, pos: Int) {
                 // Get the event for the position
-                val event = driver.eventEntryDb.elements[pos]
+                val event = events[pos]
 
                 // Assign the properties of the view
                 holder.eventTitle.text = event.title
@@ -139,12 +148,49 @@ class LaunchScreenActivity : BaseActivity() {
 
                 override fun done(success: Boolean) {
                     val cts = driver.dateDb.elements.firstOrNull()
+                    events = driver.eventEntryDb.elements
                     Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $cts", Snackbar.LENGTH_SHORT).show()
                 }
             } + DriverCallback.OUTPUT)
         }
 
         logd { "Launch screen created" }
+    }
+
+    private fun fillViews() {
+        val rooms = driver.eventConferenceRoomDb.elements
+
+        val rooms_as_sting = rooms.map { it.name }.toTypedArray()
+
+        val adapter = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, rooms_as_sting)
+
+        roomSelector.adapter = adapter
+
+
+
+        roomSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                filterEventsOnRooms(view)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                filterEventsOnRooms(null)
+            }
+        }
+    }
+
+    private fun filterEventsOnRooms(view: View?) {
+        if (view == null) {
+            events = driver.eventEntryDb.elements
+        } else {
+            val room = driver.eventConferenceRoomDb.elements.filter { it.name == roomSelector.selectedItem.toString() }.first()
+            events = driver.eventEntryDb.elements.filter { it.conferenceRoomId == room.id }
+        }
+        eventRecycler.adapter.notifyDataSetChanged()
+    }
+
+    private fun injectViews() {
+        roomSelector = findViewById(R.id.roomChoiceDropdown) as Spinner
     }
 
     fun onEventViewPress(eventEntry: EventEntry) {

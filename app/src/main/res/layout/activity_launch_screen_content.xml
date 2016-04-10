@@ -10,7 +10,28 @@
         tools:showIn="@layout/activity_launch_screen_bar"
         tools:context="org.eurofurence.connavigator.LaunchScreenActivity"
         android:id="@+id/mainActivityLayout">
-    <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
-                                            android:layout_height="match_parent" android:scrollbars="vertical"
-                                            android:id="@+id/eventRecycler"/>
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:weightSum="20" style="@style/AppTheme.TextView">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Room"
+                    android:id="@+id/roomChoiceText" android:layout_weight="5"/>
+            <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/roomChoiceDropdown" android:layout_weight="5"/>
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
+                                                    android:layout_height="match_parent" android:scrollbars="vertical"
+                                                    android:id="@+id/eventRecycler"/>
+    </LinearLayout>
 </RelativeLayout>
