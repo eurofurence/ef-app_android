@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.database.Database
 
 /**
  * Created by David on 4/9/2016.
@@ -33,7 +34,7 @@ class EventActivity : BaseActivity() {
 
         retrieveEntry()
 
-        if(event == null) {
+        if (event == null) {
             // If there's no event, we finish the activity and go back
             finish()
         }
@@ -43,7 +44,7 @@ class EventActivity : BaseActivity() {
     }
 
     private fun retrieveEntry() {
-        event = driver.eventEntryDb.elements.filter { it.id.toString().contentEquals(id) }.first()
+        event = Database(this).eventEntryDb.elements.filter { it.id.toString().contentEquals(id) }.first()
     }
 
     private fun fillActivity() {

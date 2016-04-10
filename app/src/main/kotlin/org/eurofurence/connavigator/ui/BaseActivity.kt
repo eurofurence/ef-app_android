@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -14,17 +15,14 @@ import android.widget.TextView
 import org.eurofurence.connavigator.MainEventFragment
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.app.logService
-import org.eurofurence.connavigator.driver.Driver
-import org.eurofurence.connavigator.util.logv
-import org.eurofurence.connavigator.util.view
-import org.eurofurence.connavigator.util.viewInHeader
+import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.util.delegators.view
+import org.eurofurence.connavigator.util.delegators.viewInHeader
 
 abstract class BaseActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, MainEventFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri?) {
         println(uri)
     }
-
-    val driver = Driver(this)
 
     override fun onNavigationItemSelected(item: MenuItem?): Boolean {
         // Handle navigation view item clicks here.
@@ -33,21 +31,19 @@ abstract class BaseActivity() : AppCompatActivity(), NavigationView.OnNavigation
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            logv { driver.eventConferenceDayDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.eventConferenceRoomDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.eventConferenceTrackDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.eventEntryDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.imageDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.infoDb.elements.joinToString(System.lineSeparator()) }
-            logv { driver.infoGroupDb.elements.joinToString(System.lineSeparator()) }
-        } else if (id == R.id.nav_slideshow) {
-            for (line in logService.messages())
-                println(line)
+     } else if (id == R.id.nav_slideshow) {
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
+            // Clear the database
+            Database(this).clear()
+
+            // Notify user and the recycler
+            eventRecycler.adapter.notifyDataSetChanged()
+            Snackbar.make(findViewById(R.id.fab), "Database cleared", Snackbar.LENGTH_SHORT).show()
+
 
         }
 
@@ -79,7 +75,5 @@ abstract class BaseActivity() : AppCompatActivity(), NavigationView.OnNavigation
 
         // Find navigation drawer and add this activity as a listener
         navView.setNavigationItemSelectedListener(this)
-
-        driver.initialize()
     }
 }

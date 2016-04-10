@@ -6,7 +6,7 @@ import com.android.volley.toolbox.BasicNetwork
 import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
 import io.swagger.client.ApiInvoker
-import org.eurofurence.connavigator.util.logd
+import org.eurofurence.connavigator.util.extensions.logd
 import java.io.File
 
 /**

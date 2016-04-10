@@ -12,21 +12,35 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.*
 import io.swagger.client.model.EventEntry
-import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.driver.DriverCallback
+import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.util.logd
-import org.eurofurence.connavigator.util.viewInHolder
+import org.eurofurence.connavigator.util.delegators.viewInHolder
+import org.eurofurence.connavigator.util.extensions.booleans
+import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.logd
+import org.eurofurence.connavigator.util.extensions.objects
 import org.joda.time.DateTime
 import org.joda.time.Days
 import java.util.*
 
 class LaunchScreenActivity : BaseActivity() {
+
     /**
-     * The database access, relative to the launch screen activity to support
-     * feedback events.
+     * Listens to update responses, since the event recycler holds database related data
      */
+    val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
+        // Get intent extras
+        val success = it.booleans["success"]
+        val time = it.objects["time", Date::class.java]
+
+        // Update the views
+        eventRecycler.adapter.notifyDataSetChanged()
+
+        // Make a snackbar for the result
+        Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
+    }
 
     lateinit var roomSelector: Spinner
     lateinit var daySelector: Spinner
@@ -37,6 +51,8 @@ class LaunchScreenActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         logd { "Launch screen creating" }
+
+        val database = Database(this)
 
         // Assign the main layout
         setContentView(R.layout.activity_launch_screen_base)
@@ -107,7 +123,7 @@ class LaunchScreenActivity : BaseActivity() {
 
                 // Assign an image if present
                 if (event.imageId != null) {
-                    val img = driver.imageDb.elements.firstOrNull { it.id == event.imageId }
+                    val img = database.imageDb.elements.firstOrNull { it.id == event.imageId }
                     if (img != null)
                         imageService.load(img, holder.eventImage)
 
@@ -134,7 +150,8 @@ class LaunchScreenActivity : BaseActivity() {
         // Find and setup the floating button
         val fab = findViewById(R.id.fab) as FloatingActionButton
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Reloading database", Snackbar.LENGTH_SHORT).show()
+            // Notify the update to the user
+            Snackbar.make(findViewById(R.id.fab), "Updating the database", Snackbar.LENGTH_LONG).show()
 
             // Update the database
             driver.update (object : DriverCallback {
@@ -154,9 +171,21 @@ class LaunchScreenActivity : BaseActivity() {
                     Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $cts", Snackbar.LENGTH_SHORT).show()
                 }
             } + DriverCallback.OUTPUT)
+            // Start the update service
+            UpdateIntentService.dispatchUpdate(this@LaunchScreenActivity)
         }
 
         logd { "Launch screen created" }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateReceiver.register()
+    }
+
+    override fun onPause() {
+        updateReceiver.unregister()
+        super.onPause()
     }
 
     private fun fillViews() {

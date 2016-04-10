@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.util
+package org.eurofurence.connavigator.util.extensions
 
 /**
  * A tiny amount of disk space.

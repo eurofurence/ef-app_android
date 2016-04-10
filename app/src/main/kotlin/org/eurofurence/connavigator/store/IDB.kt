@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.db
+package org.eurofurence.connavigator.store
 
 /**
  * Represents an instance of a database where the primary focus lies on their indication, that

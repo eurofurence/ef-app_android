@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.util
+package org.eurofurence.connavigator.util.extensions
 
 import com.google.common.io.CharSink
 import com.google.common.io.CharSource
