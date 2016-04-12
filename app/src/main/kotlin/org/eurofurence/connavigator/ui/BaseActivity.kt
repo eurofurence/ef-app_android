@@ -28,24 +28,17 @@ abstract class BaseActivity() : AppCompatActivity(), NavigationView.OnNavigation
         // Handle navigation view item clicks here.
         val id = item?.itemId
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-        } else if (id == R.id.nav_slideshow) {
-        } else if (id == R.id.nav_manage) {
+        if (id == R.id.nav_events) {
+            startActivity(Intent(this, LaunchScreenActivity::class.java))
+        } else if (id == R.id.nav_info) {
             startActivity(Intent(this, InfoListActivity::class.java))
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_dev_clear) {
             // Clear the database
             Database(this).clear()
 
             // Notify user and the recycler
             eventRecycler.adapter.notifyDataSetChanged()
             Snackbar.make(findViewById(R.id.fab), "Database cleared", Snackbar.LENGTH_SHORT).show()
-
-
         }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
