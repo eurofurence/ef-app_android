@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -14,7 +15,6 @@ import android.view.MenuItem
 import android.widget.TextView
 import org.eurofurence.connavigator.MainEventFragment
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.app.logService
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.delegators.viewInHeader
@@ -31,8 +31,9 @@ abstract class BaseActivity() : AppCompatActivity(), NavigationView.OnNavigation
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-     } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_slideshow) {
         } else if (id == R.id.nav_manage) {
+            startActivity(Intent(this, InfoListActivity::class.java))
 
         } else if (id == R.id.nav_share) {
 

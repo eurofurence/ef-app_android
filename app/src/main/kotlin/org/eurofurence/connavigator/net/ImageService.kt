@@ -7,6 +7,7 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageSize
 import io.swagger.client.model.Image
+import java.util.*
 
 /**
  * Provides methods for obtaining images from web and caching them.
