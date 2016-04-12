@@ -29,9 +29,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.EventActivity"
-                  android:theme="@style/AppTheme.NoActionBar"
-                  android:label="Event View">
+
+        <activity
+                android:name=".ui.InfoActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:label="Info View">
+        </activity>
+        <activity
+                android:name=".ui.InfoListActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:label="Infos View">
+        </activity>
+
+        <activity
+                android:name=".ui.EventActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:label="Event View">
         </activity>
     </application>
 </manifest>
