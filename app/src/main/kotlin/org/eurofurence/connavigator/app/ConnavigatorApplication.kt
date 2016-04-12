@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.app
 
 import android.app.Application
 import net.danlew.android.joda.JodaTimeAndroid
+import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.webapi.apiService
 
@@ -21,5 +22,7 @@ class ConnavigatorApplication : Application() {
         apiService.initialize(this)
         logService.initialize(this)
 
+        // Now running an update every time application boots
+        UpdateIntentService.dispatchUpdate(this)
     }
 }
