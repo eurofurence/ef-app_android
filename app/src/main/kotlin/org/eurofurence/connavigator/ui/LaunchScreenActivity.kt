@@ -230,7 +230,13 @@ class LaunchScreenActivity : BaseActivity() {
             events = event_set
         }
 
-        swipeToRefresh.setOnRefreshListener { events = database.eventEntryDb.elements; eventRecycler.adapter.notifyDataSetChanged(); swipeToRefresh.isRefreshing = false; }
+        swipeToRefresh.setOnRefreshListener {
+            UpdateIntentService.dispatchUpdate(this@LaunchScreenActivity)
+            events = database.eventEntryDb.elements;
+            eventRecycler.adapter.notifyDataSetChanged();
+            fillViews();
+            swipeToRefresh.isRefreshing = false;
+        }
 
         eventRecycler.adapter.notifyDataSetChanged()
     }
@@ -240,7 +246,7 @@ class LaunchScreenActivity : BaseActivity() {
         roomSelector = findViewById(R.id.roomSelector) as Spinner
         daySelector = findViewById(R.id.daySelector) as Spinner
 
-         swipeToRefresh = findViewById(R.id.eventRefresh) as SwipeRefreshLayout
+        swipeToRefresh = findViewById(R.id.eventRefresh) as SwipeRefreshLayout
     }
 
     fun onEventViewPress(eventEntry: EventEntry) {
