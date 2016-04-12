@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -26,7 +27,6 @@ import org.joda.time.Days
 import java.util.*
 
 class LaunchScreenActivity : BaseActivity() {
-
     /**
      * Listens to update responses, since the event recycler holds database related data
      */
@@ -42,6 +42,7 @@ class LaunchScreenActivity : BaseActivity() {
         Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
     }
 
+    lateinit var swipeToRefresh: SwipeRefreshLayout
     lateinit var roomSelector: Spinner
     lateinit var daySelector: Spinner
 
@@ -173,6 +174,7 @@ class LaunchScreenActivity : BaseActivity() {
     private fun fillViews() {
 
         val database = Database(this)
+
         // Create a click listener
         val listener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -227,12 +229,18 @@ class LaunchScreenActivity : BaseActivity() {
 
             events = event_set
         }
+
+        swipeToRefresh.setOnRefreshListener { events = database.eventEntryDb.elements; eventRecycler.adapter.notifyDataSetChanged(); swipeToRefresh.isRefreshing = false; }
+
         eventRecycler.adapter.notifyDataSetChanged()
     }
 
     private fun injectViews() {
+        val database = Database(this)
         roomSelector = findViewById(R.id.roomSelector) as Spinner
         daySelector = findViewById(R.id.daySelector) as Spinner
+
+         swipeToRefresh = findViewById(R.id.eventRefresh) as SwipeRefreshLayout
     }
 
     fun onEventViewPress(eventEntry: EventEntry) {
