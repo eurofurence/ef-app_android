@@ -11,16 +11,6 @@ import org.eurofurence.connavigator.util.extensions.safeWriter
 import java.io.*
 
 /**
- * Provides a database of objects of type [T].
- */
-interface DBProvider {
-    /**
-     * Creates the database from a storage file [from] and the type of elements [elementClass].
-     */
-    fun <T> create(from: File, elementClass: Class<T>): DB<T>
-}
-
-/**
  * A database on objects of type [T].
  */
 interface DB<T> {
@@ -28,24 +18,21 @@ interface DB<T> {
      * A time stamp, or null if the backend does not exist
      */
     val time: Long?
-
     /**
      * The elements of the database
      */
-    var elements: List<T>
+    var items: List<T>
 }
 
 /**
  * Provides [Serializable] databases.
  */
-object serializableDBs : DBProvider {
-    override fun <T> create(from: File, elementClass: Class<T>): DB<T> {
-        // Serializable DB can only create DBs for serializable types
-        Preconditions.checkArgument(Serializable::class.java.isAssignableFrom(elementClass))
+fun <T> createSerialized(from: File, elementClass: Class<T>): DB<T> {
+    // Serializable DB can only create DBs for serializable types
+    Preconditions.checkArgument(Serializable::class.java.isAssignableFrom(elementClass))
 
-        // Return a database of serializable elements
-        return SerializableDB(from, elementClass)
-    }
+    // Return a database of serializable elements
+    return SerializableDB(from, elementClass)
 }
 
 /**
@@ -58,7 +45,7 @@ class SerializableDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
         else
             null
 
-    override var elements: List<T>
+    override var items: List<T>
         get() = if (time != null)
             ObjectInputStream(from.safeInStream()).use { os ->
                 // Return a sequence that is provided by the iterator of objects in the stream
@@ -92,10 +79,8 @@ class SerializableDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
 /**
  * Provides GSON databases.
  */
-object gsonDBs : DBProvider {
-    override fun <T> create(from: File, elementClass: Class<T>): DB<T> {
-        return GsonDB(from, elementClass)
-    }
+fun <T> createGson(from: File, elementClass: Class<T>): DB<T> {
+    return GsonDB(from, elementClass)
 }
 
 /**
@@ -108,7 +93,7 @@ class GsonDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
         else
             null
 
-    override var elements: List<T>
+    override var items: List<T>
         get() = if (time != null)
             JsonReader(from.safeReader()).use { jr ->
                 // Deserialize using GSON
@@ -122,4 +107,3 @@ class GsonDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
             JsonUtil.getGson().toJson(values, JsonUtil.getListTypeForDeserialization(elementClass), jw)
         }
 }
-

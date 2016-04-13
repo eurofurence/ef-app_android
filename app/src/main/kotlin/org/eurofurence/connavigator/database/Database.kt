@@ -3,8 +3,8 @@ package org.eurofurence.connavigator.database
 import android.content.Context
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.store.cached
-import org.eurofurence.connavigator.store.gsonDBs
-import org.eurofurence.connavigator.store.serializableDBs
+import org.eurofurence.connavigator.store.createGson
+import org.eurofurence.connavigator.store.createSerialized
 import org.eurofurence.connavigator.util.extensions.cachedApiDB
 import java.io.File
 import java.util.*
@@ -20,58 +20,58 @@ class Database(val context: Context) {
      * Database storing dates relevant to database state.
      */
     val dateDb =
-            serializableDBs.create(File(context.cacheDir, "date.db"), Date::class.java).cached()
+            createSerialized(File(context.cacheDir, "date.db"), Date::class.java).cached()
 
     /**
      * Database of conference days.
      */
     val eventConferenceDayDb =
-            gsonDBs.create(File(context.cacheDir, "eventconday.db"), EventConferenceDay::class.java).cachedApiDB()
+            createGson(File(context.cacheDir, "eventconday.db"), EventConferenceDay::class.java).cachedApiDB()
 
     /**
      * Database of conference rooms.
      */
     val eventConferenceRoomDb =
-            gsonDBs.create(File(context.cacheDir, "eventconroom.db"), EventConferenceRoom::class.java).cachedApiDB()
+            createGson(File(context.cacheDir, "eventconroom.db"), EventConferenceRoom::class.java).cachedApiDB()
 
     /**
      * Database of conference tracks.
      */
     val eventConferenceTrackDb =
-            gsonDBs.create(File(context.cacheDir, "eventcontrack.db"), EventConferenceTrack::class.java).cachedApiDB()
+            createGson(File(context.cacheDir, "eventcontrack.db"), EventConferenceTrack::class.java).cachedApiDB()
 
     /**
      * Database of events.
      */
     val eventEntryDb =
-            gsonDBs.create(File(context.cacheDir, "events.db"), EventEntry::class.java).cachedApiDB()
+            createGson(File(context.cacheDir, "events.db"), EventEntry::class.java).cachedApiDB()
 
     /**
      * Database of images (meta information).
      */
     val imageDb =
-            gsonDBs.create(File(context.cacheDir, "image.db"), Image::class.java).cachedApiDB()
+            createGson(File(context.cacheDir, "image.db"), Image::class.java).cachedApiDB()
 
     /**
      * Database of infos.
      */
     val infoDb =
-            gsonDBs.create(File(context.cacheDir, "info.db"), Info::class.java).cachedApiDB()
+            createGson(File(context.cacheDir, "info.db"), Info::class.java).cachedApiDB()
 
     /**
      * Database of info groups.
      */
     val infoGroupDb =
-            gsonDBs.create(File(context.cacheDir, "infogroup.db"), InfoGroup::class.java).cachedApiDB()
+            createGson(File(context.cacheDir, "infogroup.db"), InfoGroup::class.java).cachedApiDB()
 
     fun clear() {
-        dateDb.elements = emptyList()
-        eventConferenceDayDb.elements = emptyList()
-        eventConferenceRoomDb.elements = emptyList()
-        eventConferenceTrackDb.elements = emptyList()
-        eventEntryDb.elements = emptyList()
-        imageDb.elements = emptyList()
-        infoDb.elements = emptyList()
-        infoGroupDb.elements = emptyList()
+        dateDb.items = emptyList()
+        eventConferenceDayDb.items = emptyList()
+        eventConferenceRoomDb.items = emptyList()
+        eventConferenceTrackDb.items = emptyList()
+        eventEntryDb.items = emptyList()
+        imageDb.items = emptyList()
+        infoDb.items = emptyList()
+        infoGroupDb.items = emptyList()
     }
 }

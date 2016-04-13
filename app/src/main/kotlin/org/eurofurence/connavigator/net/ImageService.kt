@@ -1,13 +1,13 @@
 package org.eurofurence.connavigator.net
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageSize
 import io.swagger.client.model.Image
-import java.util.*
 
 /**
  * Provides methods for obtaining images from web and caching them.
@@ -42,6 +42,13 @@ object imageService {
     /**
      * Loads the image at the URL and displays it in the image view.
      */
-    fun load(image: Image, imageView: ImageView) = imageLoader.displayImage(image.url, imageView, ImageSize(image.width, image.height))
+    fun load(image: Image?, imageView: ImageView, showHide: Boolean = true) {
+        // Load image if not null
+        if (image != null)
+            imageLoader.displayImage(image.url, imageView, ImageSize(image.width, image.height))
 
+        // If visibility modification desired, perform it
+        if (showHide)
+            imageView.visibility = if (image == null) View.GONE else View.VISIBLE
+    }
 }

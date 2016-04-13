@@ -17,10 +17,10 @@ fun <T> DB<T>.cached() = let {
         override val time: Long?
             get() = it.time
 
-        override var elements: List<T>
+        override var items: List<T>
             get() = if (cacheTime lt time) {
                 // Assign the cache if not yet assigned or invalidated by time
-                cache = it.elements
+                cache = it.items
                 cacheTime = time
                 cache!!
             } else if (time == null)
@@ -31,7 +31,7 @@ fun <T> DB<T>.cached() = let {
             set(values) {
                 // Overwrite the cache, reset memorized time
                 cache = values
-                it.elements = values
+                it.items = values
                 cacheTime = time
             }
 

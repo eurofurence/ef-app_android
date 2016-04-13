@@ -38,7 +38,7 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
         val driver = Database(this)
 
         // Get the old date
-        val oldDate = driver.dateDb.elements.firstOrNull() ?: Date(0)
+        val oldDate = driver.dateDb.items.firstOrNull() ?: Date(0)
 
         logv("UIS") { "Old date in database: $oldDate" }
 
@@ -63,7 +63,7 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
             driver.infoGroupDb.syncWith(api.infoGroupGet(oldDate))
 
             // Set the new server date
-            driver.dateDb.elements = listOf(newDate)
+            driver.dateDb.items = listOf(newDate)
 
             // Make the success response message
             response.booleans["success"] = true

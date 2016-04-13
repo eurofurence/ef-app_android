@@ -33,9 +33,9 @@ class SyncIDB<T>(val deleted: (T) -> Boolean, val synced: IDB<T>) : IDB<T>() {
         val put = other.filter(!deleted).associateBy { id(it) }
 
         // Remove dropped and replaced elements in old list, add new values
-        elements = (keyValues.filterKeys { it !in drop && it !in put.keys }.values + put.values)
+        items = (keyValues.filterKeys { it !in drop && it !in put.keys }.values + put.values)
     } else {
         // If the database does not exist yet, put all that are not deleted
-        elements = other.filter(!deleted)
+        items = other.filter(!deleted)
     }
 }

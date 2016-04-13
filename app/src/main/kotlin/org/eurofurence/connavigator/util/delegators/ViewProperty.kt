@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.util.delegators
 
 import android.app.Activity
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
 import kotlin.reflect.KProperty
@@ -41,6 +42,19 @@ fun <T : View> view(viewClass: Class<T>) = ViewProperty {
     container: Activity, name ->
     // Find view by name, cast it
     viewClass.cast(container.findViewById(container.resources.getIdentifier(name, "id", container.packageName)))
+}
+
+/**
+ * Returns a property delegate for view injection, returns a [ViewProperty]. The context is a fragment.
+ * @param viewClass The class of the view to inject
+ */
+fun <T : View> viewInFragment(viewClass: Class<T>) = ViewProperty {
+    container: Fragment, name ->
+    if (container.view == null)
+        throw NullPointerException("Fragments view is not populated")
+
+    // Find view by name, cast it
+    viewClass.cast(container.view!!.findViewById(container.resources.getIdentifier(name, "id", container.context.packageName)))
 }
 
 /**

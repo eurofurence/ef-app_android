@@ -7,63 +7,88 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="org.eurofurence.connavigator.ui.EventActivity"
-        android:id="@+id/eventActivityLayout">
+        tools:context="org.eurofurence.connavigator.ui.EventActivity">
+
     <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/scrollView">
+            android:layout_height="match_parent">
+
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true" android:layout_alignParentStart="true">
+                android:layout_height="match_parent">
+
             <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:id="@+id/eventImage" android:contentDescription="Event"
-                    android:src="@drawable/placeholder_event" android:scaleType="centerCrop"/>
+                    android:id="@+id/image"
+                    android:contentDescription="Event"
+                    android:src="@drawable/placeholder_event"
+                    android:scaleType="centerCrop"/>
+
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Large Text"
-                    android:id="@+id/eventTitle" android:gravity="center_horizontal"
+                    android:id="@+id/title"
+                    android:gravity="center_horizontal"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp" style="@style/AppTheme.BaseItem"/>
-            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
-                          android:layout_height="match_parent" android:weightSum="10">
+                    android:paddingBottom="10dp"
+                    style="@style/AppTheme.BaseItem"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="10">
+
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Con Day: %s"
-                        android:id="@+id/eventDay" style="@style/AppTheme.TextView" android:layout_weight="5"/>
+                        android:id="@+id/day"
+                        style="@style/AppTheme.TextView"
+                        android:layout_weight="5"/>
+
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="Room: %s"
-                        android:id="@+id/eventRoom" android:layout_weight="5" style="@style/AppTheme.TextView"/>
+                        android:id="@+id/room"
+                        android:layout_weight="5"
+                        style="@style/AppTheme.TextView"/>
             </LinearLayout>
+
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:weightSum="10">
+                    android:layout_height="match_parent"
+                    android:weightSum="10">
+
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="%s - %s"
-                        android:id="@+id/eventTime" android:layout_weight="5" style="@style/AppTheme.TextView"/>
+                        android:id="@+id/time"
+                        android:layout_weight="5"
+                        style="@style/AppTheme.TextView"/>
+
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Run by %s"
-                        android:id="@+id/eventOrganizers" android:layout_weight="5" style="@style/AppTheme.TextView"/>
+                        android:id="@+id/organizers"
+                        android:layout_weight="5"
+                        style="@style/AppTheme.TextView"/>
             </LinearLayout>
+
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="New Text"
-                    android:id="@+id/eventDescription" android:background="@color/colorPrimaryLight"
+                    android:id="@+id/description"
+                    android:background="@color/colorPrimaryLight"
                     style="@style/AppTheme.TextView"/>
         </LinearLayout>
     </ScrollView>

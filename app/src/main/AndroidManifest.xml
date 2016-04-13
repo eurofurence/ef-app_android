@@ -18,33 +18,15 @@
                 android:name=".database.UpdateIntentService"
                 android:exported="false"/>
 
-        <!-- Main screen within the application -->
+        <!-- Root screen of the app, will contain the different panels as fragments -->
         <activity
-                android:name=".ui.LaunchScreenActivity"
+                android:name=".ui.ActivityRoot"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-
-        <activity
-                android:name=".ui.InfoActivity"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:label="Info View">
-        </activity>
-        <activity
-                android:name=".ui.InfoListActivity"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:label="Infos View">
-        </activity>
-
-        <activity
-                android:name=".ui.EventActivity"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:label="Event View">
         </activity>
     </application>
 </manifest>
