@@ -20,16 +20,16 @@
                 android:title="Tools"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="App Management">
         <menu>
             <item
-                    android:id="@+id/navShare"
+                    android:id="@+id/nav_share"
                     android:icon="@drawable/ic_menu_share"
                     android:title="Share"/>
             <item
-                    android:id="@+id/navSend"
+                    android:id="@+id/nav_dev_clear"
                     android:icon="@drawable/ic_menu_send"
-                    android:title="Send"/>
+                    android:title="Clear Database"/>
         </menu>
     </item>
 
