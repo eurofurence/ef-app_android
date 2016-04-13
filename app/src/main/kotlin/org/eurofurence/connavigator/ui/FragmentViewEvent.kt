@@ -11,7 +11,8 @@ import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.util.delegators.viewInFragment
+import org.eurofurence.connavigator.ui.communication.ContentAPI
+import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.jsonObjects
@@ -21,6 +22,7 @@ import org.eurofurence.connavigator.util.extensions.letRoot
  * Created by David on 4/9/2016.
  */
 class FragmentViewEvent() : Fragment() {
+
     /**
      * Constructs the info view with an assigned bundle
      */
@@ -29,15 +31,15 @@ class FragmentViewEvent() : Fragment() {
         arguments.jsonObjects["eventEntry"] = eventEntry
     }
 
-    val title by viewInFragment(TextView::class.java)
-    val description by viewInFragment(TextView::class.java)
-    val image by viewInFragment(ImageView::class.java)
-    val organizers by viewInFragment(TextView::class.java)
-    val time by viewInFragment(TextView::class.java)
-    val room by viewInFragment(TextView::class.java)
-    val day by viewInFragment(TextView::class.java)
+    val title by view(TextView::class.java)
+    val description by view(TextView::class.java)
+    val image by view(ImageView::class.java)
+    val organizers by view(TextView::class.java)
+    val time by view(TextView::class.java)
+    val room by view(TextView::class.java)
+    val day by view(TextView::class.java)
 
-    val database: Database get() = letRoot { it.database }
+    val database: Database get() = letRoot { it.database }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fragment_view_event, container, false)

@@ -18,9 +18,8 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Choice
-import org.eurofurence.connavigator.util.delegators.viewInFragment
-import org.eurofurence.connavigator.util.delegators.viewInHolder
-import org.eurofurence.connavigator.util.extensions.applyRoot
+import org.eurofurence.connavigator.util.delegators.view
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
 
@@ -36,14 +35,14 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
 
     // Event view holder finds and memorizes the views in an event card
     inner class InfoGroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val image by viewInHolder(ImageView::class.java)
-        val title by viewInHolder(TextView::class.java)
-        val description by viewInHolder(TextView::class.java)
+        val image by view(ImageView::class.java)
+        val title by view(TextView::class.java)
+        val description by view(TextView::class.java)
     }
 
     // Event view holder finds and memorizes the views in an event card
     inner class InfoGroupItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title by viewInHolder(TextView::class.java)
+        val title by view(TextView::class.java)
     }
 
     inner class DataAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -88,7 +87,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
 
                         // Handle clicks
                         holder.itemView.setOnClickListener {
-                            applyRoot { navigateToInfo(info) }
+                            applyOnRoot { navigateToInfo(info) }
                         }
                     }
             )
@@ -96,10 +95,10 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
     }
 
 
-    val database: Database get() = letRoot { it.database }
+    val database: Database get() = letRoot { it.database }!!
 
     // View
-    val infoGroups  by viewInFragment(RecyclerView::class.java)
+    val infoGroups  by view(RecyclerView::class.java)
 
     // Store of currently displayed info groups and items
     var effectiveInterleaved = emptyList<Choice<InfoGroup, Info>>()

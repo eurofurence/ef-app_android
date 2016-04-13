@@ -43,13 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/content">
-            <!-- Content fragment, initialized as view of events -->
-            <fragment
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:name="org.eurofurence.connavigator.ui.FragmentViewEvents"
-                    android:id="@+id/contentFragment"
-                    tools:layout="@layout/fragment_view_events"/>
+            <!-- Filled by the root activity -->
         </FrameLayout>
 
         <!-- Additional floating action button, only used for testing purposes now -->

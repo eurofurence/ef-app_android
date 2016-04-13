@@ -23,11 +23,11 @@
     <item android:title="App Management">
         <menu>
             <item
-                    android:id="@+id/nav_share"
+                    android:id="@+id/navShare"
                     android:icon="@drawable/ic_menu_share"
                     android:title="Share"/>
             <item
-                    android:id="@+id/nav_dev_clear"
+                    android:id="@+id/navDevClear"
                     android:icon="@drawable/ic_menu_send"
                     android:title="Clear Database"/>
         </menu>

@@ -8,8 +8,8 @@ import android.view.View
 import kotlin.reflect.KProperty
 
 /**
- * A view is inserted and casted. There is a number of utility constructors, see [view], [viewInHeader], [viewInHolder],
- * [viewInView].
+ * A view is inserted and casted. There is a number of utility constructors, see [view], [header], [view],
+ * [view].
  * @param findView The method used to find a view in the container by string
  */
 class ViewProperty<T, U : View>(val findView: (T, String) -> U) {
@@ -48,7 +48,7 @@ fun <T : View> view(viewClass: Class<T>) = ViewProperty {
  * Returns a property delegate for view injection, returns a [ViewProperty]. The context is a fragment.
  * @param viewClass The class of the view to inject
  */
-fun <T : View> viewInFragment(viewClass: Class<T>) = ViewProperty {
+fun <T : View> Fragment.view(viewClass: Class<T>) = ViewProperty {
     container: Fragment, name ->
     if (container.view == null)
         throw NullPointerException("Fragments view is not populated")
@@ -61,7 +61,7 @@ fun <T : View> viewInFragment(viewClass: Class<T>) = ViewProperty {
  * Returns a property delegate for view injection, returns a [ViewProperty]. The context is a view.
  * @param viewClass The class of the view to inject
  */
-fun <T : View> viewInView(viewClass: Class<T>) = ViewProperty {
+fun <T : View> View.view(viewClass: Class<T>) = ViewProperty {
     container: View, name ->
     // Find view by name, cast it
     viewClass.cast(container.findViewById(container.resources.getIdentifier(name, "id", container.context.packageName)))
@@ -71,7 +71,7 @@ fun <T : View> viewInView(viewClass: Class<T>) = ViewProperty {
  * Returns a property delegate for view injection, returns a [ViewProperty]. The context is a view holder.
  * @param viewClass The class of the view to inject
  */
-fun <T : View> viewInHolder(viewClass: Class<T>) = ViewProperty {
+fun <T : View> ViewHolder.view(viewClass: Class<T>) = ViewProperty {
     container: ViewHolder, name ->
     // Find view by name, cast it
     viewClass.cast(container.itemView.findViewById(container.itemView.resources.getIdentifier(name, "id", container.itemView.context.packageName)))
@@ -81,7 +81,7 @@ fun <T : View> viewInHolder(viewClass: Class<T>) = ViewProperty {
  * Returns a property delegate for view injection, returns a [ViewProperty]. The context is a view.
  * @param viewClass The class of the view to inject
  */
-fun <T : View> viewInHeader(viewClass: Class<T>, navigationView: () -> NavigationView, index: Int = 0) = ViewProperty {
+fun <T : View> Activity.header(viewClass: Class<T>, navigationView: () -> NavigationView, index: Int = 0) = ViewProperty {
     container: Activity, name ->
     // Resolve header
     val header = navigationView().getHeaderView(index)

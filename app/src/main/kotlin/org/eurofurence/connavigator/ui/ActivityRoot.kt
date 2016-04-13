@@ -20,13 +20,9 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.communication.RootAPI
-import org.eurofurence.connavigator.util.delegators.fragmentInSupport
+import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.delegators.viewInHeader
-import org.eurofurence.connavigator.util.extensions.booleans
-import org.eurofurence.connavigator.util.extensions.localReceiver
-import org.eurofurence.connavigator.util.extensions.logv
-import org.eurofurence.connavigator.util.extensions.objects
+import org.eurofurence.connavigator.util.extensions.*
 import java.util.*
 
 class ActivityRoot : AppCompatActivity(), RootAPI {
@@ -38,12 +34,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
 
     // Views in navigation view
     val navView by view(NavigationView::class.java)
-    val navDays by viewInHeader(TextView::class.java, { navView })
-    val navTitle by viewInHeader(TextView::class.java, { navView })
-    val navSubtitle by viewInHeader(TextView::class.java, { navView })
+    val navDays by header(TextView::class.java, { navView })
+    val navTitle by header(TextView::class.java, { navView })
+    val navSubtitle by header(TextView::class.java, { navView })
 
-    // Content fragment
-    val contentFragment by fragmentInSupport(Fragment::class.java)
+    // Content API aggregator
+    var content: Set<ContentAPI> = setOf()
 
     /**
      * Listens to update responses, since the event recycler holds database related data
@@ -56,8 +52,11 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         // Make a snackbar for the result
         Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
 
-        // Update content data if fragment implements content API
-        contentFragment.apply { if (this is ContentAPI) dataUpdated() }
+        // Update content data if fragments implement content API
+        applyOnContent {
+            logv { "Updated the data and dispatching to $this" }
+            dataUpdated()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,16 +64,15 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         // Assign the layout
         setContentView(R.layout.activity_root)
 
+        setupContent()
         setupBar()
         setupBarNavLink()
         setupNav()
         setupFab()
-
-        supportFragmentManager.addOnBackStackChangedListener {
-            for (i in 0..supportFragmentManager.backStackEntryCount - 1)
-                logv { supportFragmentManager.getBackStackEntryAt(i) }
-        }
     }
+
+    private fun setupContent() =
+            navigateRoot(FragmentViewEvents::class.java)
 
     override fun onResume() {
         super.onResume()
@@ -122,10 +120,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
 
     private fun<T : Fragment> navigateRoot(type: Class<T>) {
         // If not already there, navigate with fragment transaction
-        if (!type.isInstance(contentFragment))
+        if (!type.isInstance(content))
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.content, type.newInstance())
+                    .replace(R.id.content, type.newInstance(), "content")
                     .commitAllowingStateLoss()
     }
 
@@ -142,7 +140,15 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 }
                 R.id.navShare -> {
                 }
-                R.id.navSend -> {
+                R.id.navDevClear -> {
+                    // Clear the database
+                    database.clear()
+
+                    // Send data update to current content API
+                    applyOnContent { dataUpdated() }
+
+                    // Notify user
+                    Snackbar.make(findViewById(R.id.fab), "Database cleared", Snackbar.LENGTH_SHORT).show()
                 }
             }
 
@@ -155,7 +161,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     override fun navigateToEvent(eventEntry: EventEntry) {
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.content, FragmentViewEvent(eventEntry))
+                .add(R.id.content, FragmentViewEvent(eventEntry), "content")
                 .addToBackStack(null)
                 .commit()
     }
@@ -163,7 +169,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     override fun navigateToInfo(info: Info) {
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.content, FragmentViewInfo(info))
+                .add(R.id.content, FragmentViewInfo(info), "content")
                 .addToBackStack(null)
                 .commit()
     }

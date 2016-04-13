@@ -9,8 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.util.delegators.viewInFragment
+import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.jsonObjects
@@ -30,9 +31,11 @@ class FragmentViewInfo() : Fragment() {
     }
 
     // Views
-    val image by viewInFragment(ImageView::class.java)
-    val title by viewInFragment(TextView::class.java)
-    val text by viewInFragment(MarkdownView::class.java)
+    val image by view(ImageView::class.java)
+    val title by view(TextView::class.java)
+    val text by view(MarkdownView::class.java)
+
+    val database: Database get() = letRoot { it.database }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fragment_view_info, container, false)
@@ -47,7 +50,7 @@ class FragmentViewInfo() : Fragment() {
             // Set the properties of the view
             title.text = info.title
             text.loadMarkdown(info.text)
-            imageService.load(letRoot { it.database.imageDb[info.imageId] }, image)
+            imageService.load(database.imageDb[info.imageId], image)
         }
     }
 }
