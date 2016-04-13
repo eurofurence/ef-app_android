@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+                android:id="@+id/navEvents"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Events"/>
+        <item
+                android:id="@+id/navInfo"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="Info"/>
+        <item
+                android:id="@+id/navDealersDen"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="Dealers den"/>
+        <item
+                android:id="@+id/navTools"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Tools"/>
+    </group>
+
+    <item android:title="App Management">
+        <menu>
+            <item
+                    android:id="@+id/navShare"
+                    android:icon="@drawable/ic_menu_share"
+                    android:title="Share"/>
+            <item
+                    android:id="@+id/navDevClear"
+                    android:icon="@drawable/ic_menu_send"
+                    android:title="Clear Database"/>
+        </menu>
+    </item>
+
+</menu>

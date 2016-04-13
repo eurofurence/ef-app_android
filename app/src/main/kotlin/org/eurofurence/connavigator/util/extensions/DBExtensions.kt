@@ -12,16 +12,16 @@ import org.eurofurence.connavigator.store.cached
 fun <T> DB<T>.indexBy(indexer: (T) -> Any) = object : IDB<T>() {
     override fun id(item: T): Any = indexer(item)
 
-    override var elements: List<T>
-        get() = this@indexBy.elements
+    override var items: List<T>
+        get() = this@indexBy.items
         set(values) {
-            this@indexBy.elements = values
+            this@indexBy.items = values
         }
 
     override var keyValues: Map<Any, T>
-        get() = this@indexBy.elements.associateBy { id(it) }
+        get() = this@indexBy.items.associateBy { id(it) }
         set(values) {
-            this@indexBy.elements = values.values.toList()
+            this@indexBy.items = values.values.toList()
         }
 
     override val time: Long?
@@ -75,4 +75,16 @@ infix fun <T, U> IDB<T>.pairWith(second: IDB<U>) =
 /**
  * Indexes the receiver by [EntityBase]s identifier, caches it returns a [SyncIDB] marking by the deleted flag.
  */
-fun <T : EntityBase> DB<T>.cachedApiDB() = SyncIDB(EntityBase::deleted, indexBy(EntityBase::getId).cached())
+fun <T : EntityBase> DB<T>.cachedApiDB() =
+        SyncIDB(EntityBase::deleted, indexBy(EntityBase::getId).cached())
+
+/**
+ * Returns the size of the database. The size of the [IDB] does not change since
+ * the association *must* be unique.
+ */
+val DB<*>.size: Int get() = items.size
+
+/**
+ * Accesses the item with the given key.
+ */
+operator fun<T> IDB<T>.get(key: Any?) = keyValues[key]

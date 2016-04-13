@@ -29,8 +29,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:cropToPadding="false"
-                    android:scaleType="centerCrop"
-                    />
+                    android:scaleType="centerCrop"/>
 
             <LinearLayout
                     android:layout_width="fill_parent"

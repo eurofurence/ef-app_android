@@ -8,7 +8,7 @@ abstract class IDB<T> : DB<T> {
     /**
      * The element of the database.
      */
-    override var elements: List<T>
+    override var items: List<T>
         get() = keyValues.values.toList()
         set(values) {
             keyValues = values.associateBy { id(it) }
