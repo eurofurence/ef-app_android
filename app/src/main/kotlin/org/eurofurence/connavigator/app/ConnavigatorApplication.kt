@@ -1,18 +1,17 @@
 package org.eurofurence.connavigator.app
 
 import android.app.Application
-import android.content.Intent
 import net.danlew.android.joda.JodaTimeAndroid
 import org.eurofurence.connavigator.database.UpdateIntentService
-import org.eurofurence.connavigator.gcm.MyGCMListenerService
 import org.eurofurence.connavigator.gcm.MyInstanceIDListenerService
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.webapi.apiService
 
 /**
  * The application initialization point.
  */
-class ConnavigatorApplication : Application() {
+class ConNavigatorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
@@ -24,6 +23,8 @@ class ConnavigatorApplication : Application() {
         imageService.initialize(this)
         apiService.initialize(this)
         logService.initialize(this)
+
+        Analytics.init(this)
 
         MyInstanceIDListenerService.dispatchUpdate(this)
 

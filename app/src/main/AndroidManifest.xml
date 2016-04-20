@@ -3,6 +3,7 @@
           package="org.eurofurence.connavigator">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
 
     <!-- Notifications -->
@@ -13,7 +14,7 @@
 
     <!-- Main entry point of the application -->
     <application
-            android:name=".app.ConnavigatorApplication"
+            android:name=".app.ConNavigatorApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"

@@ -16,6 +16,7 @@ import io.swagger.client.model.InfoGroup
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Choice
 import org.eurofurence.connavigator.util.delegators.view
@@ -109,6 +110,8 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         // Initialize the info groups
         dataInit()
+
+        Analytics.changeScreenName("View Info Groups")
 
         // Default setup for recycler layout and animation
         infoGroups.layoutManager = LinearLayoutManager(context)

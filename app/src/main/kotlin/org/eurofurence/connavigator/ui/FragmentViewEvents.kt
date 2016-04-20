@@ -11,11 +11,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.google.android.gms.analytics.HitBuilders
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
@@ -97,6 +99,8 @@ class FragmentViewEvents : Fragment(), ContentAPI {
             inflater.inflate(R.layout.fragment_view_events, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        Analytics.changeScreenName("View Events")
+
         // Configure the recycler
         events.adapter = DataAdapter()
         events.layoutManager = LinearLayoutManager(context)
