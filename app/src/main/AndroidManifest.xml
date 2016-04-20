@@ -6,7 +6,7 @@
 
 
     <!-- Notifications -->
-    <permission android:name="org.eurofurence.connavigator.permission.C2D_MESSAGE"
+    <permission android:name="org.eurofurence.permission.C2D_MESSAGE"
                 android:protectionLevel="signature"/>
     <uses-permission android:name="org.eurofurence.connavigator.permission.C2D_MESSAGE"/>
 
