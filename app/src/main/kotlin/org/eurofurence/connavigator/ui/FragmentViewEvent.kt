@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.android.gms.analytics.HitBuilders
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.contains
@@ -46,6 +48,8 @@ class FragmentViewEvent() : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Analytics.changeScreenName("View Event")
 
         if ("eventEntry" in arguments) {
             val eventEntry = arguments.jsonObjects["eventEntry", EventEntry::class.java]

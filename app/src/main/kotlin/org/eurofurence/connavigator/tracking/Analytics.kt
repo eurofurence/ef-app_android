@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.tracking
 
 import android.content.Context
 import com.google.android.gms.analytics.GoogleAnalytics
+import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
 
 /**
@@ -13,6 +14,15 @@ class Analytics {
 
         fun Init(context: Context) {
             tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-1")
+        }
+
+        fun changeScreenName(screenName: String){
+            tracker.setScreenName(screenName)
+            tracker.send(HitBuilders.ScreenViewBuilder().build())
+        }
+
+        fun trackEvent(eventBuilder: HitBuilders.EventBuilder){
+            tracker.send(eventBuilder.build())
         }
     }
 }

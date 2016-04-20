@@ -30,8 +30,6 @@ import org.eurofurence.connavigator.util.extensions.*
 import java.util.*
 
 class ActivityRoot : AppCompatActivity(), RootAPI {
-    lateinit var tracker: Tracker
-
     // Views
     val toolbar by view(Toolbar::class.java)
     val drawer by view(DrawerLayout::class.java)
@@ -69,19 +67,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         // Assign the layout
         setContentView(R.layout.activity_root)
 
-        setupTracking()
+        Analytics.changeScreenName("Root")
         setupContent()
         setupBar()
         setupBarNavLink()
         setupNav()
         setupFab()
-    }
-
-    private fun setupTracking() {
-        tracker = Analytics.tracker
-
-        tracker.setScreenName("R.layout.activity_root")
-        tracker.send(HitBuilders.ScreenViewBuilder().build())
     }
 
     private fun setupContent() =
