@@ -27,6 +27,6 @@ class RegistrationIntentService : IntentService("RegistrationIntentService") {
     Send registration token to server
      */
     private fun sendRegistrationToken() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //todo: Implement
     }
 }
