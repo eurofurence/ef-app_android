@@ -11,7 +11,7 @@ import org.eurofurence.connavigator.webapi.apiService
 /**
  * The application initialization point.
  */
-class ConnavigatorApplication : Application() {
+class ConNavigatorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
@@ -24,7 +24,7 @@ class ConnavigatorApplication : Application() {
         apiService.initialize(this)
         logService.initialize(this)
 
-        Analytics.Init(this)
+        Analytics.init(this)
 
         MyInstanceIDListenerService.dispatchUpdate(this)
 

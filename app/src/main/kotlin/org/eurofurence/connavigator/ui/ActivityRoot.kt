@@ -18,7 +18,7 @@ import com.google.android.gms.analytics.Tracker
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.app.ConnavigatorApplication
+import org.eurofurence.connavigator.app.ConNavigatorApplication
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.tracking.Analytics

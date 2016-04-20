@@ -12,7 +12,7 @@ class Analytics {
     companion object {
         lateinit var tracker: Tracker
 
-        fun Init(context: Context) {
+        fun init(context: Context) {
             tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-1")
             tracker.setSampleRate(100.0)
         }
