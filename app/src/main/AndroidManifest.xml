@@ -4,6 +4,13 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+
+    <!-- Notifications -->
+    <permission android:name="org.eurofurence.connavigator.permission.C2D_MESSAGE"
+                android:protectionLevel="signature"/>
+    <uses-permission android:name="org.eurofurence.connavigator.permission.C2D_MESSAGE"/>
+
+
     <!-- Main entry point of the application -->
     <application
             android:name=".app.ConnavigatorApplication"
@@ -28,5 +35,28 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- GCM Services -->
+        <receiver
+                android:name="com.google.android.gms.gcm.GcmReceiver"
+                android:exported="true"
+                android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="org.eurofurence.connavigator.gcm"/>
+            </intent-filter>
+        </receiver>
+        <service android:name=".gcm.MyGCMListenerService"
+                 android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+            </intent-filter>
+        </service>
+        <service android:name=".gcm.MyInstanceIDListenerService"
+                 android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
     </application>
 </manifest>

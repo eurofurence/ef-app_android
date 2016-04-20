@@ -1,8 +1,11 @@
 package org.eurofurence.connavigator.app
 
 import android.app.Application
+import android.content.Intent
 import net.danlew.android.joda.JodaTimeAndroid
 import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.gcm.MyGCMListenerService
+import org.eurofurence.connavigator.gcm.MyInstanceIDListenerService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.webapi.apiService
 
@@ -21,6 +24,8 @@ class ConnavigatorApplication : Application() {
         imageService.initialize(this)
         apiService.initialize(this)
         logService.initialize(this)
+
+        MyInstanceIDListenerService.dispatchUpdate(this)
 
         // Now running an update every time application boots
         UpdateIntentService.dispatchUpdate(this)
