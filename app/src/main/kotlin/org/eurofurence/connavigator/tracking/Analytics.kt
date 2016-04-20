@@ -14,6 +14,7 @@ class Analytics {
 
         fun Init(context: Context) {
             tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-1")
+            tracker.setSampleRate(100.0)
         }
 
         fun changeScreenName(screenName: String){
