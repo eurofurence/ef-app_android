@@ -20,6 +20,9 @@ import org.eurofurence.connavigator.R
 class FragmentMap() : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(newMap: GoogleMap?) {
+        // Show current location
+        newMap?.isMyLocationEnabled = true
+
         // Set map typ
         newMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
 
@@ -32,6 +35,7 @@ class FragmentMap() : Fragment(), OnMapReadyCallback {
                 .title("Estrel Berlin")
         )
 
+        newMap?.uiSettings?.setAllGesturesEnabled(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
