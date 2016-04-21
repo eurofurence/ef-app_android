@@ -11,7 +11,7 @@ import org.eurofurence.connavigator.webapi.apiService
 /**
  * The application initialization point.
  */
-class ConNavigatorApplication : Application() {
+class ConnavigatorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 

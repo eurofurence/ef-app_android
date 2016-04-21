@@ -13,12 +13,9 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import com.google.android.gms.analytics.HitBuilders
-import com.google.android.gms.analytics.Tracker
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.app.ConNavigatorApplication
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.tracking.Analytics
@@ -154,6 +151,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                     // Notify user
                     Snackbar.make(findViewById(R.id.fab), "Database cleared", Snackbar.LENGTH_SHORT).show()
                 }
+                R.id.navMap -> navigateRoot(FragmentMap::class.java)
             }
 
             // Close drawer and return the result
