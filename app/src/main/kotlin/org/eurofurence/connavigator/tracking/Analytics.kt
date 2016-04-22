@@ -45,7 +45,16 @@ class Analytics {
 
             // Start tracking
             tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-1")
-            tracker.setSampleRate(preferences.getString(R.string.settings_tag_analytics_interval.toString(), "50").toDouble())
+
+            var interval = preferences.getString(R.string.settings_tag_analytics_interval.toString(), "50")
+
+            try {
+                interval.toDouble()
+            } catch (exception:Exception) {
+                interval = "50"
+            }
+
+            tracker.setSampleRate(interval.toDouble())
         }
 
         fun changeScreenName(screenName: String) {
