@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+            android:title="Analytics">
+        <CheckBoxPreference
+                android:key="@string/settings_tag_analytics_enabled"
+                android:title="Enable Analytics"
+                android:defaultValue="true"/>
+        <ListPreference
+                android:dependency="@string/settings_tag_analytics_interval"
+                android:key="analytics_polling_interval"
+                android:title="Analytics Polling Interval"
+                android:summary="How many of the events are being sent"
+                android:entries="@array/polling_intervals"
+                android:defaultValue="50"/>
+    </PreferenceCategory>
+</PreferenceScreen>

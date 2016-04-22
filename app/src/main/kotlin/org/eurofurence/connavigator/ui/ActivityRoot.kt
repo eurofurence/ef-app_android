@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
@@ -192,6 +193,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     }
 
     private fun handleSettings() {
-        logv { "Settings pressed" }
+        logv { "Starting settings activity" }
+        intent = Intent(this, ActivitySettings::class.java)
+        startActivity(intent)
     }
 }
