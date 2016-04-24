@@ -18,7 +18,7 @@ class Analytics {
         lateinit var context: Context
 
         fun init(context: Context) {
-            logv{ "Initializing Google Analytics Tracking"}
+            logv { "Initializing Google Analytics Tracking" }
 
             // Get shared preferences
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -38,7 +38,7 @@ class Analytics {
         }
 
         private fun updateTracking(context: Context, preferences: SharedPreferences) {
-            logv { "Updating tracking to new stats"}
+            logv { "Updating tracking to new stats" }
             // Set app-level opt out
             GoogleAnalytics.getInstance(context).appOptOut = preferences.getBoolean(R.string.settings_tag_analytics_enabled.toString(), true)
 
@@ -50,7 +50,7 @@ class Analytics {
 
             try {
                 interval.toDouble()
-            } catch (exception:Exception) {
+            } catch (exception: Exception) {
                 interval = "50"
             }
 
