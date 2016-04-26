@@ -8,7 +8,9 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="org.eurofurence.connavigator.ui.FragmentViewInfo"
-        android:id="@+id/eventActivityLayout">
+        android:id="@+id/eventActivityLayout"
+
+        android:background="@android:color/background_light">
 
     <ImageView
             android:layout_width="match_parent"
