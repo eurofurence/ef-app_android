@@ -126,6 +126,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
             supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.content, type.newInstance(), "content")
+                    .addToBackStack(null)
                     .commitAllowingStateLoss()
     }
 
