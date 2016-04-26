@@ -8,8 +8,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:cardElevation="@dimen/cardview_default_elevation"
-            app:cardBackgroundColor="#252525">
+            app:cardElevation="@dimen/cardview_default_elevation">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -25,12 +24,12 @@
 
             <TextView
                     android:layout_margin="4dp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Large Text"
                     android:id="@+id/title"
-                    android:textColor="#c8c8c8"/>
+                    style="@style/AppTheme.Header"/>
 
             <TextView
                     android:layout_margin="4dp"
