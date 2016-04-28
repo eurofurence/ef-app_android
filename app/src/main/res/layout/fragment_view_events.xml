@@ -24,14 +24,15 @@
                 android:text="@string/room"
                 android:id="@+id/roomChoiceText"
                 android:layout_weight="8"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                style="@style/AppTheme.Header.Sub"/>
 
         <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/roomSelector"
                 android:layout_weight="12"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown" style="@style/AppTheme.Header.Sub"/>
     </LinearLayout>
 
     <LinearLayout
@@ -47,14 +48,16 @@
                 android:text="@string/day"
                 android:id="@+id/textView"
                 android:layout_weight="8"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                style="@style/AppTheme.Header.Sub"/>
 
         <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/daySelector"
                 android:layout_weight="12"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown"
+                style="@style/AppTheme.Header.Sub"/>
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
