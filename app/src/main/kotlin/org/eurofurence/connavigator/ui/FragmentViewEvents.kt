@@ -142,7 +142,7 @@ class FragmentViewEvents : Fragment(), ContentAPI {
 
         roomAdapter.clear()
         roomAdapter.add("All")
-        roomAdapter.addAll(database.eventConferenceRoomDb.items.map { it.name })
+        roomAdapter.addAll(database.eventConferenceRoomDb.items.map { it.name.split("—")[0] })
     }
 
     private fun populateDaySelector() {
@@ -163,7 +163,7 @@ class FragmentViewEvents : Fragment(), ContentAPI {
 
         // If room filter selected, filter by room
         if (roomSelected != null && roomSelected != "All") {
-            val room = database.eventConferenceRoomDb.items.filter { it.name == roomSelected }.first()
+            val room = database.eventConferenceRoomDb.items.filter { it.name.contains(roomSelected.toString()) }.first()
             effectiveEvents = effectiveEvents.filter { it.conferenceRoomId == room.id }
         }
 
