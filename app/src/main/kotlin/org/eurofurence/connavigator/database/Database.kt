@@ -65,13 +65,13 @@ class Database(val context: Context) {
             createGson(File(context.cacheDir, "infogroup.db"), InfoGroup::class.java).cachedApiDB()
 
     fun clear() {
-        dateDb.items = emptyList()
-        eventConferenceDayDb.items = emptyList()
-        eventConferenceRoomDb.items = emptyList()
-        eventConferenceTrackDb.items = emptyList()
-        eventEntryDb.items = emptyList()
-        imageDb.items = emptyList()
-        infoDb.items = emptyList()
-        infoGroupDb.items = emptyList()
+        dateDb.delete()
+        eventConferenceDayDb.delete()
+        eventConferenceRoomDb.delete()
+        eventConferenceTrackDb.delete()
+        eventEntryDb.delete()
+        imageDb.delete()
+        infoDb.delete()
+        infoGroupDb.delete()
     }
 }

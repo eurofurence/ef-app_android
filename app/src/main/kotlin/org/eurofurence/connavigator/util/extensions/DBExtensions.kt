@@ -10,6 +10,10 @@ import org.eurofurence.connavigator.store.cached
  * Uses the [indexer] function to index the database receiver.
  */
 fun <T> DB<T>.indexBy(indexer: (T) -> Any) = object : IDB<T>() {
+    override fun delete() {
+        this@indexBy.delete()
+    }
+
     override fun id(item: T): Any = indexer(item)
 
     override var items: List<T>
@@ -33,6 +37,11 @@ fun <T> DB<T>.indexBy(indexer: (T) -> Any) = object : IDB<T>() {
  */
 infix fun <T, U> IDB<T>.pairWith(second: IDB<U>) =
         object : IDB<Pair<T?, U?>>() {
+            override fun delete() {
+                this@pairWith.delete()
+                second.delete()
+            }
+
             override val time: Long?
                 get() = this@pairWith.time max second.time
 

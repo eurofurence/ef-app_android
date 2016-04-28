@@ -4,16 +4,18 @@ import com.google.common.base.Preconditions
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import io.swagger.client.JsonUtil
-import org.eurofurence.connavigator.util.extensions.safeInStream
-import org.eurofurence.connavigator.util.extensions.safeOutStream
-import org.eurofurence.connavigator.util.extensions.safeReader
-import org.eurofurence.connavigator.util.extensions.safeWriter
+import org.eurofurence.connavigator.util.extensions.*
 import java.io.*
 
 /**
  * A database on objects of type [T].
  */
 interface DB<T> {
+    /**
+     * Deletes the database
+     */
+    fun delete()
+
     /**
      * A time stamp, or null if the backend does not exist
      */
@@ -39,6 +41,10 @@ fun <T> createSerialized(from: File, elementClass: Class<T>): DB<T> {
  * A database of elements that are [Serializable].
  */
 class SerializableDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
+    override fun delete() {
+        from.delete()
+    }
+
     override val time: Long?
         get() = if (from.exists())
             from.lastModified()
@@ -66,13 +72,15 @@ class SerializableDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
         else
             emptyList()
 
-        set(values) = ObjectOutputStream(from.safeOutStream()).use { os ->
-            // Write all objects to the stream
-            for (value in values)
-                os.writeObject(value)
+        set(values) = from.substitute {
+            ObjectOutputStream(it.safeOutStream()).use { os ->
+                // Write all objects to the stream
+                for (value in values)
+                    os.writeObject(value)
 
 
-            os.flush()
+                os.flush()
+            }
         }
 }
 
@@ -87,6 +95,10 @@ fun <T> createGson(from: File, elementClass: Class<T>): DB<T> {
  * A database of elements that can be written and read by GSON.
  */
 class GsonDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
+    override fun delete() {
+        from.delete()
+    }
+
     override val time: Long?
         get() = if (from.exists())
             from.lastModified()
@@ -102,8 +114,10 @@ class GsonDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
         else
             emptyList()
 
-        set(values) = JsonWriter(from.safeWriter()).use { jw ->
-            // Serialize using GSON
-            JsonUtil.getGson().toJson(values, JsonUtil.getListTypeForDeserialization(elementClass), jw)
+        set(values) = from.substitute {
+            JsonWriter(it.safeWriter()).use { jw ->
+                // Serialize using GSON
+                JsonUtil.getGson().toJson(values, JsonUtil.getListTypeForDeserialization(elementClass), jw)
+            }
         }
 }
