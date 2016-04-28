@@ -37,57 +37,36 @@
                     android:paddingBottom="10dp"
                     style="@style/AppTheme.Header"/>
 
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Con Day: %s"
+                    android:id="@+id/time"
+                    android:layout_weight="5"
+                    style="@style/AppTheme.Header.Sub"/>
+            <TextView
+                    android:layout_width="fill_parent"
                     android:layout_height="match_parent"
-                    android:weightSum="10">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Con Day: %s"
-                        android:id="@+id/day"
-                        android:layout_weight="5"
-                style="@style/AppTheme.Header.Sub"/>
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="Room: %s"
-                        android:id="@+id/room"
-                        android:layout_weight="5"
-                style="@style/AppTheme.Header.Sub"/>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:weightSum="10">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="%s - %s"
-                        android:id="@+id/time"
-                        android:layout_weight="5"
-                        style="@style/AppTheme.Header.Sub"/>
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Run by %s"
-                        android:id="@+id/organizers"
-                        android:layout_weight="5"
-                        style="@style/AppTheme.Header.Sub"/>
-            </LinearLayout>
+                    android:text="Room: %s"
+                    android:id="@+id/room"
+                    android:layout_weight="5"
+                    style="@style/AppTheme.Header.Sub"/>
 
             <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Run by %s"
+                    android:id="@+id/organizers"
+                    android:layout_weight="5"
+                    style="@style/AppTheme.Header.Sub"/>
+
+            <us.feras.mdv.MarkdownView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="New Text"
-                    android:id="@+id/description"/>
+                    android:id="@+id/description"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:padding="10dp"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

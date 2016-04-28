@@ -7,18 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.google.android.gms.analytics.HitBuilders
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.letRoot
+import us.feras.mdv.MarkdownView
 
 /**
  * Created by David on 4/9/2016.
@@ -34,12 +33,11 @@ class FragmentViewEvent() : Fragment() {
     }
 
     val title by view(TextView::class.java)
-    val description by view(TextView::class.java)
+    val description by view(MarkdownView::class.java)
     val image by view(ImageView::class.java)
     val organizers by view(TextView::class.java)
-    val time by view(TextView::class.java)
     val room by view(TextView::class.java)
-    val day by view(TextView::class.java)
+    val time by view(TextView::class.java)
 
     val database: Database get() = letRoot { it.database }!!
 
@@ -58,11 +56,12 @@ class FragmentViewEvent() : Fragment() {
             val conferenceDay = database.eventConferenceDayDb.keyValues[eventEntry.conferenceDayId]
 
             title.text = eventEntry.title
-            description.text = eventEntry.description
-            time.text = time.text.toString().format(eventEntry.startTime, eventEntry.endTime)
-            organizers.text = organizers.text.toString().format(eventEntry.panelHosts)
-            day.text = day.text.toString().format(conferenceDay?.date)
-            room.text = room.text.toString().format(conferenceRoom?.name)
+
+            description.loadMarkdown(eventEntry.description)
+
+            time.text = "%s %s-%s".format(conferenceDay?.date.toString(), eventEntry.startTime, eventEntry.endTime)
+            organizers.text = "%s".format(eventEntry.panelHosts)
+            room.text = "%s".format(conferenceRoom?.name)
 
             imageService.load(database.imageDb[eventEntry.imageId], image)
         }
