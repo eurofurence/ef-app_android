@@ -15,9 +15,9 @@
                 android:icon="@drawable/ic_menu_slideshow"
                 android:title="Dealers den"/>
         <item
-                android:id="@+id/navTools"
+                android:id="@+id/navAbout"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="Tools"/>
+                android:title="About"/>
         <item
             android:id="@+id/navMap"
             android:icon="@drawable/common_plus_signin_btn_icon_dark_normal"

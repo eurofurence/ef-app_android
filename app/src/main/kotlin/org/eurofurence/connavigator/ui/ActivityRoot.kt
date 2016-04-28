@@ -138,8 +138,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navDealersDen -> {
                 }
-                R.id.navTools -> {
-                }
+                R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
                 R.id.navShare -> {
                 }
                 R.id.navDevClear -> {
