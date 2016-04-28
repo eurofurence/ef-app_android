@@ -55,6 +55,7 @@ class ActivityStart : AppCompatActivity() {
 
     private fun startRootActivity() {
         val intent = Intent(this, ActivityRoot::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         startActivity(intent)
     }
 }
