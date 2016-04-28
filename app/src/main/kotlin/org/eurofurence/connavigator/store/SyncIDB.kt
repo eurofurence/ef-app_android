@@ -10,6 +10,10 @@ import org.eurofurence.connavigator.util.extensions.not
  *
  */
 class SyncIDB<T>(val deleted: (T) -> Boolean, val synced: IDB<T>) : IDB<T>() {
+    override fun delete() {
+        synced.delete()
+    }
+
     override val time: Long?
         get() = synced.time
 
