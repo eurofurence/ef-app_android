@@ -35,15 +35,16 @@
                 android:exported="false"/>
 
         <!-- Root screen of the app, will contain the different panels as fragments -->
-        <activity
-                android:name=".ui.ActivityRoot"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".ui.ActivityStart"
+                  android:label="Eurofurence"
+                  android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.ActivityRoot" />
 
         <activity android:name=".ui.ActivitySettings"/>
 

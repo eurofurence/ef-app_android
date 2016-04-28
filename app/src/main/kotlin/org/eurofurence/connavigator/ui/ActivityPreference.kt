@@ -6,9 +6,6 @@ import android.preference.PreferenceActivity
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.logv
 
-/**
- * Created by David on 22-4-2016.
- */
 class ActivitySettings : PreferenceActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         logv { "Preference %s changed".format(key!!) }
