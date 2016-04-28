@@ -1,7 +1,12 @@
 package org.eurofurence.connavigator.ui
 
+import android.Manifest
+import android.app.Dialog
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +25,9 @@ import org.eurofurence.connavigator.R
 class FragmentMap() : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(newMap: GoogleMap?) {
+        if (requestMapPermission())
         // Show current location
-        newMap?.isMyLocationEnabled = true
+            newMap?.isMyLocationEnabled = true
 
         // Set map typ
         newMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
@@ -36,6 +42,21 @@ class FragmentMap() : Fragment(), OnMapReadyCallback {
         )
 
         newMap?.uiSettings?.setAllGesturesEnabled(true)
+    }
+
+    private fun requestMapPermission(): Boolean {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show a message to the user
+                val dialog = Dialog(activity)
+                dialog.setTitle("We'd like to show you where you are on the map!")
+                dialog.show()
+            } else {
+                //Request permissions
+                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 0)
+            }
+        }
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
