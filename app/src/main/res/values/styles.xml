@@ -30,4 +30,10 @@
         <item name="android:gravity">left</item>
         <item name="android:padding">10dp</item>
     </style>
+
+    <style name="AppTheme.Button" parent="AppTheme">
+        <item name="android:radius">5dp</item>
+        <item name="android:background">@color/accentDark</item>
+        <item name="android:textColor">@color/textBlack</item>
+    </style>
 </resources>

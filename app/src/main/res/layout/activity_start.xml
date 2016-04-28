@@ -14,7 +14,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Get Started"
-            android:id="@+id/buttonStart" android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible"/>
+            android:id="@+id/buttonStart"
+            android:visibility="invisible" android:layout_below="@+id/textHelp"
+            android:layout_centerHorizontal="true"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="We&apos;re just loading some data for you. Hang tight!"
+            android:id="@+id/textHelp" android:layout_below="@+id/imageView" android:layout_centerHorizontal="true"
+            style="@style/AppTheme.Header.Sub" android:gravity="center_horizontal"/>
 </RelativeLayout>

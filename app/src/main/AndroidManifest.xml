@@ -37,7 +37,7 @@
         <!-- Root screen of the app, will contain the different panels as fragments -->
         <activity android:name=".ui.ActivityStart"
                   android:label="Eurofurence"
-                  android:theme="@style/AppTheme.NoActionBar">
+                  android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
