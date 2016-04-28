@@ -11,4 +11,12 @@
     <string name="fragment_main_event_content_description">Picture of an event</string>
     <string name="day">Day</string>
     <string name="room">Room</string>
+    <string name="settings_tag_analytics_enabled">analytics_enabled</string>
+    <string name="settings_tag_analytics_interval">analytics_enabled</string>
+    <array name="polling_intervals">
+        <item>100</item>
+        <item>75</item>
+        <item>50</item>
+        <item>25</item>
+    </array>
 </resources>

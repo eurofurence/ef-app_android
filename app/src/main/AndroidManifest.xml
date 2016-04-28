@@ -45,6 +45,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.ActivitySettings"/>
+
         <!-- GCM Services -->
         <receiver
                 android:name="com.google.android.gms.gcm.GcmReceiver"
