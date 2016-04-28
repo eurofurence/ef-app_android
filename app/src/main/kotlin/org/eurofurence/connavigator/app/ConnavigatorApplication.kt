@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.app
 
 import android.app.Application
+import android.support.multidex.MultiDexApplication
 import net.danlew.android.joda.JodaTimeAndroid
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.gcm.MyInstanceIDListenerService
@@ -11,7 +12,7 @@ import org.eurofurence.connavigator.webapi.apiService
 /**
  * The application initialization point.
  */
-class ConnavigatorApplication : Application() {
+class ConnavigatorApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
