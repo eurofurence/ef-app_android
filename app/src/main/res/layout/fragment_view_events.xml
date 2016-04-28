@@ -6,9 +6,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".ui.FragmentViewEvents">
+        tools:context=".ui.FragmentViewEvents"
+        android:background="@android:color/background_light">
 
 
     <LinearLayout
@@ -16,8 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="20"
-            style="@style/AppTheme.TextView"
-            android:background="@color/colorPrimaryLight">
+            android:background="@color/primaryLight">
 
         <TextView
                 android:layout_width="100dp"
@@ -26,14 +25,14 @@
                 android:id="@+id/roomChoiceText"
                 android:layout_weight="8"
                 android:gravity="center_vertical"
-                style="@style/AppTheme.TextView"/>
+                style="@style/AppTheme.Header.Sub"/>
 
         <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/roomSelector"
                 android:layout_weight="12"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown" style="@style/AppTheme.Header.Sub"/>
     </LinearLayout>
 
     <LinearLayout
@@ -41,24 +40,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="20"
-            android:background="@color/colorPrimaryLight"
-            style="@style/AppTheme.TextView">
+            android:background="@color/primaryLight">
 
         <TextView
-                style="@style/AppTheme.TextView"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="@string/day"
                 android:id="@+id/textView"
                 android:layout_weight="8"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                style="@style/AppTheme.Header.Sub"/>
 
         <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/daySelector"
                 android:layout_weight="12"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown"
+                style="@style/AppTheme.Header.Sub"/>
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
