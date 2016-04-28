@@ -20,10 +20,11 @@
             android:contentDescription="Info image"/>
 
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
+            style="@style/AppTheme.Header"
             android:id="@+id/title"/>
 
     <us.feras.mdv.MarkdownView

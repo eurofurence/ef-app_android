@@ -21,7 +21,7 @@
                     android:layout_height="@dimen/image_height"
                     android:id="@+id/image"
                     android:src="@drawable/placeholder_event"
-                    android:contentDescription="Info image"/>
+                    android:contentDescription="Info image" android:scaleType="centerCrop"/>
 
             <TextView
                     android:layout_margin="4dp"
@@ -33,12 +33,12 @@
                     style="@style/AppTheme.Header"/>
 
             <TextView
-                    android:layout_margin="4dp"
-                    android:layout_width="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Large Text"
                     android:id="@+id/description"
-                    android:textColor="#858585"/>
+                    style="@style/AppTheme.Header.Sub"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
