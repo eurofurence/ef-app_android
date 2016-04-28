@@ -126,7 +126,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
             supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.content, type.newInstance(), "content")
-                    .addToBackStack(null)
                     .commitAllowingStateLoss()
     }
 
@@ -165,7 +164,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     override fun navigateToEvent(eventEntry: EventEntry) {
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.content, FragmentViewEvent(eventEntry), "content")
+                .add(R.id.content, FragmentViewEvent(eventEntry), "content")
                 .addToBackStack(null)
                 .commit()
     }
@@ -173,7 +172,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     override fun navigateToInfo(info: Info) {
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.content, FragmentViewInfo(info), "content")
+                .add(R.id.content, FragmentViewInfo(info), "content")
                 .addToBackStack(null)
                 .commit()
     }
