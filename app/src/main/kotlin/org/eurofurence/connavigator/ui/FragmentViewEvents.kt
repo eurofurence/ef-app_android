@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.google.android.gms.analytics.HitBuilders
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
@@ -23,6 +22,7 @@ import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
+import us.feras.mdv.MarkdownView
 
 /**
  * Fragment displaying the events.
@@ -35,7 +35,7 @@ class FragmentViewEvents : Fragment(), ContentAPI {
         val eventTitle by view(TextView::class.java)
         val eventDate by view(TextView::class.java)
         val eventHosts by view(TextView::class.java)
-        val eventDescription by view(TextView::class.java)
+        val eventDescription by view(MarkdownView::class.java)
     }
 
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
@@ -55,7 +55,10 @@ class FragmentViewEvents : Fragment(), ContentAPI {
             holder.eventTitle.text = event.title
             holder.eventDate.text = event.startTime
             holder.eventHosts.text = event.panelHosts
-            holder.eventDescription.text = event.description
+            if (event.description.length > 200)
+                holder.eventDescription.loadMarkdown(event.description.substring(0, 200) + " . . .")
+            else
+                holder.eventDescription.loadMarkdown(event.description)
 
             // Load image
             imageService.load(database.imageDb[event.imageId], holder.eventImage)

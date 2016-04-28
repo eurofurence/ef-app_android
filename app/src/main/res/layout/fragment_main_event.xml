@@ -60,7 +60,7 @@
                     android:text="Hosts placeholder"
                     style="@style/AppTheme.Header.Sub"/>
 
-            <TextView
+            <us.feras.mdv.MarkdownView
                     android:id="@+id/eventDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
