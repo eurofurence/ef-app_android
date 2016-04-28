@@ -10,10 +10,7 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
-import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.eurofurence.connavigator.R
@@ -67,8 +64,11 @@ class FragmentMap() : Fragment(), OnMapReadyCallback {
 
         //Analytics.changeScreenName("View Map")
 
-        val map = activity.fragmentManager.findFragmentById(R.id.internalMapFragment) as MapFragment
+        val mapFragment = SupportMapFragment.newInstance();
+        childFragmentManager.beginTransaction()
+                .replace(R.id.internalMapFragment, mapFragment)
+                .commit()
 
-        map.getMapAsync(this)
+        mapFragment.getMapAsync { onMapReady(it) }
     }
 }
