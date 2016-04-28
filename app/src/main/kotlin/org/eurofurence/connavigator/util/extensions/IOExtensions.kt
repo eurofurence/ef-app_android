@@ -26,3 +26,16 @@ fun File.safeOutStream() = BufferedOutputStream(FileOutputStream(this))
  * Opens a stream on the file. Uses the buffering decorator.
  */
 fun File.safeInStream() = BufferedInputStream(FileInputStream(this))
+
+/**
+ * Executes the block for a substitute file, if successful (no
+ * exception thrown), renames the temporary file to the original.
+ * @param block The block to execute
+ */
+fun File.substitute(block: (File) -> Unit) {
+    File.createTempFile(name, ".$extension", parentFile).let {
+        block(it)
+        if (!it.renameTo(this))
+            throw IOException("Error executing substitution block, could not rename")
+    }
+}

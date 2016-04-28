@@ -11,6 +11,12 @@ fun <T> DB<T>.cached() = let {
         var cacheTime: Long? = null
         var cache: List<T>? = null
 
+        override fun delete() {
+            it.delete()
+            cacheTime = null
+            cache = null
+        }
+
         /**
          * Returns the time of the backed cache
          */
@@ -49,6 +55,12 @@ fun <T> IDB<T>.cached() = let {
         var cacheTime: Long? = null
 
         var cache: Map<Any, T>? = null
+
+        override fun delete() {
+            it.delete()
+            cacheTime = null
+            cache = null
+        }
 
         /**
          * Returns the time of the backed cache
