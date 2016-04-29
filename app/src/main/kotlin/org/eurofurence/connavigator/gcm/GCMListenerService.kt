@@ -24,7 +24,7 @@ class MyGCMListenerService : GcmListenerService() {
 
     fun sendNotification(message: String) {
         val notificationBuilder = NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("New message from EF")
                 .setContentText(message)
 

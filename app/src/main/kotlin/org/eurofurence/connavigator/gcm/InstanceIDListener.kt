@@ -30,7 +30,7 @@ class MyInstanceIDListenerService: InstanceIDListenerService() {
     }
 
     override fun onTokenRefresh() {
-        logd { "REfreshing GCM token" }
+        logd { "Refreshing GCM token" }
         val intent = Intent(this, RegistrationIntentService::class.java)
         startService(intent)
     }
