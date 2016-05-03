@@ -74,7 +74,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     }
 
     private fun setupContent() =
-            navigateRoot(FragmentViewEvents::class.java)
+            navigateRoot(FragmentEventsViewpager::class.java)
 
     override fun onResume() {
         super.onResume()
