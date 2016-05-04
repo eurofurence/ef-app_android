@@ -42,7 +42,7 @@ class FragmentViewEvent() : Fragment() {
     val database: Database get() = letRoot { it.database }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_view_event, container, false)
+            inflater.inflate(R.layout.fview_event, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,7 +63,7 @@ class FragmentViewEvent() : Fragment() {
             organizers.text = "%s".format(eventEntry.panelHosts)
             room.text = "%s".format(conferenceRoom?.name)
 
-            imageService.load(database.imageDb[eventEntry.imageId], image)
+            imageService.load(database.imageDb[eventEntry.imageId], image, false)
         }
     }
 

@@ -51,10 +51,6 @@ class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment() {
             holder.eventTitle.text = event.title
             holder.eventDate.text = event.startTime
             holder.eventHosts.text = event.panelHosts
-            if (event.description.length > 200)
-                holder.eventDescription.loadMarkdown(event.description.substring(0, 200) + " . . .")
-            else
-                holder.eventDescription.loadMarkdown(event.description)
 
             // Load image
             imageService.load(database.imageDb[event.imageId], holder.eventImage)
@@ -72,7 +68,7 @@ class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment() {
     lateinit var database: Database
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_fragment_events, container, false)
+            inflater.inflate(R.layout.fragment_events, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

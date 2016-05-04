@@ -39,7 +39,7 @@ class FragmentViewInfo() : Fragment() {
     val database: Database get() = letRoot { it.database }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_view_info, container, false)
+            inflater.inflate(R.layout.fview_info, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,7 +53,8 @@ class FragmentViewInfo() : Fragment() {
             // Set the properties of the view
             title.text = info.title
             text.loadMarkdown(info.text)
-            imageService.load(database.imageDb[info.imageId], image)
+            image.scaleType = ImageView.ScaleType.CENTER_CROP
+            imageService.load(database.imageDb[info.imageId], image, showHide = false)
         }
     }
 }

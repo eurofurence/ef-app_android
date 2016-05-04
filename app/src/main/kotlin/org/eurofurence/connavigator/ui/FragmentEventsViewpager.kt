@@ -44,11 +44,12 @@ class FragmentEventsViewpager : Fragment() {
     val eventHeader by view(PagerTabStrip::class.java)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_view_events_viewpager, container, false)
+            inflater.inflate(R.layout.fview_events_viewpager, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Events Viewpager")
 
         eventPager.adapter = EventFragmentPagerAdapter(fragmentManager, activity)
+        eventPager
     }
 }

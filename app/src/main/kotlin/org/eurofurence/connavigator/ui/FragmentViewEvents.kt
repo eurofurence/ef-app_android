@@ -99,7 +99,7 @@ class FragmentViewEvents : Fragment(), ContentAPI {
     var effectiveEvents = emptyList<EventEntry>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_view_events, container, false)
+            inflater.inflate(R.layout.fview_events, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Events")
