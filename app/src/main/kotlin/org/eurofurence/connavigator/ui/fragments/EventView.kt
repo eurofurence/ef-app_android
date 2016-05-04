@@ -18,7 +18,6 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
-import us.feras.mdv.MarkdownView
 
 /**
  * Event view recycler to hold the viewpager items
@@ -30,15 +29,13 @@ class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment() {
         val eventImage by view(ImageView::class.java)
         val eventTitle by view(TextView::class.java)
         val eventDate by view(TextView::class.java)
-        val eventHosts by view(TextView::class.java)
-        val eventDescription by view(MarkdownView::class.java)
     }
 
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, pos: Int) =
                 EventViewHolder(LayoutInflater
                         .from(parent.context)
-                        .inflate(R.layout.fragment_main_event, parent, false))
+                        .inflate(R.layout.fragment_event_card, parent, false))
 
         override fun getItemCount() =
                 effectiveEvents.size
@@ -50,7 +47,6 @@ class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment() {
             // Assign the properties of the view
             holder.eventTitle.text = event.title
             holder.eventDate.text = event.startTime
-            holder.eventHosts.text = event.panelHosts
 
             // Load image
             imageService.load(database.imageDb[event.imageId], holder.eventImage)
