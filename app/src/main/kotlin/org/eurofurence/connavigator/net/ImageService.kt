@@ -8,6 +8,7 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageSize
 import io.swagger.client.model.Image
+import org.eurofurence.connavigator.R
 
 /**
  * Provides methods for obtaining images from web and caching them.
@@ -46,6 +47,8 @@ object imageService {
         // Load image if not null
         if (image != null)
             imageLoader.displayImage(image.url, imageView, ImageSize(image.width, image.height))
+        else
+            imageView.setImageResource(R.drawable.placeholder_event)
 
         // If visibility modification desired, perform it
         if (showHide)
