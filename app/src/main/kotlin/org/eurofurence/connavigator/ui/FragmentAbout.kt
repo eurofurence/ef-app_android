@@ -22,7 +22,7 @@ class FragmentAbout : Fragment() {
     val markdownAttributation by view(MarkdownView::class.java)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_view_about, container, false)
+            inflater.inflate(R.layout.fview_about, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View About")

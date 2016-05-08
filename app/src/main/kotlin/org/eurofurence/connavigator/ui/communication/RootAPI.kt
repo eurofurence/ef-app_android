@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui.communication
 
+import android.support.design.widget.TabLayout
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.database.Database
@@ -9,6 +10,8 @@ import org.eurofurence.connavigator.database.Database
  */
 interface RootAPI {
     val database: Database
+
+    val tabs: TabLayout
 
     fun navigateToEvent(eventEntry: EventEntry)
 
