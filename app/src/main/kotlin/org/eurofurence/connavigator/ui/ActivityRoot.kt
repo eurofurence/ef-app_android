@@ -53,7 +53,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         val time = it.objects["time", Date::class.java]
 
         // Make a snackbar for the result
-        Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(findViewById(R.id.fab)!!, "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
 
         // Update content data if fragments implement content API
         applyOnContent {
@@ -151,7 +151,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                     applyOnContent { dataUpdated() }
 
                     // Notify user
-                    Snackbar.make(findViewById(R.id.fab), "Database cleared", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(findViewById(R.id.fab)!!, "Database cleared", Snackbar.LENGTH_SHORT).show()
                 }
                 R.id.navMap -> navigateRoot(FragmentMap::class.java)
             }
@@ -186,7 +186,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     private fun setupFab() {
         fab.setOnClickListener { view ->
             // Notify the update to the user
-            Snackbar.make(findViewById(R.id.fab), "Updating the database", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(findViewById(R.id.fab)!!, "Updating the database", Snackbar.LENGTH_LONG).show()
 
             // Start the update service
             UpdateIntentService.dispatchUpdate(this@ActivityRoot)
