@@ -136,7 +136,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         navView.setNavigationItemSelectedListener {
             //Handle the ID
             when (it.itemId) {
-                R.id.navEvents -> navigateRoot(FragmentViewEvents::class.java)
+                R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navDealersDen -> {
                 }
