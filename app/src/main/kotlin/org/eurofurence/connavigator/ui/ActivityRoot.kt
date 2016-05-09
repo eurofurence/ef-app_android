@@ -14,9 +14,11 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
@@ -191,6 +193,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
             // Start the update service
             UpdateIntentService.dispatchUpdate(this@ActivityRoot)
         }
+
+        if (!BuildConfig.DEBUG)
+            fab.visibility = View.INVISIBLE
     }
 
     private fun handleSettings() {
