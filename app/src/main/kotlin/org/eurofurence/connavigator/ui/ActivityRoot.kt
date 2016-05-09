@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -30,6 +31,7 @@ import java.util.*
 class ActivityRoot : AppCompatActivity(), RootAPI {
     // Views
     val toolbar by view(Toolbar::class.java)
+    override val tabs by view(TabLayout::class.java)
     val drawer by view(DrawerLayout::class.java)
     val fab by view(FloatingActionButton::class.java)
 
@@ -51,7 +53,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         val time = it.objects["time", Date::class.java]
 
         // Make a snackbar for the result
-        Snackbar.make(findViewById(R.id.fab), "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(findViewById(R.id.fab)!!, "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
 
         // Update content data if fragments implement content API
         applyOnContent {
@@ -74,7 +76,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     }
 
     private fun setupContent() =
-            navigateRoot(FragmentViewEvents::class.java)
+            navigateRoot(FragmentEventsViewpager::class.java)
 
     override fun onResume() {
         super.onResume()
@@ -134,7 +136,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         navView.setNavigationItemSelectedListener {
             //Handle the ID
             when (it.itemId) {
-                R.id.navEvents -> navigateRoot(FragmentViewEvents::class.java)
+                R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navDealersDen -> {
                 }
@@ -149,7 +151,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                     applyOnContent { dataUpdated() }
 
                     // Notify user
-                    Snackbar.make(findViewById(R.id.fab), "Database cleared", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(findViewById(R.id.fab)!!, "Database cleared", Snackbar.LENGTH_SHORT).show()
                 }
                 R.id.navMap -> navigateRoot(FragmentMap::class.java)
             }
@@ -184,7 +186,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     private fun setupFab() {
         fab.setOnClickListener { view ->
             // Notify the update to the user
-            Snackbar.make(findViewById(R.id.fab), "Updating the database", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(findViewById(R.id.fab)!!, "Updating the database", Snackbar.LENGTH_LONG).show()
 
             // Start the update service
             UpdateIntentService.dispatchUpdate(this@ActivityRoot)

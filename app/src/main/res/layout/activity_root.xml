@@ -33,7 +33,16 @@
                     android:layout_height="wrap_content"
                     android:background="?attr/colorPrimary"
                     android:fitsSystemWindows="true"
+                    app:layout_scrollFlags="scroll|enterAlways"
                     app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+            <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabGravity="fill"
+                    app:tabIndicatorHeight="6dp"
+                    app:tabMode="fixed"/>
 
         </android.support.design.widget.AppBarLayout>
 
