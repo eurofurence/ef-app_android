@@ -16,7 +16,7 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
             <ImageView
                     android:layout_width="match_parent"
@@ -25,48 +25,56 @@
                     android:contentDescription="Event"
                     android:src="@drawable/placeholder_event"
                     android:scaleType="centerCrop"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@color/primaryDarker"
+                          android:padding="@dimen/outer_padding"
+                          android:orientation="vertical">
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLargeInverse"
+                        android:text="Large Text"
+                        android:id="@+id/title"
+                        android:gravity="center_horizontal"
+                        android:paddingTop="@dimen/outer_padding"
+                        android:paddingBottom="@dimen/outer_padding"/>
 
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Large Text"
-                    android:id="@+id/title"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    style="@style/AppTheme.Header"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Con Day: %s"
+                        android:id="@+id/time"
+                        android:layout_weight="5"
+                        android:paddingBottom="@dimen/inner_padding"
+                        android:textAppearance="?android:attr/textAppearanceMediumInverse"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:text="Room: %s"
+                        android:id="@+id/room"
+                        android:layout_weight="5"
+                        android:paddingBottom="@dimen/inner_padding"
+                        android:textAppearance="?android:attr/textAppearanceMediumInverse"
+                />
 
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Con Day: %s"
-                    android:id="@+id/time"
-                    android:layout_weight="5"
-                    style="@style/AppTheme.Header.Sub"/>
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:text="Room: %s"
-                    android:id="@+id/room"
-                    android:layout_weight="5"
-                    style="@style/AppTheme.Header.Sub"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Run by %s"
+                        android:id="@+id/organizers"
+                        android:layout_weight="5"
+                        android:paddingBottom="@dimen/inner_padding"
+                        android:textAppearance="?android:attr/textAppearanceMediumInverse"/>
 
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Run by %s"
-                    android:id="@+id/organizers"
-                    android:layout_weight="5"
-                    style="@style/AppTheme.Header.Sub"/>
 
+            </LinearLayout>
             <us.feras.mdv.MarkdownView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="New Text"
                     android:id="@+id/description"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:padding="10dp"/>
+                    android:padding="@dimen/outer_padding"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
