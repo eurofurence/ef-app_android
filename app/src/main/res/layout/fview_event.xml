@@ -55,8 +55,7 @@
                         android:id="@+id/room"
                         android:layout_weight="5"
                         android:paddingBottom="@dimen/inner_padding"
-                        android:textAppearance="?android:attr/textAppearanceMediumInverse"
-                />
+                        android:textAppearance="?android:attr/textAppearanceMediumInverse"/>
 
                 <TextView
                         android:layout_width="fill_parent"
