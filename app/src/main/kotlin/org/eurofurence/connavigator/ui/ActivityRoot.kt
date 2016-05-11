@@ -54,8 +54,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         val success = it.booleans["success"]
         val time = it.objects["time", Date::class.java]
 
+        if (!BuildConfig.DEBUG)
         // Make a snackbar for the result
-        Snackbar.make(findViewById(R.id.fab)!!, "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(findViewById(R.id.fab)!!, "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
 
         // Update content data if fragments implement content API
         applyOnContent {
@@ -194,8 +195,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
             UpdateIntentService.dispatchUpdate(this@ActivityRoot)
         }
 
-        if (!BuildConfig.DEBUG)
-            fab.visibility = View.INVISIBLE
+        fab.visibility = View.INVISIBLE
     }
 
     private fun handleSettings() {
