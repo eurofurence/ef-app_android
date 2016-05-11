@@ -59,7 +59,7 @@ class FragmentViewEvent() : Fragment() {
 
             description.loadMarkdown(eventEntry.description)
 
-            time.text = "%s %s-%s".format(conferenceDay?.date.toString(), eventEntry.startTime, eventEntry.endTime)
+            time.text = Formatter.eventToTimes(eventEntry, database)
             organizers.text = "%s".format(eventEntry.panelHosts)
             room.text = "%s".format(conferenceRoom?.name)
 

@@ -46,7 +46,7 @@ class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment() {
             val event = effectiveEvents[pos]
 
             // Assign the properties of the view
-            holder.eventTitle.text = event.title
+            holder.eventTitle.text = Formatter.eventTitle(event)
             holder.eventDate.text = Formatter.eventToTimes(event, database)
 
             // Load image
