@@ -55,13 +55,13 @@ class FragmentViewEvent() : Fragment() {
             val conferenceRoom = database.eventConferenceRoomDb.keyValues[eventEntry.conferenceRoomId]
             val conferenceDay = database.eventConferenceDayDb.keyValues[eventEntry.conferenceDayId]
 
-            title.text = eventEntry.title
+            title.text = Formatter.eventTitle(eventEntry)
 
             description.loadMarkdown(eventEntry.description)
 
             time.text = Formatter.eventToTimes(eventEntry, database)
             organizers.text = "%s".format(eventEntry.panelHosts)
-            room.text = "%s".format(conferenceRoom?.name)
+            room.text = Formatter.roomFull(conferenceRoom!!)
 
             imageService.load(database.imageDb[eventEntry.imageId], image, false)
         }

@@ -18,14 +18,14 @@
                       android:layout_height="wrap_content"
                       android:layout_weight="7"
                       android:orientation="vertical"
-                      android:padding="15dp">
+                      android:padding="@dimen/outer_padding">
             <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:text="Title"
                       android:textAppearance="?android:textAppearanceLarge"
                       android:id="@+id/eventTitle"
                       android:singleLine="true"
-                      android:paddingBottom="10dp"/>
+                      android:paddingBottom="@dimen/inner_padding"/>
             <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:text="Times"
