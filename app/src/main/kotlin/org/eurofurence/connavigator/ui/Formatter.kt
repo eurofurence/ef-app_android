@@ -11,7 +11,8 @@ import org.joda.time.DateTime
  * Created by David on 11-5-2016.
  */
 object Formatter {
-    val splitter = "–"
+    val splitter_1 = "–"
+    val splitter_2 = "—"
 
     fun eventToTimes(eventEntry: EventEntry, database: Database): Spanned {
         val string = "<b>%s</b> from <b>%s</b> to <b>%s</b>".format(
@@ -48,7 +49,7 @@ object Formatter {
     }
 
     private fun split(string: String): List<String> {
-        val title_split = string.split(splitter)
+        val title_split = string.split(splitter_1, splitter_2)
         return title_split
     }
 
