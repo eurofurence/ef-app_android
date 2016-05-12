@@ -60,7 +60,7 @@ class FragmentViewEvent() : Fragment() {
             description.loadMarkdown(eventEntry.description)
 
             time.text = Formatter.eventToTimes(eventEntry, database)
-            organizers.text = "%s".format(eventEntry.panelHosts)
+            organizers.text = Formatter.eventOwner(eventEntry)
             room.text = Formatter.roomFull(conferenceRoom!!)
 
             imageService.load(database.imageDb[eventEntry.imageId], image, false)
