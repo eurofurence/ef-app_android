@@ -131,7 +131,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
 
             supportFragmentManager
                     .beginTransaction()
-
+                    .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
                     .replace(R.id.content, type.newInstance(), "content")
                     .commitAllowingStateLoss()
         }

@@ -53,6 +53,7 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
 
         eventPager.adapter = EventFragmentPagerAdapter(fragmentManager, activity)
 
+
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
     }
 
