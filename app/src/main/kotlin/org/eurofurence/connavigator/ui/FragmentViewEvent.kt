@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,7 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.contains
-import org.eurofurence.connavigator.util.extensions.get
-import org.eurofurence.connavigator.util.extensions.jsonObjects
-import org.eurofurence.connavigator.util.extensions.letRoot
+import org.eurofurence.connavigator.util.extensions.*
 import us.feras.mdv.MarkdownView
 
 /**
@@ -38,6 +36,7 @@ class FragmentViewEvent() : Fragment() {
     val organizers by view(TextView::class.java)
     val room by view(TextView::class.java)
     val time by view(TextView::class.java)
+    val buttonSave by view(FloatingActionButton::class.java)
 
     val database: Database get() = letRoot { it.database }!!
 
@@ -64,6 +63,10 @@ class FragmentViewEvent() : Fragment() {
             room.text = Formatter.roomFull(conferenceRoom!!)
 
             imageService.load(database.imageDb[eventEntry.imageId], image, false)
+
+            buttonSave.setOnClickListener {
+                logd { "Save button was clicked for event %s".format(eventEntry.title) }
+            }
         }
     }
 
