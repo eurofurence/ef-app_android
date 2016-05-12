@@ -127,11 +127,15 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
 
     private fun<T : Fragment> navigateRoot(type: Class<T>) {
         // If not already there, navigate with fragment transaction
-        if (!type.isInstance(content))
+        if (!type.isInstance(content)) {
+
             supportFragmentManager
                     .beginTransaction()
+
                     .replace(R.id.content, type.newInstance(), "content")
                     .commitAllowingStateLoss()
+        }
+
     }
 
     private fun setupNav() {
@@ -168,6 +172,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     override fun navigateToEvent(eventEntry: EventEntry) {
         supportFragmentManager
                 .beginTransaction()
+                .setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom)
                 .add(R.id.content, FragmentViewEvent(eventEntry), "content")
                 .addToBackStack(null)
                 .commit()
@@ -176,6 +181,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     override fun navigateToInfo(info: Info) {
         supportFragmentManager
                 .beginTransaction()
+                .setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom)
                 .add(R.id.content, FragmentViewInfo(info), "content")
                 .addToBackStack(null)
                 .commit()
