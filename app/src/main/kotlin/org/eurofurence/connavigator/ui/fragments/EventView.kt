@@ -15,6 +15,7 @@ import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.ui.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
@@ -45,8 +46,8 @@ class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment() {
             val event = effectiveEvents[pos]
 
             // Assign the properties of the view
-            holder.eventTitle.text = event.title
-            holder.eventDate.text = event.startTime
+            holder.eventTitle.text = Formatter.eventTitle(event)
+            holder.eventDate.text = Formatter.eventToTimes(event, database)
 
             // Load image
             imageService.load(database.imageDb[event.imageId], holder.eventImage)

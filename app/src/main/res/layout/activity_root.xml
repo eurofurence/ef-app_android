@@ -9,7 +9,8 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context=".ui.ActivityRoot"
-        tools:openDrawer="start">
+        tools:openDrawer="start"
+android:background="@color/backgroundGrey">
 
     <!-- The first level child, handles scrolling et cetera -->
     <android.support.design.widget.CoordinatorLayout

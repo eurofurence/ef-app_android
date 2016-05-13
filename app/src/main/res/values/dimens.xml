@@ -9,4 +9,6 @@
 
     <dimen name="toolbar_height">48dp</dimen>
     <dimen name="image_height">150dp</dimen>
+    <dimen name="outer_padding">15dp</dimen>
+    <dimen name="inner_padding">10dp</dimen>
 </resources>

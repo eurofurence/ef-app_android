@@ -10,7 +10,7 @@
         tools:context="org.eurofurence.connavigator.ui.FragmentViewInfo"
         android:id="@+id/eventActivityLayout"
 
-        android:background="@android:color/background_light">
+        android:background="@color/backgroundGrey">
 
     <ImageView
             android:layout_width="match_parent"
