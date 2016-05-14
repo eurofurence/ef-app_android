@@ -23,6 +23,11 @@ class Database(val context: Context) {
             createSerialized(File(context.cacheDir, "date.db"), Date::class.java).cached()
 
     /**
+     * Database storing favorited events
+     */
+    val favoritedDb =
+            createGson(File(context.cacheDir, "favorited.db"), EventEntry::class.java).cachedApiDB()
+    /**
      * Database of conference days.
      */
     val eventConferenceDayDb =
@@ -66,6 +71,7 @@ class Database(val context: Context) {
 
     fun clear() {
         dateDb.delete()
+        favoritedDb.delete()
         eventConferenceDayDb.delete()
         eventConferenceRoomDb.delete()
         eventConferenceTrackDb.delete()
