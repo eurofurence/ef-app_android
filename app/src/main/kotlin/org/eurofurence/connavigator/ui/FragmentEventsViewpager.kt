@@ -1,6 +1,5 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -22,22 +21,24 @@ import org.joda.time.DateTime
  * Created by David on 5/3/2016.
  */
 class FragmentEventsViewpager : Fragment(), ContentAPI {
-    class EventFragmentPagerAdapter(val fragmentManager: FragmentManager, val context: Context) : FragmentStatePagerAdapter(fragmentManager) {
+    class EventFragmentPagerAdapter(val fragmentManager: FragmentManager, var database: Database) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int): CharSequence? {
-            val database = Database(context)
-            val d = database.eventConferenceDayDb.items[position].date
+            val d = database.eventConferenceDayDb.items.getOrNull(position)?.date
             return DateTime(d).dayOfWeek().asShortText
         }
 
         override fun getItem(position: Int): Fragment? {
-            val database = Database(context)
+
 
             return EventView(position, database.eventConferenceDayDb.items[position])
         }
 
-        override fun getCount(): Int {
-            val database = Database(context)
+        override fun notifyDataSetChanged() {
+            database = Database(database.context)
+            super.notifyDataSetChanged()
+        }
 
+        override fun getCount(): Int {
             return database.eventConferenceDayDb.items.count()
         }
 
@@ -51,10 +52,14 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Events Viewpager")
 
-        eventPager.adapter = EventFragmentPagerAdapter(fragmentManager, activity)
-
+        eventPager.adapter = EventFragmentPagerAdapter(fragmentManager, Database(activity))
+        eventPager.offscreenPageLimit = 3
 
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
+    }
+
+    override fun dataUpdated() {
+        eventPager.adapter.notifyDataSetChanged()
     }
 
     override fun onDestroyView() {

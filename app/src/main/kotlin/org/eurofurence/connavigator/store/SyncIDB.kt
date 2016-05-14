@@ -42,8 +42,4 @@ class SyncIDB<T>(val deleted: (T) -> Boolean, val synced: IDB<T>) : IDB<T>() {
         // If the database does not exist yet, put all that are not deleted
         items = other.filter(!deleted)
     }
-
-    fun overwrite(other: List<T>) = {
-        items = other
-    }
 }

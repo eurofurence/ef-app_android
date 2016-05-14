@@ -58,17 +58,16 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
 
             // Check for debug. this will change the dates so they work with the current dates
             if (preferences.getBoolean(resources.getString(R.string.debug_date_enabled), false)) {
-                logd { "DEBUG changing dates" }
-                var dates = api.eventConferenceDayGet(oldDate)
-                if (dates.count() == 0)
-                    dates = driver.eventConferenceDayDb.items
+                logd { "Changing dates instead of updating" }
+                var dates = driver.eventConferenceDayDb.items
+
                 val currentDate = DateTime.now()
                 val offset = preferences.getString(resources.getString(R.string.debug_date_setting), "0").toInt()
 
                 for (index in dates.indices) {
                     dates[index].date = currentDate.plusDays(index - offset).toString("yyyy-MM-dd")
                 }
-                driver.eventConferenceDayDb.overwrite(dates)
+                driver.eventConferenceDayDb.syncWith(dates)
             } else {
                 // If the setting is not set we'll just add the regular days
                 driver.eventConferenceDayDb.syncWith(api.eventConferenceDayGet(oldDate))
