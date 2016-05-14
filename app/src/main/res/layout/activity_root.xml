@@ -10,7 +10,7 @@
         android:fitsSystemWindows="true"
         tools:context=".ui.ActivityRoot"
         tools:openDrawer="start"
-android:background="@color/backgroundGrey">
+        android:background="@color/backgroundGrey">
 
     <!-- The first level child, handles scrolling et cetera -->
     <android.support.design.widget.CoordinatorLayout
@@ -25,7 +25,8 @@ android:background="@color/backgroundGrey">
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:theme="@style/AppTheme.AppBarOverlay"
-                android:fitsSystemWindows="true">
+                android:fitsSystemWindows="true"
+        android:id="@+id/appbar">
 
             <!-- Toolbar of the app -->
             <android.support.v7.widget.Toolbar
@@ -34,7 +35,6 @@ android:background="@color/backgroundGrey">
                     android:layout_height="wrap_content"
                     android:background="?attr/colorPrimary"
                     android:fitsSystemWindows="true"
-                    app:layout_scrollFlags="scroll|enterAlways"
                     app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
             <android.support.design.widget.TabLayout
@@ -51,7 +51,7 @@ android:background="@color/backgroundGrey">
         <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/toolbar_height"
+                android:layout_marginTop="@dimen/toolbar_height"
                 android:id="@+id/content">
             <!-- Filled by the root activity -->
         </FrameLayout>
