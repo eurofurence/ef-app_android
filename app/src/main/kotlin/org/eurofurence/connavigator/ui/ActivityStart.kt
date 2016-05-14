@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
@@ -11,8 +10,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.*
-import java.util.*
+import org.eurofurence.connavigator.util.extensions.localReceiver
 
 /**
  * Created by David on 28-4-2016.
@@ -25,22 +23,19 @@ class ActivityStart : AppCompatActivity() {
         textHelp.text = "There, all done!"
         buttonStart.visibility = View.VISIBLE
     }
+    val database by lazy { Database(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_start)
-
-        updateReceiver.register()
-
-        val db = Database(this)
-
-        if ( db.eventConferenceDayDb.items.isNotEmpty())
-            startRootActivity()
 
         buttonStart.setOnClickListener {
             startRootActivity()
         }
+
+        // Data is present, if a database has a backing file
+        if (database.eventConferenceDayDb.time != null)
+            startRootActivity()
     }
 
     override fun onResume() {
@@ -54,8 +49,7 @@ class ActivityStart : AppCompatActivity() {
     }
 
     private fun startRootActivity() {
-        val intent = Intent(this, ActivityRoot::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, ActivityRoot::class.java))
         finish()
     }
 }

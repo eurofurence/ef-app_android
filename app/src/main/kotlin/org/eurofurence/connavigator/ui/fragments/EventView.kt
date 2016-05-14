@@ -16,6 +16,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.Formatter
+import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
@@ -23,7 +24,7 @@ import org.eurofurence.connavigator.util.extensions.get
 /**
  * Event view recycler to hold the viewpager items
  */
-class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment() {
+class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment(), ContentAPI {
 
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -77,5 +78,11 @@ class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment() {
         events.adapter = DataAdapter()
         events.layoutManager = LinearLayoutManager(activity)
         events.itemAnimator = DefaultItemAnimator()
+    }
+
+    override fun dataUpdated() {
+
+        effectiveEvents = database.eventEntryDb.items.filter { it.conferenceDayId == eventDay.id }
+        events.adapter.notifyDataSetChanged()
     }
 }

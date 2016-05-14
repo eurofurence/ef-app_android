@@ -8,11 +8,21 @@ abstract class IDB<T> : DB<T> {
     /**
      * The element of the database.
      */
-    override var items: List<T>
-        get() = keyValues.values.toList()
+    override var items: Iterable<T>
+        get() = keyValues.values
         set(values) {
             keyValues = values.associateBy { id(it) }
         }
+
+    /**
+     * The elements of the database in ascending order sorted by selector.
+     */
+    fun<R : Comparable<R>> asc(by: (T) -> R?) = items.sortedBy(by)
+
+    /**
+     * The elements of the database in descending order sorted by selector.
+     */
+    fun<R : Comparable<R>> desc(by: (T) -> R?) = asc(by).asReversed()
 
     /**
      * Identifies an item in the database.

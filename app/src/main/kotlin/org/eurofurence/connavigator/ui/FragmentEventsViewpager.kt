@@ -16,32 +16,28 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.EventView
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.letRoot
 import org.joda.time.DateTime
 
 /**
  * Created by David on 5/3/2016.
  */
 class FragmentEventsViewpager : Fragment(), ContentAPI {
-    class EventFragmentPagerAdapter(val fragmentManager: FragmentManager, val context: Context) : FragmentStatePagerAdapter(fragmentManager) {
+    inner class EventFragmentPagerAdapter(val fragmentManager: FragmentManager, val context: Context) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int): CharSequence? {
-            val database = Database(context)
-            val d = database.eventConferenceDayDb.items[position].date
-            return DateTime(d).dayOfWeek().asShortText
+            return DateTime(database.eventConferenceDayDb.asc { it.date }[position].date).dayOfWeek().asShortText
         }
 
         override fun getItem(position: Int): Fragment? {
-            val database = Database(context)
-
-            return EventView(position, database.eventConferenceDayDb.items[position])
+            return EventView(position, database.eventConferenceDayDb.asc { it.date }[position])
         }
 
         override fun getCount(): Int {
-            val database = Database(context)
-
             return database.eventConferenceDayDb.items.count()
         }
-
     }
+
+    val database: Database get() = letRoot { it.database }!!
 
     val eventPager by view(ViewPager::class.java)
 
@@ -51,10 +47,13 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Events Viewpager")
 
-        eventPager.adapter = EventFragmentPagerAdapter(fragmentManager, activity)
-
-
+        eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager, activity)
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
+    }
+
+    override fun dataUpdated() {
+        // Propagate message from the root
+        eventPager.adapter.notifyDataSetChanged()
     }
 
     override fun onDestroyView() {

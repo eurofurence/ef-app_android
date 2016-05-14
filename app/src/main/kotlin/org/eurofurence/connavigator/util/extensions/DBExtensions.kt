@@ -16,7 +16,7 @@ fun <T> DB<T>.indexBy(indexer: (T) -> Any) = object : IDB<T>() {
 
     override fun id(item: T): Any = indexer(item)
 
-    override var items: List<T>
+    override var items: Iterable<T>
         get() = this@indexBy.items
         set(values) {
             this@indexBy.items = values
@@ -91,7 +91,12 @@ fun <T : EntityBase> DB<T>.cachedApiDB() =
  * Returns the size of the database. The size of the [IDB] does not change since
  * the association *must* be unique.
  */
-val DB<*>.size: Int get() = items.size
+val DB<*>.size: Int get() = items.let {
+    if (it is Collection<*>)
+        it.size
+    else
+        it.count()
+}
 
 /**
  * Accesses the item with the given key.
