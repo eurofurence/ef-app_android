@@ -9,7 +9,17 @@
               android:padding="@dimen/outer_padding"
               android:textAppearance="?android:textAppearanceLarge"/>
     <android.support.v4.view.ViewPager android:layout_width="match_parent"
-                                       android:layout_height="wrap_content">
+                                       android:layout_height="110dp"
+                                       android:id="@+id/favoritedViewPager">
 
     </android.support.v4.view.ViewPager>
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Latest Announcements"
+              android:padding="@dimen/outer_padding"
+              android:textAppearance="?android:textAppearanceMedium"/>
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Todo"/>
 </LinearLayout>

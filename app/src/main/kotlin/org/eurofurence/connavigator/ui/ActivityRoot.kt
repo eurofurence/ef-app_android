@@ -79,7 +79,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     }
 
     private fun setupContent() =
-            navigateRoot(FragmentEventsViewpager::class.java)
+            navigateRoot(FragmentViewHome::class.java)
 
     override fun onResume() {
         super.onResume()
@@ -143,6 +143,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         navView.setNavigationItemSelectedListener {
             //Handle the ID
             when (it.itemId) {
+                R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
                 R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navDealersDen -> {

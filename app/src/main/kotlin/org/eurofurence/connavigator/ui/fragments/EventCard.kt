@@ -14,7 +14,6 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.get
-import java.util.regex.Pattern
 
 /**
  * Created by David on 5/4/2016.
@@ -23,7 +22,8 @@ class EventCard(val eventEntry: EventEntry) : Fragment() {
     val eventTitle by view(TextView::class.java)
     val eventDate by view(TextView::class.java)
     val eventImage by view(ImageView::class.java)
-    val timePattern = Pattern.compile("(\\d+:\\d+):(\\d+)")
+
+    val eventCard by view(android.support.v7.widget.CardView::class.java)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_event_card, container, false)
@@ -33,8 +33,8 @@ class EventCard(val eventEntry: EventEntry) : Fragment() {
 
         val database = Database(activity)
 
-        eventTitle.text = eventEntry.title
-        eventDate.text = eventEntry.startTime
+        eventTitle.text = Formatter.eventTitle(eventEntry)
+        eventDate.text = Formatter.eventToTimes(eventEntry, database)
         imageService.load(database.imageDb[eventEntry.imageId], eventImage)
     }
 }
