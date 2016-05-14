@@ -27,7 +27,26 @@ fun <R> Fragment.letRoot(block: (RootAPI) -> R): R? = context.let {
  * Invokes the code if the item is a content API.
  */
 fun FragmentActivity.applyOnContent(block: ContentAPI.() -> Unit) {
-    supportFragmentManager.fragments.filterIsInstance(ContentAPI::class.java).forEach(block)
+    // For all Content API fragments
+    for (content in supportFragmentManager.fragments.orEmpty())
+        if (content is Fragment && content is ContentAPI) {
+            // Recursively apply first, then apply on item itself
+            content.applyOnContent(block)
+            content.block()
+        }
+}
+
+/**
+ * Invokes the code if the item is a content API.
+ */
+fun Fragment.applyOnContent(block: ContentAPI.() -> Unit) {
+    // For all Content API fragments
+    for (content in childFragmentManager.fragments.orEmpty())
+        if (content is Fragment && content is ContentAPI) {
+            // Recursively apply first, then apply on item itself
+            content.applyOnContent(block)
+            content.block()
+        }
 }
 
 /**

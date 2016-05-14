@@ -146,6 +146,7 @@ class FragmentViewEvents : Fragment(), ContentAPI {
         roomAdapter.clear()
         roomAdapter.add("All")
         roomAdapter.addAll(database.eventConferenceRoomDb.items.map { it.name.split("—")[0] })
+        roomAdapter.notifyDataSetChanged()
     }
 
     private fun populateDaySelector() {
@@ -154,11 +155,12 @@ class FragmentViewEvents : Fragment(), ContentAPI {
         dayAdapter.clear()
         dayAdapter.add("All")
         dayAdapter.addAll(database.eventConferenceDayDb.items.map { it.date })
+        dayAdapter.notifyDataSetChanged()
     }
 
     private fun populateEvents() {
         // Start filtering from entire dataset
-        effectiveEvents = database.eventEntryDb.items
+        effectiveEvents = database.eventEntryDb.asc { it.startTime }
 
         // Get selected filters
         val roomSelected = roomSelector.selectedItem

@@ -9,7 +9,7 @@ import org.eurofurence.connavigator.util.extensions.lt
 fun <T> DB<T>.cached() = let {
     object : DB<T> {
         var cacheTime: Long? = null
-        var cache: List<T>? = null
+        var cache: Iterable<T>? = null
 
         override fun delete() {
             it.delete()
@@ -23,7 +23,7 @@ fun <T> DB<T>.cached() = let {
         override val time: Long?
             get() = it.time
 
-        override var items: List<T>
+        override var items: Iterable<T>
             get() = if (cacheTime lt time) {
                 // Assign the cache if not yet assigned or invalidated by time
                 cache = it.items
