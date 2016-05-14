@@ -201,7 +201,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
             UpdateIntentService.dispatchUpdate(this@ActivityRoot)
         }
 
-        fab.visibility = View.INVISIBLE
+        if (!BuildConfig.DEBUG)
+            fab.visibility = View.INVISIBLE
     }
 
     private fun handleSettings() {
