@@ -134,10 +134,11 @@ object Favoriter {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true)
                 .setLights(Color.argb(255, 0, 100, 89), 1000, 1000)
-                .setVibrate(longArrayOf(250, 250, 250, 250))
+                .setVibrate(longArrayOf(250, 100, 250, 100))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setCategory(Notification.CATEGORY_EVENT)
 
         return builder.build()
     }
