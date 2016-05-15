@@ -5,10 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
-
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-
 
 
 @ApiModel(description = "")
@@ -25,7 +23,6 @@ public class Info extends EntityBase {
   @SerializedName("Position")
   private Integer position = null;
 
-  
   /**
    * Id of the InfoGroup this record belongs to.
    **/
@@ -37,7 +34,6 @@ public class Info extends EntityBase {
     this.infoGroupId = infoGroupId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -48,7 +44,6 @@ public class Info extends EntityBase {
     this.imageId = imageId;
   }
 
-  
   /**
    * Title of the message blob.
    **/
@@ -60,7 +55,6 @@ public class Info extends EntityBase {
     this.title = title;
   }
 
-  
   /**
    * Content of the message blob, may contain markup (tbd).
    **/
@@ -72,7 +66,6 @@ public class Info extends EntityBase {
     this.text = text;
   }
 
-  
   /**
    * Numeric order/position of the element (lower number = display first)
    **/
@@ -84,7 +77,33 @@ public class Info extends EntityBase {
     this.position = position;
   }
 
-  
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Info info = (Info) o;
+    return (infoGroupId == null ? info.infoGroupId == null : infoGroupId.equals(info.infoGroupId)) &&
+        (imageId == null ? info.imageId == null : imageId.equals(info.imageId)) &&
+        (title == null ? info.title == null : title.equals(info.title)) &&
+        (text == null ? info.text == null : text.equals(info.text)) &&
+        (position == null ? info.position == null : position.equals(info.position));
+  }
+
+  @Override 
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (infoGroupId == null ? 0: infoGroupId.hashCode());
+    result = 31 * result + (imageId == null ? 0: imageId.hashCode());
+    result = 31 * result + (title == null ? 0: title.hashCode());
+    result = 31 * result + (text == null ? 0: text.hashCode());
+    result = 31 * result + (position == null ? 0: position.hashCode());
+    return result;
+  }
 
   @Override
   public String toString()  {
@@ -100,5 +119,3 @@ public class Info extends EntityBase {
     return sb.toString();
   }
 }
-
-

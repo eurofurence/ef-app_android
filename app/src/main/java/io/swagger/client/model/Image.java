@@ -5,10 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
-
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-
 
 
 @ApiModel(description = "")
@@ -27,7 +25,6 @@ public class Image extends EntityBase {
   @SerializedName("MimeType")
   private String mimeType = null;
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -38,7 +35,6 @@ public class Image extends EntityBase {
     this.url = url;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -49,7 +45,6 @@ public class Image extends EntityBase {
     this.title = title;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -60,7 +55,6 @@ public class Image extends EntityBase {
     this.width = width;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -71,7 +65,6 @@ public class Image extends EntityBase {
     this.height = height;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -82,7 +75,6 @@ public class Image extends EntityBase {
     this.fileSizeInBytes = fileSizeInBytes;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -93,7 +85,35 @@ public class Image extends EntityBase {
     this.mimeType = mimeType;
   }
 
-  
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Image image = (Image) o;
+    return (url == null ? image.url == null : url.equals(image.url)) &&
+        (title == null ? image.title == null : title.equals(image.title)) &&
+        (width == null ? image.width == null : width.equals(image.width)) &&
+        (height == null ? image.height == null : height.equals(image.height)) &&
+        (fileSizeInBytes == null ? image.fileSizeInBytes == null : fileSizeInBytes.equals(image.fileSizeInBytes)) &&
+        (mimeType == null ? image.mimeType == null : mimeType.equals(image.mimeType));
+  }
+
+  @Override 
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (url == null ? 0: url.hashCode());
+    result = 31 * result + (title == null ? 0: title.hashCode());
+    result = 31 * result + (width == null ? 0: width.hashCode());
+    result = 31 * result + (height == null ? 0: height.hashCode());
+    result = 31 * result + (fileSizeInBytes == null ? 0: fileSizeInBytes.hashCode());
+    result = 31 * result + (mimeType == null ? 0: mimeType.hashCode());
+    return result;
+  }
 
   @Override
   public String toString()  {
@@ -110,5 +130,3 @@ public class Image extends EntityBase {
     return sb.toString();
   }
 }
-
-

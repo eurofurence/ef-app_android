@@ -5,10 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
-
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-
 
 
 @ApiModel(description = "")
@@ -41,7 +39,6 @@ public class EventEntry extends EntityBase {
   @SerializedName("PanelHosts")
   private String panelHosts = null;
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -52,7 +49,6 @@ public class EventEntry extends EntityBase {
     this.sourceEventId = sourceEventId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -63,7 +59,6 @@ public class EventEntry extends EntityBase {
     this.imageId = imageId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -74,7 +69,6 @@ public class EventEntry extends EntityBase {
     this.slug = slug;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -85,7 +79,6 @@ public class EventEntry extends EntityBase {
     this.title = title;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -96,7 +89,6 @@ public class EventEntry extends EntityBase {
     this.conferenceTrackId = conferenceTrackId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -107,7 +99,6 @@ public class EventEntry extends EntityBase {
     this.conferenceDayId = conferenceDayId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -118,7 +109,6 @@ public class EventEntry extends EntityBase {
     this.conferenceRoomId = conferenceRoomId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -129,7 +119,6 @@ public class EventEntry extends EntityBase {
     this._abstract = _abstract;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -140,7 +129,6 @@ public class EventEntry extends EntityBase {
     this.description = description;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -151,7 +139,6 @@ public class EventEntry extends EntityBase {
     this.startTime = startTime;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -162,7 +149,6 @@ public class EventEntry extends EntityBase {
     this.endTime = endTime;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -173,7 +159,6 @@ public class EventEntry extends EntityBase {
     this.duration = duration;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -184,7 +169,49 @@ public class EventEntry extends EntityBase {
     this.panelHosts = panelHosts;
   }
 
-  
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    EventEntry eventEntry = (EventEntry) o;
+    return (sourceEventId == null ? eventEntry.sourceEventId == null : sourceEventId.equals(eventEntry.sourceEventId)) &&
+        (imageId == null ? eventEntry.imageId == null : imageId.equals(eventEntry.imageId)) &&
+        (slug == null ? eventEntry.slug == null : slug.equals(eventEntry.slug)) &&
+        (title == null ? eventEntry.title == null : title.equals(eventEntry.title)) &&
+        (conferenceTrackId == null ? eventEntry.conferenceTrackId == null : conferenceTrackId.equals(eventEntry.conferenceTrackId)) &&
+        (conferenceDayId == null ? eventEntry.conferenceDayId == null : conferenceDayId.equals(eventEntry.conferenceDayId)) &&
+        (conferenceRoomId == null ? eventEntry.conferenceRoomId == null : conferenceRoomId.equals(eventEntry.conferenceRoomId)) &&
+        (_abstract == null ? eventEntry._abstract == null : _abstract.equals(eventEntry._abstract)) &&
+        (description == null ? eventEntry.description == null : description.equals(eventEntry.description)) &&
+        (startTime == null ? eventEntry.startTime == null : startTime.equals(eventEntry.startTime)) &&
+        (endTime == null ? eventEntry.endTime == null : endTime.equals(eventEntry.endTime)) &&
+        (duration == null ? eventEntry.duration == null : duration.equals(eventEntry.duration)) &&
+        (panelHosts == null ? eventEntry.panelHosts == null : panelHosts.equals(eventEntry.panelHosts));
+  }
+
+  @Override 
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (sourceEventId == null ? 0: sourceEventId.hashCode());
+    result = 31 * result + (imageId == null ? 0: imageId.hashCode());
+    result = 31 * result + (slug == null ? 0: slug.hashCode());
+    result = 31 * result + (title == null ? 0: title.hashCode());
+    result = 31 * result + (conferenceTrackId == null ? 0: conferenceTrackId.hashCode());
+    result = 31 * result + (conferenceDayId == null ? 0: conferenceDayId.hashCode());
+    result = 31 * result + (conferenceRoomId == null ? 0: conferenceRoomId.hashCode());
+    result = 31 * result + (_abstract == null ? 0: _abstract.hashCode());
+    result = 31 * result + (description == null ? 0: description.hashCode());
+    result = 31 * result + (startTime == null ? 0: startTime.hashCode());
+    result = 31 * result + (endTime == null ? 0: endTime.hashCode());
+    result = 31 * result + (duration == null ? 0: duration.hashCode());
+    result = 31 * result + (panelHosts == null ? 0: panelHosts.hashCode());
+    return result;
+  }
 
   @Override
   public String toString()  {
@@ -208,5 +235,3 @@ public class EventEntry extends EntityBase {
     return sb.toString();
   }
 }
-
-

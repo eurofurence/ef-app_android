@@ -5,10 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
-
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-
 
 
 @ApiModel(description = "")
@@ -17,7 +15,6 @@ public class EventConferenceTrack extends EntityBase {
   @SerializedName("Name")
   private String name = null;
 
-  
   /**
    * Name of the conference track.
    **/
@@ -29,7 +26,25 @@ public class EventConferenceTrack extends EntityBase {
     this.name = name;
   }
 
-  
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    EventConferenceTrack eventConferenceTrack = (EventConferenceTrack) o;
+    return (name == null ? eventConferenceTrack.name == null : name.equals(eventConferenceTrack.name));
+  }
+
+  @Override 
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (name == null ? 0: name.hashCode());
+    return result;
+  }
 
   @Override
   public String toString()  {
@@ -41,5 +56,3 @@ public class EventConferenceTrack extends EntityBase {
     return sb.toString();
   }
 }
-
-

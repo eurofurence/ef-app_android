@@ -55,6 +55,8 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
             logv("UIS") { "New date on server: $newDate" }
 
             // Update the databases with the new data
+            driver.announcementDb.syncWith(api.announcementGet(oldDate))
+            driver.dealerDb.syncWith(api.dealerGet(oldDate))
 
             // Check for debug. this will change the dates so they work with the current dates
             if (preferences.getBoolean(resources.getString(R.string.debug_date_enabled), false)) {
@@ -75,6 +77,7 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
                 // If the setting is not set we'll just add the regular days
                 driver.eventConferenceDayDb.syncWith(api.eventConferenceDayGet(oldDate))
             }
+
             driver.eventConferenceRoomDb.syncWith(api.eventConferenceRoomGet(oldDate))
             driver.eventConferenceTrackDb.syncWith(api.eventConferenceTrackGet(oldDate))
             driver.eventEntryDb.syncWith(api.eventEntryGet(oldDate))

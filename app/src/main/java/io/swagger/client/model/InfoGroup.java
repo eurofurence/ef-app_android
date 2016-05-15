@@ -5,10 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
-
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-
 
 
 @ApiModel(description = "")
@@ -23,7 +21,6 @@ public class InfoGroup extends EntityBase {
   @SerializedName("Position")
   private Integer position = null;
 
-  
   /**
    * Name of the information group
    **/
@@ -35,7 +32,6 @@ public class InfoGroup extends EntityBase {
     this.name = name;
   }
 
-  
   /**
    * Shhort description of the information group
    **/
@@ -47,7 +43,6 @@ public class InfoGroup extends EntityBase {
     this.description = description;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -58,7 +53,6 @@ public class InfoGroup extends EntityBase {
     this.imageId = imageId;
   }
 
-  
   /**
    * Numeric order/position of the element (lower number = display first)
    **/
@@ -70,7 +64,31 @@ public class InfoGroup extends EntityBase {
     this.position = position;
   }
 
-  
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    InfoGroup infoGroup = (InfoGroup) o;
+    return (name == null ? infoGroup.name == null : name.equals(infoGroup.name)) &&
+        (description == null ? infoGroup.description == null : description.equals(infoGroup.description)) &&
+        (imageId == null ? infoGroup.imageId == null : imageId.equals(infoGroup.imageId)) &&
+        (position == null ? infoGroup.position == null : position.equals(infoGroup.position));
+  }
+
+  @Override 
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (name == null ? 0: name.hashCode());
+    result = 31 * result + (description == null ? 0: description.hashCode());
+    result = 31 * result + (imageId == null ? 0: imageId.hashCode());
+    result = 31 * result + (position == null ? 0: position.hashCode());
+    return result;
+  }
 
   @Override
   public String toString()  {
@@ -85,5 +103,3 @@ public class InfoGroup extends EntityBase {
     return sb.toString();
   }
 }
-
-
