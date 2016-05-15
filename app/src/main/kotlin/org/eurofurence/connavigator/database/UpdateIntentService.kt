@@ -64,10 +64,13 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
                 val currentDate = DateTime.now()
                 val offset = preferences.getString(resources.getString(R.string.debug_date_setting), "0").toInt()
 
-                for (index in dates.indices) {
-                    dates[index].date = currentDate.plusDays(index - offset).toString("yyyy-MM-dd")
+                var i = 0
+
+                for (index in dates) {
+                    index.date = currentDate.plusDays(i - offset).toString("yyyy-MM-dd")
+                    i++
                 }
-                driver.eventConferenceDayDb.syncWith(dates)
+                driver.eventConferenceDayDb.syncWith(dates.toList())
             } else {
                 // If the setting is not set we'll just add the regular days
                 driver.eventConferenceDayDb.syncWith(api.eventConferenceDayGet(oldDate))
@@ -97,6 +100,6 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
         }
 
         // Send a broadcast notifying completion of this action
-        LocalBroadcastManager.getInstance(this).sendBroadcast(response)
+        LocalBroadcas   tManager.getInstance(this).sendBroadcast(response)
     }
 }

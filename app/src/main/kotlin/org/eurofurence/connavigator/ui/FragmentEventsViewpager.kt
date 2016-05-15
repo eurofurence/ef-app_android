@@ -51,8 +51,7 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Events Viewpager")
 
-        eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager, activity)
-        eventPager.adapter = EventFragmentPagerAdapter(fragmentManager, Database(activity))
+        eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager, database)
         eventPager.offscreenPageLimit = 3
 
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
