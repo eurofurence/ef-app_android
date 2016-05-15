@@ -28,5 +28,10 @@
                 android:entryValues="@array/debug_days_to_add"
                 android:defaultValue="0"
                 android:dependency="@string/debug_date_enabled"/>
+        <CheckBoxPreference
+                android:key="@string/debug_notifications_schedule"
+                android:title="Schedule notifications for testing"
+                android:summary="Schedules a notification in the near future for testing"
+                android:defaultValue="false"/>
     </PreferenceCategory>
 </PreferenceScreen>

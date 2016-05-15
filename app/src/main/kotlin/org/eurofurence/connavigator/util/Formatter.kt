@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.util
 
 import android.text.Html
 import android.text.Spanned

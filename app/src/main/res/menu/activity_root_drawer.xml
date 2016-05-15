@@ -3,6 +3,10 @@
 
     <group android:checkableBehavior="single">
         <item
+                android:id="@+id/navHome"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Home"/>
+        <item
                 android:id="@+id/navEvents"
                 android:icon="@drawable/ic_menu_camera"
                 android:title="Events"/>
@@ -19,9 +23,9 @@
                 android:icon="@drawable/ic_menu_manage"
                 android:title="About"/>
         <item
-            android:id="@+id/navMap"
-            android:icon="@drawable/common_plus_signin_btn_icon_dark_normal"
-            android:title="Points of Interest" />
+                android:id="@+id/navMap"
+                android:icon="@drawable/common_plus_signin_btn_icon_dark_normal"
+                android:title="Points of Interest"/>
     </group>
 
     <item android:title="App Management">
