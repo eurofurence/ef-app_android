@@ -18,7 +18,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -219,12 +218,7 @@ public class ApiInvoker {
   }
 
   public String escapeString(String str) {
-    try {
-	  return URLEncoder.encode(str, "utf8");
-    }
-    catch (UnsupportedEncodingException e) {
-      return str;
-    }
+    return str;
   }
 
   public static Object deserialize(String json, String containerType, Class cls) throws ApiException {
