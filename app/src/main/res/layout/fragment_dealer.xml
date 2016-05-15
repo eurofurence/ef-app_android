@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:padding="@dimen/outer_padding">
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="75dp">
+    <ImageView android:layout_width="75dp" android:layout_height="match_parent"
+               android:src="@drawable/placeholder_event"
+               android:scaleType="centerCrop"
+               android:id="@+id/dealerPreviewImage"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="match_parent"
               android:id="@+id/dealerName"
-              android:textAppearance="?android:textAppearanceMedium"
-              android:text="Dealer name"/>
-</LinearLayout>
+              android:textAppearance="?android:textAppearanceLarge"
+              android:padding="@dimen/inner_padding"
+              android:text="Dealer name"
+              android:gravity="center"
+              android:layout_toRightOf="@id/dealerPreviewImage"/>
+</RelativeLayout>
