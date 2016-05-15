@@ -5,10 +5,8 @@ import io.swagger.client.model.EndpointEntity;
 import java.util.*;
 import java.util.Date;
 
-
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-
 
 
 @ApiModel(description = "")
@@ -68,5 +66,3 @@ public class Endpoint  {
     return sb.toString();
   }
 }
-
-
