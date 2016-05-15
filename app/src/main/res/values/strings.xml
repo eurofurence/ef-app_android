@@ -13,6 +13,7 @@
     <string name="room">Room</string>
     <string name="settings_tag_analytics_enabled">analytics_enabled</string>
     <string name="settings_tag_analytics_interval">analytics_enabled</string>
+    <string name="debug_notifications_schedule">debug_notifications_schedule</string>
     <array name="polling_intervals">
         <item>100</item>
         <item>75</item>

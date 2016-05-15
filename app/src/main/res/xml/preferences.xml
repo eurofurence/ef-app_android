@@ -14,4 +14,12 @@
                 android:entries="@array/polling_intervals"
                 android:defaultValue="50"/>
     </PreferenceCategory>
+    <PreferenceCategory
+            android:title="Debug Notifications">
+        <CheckBoxPreference
+                android:key="@string/debug_notifications_schedule"
+                android:title="Schedule notifications for testing"
+                android:summary="Schedules a notification in the near future for testing"
+                android:defaultValue="false"/>
+    </PreferenceCategory>
 </PreferenceScreen>

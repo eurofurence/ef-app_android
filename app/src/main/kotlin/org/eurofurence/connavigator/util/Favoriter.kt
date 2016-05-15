@@ -1,18 +1,23 @@
-package org.eurofurence.connavigator.database
+package org.eurofurence.connavigator.util
 
 import android.app.AlarmManager
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.media.RingtoneManager
+import android.preference.PreferenceManager
 import com.google.android.gms.analytics.HitBuilders
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.gcm.NotificationPublisher
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.logv
+import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import java.util.*
 
@@ -83,8 +88,12 @@ object Favoriter {
 
         val pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val eventTime = eventTimeInMillis(eventEntry, context)
+        var eventTime = eventTimeInMillis(eventEntry, context)
 
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.resources.getString(R.string.debug_notifications_schedule), false)) {
+            logd { "Scheduling event 10 seconds from now!" }
+            eventTime = DateTime.now().plusSeconds(5).millis
+        }
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.set(AlarmManager.RTC_WAKEUP, eventTime, pendingIntent)
     }
@@ -121,9 +130,14 @@ object Favoriter {
         val builder = Notification.Builder(database.context)
 
         builder.setContentTitle("Upcoming eurofurence event!")
-                .setAutoCancel(true)
                 .setContentText("%s is happening soon! Go to %s".format(eventEntry.title, database.eventConferenceRoomDb[eventEntry.conferenceRoomId]!!.name))
                 .setSmallIcon(R.mipmap.ic_launcher)
+                .setAutoCancel(true)
+                .setLights(Color.MAGENTA, 1000, 1000)
+                .setVibrate(longArrayOf(500, 500))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
 
         return builder.build()
     }

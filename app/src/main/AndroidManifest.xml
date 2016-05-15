@@ -57,6 +57,9 @@
                 <category android:name="org.eurofurence.connavigator.gcm"/>
             </intent-filter>
         </receiver>
+
+        <!-- Pending intentns -->
+        <receiver android:name=".gcm.NotificationPublisher"/>
         <service android:name=".gcm.MyGCMListenerService"
                  android:exported="false">
             <intent-filter>
