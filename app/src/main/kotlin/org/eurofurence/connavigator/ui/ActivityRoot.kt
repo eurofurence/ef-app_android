@@ -149,7 +149,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
             //Handle the ID
             when (it.itemId) {
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
-                R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java)
                 R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, true)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navDealersDen -> {

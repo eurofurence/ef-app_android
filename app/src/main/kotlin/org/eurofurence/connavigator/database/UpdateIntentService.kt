@@ -100,6 +100,6 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
         }
 
         // Send a broadcast notifying completion of this action
-        LocalBroadcas   tManager.getInstance(this).sendBroadcast(response)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(response)
     }
 }
