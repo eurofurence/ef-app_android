@@ -129,7 +129,7 @@ object Favoriter {
         val database = Database(context)
         val builder = Notification.Builder(database.context)
 
-        builder.setContentTitle("Upcoming eurofurence event!")
+        builder.setContentTitle("Upcoming Eurofurence Event!")
                 .setContentText("%s is happening soon! Go to %s".format(eventEntry.title, database.eventConferenceRoomDb[eventEntry.conferenceRoomId]!!.name))
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true)
