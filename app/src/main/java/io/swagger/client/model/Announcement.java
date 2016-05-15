@@ -12,12 +12,6 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class Announcement extends EntityBase {
   
-  @SerializedName("Id")
-  private UUID id = null;
-  @SerializedName("LastChangeDateTimeUtc")
-  private Date lastChangeDateTimeUtc = null;
-  @SerializedName("IsDeleted")
-  private BigDecimal isDeleted = null;
   @SerializedName("ValidFromDateTimeUtc")
   private Date validFromDateTimeUtc = null;
   @SerializedName("ValidUntilDateTimeUtc")
@@ -31,45 +25,6 @@ public class Announcement extends EntityBase {
   @SerializedName("Content")
   private String content = null;
 
-  
-  /**
-   * Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000
-   **/
-  @ApiModelProperty(required = true, value = "Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  
-  /**
-   * Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)
-   **/
-  @ApiModelProperty(required = true, value = "Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)")
-  public Date getLastChangeDateTimeUtc() {
-    return lastChangeDateTimeUtc;
-  }
-  public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
-    this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
-  }
-
-  
-  /**
-   * Numeric flag that, if set to \"1\", indicates that the record has been deleted sine the delta reference specified, and should be removed from the local data store after retrieval.
-   * minimum: 0.0
-   * maximum: 1.0
-   **/
-  @ApiModelProperty(required = true, value = "Numeric flag that, if set to \"1\", indicates that the record has been deleted sine the delta reference specified, and should be removed from the local data store after retrieval.")
-  public BigDecimal getIsDeleted() {
-    return isDeleted;
-  }
-  public void setIsDeleted(BigDecimal isDeleted) {
-    this.isDeleted = isDeleted;
-  }
-
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -80,7 +35,6 @@ public class Announcement extends EntityBase {
     this.validFromDateTimeUtc = validFromDateTimeUtc;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -91,7 +45,6 @@ public class Announcement extends EntityBase {
     this.validUntilDateTimeUtc = validUntilDateTimeUtc;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -102,7 +55,6 @@ public class Announcement extends EntityBase {
     this.area = area;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -113,7 +65,6 @@ public class Announcement extends EntityBase {
     this.author = author;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -124,7 +75,6 @@ public class Announcement extends EntityBase {
     this.title = title;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -135,16 +85,41 @@ public class Announcement extends EntityBase {
     this.content = content;
   }
 
-  
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Announcement announcement = (Announcement) o;
+    return (validFromDateTimeUtc == null ? announcement.validFromDateTimeUtc == null : validFromDateTimeUtc.equals(announcement.validFromDateTimeUtc)) &&
+        (validUntilDateTimeUtc == null ? announcement.validUntilDateTimeUtc == null : validUntilDateTimeUtc.equals(announcement.validUntilDateTimeUtc)) &&
+        (area == null ? announcement.area == null : area.equals(announcement.area)) &&
+        (author == null ? announcement.author == null : author.equals(announcement.author)) &&
+        (title == null ? announcement.title == null : title.equals(announcement.title)) &&
+        (content == null ? announcement.content == null : content.equals(announcement.content));
+  }
+
+  @Override 
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (validFromDateTimeUtc == null ? 0: validFromDateTimeUtc.hashCode());
+    result = 31 * result + (validUntilDateTimeUtc == null ? 0: validUntilDateTimeUtc.hashCode());
+    result = 31 * result + (area == null ? 0: area.hashCode());
+    result = 31 * result + (author == null ? 0: author.hashCode());
+    result = 31 * result + (title == null ? 0: title.hashCode());
+    result = 31 * result + (content == null ? 0: content.hashCode());
+    return result;
+  }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Announcement {\n");
     sb.append("  " + super.toString()).append("\n");
-    sb.append("  id: ").append(id).append("\n");
-    sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
-    sb.append("  isDeleted: ").append(isDeleted).append("\n");
     sb.append("  validFromDateTimeUtc: ").append(validFromDateTimeUtc).append("\n");
     sb.append("  validUntilDateTimeUtc: ").append(validUntilDateTimeUtc).append("\n");
     sb.append("  area: ").append(area).append("\n");

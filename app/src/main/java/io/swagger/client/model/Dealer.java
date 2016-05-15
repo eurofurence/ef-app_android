@@ -12,12 +12,6 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class Dealer extends EntityBase {
   
-  @SerializedName("Id")
-  private UUID id = null;
-  @SerializedName("LastChangeDateTimeUtc")
-  private Date lastChangeDateTimeUtc = null;
-  @SerializedName("IsDeleted")
-  private BigDecimal isDeleted = null;
   @SerializedName("RegistrationNumber")
   private Integer registrationNumber = null;
   @SerializedName("AttendeeNickname")
@@ -41,45 +35,6 @@ public class Dealer extends EntityBase {
   @SerializedName("ArtPreviewImageId")
   private UUID artPreviewImageId = null;
 
-  
-  /**
-   * Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000
-   **/
-  @ApiModelProperty(required = true, value = "Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  
-  /**
-   * Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)
-   **/
-  @ApiModelProperty(required = true, value = "Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)")
-  public Date getLastChangeDateTimeUtc() {
-    return lastChangeDateTimeUtc;
-  }
-  public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
-    this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
-  }
-
-  
-  /**
-   * Numeric flag that, if set to \"1\", indicates that the record has been deleted sine the delta reference specified, and should be removed from the local data store after retrieval.
-   * minimum: 0.0
-   * maximum: 1.0
-   **/
-  @ApiModelProperty(required = true, value = "Numeric flag that, if set to \"1\", indicates that the record has been deleted sine the delta reference specified, and should be removed from the local data store after retrieval.")
-  public BigDecimal getIsDeleted() {
-    return isDeleted;
-  }
-  public void setIsDeleted(BigDecimal isDeleted) {
-    this.isDeleted = isDeleted;
-  }
-
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -90,7 +45,6 @@ public class Dealer extends EntityBase {
     this.registrationNumber = registrationNumber;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -101,7 +55,6 @@ public class Dealer extends EntityBase {
     this.attendeeNickname = attendeeNickname;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -112,7 +65,6 @@ public class Dealer extends EntityBase {
     this.displayName = displayName;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -123,7 +75,6 @@ public class Dealer extends EntityBase {
     this.shortDescription = shortDescription;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -134,7 +85,6 @@ public class Dealer extends EntityBase {
     this.aboutTheArtistText = aboutTheArtistText;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -145,7 +95,6 @@ public class Dealer extends EntityBase {
     this.aboutTheArtText = aboutTheArtText;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -156,7 +105,6 @@ public class Dealer extends EntityBase {
     this.websiteUri = websiteUri;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -167,7 +115,6 @@ public class Dealer extends EntityBase {
     this.artPreviewCaption = artPreviewCaption;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -178,7 +125,6 @@ public class Dealer extends EntityBase {
     this.artistThumbnailImageId = artistThumbnailImageId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -189,7 +135,6 @@ public class Dealer extends EntityBase {
     this.artistImageId = artistImageId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -200,16 +145,51 @@ public class Dealer extends EntityBase {
     this.artPreviewImageId = artPreviewImageId;
   }
 
-  
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Dealer dealer = (Dealer) o;
+    return (registrationNumber == null ? dealer.registrationNumber == null : registrationNumber.equals(dealer.registrationNumber)) &&
+        (attendeeNickname == null ? dealer.attendeeNickname == null : attendeeNickname.equals(dealer.attendeeNickname)) &&
+        (displayName == null ? dealer.displayName == null : displayName.equals(dealer.displayName)) &&
+        (shortDescription == null ? dealer.shortDescription == null : shortDescription.equals(dealer.shortDescription)) &&
+        (aboutTheArtistText == null ? dealer.aboutTheArtistText == null : aboutTheArtistText.equals(dealer.aboutTheArtistText)) &&
+        (aboutTheArtText == null ? dealer.aboutTheArtText == null : aboutTheArtText.equals(dealer.aboutTheArtText)) &&
+        (websiteUri == null ? dealer.websiteUri == null : websiteUri.equals(dealer.websiteUri)) &&
+        (artPreviewCaption == null ? dealer.artPreviewCaption == null : artPreviewCaption.equals(dealer.artPreviewCaption)) &&
+        (artistThumbnailImageId == null ? dealer.artistThumbnailImageId == null : artistThumbnailImageId.equals(dealer.artistThumbnailImageId)) &&
+        (artistImageId == null ? dealer.artistImageId == null : artistImageId.equals(dealer.artistImageId)) &&
+        (artPreviewImageId == null ? dealer.artPreviewImageId == null : artPreviewImageId.equals(dealer.artPreviewImageId));
+  }
+
+  @Override 
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (registrationNumber == null ? 0: registrationNumber.hashCode());
+    result = 31 * result + (attendeeNickname == null ? 0: attendeeNickname.hashCode());
+    result = 31 * result + (displayName == null ? 0: displayName.hashCode());
+    result = 31 * result + (shortDescription == null ? 0: shortDescription.hashCode());
+    result = 31 * result + (aboutTheArtistText == null ? 0: aboutTheArtistText.hashCode());
+    result = 31 * result + (aboutTheArtText == null ? 0: aboutTheArtText.hashCode());
+    result = 31 * result + (websiteUri == null ? 0: websiteUri.hashCode());
+    result = 31 * result + (artPreviewCaption == null ? 0: artPreviewCaption.hashCode());
+    result = 31 * result + (artistThumbnailImageId == null ? 0: artistThumbnailImageId.hashCode());
+    result = 31 * result + (artistImageId == null ? 0: artistImageId.hashCode());
+    result = 31 * result + (artPreviewImageId == null ? 0: artPreviewImageId.hashCode());
+    return result;
+  }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Dealer {\n");
     sb.append("  " + super.toString()).append("\n");
-    sb.append("  id: ").append(id).append("\n");
-    sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
-    sb.append("  isDeleted: ").append(isDeleted).append("\n");
     sb.append("  registrationNumber: ").append(registrationNumber).append("\n");
     sb.append("  attendeeNickname: ").append(attendeeNickname).append("\n");
     sb.append("  displayName: ").append(displayName).append("\n");

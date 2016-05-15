@@ -12,12 +12,6 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class InfoGroup extends EntityBase {
   
-  @SerializedName("Id")
-  private UUID id = null;
-  @SerializedName("LastChangeDateTimeUtc")
-  private Date lastChangeDateTimeUtc = null;
-  @SerializedName("IsDeleted")
-  private BigDecimal isDeleted = null;
   @SerializedName("Name")
   private String name = null;
   @SerializedName("Description")
@@ -27,45 +21,6 @@ public class InfoGroup extends EntityBase {
   @SerializedName("Position")
   private Integer position = null;
 
-  
-  /**
-   * Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000
-   **/
-  @ApiModelProperty(required = true, value = "Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  
-  /**
-   * Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)
-   **/
-  @ApiModelProperty(required = true, value = "Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)")
-  public Date getLastChangeDateTimeUtc() {
-    return lastChangeDateTimeUtc;
-  }
-  public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
-    this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
-  }
-
-  
-  /**
-   * Numeric flag that, if set to \"1\", indicates that the record has been deleted sine the delta reference specified, and should be removed from the local data store after retrieval.
-   * minimum: 0.0
-   * maximum: 1.0
-   **/
-  @ApiModelProperty(required = true, value = "Numeric flag that, if set to \"1\", indicates that the record has been deleted sine the delta reference specified, and should be removed from the local data store after retrieval.")
-  public BigDecimal getIsDeleted() {
-    return isDeleted;
-  }
-  public void setIsDeleted(BigDecimal isDeleted) {
-    this.isDeleted = isDeleted;
-  }
-
-  
   /**
    * Name of the information group
    **/
@@ -77,7 +32,6 @@ public class InfoGroup extends EntityBase {
     this.name = name;
   }
 
-  
   /**
    * Shhort description of the information group
    **/
@@ -89,7 +43,6 @@ public class InfoGroup extends EntityBase {
     this.description = description;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -100,7 +53,6 @@ public class InfoGroup extends EntityBase {
     this.imageId = imageId;
   }
 
-  
   /**
    * Numeric order/position of the element (lower number = display first)
    **/
@@ -112,16 +64,37 @@ public class InfoGroup extends EntityBase {
     this.position = position;
   }
 
-  
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    InfoGroup infoGroup = (InfoGroup) o;
+    return (name == null ? infoGroup.name == null : name.equals(infoGroup.name)) &&
+        (description == null ? infoGroup.description == null : description.equals(infoGroup.description)) &&
+        (imageId == null ? infoGroup.imageId == null : imageId.equals(infoGroup.imageId)) &&
+        (position == null ? infoGroup.position == null : position.equals(infoGroup.position));
+  }
+
+  @Override 
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (name == null ? 0: name.hashCode());
+    result = 31 * result + (description == null ? 0: description.hashCode());
+    result = 31 * result + (imageId == null ? 0: imageId.hashCode());
+    result = 31 * result + (position == null ? 0: position.hashCode());
+    return result;
+  }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class InfoGroup {\n");
     sb.append("  " + super.toString()).append("\n");
-    sb.append("  id: ").append(id).append("\n");
-    sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
-    sb.append("  isDeleted: ").append(isDeleted).append("\n");
     sb.append("  name: ").append(name).append("\n");
     sb.append("  description: ").append(description).append("\n");
     sb.append("  imageId: ").append(imageId).append("\n");

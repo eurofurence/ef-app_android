@@ -12,12 +12,6 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class EventEntry extends EntityBase {
   
-  @SerializedName("Id")
-  private UUID id = null;
-  @SerializedName("LastChangeDateTimeUtc")
-  private Date lastChangeDateTimeUtc = null;
-  @SerializedName("IsDeleted")
-  private BigDecimal isDeleted = null;
   @SerializedName("SourceEventId")
   private BigDecimal sourceEventId = null;
   @SerializedName("ImageId")
@@ -45,45 +39,6 @@ public class EventEntry extends EntityBase {
   @SerializedName("PanelHosts")
   private String panelHosts = null;
 
-  
-  /**
-   * Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000
-   **/
-  @ApiModelProperty(required = true, value = "Universally Unique Identifier (16bytes / 36char string), e.g 550e8400-e29b-11d4-a716-446655440000")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  
-  /**
-   * Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)
-   **/
-  @ApiModelProperty(required = true, value = "Date & Time (UTC) in **ISO 8601** format of when the entity was last changed. (Will also be updated upon deletion)")
-  public Date getLastChangeDateTimeUtc() {
-    return lastChangeDateTimeUtc;
-  }
-  public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
-    this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
-  }
-
-  
-  /**
-   * Numeric flag that, if set to \"1\", indicates that the record has been deleted sine the delta reference specified, and should be removed from the local data store after retrieval.
-   * minimum: 0.0
-   * maximum: 1.0
-   **/
-  @ApiModelProperty(required = true, value = "Numeric flag that, if set to \"1\", indicates that the record has been deleted sine the delta reference specified, and should be removed from the local data store after retrieval.")
-  public BigDecimal getIsDeleted() {
-    return isDeleted;
-  }
-  public void setIsDeleted(BigDecimal isDeleted) {
-    this.isDeleted = isDeleted;
-  }
-
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -94,7 +49,6 @@ public class EventEntry extends EntityBase {
     this.sourceEventId = sourceEventId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(value = "")
@@ -105,7 +59,6 @@ public class EventEntry extends EntityBase {
     this.imageId = imageId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -116,7 +69,6 @@ public class EventEntry extends EntityBase {
     this.slug = slug;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -127,7 +79,6 @@ public class EventEntry extends EntityBase {
     this.title = title;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -138,7 +89,6 @@ public class EventEntry extends EntityBase {
     this.conferenceTrackId = conferenceTrackId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -149,7 +99,6 @@ public class EventEntry extends EntityBase {
     this.conferenceDayId = conferenceDayId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -160,7 +109,6 @@ public class EventEntry extends EntityBase {
     this.conferenceRoomId = conferenceRoomId;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -171,7 +119,6 @@ public class EventEntry extends EntityBase {
     this._abstract = _abstract;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -182,7 +129,6 @@ public class EventEntry extends EntityBase {
     this.description = description;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -193,7 +139,6 @@ public class EventEntry extends EntityBase {
     this.startTime = startTime;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -204,7 +149,6 @@ public class EventEntry extends EntityBase {
     this.endTime = endTime;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -215,7 +159,6 @@ public class EventEntry extends EntityBase {
     this.duration = duration;
   }
 
-  
   /**
    **/
   @ApiModelProperty(required = true, value = "")
@@ -226,16 +169,55 @@ public class EventEntry extends EntityBase {
     this.panelHosts = panelHosts;
   }
 
-  
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    EventEntry eventEntry = (EventEntry) o;
+    return (sourceEventId == null ? eventEntry.sourceEventId == null : sourceEventId.equals(eventEntry.sourceEventId)) &&
+        (imageId == null ? eventEntry.imageId == null : imageId.equals(eventEntry.imageId)) &&
+        (slug == null ? eventEntry.slug == null : slug.equals(eventEntry.slug)) &&
+        (title == null ? eventEntry.title == null : title.equals(eventEntry.title)) &&
+        (conferenceTrackId == null ? eventEntry.conferenceTrackId == null : conferenceTrackId.equals(eventEntry.conferenceTrackId)) &&
+        (conferenceDayId == null ? eventEntry.conferenceDayId == null : conferenceDayId.equals(eventEntry.conferenceDayId)) &&
+        (conferenceRoomId == null ? eventEntry.conferenceRoomId == null : conferenceRoomId.equals(eventEntry.conferenceRoomId)) &&
+        (_abstract == null ? eventEntry._abstract == null : _abstract.equals(eventEntry._abstract)) &&
+        (description == null ? eventEntry.description == null : description.equals(eventEntry.description)) &&
+        (startTime == null ? eventEntry.startTime == null : startTime.equals(eventEntry.startTime)) &&
+        (endTime == null ? eventEntry.endTime == null : endTime.equals(eventEntry.endTime)) &&
+        (duration == null ? eventEntry.duration == null : duration.equals(eventEntry.duration)) &&
+        (panelHosts == null ? eventEntry.panelHosts == null : panelHosts.equals(eventEntry.panelHosts));
+  }
+
+  @Override 
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (sourceEventId == null ? 0: sourceEventId.hashCode());
+    result = 31 * result + (imageId == null ? 0: imageId.hashCode());
+    result = 31 * result + (slug == null ? 0: slug.hashCode());
+    result = 31 * result + (title == null ? 0: title.hashCode());
+    result = 31 * result + (conferenceTrackId == null ? 0: conferenceTrackId.hashCode());
+    result = 31 * result + (conferenceDayId == null ? 0: conferenceDayId.hashCode());
+    result = 31 * result + (conferenceRoomId == null ? 0: conferenceRoomId.hashCode());
+    result = 31 * result + (_abstract == null ? 0: _abstract.hashCode());
+    result = 31 * result + (description == null ? 0: description.hashCode());
+    result = 31 * result + (startTime == null ? 0: startTime.hashCode());
+    result = 31 * result + (endTime == null ? 0: endTime.hashCode());
+    result = 31 * result + (duration == null ? 0: duration.hashCode());
+    result = 31 * result + (panelHosts == null ? 0: panelHosts.hashCode());
+    return result;
+  }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class EventEntry {\n");
     sb.append("  " + super.toString()).append("\n");
-    sb.append("  id: ").append(id).append("\n");
-    sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
-    sb.append("  isDeleted: ").append(isDeleted).append("\n");
     sb.append("  sourceEventId: ").append(sourceEventId).append("\n");
     sb.append("  imageId: ").append(imageId).append("\n");
     sb.append("  slug: ").append(slug).append("\n");

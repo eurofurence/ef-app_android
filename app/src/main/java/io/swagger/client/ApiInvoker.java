@@ -18,6 +18,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -189,7 +190,6 @@ public class ApiInvoker {
 
      // Setup authentications (key: authentication name, value: authentication).
      INSTANCE.authentications = new HashMap<String, Authentication>();
-     
      // Prevent the authentications from being modified.
      INSTANCE.authentications = Collections.unmodifiableMap(INSTANCE.authentications);
   }
@@ -218,7 +218,12 @@ public class ApiInvoker {
   }
 
   public String escapeString(String str) {
-    return str;
+    try {
+	  return URLEncoder.encode(str, "utf8");
+    }
+    catch (UnsupportedEncodingException e) {
+      return str;
+    }
   }
 
   public static Object deserialize(String json, String containerType, Class cls) throws ApiException {
