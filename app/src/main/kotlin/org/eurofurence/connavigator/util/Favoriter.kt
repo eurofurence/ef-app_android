@@ -14,6 +14,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.gcm.NotificationPublisher
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.ui.ActivityRoot
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.logv
@@ -129,6 +130,9 @@ object Favoriter {
         val database = Database(context)
         val builder = Notification.Builder(database.context)
 
+        val intentToExecute = Intent(context, ActivityRoot::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 0, intentToExecute, 0)
+
         builder.setContentTitle("Upcoming Eurofurence Event!")
                 .setContentText("%s is happening soon! Go to %s".format(eventEntry.title, database.eventConferenceRoomDb[eventEntry.conferenceRoomId]!!.name))
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -139,6 +143,7 @@ object Favoriter {
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setCategory(Notification.CATEGORY_EVENT)
+                .setContentIntent(pendingIntent)
 
         return builder.build()
     }
