@@ -1,6 +1,5 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -23,13 +22,18 @@ import org.joda.time.DateTime
  * Created by David on 5/3/2016.
  */
 class FragmentEventsViewpager : Fragment(), ContentAPI {
-    inner class EventFragmentPagerAdapter(val fragmentManager: FragmentManager, val context: Context) : FragmentStatePagerAdapter(fragmentManager) {
+    class EventFragmentPagerAdapter(val fragmentManager: FragmentManager, var database: Database) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int): CharSequence? {
             return DateTime(database.eventConferenceDayDb.asc { it.date }[position].date).dayOfWeek().asShortText
         }
 
         override fun getItem(position: Int): Fragment? {
             return EventView(position, database.eventConferenceDayDb.asc { it.date }[position])
+        }
+
+        override fun notifyDataSetChanged() {
+            database = Database(database.context)
+            super.notifyDataSetChanged()
         }
 
         override fun getCount(): Int {
@@ -47,12 +51,13 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Events Viewpager")
 
-        eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager, activity)
+        eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager, database)
+        eventPager.offscreenPageLimit = 3
+
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
     }
 
     override fun dataUpdated() {
-        // Propagate message from the root
         eventPager.adapter.notifyDataSetChanged()
     }
 

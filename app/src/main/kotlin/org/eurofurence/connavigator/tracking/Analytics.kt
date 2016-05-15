@@ -40,13 +40,13 @@ class Analytics {
         private fun updateTracking(context: Context, preferences: SharedPreferences) {
             logv { "Updating tracking to new stats" }
             // Set app-level opt out
-            GoogleAnalytics.getInstance(context).appOptOut = preferences.getBoolean(R.string.settings_tag_analytics_enabled.toString(), true)
+            GoogleAnalytics.getInstance(context).appOptOut = preferences.getBoolean(context.resources.getString(R.string.settings_tag_analytics_enabled), true)
 
 
             // Start tracking
             tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-1")
 
-            var interval = preferences.getString(R.string.settings_tag_analytics_interval.toString(), "50")
+            var interval = "50"
 
             try {
                 interval.toDouble()
