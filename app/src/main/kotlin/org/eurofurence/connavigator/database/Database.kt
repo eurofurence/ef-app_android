@@ -13,6 +13,7 @@ import java.util.*
  * Provides an interface to all stored databases and saves a timestamp of their last update time. The databases are
  * lazily loaded and cached with invalidation on underlying file system changes, so multiple instances may be created.
  *
+ * When a new database is introduced, it should also be synchronized in the [UpdateIntentService].
  * @param context The context used to operate the background services
  */
 class Database(val context: Context) {
@@ -27,6 +28,19 @@ class Database(val context: Context) {
      */
     val favoritedDb =
             createGson(File(context.cacheDir, "favorited.db"), EventEntry::class.java).cachedApiDB()
+
+    /**
+     * Database of announcements.
+     */
+    val announcementDb =
+            createGson(File(context.cacheDir, "announcement.db"), Announcement::class.java).cachedApiDB()
+
+    /**
+     * Database of announcements.
+     */
+    val dealerDb =
+            createGson(File(context.cacheDir, "dealer.db"), Dealer::class.java).cachedApiDB()
+
     /**
      * Database of conference days.
      */
