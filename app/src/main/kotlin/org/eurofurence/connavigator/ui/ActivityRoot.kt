@@ -151,8 +151,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
                 R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, true)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
-                R.id.navDealersDen -> {
-                }
+                R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java)
                 R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
                 R.id.navShare -> {
                 }
