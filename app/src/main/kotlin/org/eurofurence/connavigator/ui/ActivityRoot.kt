@@ -79,7 +79,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     }
 
     private fun setupContent() =
-            navigateRoot(FragmentEventsViewpager::class.java)
+            navigateRoot(FragmentEventsViewpager::class.java, true)
 
     override fun onResume() {
         super.onResume()
@@ -125,7 +125,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         toggle.syncState()
     }
 
-    private fun<T : Fragment> navigateRoot(type: Class<T>) {
+    private fun<T : Fragment> navigateRoot(type: Class<T>, useTabs: Boolean = false) {
+        if (useTabs)
+            tabs.visibility = View.VISIBLE
+        else
+            tabs.visibility = View.GONE
+
         // If not already there, navigate with fragment transaction
         if (!type.isInstance(content)) {
 
@@ -143,7 +148,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         navView.setNavigationItemSelectedListener {
             //Handle the ID
             when (it.itemId) {
-                R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java)
+                R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, true)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navDealersDen -> {
                 }
@@ -201,7 +206,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
             UpdateIntentService.dispatchUpdate(this@ActivityRoot)
         }
 
-        fab.visibility = View.INVISIBLE
+        if (!BuildConfig.DEBUG)
+            fab.visibility = View.INVISIBLE
     }
 
     private fun handleSettings() {

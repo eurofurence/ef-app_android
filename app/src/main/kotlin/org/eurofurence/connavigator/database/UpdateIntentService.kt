@@ -3,12 +3,12 @@ package org.eurofurence.connavigator.database
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
+import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
 import io.swagger.client.api.DefaultApi
-import org.eurofurence.connavigator.util.extensions.booleans
-import org.eurofurence.connavigator.util.extensions.loge
-import org.eurofurence.connavigator.util.extensions.logv
-import org.eurofurence.connavigator.util.extensions.objects
+import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.util.extensions.*
+import org.joda.time.DateTime
 import java.util.*
 
 /**
@@ -50,11 +50,28 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
             // Get the current endpoint status and its date
             val endpoint = api.endpointGet()
             val newDate = endpoint.currentDateTimeUtc
+            val preferences = PreferenceManager.getDefaultSharedPreferences(this)
 
             logv("UIS") { "New date on server: $newDate" }
 
             // Update the databases with the new data
-            driver.eventConferenceDayDb.syncWith(api.eventConferenceDayGet(oldDate))
+
+            // Check for debug. this will change the dates so they work with the current dates
+            if (preferences.getBoolean(resources.getString(R.string.debug_date_enabled), false)) {
+                logd { "Changing dates instead of updating" }
+                var dates = driver.eventConferenceDayDb.items
+
+                val currentDate = DateTime.now()
+                val offset = preferences.getString(resources.getString(R.string.debug_date_setting), "0").toInt()
+
+                for (index in dates.indices) {
+                    dates[index].date = currentDate.plusDays(index - offset).toString("yyyy-MM-dd")
+                }
+                driver.eventConferenceDayDb.syncWith(dates)
+            } else {
+                // If the setting is not set we'll just add the regular days
+                driver.eventConferenceDayDb.syncWith(api.eventConferenceDayGet(oldDate))
+            }
             driver.eventConferenceRoomDb.syncWith(api.eventConferenceRoomGet(oldDate))
             driver.eventConferenceTrackDb.syncWith(api.eventConferenceTrackGet(oldDate))
             driver.eventEntryDb.syncWith(api.eventEntryGet(oldDate))

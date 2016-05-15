@@ -14,4 +14,19 @@
                 android:entries="@array/polling_intervals"
                 android:defaultValue="50"/>
     </PreferenceCategory>
+    <PreferenceCategory
+            android:title="Debug">
+        <CheckBoxPreference
+                android:key="@string/debug_date_enabled"
+                android:title="Debug event dates"
+                android:summary="Change the dates so that they will correspond to our dates"
+                android:defaultValue="false"/>
+        <ListPreference
+                android:key="@string/debug_date_setting"
+                android:title="Day to offset events by"
+                android:entries="@array/debug_days_to_add_v"
+                android:entryValues="@array/debug_days_to_add"
+                android:defaultValue="0"
+                android:dependency="@string/debug_date_enabled"/>
+    </PreferenceCategory>
 </PreferenceScreen>
