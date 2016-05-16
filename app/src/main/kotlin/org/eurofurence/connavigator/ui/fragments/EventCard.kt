@@ -13,6 +13,7 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
 
 /**
@@ -36,5 +37,10 @@ class EventCard(val eventEntry: EventEntry) : Fragment() {
         eventTitle.text = Formatter.eventTitle(eventEntry)
         eventDate.text = Formatter.eventToTimes(eventEntry, database)
         imageService.load(database.imageDb[eventEntry.imageId], eventImage)
+
+
+        eventCard.setOnClickListener {
+            applyOnRoot { navigateToEvent(eventEntry) }
+        }
     }
 }
