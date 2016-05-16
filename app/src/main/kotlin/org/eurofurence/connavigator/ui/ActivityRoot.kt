@@ -16,6 +16,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.BuildConfig
@@ -188,6 +189,15 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 .beginTransaction()
                 .setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom, R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom)
                 .add(R.id.content, FragmentViewInfo(info), "content")
+                .addToBackStack(null)
+                .commit()
+    }
+
+    override fun navigateToDealer(dealer: Dealer) {
+        supportFragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom, R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom)
+                .add(R.id.content, FragmentViewDealer(dealer), "content")
                 .addToBackStack(null)
                 .commit()
     }

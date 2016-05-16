@@ -30,7 +30,7 @@ class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Da
         val dealer = effective_events[position]
 
         holder.dealerName.text = dealer.attendeeNickname
-        imageService.load(database.imageDb[dealer.artistThumbnailImageId], holder.dealerPreviewImage, true)
+        imageService.load(database.imageDb[dealer.artistImageId], holder.dealerPreviewImage, true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DealerDataHolder =

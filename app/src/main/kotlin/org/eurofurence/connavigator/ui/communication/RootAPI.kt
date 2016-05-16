@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui.communication
 
 import android.support.design.widget.TabLayout
+import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.database.Database
@@ -16,4 +17,6 @@ interface RootAPI {
     fun navigateToEvent(eventEntry: EventEntry)
 
     fun navigateToInfo(info: Info)
+
+    fun navigateToDealer(dealer: Dealer)
 }
