@@ -1,11 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/backgroundGrey"
-              android:clickable="true">
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/dealerName"/>
-</LinearLayout>
+<android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/backgroundGrey"
+                    android:clickable="true">
+        <ImageView android:layout_width="match_parent"
+                   android:layout_height="200dp"
+                   android:id="@+id/dealerImage"
+                   android:scaleType="centerCrop"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@id/dealerImage"
+                      android:padding="@dimen/outer_padding"
+                      android:background="@color/primaryDarker"
+                      android:id="@+id/dealerHeaderLayout"
+                      android:orientation="vertical">
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/dealerName"
+                      android:text="Dealer name"
+                      android:textAppearance="?android:textAppearanceLargeInverse"
+                      android:textAlignment="center"
+                      android:padding="@dimen/inner_padding"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:text="short description"
+                      android:padding="@dimen/inner_padding"
+                      android:id="@+id/dealerShortDescription"
+                      android:textAppearance="?android:textAppearanceMediumInverse"/>
+        </LinearLayout>
+        <us.feras.mdv.MarkdownView android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:layout_below="@id/dealerHeaderLayout"
+                                   android:id="@+id/dealerFullDescription"
+                                   android:padding="@dimen/outer_padding"
+        android:paddingTop="25dp"/>
+
+    </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:id="@+id/dealerButtonMore"
+                                                        android:layout_margin="@dimen/inner_padding"
+                                                        app:layout_anchor="@id/dealerHeaderLayout"
+                                                        app:layout_anchorGravity="bottom|right|end"/>
+</android.support.design.widget.CoordinatorLayout>
