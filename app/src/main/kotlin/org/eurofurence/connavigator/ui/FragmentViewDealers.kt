@@ -35,7 +35,7 @@ class FragmentViewDealers : Fragment(), TextWatcher {
 
         effective_dealers = database.dealerDb.items.filter { it.attendeeNickname.contains(query, true) }.sortedBy { it.attendeeNickname }
 
-        dealersRecycler.adapter = DealerRecyclerAdapter(effective_dealers, database)
+        dealersRecycler.adapter = DealerRecyclerAdapter(effective_dealers, database, this)
 
         dealersRecycler.adapter.notifyDataSetChanged()
     }
@@ -55,7 +55,7 @@ class FragmentViewDealers : Fragment(), TextWatcher {
         dealersSearch.setSingleLine()
         effective_dealers = database.dealerDb.items.sortedBy { it.attendeeNickname }
 
-        dealersRecycler.adapter = DealerRecyclerAdapter(effective_dealers, database)
+        dealersRecycler.adapter = DealerRecyclerAdapter(effective_dealers, database, this)
         dealersRecycler.layoutManager = LinearLayoutManager(activity)
         dealersRecycler.itemAnimator = DefaultItemAnimator()
 
