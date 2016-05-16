@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
@@ -109,6 +110,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         // Propagate the ID based selection to functions
         return when (item.itemId) {
             R.id.action_settings -> handleSettings().let { true }
+            R.id.action_bug_report -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://goo.gl/forms/9qI2iFBwAa"))).let { true }
+            R.id.action_feedback_report -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://goo.gl/forms/66Q61KsU0G"))).let { true }
             else -> super.onOptionsItemSelected(item)
         }
     }
