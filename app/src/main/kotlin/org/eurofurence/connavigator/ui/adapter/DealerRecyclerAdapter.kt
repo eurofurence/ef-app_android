@@ -12,6 +12,7 @@ import io.swagger.client.model.Dealer
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
@@ -33,7 +34,7 @@ class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Da
     override fun onBindViewHolder(holder: DealerDataHolder, position: Int) {
         val dealer = effective_events[position]
 
-        holder.dealerName.text = dealer.attendeeNickname
+        holder.dealerName.text = Formatter.dealerName(dealer)
         imageService.load(database.imageDb[dealer.artistImageId], holder.dealerPreviewImage, true)
 
         holder.layout.setOnClickListener {

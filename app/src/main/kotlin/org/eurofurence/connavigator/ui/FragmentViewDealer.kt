@@ -15,6 +15,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
@@ -39,20 +40,29 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Dealer Details")
 
-        dealerName.text = dealer.attendeeNickname
+        dealerName.text = Formatter.dealerName(dealer)
         dealerShortDescription.text = dealer.shortDescription
         dealerFullDescription.loadMarkdown(dealer.aboutTheArtistText + " \r" + dealer.aboutTheArtText)
         imageService.load(database.imageDb[dealer.artPreviewImageId], dealerImage, false)
 
         dealerButtonMore.setOnClickListener {
             try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(dealer.websiteUri)))
+                if (dealer.websiteUri.startsWith("http"))
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(dealer.websiteUri)))
+                else
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://" + dealer.websiteUri)))
             } catch(e: Exception) {
                 logv { "User tried clicking on a dealer with no url" }
             }
         }
 
-        if (dealer.websiteUri == "")
+        if (dealer.websiteUri.isEmpty())
             dealerButtonMore.visibility = View.GONE
-   }
+
+        if (dealer.aboutTheArtText.isEmpty() && dealer.aboutTheArtistText.isEmpty())
+            dealerFullDescription.loadMarkdown("This artist did not supply any long descriptions")
+
+        if (dealer.shortDescription.isEmpty())
+            dealerShortDescription.visibility = View.GONE
+    }
 }

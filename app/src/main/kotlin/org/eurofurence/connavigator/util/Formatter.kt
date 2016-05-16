@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.util
 
 import android.text.Html
 import android.text.Spanned
+import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventConferenceRoom
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.database.Database
@@ -32,6 +33,13 @@ object Formatter {
      */
     fun eventTitle(eventEntry: EventEntry): Spanned {
         return formatHTML(eventEntry.title)
+    }
+
+    fun dealerName(dealer: Dealer): String {
+        if (dealer.displayName != "")
+            return dealer.displayName
+        else
+            return dealer.attendeeNickname
     }
 
     /*

@@ -7,7 +7,7 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/backgroundGrey"
+                    android:background="@color/cardview_light_background"
                     android:clickable="true">
         <ImageView android:layout_width="match_parent"
                    android:layout_height="200dp"
@@ -38,7 +38,7 @@
                                    android:layout_below="@id/dealerHeaderLayout"
                                    android:id="@+id/dealerFullDescription"
                                    android:padding="@dimen/outer_padding"
-        android:paddingTop="25dp"/>
+                                   android:layout_marginTop="25dp"/>
 
     </RelativeLayout>
     <android.support.design.widget.FloatingActionButton android:layout_width="wrap_content"
