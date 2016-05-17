@@ -6,16 +6,18 @@
                 android:id="@+id/layout"
                 android:clickable="true"
                 android:longClickable="true">
-    <ImageView android:layout_width="75dp" android:layout_height="match_parent"
-               android:src="@drawable/placeholder_event"
-               android:scaleType="centerCrop"
-               android:id="@+id/dealerPreviewImage"/>
     <TextView android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:id="@+id/dealerName"
               android:textAppearance="?android:textAppearanceLarge"
               android:padding="@dimen/inner_padding"
               android:text="Dealer name"
-              android:gravity="center"
-              android:layout_toRightOf="@id/dealerPreviewImage"/>
+              android:gravity="center"/>
+
+    <ImageView android:layout_width="75dp" android:layout_height="match_parent"
+               android:src="@drawable/placeholder_event"
+               android:scaleType="centerCrop"
+               android:id="@+id/dealerPreviewImage"
+               android:foregroundGravity="right" android:layout_alignParentTop="true"
+               android:layout_alignParentEnd="true"/>
 </RelativeLayout>
