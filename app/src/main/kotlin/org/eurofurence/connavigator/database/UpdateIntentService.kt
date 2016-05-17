@@ -28,17 +28,17 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
         }
     }
 
+    val database by lazy { Database(this) }
+
+    val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
 
     // TODO: Sticky intent since there should only be one pending update
 
     override fun onHandleIntent(intent: Intent?) {
         logv("UIS") { "Handling update intent service intent" }
 
-        // Driver for loading and storing
-        val driver = Database(this)
-
         // Get the old date
-        val oldDate = driver.dateDb.items.firstOrNull() ?: Date(0)
+        val oldDate = database.dateDb.items.firstOrNull() ?: Date(0)
 
         logv("UIS") { "Old date in database: $oldDate" }
 
@@ -50,43 +50,22 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
             // Get the current endpoint status and its date
             val endpoint = api.endpointGet()
             val newDate = endpoint.currentDateTimeUtc
-            val preferences = PreferenceManager.getDefaultSharedPreferences(this)
 
             logv("UIS") { "New date on server: $newDate" }
 
             // Update the databases with the new data
-            driver.announcementDb.syncWith(api.announcementGet(oldDate))
-            driver.dealerDb.syncWith(api.dealerGet(oldDate))
-
-            // Check for debug. this will change the dates so they work with the current dates
-            if (preferences.getBoolean(resources.getString(R.string.debug_date_enabled), false)) {
-                logd { "Changing dates instead of updating" }
-                var dates = driver.eventConferenceDayDb.items
-
-                val currentDate = DateTime.now()
-                val offset = preferences.getString(resources.getString(R.string.debug_date_setting), "0").toInt()
-
-                var i = 0
-
-                for (index in dates) {
-                    index.date = currentDate.plusDays(i - offset).toString("yyyy-MM-dd")
-                    i++
-                }
-                driver.eventConferenceDayDb.syncWith(dates.toList())
-            } else {
-                // If the setting is not set we'll just add the regular days
-                driver.eventConferenceDayDb.syncWith(api.eventConferenceDayGet(oldDate))
-            }
-
-            driver.eventConferenceRoomDb.syncWith(api.eventConferenceRoomGet(oldDate))
-            driver.eventConferenceTrackDb.syncWith(api.eventConferenceTrackGet(oldDate))
-            driver.eventEntryDb.syncWith(api.eventEntryGet(oldDate))
-            driver.imageDb.syncWith(api.imageGet(oldDate))
-            driver.infoDb.syncWith(api.infoGet(oldDate))
-            driver.infoGroupDb.syncWith(api.infoGroupGet(oldDate))
+            database.announcementDb.syncWith(loadAnnouncements(oldDate))
+            database.dealerDb.syncWith(loadDealers(oldDate))
+            database.eventConferenceDayDb.syncWith(loadConferenceDays(oldDate))
+            database.eventConferenceRoomDb.syncWith(loadConferenceRooms(oldDate))
+            database.eventConferenceTrackDb.syncWith(loadConferenceTracks(oldDate))
+            database.eventEntryDb.syncWith(loadEvents(oldDate))
+            database.imageDb.syncWith(loadImages(oldDate))
+            database.infoDb.syncWith(loadInfos(oldDate))
+            database.infoGroupDb.syncWith(loadInfoGroups(oldDate))
 
             // Set the new server date
-            driver.dateDb.items = listOf(newDate)
+            database.dateDb.items = listOf(newDate)
 
             // Make the success response message
             response.booleans["success"] = true
@@ -105,4 +84,42 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
         // Send a broadcast notifying completion of this action
         LocalBroadcastManager.getInstance(this).sendBroadcast(response)
     }
+
+    private fun loadAnnouncements(oldDate: Date) = api.announcementGet(oldDate)
+
+    private fun loadDealers(oldDate: Date) = api.dealerGet(oldDate)
+
+    private fun loadConferenceDays(oldDate: Date) =
+            if (preferences.getBoolean(resources.getString(R.string.debug_date_enabled), false)) {
+                logd { "Changing dates instead of updating" }
+                val dates = database.eventConferenceDayDb.items
+
+                val currentDate = DateTime.now()
+                val offset = preferences.getString(resources.getString(R.string.debug_date_setting), "0").toInt()
+
+                var i = 0
+
+                for (index in dates) {
+                    index.date = currentDate.plusDays(i - offset).toString("yyyy-MM-dd")
+                    i++
+                }
+                dates.toList()
+            } else {
+                // If the setting is not set we'll just add the regular days
+                api.eventConferenceDayGet(oldDate)
+            }
+
+    private fun loadConferenceRooms(oldDate: Date) =
+            api.eventConferenceRoomGet(oldDate)
+
+
+    private fun loadConferenceTracks(oldDate: Date) = api.eventConferenceTrackGet(oldDate)
+
+    private fun loadEvents(oldDate: Date) = api.eventEntryGet(oldDate)
+
+    private fun loadImages(oldDate: Date) = api.imageGet(oldDate)
+
+    private fun loadInfos(oldDate: Date) = api.infoGet(oldDate)
+
+    private fun loadInfoGroups(oldDate: Date) = api.infoGroupGet(oldDate)
 }
