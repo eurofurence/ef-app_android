@@ -20,6 +20,7 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
+import org.eurofurence.connavigator.util.extensions.letRoot
 
 /**
  * Event view recycler to hold the viewpager items
@@ -63,15 +64,14 @@ class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment(), C
     val events by view(RecyclerView::class.java)
 
     var effectiveEvents = emptyList<EventEntry>()
-    lateinit var database: Database
+
+    val database: Database get() = letRoot { it.database }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_events, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        database = Database(activity)
 
         effectiveEvents = database.eventEntryDb.items.filter { it.conferenceDayId == eventDay.id }
         // Configure the recycler
