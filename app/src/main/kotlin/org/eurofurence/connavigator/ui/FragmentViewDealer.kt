@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import io.swagger.client.model.Dealer
 import org.eurofurence.connavigator.R
@@ -31,6 +33,7 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
     val dealerFullDescription by view(MarkdownView::class.java)
     val dealerImage by view(ImageView::class.java)
     val dealerButtonMore by view(FloatingActionButton::class.java)
+    var isFullscreen = false
 
     val database: Database get() = letRoot { it.database }!!
 
