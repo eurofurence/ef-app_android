@@ -21,24 +21,24 @@ import org.eurofurence.connavigator.R
  */
 class FragmentMap() : Fragment(), OnMapReadyCallback {
 
-    override fun onMapReady(newMap: GoogleMap?) {
+    override fun onMapReady(newMap: GoogleMap) {
         if (requestMapPermission())
         // Show current location
-            newMap?.isMyLocationEnabled = true
+            newMap.isMyLocationEnabled = true
 
         // Set map typ
-        newMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
+        newMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
         // Center camera on berlin
-        newMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(52.5243700, 13.4105300), 10F))
+        newMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(52.5243700, 13.4105300), 10F))
 
         // Place marker at estrel
-        newMap?.addMarker(MarkerOptions()
+        newMap.addMarker(MarkerOptions()
                 .position(LatLng(52.474167, 13.459444))
                 .title("Estrel Berlin")
         )
 
-        newMap?.uiSettings?.setAllGesturesEnabled(true)
+        newMap.uiSettings?.setAllGesturesEnabled(true)
     }
 
     private fun requestMapPermission(): Boolean {

@@ -11,28 +11,30 @@ import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
+import org.eurofurence.connavigator.util.extensions.letRoot
 
 /**
  * Created by David on 5/4/2016.
  */
-class EventCard(val eventEntry: EventEntry) : Fragment() {
+class EventCard(val eventEntry: EventEntry) : Fragment(), ContentAPI {
     val eventTitle by view(TextView::class.java)
     val eventDate by view(TextView::class.java)
     val eventImage by view(ImageView::class.java)
 
     val eventCard by view(android.support.v7.widget.CardView::class.java)
 
+    val database: Database get() = letRoot { it.database }!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_event_card, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val database = Database(activity)
 
         eventTitle.text = Formatter.eventTitle(eventEntry)
         eventDate.text = Formatter.eventToTimes(eventEntry, database)

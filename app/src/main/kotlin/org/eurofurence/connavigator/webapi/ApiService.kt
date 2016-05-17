@@ -6,6 +6,7 @@ import com.android.volley.toolbox.BasicNetwork
 import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
 import io.swagger.client.ApiInvoker
+import io.swagger.client.api.DefaultApi
 import org.eurofurence.connavigator.util.extensions.logd
 import java.io.File
 
@@ -13,6 +14,13 @@ import java.io.File
  * The API services manage extended API functionality
  */
 object apiService {
+    val endpoint: String get() = api.basePath
+
+    val api by lazy { DefaultApi() }
+
+    fun formatUrl(url: String) =
+            url.replace(Regex("\\Q{Endpoint}\\E|\\Q{EndpointUrl}\\E"), endpoint)
+
     /**
      * Initializes the API services
      */
