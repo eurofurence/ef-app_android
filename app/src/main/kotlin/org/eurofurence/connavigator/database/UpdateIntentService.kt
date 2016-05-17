@@ -8,13 +8,14 @@ import android.support.v4.content.LocalBroadcastManager
 import io.swagger.client.api.DefaultApi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
 import java.util.*
 
 /**
  * Updates the database on request.
  */
-class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("UpdateIntentService") {
+class UpdateIntentService() : IntentService("UpdateIntentService") {
     companion object {
         val UPDATE_COMPLETE = "org.eurofurence.connavigator.driver.UPDATE_COMPLETE"
 
@@ -48,7 +49,7 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
         // The following code is net and IO oriented, it could fail
         try {
             // Get the current endpoint status and its date
-            val endpoint = api.endpointGet()
+            val endpoint = apiService.api.endpointGet()
             val newDate = endpoint.currentDateTimeUtc
 
             logv("UIS") { "New date on server: $newDate" }
@@ -85,9 +86,9 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
         LocalBroadcastManager.getInstance(this).sendBroadcast(response)
     }
 
-    private fun loadAnnouncements(oldDate: Date) = api.announcementGet(oldDate)
+    private fun loadAnnouncements(oldDate: Date) = apiService.api.announcementGet(oldDate)
 
-    private fun loadDealers(oldDate: Date) = api.dealerGet(oldDate)
+    private fun loadDealers(oldDate: Date) = apiService.api.dealerGet(oldDate)
 
     private fun loadConferenceDays(oldDate: Date) =
             if (preferences.getBoolean(resources.getString(R.string.debug_date_enabled), false)) {
@@ -106,20 +107,20 @@ class UpdateIntentService(val api: DefaultApi = DefaultApi()) : IntentService("U
                 dates.toList()
             } else {
                 // If the setting is not set we'll just add the regular days
-                api.eventConferenceDayGet(oldDate)
+                apiService.api.eventConferenceDayGet(oldDate)
             }
 
     private fun loadConferenceRooms(oldDate: Date) =
-            api.eventConferenceRoomGet(oldDate)
+            apiService.api.eventConferenceRoomGet(oldDate)
 
 
-    private fun loadConferenceTracks(oldDate: Date) = api.eventConferenceTrackGet(oldDate)
+    private fun loadConferenceTracks(oldDate: Date) = apiService.api.eventConferenceTrackGet(oldDate)
 
-    private fun loadEvents(oldDate: Date) = api.eventEntryGet(oldDate)
+    private fun loadEvents(oldDate: Date) = apiService.api.eventEntryGet(oldDate)
 
-    private fun loadImages(oldDate: Date) = api.imageGet(oldDate)
+    private fun loadImages(oldDate: Date) = apiService.api.imageGet(oldDate)
 
-    private fun loadInfos(oldDate: Date) = api.infoGet(oldDate)
+    private fun loadInfos(oldDate: Date) = apiService.api.infoGet(oldDate)
 
-    private fun loadInfoGroups(oldDate: Date) = api.infoGroupGet(oldDate)
+    private fun loadInfoGroups(oldDate: Date) = apiService.api.infoGroupGet(oldDate)
 }

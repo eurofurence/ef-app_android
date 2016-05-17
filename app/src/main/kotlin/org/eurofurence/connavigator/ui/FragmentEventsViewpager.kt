@@ -16,13 +16,14 @@ import org.eurofurence.connavigator.ui.fragments.EventView
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.letRoot
+import org.eurofurence.connavigator.util.extensions.size
 import org.joda.time.DateTime
 
 /**
  * Created by David on 5/3/2016.
  */
 class FragmentEventsViewpager : Fragment(), ContentAPI {
-    class EventFragmentPagerAdapter(val fragmentManager: FragmentManager, var database: Database) : FragmentStatePagerAdapter(fragmentManager) {
+    inner class EventFragmentPagerAdapter(val fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int): CharSequence? {
             return DateTime(database.eventConferenceDayDb.asc { it.date }[position].date).dayOfWeek().asShortText
         }
@@ -31,13 +32,8 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
             return EventView(position, database.eventConferenceDayDb.asc { it.date }[position])
         }
 
-        override fun notifyDataSetChanged() {
-            database = Database(database.context)
-            super.notifyDataSetChanged()
-        }
-
         override fun getCount(): Int {
-            return database.eventConferenceDayDb.items.count()
+            return database.eventConferenceDayDb.size
         }
     }
 
@@ -51,7 +47,7 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Events Viewpager")
 
-        eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager, database)
+        eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager)
         eventPager.offscreenPageLimit = 3
 
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
