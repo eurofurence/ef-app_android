@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
@@ -16,6 +17,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.BuildConfig
@@ -108,6 +110,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         // Propagate the ID based selection to functions
         return when (item.itemId) {
             R.id.action_settings -> handleSettings().let { true }
+            R.id.action_bug_report -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://goo.gl/forms/9qI2iFBwAa"))).let { true }
+            R.id.action_feedback_report -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://goo.gl/forms/66Q61KsU0G"))).let { true }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -151,8 +155,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
                 R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, true)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
-                R.id.navDealersDen -> {
-                }
+                R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java)
                 R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
                 R.id.navShare -> {
                 }
@@ -189,6 +192,15 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 .beginTransaction()
                 .setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom, R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom)
                 .add(R.id.content, FragmentViewInfo(info), "content")
+                .addToBackStack(null)
+                .commit()
+    }
+
+    override fun navigateToDealer(dealer: Dealer) {
+        supportFragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom, R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom)
+                .add(R.id.content, FragmentViewDealer(dealer), "content")
                 .addToBackStack(null)
                 .commit()
     }

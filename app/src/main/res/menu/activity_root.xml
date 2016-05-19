@@ -5,4 +5,10 @@
           android:title="@string/action_settings"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+    <item android:id="@+id/action_bug_report"
+          android:title="Report Bug"
+          android:orderInCategory="200"/>
+    <item android:id="@+id/action_feedback_report"
+          android:title="Feedback"
+          android:orderInCategory="300"/>
 </menu>
