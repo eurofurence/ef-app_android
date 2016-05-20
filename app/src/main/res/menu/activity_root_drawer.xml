@@ -25,8 +25,18 @@
         <item
                 android:id="@+id/navMap"
                 android:icon="@drawable/common_plus_signin_btn_icon_dark_normal"
-                android:title="Points of Interest"/>
+                android:title="Points of Interest"
+                android:visible="false"/>
     </group>
+
+    <item android:title="Eurofurence">
+        <menu>
+            <item android:id="@+id/navWebSite"
+                  android:title="Website"/>
+            <item android:id="@+id/navWebTwitter"
+                  android:title="Twitter"/>
+        </menu>
+    </item>
 
     <item android:title="App Management">
         <menu>
@@ -34,10 +44,13 @@
                     android:id="@+id/navShare"
                     android:icon="@drawable/ic_menu_share"
                     android:title="Share"/>
+            <item android:id="@+id/navDevReload"
+                  android:title="Reload database"/>
             <item
                     android:id="@+id/navDevClear"
                     android:icon="@drawable/ic_menu_send"
                     android:title="Clear Database"/>
+
         </menu>
     </item>
 
