@@ -4,27 +4,27 @@
     <group android:checkableBehavior="single">
         <item
                 android:id="@+id/navHome"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/icon_home"
                 android:title="Home"/>
         <item
                 android:id="@+id/navEvents"
-                android:icon="@drawable/ic_menu_camera"
+                android:icon="@drawable/icon_calendar"
                 android:title="Events"/>
         <item
                 android:id="@+id/navInfo"
-                android:icon="@drawable/ic_menu_gallery"
+                android:icon="@drawable/icon_info"
                 android:title="Info"/>
         <item
                 android:id="@+id/navDealersDen"
-                android:icon="@drawable/ic_menu_slideshow"
+                android:icon="@drawable/icon_dealer"
                 android:title="Dealers den"/>
         <item
                 android:id="@+id/navAbout"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/icon_about"
                 android:title="About"/>
         <item
                 android:id="@+id/navMap"
-                android:icon="@drawable/common_plus_signin_btn_icon_dark_normal"
+                android:icon="@drawable/icon_map_world"
                 android:title="Points of Interest"
                 android:visible="false"/>
     </group>
@@ -32,9 +32,11 @@
     <item android:title="Eurofurence">
         <menu>
             <item android:id="@+id/navWebSite"
-                  android:title="Website"/>
+                  android:title="Website"
+                  android:icon="@drawable/icon_domain"/>
             <item android:id="@+id/navWebTwitter"
-                  android:title="Twitter"/>
+                  android:title="Twitter"
+                  android:icon="@drawable/icon_twitter"/>
         </menu>
     </item>
 
@@ -45,10 +47,11 @@
                     android:icon="@drawable/ic_menu_share"
                     android:title="Share"/>
             <item android:id="@+id/navDevReload"
-                  android:title="Reload database"/>
+                  android:title="Reload database"
+            android:icon="@drawable/icon_refresh"/>
             <item
                     android:id="@+id/navDevClear"
-                    android:icon="@drawable/ic_menu_send"
+                    android:icon="@drawable/icon_delete"
                     android:title="Clear Database"/>
 
         </menu>

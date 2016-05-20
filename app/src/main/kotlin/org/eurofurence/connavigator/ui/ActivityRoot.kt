@@ -30,6 +30,8 @@ import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
+import org.joda.time.DateTime
+import org.joda.time.Days
 import java.util.*
 
 class ActivityRoot : AppCompatActivity(), RootAPI {
@@ -179,6 +181,19 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
             drawer.closeDrawer(GravityCompat.START)
             true
         }
+
+        // Set up dates to EF
+        // Manually set the first date, since the database is not updated with EF 22
+        val firstDay = DateTime(2016, 8, 17, 0, 0)
+
+        // Calculate the days between, using the current time. Todo: timezones
+        val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
+
+        // On con vs. before con. This should be updated on day changes
+        if (days <= 0)
+            navDays.text = "Day ${1 - days}"
+        else
+            navDays.text = "Only $days days left!"
     }
 
     override fun navigateToEvent(eventEntry: EventEntry) {
