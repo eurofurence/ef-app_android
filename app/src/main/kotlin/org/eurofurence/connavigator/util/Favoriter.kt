@@ -92,7 +92,6 @@ object Favoriter {
         var eventTime = eventTimeInMillis(eventEntry, context)
 
         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.resources.getString(R.string.debug_notifications_schedule), false)) {
-            logd { "Scheduling event 10 seconds from now!" }
             eventTime = DateTime.now().plusSeconds(5).millis
         }
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -103,7 +102,6 @@ object Favoriter {
      * Calculates the event time in millis so that we can notify the user
      */
     fun eventTimeInMillis(eventEntry: EventEntry, context: Context): Long {
-        logv { "Calculating event time in millis" }
         val database = Database(context)
 
         val event_date = database.eventConferenceDayDb[eventEntry.conferenceDayId]
@@ -113,11 +111,9 @@ object Favoriter {
         val eventDateTimeString = "%s %s".format(event_date!!.date, event_start_time)
         val eventDateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
 
-        val eventDateTime = eventDateTimeFormatter.parseDateTime(eventDateTimeString)
+        var eventDateTime = eventDateTimeFormatter.parseDateTime(eventDateTimeString)
 
-        eventDateTime.minusMinutes(30)
-
-        logd { "Event time in millis is %s".format(eventDateTime.millis.toString()) }
+        eventDateTime = eventDateTime.minusMinutes(30)
 
         return eventDateTime.millis
     }
