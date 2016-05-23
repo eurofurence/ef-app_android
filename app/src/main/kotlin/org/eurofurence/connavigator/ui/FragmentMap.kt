@@ -14,6 +14,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
 
 
 /**
@@ -63,6 +64,8 @@ class FragmentMap() : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         //Analytics.changeScreenName("View Map")
+
+        applyOnRoot { changeTitle("Around Eurofurence") }
 
         val mapFragment = SupportMapFragment.newInstance();
         childFragmentManager.beginTransaction()

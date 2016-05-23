@@ -17,6 +17,7 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
 import org.eurofurence.connavigator.util.delegators.view
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.letRoot
 
 /**
@@ -52,6 +53,7 @@ class FragmentViewDealers : Fragment(), TextWatcher {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View About")
 
+        applyOnRoot { changeTitle("Dealers Den") }
         dealersSearch.setSingleLine()
         effective_dealers = database.dealerDb.items.sortedBy { it.attendeeNickname }
 

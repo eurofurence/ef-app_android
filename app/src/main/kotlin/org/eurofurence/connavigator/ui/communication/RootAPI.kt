@@ -19,4 +19,6 @@ interface RootAPI {
     fun navigateToInfo(info: Info)
 
     fun navigateToDealer(dealer: Dealer)
+
+    fun changeTitle(text: String)
 }

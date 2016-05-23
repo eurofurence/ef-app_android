@@ -35,6 +35,10 @@ import org.joda.time.Days
 import java.util.*
 
 class ActivityRoot : AppCompatActivity(), RootAPI {
+    override fun changeTitle(text: String) {
+        supportActionBar!!.title = text
+    }
+
     // Views
     val toolbar by view(Toolbar::class.java)
     override val tabs by view(TabLayout::class.java)

@@ -51,6 +51,7 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
         eventPager.offscreenPageLimit = 3
 
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
+        applyOnRoot { changeTitle("Event Schedule") }
     }
 
     override fun dataUpdated() {

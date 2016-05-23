@@ -13,10 +13,7 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.contains
-import org.eurofurence.connavigator.util.extensions.get
-import org.eurofurence.connavigator.util.extensions.jsonObjects
-import org.eurofurence.connavigator.util.extensions.letRoot
+import org.eurofurence.connavigator.util.extensions.*
 import us.feras.mdv.MarkdownView
 
 /**
@@ -46,6 +43,7 @@ class FragmentViewInfo() : Fragment() {
 
         Analytics.changeScreenName("View Info")
 
+        applyOnRoot { changeTitle("Information") }
         // Get info if it exists
         if ("info" in arguments) {
             val info = arguments.jsonObjects["info", Info::class.java]

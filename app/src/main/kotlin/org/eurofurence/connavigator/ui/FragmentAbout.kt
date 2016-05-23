@@ -10,6 +10,7 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.delegators.view
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import us.feras.mdv.MarkdownView
 
 /**
@@ -27,6 +28,7 @@ class FragmentAbout : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View About")
 
+        applyOnRoot { changeTitle("About") }
         textVersion.text = "Version: %s - Build: %s".format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toString())
     }
 }

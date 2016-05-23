@@ -15,6 +15,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteFragmentStateAdapter
 import org.eurofurence.connavigator.util.delegators.view
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
 
 /**
  * Created by David on 5/14/2016.
@@ -30,7 +31,7 @@ class FragmentViewHome : Fragment() {
         Analytics.changeScreenName("View Home")
 
         val database = Database(activity)
-
+        applyOnRoot { changeTitle("Home") }
         favoritedViewPager.adapter = FavoriteFragmentStateAdapter(childFragmentManager, database)
 
         announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(database.announcementDb.items.toList())
