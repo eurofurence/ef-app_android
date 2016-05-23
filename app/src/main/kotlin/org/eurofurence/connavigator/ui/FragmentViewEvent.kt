@@ -12,9 +12,9 @@ import android.widget.TextView
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.util.Favoriter
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.util.Favoriter
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.contains
@@ -70,14 +70,28 @@ class FragmentViewEvent() : Fragment() {
 
             imageService.load(database.imageDb[eventEntry.imageId], image, false)
 
+            changeFabIcon(eventEntry)
+
             buttonSave.setOnClickListener {
-                if (Favoriter.event(database, eventEntry)) {
+                if (Favoriter(context).event(eventEntry)) {
                     Snackbar.make(buttonSave, "Favorited this event!", Snackbar.LENGTH_SHORT).show()
                 } else {
                     Snackbar.make(buttonSave, "Removed this event from favorites!", Snackbar.LENGTH_SHORT).show()
                 }
+
+                changeFabIcon(eventEntry)
             }
         }
+    }
+
+    /**
+     * Changes the FAB based on if the current event is liked or not
+     */
+    private fun changeFabIcon(eventEntry: EventEntry?) {
+        if (database.favoritedDb.items.contains(eventEntry))
+            buttonSave.setImageDrawable(resources.getDrawable(R.drawable.icon_like_filled, context.theme))
+        else
+            buttonSave.setImageDrawable(resources.getDrawable(R.drawable.icon_like_empty, context.theme))
     }
 
 }

@@ -5,8 +5,6 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.media.RingtoneManager
 import android.preference.PreferenceManager
 import com.google.android.gms.analytics.HitBuilders
 import io.swagger.client.model.EventEntry
@@ -14,9 +12,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.gcm.NotificationPublisher
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.ui.ActivityRoot
 import org.eurofurence.connavigator.util.extensions.get
-import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.logv
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -25,12 +21,20 @@ import java.util.*
 /**
  * Created by David on 5/14/2016.
  */
-object Favoriter {
+class Favoriter {
+    lateinit var context: Context
+    lateinit var database: Database
+
+    constructor(context: Context) {
+        this.context = context
+        this.database = Database(context)
+    }
+
     /**
      * Handles logic for favoriting events
      * Return: True if element was inserted, false is element was removed
      */
-    fun event(database: Database, eventEntry: EventEntry): Boolean {
+    fun event(eventEntry: EventEntry): Boolean {
         logv { "Favoriting event" }
 
         Analytics.trackEvent(
@@ -41,12 +45,12 @@ object Favoriter {
         )
 
         if (database.favoritedDb.items.contains(eventEntry)) {
-            removeEventNotification(eventEntry, database.context)
+            removeEventNotification(eventEntry)
             logv { "Removing event %s".format(eventEntry.title) }
             database.favoritedDb.items = database.favoritedDb.items.filter { it.id != eventEntry.id }
             return false
         } else {
-            scheduleEventNotification(eventEntry, database.context)
+            scheduleEventNotification(eventEntry)
 
             logv { "Entering event %s".format(eventEntry.title) }
             val newFavourited = LinkedList<EventEntry>()
@@ -62,10 +66,10 @@ object Favoriter {
      * Removes an event notification.
      * Perfectly tries to recreate a pending intent, and then removes it
      */
-    fun removeEventNotification(eventEntry: EventEntry, context: Context) {
+    fun removeEventNotification(eventEntry: EventEntry) {
         logv { "Removing notification for event" }
         val notificationIntent = Intent(context, NotificationPublisher::class.java)
-        val notification = buildEventNotification(eventEntry, context)
+        val notification = buildEventNotification(eventEntry)
 
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, eventEntry.id)
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification)
@@ -79,10 +83,10 @@ object Favoriter {
     /**
      * Schedules an event to notify
      */
-    fun scheduleEventNotification(eventEntry: EventEntry, context: Context) {
+    fun scheduleEventNotification(eventEntry: EventEntry) {
         logv { "Scheduling notification for event" }
         val notificationIntent = Intent(context, NotificationPublisher::class.java)
-        val notification = buildEventNotification(eventEntry, context)
+        val notification = buildEventNotification(eventEntry)
 
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, eventEntry.id)
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification)
@@ -121,26 +125,7 @@ object Favoriter {
     /**
      * Builds an event notification
      */
-    fun buildEventNotification(eventEntry: EventEntry, context: Context): Notification {
-        logd { "Building notification for event %s".format(eventEntry.id) }
-        val database = Database(context)
-        val builder = Notification.Builder(database.context)
-
-        val intentToExecute = Intent(context, ActivityRoot::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 0, intentToExecute, 0)
-
-        builder.setContentTitle("Upcoming Eurofurence Event!")
-                .setContentText("%s is happening soon! Go to %s".format(eventEntry.title, database.eventConferenceRoomDb[eventEntry.conferenceRoomId]!!.name))
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setAutoCancel(true)
-                .setLights(Color.argb(255, 0, 100, 89), 1000, 1000)
-                .setVibrate(longArrayOf(250, 100, 250, 100))
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setPriority(Notification.PRIORITY_HIGH)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
-                .setCategory(Notification.CATEGORY_EVENT)
-                .setContentIntent(pendingIntent)
-
-        return builder.build()
+    fun buildEventNotification(eventEntry: EventEntry): Notification {
+        return NotificationManager(context).buildNotification(eventEntry.title, database.eventConferenceRoomDb[eventEntry.conferenceRoomId]!!.name)
     }
 }
