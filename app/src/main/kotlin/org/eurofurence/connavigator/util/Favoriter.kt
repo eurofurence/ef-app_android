@@ -71,10 +71,10 @@ class Favoriter {
         val notificationIntent = Intent(context, NotificationPublisher::class.java)
         val notification = buildEventNotification(eventEntry)
 
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, eventEntry.id)
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, eventEntry.id.hashCode())
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification)
 
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, eventEntry.id.hashCode(), notificationIntent, 0)
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
@@ -88,10 +88,10 @@ class Favoriter {
         val notificationIntent = Intent(context, NotificationPublisher::class.java)
         val notification = buildEventNotification(eventEntry)
 
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, eventEntry.id)
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, eventEntry.id.hashCode())
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification)
 
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, eventEntry.id.hashCode(), notificationIntent, 0)
 
         var eventTime = eventTimeInMillis(eventEntry, context)
 

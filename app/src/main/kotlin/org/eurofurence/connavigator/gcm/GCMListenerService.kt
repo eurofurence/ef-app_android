@@ -24,6 +24,6 @@ class MyGCMListenerService : GcmListenerService() {
         val notification = NotificationFactory(applicationContext).buildNotification("Broadcast from EF", message)
         val notMan: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        notMan.notify(0, notification)
+        notMan.notify(message.hashCode(), notification)
     }
 }

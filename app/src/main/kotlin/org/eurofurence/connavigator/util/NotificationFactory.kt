@@ -49,6 +49,7 @@ class NotificationFactory {
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setCategory(Notification.CATEGORY_EVENT)
+                .setGroup("Eurofurence")
                 .setContentIntent(pendingIntent)
 
         return builder.build()

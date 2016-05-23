@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.objects
 import java.util.*
 
@@ -21,12 +22,9 @@ class NotificationPublisher : BroadcastReceiver() {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val notification = intent.getParcelableExtra<Notification>(NOTIFICATION)
+        val id = intent.getIntExtra(NOTIFICATION_ID, 0)
 
-        val id = intent.objects[NOTIFICATION_ID, UUID::class.java]
-        if (id != null) {
-            // Could be unsafe to use the hash, lets assume that clashes are very unlikely
-            // and not application critical.
-            notificationManager.notify(id.hashCode(), notification)
-        }
+        logd{ "NOT: notification ID is $id"}
+        notificationManager.notify(id, notification)
     }
 }
