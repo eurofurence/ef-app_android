@@ -1,12 +1,10 @@
 package org.eurofurence.connavigator.gcm
 
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.NotificationCompat
 import com.google.android.gms.gcm.GcmListenerService
-import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.util.NotificationFactory
 import org.eurofurence.connavigator.util.extensions.logv
 
 /**
@@ -23,13 +21,9 @@ class MyGCMListenerService : GcmListenerService() {
     }
 
     fun sendNotification(message: String) {
-        val notificationBuilder = NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("New message from EF")
-                .setContentText(message)
-
+        val notification = NotificationFactory(applicationContext).buildNotification("Broadcast from EF", message)
         val notMan: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        notMan.notify(0, notificationBuilder.build())
+        notMan.notify(0, notification)
     }
 }

@@ -74,7 +74,7 @@ class Favoriter {
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, eventEntry.id)
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification)
 
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 0)
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
@@ -91,7 +91,7 @@ class Favoriter {
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, eventEntry.id)
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification)
 
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 0)
 
         var eventTime = eventTimeInMillis(eventEntry, context)
 
@@ -126,6 +126,6 @@ class Favoriter {
      * Builds an event notification
      */
     fun buildEventNotification(eventEntry: EventEntry): Notification {
-        return NotificationManager(context).buildNotification(eventEntry.title, database.eventConferenceRoomDb[eventEntry.conferenceRoomId]!!.name)
+        return NotificationFactory(context).buildNotification(eventEntry.title, database.eventConferenceRoomDb[eventEntry.conferenceRoomId]!!.name)
     }
 }
