@@ -1,9 +1,11 @@
 package org.eurofurence.connavigator.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.content.LocalBroadcastManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +29,9 @@ import us.feras.mdv.MarkdownView
  * Created by David on 4/9/2016.
  */
 class FragmentViewEvent() : Fragment() {
+    companion object {
+        val EVENT_STATUS_CHANGED = "org.eurofurence.connavigator.ui.EVENT_STATUS_CHANGED"
+    }
 
     /**
      * Constructs the info view with an assigned bundle
@@ -79,6 +84,8 @@ class FragmentViewEvent() : Fragment() {
                     Snackbar.make(buttonSave, "Removed this event from favorites!", Snackbar.LENGTH_SHORT).show()
                 }
 
+                val broadcastIntent = Intent(EVENT_STATUS_CHANGED)
+                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent)
                 changeFabIcon(eventEntry)
             }
         }
