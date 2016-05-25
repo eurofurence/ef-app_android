@@ -12,4 +12,5 @@
     <dimen name="outer_padding">15dp</dimen>
     <dimen name="inner_padding">10dp</dimen>
     <dimen name="tabhost_height">45dp</dimen>
+    <dimen name="viewpager_margin">-64dp</dimen>
 </resources>

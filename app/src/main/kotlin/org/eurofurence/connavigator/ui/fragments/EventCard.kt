@@ -44,5 +44,8 @@ class EventCard(val eventEntry: EventEntry) : Fragment(), ContentAPI {
         eventCard.setOnClickListener {
             applyOnRoot { navigateToEvent(eventEntry) }
         }
+
+        if (database.favoritedDb.items.contains(eventEntry))
+            eventCard.setCardBackgroundColor(context.getColor(R.color.primaryLighter))
     }
 }

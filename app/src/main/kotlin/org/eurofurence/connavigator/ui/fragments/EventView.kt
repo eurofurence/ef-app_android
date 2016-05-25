@@ -29,7 +29,7 @@ import org.eurofurence.connavigator.util.extensions.localReceiver
 /**
  * Event view recycler to hold the viewpager items
  */
-class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment(), ContentAPI {
+class EventView(val page: Int, val eventDay: EventConferenceDay, val use_favorites: Boolean = false) : Fragment(), ContentAPI {
 
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -83,7 +83,11 @@ class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment(), C
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        effectiveEvents = database.eventEntryDb.items.filter { it.conferenceDayId == eventDay.id }
+        if (use_favorites) {
+            effectiveEvents = database.favoritedDb.items.filter { it.conferenceDayId == eventDay.id }
+        } else {
+            effectiveEvents = database.eventEntryDb.items.filter { it.conferenceDayId == eventDay.id }
+        }
         // Configure the recycler
         events.adapter = DataAdapter()
         events.layoutManager = LinearLayoutManager(activity)
@@ -107,7 +111,11 @@ class EventView(val page: Int, val eventDay: EventConferenceDay) : Fragment(), C
     }
 
     override fun dataUpdated() {
-        effectiveEvents = database.eventEntryDb.items.filter { it.conferenceDayId == eventDay.id }
+        if (use_favorites) {
+            effectiveEvents = database.favoritedDb.items.filter { it.conferenceDayId == eventDay.id }
+        } else {
+            effectiveEvents = database.eventEntryDb.items.filter { it.conferenceDayId == eventDay.id }
+        }
         events.adapter.notifyDataSetChanged()
     }
 }
