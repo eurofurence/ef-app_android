@@ -20,6 +20,10 @@ import org.joda.time.DateTime
  * Handles the creation of notications as a general entrypoint for more concurrent notifications
  */
 class NotificationFactory {
+    companion object {
+        val group = "EUROFURENCE_EVENT"
+    }
+
     lateinit var context: Context
 
     constructor(context: Context) {
@@ -49,7 +53,8 @@ class NotificationFactory {
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setCategory(Notification.CATEGORY_EVENT)
-                .setGroup("Eurofurence")
+                .setGroup(group)
+                .setGroupSummary(true)
                 .setContentIntent(pendingIntent)
 
         return builder.build()

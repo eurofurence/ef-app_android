@@ -40,19 +40,15 @@ class Analytics {
         private fun updateTracking(context: Context, preferences: SharedPreferences) {
             logv { "Updating tracking to new stats" }
             // Set app-level opt out
-            GoogleAnalytics.getInstance(context).appOptOut = preferences.getBoolean(context.resources.getString(R.string.settings_tag_analytics_enabled), true)
+            val analytics_on = preferences.getBoolean(context.resources.getString(R.string.settings_tag_analytics_enabled), true)
+
+            // GoogleAnalytics.getInstance(context).appOptOut = analytics_on != true
 
 
             // Start tracking
             tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-1")
 
-            var interval = "50"
-
-            try {
-                interval.toDouble()
-            } catch (exception: Exception) {
-                interval = "50"
-            }
+            var interval = 100.toDouble()
 
             tracker.setSampleRate(interval.toDouble())
         }
