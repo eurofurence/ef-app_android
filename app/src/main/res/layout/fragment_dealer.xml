@@ -15,7 +15,6 @@
               android:gravity="center"/>
 
     <ImageView android:layout_width="75dp" android:layout_height="match_parent"
-               android:src="@drawable/placeholder_event"
                android:scaleType="centerCrop"
                android:id="@+id/dealerPreviewImage"
                android:foregroundGravity="right" android:layout_alignParentTop="true"
