@@ -29,7 +29,7 @@
                 android:visible="false"/>
     </group>
 
-    <item android:title="Eurofurence">
+    <item android:title="External">
         <menu>
             <item android:id="@+id/navWebSite"
                   android:title="Website"
