@@ -42,18 +42,12 @@
 
     <item android:title="App Management">
         <menu>
-            <item
-                    android:id="@+id/navShare"
-                    android:icon="@drawable/ic_menu_share"
-                    android:title="Share"/>
             <item android:id="@+id/navDevReload"
                   android:title="Reload database"
-            android:icon="@drawable/icon_refresh"/>
-            <item
-                    android:id="@+id/navDevClear"
-                    android:icon="@drawable/icon_delete"
-                    android:title="Clear Database"/>
-
+                  android:icon="@drawable/icon_refresh"/>
+            <item android:id="@+id/navDevSettings"
+                  android:title="Settings"
+                  android:icon="@drawable/icon_settings" />
         </menu>
     </item>
 
