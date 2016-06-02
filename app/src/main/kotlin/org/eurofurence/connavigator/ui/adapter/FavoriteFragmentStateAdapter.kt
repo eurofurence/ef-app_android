@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.ui.fragments.EmptyCard
-import org.eurofurence.connavigator.ui.fragments.EventView
+import org.eurofurence.connavigator.ui.fragments.EventRecyclerView
 
 /**
  * Created by David on 5/14/2016.
@@ -13,7 +13,7 @@ import org.eurofurence.connavigator.ui.fragments.EventView
 class FavoriteFragmentStateAdapter(val fragmentManager: FragmentManager, val database: Database) : FragmentStatePagerAdapter(fragmentManager) {
     override fun getItem(position: Int): Fragment? {
         if (database.favoritedDb.items.count() > 0) {
-            return EventView(position, database.eventConferenceDayDb.asc { it.date }[position], true)
+            return EventRecyclerView(position, database.eventConferenceDayDb.asc { it.date }[position], true)
         } else
             return EmptyCard("Go favorite some events!")
     }

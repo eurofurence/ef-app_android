@@ -29,7 +29,7 @@ import org.eurofurence.connavigator.util.extensions.localReceiver
 /**
  * Event view recycler to hold the viewpager items
  */
-class EventView(val page: Int, val eventDay: EventConferenceDay, val use_favorites: Boolean = false) : Fragment(), ContentAPI {
+class EventRecyclerView(val page: Int, val eventDay: EventConferenceDay, val use_favorites: Boolean = false) : Fragment(), ContentAPI {
 
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -41,14 +41,27 @@ class EventView(val page: Int, val eventDay: EventConferenceDay, val use_favorit
 
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, pos: Int) =
-                EventViewHolder(LayoutInflater
-                        .from(parent.context)
-                        .inflate(R.layout.fragment_event_card, parent, false))
+                when (effectiveEvents.size) {
+                    0 -> EventViewHolder(LayoutInflater
+                            .from(parent.context)
+                            .inflate(R.layout.fragment_empty, parent, false))
+                    else
+                    -> EventViewHolder(LayoutInflater
+                            .from(parent.context)
+                            .inflate(R.layout.fragment_event_card, parent, false))
+                }
 
-        override fun getItemCount() =
-                effectiveEvents.size
+
+        override fun getItemCount(): Int {
+            if (effectiveEvents.isEmpty())
+                return 1
+            else
+                return effectiveEvents.size
+        }
+
 
         override fun onBindViewHolder(holder: EventViewHolder, pos: Int) {
+            if (effectiveEvents.isEmpty()) return
             // Get the event for the position
             val event = effectiveEvents[pos]
 
