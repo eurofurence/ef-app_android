@@ -21,14 +21,8 @@ import java.util.*
 /**
  * Created by David on 5/14/2016.
  */
-class Favoriter {
-    lateinit var context: Context
-    lateinit var database: Database
-
-    constructor(context: Context) {
-        this.context = context
-        this.database = Database(context)
-    }
+class Favoriter(val context: Context) {
+    val database by lazy { Database(context) }
 
     /**
      * Handles logic for favoriting events
@@ -36,13 +30,6 @@ class Favoriter {
      */
     fun event(eventEntry: EventEntry): Boolean {
         logv { "Favoriting event" }
-
-        Analytics.trackEvent(
-                HitBuilders.EventBuilder()
-                        .setAction("Favorited event %s; uid %s".format(eventEntry.title, eventEntry.id))
-                        .setLabel("Event")
-                        .setCategory("Favorited")
-        )
 
         if (database.favoritedDb.items.contains(eventEntry)) {
             removeEventNotification(eventEntry)
