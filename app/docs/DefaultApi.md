@@ -1,6 +1,6 @@
 # DefaultApi
 
-All URIs are relative to *https://eurofurencewebapi.azurewebsites.net*
+All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

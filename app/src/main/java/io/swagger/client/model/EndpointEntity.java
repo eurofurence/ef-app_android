@@ -19,6 +19,8 @@ public class EndpointEntity  {
   private String tableName = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("DeltaStartDateTimeUtc")
+  private Date deltaStartDateTimeUtc = null;
   @SerializedName("Count")
   private BigDecimal count = null;
 
@@ -63,6 +65,16 @@ public class EndpointEntity  {
   }
 
   /**
+   **/
+  @ApiModelProperty(value = "")
+  public Date getDeltaStartDateTimeUtc() {
+    return deltaStartDateTimeUtc;
+  }
+  public void setDeltaStartDateTimeUtc(Date deltaStartDateTimeUtc) {
+    this.deltaStartDateTimeUtc = deltaStartDateTimeUtc;
+  }
+
+  /**
    * Number of records (including deleted ones) in the table.
    **/
   @ApiModelProperty(value = "Number of records (including deleted ones) in the table.")
@@ -87,6 +99,7 @@ public class EndpointEntity  {
         (name == null ? endpointEntity.name == null : name.equals(endpointEntity.name)) &&
         (tableName == null ? endpointEntity.tableName == null : tableName.equals(endpointEntity.tableName)) &&
         (lastChangeDateTimeUtc == null ? endpointEntity.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(endpointEntity.lastChangeDateTimeUtc)) &&
+        (deltaStartDateTimeUtc == null ? endpointEntity.deltaStartDateTimeUtc == null : deltaStartDateTimeUtc.equals(endpointEntity.deltaStartDateTimeUtc)) &&
         (count == null ? endpointEntity.count == null : count.equals(endpointEntity.count));
   }
 
@@ -97,6 +110,7 @@ public class EndpointEntity  {
     result = 31 * result + (name == null ? 0: name.hashCode());
     result = 31 * result + (tableName == null ? 0: tableName.hashCode());
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
+    result = 31 * result + (deltaStartDateTimeUtc == null ? 0: deltaStartDateTimeUtc.hashCode());
     result = 31 * result + (count == null ? 0: count.hashCode());
     return result;
   }
@@ -110,6 +124,7 @@ public class EndpointEntity  {
     sb.append("  name: ").append(name).append("\n");
     sb.append("  tableName: ").append(tableName).append("\n");
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  deltaStartDateTimeUtc: ").append(deltaStartDateTimeUtc).append("\n");
     sb.append("  count: ").append(count).append("\n");
     sb.append("}\n");
     return sb.toString();

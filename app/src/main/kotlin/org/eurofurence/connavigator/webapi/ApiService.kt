@@ -16,7 +16,10 @@ import java.io.File
 object apiService {
     val endpoint: String get() = api.basePath
 
-    val api by lazy { DefaultApi() }
+    val api by lazy {
+        DefaultApi().apply { basePath = "http://ec2-52-29-217-220.eu-central-1.compute.amazonaws.com/"; }
+
+    }
 
     fun formatUrl(url: String) =
             url.replace(Regex("\\Q{Endpoint}\\E|\\Q{EndpointUrl}\\E"), endpoint)

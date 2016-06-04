@@ -38,6 +38,8 @@ public class EventEntry extends EntityBase {
   private String duration = null;
   @SerializedName("PanelHosts")
   private String panelHosts = null;
+  @SerializedName("IsDeviatingFromConBook")
+  private BigDecimal isDeviatingFromConBook = null;
 
   /**
    **/
@@ -169,6 +171,19 @@ public class EventEntry extends EntityBase {
     this.panelHosts = panelHosts;
   }
 
+  /**
+   * Numeric flag that, if set to \"1\", indicates that the record is differing from the original schedule in the con book. This usually indicates that the event was rescheduled after the con book was printed.
+   * minimum: 0.0
+   * maximum: 1.0
+   **/
+  @ApiModelProperty(value = "Numeric flag that, if set to \"1\", indicates that the record is differing from the original schedule in the con book. This usually indicates that the event was rescheduled after the con book was printed.")
+  public BigDecimal getIsDeviatingFromConBook() {
+    return isDeviatingFromConBook;
+  }
+  public void setIsDeviatingFromConBook(BigDecimal isDeviatingFromConBook) {
+    this.isDeviatingFromConBook = isDeviatingFromConBook;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -191,7 +206,8 @@ public class EventEntry extends EntityBase {
         (startTime == null ? eventEntry.startTime == null : startTime.equals(eventEntry.startTime)) &&
         (endTime == null ? eventEntry.endTime == null : endTime.equals(eventEntry.endTime)) &&
         (duration == null ? eventEntry.duration == null : duration.equals(eventEntry.duration)) &&
-        (panelHosts == null ? eventEntry.panelHosts == null : panelHosts.equals(eventEntry.panelHosts));
+        (panelHosts == null ? eventEntry.panelHosts == null : panelHosts.equals(eventEntry.panelHosts)) &&
+        (isDeviatingFromConBook == null ? eventEntry.isDeviatingFromConBook == null : isDeviatingFromConBook.equals(eventEntry.isDeviatingFromConBook));
   }
 
   @Override 
@@ -210,6 +226,7 @@ public class EventEntry extends EntityBase {
     result = 31 * result + (endTime == null ? 0: endTime.hashCode());
     result = 31 * result + (duration == null ? 0: duration.hashCode());
     result = 31 * result + (panelHosts == null ? 0: panelHosts.hashCode());
+    result = 31 * result + (isDeviatingFromConBook == null ? 0: isDeviatingFromConBook.hashCode());
     return result;
   }
 
@@ -231,6 +248,7 @@ public class EventEntry extends EntityBase {
     sb.append("  endTime: ").append(endTime).append("\n");
     sb.append("  duration: ").append(duration).append("\n");
     sb.append("  panelHosts: ").append(panelHosts).append("\n");
+    sb.append("  isDeviatingFromConBook: ").append(isDeviatingFromConBook).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
