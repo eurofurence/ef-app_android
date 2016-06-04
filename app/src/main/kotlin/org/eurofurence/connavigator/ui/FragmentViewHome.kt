@@ -49,6 +49,10 @@ class FragmentViewHome : Fragment() {
                 .replace(R.id.upcomingEventRecycler, EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.UPCOMING)))
                 .commitAllowingStateLoss()
 
+        fragmentManager.beginTransaction()
+                .replace(R.id.currentEventsRecycler, EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.CURRENT)))
+                .commitAllowingStateLoss()
+
         if (database.favoritedDb.size == 0) {
             favoritedViewPager.visibility = View.GONE
             favoritedTitle.visibility = View.GONE
