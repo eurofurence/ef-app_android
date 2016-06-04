@@ -6,6 +6,8 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import io.swagger.client.JsonUtil
 import io.swagger.client.model.EntityBase
+import io.swagger.client.model.EventEntry
+import org.joda.time.DateTime
 import java.io.Reader
 import java.io.Writer
 import java.math.BigDecimal

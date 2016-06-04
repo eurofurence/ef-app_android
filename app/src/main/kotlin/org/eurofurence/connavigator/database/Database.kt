@@ -6,6 +6,10 @@ import org.eurofurence.connavigator.store.cached
 import org.eurofurence.connavigator.store.createGson
 import org.eurofurence.connavigator.store.createSerialized
 import org.eurofurence.connavigator.util.extensions.cachedApiDB
+import org.eurofurence.connavigator.util.extensions.get
+import org.joda.time.DateTime
+import org.joda.time.Interval
+import org.joda.time.LocalTime
 import java.io.File
 import java.util.*
 
@@ -94,4 +98,27 @@ class Database(val context: Context) {
         infoDb.delete()
         infoGroupDb.delete()
     }
+
+    /**
+     * Gets the day of the event
+     */
+    fun eventDay(eventEntry: EventEntry): DateTime = DateTime.parse(eventConferenceDayDb[eventEntry.conferenceDayId]!!.date)
+
+    /**
+     * Gets the start time and day of the event
+     */
+    fun eventStart(eventEntry: EventEntry): DateTime =
+            eventDay(eventEntry).withTime(LocalTime.parse(eventEntry.startTime))
+
+    /**
+     * Gets the end time and day of the event
+     */
+    fun eventEnd(eventEntry: EventEntry): DateTime =
+            eventDay(eventEntry).withTime(LocalTime.parse(eventEntry.endTime))
+
+    /**
+     * Gets the time interval this event is happening in
+     */
+    fun eventInterval(eventEntry: EventEntry): Interval =
+            Interval(eventStart(eventEntry), eventEnd(eventEntry))
 }
