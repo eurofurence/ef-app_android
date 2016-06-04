@@ -18,6 +18,7 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
+import org.eurofurence.connavigator.ui.filters.IEventFilter
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
@@ -25,11 +26,12 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
 import org.eurofurence.connavigator.util.extensions.localReceiver
+import java.util.*
 
 /**
  * Event view recycler to hold the viewpager items
  */
-class EventView(val page: Int, val eventDay: EventConferenceDay, val use_favorites: Boolean = false) : Fragment(), ContentAPI {
+class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any = Unit) : Fragment(), ContentAPI {
 
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -83,11 +85,8 @@ class EventView(val page: Int, val eventDay: EventConferenceDay, val use_favorit
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (use_favorites) {
-            effectiveEvents = database.favoritedDb.items.filter { it.conferenceDayId == eventDay.id }
-        } else {
-            effectiveEvents = database.eventEntryDb.items.filter { it.conferenceDayId == eventDay.id }
-        }
+        effectiveEvents = filterStrategy.filter(context, filterVal).toList()
+
         // Configure the recycler
         events.adapter = DataAdapter()
         events.layoutManager = LinearLayoutManager(activity)
@@ -111,11 +110,7 @@ class EventView(val page: Int, val eventDay: EventConferenceDay, val use_favorit
     }
 
     override fun dataUpdated() {
-        if (use_favorites) {
-            effectiveEvents = database.favoritedDb.items.filter { it.conferenceDayId == eventDay.id }
-        } else {
-            effectiveEvents = database.eventEntryDb.items.filter { it.conferenceDayId == eventDay.id }
-        }
+        effectiveEvents = filterStrategy.filter(context, filterVal).toList()
         events.adapter.notifyDataSetChanged()
     }
 }

@@ -1,9 +1,9 @@
-package org.eurofurence.connavigator.ui.enums
+package org.eurofurence.connavigator.ui.filters
 
 /**
  * Created by David on 25-5-2016.
  */
-enum class EventRecyclerViewmode {
+enum class EnumEventRecyclerViewmode {
     ALL, // All events
     DAY, // Events happening on a specific day
     FAVORITED, // Events that have been favourited

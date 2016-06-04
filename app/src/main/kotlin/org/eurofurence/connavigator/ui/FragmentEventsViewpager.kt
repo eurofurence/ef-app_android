@@ -12,7 +12,9 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.ui.fragments.EventView
+import org.eurofurence.connavigator.ui.filters.EnumEventRecyclerViewmode
+import org.eurofurence.connavigator.ui.filters.EventFilterFactory
+import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.letRoot
@@ -29,7 +31,7 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
         }
 
         override fun getItem(position: Int): Fragment? {
-            return EventView(position, database.eventConferenceDayDb.asc { it.date }[position])
+            return EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.DAY), database.eventConferenceDayDb.asc { it.date }[position])
         }
 
         override fun getCount(): Int {
