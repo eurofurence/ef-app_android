@@ -11,9 +11,8 @@ import org.joda.time.Interval
  */
 class UpcomingEventFilter : IEventFilter {
 
-    override fun filter(context: Context, filterVal: Any): Iterable<EventEntry> {
+    override fun filter(database: Database, filterVal: Any): Iterable<EventEntry> {
         val now = DateTime.now()
-        val database = Database(context)
         val nowDate = now.toString("yyyy-MM-dd")
 
         val nextThirty = Interval(now, now.plusMinutes(30))

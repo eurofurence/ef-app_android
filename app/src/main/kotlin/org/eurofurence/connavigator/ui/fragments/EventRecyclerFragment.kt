@@ -85,7 +85,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        effectiveEvents = filterStrategy.filter(context, filterVal).toList()
+        effectiveEvents = filterStrategy.filter(database, filterVal).toList()
 
         // Configure the recycler
         events.adapter = DataAdapter()
@@ -110,7 +110,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
     }
 
     override fun dataUpdated() {
-        effectiveEvents = filterStrategy.filter(context, filterVal).toList()
+        effectiveEvents = filterStrategy.filter(database, filterVal).toList()
         events.adapter.notifyDataSetChanged()
     }
 }

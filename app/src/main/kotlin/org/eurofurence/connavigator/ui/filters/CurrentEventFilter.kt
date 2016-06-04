@@ -1,6 +1,5 @@
 package org.eurofurence.connavigator.ui.filters
 
-import android.content.Context
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.database.Database
 import org.joda.time.DateTime
@@ -10,9 +9,8 @@ import org.joda.time.DateTime
  */
 class CurrentEventFilter : IEventFilter {
 
-    override fun filter(context: Context, filterVal: Any): Iterable<EventEntry> {
+    override fun filter(database: Database, filterVal: Any): Iterable<EventEntry> {
         val now = DateTime.now()
-        val database = Database(context)
         val nowDate = now.toString("yyyy-MM-dd")
 
         // Get today, otherwise first day
