@@ -9,6 +9,7 @@ object EventFilterFactory {
                 EnumEventRecyclerViewmode.ALL -> AnyEventFilter()
                 EnumEventRecyclerViewmode.DAY -> DayEventFilter()
                 EnumEventRecyclerViewmode.FAVORITED -> AnyFavoritedEventFilter()
+                EnumEventRecyclerViewmode.UPCOMING -> UpcomingEventFilter()
                 else -> AnyEventFilter()
             }
 

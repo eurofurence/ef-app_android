@@ -9,6 +9,15 @@
                       android:orientation="vertical"
                       android:layout_width="match_parent"
                       android:layout_height="match_parent">
+            <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                      android:text="Upcoming Events"
+                      android:padding="@dimen/inner_padding"
+                      android:textAppearance="?android:textAppearanceLarge"/>
+            <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/upcomingEventRecycler">
+
+            </LinearLayout>
             <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:id="@+id/favoritedTitle"

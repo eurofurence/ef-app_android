@@ -15,6 +15,9 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteFragmentStateAdapter
+import org.eurofurence.connavigator.ui.filters.EnumEventRecyclerViewmode
+import org.eurofurence.connavigator.ui.filters.EventFilterFactory
+import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.size
@@ -42,6 +45,9 @@ class FragmentViewHome : Fragment() {
         announcementsRecycler.layoutManager = LinearLayoutManager(activity)
         announcementsRecycler.itemAnimator = DefaultItemAnimator()
 
+        fragmentManager.beginTransaction()
+                .replace(R.id.upcomingEventRecycler, EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.UPCOMING)))
+                .commitAllowingStateLoss()
 
         if (database.favoritedDb.size == 0) {
             favoritedViewPager.visibility = View.GONE

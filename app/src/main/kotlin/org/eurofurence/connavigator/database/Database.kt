@@ -119,9 +119,10 @@ class Database(val context: Context) {
         val et = LocalTime.parse(eventEntry.endTime)
 
         if (et < st)
-            eventDay(eventEntry).plusDays(1).withTime(et)
+            return eventDay(eventEntry).plusDays(1).withTime(et)
         else
-            eventDay(eventEntry).withTime(et)
+            return eventDay(eventEntry).withTime(et)
+
     }
 
 
