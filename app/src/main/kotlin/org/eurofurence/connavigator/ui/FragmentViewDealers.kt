@@ -34,7 +34,7 @@ class FragmentViewDealers : Fragment(), TextWatcher {
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val query = dealersSearch.text
 
-        effective_dealers = database.dealerDb.items.filter { it.attendeeNickname.contains(query, true) }.sortedBy { it.attendeeNickname }
+        effective_dealers = database.dealerDb.items.filter { it.attendeeNickname.contains(query, true) }.sortedBy { it.attendeeNickname.toLowerCase() }
 
         dealersRecycler.adapter = DealerRecyclerAdapter(effective_dealers, database, this)
 
@@ -55,7 +55,7 @@ class FragmentViewDealers : Fragment(), TextWatcher {
 
         applyOnRoot { changeTitle("Dealers Den") }
         dealersSearch.setSingleLine()
-        effective_dealers = database.dealerDb.items.sortedBy { it.attendeeNickname }
+        effective_dealers = database.dealerDb.items.sortedBy { it.attendeeNickname.toLowerCase() }
 
         dealersRecycler.adapter = DealerRecyclerAdapter(effective_dealers, database, this)
         dealersRecycler.layoutManager = LinearLayoutManager(activity)

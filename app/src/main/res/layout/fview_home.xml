@@ -11,11 +11,12 @@
                       android:layout_height="match_parent">
             <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
+                      android:id="@+id/favoritedTitle"
                       android:text="Your favourited events"
                       android:padding="@dimen/outer_padding"
                       android:textAppearance="?android:textAppearanceLarge"/>
             <android.support.v4.view.ViewPager android:layout_width="match_parent"
-                                               android:layout_height="110dp"
+                                               android:layout_height="wrap_content"
                                                android:id="@+id/favoritedViewPager">
 
             </android.support.v4.view.ViewPager>
@@ -23,10 +24,11 @@
             <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:text="Latest Announcements"
+                      android:id="@+id/announcementsTitle"
                       android:padding="@dimen/outer_padding"
                       android:textAppearance="?android:textAppearanceLarge"/>
             <ScrollView android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="wrap_content"
                         android:background="@color/cardview_light_background">
                 <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
                                                         android:layout_height="match_parent"

@@ -17,7 +17,9 @@ import us.feras.mdv.MarkdownView
  * Created by David on 28-4-2016.
  */
 class FragmentAbout : Fragment() {
-    private val attributations = "Google Maps \n Icons8"
+    private val attributations = "Google Maps" +
+            "" +
+            " Icons8"
 
     val textVersion by view(TextView::class.java)
     val markdownAttributation by view(MarkdownView::class.java)
@@ -30,5 +32,6 @@ class FragmentAbout : Fragment() {
 
         applyOnRoot { changeTitle("About") }
         textVersion.text = "Version: %s - Build: %s".format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toString())
+        markdownAttributation.loadMarkdown(attributations)
     }
 }

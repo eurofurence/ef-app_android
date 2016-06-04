@@ -165,20 +165,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
-                R.id.navShare -> {
-                }
                 R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this)
-                R.id.navDevClear -> {
-                    // Clear the database
-                    database.clear()
-
-                    // Send data update to current content API
-                    applyOnContent { dataUpdated() }
-
-                    // Notify user
-                    Snackbar.make(findViewById(R.id.fab)!!, "Database cleared", Snackbar.LENGTH_SHORT).show()
-                }
                 R.id.navMap -> navigateRoot(FragmentMap::class.java)
+                R.id.navDevSettings -> handleSettings()
             }
 
             // Close drawer and return the result
