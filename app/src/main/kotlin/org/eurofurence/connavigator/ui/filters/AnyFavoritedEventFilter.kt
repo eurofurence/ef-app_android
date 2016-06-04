@@ -7,7 +7,7 @@ import org.eurofurence.connavigator.database.Database
 /**
  * Created by David on 6/4/2016.
  */
-class AnyFavoritedEventFilter :IEventFilter{
+class AnyFavoritedEventFilter : IEventFilter {
     override fun filter(context: Context, filterVal: Any): Iterable<EventEntry> {
         return Database(context).favoritedDb.items
     }
