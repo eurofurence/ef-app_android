@@ -111,10 +111,19 @@ class Database(val context: Context) {
             eventDay(eventEntry).withTime(LocalTime.parse(eventEntry.startTime))
 
     /**
-     * Gets the end time and day of the event
+     * Gets the end time and day of the event. Special behavior: if end time is smaller than the start time, it is
+     * assumed that the next day is meant.
      */
-    fun eventEnd(eventEntry: EventEntry): DateTime =
-            eventDay(eventEntry).withTime(LocalTime.parse(eventEntry.endTime))
+    fun eventEnd(eventEntry: EventEntry): DateTime {
+        val st = LocalTime.parse(eventEntry.startTime)
+        val et = LocalTime.parse(eventEntry.endTime)
+
+        if (et < st)
+            eventDay(eventEntry).plusDays(1).withTime(et)
+        else
+            eventDay(eventEntry).withTime(et)
+    }
+
 
     /**
      * Gets the time interval this event is happening in
