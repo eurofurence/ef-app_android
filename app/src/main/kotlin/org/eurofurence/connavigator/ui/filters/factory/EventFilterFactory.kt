@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.ui.filters.factory
 
 import org.eurofurence.connavigator.ui.filters.*
 import org.eurofurence.connavigator.ui.filters.enums.EnumEventRecyclerViewmode
-import org.eurofurence.connavigator.ui.filters.intf.IEventFilter
 
 /**
  * Created by David on 6/4/2016.

@@ -12,14 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import io.swagger.client.model.EventConferenceDay
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.ui.filters.intf.IEventFilter
+import org.eurofurence.connavigator.ui.filters.IEventFilter
 import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
@@ -28,7 +27,6 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
 import org.eurofurence.connavigator.util.extensions.localReceiver
-import java.util.*
 
 /**
  * Event view recycler to hold the viewpager items
@@ -94,7 +92,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
         else
             eventsTitle.text = filterStrategy.getTitle()
 
-        effectiveEvents = filterStrategy.filter(context, filterVal).toList()
+        effectiveEvents = filterStrategy.filter(database, filterVal).toList()
 
         // Configure the recycler
         events.setHasFixedSize(true)

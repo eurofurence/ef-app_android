@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.ui.filters
 
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.ui.filters.intf.IEventFilter
 import org.joda.time.DateTime
 
 /**
