@@ -66,7 +66,12 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
                 applyOnRoot { navigateToEvent(event) }
             }
 
-            if (database.favoritedDb[event.id] != null)
+            // Colour the event cards according to if they've already occured, are ocurring or are favourited
+            if (database.eventInterval(event).containsNow())
+                holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.accentLight))
+            else if (database.eventEnd(event).isBeforeNow)
+                holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.backgroundGrey))
+            else if (database.favoritedDb[event.id] != null)
                 holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primaryLighter))
         }
     }
