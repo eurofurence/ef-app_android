@@ -6,6 +6,7 @@
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textAppearance="?android:textAppearanceLarge"
+              android:padding="@dimen/outer_padding"
               android:id="@+id/eventsTitle"/>
     <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"

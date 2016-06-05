@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,7 +13,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
-import org.eurofurence.connavigator.ui.adapter.FavoriteFragmentStateAdapter
 import org.eurofurence.connavigator.ui.filters.enums.EnumEventRecyclerViewmode
 import org.eurofurence.connavigator.ui.filters.factory.EventFilterFactory
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
@@ -26,8 +24,6 @@ import org.eurofurence.connavigator.util.extensions.size
  * Created by David on 5/14/2016.
  */
 class FragmentViewHome : Fragment() {
-    val favoritedViewPager by view(ViewPager::class.java)
-    val favoritedTitle by view(TextView::class.java)
     val announcementsRecycler by view(RecyclerView::class.java)
     val announcementsTitle by view(TextView::class.java)
 
@@ -39,7 +35,6 @@ class FragmentViewHome : Fragment() {
 
         val database = Database(activity)
         applyOnRoot { changeTitle("Home") }
-        favoritedViewPager.adapter = FavoriteFragmentStateAdapter(childFragmentManager, database)
 
         announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(database.announcementDb.items.toList())
         announcementsRecycler.layoutManager = LinearLayoutManager(activity)
@@ -53,10 +48,9 @@ class FragmentViewHome : Fragment() {
                 .replace(R.id.currentEventsRecycler, EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.CURRENT)))
                 .commitAllowingStateLoss()
 
-        if (database.favoritedDb.size == 0) {
-            favoritedViewPager.visibility = View.GONE
-            favoritedTitle.visibility = View.GONE
-        }
+        fragmentManager.beginTransaction()
+                .replace(R.id.favouritedEventsRecycler, EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.FAVORITED)))
+                .commitAllowingStateLoss()
 
         if (database.announcementDb.size == 0) {
             announcementsRecycler.visibility = View.GONE
