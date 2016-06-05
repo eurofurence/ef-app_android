@@ -45,12 +45,14 @@ class FragmentViewHome : Fragment() {
         announcementsRecycler.layoutManager = LinearLayoutManager(activity)
         announcementsRecycler.itemAnimator = DefaultItemAnimator()
 
+        val upcoming = EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.UPCOMING))
         fragmentManager.beginTransaction()
-                .replace(R.id.upcomingEventRecycler, EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.UPCOMING)))
+                .replace(R.id.upcomingEventRecycler, upcoming)
                 .commitAllowingStateLoss()
 
+        val current = EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.CURRENT))
         fragmentManager.beginTransaction()
-                .replace(R.id.currentEventsRecycler, EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.CURRENT)))
+                .replace(R.id.currentEventsRecycler, current)
                 .commitAllowingStateLoss()
 
         if (database.favoritedDb.size == 0) {

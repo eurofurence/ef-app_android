@@ -18,6 +18,6 @@ class FavoriteFragmentStateAdapter(val fragmentManager: FragmentManager, val dat
     }
 
     override fun getCount(): Int {
-        return database.favoritedDb.items.count()
+        return 1
     }
 }

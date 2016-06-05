@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +47,6 @@ class EventCard(val eventEntry: EventEntry) : Fragment(), ContentAPI {
         }
 
         if (database.favoritedDb.items.contains(eventEntry))
-            eventCard.setCardBackgroundColor(context.getColor(R.color.primaryLighter))
+            eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primaryLighter))
     }
 }

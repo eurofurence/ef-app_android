@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -11,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import io.swagger.client.model.EventConferenceDay
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
@@ -26,7 +26,6 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
 import org.eurofurence.connavigator.util.extensions.localReceiver
-import java.util.*
 
 /**
  * Event view recycler to hold the viewpager items
@@ -66,8 +65,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
                 applyOnRoot { navigateToEvent(event) }
             }
 
-            if (database.favoritedDb.items.filter { it.id.equals(event.id) }.count() > 0)
-                holder.eventCard.setCardBackgroundColor(context.getColor(R.color.primaryLighter))
+            if (database.favoritedDb[event.id] != null)
+                holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primaryLighter))
         }
     }
 
@@ -88,8 +87,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
         effectiveEvents = filterStrategy.filter(database, filterVal).toList()
 
         // Configure the recycler
+        events.setHasFixedSize(true)
         events.adapter = DataAdapter()
-        events.layoutManager = LinearLayoutManager(activity)
         events.itemAnimator = DefaultItemAnimator()
 
         updateReceiver = context.localReceiver(FragmentViewEvent.EVENT_STATUS_CHANGED) {
