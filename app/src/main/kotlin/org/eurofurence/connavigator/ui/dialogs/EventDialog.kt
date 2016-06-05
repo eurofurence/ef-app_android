@@ -6,11 +6,14 @@ import android.app.DialogFragment
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.support.design.widget.Snackbar
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.eventFavouriter
+import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.logd
 
 /**
@@ -29,16 +32,30 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
 
     private fun update(dialogInterface: DialogInterface, i: Int) {
         logd { "Selected event option: $i" }
+        val database = Database(context)
         when (i) {
             0 -> {
+                logd { "Favouriting event for user" }
                 eventFavouriter(context).toNotifications(event)
 
                 Snackbar.make(activity.findViewById(R.id.content), "Favourited event!", Snackbar.LENGTH_SHORT)
             }
             1 -> {
-                logd { "Write to calendar pls" }
+                logd { "Writing event to calendar" }
+
+                val calendarIntent = Intent(Intent.ACTION_INSERT)
+
+                calendarIntent.setType("vnd.android.cursor.item/event");
+                calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title);
+                calendarIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, database.eventConferenceRoomDb[event.conferenceRoomId]!!    .name);
+                calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.description);
+                calendarIntent.putExtra(CalendarContract.Events.DTSTART, database.eventStart(event).toString())
+                calendarIntent.putExtra(CalendarContract.Events.DTEND, database.eventEnd(event).toString())
+
+                startActivity(calendarIntent)
             }
             2 -> {
+                logd { "Sharing event" }
                 //share
                 val shareIntent = Intent();
 
