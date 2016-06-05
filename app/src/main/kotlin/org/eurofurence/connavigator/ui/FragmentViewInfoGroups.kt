@@ -1,6 +1,5 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.CardView
@@ -22,6 +21,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Choice
 import org.eurofurence.connavigator.util.Formatter
+import org.eurofurence.connavigator.util.SharingUtility
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
@@ -97,11 +97,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
                             applyOnRoot { navigateToInfo(info) }
                         }
                         holder.layout.setOnLongClickListener {
-                            val shareIntent = Intent()
-                            shareIntent.putExtra(Intent.EXTRA_TEXT, Formatter.shareInfo(info))
-                            shareIntent.setType("text/plain")
-                            startActivity(shareIntent)
-                            true
+                            startActivity(SharingUtility.share(Formatter.shareInfo(info))).let { true }
                         }
                     }
             )

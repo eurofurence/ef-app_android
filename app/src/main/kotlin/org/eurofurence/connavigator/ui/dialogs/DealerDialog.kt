@@ -3,12 +3,12 @@ package org.eurofurence.connavigator.ui.dialogs
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import io.swagger.client.model.Dealer
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.Formatter
+import org.eurofurence.connavigator.util.SharingUtility
 import org.eurofurence.connavigator.util.extensions.logd
 
 /**
@@ -29,11 +29,7 @@ class DealerDialog(val dealer: Dealer) : DialogFragment() {
             when (i) {
                 0 -> logd { "send to notes" }
                 else -> {
-                    val shareIntent = Intent()
-                    shareIntent.setAction(Intent.ACTION_SEND)
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, Formatter.shareDealer(dealer))
-                    shareIntent.setType("text/plain")
-                    startActivity(shareIntent)
+                    startActivity(SharingUtility.share(Formatter.shareDealer(dealer)))
                 }
             }
 }

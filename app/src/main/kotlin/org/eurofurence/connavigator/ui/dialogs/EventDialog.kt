@@ -12,6 +12,7 @@ import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.util.Formatter
+import org.eurofurence.connavigator.util.SharingUtility
 import org.eurofurence.connavigator.util.eventFavouriter
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.logd
@@ -57,12 +58,7 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
             2 -> {
                 logd { "Sharing event" }
                 //share
-                val shareIntent = Intent();
-
-                shareIntent.setAction(Intent.ACTION_SEND)
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Formatter.shareEvent(event))
-                shareIntent.setType("text/plain")
-                startActivity(shareIntent)
+                startActivity(SharingUtility.share(Formatter.shareEvent(event)))
             }
         }
     }
