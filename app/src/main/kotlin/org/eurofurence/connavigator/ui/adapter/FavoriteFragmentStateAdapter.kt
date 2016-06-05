@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.ui.filters.EnumEventRecyclerViewmode
-import org.eurofurence.connavigator.ui.filters.EventFilterFactory
+import org.eurofurence.connavigator.ui.filters.enums.EnumEventRecyclerViewmode
+import org.eurofurence.connavigator.ui.filters.factory.EventFilterFactory
 import org.eurofurence.connavigator.ui.fragments.EmptyCard
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 

@@ -12,13 +12,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import io.swagger.client.model.EventConferenceDay
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.ui.filters.IEventFilter
+import org.eurofurence.connavigator.ui.filters.intf.IEventFilter
+import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
@@ -26,6 +28,7 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
 import org.eurofurence.connavigator.util.extensions.localReceiver
+import java.util.*
 
 /**
  * Event view recycler to hold the viewpager items
@@ -74,6 +77,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
     var effectiveEvents = emptyList<EventEntry>()
 
+    val eventsTitle by view(TextView::class.java)
+
     val database: Database get() = letRoot { it.database }!!
 
     lateinit var updateReceiver: EmbeddedLocalBroadcastReceiver
@@ -84,11 +89,22 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        effectiveEvents = filterStrategy.filter(database, filterVal).toList()
+        if (filterStrategy.getTitle() == "")
+            eventsTitle.visibility = View.GONE
+        else
+            eventsTitle.text = filterStrategy.getTitle()
+
+        effectiveEvents = filterStrategy.filter(context, filterVal).toList()
 
         // Configure the recycler
         events.setHasFixedSize(true)
         events.adapter = DataAdapter()
+
+        if (filterStrategy.scrolling)
+            events.layoutManager = LinearLayoutManager(activity)
+        else
+            events.layoutManager = NonScrollingLinearLayout(activity)
+
         events.itemAnimator = DefaultItemAnimator()
 
         updateReceiver = context.localReceiver(FragmentViewEvent.EVENT_STATUS_CHANGED) {
@@ -96,6 +112,11 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
         }
 
         updateReceiver.register()
+
+        if (effectiveEvents.isEmpty()) {
+            eventsTitle.visibility = View.GONE
+            events.visibility = View.GONE
+        }
     }
 
     override fun onPause() {
