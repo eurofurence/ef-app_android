@@ -7,6 +7,7 @@ import io.swagger.client.model.EventConferenceRoom
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.database.Database
 import org.joda.time.DateTime
+import java.util.*
 
 /**
  * Created by David on 11-5-2016.
@@ -86,4 +87,11 @@ object Formatter {
         return title_split
     }
 
+    fun shareEvent(eventEntry: EventEntry): String {
+        return "Check out ${eventEntry.title}!\n${createUrl("event", eventEntry.id)}"
+    }
+
+    fun createUrl(type: String, id: UUID): String {
+        return "http://app.eurofurence.org/$type/${id.toString()}"
+    }
 }
