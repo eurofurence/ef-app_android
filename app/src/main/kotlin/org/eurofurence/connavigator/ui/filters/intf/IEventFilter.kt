@@ -9,5 +9,8 @@ import io.swagger.client.model.EventEntry
 interface IEventFilter {
     fun filter(context: Context, filterVal: Any = Unit): Iterable<EventEntry>
 
+    val scrolling: Boolean get() = false
+
     fun getTitle(): String
+
 }

@@ -12,6 +12,8 @@ import org.eurofurence.connavigator.ui.filters.intf.IEventFilter
  */
 class DayEventFilter : IEventFilter {
     override fun getTitle(): String = ""
+    override val scrolling: Boolean
+        get() = true
 
     override fun filter(context: Context, filterVal: Any): Iterable<EventEntry> {
         Preconditions.checkArgument(EventConferenceDay::class.java.isAssignableFrom(filterVal.javaClass), "Filter value is not an eventConference day!")

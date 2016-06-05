@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.CardView
 import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -94,7 +95,12 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
         // Configure the recycler
         events.adapter = DataAdapter()
-        events.layoutManager = NonScrollingLinearLayout(activity)
+
+        if (filterStrategy.scrolling)
+            events.layoutManager = LinearLayoutManager(activity)
+        else
+            events.layoutManager = NonScrollingLinearLayout(activity)
+
         events.itemAnimator = DefaultItemAnimator()
 
         updateReceiver = context.localReceiver(FragmentViewEvent.EVENT_STATUS_CHANGED) {
