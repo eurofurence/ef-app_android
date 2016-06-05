@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
-import io.swagger.client.api.DefaultApi
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.store.SyncIDB
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
@@ -39,7 +39,7 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
         logv("UIS") { "Handling update intent service intent" }
 
         // Get the old date
-        val oldDate = database.dateDb.items.firstOrNull() ?: Date(0)
+        val oldDate = database.dateDb.items.firstOrNull()
 
         logv("UIS") { "Old date in database: $oldDate" }
 
@@ -54,16 +54,29 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
 
             logv("UIS") { "New date on server: $newDate" }
 
-            // Update the databases with the new data
-            database.announcementDb.syncWith(loadAnnouncements(oldDate))
-            database.dealerDb.syncWith(loadDealers(oldDate))
-            database.eventConferenceDayDb.syncWith(loadConferenceDays(oldDate))
-            database.eventConferenceRoomDb.syncWith(loadConferenceRooms(oldDate))
-            database.eventConferenceTrackDb.syncWith(loadConferenceTracks(oldDate))
-            database.eventEntryDb.syncWith(loadEvents(oldDate))
-            database.imageDb.syncWith(loadImages(oldDate))
-            database.infoDb.syncWith(loadInfos(oldDate))
-            database.infoGroupDb.syncWith(loadInfoGroups(oldDate))
+            /**
+             * Checks if the table entity contains a completely different version, then write instead of sync
+             * @param name The corresponding table name
+             * @param db The database to synchronize
+             * @param provider The provider of data, relative to a delta
+             */
+            fun  <T> checkedUpdate(name: String, db: SyncIDB<T>, provider: (Date?) -> List<T>) {
+                if (oldDate lt endpoint[name]?.deltaStartDateTimeUtc)
+                    db.items = provider(null)
+                else
+                    db.syncWith(provider(oldDate))
+            }
+
+            // Update or replace tables
+            checkedUpdate("Announcement", database.announcementDb, { loadAnnouncements(it) })
+            checkedUpdate("Dealer", database.dealerDb, { loadDealers(it) })
+            checkedUpdate("EventConferenceDay", database.eventConferenceDayDb, { loadConferenceDays(it) })
+            checkedUpdate("EventConferenceRoom", database.eventConferenceRoomDb, { loadConferenceRooms(it) })
+            checkedUpdate("EventConferenceTrack", database.eventConferenceTrackDb, { loadConferenceTracks(it) })
+            checkedUpdate("EventEntry", database.eventEntryDb, { loadEvents(it) })
+            checkedUpdate("Image", database.imageDb, { loadImages(it) })
+            checkedUpdate("Info", database.infoDb, { loadInfos(it) })
+            checkedUpdate("InfoGroup", database.infoGroupDb, { loadInfoGroups(it) })
 
             // Set the new server date
             database.dateDb.items = listOf(newDate)
@@ -86,11 +99,11 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
         LocalBroadcastManager.getInstance(this).sendBroadcast(response)
     }
 
-    private fun loadAnnouncements(oldDate: Date) = apiService.api.announcementGet(oldDate)
+    private fun loadAnnouncements(oldDate: Date?) = apiService.api.announcementGet(oldDate)
 
-    private fun loadDealers(oldDate: Date) = apiService.api.dealerGet(oldDate)
+    private fun loadDealers(oldDate: Date?) = apiService.api.dealerGet(oldDate)
 
-    private fun loadConferenceDays(oldDate: Date) =
+    private fun loadConferenceDays(oldDate: Date?) =
             if (preferences.getBoolean(resources.getString(R.string.debug_date_enabled), false)) {
                 logd { "Changing dates instead of updating" }
                 val dates = database.eventConferenceDayDb.items
@@ -110,17 +123,17 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
                 apiService.api.eventConferenceDayGet(oldDate)
             }
 
-    private fun loadConferenceRooms(oldDate: Date) =
+    private fun loadConferenceRooms(oldDate: Date?) =
             apiService.api.eventConferenceRoomGet(oldDate)
 
 
-    private fun loadConferenceTracks(oldDate: Date) = apiService.api.eventConferenceTrackGet(oldDate)
+    private fun loadConferenceTracks(oldDate: Date?) = apiService.api.eventConferenceTrackGet(oldDate)
 
-    private fun loadEvents(oldDate: Date) = apiService.api.eventEntryGet(oldDate)
+    private fun loadEvents(oldDate: Date?) = apiService.api.eventEntryGet(oldDate)
 
-    private fun loadImages(oldDate: Date) = apiService.api.imageGet(oldDate)
+    private fun loadImages(oldDate: Date?) = apiService.api.imageGet(oldDate)
 
-    private fun loadInfos(oldDate: Date) = apiService.api.infoGet(oldDate)
+    private fun loadInfos(oldDate: Date?) = apiService.api.infoGet(oldDate)
 
-    private fun loadInfoGroups(oldDate: Date) = apiService.api.infoGroupGet(oldDate)
+    private fun loadInfoGroups(oldDate: Date?) = apiService.api.infoGroupGet(oldDate)
 }

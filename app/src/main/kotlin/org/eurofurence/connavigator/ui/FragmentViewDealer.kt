@@ -9,8 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import io.swagger.client.model.Dealer
 import org.eurofurence.connavigator.R
@@ -43,10 +41,14 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Dealer Details")
 
+        val image = database.imageDb[dealer.artPreviewImageId]
+        imageService.load(image, dealerImage, false)
+            imageService.resizeFor(image, dealerImage)
+
         dealerName.text = Formatter.dealerName(dealer)
         dealerShortDescription.text = dealer.shortDescription
+
         dealerFullDescription.loadMarkdown(dealer.aboutTheArtistText + " \r" + dealer.aboutTheArtText)
-        imageService.load(database.imageDb[dealer.artPreviewImageId], dealerImage, false)
 
         dealerButtonMore.setOnClickListener {
             try {

@@ -6,6 +6,7 @@ import android.widget.ImageView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
+import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.assist.ImageSize
 import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
@@ -27,6 +28,9 @@ object imageService {
 
         // Enable caching in default display options
         val defaultOptions = DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.placeholder_event)// TODO: Maybe add specific placeholders
+                .showImageOnFail(R.drawable.placeholder_event)
+                .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build()
@@ -49,11 +53,18 @@ object imageService {
         if (image != null)
             imageLoader.displayImage(apiService.formatUrl(image.url), imageView, ImageSize(image.width, image.height))
         else
-            imageView.setImageResource(R.drawable.placeholder_event)
+            imageLoader.displayImage("", imageView)
 
         // If visibility modification desired, perform it
         if (showHide)
             imageView.visibility = if (image == null) View.GONE else View.VISIBLE
+    }
+
+    /**
+     * Resizes the image view to fit the image, hiding it if desired and resetting to zero if not
+     */
+    fun resizeFor(image: Image?, imageView: ImageView) {
+        // TODO
     }
 
 

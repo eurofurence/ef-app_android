@@ -5,9 +5,9 @@ import com.google.common.io.CharSource
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import io.swagger.client.JsonUtil
+import io.swagger.client.model.Endpoint
 import io.swagger.client.model.EntityBase
-import io.swagger.client.model.EventEntry
-import org.joda.time.DateTime
+import org.eurofurence.connavigator.webapi.apiService
 import java.io.Reader
 import java.io.Writer
 import java.math.BigDecimal
@@ -58,3 +58,9 @@ object gson {
  */
 val EntityBase.deleted: Boolean
     get() = isDeleted == BigDecimal.ONE
+
+/**
+ * Gets the endpoint entity for the given name
+ */
+operator fun Endpoint.get(name: String) =
+        apiService.api.endpointGet().entities.find { it.name == name }

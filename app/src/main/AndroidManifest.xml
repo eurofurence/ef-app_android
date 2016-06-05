@@ -11,8 +11,9 @@
 
 
     <!-- Notifications -->
-    <permission android:name="org.eurofurence.permission.C2D_MESSAGE"
-                android:protectionLevel="signature"/>
+    <permission
+            android:name="org.eurofurence.permission.C2D_MESSAGE"
+            android:protectionLevel="signature"/>
     <uses-permission android:name="org.eurofurence.connavigator.permission.C2D_MESSAGE"/>
 
 
@@ -25,20 +26,36 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <!-- API key -->
-        <meta-data android:name="com.google.android.geo.API_KEY"
-                   android:value="AIzaSyCoy8lY9f4cWx2fvS1HMBJaNHCkFWxm8DY"/>
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyCoy8lY9f4cWx2fvS1HMBJaNHCkFWxm8DY"/>
 
         <!-- Root screen of the app, will contain the different panels as fragments -->
-        <activity android:name=".ui.ActivityStart"
-                  android:label="Eurofurence"
-                  android:theme="@style/AppTheme">
+        <activity
+                android:name=".ui.ActivityStart"
+                android:label="Eurofurence"
+                android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.ActivityRoot"/>
+        <activity android:name=".ui.ActivityRoot">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                        android:scheme="http"
+                        android:host="app.eurofurence.org"/>
+                <data
+                        android:scheme="http:ef"
+                        android:host="app.eurofurence.org"/>
+            </intent-filter>
+        </activity>
 
         <activity android:name=".ui.ActivitySettings"/>
 
@@ -60,18 +77,23 @@
 
         <!-- Pending intentns -->
         <receiver android:name=".gcm.NotificationPublisher"/>
-        <service android:name=".gcm.MyGCMListenerService"
-                 android:exported="false">
+
+        <service
+                android:name=".gcm.MyGCMListenerService"
+                android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
             </intent-filter>
         </service>
-        <service android:name=".gcm.MyInstanceIDListenerService"
-                 android:exported="false">
+        <service
+                android:name=".gcm.MyInstanceIDListenerService"
+                android:exported="false">
             <intent-filter>
                 <action android:name="com.google.gms.iid.InstanceID"/>
             </intent-filter>
         </service>
-        <service android:name=".gcm.RegistrationIntentService" android:exported="false"/>
+        <service
+                android:name=".gcm.RegistrationIntentService"
+                android:exported="false"/>
     </application>
 </manifest>

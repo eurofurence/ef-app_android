@@ -7,6 +7,7 @@ import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
 import io.swagger.client.ApiInvoker
 import io.swagger.client.api.DefaultApi
+import io.swagger.client.model.Endpoint
 import org.eurofurence.connavigator.util.extensions.logd
 import java.io.File
 
@@ -18,7 +19,6 @@ object apiService {
 
     val api by lazy {
         DefaultApi().apply { basePath = "http://ec2-52-29-217-220.eu-central-1.compute.amazonaws.com"; }
-
     }
 
     fun formatUrl(url: String) =

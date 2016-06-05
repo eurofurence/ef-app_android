@@ -84,6 +84,42 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         setupBarNavLink()
         setupNav()
         setupFab()
+
+        handleBrowsingIntent()
+    }
+
+    /**
+     * Reacts to the intent ACTION_VIEW
+     */
+    private fun handleBrowsingIntent() {
+        if (intent.action == Intent.ACTION_VIEW) {
+            logd { intent.dataString }
+            when {
+            // Handle event links
+                intent.dataString.contains("/event/") -> {
+                    val uuid = intent.data.lastPathSegment
+                    val eventValue = database.eventEntryDb[UUID.fromString(uuid)]
+                    if (eventValue != null)
+                        navigateToEvent(eventValue)
+                }
+
+            // Handle info links
+                intent.dataString.contains("/info/") -> {
+                    val uuid = intent.data.lastPathSegment
+                    val infoValue = database.infoDb[UUID.fromString(uuid)]
+                    if (infoValue != null)
+                        navigateToInfo(infoValue)
+                }
+
+            // Handle dealer links
+                intent.dataString.contains("/dealer/") -> {
+                    val uuid = intent.data.lastPathSegment
+                    val dealerValue = database.dealerDb[UUID.fromString(uuid)]
+                    if (dealerValue != null)
+                        navigateToDealer(dealerValue)
+                }
+            }
+        }
     }
 
     private fun setupContent() =
