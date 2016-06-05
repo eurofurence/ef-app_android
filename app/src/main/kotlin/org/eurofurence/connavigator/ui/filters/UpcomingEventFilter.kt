@@ -11,6 +11,7 @@ import org.joda.time.Interval
  * Created by David on 6/4/2016.
  */
 class UpcomingEventFilter : IEventFilter {
+    override fun getTitle(): String = "Upcoming Events"
 
     override fun filter(context: Context, filterVal: Any): Iterable<EventEntry> {
         val now = DateTime.now()

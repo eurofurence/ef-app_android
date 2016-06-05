@@ -10,6 +10,7 @@ import org.joda.time.DateTime
  * Created by David on 6/4/2016.
  */
 class CurrentEventFilter : IEventFilter {
+    override fun getTitle(): String = "Current Events"
 
     override fun filter(context: Context, filterVal: Any): Iterable<EventEntry> {
         val now = DateTime.now()
