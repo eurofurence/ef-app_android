@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui.filters
 import android.content.Context
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.ui.filters.intf.IEventFilter
 import org.joda.time.DateTime
 import org.joda.time.Interval
 

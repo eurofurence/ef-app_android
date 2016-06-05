@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui.filters
+package org.eurofurence.connavigator.ui.filters.enums
 
 /**
  * Created by David on 25-5-2016.

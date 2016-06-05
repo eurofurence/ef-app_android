@@ -15,8 +15,8 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteFragmentStateAdapter
-import org.eurofurence.connavigator.ui.filters.EnumEventRecyclerViewmode
-import org.eurofurence.connavigator.ui.filters.EventFilterFactory
+import org.eurofurence.connavigator.ui.filters.enums.EnumEventRecyclerViewmode
+import org.eurofurence.connavigator.ui.filters.factory.EventFilterFactory
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot

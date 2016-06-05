@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui.filters
+package org.eurofurence.connavigator.ui.filters.intf
 
 import android.content.Context
 import io.swagger.client.model.EventEntry
