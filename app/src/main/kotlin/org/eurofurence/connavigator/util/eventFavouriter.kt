@@ -21,14 +21,14 @@ import java.util.*
 /**
  * Created by David on 5/14/2016.
  */
-class Favoriter(val context: Context) {
+class eventFavouriter(val context: Context) {
     val database by lazy { Database(context) }
 
     /**
      * Handles logic for favoriting events
      * Return: True if element was inserted, false is element was removed
      */
-    fun event(eventEntry: EventEntry): Boolean {
+    fun toNotifications(eventEntry: EventEntry): Boolean {
         logv { "Favoriting event" }
 
         if (database.favoritedDb.items.contains(eventEntry)) {
@@ -47,6 +47,10 @@ class Favoriter(val context: Context) {
             database.favoritedDb.items = newFavourited
             return true
         }
+    }
+
+    fun toCalendar(eventEntry: EventEntry){
+
     }
 
     /**

@@ -100,6 +100,25 @@ class Database(val context: Context) {
     }
 
     /**
+     * Sees if an event is happening during the specified datetime
+     */
+    fun eventIsHappening(event: EventEntry, date: DateTime) =
+            eventInterval(event).contains(date)
+
+    /**
+     * Checks whether an event is upcoming in the next x minutes
+     * event: Event to check
+     * date: Date that event might be upcoming
+     * minutes: Amount of minutes you want to check ahead
+     */
+    fun eventIsUpcoming(event: EventEntry, date: DateTime, minutes: Int): Boolean {
+        // Gap that has now and the upcoming time
+        val upcomingInterval = Interval(date, date.plusMinutes(minutes))
+
+        return upcomingInterval.contains(eventStart(event))
+    }
+
+    /**
      * Gets the day of the event
      */
     fun eventDay(eventEntry: EventEntry): DateTime = DateTime.parse(eventConferenceDayDb[eventEntry.conferenceDayId]!!.date)

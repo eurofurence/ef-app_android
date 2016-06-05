@@ -18,6 +18,7 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
+import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.ui.filters.IEventFilter
 import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
@@ -27,6 +28,7 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
 import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.joda.time.DateTime
 
 /**
  * Event view recycler to hold the viewpager items
@@ -65,9 +67,12 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
             holder.itemView.setOnClickListener {
                 applyOnRoot { navigateToEvent(event) }
             }
+            holder.itemView.setOnLongClickListener {
+                EventDialog(event).show(activity.fragmentManager, "Kek").let { true }
+            }
 
             // Colour the event cards according to if they've already occured, are ocurring or are favourited
-            if (database.eventInterval(event).containsNow())
+            if (database.eventIsHappening(event, DateTime.now()))
                 holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.accentLighter))
             else if (database.eventEnd(event).isBeforeNow)
                 holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.backgroundGrey))

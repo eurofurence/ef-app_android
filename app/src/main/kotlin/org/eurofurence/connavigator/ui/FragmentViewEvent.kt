@@ -16,7 +16,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.Favoriter
+import org.eurofurence.connavigator.util.eventFavouriter
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.contains
@@ -78,7 +78,7 @@ class FragmentViewEvent() : Fragment() {
             changeFabIcon(eventEntry)
 
             buttonSave.setOnClickListener {
-                if (Favoriter(context).event(eventEntry)) {
+                if (eventFavouriter(context).toNotifications(eventEntry)) {
                     Snackbar.make(buttonSave, "Favorited this event!", Snackbar.LENGTH_SHORT).show()
                 } else {
                     Snackbar.make(buttonSave, "Removed this event from favorites!", Snackbar.LENGTH_SHORT).show()

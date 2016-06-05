@@ -17,6 +17,6 @@ class CurrentEventFilter : IEventFilter {
         // Get today, otherwise first day
         val closestEventDay = database.eventConferenceDayDb.items.find { it.date == nowDate } ?: database.eventConferenceDayDb.asc { it.date }.first()
 
-        return database.eventEntryDb.items.filter { it.conferenceDayId == closestEventDay.id && database.eventInterval(it).contains(now) }.sortedBy { it.startTime }
+        return database.eventEntryDb.items.filter { it.conferenceDayId == closestEventDay.id && database.eventIsHappening(it, now) }.sortedBy { it.startTime }
     }
 }

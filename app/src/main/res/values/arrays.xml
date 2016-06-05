@@ -16,4 +16,9 @@
         <item>4 days</item>
         <item>5 days</item>
     </string-array>
+    <string-array name="event_options">
+        <item>Favourite Event</item>
+        <item>Export To Calendar</item>
+        <item>Share</item>
+    </string-array>
 </resources>

@@ -16,11 +16,9 @@ class UpcomingEventFilter : IEventFilter {
         val now = DateTime.now()
         val nowDate = now.toString("yyyy-MM-dd")
 
-        val nextThirty = Interval(now, now.plusMinutes(30))
-
         // Get today, otherwise first day
         val closestEventDay = database.eventConferenceDayDb.items.find { it.date == nowDate } ?: database.eventConferenceDayDb.asc { it.date }.first()
 
-        return database.eventEntryDb.items.filter { it.conferenceDayId == closestEventDay.id && nextThirty.contains(database.eventStart(it)) }.sortedBy { it.startTime }
+        return database.eventEntryDb.items.filter { it.conferenceDayId == closestEventDay.id && database.eventIsUpcoming(it, now, 30)}.sortedBy { it.startTime }
     }
 }
