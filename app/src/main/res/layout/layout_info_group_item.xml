@@ -13,7 +13,8 @@
             app:cardUseCompatPadding="true"
             app:cardElevation="@dimen/cardview_default_elevation"
             app:cardCornerRadius="@dimen/cardview_default_radius"
-            android:background="@color/primary">
+            android:background="@color/primary"
+            android:id="@+id/layout">
 
         <TextView
                 android:layout_margin="4dp"

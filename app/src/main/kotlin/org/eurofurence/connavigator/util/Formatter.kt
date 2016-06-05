@@ -5,6 +5,7 @@ import android.text.Spanned
 import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventConferenceRoom
 import io.swagger.client.model.EventEntry
+import io.swagger.client.model.Info
 import org.eurofurence.connavigator.database.Database
 import org.joda.time.DateTime
 import java.util.*
@@ -89,6 +90,14 @@ object Formatter {
 
     fun shareEvent(eventEntry: EventEntry): String {
         return "Check out ${eventEntry.title}!\n${createUrl("event", eventEntry.id)}"
+    }
+
+    fun shareDealer(dealer: Dealer): String {
+        return "Check out ${dealer.displayName} at the dealers den!\n${createUrl("dealer", dealer.id)}"
+    }
+
+    fun shareInfo(info: Info): String {
+        return "Hey, this might help: ${info.title}!\n${createUrl("info", info.id)}"
     }
 
     fun createUrl(type: String, id: UUID): String {

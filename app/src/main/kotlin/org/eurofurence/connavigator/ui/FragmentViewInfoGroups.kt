@@ -1,7 +1,9 @@
 package org.eurofurence.connavigator.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.CardView
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -19,6 +21,7 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Choice
+import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
@@ -44,6 +47,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
     // Event view holder finds and memorizes the views in an event card
     inner class InfoGroupItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title by view(TextView::class.java)
+        val layout by view(CardView::class.java)
     }
 
     inner class DataAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -78,6 +82,8 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
 
                         // Load image
                         imageService.load(database.imageDb[infoGroup.imageId], holder.image)
+
+
                     },
                     { info ->
                         // Cast holder
@@ -89,6 +95,13 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
                         // Handle clicks
                         holder.itemView.setOnClickListener {
                             applyOnRoot { navigateToInfo(info) }
+                        }
+                        holder.layout.setOnLongClickListener {
+                            val shareIntent = Intent()
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, Formatter.shareInfo(info))
+                            shareIntent.setType("text/plain")
+                            startActivity(shareIntent)
+                            true
                         }
                     }
             )

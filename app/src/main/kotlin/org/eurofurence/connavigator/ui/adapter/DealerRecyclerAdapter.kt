@@ -12,6 +12,7 @@ import io.swagger.client.model.Dealer
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.ui.dialogs.DealerDialog
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
@@ -39,6 +40,10 @@ class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Da
 
         holder.layout.setOnClickListener {
             fragment.applyOnRoot { navigateToDealer(dealer) }
+        }
+
+        holder.layout.setOnLongClickListener {
+            DealerDialog(dealer).show(fragment.childFragmentManager, "Dealer menu").let { true }
         }
     }
 
