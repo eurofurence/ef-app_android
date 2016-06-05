@@ -16,6 +16,7 @@ import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.filters.enums.EnumEventRecyclerViewmode
 import org.eurofurence.connavigator.ui.filters.factory.EventFilterFactory
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
+import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.size
@@ -37,7 +38,7 @@ class FragmentViewHome : Fragment() {
         applyOnRoot { changeTitle("Home") }
 
         announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(database.announcementDb.items.toList())
-        announcementsRecycler.layoutManager = LinearLayoutManager(activity)
+        announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
         announcementsRecycler.itemAnimator = DefaultItemAnimator()
 
         fragmentManager.beginTransaction()

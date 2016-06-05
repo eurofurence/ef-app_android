@@ -18,6 +18,7 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.intf.IEventFilter
+import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
@@ -94,7 +95,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
         // Configure the recycler
         events.adapter = DataAdapter()
-        events.layoutManager = LinearLayoutManager(activity)
+        events.layoutManager = NonScrollingLinearLayout(activity)
         events.itemAnimator = DefaultItemAnimator()
 
         updateReceiver = context.localReceiver(FragmentViewEvent.EVENT_STATUS_CHANGED) {
