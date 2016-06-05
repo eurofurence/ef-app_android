@@ -68,7 +68,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
             // Colour the event cards according to if they've already occured, are ocurring or are favourited
             if (database.eventInterval(event).containsNow())
-                holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.accentLight))
+                holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.accentLighter))
             else if (database.eventEnd(event).isBeforeNow)
                 holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.backgroundGrey))
             else if (database.favoritedDb[event.id] != null)
