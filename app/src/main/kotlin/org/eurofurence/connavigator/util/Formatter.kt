@@ -7,6 +7,7 @@ import io.swagger.client.model.EventConferenceRoom
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
 import java.util.*
 
@@ -101,6 +102,6 @@ object Formatter {
     }
 
     fun createUrl(type: String, id: UUID): String {
-        return "http://app.eurofurence.org/$type/${id.toString()}"
+        return "${apiService.api.basePath}/$type/${id.toString()}"
     }
 }

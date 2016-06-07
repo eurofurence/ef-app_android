@@ -21,7 +21,7 @@ import java.util.*
 /**
  * Created by David on 5/14/2016.
  */
-class eventFavouriter(val context: Context) {
+class EventFavouriter(val context: Context) {
     val database by lazy { Database(context) }
 
     /**
