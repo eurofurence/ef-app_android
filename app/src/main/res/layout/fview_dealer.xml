@@ -4,13 +4,13 @@
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="@android:color/background_light">
     <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/cardview_light_background"
-                        android:clickable="true">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      xmlns:app="http://schemas.android.com/apk/res-auto"
+                      android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:background="@color/cardview_light_background"
+                      android:clickable="true">
             <ImageView android:layout_width="match_parent"
                        android:layout_height="300dp"
                        android:id="@+id/dealerImage"
@@ -37,14 +37,38 @@
                           android:id="@+id/dealerShortDescription"
                           android:textAppearance="?android:textAppearanceMediumInverse"/>
             </LinearLayout>
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="About the Artist"
+                      android:padding="@dimen/outer_padding"
+                      android:textAppearance="?android:textAppearanceLarge"/>
             <us.feras.mdv.MarkdownView android:layout_width="match_parent"
                                        android:layout_height="wrap_content"
                                        android:layout_below="@id/dealerHeaderLayout"
-                                       android:id="@+id/dealerFullDescription"
-                                       android:padding="@dimen/outer_padding"
-                                       android:layout_marginTop="25dp"/>
+                                       android:id="@+id/dealerArtistDescription"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:padding="@dimen/outer_padding"
+                      android:text="About the Art"
+                      android:textAppearance="?android:textAppearanceLarge"/>
+            <ImageView android:layout_width="match_parent"
+                       android:layout_height="200dp"
+                       android:padding="@dimen/outer_padding"
+                       android:id="@+id/dealerPreviewArtImage"
+                       android:scaleType="fitCenter"
+                       android:background="@color/primary"/>
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/dealerPreviewCaption"
+                      android:textAlignment="center"
+                      android:background="@color/primary"
+                      android:padding="@dimen/outer_padding"
+                      android:textAppearance="?android:textAppearanceSmallInverse"/>
+            <us.feras.mdv.MarkdownView android:layout_width="match_parent"
+                                       android:layout_height="wrap_content"
+                                       android:id="@+id/dealerArtDescription"/>
 
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
     <android.support.design.widget.FloatingActionButton android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"

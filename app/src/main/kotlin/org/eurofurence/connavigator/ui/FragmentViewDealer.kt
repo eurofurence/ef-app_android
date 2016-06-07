@@ -28,9 +28,12 @@ import us.feras.mdv.MarkdownView
 class FragmentViewDealer(val dealer: Dealer) : Fragment() {
     val dealerName by view(TextView::class.java)
     val dealerShortDescription by view(TextView::class.java)
-    val dealerFullDescription by view(MarkdownView::class.java)
+    val dealerArtistDescription by view(MarkdownView::class.java)
+    val dealerArtDescription by view(MarkdownView::class.java)
     val dealerImage by view(ImageView::class.java)
     val dealerButtonMore by view(FloatingActionButton::class.java)
+    val dealerPreviewArtImage by view(ImageView::class.java)
+    val dealerPreviewCaption by view(TextView::class.java)
     var isFullscreen = false
 
     val database: Database get() = letRoot { it.database }!!
@@ -41,14 +44,19 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Dealer Details")
 
-        val image = database.imageDb[dealer.artPreviewImageId]
+        val image = database.imageDb[dealer.artistImageId]
         imageService.load(image, dealerImage, false)
-            imageService.resizeFor(image, dealerImage)
+        imageService.resizeFor(image, dealerImage)
+
+        imageService.load(database.imageDb[dealer.artPreviewImageId], dealerPreviewArtImage)
+
+        dealerPreviewCaption.text = dealer.artPreviewCaption
 
         dealerName.text = Formatter.dealerName(dealer)
         dealerShortDescription.text = dealer.shortDescription
 
-        dealerFullDescription.loadMarkdown(dealer.aboutTheArtistText + " \r" + dealer.aboutTheArtText)
+        dealerArtistDescription.loadMarkdown(dealer.aboutTheArtistText)
+        dealerArtDescription.loadMarkdown(dealer.aboutTheArtText)
 
         dealerButtonMore.setOnClickListener {
             try {
@@ -64,8 +72,11 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
         if (dealer.websiteUri.isEmpty())
             dealerButtonMore.visibility = View.GONE
 
-        if (dealer.aboutTheArtText.isEmpty() && dealer.aboutTheArtistText.isEmpty())
-            dealerFullDescription.loadMarkdown("This artist did not supply any long descriptions")
+        if (dealer.aboutTheArtText.isEmpty())
+            dealerArtistDescription.loadMarkdown("This artist did not supply any artist description to show to you :(")
+
+        if (dealer.aboutTheArtistText.isEmpty())
+            dealerArtDescription.loadMarkdown("this artist did not supply any art descriptions to show to you  :V")
 
         if (dealer.shortDescription.isEmpty())
             dealerShortDescription.visibility = View.GONE
