@@ -51,9 +51,12 @@
                 <data
                         android:scheme="http"
                         android:host="app.eurofurence.org"/>
+
                 <data
-                        android:scheme="http:ef"
-                        android:host="app.eurofurence.org"/>
+                        android:scheme="http"
+                        android:host="app.eurofurence.pinselohr.ch"/>
+                <data
+                        android:scheme="eurofurence"/>
             </intent-filter>
         </activity>
 
