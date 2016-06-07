@@ -19,6 +19,7 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
+import org.eurofurence.connavigator.ui.filters.AnyEventFilter
 import org.eurofurence.connavigator.ui.filters.IEventFilter
 import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
@@ -35,6 +36,7 @@ import org.joda.time.DateTime
  */
 class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any = Unit) : Fragment(), ContentAPI {
 
+    constructor() : this(AnyEventFilter(), Unit) {}
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val eventImage by view(ImageView::class.java)

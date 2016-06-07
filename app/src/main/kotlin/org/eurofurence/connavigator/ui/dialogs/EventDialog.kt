@@ -50,8 +50,8 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
                 calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title);
                 calendarIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, database.eventConferenceRoomDb[event.conferenceRoomId]!!    .name);
                 calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.description);
-                calendarIntent.putExtra(CalendarContract.Events.DTSTART, database.eventStart(event).toString())
-                calendarIntent.putExtra(CalendarContract.Events.DTEND, database.eventEnd(event).toString())
+                calendarIntent.putExtra(CalendarContract.Events.DTSTART, database.eventStart(event).millis)
+                calendarIntent.putExtra(CalendarContract.Events.DTEND, database.eventEnd(event).millis)
 
                 startActivity(calendarIntent)
             }
