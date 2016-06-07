@@ -53,10 +53,17 @@
                         android:host="app.eurofurence.org"/>
 
                 <data
-                        android:scheme="http"
-                        android:host="app.eurofurence.pinselohr.ch"/>
+                        android:scheme="httpnope"
+                        android:host="app.eurofuddwadawrence.pinselohr.ch"/>
                 <data
-                        android:scheme="eurofurence"/>
+                        android:scheme="eurofurence"
+                        android:host="event"/>
+                <data
+                        android:scheme="eurofurence"
+                        android:host="info"/>
+                <data
+                        android:scheme="eurofurence"
+                        android:host="dealer"/>
             </intent-filter>
         </activity>
 
