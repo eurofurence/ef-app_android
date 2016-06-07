@@ -19,7 +19,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.eventFavouriter
+import org.eurofurence.connavigator.util.EventFavouriter
 import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.jsonObjects
@@ -79,7 +79,7 @@ class FragmentViewEvent() : Fragment() {
             changeFabIcon(eventEntry)
 
             buttonSave.setOnClickListener {
-                if (eventFavouriter(context).toNotifications(eventEntry)) {
+                if (EventFavouriter(context).toNotifications(eventEntry)) {
                     Snackbar.make(buttonSave, "Favorited this event!", Snackbar.LENGTH_SHORT).show()
                 } else {
                     Snackbar.make(buttonSave, "Removed this event from favorites!", Snackbar.LENGTH_SHORT).show()

@@ -13,7 +13,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.SharingUtility
-import org.eurofurence.connavigator.util.eventFavouriter
+import org.eurofurence.connavigator.util.EventFavouriter
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.logd
 
@@ -37,7 +37,7 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
         when (i) {
             0 -> {
                 logd { "Favouriting event for user" }
-                eventFavouriter(context).toNotifications(event)
+                EventFavouriter(context).toNotifications(event)
 
                 Snackbar.make(activity.findViewById(R.id.content), "Favourited event!", Snackbar.LENGTH_SHORT)
             }
