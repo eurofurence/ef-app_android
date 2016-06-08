@@ -3,7 +3,6 @@ package org.eurofurence.connavigator.ui
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +36,7 @@ class FragmentViewHome : Fragment() {
         val database = Database(activity)
         applyOnRoot { changeTitle("Home") }
 
-        announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(database.announcementDb.items.toList())
+        announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(database.announcementDb.items.sortedByDescending { it.lastChangeDateTimeUtc }.toList())
         announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
         announcementsRecycler.itemAnimator = DefaultItemAnimator()
 
