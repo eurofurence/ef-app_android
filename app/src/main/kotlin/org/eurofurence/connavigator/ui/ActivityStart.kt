@@ -10,6 +10,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.util.delegators.view
+import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 
 /**
@@ -20,18 +21,21 @@ class ActivityStart : AppCompatActivity() {
     val textHelp by view(TextView::class.java)
 
     val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
-        textHelp.text = "There, all done!"
-        buttonStart.visibility = View.VISIBLE
+        if (it.booleans["success"]) {
+            textHelp.text = "There, all done!"
+            buttonStart.visibility = View.VISIBLE
+
+            buttonStart.setOnClickListener { startRootActivity() }
+        } else {
+            textHelp.text = "Failed to successfully get data from the backend. Press the button to try again"
+            buttonStart.setOnClickListener { UpdateIntentService.dispatchUpdate(this) }
+        }
     }
     val database by lazy { Database(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
-
-        buttonStart.setOnClickListener {
-            startRootActivity()
-        }
 
         // Data is present, if a database has a backing file
         if (database.eventConferenceDayDb.time != null)
