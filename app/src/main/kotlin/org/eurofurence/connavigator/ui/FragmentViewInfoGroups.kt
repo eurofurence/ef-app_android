@@ -96,7 +96,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
                         holder.itemView.setOnClickListener {
                             applyOnRoot { navigateToInfo(info) }
                         }
-                        holder.layout.setOnLongClickListener {
+                        holder.itemView.setOnLongClickListener {
                             startActivity(SharingUtility.share(Formatter.shareInfo(info))).let { true }
                         }
                     }
