@@ -11,9 +11,9 @@ import android.support.design.widget.Snackbar
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.util.EventFavouriter
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.SharingUtility
-import org.eurofurence.connavigator.util.EventFavouriter
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.logd
 
@@ -48,10 +48,11 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
 
                 calendarIntent.setType("vnd.android.cursor.item/event");
                 calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title);
-                calendarIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, database.eventConferenceRoomDb[event.conferenceRoomId]!!    .name);
+                calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, database.eventStart(event).millis)
+                calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, database.eventEnd(event).millis)
+                calendarIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, database.eventConferenceRoomDb[event.conferenceRoomId]!!.name);
                 calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.description);
-                calendarIntent.putExtra(CalendarContract.Events.DTSTART, database.eventStart(event).millis)
-                calendarIntent.putExtra(CalendarContract.Events.DTEND, database.eventEnd(event).millis)
+
 
                 startActivity(calendarIntent)
             }

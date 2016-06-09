@@ -129,6 +129,7 @@ class Database(val context: Context) {
     fun eventStart(eventEntry: EventEntry): DateTime =
             eventDay(eventEntry).withTime(LocalTime.parse(eventEntry.startTime))
 
+
     /**
      * Gets the end time and day of the event. Special behavior: if end time is smaller than the start time, it is
      * assumed that the next day is meant.
