@@ -1,6 +1,5 @@
 package org.eurofurence.connavigator.ui.filters
 
-import android.content.Context
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.database.Database
 
@@ -11,6 +10,6 @@ class AnyFavoritedEventFilter : IEventFilter {
     override fun getTitle(): String = "Favourited Events"
 
     override fun filter(database: Database, filterVal: Any): Iterable<EventEntry> {
-        return database.favoritedDb.items
+        return database.favoritedDb.items.sortedBy { it.startTime }
     }
 }

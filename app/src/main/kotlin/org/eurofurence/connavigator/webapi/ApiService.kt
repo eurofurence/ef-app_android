@@ -18,7 +18,7 @@ object apiService {
     val endpoint: String get() = api.basePath
 
     val api by lazy {
-        DefaultApi().apply { basePath = "http://app.eurofurence.pinselohr.ch"; }
+        DefaultApi().apply { basePath = "https://app.eurofurence.org/api"; }
     }
 
     fun formatUrl(url: String) =

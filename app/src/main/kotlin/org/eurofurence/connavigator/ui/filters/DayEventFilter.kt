@@ -17,6 +17,6 @@ class DayEventFilter : IEventFilter {
         Preconditions.checkArgument(EventConferenceDay::class.java.isAssignableFrom(filterVal.javaClass), "Filter value is not an eventConference day!")
 
         val day = filterVal as EventConferenceDay
-        return database.eventEntryDb.items.filter { it.conferenceDayId == day.id }
+        return database.eventEntryDb.items.filter { it.conferenceDayId == day.id }.sortedBy { it.startTime }
     }
 }

@@ -226,28 +226,23 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     }
 
     override fun navigateToEvent(eventEntry: EventEntry) {
-        supportFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(R.anim.in_slide_and_fade, R.anim.out_slide_and_fade, R.anim.in_slide_and_fade, R.anim.out_slide_and_fade)
-                .add(R.id.content, FragmentViewEvent(eventEntry), "content")
-                .addToBackStack(null)
-                .commit()
+        navigateToSubFragment(FragmentViewEvent(eventEntry))
     }
 
     override fun navigateToInfo(info: Info) {
+        navigateToSubFragment(FragmentViewInfo(info))
+    }
+
+
+    override fun navigateToDealer(dealer: Dealer) {
+        navigateToSubFragment(FragmentViewDealer(dealer))
+    }
+
+    private fun navigateToSubFragment(fragment: Fragment) {
         supportFragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.in_slide_and_fade, R.anim.out_slide_and_fade, R.anim.in_slide_and_fade, R.anim.out_slide_and_fade)
-                .add(R.id.content, FragmentViewInfo(info), "content")
-                .addToBackStack(null)
-                .commit()
-    }
-
-    override fun navigateToDealer(dealer: Dealer) {
-        supportFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom, R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom)
-                .add(R.id.content, FragmentViewDealer(dealer), "content")
+                .add(R.id.content, fragment, "content")
                 .addToBackStack(null)
                 .commit()
     }
