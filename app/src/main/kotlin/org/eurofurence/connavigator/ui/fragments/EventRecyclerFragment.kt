@@ -3,7 +3,7 @@ package org.eurofurence.connavigator.ui.fragments
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.CardView
+import android.support.v4.content.ContextCompat.getColor
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
@@ -46,7 +47,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
         val eventStartTime by view(TextView::class.java)
         val eventEndTime by view(TextView::class.java)
         val eventRoom by view(TextView::class.java)
-        val eventCard by view(CardView::class.java)
+        val eventCard by view(LinearLayout::class.java)
     }
 
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
@@ -80,12 +81,14 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
             }
 
             // Colour the event cards according to if they've already occured, are ocurring or are favourited
-            if (database.eventIsHappening(event, DateTime.now()))
-                holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.accentLighter))
-            else if (database.eventEnd(event).isBeforeNow)
-                holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.backgroundGrey))
-            else if (database.favoritedDb[event.id] != null)
-                holder.eventCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primaryLighter))
+            if (database.eventIsHappening(event, DateTime.now())) {
+                holder.eventCard.setBackgroundColor(getColor(context, R.color.accentLighter))
+
+            } else if (database.eventEnd(event).isBeforeNow) {
+                holder.eventCard.setBackgroundColor(getColor(context, R.color.backgroundGrey))
+            } else if (database.favoritedDb[event.id] != null) {
+                holder.eventCard.setBackgroundColor(getColor(context, R.color.primaryLighter))
+            }
         }
     }
 
