@@ -50,7 +50,7 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
         Analytics.changeScreenName("View Events Viewpager")
 
         eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager)
-        eventPager.offscreenPageLimit = 3
+        eventPager.offscreenPageLimit = 2
 
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
         applyOnRoot { changeTitle("Event Schedule") }

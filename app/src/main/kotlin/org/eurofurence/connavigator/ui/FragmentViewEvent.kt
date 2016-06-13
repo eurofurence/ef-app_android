@@ -85,8 +85,6 @@ class FragmentViewEvent() : Fragment() {
                     Snackbar.make(buttonSave, "Removed this event from favorites!", Snackbar.LENGTH_SHORT).show()
                 }
 
-                val broadcastIntent = Intent(EVENT_STATUS_CHANGED)
-                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent)
                 changeFabIcon(eventEntry)
             }
 

@@ -6,13 +6,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
-
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.gcm.NotificationPublisher
-import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.util.extensions.get
+import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.logv
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -34,23 +34,25 @@ class EventFavouriter(val context: Context) {
         if (database.favoritedDb.items.contains(eventEntry)) {
             removeEventNotification(eventEntry)
             logv { "Removing event %s".format(eventEntry.title) }
+
+            simpleBroadcaster.cast(FragmentViewEvent.EVENT_STATUS_CHANGED, context)
             database.favoritedDb.items = database.favoritedDb.items.filter { it.id != eventEntry.id }
             return false
         } else {
-            scheduleEventNotification(eventEntry)
-
+            if (database.eventStart(eventEntry).isAfterNow) {
+                logd { "Favourited event in the pas" }
+                scheduleEventNotification(eventEntry)
+            }
             logv { "Entering event %s".format(eventEntry.title) }
             val newFavourited = LinkedList<EventEntry>()
             newFavourited.addAll(database.favoritedDb.items)
             newFavourited.add(eventEntry)
 
+            simpleBroadcaster.cast(FragmentViewEvent.EVENT_STATUS_CHANGED, context)
+
             database.favoritedDb.items = newFavourited
             return true
         }
-    }
-
-    fun toCalendar(eventEntry: EventEntry){
-
     }
 
     /**

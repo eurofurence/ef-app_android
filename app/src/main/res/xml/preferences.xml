@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
+            android:title="Notification Options">
+        <ListPreference android:key="notifications_time_extra"
+                        android:title="Alert time"
+                        android:summary="Minutes a notification will appear for an event"
+                        android:entries="@array/notification_timeframe"
+                        android:entryValues="@array/notification_timeframe_v"
+                        android:defaultValue="15"/>
+    </PreferenceCategory>
+    <PreferenceCategory
             android:title="Analytics">
         <CheckBoxPreference
                 android:key="@string/settings_tag_analytics_enabled"
