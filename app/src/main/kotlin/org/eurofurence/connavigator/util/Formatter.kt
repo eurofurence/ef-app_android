@@ -40,7 +40,7 @@ object Formatter {
 
     fun dealerName(dealer: Dealer): String {
         if (dealer.displayName != "")
-            return dealer.displayName
+            return "${dealer.displayName}"
         else
             return dealer.attendeeNickname
     }

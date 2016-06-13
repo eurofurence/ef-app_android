@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RelativeLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import io.swagger.client.model.Dealer
 import org.eurofurence.connavigator.R
@@ -23,8 +23,9 @@ import org.eurofurence.connavigator.util.extensions.get
  */
 class DealerDataHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     val dealerName by view(TextView::class.java)
+    val dealerSubText by view(TextView::class.java)
     val dealerPreviewImage by view(ImageView::class.java)
-    val layout by view(RelativeLayout::class.java)
+    val layout by view(LinearLayout::class.java)
 }
 
 class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Database, val fragment: Fragment) : RecyclerView.Adapter<DealerDataHolder>() {
@@ -36,7 +37,8 @@ class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Da
         val dealer = effective_events[position]
 
         holder.dealerName.text = Formatter.dealerName(dealer)
-        imageService.load(database.imageDb[dealer.artistThumbnailImageId], holder.dealerPreviewImage, true)
+        holder.dealerSubText.text = dealer.shortDescription ?: "This dealer did not provide a short description"
+        imageService.load(database.imageDb[dealer.artistThumbnailImageId], holder.dealerPreviewImage, false)
 
         holder.layout.setOnClickListener {
             fragment.applyOnRoot { navigateToDealer(dealer) }
