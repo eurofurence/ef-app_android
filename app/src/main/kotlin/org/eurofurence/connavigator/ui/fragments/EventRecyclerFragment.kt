@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.support.v4.content.ContextCompat.getColor
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -65,7 +64,15 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
             // Assign the properties of the view
             holder.eventTitle.text = Formatter.eventTitle(event)
-            holder.eventStartTime.text = Formatter.shortTime(event.startTime)
+
+            if (database.eventIsHappening(event, DateTime.now())) {
+                holder.eventStartTime.text = "NOW"
+            } else if (database.eventStart(event).isBeforeNow) {
+                holder.eventStartTime.text = "DONE"
+            } else {
+                holder.eventStartTime.text = Formatter.shortTime(event.startTime)
+            }
+
             holder.eventEndTime.text = "until ${Formatter.shortTime(event.endTime)}"
             holder.eventRoom.text = Formatter.roomFull(database.eventConferenceRoomDb[event.conferenceRoomId]!!)
 
