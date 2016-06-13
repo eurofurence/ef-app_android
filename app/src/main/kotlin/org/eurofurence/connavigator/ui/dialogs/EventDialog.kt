@@ -24,7 +24,7 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
         val builder = AlertDialog.Builder(activity)
 
-        builder.setTitle(event.title)
+        builder.setTitle("Event Options for event ${event.title}")
 
         builder.setItems(R.array.event_options, DialogInterface.OnClickListener { dialogInterface, i -> update(dialogInterface, i) })
 

@@ -31,6 +31,10 @@ object Formatter {
         return Html.fromHtml(string)
     }
 
+    fun shortTime(string: String): String {
+        return string.subSequence(0, 5).toString()
+    }
+
     /*
     Formats an event title accoding to our rules
      */

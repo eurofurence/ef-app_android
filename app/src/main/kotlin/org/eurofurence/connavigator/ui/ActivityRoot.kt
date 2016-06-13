@@ -20,7 +20,6 @@ import android.widget.TextView
 import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
-import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
@@ -62,9 +61,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         val success = it.booleans["success"]
         val time = it.objects["time", Date::class.java]
 
-        if (!BuildConfig.DEBUG)
+
         // Make a snackbar for the result
-            Snackbar.make(findViewById(R.id.fab)!!, "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(findViewById(R.id.content)!!, "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
 
         // Update content data if fragments implement content API
         applyOnContent {
@@ -255,7 +254,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     private fun setupFab() {
         fab.setOnClickListener { view ->
             // Notify the update to the user
-            Snackbar.make(findViewById(R.id.fab)!!, "Updating the database", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(findViewById(R.id.content)!!, "Updating the database", Snackbar.LENGTH_LONG).show()
 
             // Start the update service
             UpdateIntentService.dispatchUpdate(this@ActivityRoot)

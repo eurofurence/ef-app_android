@@ -18,7 +18,7 @@ class DealerDialog(val dealer: Dealer) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
 
-        builder.setTitle(dealer.displayName)
+        builder.setTitle("Dealer options for ${dealer.displayName}")
 
         builder.setItems(R.array.dealer_options, DialogInterface.OnClickListener { dialogInterface, i -> update(dialogInterface, i) })
 

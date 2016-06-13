@@ -36,12 +36,16 @@ import org.joda.time.DateTime
  */
 class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any = Unit) : Fragment(), ContentAPI {
 
-    constructor() : this(AnyEventFilter(), Unit) {}
+    constructor() : this(AnyEventFilter(), Unit) {
+    }
+
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val eventImage by view(ImageView::class.java)
         val eventTitle by view(TextView::class.java)
-        val eventDate by view(TextView::class.java)
+        val eventStartTime by view(TextView::class.java)
+        val eventEndTime by view(TextView::class.java)
+        val eventRoom by view(TextView::class.java)
         val eventCard by view(CardView::class.java)
     }
 
@@ -60,7 +64,9 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
             // Assign the properties of the view
             holder.eventTitle.text = Formatter.eventTitle(event)
-            holder.eventDate.text = Formatter.eventToTimes(event, database)
+            holder.eventStartTime.text = Formatter.shortTime(event.startTime)
+            holder.eventEndTime.text = "until ${Formatter.shortTime(event.endTime)}"
+            holder.eventRoom.text = Formatter.roomFull(database.eventConferenceRoomDb[event.conferenceRoomId]!!)
 
             // Load image
             imageService.load(database.imageDb[event.imageId], holder.eventImage)
