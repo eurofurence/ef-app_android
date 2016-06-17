@@ -51,10 +51,6 @@ class NotificationFactory {
                 .setVibrate(longArrayOf(250, 100, 250, 100))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setPriority(Notification.PRIORITY_HIGH)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
-                .setCategory(Notification.CATEGORY_EVENT)
-                .setGroup(group)
-                .setGroupSummary(true)
                 .setContentIntent(pendingIntent)
 
         return builder.build()

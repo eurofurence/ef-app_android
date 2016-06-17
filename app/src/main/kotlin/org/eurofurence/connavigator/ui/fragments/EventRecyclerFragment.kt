@@ -84,7 +84,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
                 applyOnRoot { navigateToEvent(event) }
             }
             holder.itemView.setOnLongClickListener {
-                EventDialog(event).show(activity.fragmentManager, "Kek").let { true }
+                EventDialog(event).show(activity.supportFragmentManager, "Kek").let { true }
             }
 
             // Colour the event cards according to if they've already occured, are ocurring or are favourited
