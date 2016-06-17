@@ -1,11 +1,10 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.support.v4.content.LocalBroadcastManager
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +16,9 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
+import org.eurofurence.connavigator.util.EventFavouriter
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.EventFavouriter
 import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.jsonObjects
@@ -89,7 +88,7 @@ class FragmentViewEvent() : Fragment() {
             }
 
             buttonSave.setOnLongClickListener {
-                EventDialog(eventEntry).show(activity.fragmentManager, "Event Dialog").let { true }
+                EventDialog(eventEntry).show(activity.supportFragmentManager, "Event Dialog").let { true }
             }
         }
     }
@@ -99,9 +98,9 @@ class FragmentViewEvent() : Fragment() {
      */
     private fun changeFabIcon(eventEntry: EventEntry?) {
         if (database.favoritedDb.items.contains(eventEntry))
-            buttonSave.setImageDrawable(resources.getDrawable(R.drawable.icon_like_filled, context.theme))
+            buttonSave.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_like_filled))
         else
-            buttonSave.setImageDrawable(resources.getDrawable(R.drawable.icon_like_empty, context.theme))
+            buttonSave.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_like_empty))
     }
 
 }
