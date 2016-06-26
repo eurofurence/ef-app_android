@@ -71,7 +71,10 @@ class FragmentViewInfo() : Fragment() {
             for (url in info.urls) {
                 val button = Button(context)
                 button.text = url.text
-                button.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url.target))) }
+                button.setOnClickListener {
+                    Analytics.trackEvent(Analytics.Category.INFO, Analytics.Action.LINK_CLICKED, url.target)
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url.target)))
+                }
 
                 layout.addView(button)
             }
