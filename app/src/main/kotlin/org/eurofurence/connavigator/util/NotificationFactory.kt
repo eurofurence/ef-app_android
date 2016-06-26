@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.preference.PreferenceManager
+import android.support.v4.app.NotificationCompat
 import com.google.common.base.Preconditions
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.gcm.NotificationPublisher
@@ -33,7 +34,7 @@ class NotificationFactory {
     fun buildNotification(title: String, message: String, pendingActivity: Class<*> = ActivityRoot::class.java): Notification {
         Preconditions.checkArgument(Activity::class.java.isAssignableFrom(pendingActivity), "Pending activity is not actually an activity")
 
-        val builder = Notification.Builder(context)
+        val builder = NotificationCompat.Builder(context)
 
         // On a click event we want to start an activity
         val intentToExecute = Intent(context, pendingActivity)
