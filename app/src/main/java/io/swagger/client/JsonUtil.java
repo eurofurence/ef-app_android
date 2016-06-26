@@ -87,6 +87,10 @@ public class JsonUtil {
       return new TypeToken<List<InfoGroup>>(){}.getType();
     }
     
+    if ("NamedUrl".equalsIgnoreCase(className)) {
+      return new TypeToken<List<NamedUrl>>(){}.getType();
+    }
+    
     return new TypeToken<List<Object>>(){}.getType();
   }
 
@@ -143,6 +147,10 @@ public class JsonUtil {
     
     if ("InfoGroup".equalsIgnoreCase(className)) {
       return new TypeToken<InfoGroup>(){}.getType();
+    }
+    
+    if ("NamedUrl".equalsIgnoreCase(className)) {
+      return new TypeToken<NamedUrl>(){}.getType();
     }
     
     return new TypeToken<Object>(){}.getType();

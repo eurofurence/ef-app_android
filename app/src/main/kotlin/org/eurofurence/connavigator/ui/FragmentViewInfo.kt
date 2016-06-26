@@ -15,6 +15,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import us.feras.mdv.MarkdownView
+import java.util.*
 
 /**
  * Views an info based on an ID passed to the intent
@@ -55,7 +56,12 @@ class FragmentViewInfo() : Fragment() {
             title.text = info.title
             text.loadMarkdown(info.text)
             image.scaleType = ImageView.ScaleType.CENTER_CROP
-            imageService.load(database.imageDb[info.imageId], image, showHide = false)
+
+            if (info.imageIds.isNotEmpty()) {
+                imageService.load(database.imageDb[UUID.fromString(info.imageIds.first())], image, showHide = false)
+            } else {
+                image.visibility = View.GONE
+            }
         }
     }
 }

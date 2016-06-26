@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.CardView
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -10,12 +9,14 @@ import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import io.swagger.client.model.Info
 import io.swagger.client.model.InfoGroup
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Choice
@@ -23,6 +24,7 @@ import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.SharingUtility
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
 
 class FragmentViewInfoGroups : Fragment(), ContentAPI {
@@ -39,6 +41,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
     inner class InfoGroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title by view(TextView::class.java)
         val description by view(TextView::class.java)
+        val image by view(ImageView::class.java)
     }
 
     // Event view holder finds and memorizes the views in an event card
@@ -76,7 +79,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
                         // Set data
                         holder.title.text = infoGroup.name
                         holder.description.text = infoGroup.description
-
+                        imageService.load(database.imageDb[infoGroup.imageId], holder.image)
 
                     },
                     { info ->

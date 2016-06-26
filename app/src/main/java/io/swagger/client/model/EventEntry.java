@@ -20,6 +20,8 @@ public class EventEntry extends EntityBase {
   private String slug = null;
   @SerializedName("Title")
   private String title = null;
+  @SerializedName("SubTitle")
+  private String subTitle = null;
   @SerializedName("ConferenceTrackId")
   private UUID conferenceTrackId = null;
   @SerializedName("ConferenceDayId")
@@ -79,6 +81,16 @@ public class EventEntry extends EntityBase {
   }
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public String getSubTitle() {
+    return subTitle;
+  }
+  public void setSubTitle(String subTitle) {
+    this.subTitle = subTitle;
   }
 
   /**
@@ -176,7 +188,7 @@ public class EventEntry extends EntityBase {
    * minimum: 0.0
    * maximum: 1.0
    **/
-  @ApiModelProperty(value = "Numeric flag that, if set to \"1\", indicates that the record is differing from the original schedule in the con book. This usually indicates that the event was rescheduled after the con book was printed.")
+  @ApiModelProperty(required = true, value = "Numeric flag that, if set to \"1\", indicates that the record is differing from the original schedule in the con book. This usually indicates that the event was rescheduled after the con book was printed.")
   public BigDecimal getIsDeviatingFromConBook() {
     return isDeviatingFromConBook;
   }
@@ -198,6 +210,7 @@ public class EventEntry extends EntityBase {
         (imageId == null ? eventEntry.imageId == null : imageId.equals(eventEntry.imageId)) &&
         (slug == null ? eventEntry.slug == null : slug.equals(eventEntry.slug)) &&
         (title == null ? eventEntry.title == null : title.equals(eventEntry.title)) &&
+        (subTitle == null ? eventEntry.subTitle == null : subTitle.equals(eventEntry.subTitle)) &&
         (conferenceTrackId == null ? eventEntry.conferenceTrackId == null : conferenceTrackId.equals(eventEntry.conferenceTrackId)) &&
         (conferenceDayId == null ? eventEntry.conferenceDayId == null : conferenceDayId.equals(eventEntry.conferenceDayId)) &&
         (conferenceRoomId == null ? eventEntry.conferenceRoomId == null : conferenceRoomId.equals(eventEntry.conferenceRoomId)) &&
@@ -217,6 +230,7 @@ public class EventEntry extends EntityBase {
     result = 31 * result + (imageId == null ? 0: imageId.hashCode());
     result = 31 * result + (slug == null ? 0: slug.hashCode());
     result = 31 * result + (title == null ? 0: title.hashCode());
+    result = 31 * result + (subTitle == null ? 0: subTitle.hashCode());
     result = 31 * result + (conferenceTrackId == null ? 0: conferenceTrackId.hashCode());
     result = 31 * result + (conferenceDayId == null ? 0: conferenceDayId.hashCode());
     result = 31 * result + (conferenceRoomId == null ? 0: conferenceRoomId.hashCode());
@@ -239,6 +253,7 @@ public class EventEntry extends EntityBase {
     sb.append("  imageId: ").append(imageId).append("\n");
     sb.append("  slug: ").append(slug).append("\n");
     sb.append("  title: ").append(title).append("\n");
+    sb.append("  subTitle: ").append(subTitle).append("\n");
     sb.append("  conferenceTrackId: ").append(conferenceTrackId).append("\n");
     sb.append("  conferenceDayId: ").append(conferenceDayId).append("\n");
     sb.append("  conferenceRoomId: ").append(conferenceRoomId).append("\n");

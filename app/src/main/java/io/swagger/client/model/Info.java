@@ -1,7 +1,9 @@
 package io.swagger.client.model;
 
 import io.swagger.client.model.EntityBase;
+import io.swagger.client.model.NamedUrl;
 import java.math.BigDecimal;
+import java.util.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -22,6 +24,10 @@ public class Info extends EntityBase {
   private String text = null;
   @SerializedName("Position")
   private Integer position = null;
+  @SerializedName("ImageIds")
+  private List<String> imageIds = null;
+  @SerializedName("Urls")
+  private List<NamedUrl> urls = null;
 
   /**
    * Id of the InfoGroup this record belongs to.
@@ -77,6 +83,26 @@ public class Info extends EntityBase {
     this.position = position;
   }
 
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public List<String> getImageIds() {
+    return imageIds;
+  }
+  public void setImageIds(List<String> imageIds) {
+    this.imageIds = imageIds;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public List<NamedUrl> getUrls() {
+    return urls;
+  }
+  public void setUrls(List<NamedUrl> urls) {
+    this.urls = urls;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -91,7 +117,9 @@ public class Info extends EntityBase {
         (imageId == null ? info.imageId == null : imageId.equals(info.imageId)) &&
         (title == null ? info.title == null : title.equals(info.title)) &&
         (text == null ? info.text == null : text.equals(info.text)) &&
-        (position == null ? info.position == null : position.equals(info.position));
+        (position == null ? info.position == null : position.equals(info.position)) &&
+        (imageIds == null ? info.imageIds == null : imageIds.equals(info.imageIds)) &&
+        (urls == null ? info.urls == null : urls.equals(info.urls));
   }
 
   @Override 
@@ -102,6 +130,8 @@ public class Info extends EntityBase {
     result = 31 * result + (title == null ? 0: title.hashCode());
     result = 31 * result + (text == null ? 0: text.hashCode());
     result = 31 * result + (position == null ? 0: position.hashCode());
+    result = 31 * result + (imageIds == null ? 0: imageIds.hashCode());
+    result = 31 * result + (urls == null ? 0: urls.hashCode());
     return result;
   }
 
@@ -115,6 +145,8 @@ public class Info extends EntityBase {
     sb.append("  title: ").append(title).append("\n");
     sb.append("  text: ").append(text).append("\n");
     sb.append("  position: ").append(position).append("\n");
+    sb.append("  imageIds: ").append(imageIds).append("\n");
+    sb.append("  urls: ").append(urls).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **imageId** | [**UUID**](UUID.md) |  |  [optional]
 **slug** | **String** |  | 
 **title** | **String** |  | 
+**subTitle** | **String** |  | 
 **conferenceTrackId** | [**UUID**](UUID.md) |  | 
 **conferenceDayId** | [**UUID**](UUID.md) |  | 
 **conferenceRoomId** | [**UUID**](UUID.md) |  | 
@@ -17,7 +18,7 @@ Name | Type | Description | Notes
 **endTime** | **String** |  | 
 **duration** | **String** |  | 
 **panelHosts** | **String** |  | 
-**isDeviatingFromConBook** | [**BigDecimal**](BigDecimal.md) | Numeric flag that, if set to \&quot;1\&quot;, indicates that the record is differing from the original schedule in the con book. This usually indicates that the event was rescheduled after the con book was printed. |  [optional]
+**isDeviatingFromConBook** | [**BigDecimal**](BigDecimal.md) | Numeric flag that, if set to \&quot;1\&quot;, indicates that the record is differing from the original schedule in the con book. This usually indicates that the event was rescheduled after the con book was printed. | 
 
 
 

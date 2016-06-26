@@ -9,6 +9,8 @@ Name | Type | Description | Notes
 **title** | **String** | Title of the message blob. |  [optional]
 **text** | **String** | Content of the message blob, may contain markup (tbd). |  [optional]
 **position** | **Integer** | Numeric order/position of the element (lower number &#x3D; display first) |  [optional]
+**imageIds** | **List&lt;String&gt;** |  |  [optional]
+**urls** | [**List&lt;NamedUrl&gt;**](NamedUrl.md) |  |  [optional]
 
 
 
