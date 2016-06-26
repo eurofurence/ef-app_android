@@ -44,6 +44,8 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.changeScreenName("View Dealer Details")
 
+        Analytics.trackEvent(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName ?: dealer.attendeeNickname)
+
         val image = database.imageDb[dealer.artistImageId]
         imageService.load(image, dealerImage, false)
         imageService.resizeFor(image, dealerImage)

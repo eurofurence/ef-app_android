@@ -31,7 +31,7 @@ class FragmentViewHome : Fragment() {
             inflater.inflate(R.layout.fview_home, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.changeScreenName("View Home")
+        Analytics.changeScreenName("Home")
 
         val database = Database(activity)
         applyOnRoot { changeTitle("Home") }

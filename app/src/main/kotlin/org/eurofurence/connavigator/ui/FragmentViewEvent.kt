@@ -57,10 +57,13 @@ class FragmentViewEvent() : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.changeScreenName("View Event")
+        Analytics.changeScreenName("Event Specific")
+
 
         if ("eventEntry" in arguments) {
             val eventEntry = arguments.jsonObjects["eventEntry", EventEntry::class.java]
+
+            Analytics.trackEvent(Analytics.Category.EVENT, Analytics.Action.OPENED, eventEntry.title)
 
             val conferenceRoom = database.eventConferenceRoomDb.keyValues[eventEntry.conferenceRoomId]
             val conferenceDay = database.eventConferenceDayDb.keyValues[eventEntry.conferenceDayId]

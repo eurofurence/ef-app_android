@@ -51,7 +51,7 @@ class FragmentViewDealers : Fragment(), TextWatcher {
             inflater.inflate(R.layout.fview_dealers, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.changeScreenName("View About")
+        Analytics.changeScreenName("Dealers Listing")
 
         applyOnRoot { changeTitle("Dealers Den") }
         dealersSearch.setSingleLine()
