@@ -10,6 +10,7 @@ import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.gcm.NotificationPublisher
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.logd
@@ -35,6 +36,9 @@ class EventFavouriter(val context: Context) {
             removeEventNotification(eventEntry)
             logv { "Removing event %s".format(eventEntry.title) }
 
+            // Send an event to analytics that we've removed a favourite
+            Analytics.trackEvent(Analytics.Category.EVENT, Analytics.Action.FAVOURITE_DEL, eventEntry.title)
+
             simpleBroadcaster.cast(FragmentViewEvent.EVENT_STATUS_CHANGED, context)
             database.favoritedDb.items = database.favoritedDb.items.filter { it.id != eventEntry.id }
             return false
@@ -44,9 +48,13 @@ class EventFavouriter(val context: Context) {
                 scheduleEventNotification(eventEntry)
             }
             logv { "Entering event %s".format(eventEntry.title) }
+
             val newFavourited = LinkedList<EventEntry>()
             newFavourited.addAll(database.favoritedDb.items)
             newFavourited.add(eventEntry)
+
+            // Send an event to analytics that we've favourited
+            Analytics.trackEvent(Analytics.Category.EVENT, Analytics.Action.FAVOURITE_ADD, eventEntry.title)
 
             simpleBroadcaster.cast(FragmentViewEvent.EVENT_STATUS_CHANGED, context)
 

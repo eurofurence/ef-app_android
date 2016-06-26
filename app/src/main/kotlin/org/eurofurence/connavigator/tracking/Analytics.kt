@@ -13,6 +13,21 @@ import org.eurofurence.connavigator.util.extensions.logv
  * Created by David on 20-4-2016.
  */
 class Analytics {
+    object Category {
+        val EVENT = "event"
+        val DEALER = "dealer"
+        val INFO = "info"
+    }
+
+    object Action {
+        val SHARED = "shared"
+        val OPENED = "opened"
+        val FAVOURITE_ADD = "favourite added"
+        val FAVOURITE_DEL = "favourite removed"
+        val EXPORT_CALENDAR = "Exported to calendar"
+        val LINK_CLICKED = "Clicked external link"
+    }
+
     companion object : SharedPreferences.OnSharedPreferenceChangeListener {
         lateinit var tracker: Tracker
         lateinit var context: Context
@@ -42,7 +57,7 @@ class Analytics {
             // Set app-level opt out
             val analytics_on = preferences.getBoolean(context.resources.getString(R.string.settings_tag_analytics_enabled), true)
 
-            // GoogleAnalytics.getInstance(context).appOptOut = analytics_on != true
+            GoogleAnalytics.getInstance(context).appOptOut = analytics_on
 
 
             // Start tracking
@@ -61,5 +76,11 @@ class Analytics {
         fun trackEvent(eventBuilder: HitBuilders.EventBuilder) {
             tracker.send(eventBuilder.build())
         }
+
+        fun trackEvent(category: String, action: String, label: String) =
+                trackEvent(HitBuilders.EventBuilder()
+                        .setCategory(category)
+                        .setAction(action)
+                        .setLabel(label))
     }
 }

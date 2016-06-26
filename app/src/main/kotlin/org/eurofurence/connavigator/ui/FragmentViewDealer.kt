@@ -60,10 +60,13 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
 
         dealerButtonMore.setOnClickListener {
             try {
-                if (dealer.websiteUri.startsWith("http"))
+                if (dealer.websiteUri.startsWith("http")) {
+                    Analytics.trackEvent(Analytics.Category.DEALER, Analytics.Action.LINK_CLICKED, dealer.displayName ?: dealer.attendeeNickname)
+
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(dealer.websiteUri)))
-                else
+                } else {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://" + dealer.websiteUri)))
+                }
             } catch(e: Exception) {
                 logv { "User tried clicking on a dealer with no url" }
             }

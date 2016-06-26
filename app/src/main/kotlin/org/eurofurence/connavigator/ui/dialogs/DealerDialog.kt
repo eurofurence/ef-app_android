@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import io.swagger.client.model.Dealer
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.SharingUtility
 import org.eurofurence.connavigator.util.extensions.logd
@@ -29,6 +30,8 @@ class DealerDialog(val dealer: Dealer) : DialogFragment() {
             when (i) {
                 0 -> logd { "send to notes" }
                 else -> {
+                    Analytics.trackEvent(Analytics.Category.DEALER, Analytics.Action.SHARED, dealer.displayName ?: dealer.attendeeNickname)
+
                     startActivity(SharingUtility.share(Formatter.shareDealer(dealer)))
                 }
             }

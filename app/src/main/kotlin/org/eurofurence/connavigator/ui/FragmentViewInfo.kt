@@ -43,10 +43,13 @@ class FragmentViewInfo() : Fragment() {
 
         Analytics.changeScreenName("View Info")
 
+
         applyOnRoot { changeTitle("Information") }
         // Get info if it exists
         if ("info" in arguments) {
             val info = arguments.jsonObjects["info", Info::class.java]
+
+            Analytics.trackEvent(Analytics.Category.INFO, Analytics.Action.OPENED, info.title)
 
             // Set the properties of the view
             title.text = info.title

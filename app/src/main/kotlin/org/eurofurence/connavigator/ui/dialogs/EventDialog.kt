@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.EventFavouriter
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.SharingUtility
@@ -46,6 +47,8 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
 
                 val calendarIntent = Intent(Intent.ACTION_INSERT)
 
+                Analytics.trackEvent(Analytics.Category.EVENT, Analytics.Action.EXPORT_CALENDAR, event.title)
+
                 calendarIntent.setType("vnd.android.cursor.item/event");
                 calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title);
                 calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, database.eventStart(event).millis)
@@ -58,6 +61,8 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
             }
             2 -> {
                 logd { "Sharing event" }
+
+                Analytics.trackEvent(Analytics.Category.EVENT, Analytics.Action.SHARED, event.title)
                 //share
                 startActivity(SharingUtility.share(Formatter.shareEvent(event)))
             }
