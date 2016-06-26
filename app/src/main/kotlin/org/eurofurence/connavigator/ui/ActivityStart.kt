@@ -28,6 +28,7 @@ class ActivityStart : AppCompatActivity() {
             buttonStart.setOnClickListener { startRootActivity() }
         } else {
             textHelp.text = "Failed to successfully get data from the backend. Press the button to try again"
+            buttonStart.visibility = View.VISIBLE
             buttonStart.setOnClickListener { UpdateIntentService.dispatchUpdate(this) }
         }
     }

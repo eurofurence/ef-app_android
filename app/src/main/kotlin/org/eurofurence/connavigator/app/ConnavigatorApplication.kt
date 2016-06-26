@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.app
 
-import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
 import android.support.multidex.MultiDexApplication
 import net.danlew.android.joda.JodaTimeAndroid
 import org.eurofurence.connavigator.database.UpdateIntentService
@@ -27,9 +28,18 @@ class ConnavigatorApplication : MultiDexApplication() {
 
         Analytics.init(this)
 
-        MyInstanceIDListenerService.dispatchUpdate(this)
+        if (networkIsAvailable()) {
+            MyInstanceIDListenerService.dispatchUpdate(this)
+        }
 
         // Now running an update every time application boots
         UpdateIntentService.dispatchUpdate(this)
+    }
+
+    private fun networkIsAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager;
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo;
+
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected;
     }
 }

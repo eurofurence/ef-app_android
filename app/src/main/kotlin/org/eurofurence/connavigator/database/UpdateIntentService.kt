@@ -88,7 +88,7 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
             logv("UIS") { "Completed update successfully" }
         } catch(ex: Throwable) {
             // Make the fail response message, transfer exception
-            response.booleans["success"] = true
+            response.booleans["success"] = false
             response.objects["time"] = oldDate
             response.objects["reason"] = ex
 
