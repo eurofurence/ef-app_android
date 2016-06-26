@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui.adapter
 
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +39,13 @@ class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Da
 
         holder.dealerName.text = Formatter.dealerName(dealer)
         holder.dealerSubText.text = dealer.shortDescription ?: "This dealer did not provide a short description"
-        imageService.load(database.imageDb[dealer.artistThumbnailImageId], holder.dealerPreviewImage, false)
+
+        // If no dealer preview was provided, load the YCH icon
+        if (database.imageDb[dealer.artPreviewImageId] != null) {
+            imageService.load(database.imageDb[dealer.artistThumbnailImageId], holder.dealerPreviewImage, false)
+        } else {
+            holder.dealerPreviewImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_black))
+        }
 
         holder.layout.setOnClickListener {
             fragment.applyOnRoot { navigateToDealer(dealer) }

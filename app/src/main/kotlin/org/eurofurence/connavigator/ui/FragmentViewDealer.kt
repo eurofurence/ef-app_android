@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,8 +48,13 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
         Analytics.trackEvent(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName ?: dealer.attendeeNickname)
 
         val image = database.imageDb[dealer.artistImageId]
-        imageService.load(image, dealerImage, false)
-        imageService.resizeFor(image, dealerImage)
+
+        if (image != null) {
+            imageService.load(image, dealerImage, false)
+            imageService.resizeFor(image, dealerImage)
+        } else {
+            dealerImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_black))
+        }
 
         imageService.load(database.imageDb[dealer.artPreviewImageId], dealerPreviewArtImage)
 
