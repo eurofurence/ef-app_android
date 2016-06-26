@@ -2,9 +2,9 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@android:color/background_light"
-android:id="@+id/layout">
+              android:padding="@dimen/outer_padding"
+              android:id="@+id/layout">
     <TextView
-            android:padding="@dimen/outer_padding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
