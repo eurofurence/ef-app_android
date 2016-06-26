@@ -14,6 +14,7 @@ import org.eurofurence.connavigator.util.delegators.view
  */
 class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     val announcementTitle by view(TextView::class.java)
+    val announcementDate by view(TextView::class.java)
     val announcementContent by view(TextView::class.java)
 }
 
@@ -22,7 +23,18 @@ class AnnoucementRecyclerDataAdapter(val announcements: List<Announcement>) : Re
         val announcement = announcements[position]
 
         holder.announcementTitle.text = announcement.title
+        holder.announcementDate.text = announcement.lastChangeDateTimeUtc.toString()
         holder.announcementContent.text = announcement.content
+
+        holder.announcementTitle.setOnClickListener {
+            if (holder.announcementContent.visibility == View.GONE) {
+                holder.announcementTitle.setSingleLine(false)
+                holder.announcementContent.visibility = View.VISIBLE
+            } else {
+                holder.announcementTitle.setSingleLine(true)
+                holder.announcementContent.visibility = View.GONE
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnnouncementDataholder =

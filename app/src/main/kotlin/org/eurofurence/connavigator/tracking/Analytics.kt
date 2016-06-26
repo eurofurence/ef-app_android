@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.logv
 
@@ -61,7 +62,11 @@ class Analytics {
 
 
             // Start tracking
-            tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-1")
+            if (BuildConfig.DEBUG) {
+                tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-2")
+            } else {
+                tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-1")
+            }
 
             var interval = 100.toDouble()
 
