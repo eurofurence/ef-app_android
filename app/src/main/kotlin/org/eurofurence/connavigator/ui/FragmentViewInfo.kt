@@ -1,11 +1,15 @@
 package org.eurofurence.connavigator.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.R
@@ -33,6 +37,7 @@ class FragmentViewInfo() : Fragment() {
     val image by view(ImageView::class.java)
     val title by view(TextView::class.java)
     val text by view(MarkdownView::class.java)
+    val layout by view(LinearLayout::class.java)
 
     val database: Database get() = letRoot { it.database }!!
 
@@ -61,6 +66,14 @@ class FragmentViewInfo() : Fragment() {
                 imageService.load(database.imageDb[UUID.fromString(info.imageIds.first())], image, showHide = false)
             } else {
                 image.visibility = View.GONE
+            }
+
+            for (url in info.urls) {
+                val button = Button(context)
+                button.text = url.text
+                button.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url.target))) }
+
+                layout.addView(button)
             }
         }
     }
