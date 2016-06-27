@@ -63,6 +63,8 @@ class Database(val context: Context) {
     val eventConferenceTrackDb =
             createGson(File(context.cacheDir, "eventcontrack.db"), EventConferenceTrack::class.java).cachedApiDB()
 
+    val mapEntityDb =
+            createGson(File(context.cacheDir, "mapentity.db"), MapEntity::class.java).cachedApiDB()
     /**
      * Database containing map entries
      */
@@ -104,6 +106,7 @@ class Database(val context: Context) {
         infoDb.delete()
         infoGroupDb.delete()
         mapEntryDb.delete()
+        mapEntityDb.delete()
     }
 
     /**

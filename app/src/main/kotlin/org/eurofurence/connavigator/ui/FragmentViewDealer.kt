@@ -54,7 +54,12 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment(), ContentAPI {
         // Retrieve top image
         val image = database.imageDb[dealer.artistImageId]
 
+        // Load the map
         val mapEntry = database.mapEntryDb.items.find { it.targetId == dealer.id }
+
+        val mapImage = database.imageDb[database.mapEntityDb[mapEntry?.mapId]?.imageId]
+
+        imageService.load(mapImage, dealerMap)
 
         // Set image on top
         if (image != null) {
