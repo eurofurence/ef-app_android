@@ -1,13 +1,16 @@
 package org.eurofurence.connavigator.ui.adapter
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import io.swagger.client.model.Announcement
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.delegators.view
+import org.joda.time.format.DateTimeFormat
 
 /**
  * Created by David on 15-5-2016.
@@ -16,24 +19,37 @@ class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView
     val announcementTitle by view(TextView::class.java)
     val announcementDate by view(TextView::class.java)
     val announcementContent by view(TextView::class.java)
+    val announcementCaret by view(ImageView::class.java)
 }
 
 class AnnoucementRecyclerDataAdapter(val announcements: List<Announcement>) : RecyclerView.Adapter<AnnouncementDataholder>() {
     override fun onBindViewHolder(holder: AnnouncementDataholder, position: Int) {
         val announcement = announcements[position]
 
+        val dateTimeFormatter = DateTimeFormat.forPattern("MMMM dd yyyy 'at' HH:mm")
+
         holder.announcementTitle.text = announcement.title
-        holder.announcementDate.text = announcement.lastChangeDateTimeUtc.toString()
+        holder.announcementDate.text = dateTimeFormatter.print(announcement.lastChangeDateTimeUtc.time)
         holder.announcementContent.text = announcement.content
 
-        holder.announcementTitle.setOnClickListener {
-            if (holder.announcementContent.visibility == View.GONE) {
-                holder.announcementTitle.setSingleLine(false)
-                holder.announcementContent.visibility = View.VISIBLE
-            } else {
-                holder.announcementTitle.setSingleLine(true)
-                holder.announcementContent.visibility = View.GONE
-            }
+        holder.announcementTitle.setOnClickListener { showItem(holder) }
+        holder.announcementDate.setOnClickListener { showItem(holder) }
+        holder.announcementCaret.setOnClickListener { showItem(holder) }
+
+
+    }
+
+    fun showItem(holder: AnnouncementDataholder) {
+        if (holder.announcementContent.visibility == View.GONE) {
+            holder.announcementTitle.setSingleLine(false)
+            holder.announcementContent.visibility = View.VISIBLE
+
+            holder.announcementCaret.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.icon_collapse))
+        } else {
+            holder.announcementTitle.setSingleLine(true)
+            holder.announcementContent.visibility = View.GONE
+
+            holder.announcementCaret.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.icon_expand))
         }
     }
 
