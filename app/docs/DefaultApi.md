@@ -489,7 +489,7 @@ No authorization required
 
 <a name="mapGet"></a>
 # **mapGet**
-> List&lt;Map&gt; mapGet(since)
+> List&lt;MapEntity&gt; mapGet(since)
 
 
 
@@ -503,7 +503,7 @@ tbd
 DefaultApi apiInstance = new DefaultApi();
 Date since = new Date(); // Date | Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* >= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
 try {
-    List<Map> result = apiInstance.mapGet(since);
+    List<MapEntity> result = apiInstance.mapGet(since);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#mapGet");
@@ -519,7 +519,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List&lt;Map&gt;**](Map.md)
+[**List&lt;MapEntity&gt;**](MapEntity.md)
 
 ### Authorization
 

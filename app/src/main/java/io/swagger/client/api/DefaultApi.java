@@ -23,7 +23,7 @@ import io.swagger.client.model.Image;
 import io.swagger.client.model.Info;
 import io.swagger.client.model.InfoGroup;
 import io.swagger.client.model.MapEntry;
-import java.util.Map;
+import io.swagger.client.model.MapEntity;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -1453,9 +1453,9 @@ public class DefaultApi {
   * 
   * tbd
    * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;&#x3D; the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
-   * @return List<Map>
+   * @return List<MapEntity>
   */
-  public List<Map> mapGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<MapEntity> mapGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
@@ -1493,7 +1493,7 @@ public class DefaultApi {
       try {
         String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
         if(localVarResponse != null){
-           return (List<Map>) ApiInvoker.deserialize(localVarResponse, "array", Map.class);
+           return (List<MapEntity>) ApiInvoker.deserialize(localVarResponse, "array", MapEntity.class);
         } else {
            return null;
         }
@@ -1519,7 +1519,7 @@ public class DefaultApi {
    * tbd
    * @param since Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;&#x3D; the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
   */
-  public void mapGet (Date since, final Response.Listener<List<Map>> responseListener, final Response.ErrorListener errorListener) {
+  public void mapGet (Date since, final Response.Listener<List<MapEntity>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
@@ -1561,7 +1561,7 @@ public class DefaultApi {
           @Override
           public void onResponse(String localVarResponse) {
             try {
-              responseListener.onResponse((List<Map>) ApiInvoker.deserialize(localVarResponse,  "array", Map.class));
+              responseListener.onResponse((List<MapEntity>) ApiInvoker.deserialize(localVarResponse,  "array", MapEntity.class));
             } catch (ApiException exception) {
                errorListener.onErrorResponse(new VolleyError(exception));
             }

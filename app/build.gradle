@@ -70,7 +70,7 @@ android {
 
 ext {
     // Location of the schema file
-    backend_commit = "f7495a4523d20adf461373fcd5bf6b6ffe469bd7"
+    backend_commit = "c72de67fe4dded4f8acf2e67f9e286245d3ebd1e"
     schema_location = "https://raw.githubusercontent.com/eurofurence/ef-app_backend/$backend_commit/Swagger/ApiDefinition.yml"
 
     // Dependency versions

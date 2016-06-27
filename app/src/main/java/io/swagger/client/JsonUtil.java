@@ -87,6 +87,10 @@ public class JsonUtil {
       return new TypeToken<List<InfoGroup>>(){}.getType();
     }
     
+    if ("MapEntity".equalsIgnoreCase(className)) {
+      return new TypeToken<List<MapEntity>>(){}.getType();
+    }
+    
     if ("MapEntry".equalsIgnoreCase(className)) {
       return new TypeToken<List<MapEntry>>(){}.getType();
     }
@@ -151,6 +155,10 @@ public class JsonUtil {
     
     if ("InfoGroup".equalsIgnoreCase(className)) {
       return new TypeToken<InfoGroup>(){}.getType();
+    }
+    
+    if ("MapEntity".equalsIgnoreCase(className)) {
+      return new TypeToken<MapEntity>(){}.getType();
     }
     
     if ("MapEntry".equalsIgnoreCase(className)) {
