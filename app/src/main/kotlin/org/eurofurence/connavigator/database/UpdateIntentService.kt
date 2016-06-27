@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
+import io.swagger.client.model.MapEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.store.SyncIDB
 import org.eurofurence.connavigator.util.extensions.*
@@ -77,6 +78,7 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
             checkedUpdate("Image", database.imageDb, { loadImages(it) })
             checkedUpdate("Info", database.infoDb, { loadInfos(it) })
             checkedUpdate("InfoGroup", database.infoGroupDb, { loadInfoGroups(it) })
+            checkedUpdate("MapEntry", database.mapEntryDb, { loadMapEntry(it) })
 
             // Set the new server date
             database.dateDb.items = listOf(newDate)
@@ -98,6 +100,8 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
         // Send a broadcast notifying completion of this action
         LocalBroadcastManager.getInstance(this).sendBroadcast(response)
     }
+
+    private fun loadMapEntry(oldDate: Date?) = apiService.api.mapEntryGet(oldDate)
 
     private fun loadAnnouncements(oldDate: Date?) = apiService.api.announcementGet(oldDate)
 

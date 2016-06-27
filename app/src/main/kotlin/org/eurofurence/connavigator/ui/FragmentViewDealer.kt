@@ -49,6 +49,8 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
 
         val image = database.imageDb[dealer.artistImageId]
 
+        val mapEntry = database.mapEntryDb.items.find { it.targetId == dealer.id}
+
         if (image != null) {
             imageService.load(image, dealerImage, false)
             imageService.resizeFor(image, dealerImage)

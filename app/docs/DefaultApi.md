@@ -14,6 +14,8 @@ Method | HTTP request | Description
 [**imageGet**](DefaultApi.md#imageGet) | **GET** /Image | 
 [**infoGet**](DefaultApi.md#infoGet) | **GET** /Info | 
 [**infoGroupGet**](DefaultApi.md#infoGroupGet) | **GET** /InfoGroup | 
+[**mapEntryGet**](DefaultApi.md#mapEntryGet) | **GET** /MapEntry | 
+[**mapGet**](DefaultApi.md#mapGet) | **GET** /Map | 
 
 
 <a name="announcementGet"></a>
@@ -432,6 +434,92 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**List&lt;InfoGroup&gt;**](InfoGroup.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="mapEntryGet"></a>
+# **mapEntryGet**
+> List&lt;MapEntry&gt; mapEntryGet(since)
+
+
+
+tbd
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.DefaultApi;
+
+DefaultApi apiInstance = new DefaultApi();
+Date since = new Date(); // Date | Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* >= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
+try {
+    List<MapEntry> result = apiInstance.mapEntryGet(since);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#mapEntryGet");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Date**| Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;&#x3D; the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set. | [optional]
+
+### Return type
+
+[**List&lt;MapEntry&gt;**](MapEntry.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="mapGet"></a>
+# **mapGet**
+> List&lt;Map&gt; mapGet(since)
+
+
+
+tbd
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.DefaultApi;
+
+DefaultApi apiInstance = new DefaultApi();
+Date since = new Date(); // Date | Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* >= the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set.
+try {
+    List<Map> result = apiInstance.mapGet(since);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#mapGet");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Date**| Delta reference, date time in **ISO 8610**. If set, only items with a *LastChangeDateTimeUtc* &gt;&#x3D; the specified value will be returned. If not set, API will return the current set of records without deleted items. If set, items deleted since the delta specified will be returned with an *IsDeleted* flag set. | [optional]
+
+### Return type
+
+[**List&lt;Map&gt;**](Map.md)
 
 ### Authorization
 
