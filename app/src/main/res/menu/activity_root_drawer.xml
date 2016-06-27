@@ -45,6 +45,9 @@
             <item android:id="@+id/navDevReload"
                   android:title="Reload database"
                   android:icon="@drawable/icon_refresh"/>
+            <item android:id="@+id/navDevClear"
+                  android:title="Empty database"
+                  android:icon="@drawable/icon_delete" />
             <item android:id="@+id/navDevSettings"
                   android:title="Settings"
                   android:icon="@drawable/icon_settings" />

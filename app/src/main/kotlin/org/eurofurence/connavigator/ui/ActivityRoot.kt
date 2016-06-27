@@ -213,6 +213,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this)
                 R.id.navMap -> navigateRoot(FragmentMap::class.java)
                 R.id.navDevSettings -> handleSettings()
+                R.id.navDevClear -> {
+                    database.clear()
+                    System.exit(0)
+                }
             }
 
             // Close drawer and return the result
