@@ -16,6 +16,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
+import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.letRoot
@@ -23,7 +24,7 @@ import org.eurofurence.connavigator.util.extensions.letRoot
 /**
  * Created by David on 15-5-2016.
  */
-class FragmentViewDealers : Fragment(), TextWatcher {
+class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
     override fun afterTextChanged(s: Editable?) {
     }
 
@@ -62,5 +63,13 @@ class FragmentViewDealers : Fragment(), TextWatcher {
         dealersRecycler.itemAnimator = DefaultItemAnimator()
 
         dealersSearch.addTextChangedListener(this)
+    }
+
+    override fun onSearchButtonClick() {
+        if(dealersSearch.visibility == View.GONE){
+            dealersSearch.visibility = View.VISIBLE
+        } else{
+            dealersSearch.visibility = View.GONE
+        }
     }
 }

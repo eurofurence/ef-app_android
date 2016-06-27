@@ -10,4 +10,11 @@ interface ContentAPI {
     fun dataUpdated() {
         // No operation
     }
+
+    /**
+     * Called when the search button is clicked in the toolbar
+     */
+    fun onSearchButtonClick(){
+
+    }
 }

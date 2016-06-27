@@ -67,6 +67,9 @@
             <us.feras.mdv.MarkdownView android:layout_width="match_parent"
                                        android:layout_height="wrap_content"
                                        android:id="@+id/dealerArtDescription"/>
+            <ImageView android:layout_width="match_parent"
+                       android:layout_height="200dp"
+                        android:id="@+id/dealerMap"/>
 
         </LinearLayout>
     </ScrollView>

@@ -16,6 +16,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.get
@@ -26,7 +27,7 @@ import us.feras.mdv.MarkdownView
 /**
  * Created by David on 16-5-2016.
  */
-class FragmentViewDealer(val dealer: Dealer) : Fragment() {
+class FragmentViewDealer(val dealer: Dealer) : Fragment(), ContentAPI {
     val dealerName by view(TextView::class.java)
     val dealerShortDescription by view(TextView::class.java)
     val dealerArtistDescription by view(MarkdownView::class.java)
@@ -35,6 +36,8 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
     val dealerButtonMore by view(FloatingActionButton::class.java)
     val dealerPreviewArtImage by view(ImageView::class.java)
     val dealerPreviewCaption by view(TextView::class.java)
+    val dealerMap by view(ImageView::class.java)
+
     var isFullscreen = false
 
     val database: Database get() = letRoot { it.database }!!
@@ -43,14 +46,17 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
             inflater.inflate(R.layout.fview_dealer, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        // Send analytics pings
         Analytics.changeScreenName("View Dealer Details")
 
         Analytics.trackEvent(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName ?: dealer.attendeeNickname)
 
+        // Retrieve top image
         val image = database.imageDb[dealer.artistImageId]
 
-        val mapEntry = database.mapEntryDb.items.find { it.targetId == dealer.id}
+        val mapEntry = database.mapEntryDb.items.find { it.targetId == dealer.id }
 
+        // Set image on top
         if (image != null) {
             imageService.load(image, dealerImage, false)
             imageService.resizeFor(image, dealerImage)
@@ -58,6 +64,7 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
             dealerImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_black))
         }
 
+        // Load art preview image
         imageService.load(database.imageDb[dealer.artPreviewImageId], dealerPreviewArtImage)
 
         dealerPreviewCaption.text = dealer.artPreviewCaption
@@ -68,6 +75,7 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
         dealerArtistDescription.loadMarkdown(dealer.aboutTheArtistText)
         dealerArtDescription.loadMarkdown(dealer.aboutTheArtText)
 
+        // Handle the FAB that links out
         dealerButtonMore.setOnClickListener {
             try {
                 if (dealer.websiteUri.startsWith("http")) {
@@ -82,6 +90,7 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
             }
         }
 
+        // Load empty texts
         if (dealer.websiteUri.isEmpty())
             dealerButtonMore.visibility = View.GONE
 
@@ -94,4 +103,5 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment() {
         if (dealer.shortDescription.isEmpty())
             dealerShortDescription.visibility = View.GONE
     }
+
 }

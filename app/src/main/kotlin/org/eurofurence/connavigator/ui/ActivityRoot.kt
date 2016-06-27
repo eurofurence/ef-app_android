@@ -38,6 +38,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         supportActionBar!!.title = text
     }
 
+    // Menu
+    var menu: Menu? = null
+
     // Views
     val toolbar by view(Toolbar::class.java)
     override val tabs by view(TabLayout::class.java)
@@ -63,7 +66,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
 
 
         // Make a snackbar for the result
-            Snackbar.make(findViewById(R.id.content)!!, "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(findViewById(R.id.content)!!, "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
 
         // Update content data if fragments implement content API
         applyOnContent {
@@ -78,11 +81,11 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         setContentView(R.layout.activity_root)
 
         Analytics.changeScreenName("Root")
-        setupContent()
         setupBar()
         setupBarNavLink()
         setupNav()
         setupFab()
+        setupContent()
 
         handleBrowsingIntent()
     }
@@ -144,6 +147,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu options
         menuInflater.inflate(R.menu.activity_root, menu)
+        this.menu = menu
         return true
     }
 
@@ -153,6 +157,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
             R.id.action_settings -> handleSettings().let { true }
             R.id.action_bug_report -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://goo.gl/forms/9qI2iFBwAa"))).let { true }
             R.id.action_feedback_report -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://goo.gl/forms/66Q61KsU0G"))).let { true }
+            R.id.action_search -> applyOnContent { onSearchButtonClick() }.let { true }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -170,11 +175,16 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         toggle.syncState()
     }
 
-    private fun<T : Fragment> navigateRoot(type: Class<T>, useTabs: Boolean = false) {
-        if (useTabs)
+    private fun<T : Fragment> navigateRoot(type: Class<T>, useTabs: Boolean = false, showSearch: Boolean = false) {
+        // Show the tabs for a viewpager
+        if (useTabs) {
             tabs.visibility = View.VISIBLE
-        else
+        } else {
             tabs.visibility = View.GONE
+        }
+
+        // Show the search button
+        menu?.findItem(R.id.action_search)?.isVisible = showSearch
 
         // If not already there, navigate with fragment transaction
         if (!type.isInstance(content)) {
@@ -196,7 +206,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
                 R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, true)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
-                R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java)
+                R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, showSearch = true)
                 R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
