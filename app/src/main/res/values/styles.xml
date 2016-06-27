@@ -37,4 +37,7 @@
         <item name="android:background">@color/accentDark</item>
         <item name="android:textColor">@color/textBlack</item>
     </style>
+    <style name="appcompatDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

@@ -11,8 +11,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.ContextThemeWrapper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -214,8 +216,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 R.id.navMap -> navigateRoot(FragmentMap::class.java)
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
-                    database.clear()
-                    System.exit(0)
+                    AlertDialog.Builder(ContextThemeWrapper(this, R.style.appcompatDialog))
+                            .setTitle("Clearing Database")
+                            .setMessage("This will get rid of all cached items you have stored locally. You will need an internet connection to restart!")
+                            .setPositiveButton("Clear", { dialogInterface, i -> database.clear(); System.exit(0) })
+                            .setNegativeButton("Cancel", { dialogInterface, i -> })
+                            .show()
                 }
             }
 
