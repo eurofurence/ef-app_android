@@ -29,7 +29,6 @@
               android:layout_height="wrap_content"
               android:textAppearance="?android:textAppearanceSmall"
               android:text="5 hours ago"
-              android:layout_below="@id/announcementTitle"
               android:id="@+id/announcementDate"/>
     <TextView android:layout_width="match_parent"
               android:layout_height="wrap_content"

@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import io.swagger.client.model.Announcement
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.delegators.view
 import org.joda.time.format.DateTimeFormat
 
@@ -45,6 +46,8 @@ class AnnoucementRecyclerDataAdapter(val announcements: List<Announcement>) : Re
             holder.announcementContent.visibility = View.VISIBLE
 
             holder.announcementCaret.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.icon_collapse))
+
+            Analytics.trackEvent(Analytics.Category.ANNOUNCEMENT, Analytics.Action.OPENED, holder.announcementTitle.text.toString())
         } else {
             holder.announcementTitle.setSingleLine(true)
             holder.announcementContent.visibility = View.GONE

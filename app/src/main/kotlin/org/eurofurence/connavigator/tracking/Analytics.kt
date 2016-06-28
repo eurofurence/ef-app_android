@@ -18,6 +18,7 @@ class Analytics {
         val EVENT = "event"
         val DEALER = "dealer"
         val INFO = "info"
+        val ANNOUNCEMENT = "announcement"
     }
 
     object Action {
