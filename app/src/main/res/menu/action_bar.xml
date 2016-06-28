@@ -18,6 +18,11 @@
           app:showAsAction="ifRoom"
           android:visible="false"
           android:icon="@drawable/icon_search"/>
+    <item android:id="@+id/action_map"
+          android:title="Map"
+          android:visible="false"
+          app:showAsAction="ifRoom"
+          android:icon="@drawable/icon_map_world"/>
     <item android:id="@+id/action_filter"
           android:title="Filter"
           app:showAsAction="ifRoom"

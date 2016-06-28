@@ -148,7 +148,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu options
-        menuInflater.inflate(R.menu.activity_root, menu)
+        menuInflater.inflate(R.menu.action_bar, menu)
         this.menu = menu
         return true
     }
@@ -177,16 +177,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         toggle.syncState()
     }
 
-    private fun<T : Fragment> navigateRoot(type: Class<T>, useTabs: Boolean = false, showSearch: Boolean = false) {
-        // Show the tabs for a viewpager
-        if (useTabs) {
-            tabs.visibility = View.VISIBLE
-        } else {
-            tabs.visibility = View.GONE
-        }
-
-        // Show the search button
-        menu?.findItem(R.id.action_search)?.isVisible = showSearch
+    private fun<T : Fragment> navigateRoot(type: Class<T>, mode: ActionBarMode = ActionBarMode.NONE) {
+        setActionBarMode(mode)
 
         // If not already there, navigate with fragment transaction
         if (!type.isInstance(content)) {
@@ -200,15 +192,29 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
 
     }
 
+    private fun setActionBarMode(mode: ActionBarMode) {
+        if (mode == ActionBarMode.TABS) {
+            tabs.visibility = View.VISIBLE
+        } else {
+            tabs.visibility = View.GONE
+        }
+
+        // Show the search button
+        menu?.findItem(R.id.action_search)?.isVisible = (mode == ActionBarMode.SEARCH || mode == ActionBarMode.SEARCHMAP)
+
+        // Show map button
+        menu?.findItem(R.id.action_map)?.isVisible = (mode == ActionBarMode.MAP || mode == ActionBarMode.SEARCHMAP)
+    }
+
     private fun setupNav() {
         // Add handler for navigation selection
         navView.setNavigationItemSelectedListener {
             //Handle the ID
             when (it.itemId) {
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
-                R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, true)
+                R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, ActionBarMode.TABS)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
-                R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, showSearch = true)
+                R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCHMAP)
                 R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
