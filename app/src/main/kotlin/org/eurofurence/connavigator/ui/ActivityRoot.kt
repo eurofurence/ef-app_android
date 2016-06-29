@@ -82,7 +82,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         // Assign the layout
         setContentView(R.layout.activity_root)
 
-        Analytics.screen("Root")
         setupBar()
         setupBarNavLink()
         setupNav()
@@ -188,6 +187,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                     .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
                     .replace(R.id.content, type.newInstance(), "content")
                     .commitAllowingStateLoss()
+
+
         }
 
     }
