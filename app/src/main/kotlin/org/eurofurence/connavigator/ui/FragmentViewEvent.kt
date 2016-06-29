@@ -76,7 +76,7 @@ class FragmentViewEvent() : Fragment() {
             organizers.text = Formatter.eventOwner(eventEntry)
             room.text = Formatter.roomFull(conferenceRoom!!)
 
-            imageService.load(database.imageDb[eventEntry.imageId], image, false)
+            imageService.load(database.imageDb[eventEntry.imageId], image)
 
             changeFabIcon(eventEntry)
 
