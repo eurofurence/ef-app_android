@@ -30,7 +30,7 @@ class DealerDialog(val dealer: Dealer) : DialogFragment() {
             when (i) {
                 0 -> logd { "send to notes" }
                 else -> {
-                    Analytics.trackEvent(Analytics.Category.DEALER, Analytics.Action.SHARED, dealer.displayName ?: dealer.attendeeNickname)
+                    Analytics.event(Analytics.Category.DEALER, Analytics.Action.SHARED, dealer.displayName ?: dealer.attendeeNickname)
 
                     startActivity(SharingUtility.share(Formatter.shareDealer(dealer)))
                 }

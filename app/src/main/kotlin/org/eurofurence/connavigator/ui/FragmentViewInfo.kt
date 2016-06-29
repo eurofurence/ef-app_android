@@ -47,7 +47,7 @@ class FragmentViewInfo() : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.changeScreenName("Info Specific")
+        Analytics.screen("Info Specific")
 
 
         applyOnRoot { changeTitle("Information") }
@@ -55,7 +55,7 @@ class FragmentViewInfo() : Fragment() {
         if ("info" in arguments) {
             val info = arguments.jsonObjects["info", Info::class.java]
 
-            Analytics.trackEvent(Analytics.Category.INFO, Analytics.Action.OPENED, info.title)
+            Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, info.title)
 
             // Set the properties of the view
             title.text = info.title
@@ -72,7 +72,7 @@ class FragmentViewInfo() : Fragment() {
                 val button = Button(context)
                 button.text = url.text
                 button.setOnClickListener {
-                    Analytics.trackEvent(Analytics.Category.INFO, Analytics.Action.LINK_CLICKED, url.target)
+                    Analytics.event(Analytics.Category.INFO, Analytics.Action.LINK_CLICKED, url.target)
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url.target)))
                 }
 

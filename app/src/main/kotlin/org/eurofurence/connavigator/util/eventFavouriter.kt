@@ -37,7 +37,7 @@ class EventFavouriter(val context: Context) {
             logv { "Removing event %s".format(eventEntry.title) }
 
             // Send an event to analytics that we've removed a favourite
-            Analytics.trackEvent(Analytics.Category.EVENT, Analytics.Action.FAVOURITE_DEL, eventEntry.title)
+            Analytics.event(Analytics.Category.EVENT, Analytics.Action.FAVOURITE_DEL, eventEntry.title)
 
             simpleBroadcaster.cast(FragmentViewEvent.EVENT_STATUS_CHANGED, context)
             database.favoritedDb.items = database.favoritedDb.items.filter { it.id != eventEntry.id }
@@ -54,7 +54,7 @@ class EventFavouriter(val context: Context) {
             newFavourited.add(eventEntry)
 
             // Send an event to analytics that we've favourited
-            Analytics.trackEvent(Analytics.Category.EVENT, Analytics.Action.FAVOURITE_ADD, eventEntry.title)
+            Analytics.event(Analytics.Category.EVENT, Analytics.Action.FAVOURITE_ADD, eventEntry.title)
 
             simpleBroadcaster.cast(FragmentViewEvent.EVENT_STATUS_CHANGED, context)
 

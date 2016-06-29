@@ -102,7 +102,7 @@ class FragmentViewEvents : Fragment(), ContentAPI {
             inflater.inflate(R.layout.fview_events, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.changeScreenName("View Events")
+        Analytics.screen("View Events")
 
         // Configure the recycler
         events.adapter = DataAdapter()

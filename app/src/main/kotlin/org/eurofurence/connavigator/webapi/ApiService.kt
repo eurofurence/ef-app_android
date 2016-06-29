@@ -39,6 +39,6 @@ object apiService {
         }
 
         // Sets up the API invoker
-        ApiInvoker.initializeInstance(cache, network, 2, null, 30)
+        ApiInvoker.initializeInstance(cache, network, 2, null, 60)
     }
 }

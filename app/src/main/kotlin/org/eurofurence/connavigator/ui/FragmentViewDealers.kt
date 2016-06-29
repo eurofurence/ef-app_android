@@ -52,7 +52,7 @@ class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
             inflater.inflate(R.layout.fview_dealers, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.changeScreenName("Dealers Listing")
+        Analytics.screen("Dealers Listing")
 
         applyOnRoot { changeTitle("Dealers Den") }
         dealersSearch.setSingleLine()

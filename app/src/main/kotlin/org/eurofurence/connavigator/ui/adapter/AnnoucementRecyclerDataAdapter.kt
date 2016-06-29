@@ -47,7 +47,7 @@ class AnnoucementRecyclerDataAdapter(val announcements: List<Announcement>) : Re
 
             holder.announcementCaret.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.icon_collapse))
 
-            Analytics.trackEvent(Analytics.Category.ANNOUNCEMENT, Analytics.Action.OPENED, holder.announcementTitle.text.toString())
+            Analytics.event(Analytics.Category.ANNOUNCEMENT, Analytics.Action.OPENED, holder.announcementTitle.text.toString())
         } else {
             holder.announcementTitle.setSingleLine(true)
             holder.announcementContent.visibility = View.GONE

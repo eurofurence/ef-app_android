@@ -47,7 +47,7 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
 
                 val calendarIntent = Intent(Intent.ACTION_INSERT)
 
-                Analytics.trackEvent(Analytics.Category.EVENT, Analytics.Action.EXPORT_CALENDAR, event.title)
+                Analytics.event(Analytics.Category.EVENT, Analytics.Action.EXPORT_CALENDAR, event.title)
 
                 calendarIntent.setType("vnd.android.cursor.item/event");
                 calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title);
@@ -62,7 +62,7 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
             2 -> {
                 logd { "Sharing event" }
 
-                Analytics.trackEvent(Analytics.Category.EVENT, Analytics.Action.SHARED, event.title)
+                Analytics.event(Analytics.Category.EVENT, Analytics.Action.SHARED, event.title)
                 //share
                 startActivity(SharingUtility.share(Formatter.shareEvent(event)))
             }

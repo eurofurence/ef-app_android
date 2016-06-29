@@ -47,9 +47,9 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment(), ContentAPI {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         // Send analytics pings
-        Analytics.changeScreenName("View Dealer Details")
+        Analytics.screen("View Dealer Details")
 
-        Analytics.trackEvent(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName ?: dealer.attendeeNickname)
+        Analytics.event(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName ?: dealer.attendeeNickname)
 
         // Retrieve top image
         val image = database.imageDb[dealer.artistImageId]
@@ -84,7 +84,7 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment(), ContentAPI {
         dealerButtonMore.setOnClickListener {
             try {
                 if (dealer.websiteUri.startsWith("http")) {
-                    Analytics.trackEvent(Analytics.Category.DEALER, Analytics.Action.LINK_CLICKED, dealer.displayName ?: dealer.attendeeNickname)
+                    Analytics.event(Analytics.Category.DEALER, Analytics.Action.LINK_CLICKED, dealer.displayName ?: dealer.attendeeNickname)
 
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(dealer.websiteUri)))
                 } else {

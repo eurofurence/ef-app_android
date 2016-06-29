@@ -117,7 +117,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
         // Initialize the info groups
         dataInit()
 
-        Analytics.changeScreenName("Info Listings")
+        Analytics.screen("Info Listings")
 
         // Default setup for recycler layout and animation
         infoGroups.layoutManager = LinearLayoutManager(context)

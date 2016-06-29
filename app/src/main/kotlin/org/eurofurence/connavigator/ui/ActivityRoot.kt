@@ -82,7 +82,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         // Assign the layout
         setContentView(R.layout.activity_root)
 
-        Analytics.changeScreenName("Root")
+        Analytics.screen("Root")
         setupBar()
         setupBarNavLink()
         setupNav()
