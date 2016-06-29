@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import io.swagger.client.model.Dealer
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
@@ -45,6 +46,7 @@ class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
     val database: Database get() = letRoot { it.database }!!
     val dealersRecycler by view(RecyclerView::class.java)
     val dealersSearch by view(EditText::class.java)
+    val dealersSearchLayout by view(LinearLayout::class.java)
 
     var effective_dealers = emptyList<Dealer>()
 
@@ -66,10 +68,10 @@ class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
     }
 
     override fun onSearchButtonClick() {
-        if(dealersSearch.visibility == View.GONE){
-            dealersSearch.visibility = View.VISIBLE
+        if(dealersSearchLayout.visibility == View.GONE){
+            dealersSearchLayout.visibility = View.VISIBLE
         } else{
-            dealersSearch.visibility = View.GONE
+            dealersSearchLayout.visibility = View.GONE
         }
     }
 }

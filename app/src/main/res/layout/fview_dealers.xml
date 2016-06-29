@@ -6,12 +6,26 @@
               android:animateLayoutChanges="true"
               android:background="@color/backgroundGrey">
 
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/dealersSearch"
-            android:padding="@dimen/outer_padding"
-            android:visibility="gone"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:weightSum="10"
+                  android:visibility="gone"
+                  android:background="@color/cardview_light_background"
+                  android:id="@+id/dealersSearchLayout">
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dealersSearch"
+                android:padding="@dimen/outer_padding"
+                android:imeOptions="actionDone|normal"
+                android:layout_weight="9"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:scaleType="fitCenter"
+                   android:src="@drawable/icon_search"
+                   android:layout_weight="1"/>
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:id="@+id/dealersRecycler"/>
