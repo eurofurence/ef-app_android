@@ -3,17 +3,22 @@ package org.eurofurence.connavigator.tracking
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import com.google.android.gms.analytics.ExceptionReporter
 import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.logv
 
 /**
  * Created by David on 20-4-2016.
  */
 class Analytics {
+    /**
+     * Collects all categories for analytics
+     */
     object Category {
         val EVENT = "event"
         val DEALER = "dealer"
@@ -21,6 +26,9 @@ class Analytics {
         val ANNOUNCEMENT = "announcement"
     }
 
+    /**
+     * Collects all actions for analytics
+     */
     object Action {
         val SHARED = "shared"
         val OPENED = "opened"
@@ -31,62 +39,96 @@ class Analytics {
     }
 
     companion object : SharedPreferences.OnSharedPreferenceChangeListener {
+        val LOGTAG = "ANAL"
         lateinit var tracker: Tracker
         lateinit var context: Context
 
         fun init(context: Context) {
-            logv { "Initializing Google Analytics Tracking" }
+            logd { "Initializing Google Analytics Tracking" }
 
             // Get shared preferences
-            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val preferences = PreferenceManager.getDefaultSharedPreferences(context)!!
 
             //connect callback
             preferences.registerOnSharedPreferenceChangeListener(this)
 
             this.context = context
 
-            updateTracking(context, preferences)
+            updateTracking(preferences)
         }
 
-        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-            if (key?.contains("analytics")!!) {
-                updateTracking(context, sharedPreferences!!);
+        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+            if (key.contains("analytics")) {
+                logd { "Analytics settings have been updated" }
+                updateTracking(sharedPreferences);
             }
         }
 
-        private fun updateTracking(context: Context, preferences: SharedPreferences) {
+        /**
+         * Update the tracking settings
+         */
+        private fun updateTracking(preferences: SharedPreferences) {
             logv { "Updating tracking to new stats" }
+
             // Set app-level opt out
             val analytics_on = preferences.getBoolean(context.resources.getString(R.string.settings_tag_analytics_enabled), true)
 
             GoogleAnalytics.getInstance(context).appOptOut = analytics_on
 
-
             // Start tracking
+
+            // Set debug or production version
             if (BuildConfig.DEBUG) {
                 tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-2")
             } else {
                 tracker = GoogleAnalytics.getInstance(context).newTracker("UA-76443357-1")
             }
 
-            var interval = 100.toDouble()
+            // Set sampling rate
+            tracker.setSampleRate(100.0)
 
-            tracker.setSampleRate(interval.toDouble())
+            //Track exceptions
+            tracker.enableExceptionReporting(true)
+
+            // Track uncaught exceptions
+            val exceptionHandler = ExceptionReporter(tracker, Thread.getDefaultUncaughtExceptionHandler(), context)
+
+            Thread.setDefaultUncaughtExceptionHandler(exceptionHandler)
+
+            // Anonymize IP
+            tracker.setAnonymizeIp(true)
         }
 
-        fun changeScreenName(screenName: String) {
+        /**
+         * Change screen and report
+         */
+        fun screen(screenName: String) {
             tracker.setScreenName(screenName)
             tracker.send(HitBuilders.ScreenViewBuilder().build())
         }
 
-        fun trackEvent(eventBuilder: HitBuilders.EventBuilder) {
-            tracker.send(eventBuilder.build())
-        }
+        /**
+         * Send an event to analytics
+         */
+        fun event(eventBuilder: HitBuilders.EventBuilder) =
+                tracker.send(eventBuilder.build())
 
-        fun trackEvent(category: String, action: String, label: String) =
-                trackEvent(HitBuilders.EventBuilder()
+        /**
+         * Send an event to analytics using predefined statuses
+         */
+        fun event(category: String, action: String, label: String) =
+                event(HitBuilders.EventBuilder()
                         .setCategory(category)
                         .setAction(action)
                         .setLabel(label))
+
+        /**
+         * Track an exception
+         */
+        fun exception(description: String, fatal: Boolean = false) =
+                tracker.send(HitBuilders.ExceptionBuilder()
+                        .setDescription(description)
+                        .setFatal(fatal)
+                        .build())
     }
 }
