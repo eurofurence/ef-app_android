@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.store.SyncIDB
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
@@ -88,6 +89,8 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
 
             logv("UIS") { "Completed update successfully" }
         } catch(ex: Throwable) {
+            Analytics.exception(ex)
+
             // Make the fail response message, transfer exception
             response.booleans["success"] = false
             response.objects["time"] = oldDate

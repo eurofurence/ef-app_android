@@ -91,6 +91,7 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment(), ContentAPI {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://" + dealer.websiteUri)))
                 }
             } catch(e: Exception) {
+                Analytics.exception(e)
                 logv { "User tried clicking on a dealer with no url" }
             }
         }

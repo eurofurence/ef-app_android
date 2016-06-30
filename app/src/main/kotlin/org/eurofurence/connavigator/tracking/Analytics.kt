@@ -130,5 +130,15 @@ class Analytics {
                         .setDescription(description)
                         .setFatal(fatal)
                         .build())
+
+        /**
+         * Tracks a non-fatal exception, getting it's stacktrace from context
+         */
+        fun exception(ex: Throwable) {
+            // Get the stats regarding the method outside
+            val stackTrace = Thread.currentThread().stackTrace[2]
+
+            exception("${stackTrace.className}.${stackTrace.methodName}:${stackTrace.lineNumber} ${ex.javaClass.simpleName}".substring(0, 100))
+        }
     }
 }
