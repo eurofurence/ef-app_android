@@ -36,6 +36,11 @@ class ActivityStart : AppCompatActivity() {
                 imageService.imageLoader.loadImage(apiService.formatUrl(image.url), SimpleImageLoadingListener())
             }
 
+            for (image in database.imageDb.items) {
+                logd { "Preloading image ${image.title}" }
+                imageService.imageLoader.loadImage(apiService.formatUrl(database.imageDb[image.id]!!.url), SimpleImageLoadingListener())
+            }
+
             textHelp.text = "There, all done!"
             buttonStart.visibility = View.VISIBLE
 
