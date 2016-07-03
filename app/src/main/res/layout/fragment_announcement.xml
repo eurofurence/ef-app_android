@@ -16,8 +16,8 @@
                   android:singleLine="true"
                   android:layout_weight="9"
                   android:text="Announcement Title"/>
-        <ImageView android:layout_width="20dp"
-                   android:layout_height="20dp"
+        <ImageView android:layout_width="40dp"
+                   android:layout_height="40dp"
                    android:scaleType="fitCenter"
                    android:layout_weight="1"
                    android:id="@+id/announcementCaret"
