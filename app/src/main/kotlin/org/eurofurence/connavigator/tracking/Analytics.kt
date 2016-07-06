@@ -90,11 +90,6 @@ class Analytics {
             //Track exceptions
             tracker.enableExceptionReporting(true)
 
-            // Track uncaught exceptions
-            val exceptionHandler = ExceptionReporter(tracker, Thread.getDefaultUncaughtExceptionHandler(), context)
-
-            Thread.setDefaultUncaughtExceptionHandler(exceptionHandler)
-
             // Anonymize IP
             tracker.setAnonymizeIp(true)
         }
