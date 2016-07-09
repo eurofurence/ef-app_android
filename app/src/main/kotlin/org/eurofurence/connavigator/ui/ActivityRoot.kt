@@ -215,7 +215,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
                 R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, ActionBarMode.TABS)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
-                R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCHMAP)
+                R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCH)
                 R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
