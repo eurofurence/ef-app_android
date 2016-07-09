@@ -58,7 +58,7 @@ class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
 
         applyOnRoot { changeTitle("Dealers Den") }
         dealersSearch.setSingleLine()
-        effective_dealers = database.dealerDb.items.sortedBy { it.attendeeNickname.toLowerCase() }
+        effective_dealers = database.dealerDb.items.sortedBy { (if(it.displayName != "") it.displayName else it.attendeeNickname).toLowerCase() }
 
         dealersRecycler.adapter = DealerRecyclerAdapter(effective_dealers, database, this)
         dealersRecycler.layoutManager = LinearLayoutManager(activity)
@@ -68,9 +68,9 @@ class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
     }
 
     override fun onSearchButtonClick() {
-        if(dealersSearchLayout.visibility == View.GONE){
+        if (dealersSearchLayout.visibility == View.GONE) {
             dealersSearchLayout.visibility = View.VISIBLE
-        } else{
+        } else {
             dealersSearchLayout.visibility = View.GONE
         }
     }
