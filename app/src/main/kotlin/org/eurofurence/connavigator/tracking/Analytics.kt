@@ -3,7 +3,6 @@ package org.eurofurence.connavigator.tracking
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.google.android.gms.analytics.ExceptionReporter
 import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
@@ -132,8 +131,13 @@ class Analytics {
         fun exception(ex: Throwable) {
             // Get the stats regarding the method outside
             val stackTrace = Thread.currentThread().stackTrace[2]
+            val mess = "${stackTrace.className}.${stackTrace.methodName}:${stackTrace.lineNumber} ${ex.javaClass.simpleName}"
 
-            exception("${stackTrace.className}.${stackTrace.methodName}:${stackTrace.lineNumber} ${ex.javaClass.simpleName}".substring(0, 100))
+            if (mess.length >= 100) {
+                exception(mess.substring(0, 100))
+            } else {
+                exception(mess)
+            }
         }
     }
 }
