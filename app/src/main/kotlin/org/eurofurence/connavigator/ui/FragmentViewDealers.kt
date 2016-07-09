@@ -36,9 +36,9 @@ class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val query = dealersSearch.text
 
-        effective_dealers = database.dealerDb.items.filter { it.attendeeNickname.contains(query, true) }.sortedBy { it.attendeeNickname.toLowerCase() }
+        effectiveDealers = database.dealerDb.items.filter { if (it.displayName != "") it.displayName.contains(query, true) else it.attendeeNickname.contains(query, true) }
 
-        dealersRecycler.adapter = DealerRecyclerAdapter(effective_dealers, database, this)
+        dealersRecycler.adapter = DealerRecyclerAdapter(sortDealers(effectiveDealers), database, this)
 
         dealersRecycler.adapter.notifyDataSetChanged()
     }
@@ -48,7 +48,7 @@ class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
     val dealersSearch by view(EditText::class.java)
     val dealersSearchLayout by view(LinearLayout::class.java)
 
-    var effective_dealers = emptyList<Dealer>()
+    var effectiveDealers = emptyList<Dealer>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_dealers, container, false)
@@ -58,14 +58,16 @@ class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
 
         applyOnRoot { changeTitle("Dealers Den") }
         dealersSearch.setSingleLine()
-        effective_dealers = database.dealerDb.items.sortedBy { (if(it.displayName != "") it.displayName else it.attendeeNickname).toLowerCase() }
+        effectiveDealers = sortDealers(database.dealerDb.items)
 
-        dealersRecycler.adapter = DealerRecyclerAdapter(effective_dealers, database, this)
+        dealersRecycler.adapter = DealerRecyclerAdapter(effectiveDealers, database, this)
         dealersRecycler.layoutManager = LinearLayoutManager(activity)
         dealersRecycler.itemAnimator = DefaultItemAnimator()
 
         dealersSearch.addTextChangedListener(this)
     }
+
+    fun sortDealers(dealers: Iterable<Dealer>): List<Dealer> = dealers.sortedBy { (if (it.displayName != "") it.displayName else it.attendeeNickname).toLowerCase() }
 
     override fun onSearchButtonClick() {
         if (dealersSearchLayout.visibility == View.GONE) {
