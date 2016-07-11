@@ -58,6 +58,12 @@
                 <data
                         android:scheme="eurofurence"
                         android:host="event"/>
+				<data
+                        android:scheme="eurofurence"
+                        android:host="dealer"/>
+				<data
+                        android:scheme="eurofurence"
+                        android:host="info"/>
             </intent-filter>
         </activity>
 
