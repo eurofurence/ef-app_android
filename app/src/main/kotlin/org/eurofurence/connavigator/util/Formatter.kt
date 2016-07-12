@@ -110,6 +110,6 @@ object Formatter {
     }
 
     fun createUrl(type: String, id: UUID): String {
-        return "${apiService.api.basePath}/$type/${id.toString()}"
+        return "https://app.eurofurence.org/web/#/$type/${id.toString()}"
     }
 }

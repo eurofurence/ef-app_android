@@ -49,13 +49,6 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                        android:scheme="http"
-                        android:host="app.eurofurence.org"/>
-
-                <data
-                        android:scheme="httpnope"
-                        android:host="app.eurofuddwadawrence.pinselohr.ch"/>
-                <data
                         android:scheme="eurofurence"
                         android:host="event"/>
 				<data
