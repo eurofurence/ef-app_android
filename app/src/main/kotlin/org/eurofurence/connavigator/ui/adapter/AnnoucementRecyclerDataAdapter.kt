@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.ui.adapter
 
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +31,7 @@ class AnnoucementRecyclerDataAdapter(val announcements: List<Announcement>) : Re
         val dateTimeFormatter = DateTimeFormat.forPattern("MMMM dd yyyy 'at' HH:mm")
 
         holder.announcementTitle.text = announcement.title
-        holder.announcementDate.text = dateTimeFormatter.print(announcement.lastChangeDateTimeUtc.time)
+        holder.announcementDate.text = Html.fromHtml("${announcement.area} <i>by</i> ${announcement.author}")
         holder.announcementContent.text = announcement.content
 
         holder.announcementTitle.setOnClickListener { showItem(holder) }
