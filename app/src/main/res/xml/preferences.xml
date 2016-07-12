@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-            android:title="Notification Options">
-        <ListPreference android:key="notifications_time_extra"
+            android:title="App Settings">
+        <ListPreference android:key="@string/notification_time_extra"
                         android:title="Alert time"
                         android:summary="Minutes a notification will appear for an event"
                         android:entries="@array/notification_timeframe"
                         android:entryValues="@array/notification_timeframe_v"
                         android:defaultValue="15"/>
-    </PreferenceCategory>
-    <PreferenceCategory
-            android:title="Misc">
         <CheckBoxPreference android:key="@string/announcement_show_old"
                             android:title="Show expired Announcements"
                             android:summary="This will show you all the announcements that have expired"
                             android:defaultValue="false"/>
+        <CheckBoxPreference android:key="date_short"
+                            android:title="Shortened dates and times"
+                            android:contentDescription="Display dates in names instead of numbers (Friday vs 13-08)"
+                            android:defaultValue="true" />
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Analytics">
