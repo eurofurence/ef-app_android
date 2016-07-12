@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -58,6 +59,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
     // Content API aggregator
     var content: Set<ContentAPI> = setOf()
 
+    // Settings
+    override val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+
     /**
      * Listens to update responses, since the event recycler holds database related data
      */
@@ -94,6 +98,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         if (!handleBrowsingIntent()) {
             setupContent()
         }
+
+        preferences.registerOnSharedPreferenceChangeListener { sharedPreferences, s -> applyOnContent { dataUpdated() } }
     }
 
     /**

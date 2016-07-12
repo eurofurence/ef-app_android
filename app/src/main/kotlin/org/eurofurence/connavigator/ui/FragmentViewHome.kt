@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
@@ -21,6 +22,7 @@ import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.letRoot
 import org.eurofurence.connavigator.util.extensions.size
+import org.joda.time.DateTime
 
 /**
  * Created by David on 5/14/2016.
@@ -28,7 +30,8 @@ import org.eurofurence.connavigator.util.extensions.size
 class FragmentViewHome : Fragment(), ContentAPI {
     val announcementsRecycler by view(RecyclerView::class.java)
     val announcementsTitle by view(TextView::class.java)
-    val database: Database by lazy { letRoot { database }!! }
+    val database: Database get() = letRoot { it.database }!!
+    val preferences: SharedPreferences get() = letRoot { it.preferences }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_home, container, false)
@@ -46,7 +49,16 @@ class FragmentViewHome : Fragment(), ContentAPI {
     }
 
     private fun instantiate() {
-        announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(database.announcementDb.items.sortedByDescending { it.lastChangeDateTimeUtc }.toList())
+        val now = DateTime.now()
+
+        var announcements = database.announcementDb.items
+
+        if (!preferences.getBoolean(this.getString(R.string.announcement_show_old), false)) {
+            announcements = announcements.filter {
+                it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis
+            }
+        }
+        announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(announcements.sortedByDescending { it.lastChangeDateTimeUtc }.toList())
         announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
         announcementsRecycler.itemAnimator = DefaultItemAnimator()
 

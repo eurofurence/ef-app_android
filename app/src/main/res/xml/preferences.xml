@@ -10,6 +10,13 @@
                         android:defaultValue="15"/>
     </PreferenceCategory>
     <PreferenceCategory
+            android:title="Misc">
+        <CheckBoxPreference android:key="@string/announcement_show_old"
+                            android:title="Show expired Announcements"
+                            android:summary="This will show you all the announcements that have expired"
+                            android:defaultValue="false"/>
+    </PreferenceCategory>
+    <PreferenceCategory
             android:title="Analytics">
         <CheckBoxPreference
                 android:key="@string/settings_tag_analytics_enabled"

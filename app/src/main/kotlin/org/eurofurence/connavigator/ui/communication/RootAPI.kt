@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui.communication
 
+import android.content.SharedPreferences
 import android.support.design.widget.TabLayout
 import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventEntry
@@ -13,6 +14,8 @@ interface RootAPI {
     val database: Database
 
     val tabs: TabLayout
+
+    val preferences: SharedPreferences
 
     fun navigateToEvent(eventEntry: EventEntry)
 
