@@ -10,8 +10,8 @@ android {
         applicationId "org.eurofurence.connavigator"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 16
-        versionName "1.8.3"
+        versionCode 17
+        versionName "1.8.4"
         multiDexEnabled true
     }
 
