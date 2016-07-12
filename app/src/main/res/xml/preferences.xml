@@ -15,7 +15,8 @@
         <CheckBoxPreference android:key="date_short"
                             android:title="Shortened dates and times"
                             android:contentDescription="Display dates in names instead of numbers (Friday vs 13-08)"
-                            android:defaultValue="true" />
+                            android:defaultValue="true"
+                            android:enabled="false"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Analytics">
