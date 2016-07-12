@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView2"
-            android:src="@drawable/icon_pazuzu" android:layout_below="@+id/textView2"
-            android:layout_alignParentLeft="true" android:layout_alignParentStart="true"/>
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView3" android:layout_below="@+id/imageView2" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" android:src="@drawable/icon_condemned"/>
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -22,23 +10,51 @@
             android:text="Developed by"
             android:id="@+id/textView2" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" style="@style/AppTheme.Header"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Condemnedtrack http://www.furaffinity.net/user/condemnedtrack/"
-            android:id="@+id/textView3"
-            android:layout_alignBottom="@+id/imageView3" android:layout_toRightOf="@+id/imageView3"
-            android:layout_toEndOf="@+id/imageView3" android:layout_marginLeft="59dp" android:layout_marginStart="20dp"
-            android:layout_marginBottom="34dp"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Pazuzu http://www.furaffinity.net/user/pazuzu"
-            android:id="@+id/textView4" android:layout_alignBottom="@+id/imageView2"
-            android:layout_alignLeft="@+id/textView3" android:layout_alignStart="@+id/textView3"
-            android:layout_marginBottom="37dp"/>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:weightSum="10"
+                  android:orientation="horizontal">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView2"
+                android:src="@drawable/icon_pazuzu"
+                android:layout_weight="1"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Pazuzu"
+                android:id="@+id/textView4"
+                android:layout_gravity="center"
+                android:layout_weight="9"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:weightSum="10"
+                  android:orientation="horizontal">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView3"
+                android:src="@drawable/icon_condemned"
+                android:layout_weight="1"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Requinard"
+                android:id="@+id/textView3"
+                android:layout_weight="9"
+                android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:padding="@dimen/outer_padding"
+              android:textAppearance="?android:textAppearanceMedium"
+              android:text="More thanks to \nLuchs (Windows, Team Lead)\nOmega Wolfblood (iOS)\nZefiro (Team Lead)\n\nSpecial thanks to Akulatraxas, Mark Treefox and StreifiGreif"/>
+
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -57,4 +73,4 @@
                                android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
                                android:id="@+id/markdownAttributation"></us.feras.mdv.MarkdownView>
 
-</RelativeLayout>
+</LinearLayout>
