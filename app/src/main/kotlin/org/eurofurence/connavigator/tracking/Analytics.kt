@@ -35,6 +35,7 @@ class Analytics {
         val FAVOURITE_DEL = "favourite removed"
         val EXPORT_CALENDAR = "Exported to calendar"
         val LINK_CLICKED = "Clicked external link"
+        val INCOMING = "Incoming from website"
     }
 
     companion object : SharedPreferences.OnSharedPreferenceChangeListener {

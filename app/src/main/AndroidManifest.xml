@@ -51,10 +51,10 @@
                 <data
                         android:scheme="eurofurence"
                         android:host="event"/>
-				<data
+                <data
                         android:scheme="eurofurence"
                         android:host="dealer"/>
-				<data
+                <data
                         android:scheme="eurofurence"
                         android:host="info"/>
             </intent-filter>

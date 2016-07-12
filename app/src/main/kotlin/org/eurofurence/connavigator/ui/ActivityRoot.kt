@@ -68,13 +68,17 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
 
 
         // Make a snackbar for the result
-        Snackbar.make(findViewById(R.id.content)!!, "Database reload ${if (success) "successful" else "failed"}, version $time", Snackbar.LENGTH_LONG).show()
+        makeSnackbar("Database reload ${if (success) "successful" else "failed"}, version $time");
 
         // Update content data if fragments implement content API
         applyOnContent {
             logv { "Updated the data and dispatching to $this" }
             dataUpdated()
         }
+    }
+
+    fun makeSnackbar(text: String) {
+        Snackbar.make(findViewById(R.id.content)!!, text, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,15 +90,17 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
         setupBarNavLink()
         setupNav()
         setupFab()
-        setupContent()
 
-        handleBrowsingIntent()
+        if (!handleBrowsingIntent()) {
+            setupContent()
+        }
     }
 
     /**
      * Reacts to the intent ACTION_VIEW
+     * Returns true if we have managed to navigate, false if not
      */
-    private fun handleBrowsingIntent() {
+    private fun handleBrowsingIntent(): Boolean {
         if (intent.action == Intent.ACTION_VIEW) {
             logd { intent.dataString }
             when {
@@ -102,27 +108,43 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
                 intent.dataString.contains("/event/") -> {
                     val uuid = intent.data.lastPathSegment
                     val eventValue = database.eventEntryDb[UUID.fromString(uuid)]
-                    if (eventValue != null)
+                    if (eventValue != null) {
+                        Analytics.event(Analytics.Category.EVENT, Analytics.Action.INCOMING, eventValue.title)
                         navigateToEvent(eventValue)
+                        return true
+                    } else {
+                        makeSnackbar("I'm sorry, we didn't find any event!")
+                    }
                 }
 
             // Handle info links
                 intent.dataString.contains("/info/") -> {
                     val uuid = intent.data.lastPathSegment
                     val infoValue = database.infoDb[UUID.fromString(uuid)]
-                    if (infoValue != null)
+                    if (infoValue != null) {
+                        Analytics.event(Analytics.Category.INFO, Analytics.Action.INCOMING, infoValue.title)
                         navigateToInfo(infoValue)
+                        return true;
+                    } else {
+                        makeSnackbar("I'm sorry, but we didn't find any info!")
+                    }
                 }
 
             // Handle dealer links
                 intent.dataString.contains("/dealer/") -> {
                     val uuid = intent.data.lastPathSegment
                     val dealerValue = database.dealerDb[UUID.fromString(uuid)]
-                    if (dealerValue != null)
+                    if (dealerValue != null) {
+                        Analytics.event(Analytics.Category.DEALER, Analytics.Action.INCOMING, dealerValue.attendeeNickname)
                         navigateToDealer(dealerValue)
+                        return true;
+                    } else {
+                        makeSnackbar("I'm sorry, but we didn't find any dealer!")
+                    }
                 }
             }
         }
+        return false;
     }
 
     private fun setupContent() =
