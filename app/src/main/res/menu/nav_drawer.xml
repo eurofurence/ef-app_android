@@ -7,17 +7,22 @@
                 android:icon="@drawable/icon_home"
                 android:title="Home"/>
         <item
-                android:id="@+id/navEvents"
-                android:icon="@drawable/icon_calendar"
-                android:title="Events"/>
-        <item
                 android:id="@+id/navInfo"
                 android:icon="@drawable/icon_info"
                 android:title="Info"/>
         <item
+                android:id="@+id/navEvents"
+                android:icon="@drawable/icon_calendar"
+                android:title="Events"/>
+        <item
                 android:id="@+id/navDealersDen"
                 android:icon="@drawable/icon_dealer"
                 android:title="Dealers den"/>
+        <item
+                android:id="@+id/navMaps"
+                android:visible="false"
+                android:icon="@drawable/icon_map_world"
+                android:title="Maps"/>
         <item
                 android:id="@+id/navAbout"
                 android:icon="@drawable/icon_about"
@@ -43,14 +48,14 @@
     <item android:title="App Management">
         <menu>
             <item android:id="@+id/navDevReload"
-                  android:title="Reload database"
+                  android:title="Update"
                   android:icon="@drawable/icon_refresh"/>
             <item android:id="@+id/navDevClear"
                   android:title="Empty database"
-                  android:icon="@drawable/icon_delete" />
+                  android:icon="@drawable/icon_delete"/>
             <item android:id="@+id/navDevSettings"
                   android:title="Settings"
-                  android:icon="@drawable/icon_settings" />
+                  android:icon="@drawable/icon_settings"/>
         </menu>
     </item>
 
