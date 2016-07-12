@@ -39,7 +39,7 @@ object Formatter {
     Formats an event title accoding to our rules
      */
     fun eventTitle(eventEntry: EventEntry): Spanned {
-        if (eventEntry.subTitle.isEmpty()) {
+        if (eventEntry.subTitle.isNullOrEmpty()) {
             return formatHTML(eventEntry.title)
         } else {
             return Html.fromHtml((eventEntry.title).toString().trim() + ":<br /> <i>${eventEntry.subTitle}</i>")
