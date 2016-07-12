@@ -21,6 +21,7 @@ import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.letRoot
+import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.size
 import org.joda.time.DateTime
 
@@ -45,6 +46,7 @@ class FragmentViewHome : Fragment(), ContentAPI {
     }
 
     override fun dataUpdated() {
+        logd{ "Updating home screen data"}
         instantiate()
     }
 

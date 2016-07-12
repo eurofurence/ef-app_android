@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -23,6 +24,7 @@ import android.widget.TextView
 import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
@@ -36,7 +38,18 @@ import org.joda.time.DateTime
 import org.joda.time.Days
 import java.util.*
 
-class ActivityRoot : AppCompatActivity(), RootAPI {
+class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPreferenceChangeListener {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+        logd { "Updating content data after preference change" }
+
+        if(BuildConfig.DEBUG) {
+            Analytics.event(Analytics.Category.SETTINGS, Analytics.Action.CHANGED, key)
+        }
+
+        applyOnContent { dataUpdated() }
+        Analytics.onSharedPreferenceChanged(sharedPreferences, key)
+    }
+
     override fun changeTitle(text: String) {
         supportActionBar!!.title = text
     }
@@ -61,6 +74,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
 
     // Settings
     override val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+
 
     /**
      * Listens to update responses, since the event recycler holds database related data
@@ -87,6 +101,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         // Assign the layout
         setContentView(R.layout.activity_root)
 
@@ -99,7 +114,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI {
             setupContent()
         }
 
-        preferences.registerOnSharedPreferenceChangeListener { sharedPreferences, s -> applyOnContent { dataUpdated() } }
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
     }
 
     /**

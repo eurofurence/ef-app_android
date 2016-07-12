@@ -23,6 +23,7 @@ class Analytics {
         val DEALER = "dealer"
         val INFO = "info"
         val ANNOUNCEMENT = "announcement"
+        val SETTINGS = "settings"
     }
 
     /**
@@ -36,9 +37,10 @@ class Analytics {
         val EXPORT_CALENDAR = "Exported to calendar"
         val LINK_CLICKED = "Clicked external link"
         val INCOMING = "Incoming from website"
+        val CHANGED = "changed"
     }
 
-    companion object : SharedPreferences.OnSharedPreferenceChangeListener {
+    companion object {
         val LOGTAG = "ANAL"
         lateinit var tracker: Tracker
         lateinit var context: Context
@@ -49,15 +51,12 @@ class Analytics {
             // Get shared preferences
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)!!
 
-            //connect callback
-            preferences.registerOnSharedPreferenceChangeListener(this)
-
             this.context = context
 
             updateTracking(preferences)
         }
 
-        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+        fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
             if (key.contains("analytics")) {
                 logd { "Analytics settings have been updated" }
                 updateTracking(sharedPreferences);
