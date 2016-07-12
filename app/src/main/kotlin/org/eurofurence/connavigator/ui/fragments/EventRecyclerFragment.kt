@@ -89,12 +89,16 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
             // Colour the event cards according to if they've already occured, are ocurring or are favourited
             if (database.eventIsHappening(event, DateTime.now())) {
+                // Event is happening, so we colour it light accent
                 holder.eventCard.setBackgroundColor(getColor(context, R.color.accentLighter))
-
-            } else if (database.eventEnd(event).isBeforeNow) {
-                holder.eventCard.setBackgroundColor(getColor(context, R.color.backgroundGrey))
             } else if (database.favoritedDb[event.id] != null) {
+                // Event is in favourites, thus it is coloured in primary
                 holder.eventCard.setBackgroundColor(getColor(context, R.color.primaryLighter))
+            } else if (database.eventEnd(event).isBeforeNow) {
+                // Event end is before the current time, so it has already occurred thus it is gray
+                holder.eventCard.setBackgroundColor(getColor(context, R.color.backgroundGrey))
+            } else {
+                holder.eventCard.setBackgroundColor(getColor(context, R.color.cardview_light_background))
             }
         }
     }
