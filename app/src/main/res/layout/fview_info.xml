@@ -12,9 +12,12 @@
 
         <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:id="@+id/image"
                 android:src="@drawable/placeholder_event"
+                android:background="@drawable/image_fade"
+                android:padding="@dimen/outer_padding"
+                android:scaleType="centerInside"
                 android:contentDescription="Info image"/>
 
         <TextView
