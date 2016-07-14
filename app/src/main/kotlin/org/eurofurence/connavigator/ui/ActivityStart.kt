@@ -44,12 +44,14 @@ class ActivityStart : AppCompatActivity() {
             }
 
             textHelp.text = "There, all done!"
+            buttonStart.text = "Get Started!"
             buttonStart.visibility = View.VISIBLE
 
             buttonStart.setOnClickListener { startRootActivity() }
         } else {
             textHelp.text = "Failed to successfully get data. Are you connected to the internet?"
             buttonStart.visibility = View.VISIBLE
+            buttonStart.text = "Retry"
             buttonStart.setOnClickListener { UpdateIntentService.dispatchUpdate(this) }
         }
     }
@@ -61,22 +63,24 @@ class ActivityStart : AppCompatActivity() {
 
         Analytics.screen("Start")
 
+        // Version Check
+
         if (database.versionDb.items.count() > 0 && database.versionDb.items.first().split(".")[1] != BuildConfig.VERSION_NAME.split(".")[1]) {
             // We're on an old version (v1.8 instead of v1.9 So we empty the database and exit
             AlertDialog.Builder(this)
                     .setTitle("Outdated version found")
                     .setMessage("Your version is outdated. Because you might be missing critical data in your synced versions. Sadly you will need a complete resync.")
-                    .setPositiveButton("Clear Data", { dialogInterface, i -> database.clear(); System.exit(1) })
-                    .setNegativeButton("No, just exit", { dialogInterface, i -> System.exit(1) })
+                    .setPositiveButton("Clear Data and restart", { dialogInterface, i -> database.clear(); System.exit(1) })
+                    .setNeutralButton("No, just exit", { dialogInterface, i -> System.exit(1) })
                     .show()
+        } else {
+            // Now running an update every time application boots
+            UpdateIntentService.dispatchUpdate(this)
+
+            // Data is present, if a database has a backing file
+            if (database.eventConferenceDayDb.time != null)
+                startRootActivity()
         }
-
-        // Now running an update every time application boots
-        UpdateIntentService.dispatchUpdate(this)
-
-        // Data is present, if a database has a backing file
-        if (database.eventConferenceDayDb.time != null)
-            startRootActivity()
     }
 
     override fun onResume() {
@@ -90,6 +94,8 @@ class ActivityStart : AppCompatActivity() {
     }
 
     private fun startRootActivity() {
+        database.versionDb.items = listOf(BuildConfig.VERSION_NAME)
+
         startActivity(Intent(this, ActivityRoot::class.java))
         finish()
     }

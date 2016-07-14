@@ -31,6 +31,8 @@ class ConnavigatorApplication : MultiDexApplication() {
         if (networkIsAvailable()) {
             MyInstanceIDListenerService.dispatchUpdate(this)
         }
+
+        UpdateIntentService.dispatchUpdate(this)
     }
 
     private fun networkIsAvailable(): Boolean {

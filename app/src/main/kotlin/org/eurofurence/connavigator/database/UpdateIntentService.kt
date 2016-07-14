@@ -83,8 +83,6 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
             checkedUpdate("MapEntity", database.mapEntityDb, { loadMapEntity(it) })
             // Set the new server date
             database.dateDb.items = listOf(newDate)
-            // Set the new version
-            database.versionDb.items = listOf(BuildConfig.VERSION_NAME)
 
             // Make the success response message
             response.booleans["success"] = true
