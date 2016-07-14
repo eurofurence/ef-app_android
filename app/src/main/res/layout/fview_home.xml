@@ -5,10 +5,22 @@
     <ScrollView android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 xmlns:android="http://schemas.android.com/apk/res/android">
+
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                       android:orientation="vertical"
                       android:layout_width="match_parent"
                       android:layout_height="match_parent">
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="Latest Announcements"
+                      android:id="@+id/announcementsTitle"
+                      android:padding="@dimen/outer_padding"
+                      android:textAppearance="?android:textAppearanceLarge"/>
+
+            <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
+                                                    android:layout_height="match_parent"
+                                                    android:background="@color/cardview_light_background"
+                                                    android:id="@+id/announcementsRecycler"/>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:id="@+id/upcomingEventRecycler"
@@ -21,19 +33,6 @@
                           android:layout_height="wrap_content"
                           android:id="@+id/favouritedEventsRecycler"
                           android:orientation="horizontal"/>
-
-            <TextView android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:text="Latest Announcements"
-                      android:id="@+id/announcementsTitle"
-                      android:padding="@dimen/outer_padding"
-                      android:textAppearance="?android:textAppearanceLarge"/>
-
-            <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
-                                                    android:layout_height="match_parent"
-                                                    android:background="@color/cardview_light_background"
-                                                    android:id="@+id/announcementsRecycler"/>
-
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

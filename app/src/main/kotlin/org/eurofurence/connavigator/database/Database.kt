@@ -28,6 +28,11 @@ class Database(val context: Context) {
             createSerialized(File(context.cacheDir, "date.db"), Date::class.java).cached()
 
     /**
+     * Stores the latest version
+     */
+    val versionDb =
+            createSerialized(File(context.cacheDir, "version.db"), String::class.java).cached()
+    /**
      * Database storing favorited events
      */
     val favoritedDb =
@@ -97,6 +102,7 @@ class Database(val context: Context) {
 
     fun clear() {
         dateDb.delete()
+        versionDb.delete()
         favoritedDb.delete()
         eventConferenceDayDb.delete()
         eventConferenceRoomDb.delete()

@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -7,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
@@ -58,6 +60,19 @@ class ActivityStart : AppCompatActivity() {
         setContentView(R.layout.activity_start)
 
         Analytics.screen("Start")
+
+        if (database.versionDb.items.count() > 0 && database.versionDb.items.first().split(".")[1] != BuildConfig.VERSION_NAME.split(".")[1]) {
+            // We're on an old version (v1.8 instead of v1.9 So we empty the database and exit
+            AlertDialog.Builder(this)
+                    .setTitle("Outdated version found")
+                    .setMessage("Your version is outdated. Because you might be missing critical data in your synced versions. Sadly you will need a complete resync.")
+                    .setPositiveButton("Clear Data", { dialogInterface, i -> database.clear(); System.exit(1) })
+                    .setNegativeButton("No, just exit", { dialogInterface, i -> System.exit(1) })
+                    .show()
+        }
+
+        // Now running an update every time application boots
+        UpdateIntentService.dispatchUpdate(this)
 
         // Data is present, if a database has a backing file
         if (database.eventConferenceDayDb.time != null)
