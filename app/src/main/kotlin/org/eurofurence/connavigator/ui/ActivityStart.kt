@@ -74,9 +74,6 @@ class ActivityStart : AppCompatActivity() {
                     .setNeutralButton("No, just exit", { dialogInterface, i -> System.exit(1) })
                     .show()
         } else {
-            // Now running an update every time application boots
-            UpdateIntentService.dispatchUpdate(this)
-
             // Data is present, if a database has a backing file
             if (database.eventConferenceDayDb.time != null)
                 startRootActivity()
