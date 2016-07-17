@@ -43,7 +43,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         logd { "Updating content data after preference change" }
 
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Analytics.event(Analytics.Category.SETTINGS, Analytics.Action.CHANGED, key)
         }
 
@@ -124,6 +124,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
      */
     private fun handleBrowsingIntent(): Boolean {
         if (intent.action == Intent.ACTION_VIEW) {
+
             logd { intent.dataString }
             when {
             // Handle event links
@@ -183,10 +184,11 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START))
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
-        else
+        } else {
             super.onBackPressed()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -309,12 +311,16 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     private fun navigateToSubFragment(fragment: Fragment) {
-        supportFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(R.anim.in_slide_and_fade, R.anim.out_slide_and_fade, R.anim.in_slide_and_fade, R.anim.out_slide_and_fade)
-                .add(R.id.content, fragment, "content")
-                .addToBackStack(null)
-                .commit()
+        if (supportFragmentManager.backStackEntryCount <= 0) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.in_slide_and_fade, R.anim.out_slide_and_fade, R.anim.in_slide_and_fade, R.anim.out_slide_and_fade)
+                    .add(R.id.content, fragment, "content")
+                    .addToBackStack(null)
+                    .commit()
+        } else if (BuildConfig.DEBUG) {
+            makeSnackbar("Trying to add more then one subelement to the backstack. Pls don't")
+        }
     }
 
     /**
