@@ -34,6 +34,10 @@ class FragmentViewHome : Fragment(), ContentAPI {
     val database: Database get() = letRoot { it.database }!!
     val preferences: SharedPreferences get() = letRoot { it.preferences }!!
 
+    val upcoming by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.UPCOMING)) }
+    val current by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.CURRENT))}
+    val favourited by lazy {EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.FAVORITED))}
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_home, container, false)
 
@@ -42,17 +46,26 @@ class FragmentViewHome : Fragment(), ContentAPI {
 
         applyOnRoot { changeTitle("Home") }
 
-        instantiate()
+        childFragmentManager.beginTransaction()
+                .replace(R.id.upcomingEventRecycler, upcoming)
+                .replace(R.id.currentEventsRecycler, current)
+                .replace(R.id.favouritedEventsRecycler, favourited)
+                .commitAllowingStateLoss()
+
+        updateContents()
     }
 
     override fun dataUpdated() {
-        logd{ "Updating home screen data"}
-        instantiate()
+        logd { "Updating home screen data" }
+        try {
+            updateContents()
+        } catch(throwable: Throwable) {
+            Analytics.exception(throwable)
+        }
     }
 
-    private fun instantiate() {
+    private fun updateContents() {
         val now = DateTime.now()
-
         var announcements = database.announcementDb.items
 
         if (!preferences.getBoolean(this.getString(R.string.announcement_show_old), false)) {
@@ -64,19 +77,7 @@ class FragmentViewHome : Fragment(), ContentAPI {
         announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
         announcementsRecycler.itemAnimator = DefaultItemAnimator()
 
-        val upcoming = EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.UPCOMING))
-        fragmentManager.beginTransaction()
-                .replace(R.id.upcomingEventRecycler, upcoming)
-                .commitAllowingStateLoss()
-
-        val current = EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.CURRENT))
-        fragmentManager.beginTransaction()
-                .replace(R.id.currentEventsRecycler, current)
-                .commitAllowingStateLoss()
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.favouritedEventsRecycler, EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.FAVORITED)))
-                .commitAllowingStateLoss()
+        upcoming.dataUpdated()
 
         if (database.announcementDb.size == 0) {
             announcementsRecycler.visibility = View.GONE

@@ -33,3 +33,4 @@
                     style="@style/AppTheme.Header.Sub" android:gravity="center_horizontal"/>
         </RelativeLayout>
     </ScrollView>
+</LinearLayout>

@@ -79,6 +79,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
             // Load image
             imageService.load(database.imageDb[event.imageId], holder.eventImage)
 
+            holder.itemView.isClickable = true
+
             // Assign the on-click action
             holder.itemView.setOnClickListener {
                 applyOnRoot { navigateToEvent(event) }
@@ -109,7 +111,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
     val eventsTitle by view(TextView::class.java)
 
-    val database: Database get() = letRoot { it.database }!!
+    val database: Database get() = letRoot { it.database } ?: Database(this)
 
     lateinit var updateReceiver: EmbeddedLocalBroadcastReceiver
 
