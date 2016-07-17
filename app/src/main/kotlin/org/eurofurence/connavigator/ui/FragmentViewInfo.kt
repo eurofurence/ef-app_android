@@ -17,10 +17,11 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
+import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
-import us.feras.mdv.MarkdownView
 import java.util.*
+
 
 /**
  * Views an info based on an ID passed to the intent
@@ -37,7 +38,7 @@ class FragmentViewInfo() : Fragment() {
     // Views
     val image by view(ImageView::class.java)
     val title by view(TextView::class.java)
-    val text by view(MarkdownView::class.java)
+    val text by view(TextView::class.java)
     val layout by view(LinearLayout::class.java)
 
     val database: Database get() = letRoot { it.database }!!
@@ -60,7 +61,7 @@ class FragmentViewInfo() : Fragment() {
 
             // Set the properties of the view
             title.text = info.title
-            text.loadMarkdown(info.text)
+            text.text = Formatter.wikiToMarkdown(info.text)
             image.scaleType = ImageView.ScaleType.CENTER_CROP
 
             if (info.imageIds.isNotEmpty()) {

@@ -76,4 +76,8 @@ class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
             dealersSearchLayout.visibility = View.GONE
         }
     }
+
+    override fun dataUpdated() {
+        dealersRecycler.adapter = DealerRecyclerAdapter(sortDealers(database.dealerDb.items), database, this)
+    }
 }

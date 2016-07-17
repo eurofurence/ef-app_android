@@ -163,8 +163,6 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
     override fun dataUpdated() {
         effectiveEvents = filterStrategy.filter(database, filterVal).toList()
-
-        //TODO: fix adapter data updated
         events.adapter.notifyDataSetChanged()
     }
 }

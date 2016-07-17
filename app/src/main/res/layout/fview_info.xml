@@ -28,10 +28,11 @@
                 style="@style/AppTheme.Header"
                 android:id="@+id/title"/>
 
-        <us.feras.mdv.MarkdownView
+        <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/text"
+                android:textAppearance="?android:textAppearance"
                 android:layout_margin="@dimen/outer_padding"/>
     </LinearLayout>
 </ScrollView>
