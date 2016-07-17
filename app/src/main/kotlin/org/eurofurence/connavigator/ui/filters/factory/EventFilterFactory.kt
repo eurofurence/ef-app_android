@@ -14,6 +14,7 @@ object EventFilterFactory {
                 EnumEventRecyclerViewmode.FAVORITED -> AnyFavoritedEventFilter()
                 EnumEventRecyclerViewmode.CURRENT -> CurrentEventFilter()
                 EnumEventRecyclerViewmode.UPCOMING -> UpcomingEventFilter()
+                EnumEventRecyclerViewmode.SEARCH -> SearchEventFilter()
                 else -> AnyEventFilter()
             }
 

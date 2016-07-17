@@ -10,4 +10,5 @@ enum class EnumEventRecyclerViewmode {
     FAVORITED_DAY, // Events that have been favourited, ordered by day
     CURRENT, // Events that are happening right now
     UPCOMING, // Events that are going to happen in 30 minutes
+    SEARCH,
 }

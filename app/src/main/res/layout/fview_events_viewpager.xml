@@ -4,6 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:animateLayoutChanges="true"
               android:background="@color/backgroundGrey">
     <android.support.v4.view.ViewPager android:layout_width="match_parent"
                                        android:layout_height="match_parent"
@@ -11,4 +12,18 @@
                                        android:clickable="true"
                                        android:longClickable="true"
                                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:visibility="gone"
+        android:id="@+id/searchLayout">
+            <EditText android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/eventSearchBar"/>
+            <AbsoluteLayout android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/eventSearch" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -8,5 +8,6 @@ enum class ActionBarMode {
     TABS,
     SEARCH,
     MAP,
-    SEARCHMAP
+    SEARCHMAP,
+    SEARCHTABS,
 }

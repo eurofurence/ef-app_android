@@ -17,6 +17,8 @@ interface RootAPI {
 
     val preferences: SharedPreferences
 
+    fun makeSnackbar(text: String)
+
     fun navigateToEvent(eventEntry: EventEntry)
 
     fun navigateToInfo(info: Info)

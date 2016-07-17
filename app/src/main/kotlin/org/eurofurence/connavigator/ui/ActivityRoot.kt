@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.FloatingActionButton
@@ -96,7 +97,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         }
     }
 
-    fun makeSnackbar(text: String) {
+    override fun makeSnackbar(text: String) {
         Snackbar.make(findViewById(R.id.content)!!, text, Snackbar.LENGTH_LONG).show()
     }
 
@@ -227,7 +228,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
         // If not already there, navigate with fragment transaction
         if (!type.isInstance(content)) {
-
             supportFragmentManager
                     .beginTransaction()
                     .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
@@ -238,14 +238,14 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     private fun setActionBarMode(mode: ActionBarMode) {
-        if (mode == ActionBarMode.TABS) {
+        if (listOf(ActionBarMode.TABS, ActionBarMode.SEARCHTABS).contains(mode)) {
             tabs.visibility = View.VISIBLE
         } else {
             tabs.visibility = View.GONE
         }
 
         // Show the search button
-        menu?.findItem(R.id.action_search)?.isVisible = (mode == ActionBarMode.SEARCH || mode == ActionBarMode.SEARCHMAP)
+        menu?.findItem(R.id.action_search)?.isVisible = listOf(ActionBarMode.SEARCH, ActionBarMode.SEARCHTABS, ActionBarMode.SEARCHMAP).contains(mode)
 
         // Show map button
         menu?.findItem(R.id.action_map)?.isVisible = (mode == ActionBarMode.MAP || mode == ActionBarMode.SEARCHMAP)
@@ -257,7 +257,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             //Handle the ID
             when (it.itemId) {
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
-                R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, ActionBarMode.TABS)
+                R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, ActionBarMode.SEARCHTABS)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCH)
                 R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
