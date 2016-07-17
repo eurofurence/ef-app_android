@@ -111,7 +111,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
     val eventsTitle by view(TextView::class.java)
 
-    val database: Database get() = letRoot { it.database } ?: Database(this)
+    val database: Database get() = letRoot { it.database }!!
 
     lateinit var updateReceiver: EmbeddedLocalBroadcastReceiver
 
@@ -163,6 +163,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
 
     override fun dataUpdated() {
         effectiveEvents = filterStrategy.filter(database, filterVal).toList()
+
+        //TODO: fix adapter data updated
         events.adapter.notifyDataSetChanged()
     }
 }

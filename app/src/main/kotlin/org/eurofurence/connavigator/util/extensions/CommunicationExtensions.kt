@@ -5,10 +5,18 @@ import android.support.v4.app.FragmentActivity
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.communication.RootAPI
 
+fun Fragment.findRoot(): RootAPI? = context.let {
+    when (it) {
+        is RootAPI -> it
+        is Fragment -> it.findRoot()
+        else -> null
+    }
+}
+
 /**
  * Invokes the code if the container is a root API.
  */
-fun Fragment.applyOnRoot(block: RootAPI.() -> Unit) = context.let {
+fun Fragment.applyOnRoot(block: RootAPI.() -> Unit) = findRoot().let {
     if (it is RootAPI)
         it.block()
 }
@@ -16,7 +24,7 @@ fun Fragment.applyOnRoot(block: RootAPI.() -> Unit) = context.let {
 /**
  * Invokes the code if the container is a root API.
  */
-fun <R> Fragment.letRoot(block: (RootAPI) -> R): R? = context.let {
+fun <R> Fragment.letRoot(block: (RootAPI) -> R): R? = findRoot().let {
     if (it is RootAPI)
         block(it)
     else

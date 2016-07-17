@@ -19,10 +19,7 @@ import org.eurofurence.connavigator.ui.filters.factory.EventFilterFactory
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.letRoot
-import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.util.extensions.size
+import org.eurofurence.connavigator.util.extensions.*
 import org.joda.time.DateTime
 
 /**
@@ -35,8 +32,8 @@ class FragmentViewHome : Fragment(), ContentAPI {
     val preferences: SharedPreferences get() = letRoot { it.preferences }!!
 
     val upcoming by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.UPCOMING)) }
-    val current by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.CURRENT))}
-    val favourited by lazy {EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.FAVORITED))}
+    val current by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.CURRENT)) }
+    val favourited by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.FAVORITED)) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_home, container, false)
@@ -46,13 +43,26 @@ class FragmentViewHome : Fragment(), ContentAPI {
 
         applyOnRoot { changeTitle("Home") }
 
-        childFragmentManager.beginTransaction()
+        fragmentManager.beginTransaction()
                 .replace(R.id.upcomingEventRecycler, upcoming)
                 .replace(R.id.currentEventsRecycler, current)
                 .replace(R.id.favouritedEventsRecycler, favourited)
                 .commitAllowingStateLoss()
 
-        updateContents()
+        val now = DateTime.now()
+        var announcements = database.announcementDb.items.filterIf(
+                !preferences.getBoolean(this.getString(R.string.announcement_show_old), false),
+                { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis }
+        )
+
+        announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(announcements.sortedByDescending { it.lastChangeDateTimeUtc }.toList())
+        announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
+        announcementsRecycler.itemAnimator = DefaultItemAnimator()
+
+        if (database.announcementDb.size == 0) {
+            announcementsRecycler.visibility = View.GONE
+            announcementsTitle.visibility = View.GONE
+        }
     }
 
     override fun dataUpdated() {
@@ -66,18 +76,17 @@ class FragmentViewHome : Fragment(), ContentAPI {
 
     private fun updateContents() {
         val now = DateTime.now()
-        var announcements = database.announcementDb.items
+        var announcements = database.announcementDb.items.filterIf(
+                !preferences.getBoolean(this.getString(R.string.announcement_show_old), false),
+                { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis })
+                .sortedByDescending { it.lastChangeDateTimeUtc }
 
-        if (!preferences.getBoolean(this.getString(R.string.announcement_show_old), false)) {
-            announcements = announcements.filter {
-                it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis
-            }
-        }
-        announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(announcements.sortedByDescending { it.lastChangeDateTimeUtc }.toList())
-        announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
-        announcementsRecycler.itemAnimator = DefaultItemAnimator()
+        announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(announcements)
+        announcementsRecycler.adapter.notifyDataSetChanged()
 
         upcoming.dataUpdated()
+        current.dataUpdated()
+        favourited.dataUpdated()
 
         if (database.announcementDb.size == 0) {
             announcementsRecycler.visibility = View.GONE

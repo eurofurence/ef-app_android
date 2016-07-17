@@ -233,8 +233,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
                     .replace(R.id.content, type.newInstance(), "content")
                     .commitAllowingStateLoss()
-
-
         }
 
     }
