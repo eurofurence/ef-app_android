@@ -5,9 +5,12 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.tracking.Analytics
@@ -24,7 +27,21 @@ import org.joda.time.DateTime
 /**
  * Created by David on 5/3/2016.
  */
-class FragmentEventsViewpager : Fragment(), ContentAPI {
+class FragmentEventsViewpager : Fragment(), ContentAPI, TextWatcher {
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+        searhFragment.filterVal = eventSearchBar.text
+        searhFragment.dataUpdatedLong()
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        // pass
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+        // pass
+    }
+
     inner class EventFragmentPagerAdapter(val fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int): CharSequence? {
             return DateTime(database.eventConferenceDayDb.asc { it.date }[position].date).dayOfWeek().asShortText
@@ -42,6 +59,9 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
     val database: Database get() = letRoot { it.database }!!
 
     val eventPager by view(ViewPager::class.java)
+    val eventSearchBar by view(EditText::class.java)
+
+    val searhFragment by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.SEARCH)) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_events_viewpager, container, false)
@@ -51,6 +71,12 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
 
         eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager)
         eventPager.offscreenPageLimit = 2
+
+        childFragmentManager.beginTransaction()
+                .replace(R.id.eventSearch, searhFragment)
+                .commitAllowingStateLoss()
+
+        eventSearchBar.addTextChangedListener(this)
 
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
         applyOnRoot { changeTitle("Event Schedule") }
@@ -63,5 +89,15 @@ class FragmentEventsViewpager : Fragment(), ContentAPI {
     override fun onDestroyView() {
         super.onDestroyView()
         applyOnRoot { tabs.setupWithViewPager(null) }
+    }
+
+    override fun onSearchButtonClick() {
+        if (eventPager.visibility == View.VISIBLE) {
+            eventPager.visibility = View.GONE
+            activity.findViewById(R.id.searchLayout).visibility = View.VISIBLE
+        } else {
+            eventPager.visibility = View.VISIBLE
+            activity.findViewById(R.id.searchLayout).visibility = View.GONE
+        }
     }
 }

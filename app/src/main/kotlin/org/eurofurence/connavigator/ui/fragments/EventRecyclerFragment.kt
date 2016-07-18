@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui.fragments
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat.getColor
@@ -25,16 +26,13 @@ import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.get
-import org.eurofurence.connavigator.util.extensions.letRoot
-import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.*
 import org.joda.time.DateTime
 
 /**
  * Event view recycler to hold the viewpager items
  */
-class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any = Unit) : Fragment(), ContentAPI {
+class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any = Unit) : Fragment(), ContentAPI {
 
     constructor() : this(AnyEventFilter(), Unit) {
     }
@@ -126,11 +124,12 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
         else
             eventsTitle.text = filterStrategy.getTitle()
 
-        effectiveEvents = filterStrategy.filter(database, filterVal).toList()
-
         // Configure the recycler
         events.setHasFixedSize(true)
         events.adapter = DataAdapter()
+
+        // Filter the data
+        dataUpdated()
 
         if (filterStrategy.scrolling)
             events.layoutManager = LinearLayoutManager(activity)
@@ -144,11 +143,6 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
         }
 
         updateReceiver.register()
-
-        if (effectiveEvents.isEmpty()) {
-            eventsTitle.visibility = View.GONE
-            events.visibility = View.GONE
-        }
     }
 
     override fun onPause() {
@@ -164,5 +158,33 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, val filterVal: Any
     override fun dataUpdated() {
         effectiveEvents = filterStrategy.filter(database, filterVal).toList()
         events.adapter.notifyDataSetChanged()
+
+        if (effectiveEvents.isEmpty()) {
+            eventsTitle.visibility = View.GONE
+            events.visibility = View.GONE
+        }
+    }
+
+    fun dataUpdatedLong() {
+        object : AsyncTask<Unit, Unit, Iterable<EventEntry>>() {
+            override fun onPreExecute() {
+                logd { "Starting long data update" }
+            }
+
+            override fun doInBackground(vararg params: Unit?): Iterable<EventEntry>? {
+                return filterStrategy.filter(database, filterVal)
+            }
+
+            override fun onPostExecute(result: Iterable<EventEntry>) {
+                logd { "Completed long data update" }
+                effectiveEvents = result.toList()
+                events.adapter.notifyDataSetChanged()
+
+                if (effectiveEvents.isEmpty()) {
+                    eventsTitle.visibility = View.GONE
+                    events.visibility = View.GONE
+                }
+            }
+        }.execute()
     }
 }

@@ -9,7 +9,7 @@ import org.eurofurence.connavigator.util.extensions.filterIf
  */
 class SearchEventFilter : IEventFilter {
     override fun filter(database: Database, filterVal: Any): Iterable<EventEntry> =
-            database.eventEntryDb.items.filterIf(filterVal != Unit, { it.title.contains(filterVal.toString()) }).sortedBy { it.title }
+            database.eventEntryDb.items.filterIf(filterVal != Unit && filterVal != "", { it.title.contains(filterVal.toString()) }).sortedBy { it.title }
 
     override fun getTitle(): String = "Search events"
 
