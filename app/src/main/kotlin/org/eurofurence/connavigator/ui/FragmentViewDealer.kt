@@ -19,15 +19,19 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.get
-import org.eurofurence.connavigator.util.extensions.letRoot
-import org.eurofurence.connavigator.util.extensions.logv
+import org.eurofurence.connavigator.util.extensions.*
 import us.feras.mdv.MarkdownView
 
 /**
  * Created by David on 16-5-2016.
  */
-class FragmentViewDealer(val dealer: Dealer) : Fragment(), ContentAPI {
+class FragmentViewDealer() : Fragment(), ContentAPI {
+    constructor(dealer: Dealer) : this() {
+        arguments = Bundle()
+
+        arguments.jsonObjects["dealer"] = dealer
+    }
+
     val dealerName by view(TextView::class.java)
     val dealerShortDescription by view(TextView::class.java)
     val dealerArtistDescription by view(MarkdownView::class.java)
@@ -49,65 +53,69 @@ class FragmentViewDealer(val dealer: Dealer) : Fragment(), ContentAPI {
         // Send analytics pings
         Analytics.screen("View Dealer Details")
 
-        Analytics.event(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName ?: dealer.attendeeNickname)
+        if ("dealer" in arguments) {
+            val dealer = arguments.jsonObjects["dealer", Dealer::class.java]
 
-        // Retrieve top image
-        val image = database.imageDb[dealer.artistImageId]
+            Analytics.event(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName ?: dealer.attendeeNickname)
 
-        // Load the map
-        val mapEntry = database.mapEntryDb.items.find { it.targetId == dealer.id }
+            // Retrieve top image
+            val image = database.imageDb[dealer.artistImageId]
 
-        val mapImage = database.imageDb[database.mapEntityDb[mapEntry?.mapId]?.imageId]
+            // Load the map
+            val mapEntry = database.mapEntryDb.items.find { it.targetId == dealer.id }
 
-        imageService.load(mapImage, dealerMap)
+            val mapImage = database.imageDb[database.mapEntityDb[mapEntry?.mapId]?.imageId]
 
-        // Set image on top
-        if (image != null) {
-            imageService.load(image, dealerImage, false)
-            imageService.resizeFor(image, dealerImage)
-        } else {
-            dealerImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_black))
-        }
+            imageService.load(mapImage, dealerMap)
 
-        // Load art preview image
-        imageService.load(database.imageDb[dealer.artPreviewImageId], dealerPreviewArtImage)
-
-        dealerPreviewCaption.text = dealer.artPreviewCaption
-
-        dealerName.text = Formatter.dealerName(dealer)
-        dealerShortDescription.text = dealer.shortDescription
-
-        dealerArtistDescription.loadMarkdown(dealer.aboutTheArtistText)
-        dealerArtDescription.loadMarkdown(dealer.aboutTheArtText)
-
-        // Handle the FAB that links out
-        dealerButtonMore.setOnClickListener {
-            try {
-                if (dealer.websiteUri.startsWith("http")) {
-                    Analytics.event(Analytics.Category.DEALER, Analytics.Action.LINK_CLICKED, dealer.displayName ?: dealer.attendeeNickname)
-
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(dealer.websiteUri)))
-                } else {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://" + dealer.websiteUri)))
-                }
-            } catch(e: Exception) {
-                Analytics.exception(e)
-                logv { "User tried clicking on a dealer with no url" }
+            // Set image on top
+            if (image != null) {
+                imageService.load(image, dealerImage, false)
+                imageService.resizeFor(image, dealerImage)
+            } else {
+                dealerImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_black))
             }
+
+            // Load art preview image
+            imageService.load(database.imageDb[dealer.artPreviewImageId], dealerPreviewArtImage)
+
+            dealerPreviewCaption.text = dealer.artPreviewCaption
+
+            dealerName.text = Formatter.dealerName(dealer)
+            dealerShortDescription.text = dealer.shortDescription
+
+            dealerArtistDescription.loadMarkdown(dealer.aboutTheArtistText)
+            dealerArtDescription.loadMarkdown(dealer.aboutTheArtText)
+
+            // Handle the FAB that links out
+            dealerButtonMore.setOnClickListener {
+                try {
+                    if (dealer.websiteUri.startsWith("http")) {
+                        Analytics.event(Analytics.Category.DEALER, Analytics.Action.LINK_CLICKED, dealer.displayName ?: dealer.attendeeNickname)
+
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(dealer.websiteUri)))
+                    } else {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://" + dealer.websiteUri)))
+                    }
+                } catch(e: Exception) {
+                    Analytics.exception(e)
+                    logv { "User tried clicking on a dealer with no url" }
+                }
+            }
+
+            // Load empty texts
+            if (dealer.websiteUri.isEmpty())
+                dealerButtonMore.visibility = View.GONE
+
+            if (dealer.aboutTheArtText.isEmpty())
+                dealerArtistDescription.loadMarkdown("This artist did not supply any artist description to show to you :(")
+
+            if (dealer.aboutTheArtistText.isEmpty())
+                dealerArtDescription.loadMarkdown("this artist did not supply any art descriptions to show to you  :V")
+
+            if (dealer.shortDescription.isEmpty())
+                dealerShortDescription.visibility = View.GONE
         }
-
-        // Load empty texts
-        if (dealer.websiteUri.isEmpty())
-            dealerButtonMore.visibility = View.GONE
-
-        if (dealer.aboutTheArtText.isEmpty())
-            dealerArtistDescription.loadMarkdown("This artist did not supply any artist description to show to you :(")
-
-        if (dealer.aboutTheArtistText.isEmpty())
-            dealerArtDescription.loadMarkdown("this artist did not supply any art descriptions to show to you  :V")
-
-        if (dealer.shortDescription.isEmpty())
-            dealerShortDescription.visibility = View.GONE
     }
 
 }

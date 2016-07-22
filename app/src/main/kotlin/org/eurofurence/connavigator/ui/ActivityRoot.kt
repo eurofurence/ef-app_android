@@ -3,7 +3,6 @@ package org.eurofurence.connavigator.ui
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.FloatingActionButton
@@ -308,18 +307,13 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         navigateToSubFragment(FragmentViewDealer(dealer))
     }
 
-    private fun navigateToSubFragment(fragment: Fragment) {
-        if (supportFragmentManager.backStackEntryCount <= 0) {
+    private fun navigateToSubFragment(fragment: Fragment) =
             supportFragmentManager
                     .beginTransaction()
                     .setCustomAnimations(R.anim.in_slide_and_fade, R.anim.out_slide_and_fade, R.anim.in_slide_and_fade, R.anim.out_slide_and_fade)
                     .add(R.id.content, fragment, "content")
                     .addToBackStack(null)
                     .commit()
-        } else if (BuildConfig.DEBUG) {
-            makeSnackbar("Trying to add more then one subelement to the backstack. Pls don't")
-        }
-    }
 
     /**
      * Database is lazily initialized and then provided as part of the root API

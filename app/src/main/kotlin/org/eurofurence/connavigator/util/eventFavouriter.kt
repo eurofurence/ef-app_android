@@ -24,10 +24,6 @@ import java.util.*
 class EventFavouriter(val context: Context) {
     val database by lazy { Database(context) }
 
-    val notificationDelay by lazy {
-        PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.notification_time_extra), "15").toInt()
-    }
-
     /**
      * Handles logic for favoriting events
      * Return: True if element was inserted, false is element was removed
@@ -114,9 +110,7 @@ class EventFavouriter(val context: Context) {
 
         var eventDateTime = eventDateTimeFormatter.parseDateTime(eventDateTimeString)
 
-        eventDateTime = eventDateTime.minusMinutes(notificationDelay)
-
-        logd{ "NotificationDelay = $notificationDelay minutes"}
+        eventDateTime = eventDateTime.minusMinutes(30)
 
         return eventDateTime.millis
     }
