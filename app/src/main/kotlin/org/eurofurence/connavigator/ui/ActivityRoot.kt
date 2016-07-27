@@ -256,7 +256,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             //Handle the ID
             when (it.itemId) {
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
-                R.id.navEvents -> navigateRoot(FragmentEventsViewpager::class.java, ActionBarMode.SEARCHTABS)
+                R.id.navEvents -> navigateRoot(FragmentViewEvents::class.java, ActionBarMode.SEARCHTABS)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCH)
                 R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
