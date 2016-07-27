@@ -162,6 +162,9 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
         if (effectiveEvents.isEmpty()) {
             eventsTitle.visibility = View.GONE
             events.visibility = View.GONE
+        } else{
+            eventsTitle.visibility = View.VISIBLE
+            events.visibility = View.VISIBLE
         }
     }
 
