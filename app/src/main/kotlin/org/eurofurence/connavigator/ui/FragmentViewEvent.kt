@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -49,6 +50,8 @@ class FragmentViewEvent() : Fragment() {
     val time by view(TextView::class.java)
     val buttonSave by view(FloatingActionButton::class.java)
 
+    val preferences: SharedPreferences get() = letRoot { it.preferences }!!
+
     val database: Database get() = letRoot { it.database }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -72,7 +75,7 @@ class FragmentViewEvent() : Fragment() {
 
             description.loadMarkdown(eventEntry.description)
 
-            time.text = Formatter.eventToTimes(eventEntry, database)
+            time.text = Formatter.eventToTimes(eventEntry, database, preferences.getBoolean(context.getString(R.string.date_short), true))
             organizers.text = Formatter.eventOwner(eventEntry)
             room.text = Formatter.roomFull(conferenceRoom!!)
 

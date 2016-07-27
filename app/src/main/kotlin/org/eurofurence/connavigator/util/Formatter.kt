@@ -7,8 +7,9 @@ import io.swagger.client.model.EventConferenceRoom
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.util.extensions.get
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import java.util.*
 
 /**
@@ -21,9 +22,14 @@ object Formatter {
     /*
     Formats an event starting and ending times to conform to our standards
      */
-    fun eventToTimes(eventEntry: EventEntry, database: Database): Spanned {
+    fun eventToTimes(eventEntry: EventEntry, database: Database, short: Boolean): Spanned {
+        val date: String = if (short) {
+            DateTime(database.eventConferenceDayDb.keyValues[eventEntry.conferenceDayId]!!.date).dayOfWeek().asText
+        } else {
+            DateTime(database.eventConferenceDayDb[eventEntry.conferenceDayId]!!.date).toString(DateTimeFormat.forPattern("MMM d"))
+        }
         val string = "<b>%s</b> from <b>%s</b> to <b>%s</b>".format(
-                DateTime(database.eventConferenceDayDb.keyValues[eventEntry.conferenceDayId]!!.date).dayOfWeek().asText,
+                date,
                 eventEntry.startTime.subSequence(0, 5),
                 eventEntry.endTime.subSequence(0, 5)
         )

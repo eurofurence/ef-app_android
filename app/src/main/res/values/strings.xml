@@ -18,6 +18,7 @@
     <string name="debug_notifications_schedule">debug_notifications_schedule</string>
     <string name="announcement_show_old">announcement_show_old</string>
     <string name="notification_time_extra">notifications_time_extra</string>
+    <string name="date_short">date_short</string>
     <array name="polling_intervals">
         <item>100</item>
         <item>75</item>

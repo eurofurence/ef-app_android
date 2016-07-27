@@ -12,11 +12,11 @@
                             android:title="Show expired Announcements"
                             android:summary="This will show you all the announcements that have expired"
                             android:defaultValue="false"/>
-        <CheckBoxPreference android:key="date_short"
+        <CheckBoxPreference android:key="@string/date_short"
                             android:title="Shortened dates and times"
                             android:contentDescription="Display dates in names instead of numbers (Friday vs 13-08)"
                             android:defaultValue="true"
-                            android:enabled="false"/>
+                            android:enabled="true"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Analytics">

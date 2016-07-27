@@ -38,7 +38,7 @@ class EventCard(val eventEntry: EventEntry) : Fragment(), ContentAPI {
         super.onViewCreated(view, savedInstanceState)
 
         eventTitle.text = Formatter.eventTitle(eventEntry)
-        eventDate.text = Formatter.eventToTimes(eventEntry, database)
+        eventDate.text = Formatter.eventToTimes(eventEntry, database, true)
         imageService.load(database.imageDb[eventEntry.imageId], eventImage)
 
 
