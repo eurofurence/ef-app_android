@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import io.swagger.client.model.Dealer
 import org.eurofurence.connavigator.R
@@ -42,6 +43,8 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
     val dealerPreviewCaption by view(TextView::class.java)
     val dealerMap by view(ImageView::class.java)
 
+    val dealerPreviewArtLayout by view(LinearLayout::class.java)
+
     var isFullscreen = false
 
     val database: Database get() = letRoot { it.database }!!
@@ -73,11 +76,15 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
                 imageService.load(image, dealerImage, false)
                 imageService.resizeFor(image, dealerImage)
             } else {
-                dealerImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_black))
+                dealerImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_white_full))
             }
 
             // Load art preview image
             imageService.load(database.imageDb[dealer.artPreviewImageId], dealerPreviewArtImage)
+
+            if(dealerPreviewArtImage.visibility == View.GONE){
+                dealerPreviewArtLayout.visibility = View.GONE
+            }
 
             dealerPreviewCaption.text = dealer.artPreviewCaption
 
@@ -111,7 +118,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
                 dealerArtistDescription.loadMarkdown("This artist did not supply any artist description to show to you :(")
 
             if (dealer.aboutTheArtistText.isEmpty())
-                dealerArtDescription.loadMarkdown("this artist did not supply any art descriptions to show to you  :V")
+                dealerArtDescription.loadMarkdown("this artist did not supply any art descriptions to show to you :(")
 
             if (dealer.shortDescription.isEmpty())
                 dealerShortDescription.visibility = View.GONE

@@ -51,25 +51,30 @@
                       android:padding="@dimen/outer_padding"
                       android:text="About the Art"
                       android:textAppearance="?android:textAppearanceLarge"/>
-            <ImageView android:layout_width="match_parent"
-                       android:layout_height="200dp"
-                       android:padding="@dimen/outer_padding"
-                       android:id="@+id/dealerPreviewArtImage"
-                       android:scaleType="fitCenter"
-                       android:background="@color/primary"/>
-            <TextView android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:id="@+id/dealerPreviewCaption"
-                      android:textAlignment="center"
-                      android:background="@color/primary"
-                      android:padding="@dimen/outer_padding"
-                      android:textAppearance="?android:textAppearanceSmallInverse"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="vertical"
+            android:id="@+id/dealerPreviewArtLayout">
+                <ImageView android:layout_width="match_parent"
+                           android:layout_height="200dp"
+                           android:padding="@dimen/outer_padding"
+                           android:id="@+id/dealerPreviewArtImage"
+                           android:scaleType="fitCenter"
+                           android:background="@color/primary"/>
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/dealerPreviewCaption"
+                          android:textAlignment="center"
+                          android:background="@color/primary"
+                          android:padding="@dimen/outer_padding"
+                          android:textAppearance="?android:textAppearanceSmallInverse"/>
+            </LinearLayout>
             <us.feras.mdv.MarkdownView android:layout_width="match_parent"
                                        android:layout_height="wrap_content"
                                        android:id="@+id/dealerArtDescription"/>
             <ImageView android:layout_width="match_parent"
                        android:layout_height="200dp"
-                        android:id="@+id/dealerMap"/>
+                       android:id="@+id/dealerMap"/>
 
         </LinearLayout>
     </ScrollView>
