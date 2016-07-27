@@ -48,7 +48,12 @@ object Formatter {
         if (eventEntry.subTitle.isNullOrEmpty()) {
             return formatHTML(eventEntry.title)
         } else {
-            return Html.fromHtml((eventEntry.title).toString().trim() + ":<br /> <i>${eventEntry.subTitle}</i>")
+            val format = if (eventEntry.isDeviatingFromConBook.toInt() == 0) {
+                (eventEntry.title).toString().trim() + ":<br /> <i>${eventEntry.subTitle}</i>"
+            } else {
+                (eventEntry.title).toString().trim() + ":<br /> <i>${eventEntry.subTitle}</i><br />This item differs from the conbook!"
+            }
+            return Html.fromHtml(format)
         }
     }
 
