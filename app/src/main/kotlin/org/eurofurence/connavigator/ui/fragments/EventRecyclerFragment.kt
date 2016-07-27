@@ -64,9 +64,15 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
             holder.eventTitle.text = Formatter.eventTitle(event)
 
             if (database.eventIsHappening(event, DateTime.now())) {
+                // It's happening now
                 holder.eventStartTime.text = "NOW"
             } else if (database.eventStart(event).isBeforeNow) {
+                // It's already happened
                 holder.eventStartTime.text = "DONE"
+            } else if (database.eventIsUpcoming(event, DateTime.now(), 30)) {
+                // It's upcoming, so we give a timer
+                val countdown = database.eventStart(event).minus(DateTime.now().millis).millis / 1000 / 60
+                holder.eventStartTime.text = "IN $countdown MIN"
             } else {
                 holder.eventStartTime.text = Formatter.shortTime(event.startTime)
             }
@@ -119,10 +125,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (filterStrategy.getTitle() == "")
-            eventsTitle.visibility = View.GONE
-        else
-            eventsTitle.text = filterStrategy.getTitle()
+        setTitle()
 
         // Configure the recycler
         events.setHasFixedSize(true)
@@ -145,6 +148,13 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
         updateReceiver.register()
     }
 
+    private fun setTitle() {
+        if (filterStrategy.getTitle() == "")
+            eventsTitle.visibility = View.GONE
+        else
+            eventsTitle.text = filterStrategy.getTitle()
+    }
+
     override fun onPause() {
         super.onPause()
         updateReceiver.unregister()
@@ -162,8 +172,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
         if (effectiveEvents.isEmpty()) {
             eventsTitle.visibility = View.GONE
             events.visibility = View.GONE
-        } else{
-            eventsTitle.visibility = View.VISIBLE
+        } else {
+            setTitle()
             events.visibility = View.VISIBLE
         }
     }
