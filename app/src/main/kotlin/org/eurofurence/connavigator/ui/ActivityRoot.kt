@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.ui
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -103,6 +104,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Stop the rotation
+        if(BuildConfig.NO_ROTATION) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
         // Assign the layout
         setContentView(R.layout.activity_root)
 

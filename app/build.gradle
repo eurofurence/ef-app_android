@@ -13,6 +13,8 @@ android {
         versionCode 20
         versionName "1.8.7"
         multiDexEnabled true
+
+        buildConfigField("boolean", "NO_ROTATION", "true")
     }
 
     lintOptions {
