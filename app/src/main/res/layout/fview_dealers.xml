@@ -17,13 +17,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/dealersSearch"
                 android:padding="@dimen/outer_padding"
-                android:imeOptions="actionDone|normal"
-                android:layout_weight="9"/>
-        <ImageView android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:scaleType="fitCenter"
-                   android:src="@drawable/icon_search"
-                   android:layout_weight="1"/>
+                android:imeOptions="actionDone|normal"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView android:layout_width="match_parent"

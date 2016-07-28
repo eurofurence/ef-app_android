@@ -39,6 +39,8 @@ android {
         exclude "META-INF/NOTICE"
         exclude "META-INF/maven/com.google.guava/guava/pom.xml"
         exclude "META-INF/maven/com.google.guava/guava/pom.properties"
+
+
     }
 
     defaultConfig {
@@ -60,6 +62,7 @@ android {
             // to pre-dex each module and produce an APK that can be tested on
             // Android Lollipop without time consuming dex merging processes.
             minSdkVersion 21
+            applicationId "org.eurofurence.connavigator.debug"
         }
         prod {
             // The actual minSdkVersion for the application.

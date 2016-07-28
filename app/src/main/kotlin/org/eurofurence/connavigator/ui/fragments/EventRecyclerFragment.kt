@@ -132,7 +132,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
         events.adapter = DataAdapter()
 
         // Filter the data
-        dataUpdated()
+        dataUpdatedLong()
 
         if (filterStrategy.scrolling)
             events.layoutManager = LinearLayoutManager(activity)
@@ -196,6 +196,9 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
                 if (effectiveEvents.isEmpty()) {
                     eventsTitle.visibility = View.GONE
                     events.visibility = View.GONE
+                }else {
+                    setTitle()
+                    events.visibility = View.VISIBLE
                 }
             }
         }.execute()

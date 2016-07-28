@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.app
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.support.multidex.BuildConfig
 import android.support.multidex.MultiDexApplication
 import net.danlew.android.joda.JodaTimeAndroid
 import org.eurofurence.connavigator.database.UpdateIntentService
