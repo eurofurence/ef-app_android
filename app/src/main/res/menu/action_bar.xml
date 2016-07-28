@@ -17,7 +17,7 @@
           android:title="Search"
           app:showAsAction="ifRoom"
           android:visible="false"
-          android:icon="@drawable/icon_search"/>
+          android:icon="@drawable/icon_search_white"/>
     <item android:id="@+id/action_map"
           android:title="Map"
           android:visible="false"
