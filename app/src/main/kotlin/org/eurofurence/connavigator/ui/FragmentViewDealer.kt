@@ -1,6 +1,9 @@
 package org.eurofurence.connavigator.ui
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.graphics.Point
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -13,6 +16,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import io.swagger.client.model.Dealer
+import io.swagger.client.model.Image
+import io.swagger.client.model.MapEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
@@ -69,12 +74,11 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
 
             val mapImage = database.imageDb[database.mapEntityDb[mapEntry?.mapId]?.imageId]
 
-            imageService.load(mapImage, dealerMap)
+            resizeMap(dealer, mapEntry, mapImage)
 
             // Set image on top
             if (image != null) {
                 imageService.load(image, dealerImage, false)
-                imageService.resizeFor(image, dealerImage)
             } else {
                 dealerImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_white_full))
             }
@@ -82,7 +86,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
             // Load art preview image
             imageService.load(database.imageDb[dealer.artPreviewImageId], dealerPreviewArtImage)
 
-            if(dealerPreviewArtImage.visibility == View.GONE){
+            if (dealerPreviewArtImage.visibility == View.GONE) {
                 dealerPreviewArtLayout.visibility = View.GONE
             }
 
@@ -123,6 +127,46 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
             if (dealer.shortDescription.isEmpty())
                 dealerShortDescription.visibility = View.GONE
         }
+    }
+
+    private fun resizeMap(dealer: Dealer, mapEntry: MapEntry?, mapImage: Image?) {
+        if (mapEntry == null) {
+            dealerMap.visibility = View.GONE
+            return
+        }
+        // Make sure we have an image
+        mapImage!!
+
+
+        val bitmap = imageService.getBitmap(mapImage)
+
+        val dealerCoords = Point(((mapEntry.relativeX.toFloat() / 100) * bitmap.width).toInt(), ((mapEntry.relativeY.toFloat() / 100) * bitmap.height).toInt())
+
+        var width = 400
+        var height = 200
+
+        val matrix = Matrix()
+
+        // set coordinates
+        var x = dealerCoords.x
+        var y = dealerCoords.y
+
+        // Move X and y higher and lefter to to make coords we have the middle
+        x -= width / 2
+        y -= height / 2
+
+        // Fix if less then 0
+        if (x < 0) x = 0
+        if (y < 0) y = 0
+
+        // Fix image bounds
+        if (x + width > bitmap.width) width = bitmap.width - x
+        if (y + height > bitmap.height) height = bitmap.height - y
+
+        //crop
+        val croppedMap = Bitmap.createBitmap(bitmap, x, y, width, height, matrix, true)
+
+        dealerMap.setImageBitmap(croppedMap)
     }
 
 }

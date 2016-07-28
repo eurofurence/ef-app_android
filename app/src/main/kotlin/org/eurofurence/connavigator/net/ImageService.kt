@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.net
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
@@ -60,12 +61,6 @@ object imageService {
             imageView.visibility = if (image == null) View.GONE else View.VISIBLE
     }
 
-    /**
-     * Resizes the image view to fit the image, hiding it if desired and resetting to zero if not
-     */
-    fun resizeFor(image: Image?, imageView: ImageView) {
-        // TODO
-    }
-
-
+    fun getBitmap(image: Image): Bitmap =
+            imageLoader.loadImageSync(apiService.formatUrl(image.url), ImageSize(image.width, image.height))
 }
