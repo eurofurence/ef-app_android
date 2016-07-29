@@ -79,7 +79,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, TextWatcher {
         Analytics.screen("Events Listing")
 
         eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager)
-        eventPager.offscreenPageLimit = 2
+        eventPager.offscreenPageLimit = 1
 
         childFragmentManager.beginTransaction()
                 .replace(R.id.eventSearch, searhFragment)

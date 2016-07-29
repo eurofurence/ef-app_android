@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
@@ -110,6 +111,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
     }
 
     val events by view(RecyclerView::class.java)
+    val progress by view(ProgressBar::class.java)
 
     var effectiveEvents = emptyList<EventEntry>()
 
@@ -182,6 +184,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
         object : AsyncTask<Unit, Unit, Iterable<EventEntry>>() {
             override fun onPreExecute() {
                 logd { "Starting long data update" }
+                progress.visibility = View.VISIBLE
+                events.visibility = View.GONE
             }
 
             override fun doInBackground(vararg params: Unit?): Iterable<EventEntry>? {
@@ -192,6 +196,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
                 logd { "Completed long data update" }
                 effectiveEvents = result.toList()
                 events.adapter.notifyDataSetChanged()
+
+                progress.visibility = View.GONE
 
                 if (effectiveEvents.isEmpty()) {
                     eventsTitle.visibility = View.GONE
