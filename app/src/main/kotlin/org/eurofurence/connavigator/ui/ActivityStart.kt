@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
@@ -19,7 +18,6 @@ import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.webapi.apiService
 
 /**
  * Created by David on 28-4-2016.
@@ -35,12 +33,12 @@ class ActivityStart : AppCompatActivity() {
             for (map in database.mapEntityDb.items) {
                 logd { "Preloading map ${map.description}" }
                 val image = database.imageDb[map.imageId]!!
-                imageService.imageLoader.loadImage(apiService.formatUrl(image.url), SimpleImageLoadingListener())
+                imageService.preload(image)
             }
 
             for (image in database.imageDb.items) {
                 logd { "Preloading image ${image.title}" }
-                imageService.imageLoader.loadImage(apiService.formatUrl(database.imageDb[image.id]!!.url), SimpleImageLoadingListener())
+                imageService.preload(image)
             }
 
             textHelp.text = "There, all done!"

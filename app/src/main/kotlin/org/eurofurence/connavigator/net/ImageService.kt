@@ -9,8 +9,10 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.assist.ImageSize
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.webapi.apiService
 
 /**
@@ -61,6 +63,18 @@ object imageService {
             imageView.visibility = if (image == null) View.GONE else View.VISIBLE
     }
 
+    /**
+     * Preloads an image too memory
+     */
+    fun preload(image: Image) =
+            imageLoader.loadImage(apiService.formatUrl(image.url), ImageSize(image.width, image.height), SimpleImageLoadingListener())
+
     fun getBitmap(image: Image): Bitmap =
             imageLoader.loadImageSync(apiService.formatUrl(image.url), ImageSize(image.width, image.height))
+
+    fun clear() {
+        logd { "Clearing image cache"}
+        imageLoader.clearDiskCache()
+        imageLoader.clearMemoryCache()
+    }
 }

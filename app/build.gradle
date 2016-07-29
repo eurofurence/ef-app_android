@@ -127,6 +127,8 @@ dependencies {
     // Maps
     compile 'com.google.android.gms:play-services-maps:9.0.2'
 
+    // Photoview
+    compile 'com.github.chrisbanes:PhotoView:1.2.6'
 
     compile 'us.feras.mdv:markdownview:1.1.0'
 
