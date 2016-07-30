@@ -8,4 +8,8 @@
         <key>maps_enabled</key>
         <value>false</value>
     </entry>
+    <entry>
+        <key>rotation_enabled</key>
+        <value>false</value>
+    </entry>
 </defaultsMap>

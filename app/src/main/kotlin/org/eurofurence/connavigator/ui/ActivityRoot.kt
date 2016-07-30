@@ -109,7 +109,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         super.onCreate(savedInstanceState)
 
         // Stop the rotation
-        if (BuildConfig.NO_ROTATION) {
+        if (remotePreferences.rotationEnabled == false) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         // Assign the layout
@@ -296,7 +296,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         // Calculate the days between, using the current time. Todo: timezones
         val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
 
-        if (remotePreferences.maps_enabled == false) {
+        if (remotePreferences.mapsEnabled == false) {
             navView.menu.findItem(R.id.navMap).isVisible = false
         }
 

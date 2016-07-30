@@ -46,5 +46,6 @@ class RemoteConfig {
         }
     }
 
-    val maps_enabled: Boolean = remoteConfig.getBoolean("maps_enabled")
+    val mapsEnabled: Boolean = remoteConfig.getBoolean("maps_enabled")
+    val rotationEnabled: Boolean = remoteConfig.getBoolean("rotation_enabled")
 }
