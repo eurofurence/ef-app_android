@@ -22,11 +22,15 @@ class MyGCMListenerService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(p0: RemoteMessage) {
-        sendNotification(p0.notification.body, p0.notification.title ?: "Message from EF")
+        if(p0.notification.title == null) {
+            sendNotification(p0.notification.body)
+        } else {
+            sendNotification(p0.notification.body, p0.notification.title)
+        }
     }
 
     fun sendNotification(message: String, title: String = "Broadcast from EF") {
-        val notification = NotificationFactory(applicationContext).buildNotification("Broadcast from EF", message)
+        val notification = NotificationFactory(applicationContext).buildNotification(title, message)
         val notMan: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notMan.notify(message.hashCode(), notification)
