@@ -25,80 +25,80 @@ class Database(val context: Context) {
      * Database storing dates relevant to database state.
      */
     val dateDb =
-            createSerialized(File(context.cacheDir, "date.db"), Date::class.java).cached()
+            createSerialized(File(context.filesDir, "date.db"), Date::class.java).cached()
 
     /**
      * Stores the latest version
      */
     val versionDb =
-            createSerialized(File(context.cacheDir, "version.db"), String::class.java).cached()
+            createSerialized(File(context.filesDir, "version.db"), String::class.java).cached()
     /**
      * Database storing favorited events
      */
     val favoritedDb =
-            createGson(File(context.cacheDir, "favorited.db"), EventEntry::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "favorited.db"), EventEntry::class.java).cachedApiDB()
 
     /**
      * Database of announcements.
      */
     val announcementDb =
-            createGson(File(context.cacheDir, "announcement.db"), Announcement::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "announcement.db"), Announcement::class.java).cachedApiDB()
 
     /**
      * Database of announcements.
      */
     val dealerDb =
-            createGson(File(context.cacheDir, "dealer.db"), Dealer::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "dealer.db"), Dealer::class.java).cachedApiDB()
 
     /**
      * Database of conference days.
      */
     val eventConferenceDayDb =
-            createGson(File(context.cacheDir, "eventconday.db"), EventConferenceDay::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "eventconday.db"), EventConferenceDay::class.java).cachedApiDB()
 
     /**
      * Database of conference rooms.
      */
     val eventConferenceRoomDb =
-            createGson(File(context.cacheDir, "eventconroom.db"), EventConferenceRoom::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "eventconroom.db"), EventConferenceRoom::class.java).cachedApiDB()
 
     /**
      * Database of conference tracks.
      */
     val eventConferenceTrackDb =
-            createGson(File(context.cacheDir, "eventcontrack.db"), EventConferenceTrack::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "eventcontrack.db"), EventConferenceTrack::class.java).cachedApiDB()
 
     val mapEntityDb =
-            createGson(File(context.cacheDir, "mapentity.db"), MapEntity::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "mapentity.db"), MapEntity::class.java).cachedApiDB()
     /**
      * Database containing map entries
      */
     val mapEntryDb =
-            createGson(File(context.cacheDir, "mapentry.db"), MapEntry::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "mapentry.db"), MapEntry::class.java).cachedApiDB()
 
     /**
      * Database of events.
      */
     val eventEntryDb =
-            createGson(File(context.cacheDir, "events.db"), EventEntry::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "events.db"), EventEntry::class.java).cachedApiDB()
 
     /**
      * Database of images (meta information).
      */
     val imageDb =
-            createGson(File(context.cacheDir, "image.db"), Image::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "image.db"), Image::class.java).cachedApiDB()
 
     /**
      * Database of infos.
      */
     val infoDb =
-            createGson(File(context.cacheDir, "info.db"), Info::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "info.db"), Info::class.java).cachedApiDB()
 
     /**
      * Database of info groups.
      */
     val infoGroupDb =
-            createGson(File(context.cacheDir, "infogroup.db"), InfoGroup::class.java).cachedApiDB()
+            createGson(File(context.filesDir, "infogroup.db"), InfoGroup::class.java).cachedApiDB()
 
     fun clear() {
         dateDb.delete()
