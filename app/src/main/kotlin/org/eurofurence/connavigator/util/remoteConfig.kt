@@ -6,6 +6,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.logd
+import org.joda.time.DateTime
 
 /**
  * Created by David on 30-7-2016.
@@ -36,9 +37,13 @@ class RemoteConfig {
         private fun logConfigStatus() {
             val status = remoteConfig.getString("config_working_test")
             logd { "Config status: $status" }
+            logd { "Config last fetch: ${DateTime(remoteConfig.info.fetchTimeMillis).toString()}}" }
         }
 
-        val cacheExpiration = if (remoteConfig.info.configSettings.isDeveloperModeEnabled) 0L else 43200L
+        val cacheExpiration: Long = when (BuildConfig.DEBUG) {
+            true -> 0L
+            else -> 3600L
+        }
     }
 
     val maps_enabled: Boolean = remoteConfig.getBoolean("maps_enabled")
