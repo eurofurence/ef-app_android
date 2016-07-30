@@ -25,12 +25,17 @@ class RemoteConfig {
             logConfigStatus()
 
             remoteConfig.fetch(cacheExpiration)
-                    .addOnSuccessListener {
-                        logd { "Fetch completed" }
-                        remoteConfig.activateFetched()
-                        logConfigStatus()
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            logd { "Fetch completed" }
+                            remoteConfig.activateFetched()
+                            logConfigStatus()
+                        } else {
+                            logd { "failed to update" }
+                        }
                     }
                     .addOnFailureListener { logd { "Fetch failed ${it.toString()}" } }
+
 
         }
 
@@ -41,7 +46,7 @@ class RemoteConfig {
         }
 
         val cacheExpiration: Long = when (BuildConfig.DEBUG) {
-            true -> 0L
+            true -> 5L
             else -> 3600L
         }
     }
