@@ -6,7 +6,6 @@ import android.support.multidex.BuildConfig
 import android.support.multidex.MultiDexApplication
 import net.danlew.android.joda.JodaTimeAndroid
 import org.eurofurence.connavigator.database.UpdateIntentService
-import org.eurofurence.connavigator.gcm.MyInstanceIDListenerService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.webapi.apiService
@@ -29,17 +28,6 @@ class ConnavigatorApplication : MultiDexApplication() {
 
         Analytics.init(this)
 
-        if (networkIsAvailable()) {
-            MyInstanceIDListenerService.dispatchUpdate(this)
-        }
-
         UpdateIntentService.dispatchUpdate(this)
-    }
-
-    private fun networkIsAvailable(): Boolean {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager;
-        val activeNetworkInfo = connectivityManager.activeNetworkInfo;
-
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected;
     }
 }
