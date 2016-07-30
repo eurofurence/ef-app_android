@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>config_working_test</key>
+        <value>local</value>
+    </entry>
+    <entry>
+        <key>maps_enabled</key>
+        <value>false</value>
+    </entry>
+</defaultsMap>

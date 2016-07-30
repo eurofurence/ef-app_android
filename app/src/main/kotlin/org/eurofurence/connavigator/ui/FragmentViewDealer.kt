@@ -26,6 +26,7 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
+import uk.co.senab.photoview.PhotoViewAttacher
 import us.feras.mdv.MarkdownView
 
 /**
@@ -49,8 +50,6 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
     val dealerMap by view(ImageView::class.java)
 
     val dealerPreviewArtLayout by view(LinearLayout::class.java)
-
-    var isFullscreen = false
 
     val database: Database get() = letRoot { it.database }!!
 
@@ -142,8 +141,8 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
 
         val dealerCoords = Point(((mapEntry.relativeX.toFloat() / 100) * bitmap.width).toInt(), ((mapEntry.relativeY.toFloat() / 100) * bitmap.height).toInt())
 
-        var width = 400
-        var height = 200
+        var width = 500
+        var height = 250
 
         val matrix = Matrix()
 

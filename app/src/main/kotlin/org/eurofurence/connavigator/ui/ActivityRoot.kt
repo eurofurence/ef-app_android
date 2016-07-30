@@ -34,6 +34,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.ui.fragments.FragmentMap
+import org.eurofurence.connavigator.util.RemoteConfig
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -78,6 +79,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     // Settings
     override val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
 
+    override val remotePreferences = RemoteConfig()
+
 
     /**
      * Listens to update responses, since the event recycler holds database related data
@@ -106,7 +109,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         super.onCreate(savedInstanceState)
 
         // Stop the rotation
-        if(BuildConfig.NO_ROTATION) {
+        if (BuildConfig.NO_ROTATION) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         // Assign the layout
@@ -292,6 +295,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
         // Calculate the days between, using the current time. Todo: timezones
         val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
+
+        if (remotePreferences.maps_enabled == false) {
+            navView.menu.findItem(R.id.navMap).isVisible = false
+        }
 
         // On con vs. before con. This should be updated on day changes
         if (days <= 0)

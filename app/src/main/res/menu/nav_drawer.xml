@@ -30,8 +30,7 @@
         <item
                 android:id="@+id/navMap"
                 android:icon="@drawable/icon_map_world"
-                android:title="Points of Interest"
-                android:visible="false"/>
+                android:title="Points of Interest"/>
     </group>
 
     <item android:title="External">

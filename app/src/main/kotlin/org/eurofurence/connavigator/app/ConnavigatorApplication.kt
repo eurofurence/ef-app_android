@@ -8,6 +8,7 @@ import net.danlew.android.joda.JodaTimeAndroid
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.util.RemoteConfig
 import org.eurofurence.connavigator.webapi.apiService
 
 /**
@@ -25,6 +26,8 @@ class ConnavigatorApplication : MultiDexApplication() {
         imageService.initialize(this)
         apiService.initialize(this)
         logService.initialize(this)
+
+        RemoteConfig.intitialize(this)
 
         Analytics.init(this)
 
