@@ -6,6 +6,7 @@ import android.support.multidex.BuildConfig
 import android.support.multidex.MultiDexApplication
 import net.danlew.android.joda.JodaTimeAndroid
 import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.gcm.MyGCMListenerService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.RemoteConfig
@@ -31,6 +32,7 @@ class ConnavigatorApplication : MultiDexApplication() {
 
         Analytics.init(this)
 
+        MyGCMListenerService().subscribeToTest()
         UpdateIntentService.dispatchUpdate(this)
     }
 }
