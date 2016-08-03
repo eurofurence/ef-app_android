@@ -125,11 +125,11 @@ object Formatter {
     }
 
     fun wikiToMarkdown(text: String): Spanned =
-            Html.fromHtml(text.replace("\\\\", "<br />")
-                    .replace("\n", "<br />")
+            Html.fromHtml(text.replace("\\\\", "<br>")
+                    .replace("\n\n", "<br><br>")
                     .replace(Regex("^([^ ]+.*$)(\\n^)(  \\*)", RegexOption.MULTILINE), "$1<br><br>$2$3")
                     .replace(Regex("(^  \\*[^\\n]+$\\n^)(?!  \\* )", RegexOption.MULTILINE), "$1<br><br>")
-                    .replace(Regex("^\\s*\\* (.*)$", RegexOption.MULTILINE), " - $1")
+                    .replace(Regex("^  \\* (.*)$", RegexOption.MULTILINE), "\t$1")
                     .replace(Regex("\\*\\*([^\\*]*)\\*\\*"), "<b>$1</b>")
                     .replace(Regex("\\*([^\\*]*)\\*"), "<i>$1</i>"))
 
