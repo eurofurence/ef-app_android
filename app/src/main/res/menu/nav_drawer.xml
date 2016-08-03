@@ -20,7 +20,6 @@
                 android:title="Dealers den"/>
         <item
                 android:id="@+id/navMaps"
-                android:visible="false"
                 android:icon="@drawable/icon_map_world"
                 android:title="Maps"/>
         <item
