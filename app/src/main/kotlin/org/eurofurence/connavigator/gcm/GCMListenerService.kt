@@ -15,7 +15,7 @@ import org.eurofurence.connavigator.util.extensions.logv
  * Created by David on 14-4-2016.
  */
 class MyGCMListenerService : FirebaseMessagingService() {
-    fun subscribeToTest() {
+    fun subscribe() {
         val messaging = FirebaseMessaging.getInstance()
         if (BuildConfig.DEBUG) {
             messaging.subscribeToTopic("test")
