@@ -56,7 +56,7 @@
                           android:orientation="vertical"
             android:id="@+id/dealerPreviewArtLayout">
                 <uk.co.senab.photoview.PhotoView android:layout_width="match_parent"
-                           android:layout_height="200dp"
+                           android:layout_height="400dp"
                            android:padding="@dimen/outer_padding"
                            android:id="@+id/dealerPreviewArtImage"
                            android:scaleType="fitCenter"
