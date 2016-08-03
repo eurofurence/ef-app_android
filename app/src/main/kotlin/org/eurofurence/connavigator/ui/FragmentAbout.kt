@@ -1,10 +1,13 @@
 package org.eurofurence.connavigator.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
@@ -21,6 +24,8 @@ class FragmentAbout : Fragment() {
 
     val textVersion by view(TextView::class.java)
     val markdownAttributation by view(MarkdownView::class.java)
+    val aboutRequinard by view(LinearLayout::class.java)
+    val aboutPazuzu by view(LinearLayout::class.java)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_about, container, false)
@@ -31,5 +36,12 @@ class FragmentAbout : Fragment() {
         applyOnRoot { changeTitle("About") }
         textVersion.text = "Version: %s - Build: %s".format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toString())
         markdownAttributation.loadMarkdown(attributations)
+
+        aboutRequinard.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://www.furaffinity.net/user/condemnedtrack/")))
+        }
+        aboutPazuzu.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://www.furaffinity.net/user/pazuzu")))
+        }
     }
 }
