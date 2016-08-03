@@ -82,7 +82,7 @@ ext {
     volley_version = "1.0.1"
     junit_version = "4.8.1"
     android_support_version = "23.2.1"
-    google_play_version = "9.0.2"
+    google_play_version = "9.2.1"
 }
 
 // Embedded swagger

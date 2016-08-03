@@ -23,9 +23,10 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.ui.filters.AnyEventFilter
 import org.eurofurence.connavigator.ui.filters.IEventFilter
-import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
+import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
+import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.joda.time.DateTime
@@ -89,9 +90,11 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
             // Assign the on-click action
             holder.itemView.setOnClickListener {
                 applyOnRoot { navigateToEvent(event) }
+                vibrator.short().let { true }
             }
             holder.itemView.setOnLongClickListener {
-                EventDialog(event).show(activity.supportFragmentManager, "Kek").let { true }
+                EventDialog(event).show(activity.supportFragmentManager, "Kek")
+                vibrator.long().let { true }
             }
 
             // Colour the event cards according to if they've already occured, are ocurring or are favourited
@@ -118,6 +121,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
     val eventsTitle by view(TextView::class.java)
 
     val database: Database get() = letRoot { it.database }!!
+
+    val vibrator by lazy { TouchVibrator(context) }
 
     lateinit var updateReceiver: EmbeddedLocalBroadcastReceiver
 
@@ -202,7 +207,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
                 if (effectiveEvents.isEmpty()) {
                     eventsTitle.visibility = View.GONE
                     events.visibility = View.GONE
-                }else {
+                } else {
                     setTitle()
                     events.visibility = View.VISIBLE
                 }

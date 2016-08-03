@@ -22,6 +22,7 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Choice
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.SharingUtility
+import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
@@ -92,9 +93,11 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
                         // Handle clicks
                         holder.itemView.setOnClickListener {
                             applyOnRoot { navigateToInfo(info) }
+                            vibrator.short()
                         }
                         holder.itemView.setOnLongClickListener {
                             startActivity(SharingUtility.share(Formatter.shareInfo(info))).let { true }
+                            vibrator.long().let { true }
                         }
                     }
             )
@@ -106,6 +109,8 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
 
     // View
     val infoGroups  by view(RecyclerView::class.java)
+
+    val vibrator by lazy { TouchVibrator(context) }
 
     // Store of currently displayed info groups and items
     var effectiveInterleaved = emptyList<Choice<InfoGroup, Info>>()
