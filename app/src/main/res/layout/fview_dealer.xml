@@ -11,7 +11,7 @@
                       android:layout_height="match_parent"
                       android:background="@color/cardview_light_background"
                       android:clickable="true">
-            <ImageView android:layout_width="match_parent"
+            <uk.co.senab.photoview.PhotoView android:layout_width="match_parent"
                        android:layout_height="300dp"
                        android:id="@+id/dealerImage"
                        android:adjustViewBounds="true"
@@ -55,7 +55,7 @@
                           android:layout_height="wrap_content"
                           android:orientation="vertical"
             android:id="@+id/dealerPreviewArtLayout">
-                <ImageView android:layout_width="match_parent"
+                <uk.co.senab.photoview.PhotoView android:layout_width="match_parent"
                            android:layout_height="200dp"
                            android:padding="@dimen/outer_padding"
                            android:id="@+id/dealerPreviewArtImage"

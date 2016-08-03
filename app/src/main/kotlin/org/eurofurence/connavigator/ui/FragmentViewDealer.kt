@@ -51,6 +51,8 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
 
     val dealerPreviewArtLayout by view(LinearLayout::class.java)
 
+
+
     val database: Database get() = letRoot { it.database }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
