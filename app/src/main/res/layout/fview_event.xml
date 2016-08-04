@@ -21,11 +21,12 @@
 
             <uk.co.senab.photoview.PhotoView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="500dp"
                     android:id="@+id/image"
                     android:contentDescription="Event"
                     android:src="@drawable/placeholder_event"
-                    android:scaleType="centerCrop"/>
+                    android:background="@drawable/image_fade"
+                    android:scaleType="fitCenter"/>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:background="@color/primaryDarker"
