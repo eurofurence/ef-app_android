@@ -15,41 +15,43 @@ class RemoteConfig {
     companion object {
         val remoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 
-        fun intitialize(context: Context) {
-            remoteConfig.setConfigSettings(FirebaseRemoteConfigSettings.Builder()
-                    .setDeveloperModeEnabled(BuildConfig.DEBUG)
-                    .build())
-
-            remoteConfig.setDefaults(R.xml.remote)
-
-            logConfigStatus()
-
-            remoteConfig.fetch(cacheExpiration)
-                    .addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            logd { "Fetch completed" }
-                            remoteConfig.activateFetched()
-                            logConfigStatus()
-                        } else {
-                            logd { "failed to update" }
-                        }
-                    }
-                    .addOnFailureListener { logd { "Fetch failed ${it.toString()}" } }
-
-
-        }
-
-        private fun logConfigStatus() {
-            val status = remoteConfig.getString("config_working_test")
-            logd { "Config status: $status" }
-            logd { "Config last fetch: ${DateTime(remoteConfig.info.fetchTimeMillis).toString()}}" }
-        }
 
         val cacheExpiration: Long = when (BuildConfig.DEBUG) {
             true -> 5L
             else -> 3600L
         }
     }
+
+    fun  intitialize(context: Context) {
+        remoteConfig.setConfigSettings(FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                .build())
+
+        remoteConfig.setDefaults(R.xml.remote)
+
+        logConfigStatus()
+
+        remoteConfig.fetch()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        logd { "Fetch completed" }
+                        remoteConfig.activateFetched()
+                        logConfigStatus()
+                    } else {
+                        logd { "failed to update" }
+                    }
+                }
+                .addOnFailureListener { logd { "Fetch failed ${it.toString()}" } }
+
+
+    }
+
+    private fun logConfigStatus() {
+        val status = remoteConfig.getString("config_working_test")
+        logd { "Config status: $status" }
+        logd { "Config last fetch: ${DateTime(remoteConfig.info.fetchTimeMillis).toString()}}" }
+    }
+
 
     val mapsEnabled: Boolean = remoteConfig.getBoolean("maps_enabled")
     val rotationEnabled: Boolean = remoteConfig.getBoolean("rotation_enabled")
