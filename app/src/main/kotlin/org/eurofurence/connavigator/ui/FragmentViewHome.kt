@@ -17,7 +17,7 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.enums.EnumEventRecyclerViewmode
 import org.eurofurence.connavigator.ui.filters.factory.EventFilterFactory
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
-import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
+import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.joda.time.DateTime
