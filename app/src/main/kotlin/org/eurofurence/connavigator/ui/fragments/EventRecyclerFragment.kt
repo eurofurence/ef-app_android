@@ -18,6 +18,7 @@ import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
@@ -194,7 +195,12 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
             }
 
             override fun doInBackground(vararg params: Unit?): Iterable<EventEntry>? {
-                return filterStrategy.filter(database, filterVal)
+                try {
+                    return filterStrategy.filter(database, filterVal)
+                } catch(throwable: Throwable) {
+                    Analytics.exception(throwable)
+                    return emptyList()
+                }
             }
 
             override fun onPostExecute(result: Iterable<EventEntry>) {
