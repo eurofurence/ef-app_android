@@ -12,14 +12,17 @@ import android.widget.TextView
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.ui.communication.ContentAPI
+import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.letRoot
 import us.feras.mdv.MarkdownView
 
 /**
  * Created by David on 28-4-2016.
  */
-class FragmentAbout : Fragment() {
+class FragmentAbout : Fragment(), ContentAPI {
     private val attributations = "Google Map\n\nIcons8"
 
     val textVersion by view(TextView::class.java)
@@ -38,6 +41,7 @@ class FragmentAbout : Fragment() {
         markdownAttributation.loadMarkdown(attributations)
 
         aboutRequinard.setOnClickListener {
+            //applyOnRoot { changeTheme(R.style.RequinardTheme) }
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://www.furaffinity.net/user/condemnedtrack/")))
         }
         aboutPazuzu.setOnClickListener {
