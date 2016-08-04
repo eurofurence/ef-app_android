@@ -13,10 +13,8 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.letRoot
 import us.feras.mdv.MarkdownView
 
 /**

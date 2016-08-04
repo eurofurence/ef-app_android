@@ -49,7 +49,7 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
 
                 Analytics.event(Analytics.Category.EVENT, Analytics.Action.EXPORT_CALENDAR, event.title)
 
-                calendarIntent.setType("vnd.android.cursor.item/event");
+                calendarIntent.type = "vnd.android.cursor.item/event";
                 calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title);
                 calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, database.eventStart(event).millis)
                 calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, database.eventEnd(event).millis)
