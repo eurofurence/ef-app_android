@@ -270,7 +270,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navMaps -> navigateRoot(FragmentViewMaps::class.java)
                 R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCH)
-                R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
+                R.id.navAbout -> navigateRoot(FragmentViewAbout::class.java)
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
                 R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this)

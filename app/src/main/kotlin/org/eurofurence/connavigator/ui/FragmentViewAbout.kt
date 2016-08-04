@@ -22,7 +22,7 @@ import us.feras.mdv.MarkdownView
 /**
  * Created by David on 28-4-2016.
  */
-class FragmentAbout : Fragment(), ContentAPI {
+class FragmentViewAbout : Fragment(), ContentAPI {
     private val attributations = "Google Map\n\nIcons8"
 
     val textVersion by view(TextView::class.java)
