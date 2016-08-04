@@ -28,11 +28,11 @@ class ConnavigatorApplication : MultiDexApplication() {
         apiService.initialize(this)
         logService.initialize(this)
 
-        RemoteConfig.intitialize(this)
+        RemoteConfig().intitialize(this)
 
         Analytics.init(this)
 
-        MyGCMListenerService().subscribeToTest()
+        MyGCMListenerService().subscribe()
         UpdateIntentService.dispatchUpdate(this)
     }
 }
