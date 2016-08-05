@@ -129,7 +129,7 @@ object Formatter {
                     .replace("\n\n", "<br><br>")
                     .replace(Regex("^([^ ]+.*$)(\\n^)(  \\*)", RegexOption.MULTILINE), "$1<br><br>$2$3")
                     .replace(Regex("(^  \\*[^\\n]+$\\n^)(?!  \\* )", RegexOption.MULTILINE), "$1<br><br>")
-                    .replace(Regex("^  \\* (.*)$", RegexOption.MULTILINE), "\t$1")
+                    .replace(Regex("^  \\* (.*)$", RegexOption.MULTILINE), "&nbsp;&nbsp;&nbsp;&nbsp; &bull; $1 <br/>")
                     .replace(Regex("\\*\\*([^\\*]*)\\*\\*"), "<b>$1</b>")
                     .replace(Regex("\\*([^\\*]*)\\*"), "<i>$1</i>"))
 
