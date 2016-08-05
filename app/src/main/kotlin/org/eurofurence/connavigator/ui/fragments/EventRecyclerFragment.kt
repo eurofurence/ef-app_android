@@ -7,6 +7,8 @@ import android.support.v4.content.ContextCompat.getColor
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.SpannableStringBuilder
+import android.text.style.ImageSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +29,7 @@ import org.eurofurence.connavigator.ui.filters.IEventFilter
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
+import org.eurofurence.connavigator.util.RemoteConfig
 import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -63,8 +66,31 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
             // Get the event for the position
             val event = effectiveEvents[pos]
 
+            val conflicting = if (remoteConfig.showConflictingEvents) database.eventIsConflicting(event) else false
+
+            val favourite = database.favoritedDb[event.id] != null
+
+            val builder = SpannableStringBuilder()
+
+            var titleText = Formatter.eventTitle(event)
+
+            if ((conflicting || favourite) && remoteConfig.showEventGlyphs) {
+                if (conflicting) {
+                    builder.append(" ")
+                    builder.setSpan(ImageSpan(activity, R.drawable.icon_attention_small), builder.length - 1, builder.length, 0)
+                    builder.append(" ")
+                }
+                if (favourite) {
+                    builder.append(" ")
+                    builder.setSpan(ImageSpan(activity, R.drawable.icon_like_filled_small), builder.length - 1, builder.length, 0)
+                    builder.append(" ")
+                }
+            }
+
+            builder.append(titleText)
+
             // Assign the properties of the view
-            holder.eventTitle.text = Formatter.eventTitle(event)
+            holder.eventTitle.text = builder
 
             if (database.eventIsHappening(event, DateTime.now())) {
                 // It's happening now
@@ -108,6 +134,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
             } else if (database.eventEnd(event).isBeforeNow) {
                 // Event end is before the current time, so it has already occurred thus it is gray
                 holder.eventCard.setBackgroundColor(getColor(context, R.color.backgroundGrey))
+            } else if (conflicting) {
+                holder.eventCard.setBackgroundColor(getColor(context, R.color.alert))
             } else {
                 holder.eventCard.setBackgroundColor(getColor(context, R.color.cardview_light_background))
             }
@@ -122,6 +150,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
     val eventsTitle by view(TextView::class.java)
 
     val database: Database get() = letRoot { it.database }!!
+
+    val remoteConfig: RemoteConfig get() = letRoot { it.remotePreferences }!!
 
     val vibrator by lazy { TouchVibrator(context) }
 

@@ -279,7 +279,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     AlertDialog.Builder(ContextThemeWrapper(this, R.style.appcompatDialog))
                             .setTitle("Clearing Database")
                             .setMessage("This will get rid of all cached items you have stored locally. You will need an internet connection to restart!")
-                            .setPositiveButton("Clear", { dialogInterface, i -> database.clear(); imageService.clear(); preferences.edit().clear().commit(); System.exit(0) })
+                            .setPositiveButton("Clear", { dialogInterface, i -> database.clear(); imageService.clear(); preferences.edit().clear().commit(); RemoteConfig.clear(); System.exit(0) })
                             .setNegativeButton("Cancel", { dialogInterface, i -> })
                             .show()
                 }

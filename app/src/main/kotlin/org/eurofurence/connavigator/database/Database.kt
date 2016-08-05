@@ -167,4 +167,14 @@ class Database(val context: Context) {
      */
     fun eventInterval(eventEntry: EventEntry): Interval =
             Interval(eventStart(eventEntry), eventEnd(eventEntry))
+
+    /**
+     * You input an event and it will check it it overlaps with a favourited event
+     */
+    fun eventIsConflicting(eventEntry: EventEntry): Boolean =
+            eventEntryDb.items.filter { it.conferenceDayId == eventEntry.conferenceDayId }
+                    .filter { it.id in favoritedDb.keyValues }
+                    .filter { it.id != eventEntry.id }
+                    .filter { eventInterval(eventEntry).overlaps(eventInterval(it)) }
+                    .size > 0 // If this list is bigger then 0, we have conflicting events
 }
