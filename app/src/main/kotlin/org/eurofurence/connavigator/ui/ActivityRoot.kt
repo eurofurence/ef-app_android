@@ -185,6 +185,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     override fun onResume() {
         super.onResume()
         updateReceiver.register()
+        UpdateIntentService.dispatchUpdate(this)
     }
 
     override fun onPause() {
