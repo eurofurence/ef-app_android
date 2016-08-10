@@ -37,9 +37,12 @@ object Formatter {
         return Html.fromHtml(string)
     }
 
-    fun shortTime(string: String): String {
-        return string.subSequence(0, 5).toString()
-    }
+    fun shortTime(string: String, date: DateTime? = null) =
+            if (date == null) {
+                string.subSequence(0, 5).toString()
+            } else {
+                string.subSequence(0, 5).toString() + " ${date.toString("EE")}"
+            }
 
     /*
     Formats an event title accoding to our rules

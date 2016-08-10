@@ -25,6 +25,7 @@ import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.ui.filters.AnyEventFilter
+import org.eurofurence.connavigator.ui.filters.AnyFavoritedEventFilter
 import org.eurofurence.connavigator.ui.filters.IEventFilter
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
@@ -102,6 +103,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
                 // It's upcoming, so we give a timer
                 val countdown = database.eventStart(event).minus(DateTime.now().millis).millis / 1000 / 60
                 holder.eventStartTime.text = "IN $countdown MIN"
+            } else if (filterStrategy is AnyFavoritedEventFilter) {
+                holder.eventStartTime.text = Formatter.shortTime(event.startTime, database.eventDay(event))
             } else {
                 holder.eventStartTime.text = Formatter.shortTime(event.startTime)
             }
