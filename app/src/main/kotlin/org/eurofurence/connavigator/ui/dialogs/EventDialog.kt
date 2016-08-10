@@ -49,12 +49,12 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
 
                 Analytics.event(Analytics.Category.EVENT, Analytics.Action.EXPORT_CALENDAR, event.title)
 
-                calendarIntent.type = "vnd.android.cursor.item/event";
-                calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title);
+                calendarIntent.type = "vnd.android.cursor.item/event"
+                calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title)
                 calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, database.eventStart(event).millis)
                 calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, database.eventEnd(event).millis)
-                calendarIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, database.eventConferenceRoomDb[event.conferenceRoomId]!!.name);
-                calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.description);
+                calendarIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, database.eventConferenceRoomDb[event.conferenceRoomId]!!.name)
+                calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
 
 
                 startActivity(calendarIntent)
@@ -64,7 +64,7 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
 
                 Analytics.event(Analytics.Category.EVENT, Analytics.Action.SHARED, event.title)
                 //share
-                startActivity(SharingUtility.share(Formatter.shareEvent(event)))
+                startActivity(Intent.createChooser(Intent(SharingUtility.share(Formatter.shareEvent(event))), "Share Event"))
             }
         }
     }

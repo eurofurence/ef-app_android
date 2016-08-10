@@ -42,7 +42,6 @@
         <item>Share</item>
     </string-array>
     <string-array name="dealer_options">
-        <item>Save to notes</item>
         <item>Share</item>
     </string-array>
 </resources>
