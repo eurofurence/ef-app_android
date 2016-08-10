@@ -62,7 +62,7 @@
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                       android:padding="@dimen/outer_padding"
                       android:textAppearance="?android:textAppearanceMedium"
-                      android:text="More thanks to \n\nLuchs (Windows, Team Lead)\nOmega Wolfblood (iOS)\nZefiro (Team Lead)\n\nSpecial thanks to Akulatraxas, Mark Treefox and StreifiGreif"/>
+                      android:text="More thanks to \n\nLuchs (Windows, Team Lead)\nOmega Wolfblood, Fenrikur (iOS)\nZefiro (Team Lead)\n\nSpecial thanks to Akulatraxas, Mark Treefox and StreifiGreif"/>
 
             <TextView
                     android:layout_width="fill_parent"
