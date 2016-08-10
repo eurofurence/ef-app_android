@@ -75,7 +75,7 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
 
             var titleText = Formatter.eventTitle(event)
 
-            if ((conflicting || favourite) && remoteConfig.showEventGlyphs) {
+            if (conflicting || favourite) {
                 if (conflicting) {
                     builder.append(" ")
                     builder.setSpan(ImageSpan(activity, R.drawable.icon_attention_small), builder.length - 1, builder.length, 0)
