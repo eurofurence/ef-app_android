@@ -2,28 +2,20 @@ package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.ui.dialogs.EventDialog
-import org.eurofurence.connavigator.ui.fragments.FragmentMap
-import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
-import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
-import org.joda.time.DateTime
 import uk.co.senab.photoview.PhotoView
 
 /**
@@ -66,7 +58,7 @@ class FragmentViewMaps : Fragment(), ContentAPI {
         super.onViewCreated(view, savedInstanceState)
 
         mapsRecycler.adapter = DataAdapter()
-        mapsRecycler.layoutManager = NonScrollingLinearLayout(activity)
+        mapsRecycler.layoutManager = LinearLayoutManager(activity)
         mapsRecycler.itemAnimator = DefaultItemAnimator()
     }
 }
