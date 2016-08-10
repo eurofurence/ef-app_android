@@ -12,6 +12,7 @@ class AnyFavoritedEventFilter : IEventFilter {
     override fun filter(database: Database, filterVal: Any): Iterable<EventEntry> {
         return database.eventEntryDb.items
                 .filter { it.id in database.favoritedDb.items.map { it.id } }
+                .sortedBy { database.eventDay(it).toDate() }
                 .sortedBy { it.startTime }
     }
 }
