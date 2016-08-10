@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.logd
@@ -44,6 +45,7 @@ class Analytics {
         val LOGTAG = "ANAL"
         lateinit var tracker: Tracker
         lateinit var context: Context
+        lateinit var firebaseAnalytics: FirebaseAnalytics
 
         fun init(context: Context) {
             logd { "Initializing Google Analytics Tracking" }
@@ -53,13 +55,19 @@ class Analytics {
 
             this.context = context
 
+
+            // Get the new tracking
             updateTracking(preferences)
         }
 
         fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
             if (key.contains("analytics")) {
                 logd { "Analytics settings have been updated" }
-                updateTracking(sharedPreferences);
+                updateTracking(sharedPreferences)
+
+                // Get firebase analytics
+                firebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
             }
         }
 
