@@ -135,7 +135,11 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
             return
         }
         // Make sure we have an image
-        mapImage!!
+        if (mapImage == null)
+            return
+        else {
+            mapImage
+        }
 
 
         val bitmap = imageService.getBitmap(mapImage)

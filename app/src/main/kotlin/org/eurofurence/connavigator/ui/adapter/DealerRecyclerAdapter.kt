@@ -43,7 +43,7 @@ class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Da
         holder.dealerSubText.text = dealer.shortDescription ?: "This dealer did not provide a short description"
 
         // If no dealer preview was provided, load the YCH icon
-        if (database.imageDb[dealer.artPreviewImageId] != null) {
+        if (database.imageDb[dealer.artistThumbnailImageId] != null) {
             imageService.load(database.imageDb[dealer.artistThumbnailImageId], holder.dealerPreviewImage, false)
         } else {
             holder.dealerPreviewImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_black))
