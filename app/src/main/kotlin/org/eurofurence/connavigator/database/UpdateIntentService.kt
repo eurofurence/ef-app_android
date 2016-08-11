@@ -82,7 +82,7 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
             checkedUpdate("Info", database.infoDb, { loadInfos(it) })
             checkedUpdate("InfoGroup", database.infoGroupDb, { loadInfoGroups(it) })
             checkedUpdate("MapEntry", database.mapEntryDb, { loadMapEntry(it) })
-            checkedUpdate("MapEntity", database.mapEntityDb, { loadMapEntity(it) })
+            checkedUpdate("Map", database.mapEntityDb, { loadMapEntity(it) })
             // Set the new server date
             database.dateDb.items = listOf(newDate)
 
