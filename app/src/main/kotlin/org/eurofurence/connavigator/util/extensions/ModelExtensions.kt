@@ -7,7 +7,6 @@ import com.google.gson.stream.JsonWriter
 import io.swagger.client.JsonUtil
 import io.swagger.client.model.Endpoint
 import io.swagger.client.model.EntityBase
-import org.eurofurence.connavigator.webapi.apiService
 import java.io.Reader
 import java.io.Writer
 import java.math.BigDecimal
@@ -63,4 +62,4 @@ val EntityBase.deleted: Boolean
  * Gets the endpoint entity for the given name
  */
 operator fun Endpoint.get(name: String) =
-        apiService.api.endpointGet().entities.find { it.name == name }
+        this.entities.find { it.name == name }

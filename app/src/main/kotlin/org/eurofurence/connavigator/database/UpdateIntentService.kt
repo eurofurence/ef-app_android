@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
-import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.store.SyncIDB
 import org.eurofurence.connavigator.tracking.Analytics
@@ -62,11 +61,14 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
              * @param db The database to synchronize
              * @param provider The provider of data, relative to a delta
              */
-            fun  <T> checkedUpdate(name: String, db: SyncIDB<T>, provider: (Date?) -> List<T>) {
+            fun <T> checkedUpdate(name: String, db: SyncIDB<T>, provider: (Date?) -> List<T>) {
                 if (oldDate lt endpoint[name]?.deltaStartDateTimeUtc)
                     db.items = provider(null)
-                else
+                else if (oldDate lt endpoint[name]?.lastChangeDateTimeUtc) {
+                    logd { "New data for $name" }
                     db.syncWith(provider(oldDate))
+                } else
+                    logd { "No new data for $name" }
             }
 
             // Update or replace tables
