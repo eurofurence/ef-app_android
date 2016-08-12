@@ -92,7 +92,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
 
         // Make a snackbar for the result
-        makeSnackbar("Database reload ${if (success) "successful" else "failed"}, version $time");
+        makeSnackbar("Database reload ${if (success) "successful" else "failed"}, version $time")
 
         // Update content data if fragments implement content API
         applyOnContent {
@@ -156,7 +156,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     if (infoValue != null) {
                         Analytics.event(Analytics.Category.INFO, Analytics.Action.INCOMING, infoValue.title)
                         navigateToInfo(infoValue)
-                        return true;
+                        return true
                     } else {
                         makeSnackbar("I'm sorry, but we didn't find any info!")
                     }
@@ -169,14 +169,14 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     if (dealerValue != null) {
                         Analytics.event(Analytics.Category.DEALER, Analytics.Action.INCOMING, dealerValue.attendeeNickname)
                         navigateToDealer(dealerValue)
-                        return true;
+                        return true
                     } else {
                         makeSnackbar("I'm sorry, but we didn't find any dealer!")
                     }
                 }
             }
         }
-        return false;
+        return false
     }
 
     private fun setupContent() =
@@ -186,6 +186,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         super.onResume()
         updateReceiver.register()
         UpdateIntentService.dispatchUpdate(this)
+        RemoteConfig().intitialize(this)
     }
 
     override fun onPause() {
@@ -268,7 +269,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
                 R.id.navEvents -> navigateRoot(FragmentViewEvents::class.java, ActionBarMode.SEARCHTABS)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
-                R.id.navMaps -> navigateRoot(FragmentViewMaps::class.java)
+                R.id.navMaps -> navigateRoot(FragmentViewMaps::class.java, ActionBarMode.TABS)
                 R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCH)
                 R.id.navAbout -> navigateRoot(FragmentViewAbout::class.java)
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))

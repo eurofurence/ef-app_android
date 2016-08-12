@@ -31,7 +31,7 @@ class FragmentMap() : Fragment(), ContentAPI {
     val mapTitle by view(TextView::class.java)
     val mapImage by view(PhotoView::class.java)
 
-    val database: Database  get() = letRoot { database }!!
+    val database: Database get() = letRoot { it.database } ?: Database(activity)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fragment_map, container, false)
@@ -43,6 +43,8 @@ class FragmentMap() : Fragment(), ContentAPI {
             val mapEntity = arguments.jsonObjects["mapEntity", MapEntity::class.java]
 
             mapTitle.text = mapEntity.description
+
+            mapTitle.visibility = View.GONE
             imageService.load(database.imageDb[mapEntity.imageId]!!, mapImage, false)
         }
     }
