@@ -24,6 +24,16 @@ class RemoteConfig {
         fun clear() {
             remoteConfig.setDefaults(R.xml.remote)
         }
+
+        fun refresh(seconds: Int = 3600) {
+            remoteConfig.fetch(seconds.toLong()).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    remoteConfig.activateFetched()
+                } else {
+                    logd { "Failed to refresh cache" }
+                }
+            }
+        }
     }
 
     fun intitialize(context: Context) {
@@ -34,20 +44,6 @@ class RemoteConfig {
         remoteConfig.setDefaults(R.xml.remote)
 
         logConfigStatus()
-
-        remoteConfig.fetch()
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        logd { "Fetch completed" }
-                        remoteConfig.activateFetched()
-                        logConfigStatus()
-                    } else {
-                        logd { "failed to update" }
-                    }
-                }
-                .addOnFailureListener { logd { "Fetch failed ${it.toString()}" } }
-
-
     }
 
     private fun logConfigStatus() {

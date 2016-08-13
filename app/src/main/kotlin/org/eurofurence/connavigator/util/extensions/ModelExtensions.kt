@@ -1,5 +1,7 @@
 package org.eurofurence.connavigator.util.extensions
 
+import android.graphics.Point
+import android.graphics.Rect
 import com.google.common.io.CharSink
 import com.google.common.io.CharSource
 import com.google.gson.stream.JsonReader
@@ -7,6 +9,8 @@ import com.google.gson.stream.JsonWriter
 import io.swagger.client.JsonUtil
 import io.swagger.client.model.Endpoint
 import io.swagger.client.model.EntityBase
+import io.swagger.client.model.Image
+import io.swagger.client.model.MapEntry
 import java.io.Reader
 import java.io.Writer
 import java.math.BigDecimal
@@ -63,3 +67,17 @@ val EntityBase.deleted: Boolean
  */
 operator fun Endpoint.get(name: String) =
         this.entities.find { it.name == name }
+
+
+/**
+ * Gets the fixed coordinates of a map entity, fitted to a map
+ */
+fun MapEntry.asRelatedCoordinates(image: Image) =
+        Point(((this.relativeX.toFloat() / 100) * image.width).toInt(), ((this.relativeY.toFloat() / 100) * image.height).toInt())
+
+fun MapEntry.asRectangle(image: Image): Rect {
+    val point = this.asRelatedCoordinates(image)
+    val jitter = ((this.relativeTapRadius.toFloat() / 100) * image.width).toInt()
+
+    return Rect(point.x - jitter, point.y - jitter, point.x + jitter, point.y + jitter)
+}

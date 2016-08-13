@@ -3,7 +3,6 @@ package org.eurofurence.connavigator.ui
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.graphics.Point
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -144,7 +143,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
 
         val bitmap = imageService.getBitmap(mapImage)
 
-        val dealerCoords = Point(((mapEntry.relativeX.toFloat() / 100) * bitmap.width).toInt(), ((mapEntry.relativeY.toFloat() / 100) * bitmap.height).toInt())
+        val dealerCoords = mapEntry.asRelatedCoordinates(mapImage)
 
         var width = remoteConfig.dealerMapWidth.toInt()
         var height = remoteConfig.dealerMapHeight.toInt()
