@@ -16,7 +16,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -74,8 +73,9 @@ class FragmentViewInfo() : Fragment() {
                 val button = Button(context)
                 button.text = url.text
                 button.setOnClickListener {
-                    Analytics.event(Analytics.Category.INFO, Analytics.Action.LINK_CLICKED, url.target)
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url.target)))
+                    val target = if (url.target.contains("http")) url.target else "http://${url.target}"
+                    Analytics.event(Analytics.Category.INFO, Analytics.Action.LINK_CLICKED, target)
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(target)))
                 }
 
                 layout.addView(button)
