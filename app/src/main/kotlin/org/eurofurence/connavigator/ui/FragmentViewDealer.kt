@@ -129,15 +129,9 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
     }
 
     private fun resizeMap(dealer: Dealer, mapEntry: MapEntry?, mapImage: Image?) {
-        if (mapEntry == null) {
+        if (mapEntry == null || mapImage == null) {
             dealerMap.visibility = View.GONE
             return
-        }
-        // Make sure we have an image
-        if (mapImage == null)
-            return
-        else {
-            mapImage
         }
 
 
