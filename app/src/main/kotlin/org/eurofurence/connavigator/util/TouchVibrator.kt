@@ -1,9 +1,7 @@
 package org.eurofurence.connavigator.util
 
 import android.content.Context
-import android.media.AudioAttributes
 import android.os.Vibrator
-import android.provider.MediaStore
 
 /**
  * Created by david on 8/3/16.
@@ -16,13 +14,13 @@ class TouchVibrator(context: Context) {
 
     fun short() {
         if (vibrator.hasVibrator()) {
-            vibrator.vibrate(TIME)
+            //   vibrator.vibrate(TIME)
         }
     }
 
     fun long() {
         if (vibrator.hasVibrator()) {
-            vibrator.vibrate(longArrayOf(0, TIME, TIME*2), -1)
+            //vibrator.vibrate(longArrayOf(0, TIME, TIME*2), -1)
         }
     }
 }
