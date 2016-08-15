@@ -223,8 +223,12 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
         object : AsyncTask<Unit, Unit, Iterable<EventEntry>>() {
             override fun onPreExecute() {
                 logd { "Starting long data update" }
-                progress.visibility = View.VISIBLE
-                events.visibility = View.GONE
+                try {
+                    progress.visibility = View.VISIBLE
+                    events.visibility = View.GONE
+                } catch (throwable: Throwable) {
+                    Analytics.exception(throwable)
+                }
             }
 
             override fun doInBackground(vararg params: Unit?): Iterable<EventEntry>? {
@@ -238,17 +242,21 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
 
             override fun onPostExecute(result: Iterable<EventEntry>) {
                 logd { "Completed long data update" }
-                effectiveEvents = result.toList()
-                events.adapter.notifyDataSetChanged()
+                try {
+                    effectiveEvents = result.toList()
+                    events.adapter.notifyDataSetChanged()
 
-                progress.visibility = View.GONE
+                    progress.visibility = View.GONE
 
-                if (effectiveEvents.isEmpty()) {
-                    eventsTitle.visibility = View.GONE
-                    events.visibility = View.GONE
-                } else {
-                    setTitle()
-                    events.visibility = View.VISIBLE
+                    if (effectiveEvents.isEmpty()) {
+                        eventsTitle.visibility = View.GONE
+                        events.visibility = View.GONE
+                    } else {
+                        setTitle()
+                        events.visibility = View.VISIBLE
+                    }
+                } catch (throwable: Throwable) {
+                    Analytics.exception(throwable)
                 }
             }
         }.execute()
