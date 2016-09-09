@@ -13,7 +13,7 @@ class SearchEventFilter : IEventFilter {
             database.eventEntryDb.items
                     .filterIf(
                             filterVal != Unit && filterVal != "",
-                            { it.title.contains(filterVal.toString()) }
+                            { it.title.contains(filterVal.toString(), true) }
                     )
                     .distinctBy { it.title }
                     .sortedBy { it.title }
