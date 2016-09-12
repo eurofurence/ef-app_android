@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.app
 
 import android.support.multidex.MultiDexApplication
 import net.danlew.android.joda.JodaTimeAndroid
+import net.hockeyapp.android.metrics.MetricsManager
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.gcm.MyGCMListenerService
 import org.eurofurence.connavigator.net.imageService
@@ -24,7 +25,7 @@ class ConnavigatorApplication : MultiDexApplication() {
         imageService.initialize(this)
         apiService.initialize(this)
         logService.initialize(this)
-
+        MetricsManager.register(this)
         RemoteConfig().intitialize(this)
         RemoteConfig.refresh(-1)
         Analytics.init(this)

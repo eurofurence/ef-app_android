@@ -7,8 +7,10 @@ import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
 import com.google.firebase.analytics.FirebaseAnalytics
+import net.hockeyapp.android.metrics.MetricsManager
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.util.extensions.limit
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.logv
 
@@ -118,11 +120,14 @@ class Analytics {
         /**
          * Send an event to analytics using predefined statuses
          */
-        fun event(category: String, action: String, label: String) =
-                event(HitBuilders.EventBuilder()
-                        .setCategory(category)
-                        .setAction(action)
-                        .setLabel(label))
+        fun event(category: String, action: String, label: String) {
+            event(HitBuilders.EventBuilder()
+                    .setCategory(category)
+                    .setAction(action)
+                    .setLabel(label))
+
+            MetricsManager.trackEvent("$category-$action-$label".limit(300))
+        }
 
         /**
          * Track an exception
