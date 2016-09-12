@@ -26,6 +26,7 @@ import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
 import net.hockeyapp.android.CrashManager
+import net.hockeyapp.android.FeedbackManager
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
@@ -279,6 +280,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
                 R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this)
                 R.id.navMap -> navigateRoot(FragmentPoiMap::class.java)
+                R.id.navFeedback -> FeedbackManager.showFeedbackActivity(this@ActivityRoot)
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
                     AlertDialog.Builder(ContextThemeWrapper(this, R.style.appcompatDialog))

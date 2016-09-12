@@ -45,6 +45,9 @@
 
     <item android:title="App Management">
         <menu>
+            <item android:id="@+id/navFeedback"
+                  android:title="App Feedback"
+                  android:icon="@drawable/icon_like_filled"/>
             <item android:id="@+id/navDevReload"
                   android:title="Update"
                   android:icon="@drawable/icon_refresh"/>
