@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
+import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.store.SyncIDB
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.*
@@ -142,7 +144,12 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
 
     private fun loadEvents(oldDate: Date?) = apiService.api.eventEntryGet(oldDate)
 
-    private fun loadImages(oldDate: Date?) = apiService.api.imageGet(oldDate)
+    private fun loadImages(oldDate: Date?): List<Image> {
+        val images = apiService.api.imageGet(oldDate)
+        images.forEach { imageService.recache(it) }
+
+        return images
+    }
 
     private fun loadInfos(oldDate: Date?) = apiService.api.infoGet(oldDate)
 
