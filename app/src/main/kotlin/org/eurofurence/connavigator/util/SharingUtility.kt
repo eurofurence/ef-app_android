@@ -10,9 +10,9 @@ class SharingUtility {
         fun share(text: String): Intent {
             val shareIntent = Intent();
 
-            shareIntent.setAction(Intent.ACTION_SEND)
+            shareIntent.action = Intent.ACTION_SEND
             shareIntent.putExtra(Intent.EXTRA_TEXT, text)
-            shareIntent.setType("text/plain")
+            shareIntent.type = "text/plain"
             return shareIntent
         }
     }

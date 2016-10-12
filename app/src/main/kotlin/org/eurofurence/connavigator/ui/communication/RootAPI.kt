@@ -30,4 +30,6 @@ interface RootAPI {
     fun navigateToDealer(dealer: Dealer)
 
     fun changeTitle(text: String)
+
+    fun changeTheme(newTheme: Int)
 }

@@ -25,7 +25,6 @@ import org.eurofurence.connavigator.util.extensions.letRoot
 import org.eurofurence.connavigator.util.extensions.size
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
 
 /**
  * Created by David on 5/3/2016.
@@ -33,8 +32,8 @@ import org.joda.time.format.DateTimeFormatter
 class FragmentViewEvents : Fragment(), ContentAPI, TextWatcher {
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
-        searhFragment.filterVal = eventSearchBar.text
-        searhFragment.dataUpdatedLong()
+        searchFragment.filterVal = eventSearchBar.text
+        searchFragment.dataUpdatedLong()
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -68,7 +67,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, TextWatcher {
     val eventPager by view(ViewPager::class.java)
     val eventSearchBar by view(EditText::class.java)
 
-    val searhFragment by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.SEARCH)) }
+    val searchFragment by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.SEARCH)) }
 
     val settings: SharedPreferences get() = letRoot { it.preferences }!!
 
@@ -82,7 +81,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, TextWatcher {
         eventPager.offscreenPageLimit = 1
 
         childFragmentManager.beginTransaction()
-                .replace(R.id.eventSearch, searhFragment)
+                .replace(R.id.eventSearch, searchFragment)
                 .commitAllowingStateLoss()
 
         eventSearchBar.addTextChangedListener(this)

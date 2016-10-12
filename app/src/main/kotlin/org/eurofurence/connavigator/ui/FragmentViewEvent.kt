@@ -84,6 +84,10 @@ class FragmentViewEvent() : Fragment() {
             changeFabIcon(eventEntry)
 
             buttonSave.setOnClickListener {
+                EventDialog(eventEntry).show(activity.supportFragmentManager, "Event Dialog").let { true }
+            }
+
+            buttonSave.setOnLongClickListener {
                 if (EventFavouriter(context).toNotifications(eventEntry)) {
                     Snackbar.make(buttonSave, "Favorited this event!", Snackbar.LENGTH_SHORT).show()
                 } else {
@@ -91,10 +95,8 @@ class FragmentViewEvent() : Fragment() {
                 }
 
                 changeFabIcon(eventEntry)
-            }
 
-            buttonSave.setOnLongClickListener {
-                EventDialog(eventEntry).show(activity.supportFragmentManager, "Event Dialog").let { true }
+                true
             }
         }
     }
@@ -106,7 +108,7 @@ class FragmentViewEvent() : Fragment() {
         if (database.favoritedDb.items.contains(eventEntry))
             buttonSave.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_like_filled))
         else
-            buttonSave.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_like_empty))
+            buttonSave.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_menu))
     }
 
 }

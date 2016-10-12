@@ -13,4 +13,5 @@
     <color name="textWhite">#dcdcdc</color>
     <color name="textBlack">#111</color>
     <color name="backgroundGrey">#DDD</color>
+    <color name="alert">#FFE082</color>
 </resources>

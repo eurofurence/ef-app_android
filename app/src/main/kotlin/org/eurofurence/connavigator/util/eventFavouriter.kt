@@ -119,6 +119,6 @@ class EventFavouriter(val context: Context) {
      * Builds an event notification
      */
     fun buildEventNotification(eventEntry: EventEntry): Notification {
-        return NotificationFactory(context).buildNotification(eventEntry.title, database.eventConferenceRoomDb[eventEntry.conferenceRoomId]!!.name)
+        return NotificationFactory(context).buildNotification("${eventEntry.title} is happening soon!", "Go to ${database.eventConferenceRoomDb[eventEntry.conferenceRoomId]!!.name}")
     }
 }

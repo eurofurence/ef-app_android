@@ -3,7 +3,6 @@ package org.eurofurence.connavigator.ui
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.graphics.Point
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -24,9 +23,9 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Formatter
+import org.eurofurence.connavigator.util.RemoteConfig
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
-import uk.co.senab.photoview.PhotoViewAttacher
 import us.feras.mdv.MarkdownView
 
 /**
@@ -52,6 +51,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
     val dealerPreviewArtLayout by view(LinearLayout::class.java)
 
     val database: Database get() = letRoot { it.database }!!
+    val remoteConfig: RemoteConfig get () = letRoot { it.remotePreferences }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_dealer, container, false)
@@ -129,20 +129,18 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
     }
 
     private fun resizeMap(dealer: Dealer, mapEntry: MapEntry?, mapImage: Image?) {
-        if (mapEntry == null) {
+        if (mapEntry == null || mapImage == null) {
             dealerMap.visibility = View.GONE
             return
         }
-        // Make sure we have an image
-        mapImage!!
 
 
         val bitmap = imageService.getBitmap(mapImage)
 
-        val dealerCoords = Point(((mapEntry.relativeX.toFloat() / 100) * bitmap.width).toInt(), ((mapEntry.relativeY.toFloat() / 100) * bitmap.height).toInt())
+        val dealerCoords = mapEntry.asRelatedCoordinates(mapImage)
 
-        var width = 500
-        var height = 250
+        var width = remoteConfig.dealerMapWidth.toInt()
+        var height = remoteConfig.dealerMapHeight.toInt()
 
         val matrix = Matrix()
 

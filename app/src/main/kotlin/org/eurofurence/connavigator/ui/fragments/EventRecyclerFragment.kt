@@ -7,6 +7,8 @@ import android.support.v4.content.ContextCompat.getColor
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.SpannableStringBuilder
+import android.text.style.ImageSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,14 +20,18 @@ import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.ui.filters.AnyEventFilter
+import org.eurofurence.connavigator.ui.filters.AnyFavoritedEventFilter
 import org.eurofurence.connavigator.ui.filters.IEventFilter
-import org.eurofurence.connavigator.ui.layouts.NonScrollingLinearLayout
+import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
+import org.eurofurence.connavigator.util.RemoteConfig
+import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.joda.time.DateTime
@@ -61,8 +67,31 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
             // Get the event for the position
             val event = effectiveEvents[pos]
 
+            val conflicting = if (remoteConfig.showConflictingEvents) database.eventIsConflicting(event) else false
+
+            val favourite = database.favoritedDb[event.id] != null
+
+            val builder = SpannableStringBuilder()
+
+            var titleText = Formatter.eventTitle(event)
+
+            if (conflicting || favourite && remoteConfig.showEventGlyphs == true) {
+                if (conflicting) {
+                    builder.append(" ")
+                    builder.setSpan(ImageSpan(activity, R.drawable.icon_attention_small), builder.length - 1, builder.length, 0)
+                    builder.append(" ")
+                }
+                if (favourite) {
+                    builder.append(" ")
+                    builder.setSpan(ImageSpan(activity, R.drawable.icon_like_filled_small), builder.length - 1, builder.length, 0)
+                    builder.append(" ")
+                }
+            }
+
+            builder.append(titleText)
+
             // Assign the properties of the view
-            holder.eventTitle.text = Formatter.eventTitle(event)
+            holder.eventTitle.text = builder
 
             if (database.eventIsHappening(event, DateTime.now())) {
                 // It's happening now
@@ -74,6 +103,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
                 // It's upcoming, so we give a timer
                 val countdown = database.eventStart(event).minus(DateTime.now().millis).millis / 1000 / 60
                 holder.eventStartTime.text = "IN $countdown MIN"
+            } else if (filterStrategy is AnyFavoritedEventFilter) {
+                holder.eventStartTime.text = Formatter.shortTime(event.startTime, database.eventDay(event))
             } else {
                 holder.eventStartTime.text = Formatter.shortTime(event.startTime)
             }
@@ -89,9 +120,11 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
             // Assign the on-click action
             holder.itemView.setOnClickListener {
                 applyOnRoot { navigateToEvent(event) }
+                vibrator.short().let { true }
             }
             holder.itemView.setOnLongClickListener {
-                EventDialog(event).show(activity.supportFragmentManager, "Kek").let { true }
+                EventDialog(event).show(activity.supportFragmentManager, "Kek")
+                vibrator.long().let { true }
             }
 
             // Colour the event cards according to if they've already occured, are ocurring or are favourited
@@ -104,6 +137,8 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
             } else if (database.eventEnd(event).isBeforeNow) {
                 // Event end is before the current time, so it has already occurred thus it is gray
                 holder.eventCard.setBackgroundColor(getColor(context, R.color.backgroundGrey))
+            } else if (conflicting) {
+                holder.eventCard.setBackgroundColor(getColor(context, R.color.alert))
             } else {
                 holder.eventCard.setBackgroundColor(getColor(context, R.color.cardview_light_background))
             }
@@ -118,6 +153,10 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
     val eventsTitle by view(TextView::class.java)
 
     val database: Database get() = letRoot { it.database }!!
+
+    val remoteConfig: RemoteConfig get() = letRoot { it.remotePreferences }!!
+
+    val vibrator by lazy { TouchVibrator(context) }
 
     lateinit var updateReceiver: EmbeddedLocalBroadcastReceiver
 
@@ -184,27 +223,40 @@ class EventRecyclerFragment(val filterStrategy: IEventFilter, var filterVal: Any
         object : AsyncTask<Unit, Unit, Iterable<EventEntry>>() {
             override fun onPreExecute() {
                 logd { "Starting long data update" }
-                progress.visibility = View.VISIBLE
-                events.visibility = View.GONE
+                try {
+                    progress.visibility = View.VISIBLE
+                    events.visibility = View.GONE
+                } catch (throwable: Throwable) {
+                    Analytics.exception(throwable)
+                }
             }
 
             override fun doInBackground(vararg params: Unit?): Iterable<EventEntry>? {
-                return filterStrategy.filter(database, filterVal)
+                try {
+                    return filterStrategy.filter(database, filterVal)
+                } catch(throwable: Throwable) {
+                    Analytics.exception(throwable)
+                    return emptyList()
+                }
             }
 
             override fun onPostExecute(result: Iterable<EventEntry>) {
                 logd { "Completed long data update" }
-                effectiveEvents = result.toList()
-                events.adapter.notifyDataSetChanged()
+                try {
+                    effectiveEvents = result.toList()
+                    events.adapter.notifyDataSetChanged()
 
-                progress.visibility = View.GONE
+                    progress.visibility = View.GONE
 
-                if (effectiveEvents.isEmpty()) {
-                    eventsTitle.visibility = View.GONE
-                    events.visibility = View.GONE
-                }else {
-                    setTitle()
-                    events.visibility = View.VISIBLE
+                    if (effectiveEvents.isEmpty()) {
+                        eventsTitle.visibility = View.GONE
+                        events.visibility = View.GONE
+                    } else {
+                        setTitle()
+                        events.visibility = View.VISIBLE
+                    }
+                } catch (throwable: Throwable) {
+                    Analytics.exception(throwable)
                 }
             }
         }.execute()

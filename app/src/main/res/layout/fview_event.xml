@@ -19,13 +19,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <ImageView
+            <uk.co.senab.photoview.PhotoView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="500dp"
                     android:id="@+id/image"
                     android:contentDescription="Event"
                     android:src="@drawable/placeholder_event"
-                    android:scaleType="centerCrop"/>
+                    android:background="@drawable/image_fade"
+                    android:scaleType="fitCenter"/>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:background="@color/primaryDarker"
@@ -81,7 +82,7 @@
     <android.support.design.widget.FloatingActionButton android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:layout_margin="16dp"
-                                                        android:src="@drawable/icon_like_empty"
+                                                        android:src="@drawable/icon_menu"
                                                         android:clickable="true"
                                                         app:layout_anchor="@id/splitter"
                                                         app:layout_anchorGravity="bottom|right|end"

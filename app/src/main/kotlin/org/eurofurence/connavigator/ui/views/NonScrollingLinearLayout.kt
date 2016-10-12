@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui.layouts
+package org.eurofurence.connavigator.ui.views
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager

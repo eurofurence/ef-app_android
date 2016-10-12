@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.assist.ImageSize
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils
 import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.logd
@@ -33,7 +34,7 @@ object imageService {
         val defaultOptions = DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.placeholder_event)// TODO: Maybe add specific placeholders
                 .showImageOnFail(R.drawable.placeholder_event)
-                .imageScaleType(ImageScaleType.EXACTLY)
+                .imageScaleType(ImageScaleType.NONE)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build()
@@ -67,14 +68,37 @@ object imageService {
      * Preloads an image too memory
      */
     fun preload(image: Image) =
-            imageLoader.loadImage(apiService.formatUrl(image.url), ImageSize(image.width, image.height), SimpleImageLoadingListener())
+            imageLoader.loadImage(apiService.formatUrl(image.url), ImageSize(image.width, image.height), object : SimpleImageLoadingListener() {
+                override fun onLoadingComplete(imageUri: String, view: View?, loadedImage: Bitmap) {
+
+                    if (imageUri.contains("1f70fd04-39e5-11e6-bae0-066e23d209cf")) {
+                        println("${image.width} x ${image.height}")
+                        println("${loadedImage.width} x ${loadedImage.height}")
+                    }
+                }
+            })
 
     fun getBitmap(image: Image): Bitmap =
             imageLoader.loadImageSync(apiService.formatUrl(image.url), ImageSize(image.width, image.height))
 
     fun clear() {
-        logd { "Clearing image cache"}
+        logd { "Clearing image cache" }
         imageLoader.clearDiskCache()
         imageLoader.clearMemoryCache()
+    }
+
+    /**
+     * Reload an image
+     */
+    fun recache(image: Image) {
+        val imageFile = imageLoader.diskCache.get(apiService.formatUrl(image.url))
+
+        if (imageFile.exists()) {
+            logd { "Deleting cached image" }
+            imageFile.delete()
+            preload(image)
+        }
+
+        MemoryCacheUtils.removeFromCache(apiService.formatUrl(image.url), imageLoader.memoryCache)
     }
 }

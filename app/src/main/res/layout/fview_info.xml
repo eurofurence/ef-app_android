@@ -10,7 +10,7 @@
             android:id="@+id/layout"
             android:clickable="true">
 
-        <ImageView
+        <uk.co.senab.photoview.PhotoView
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:id="@+id/image"

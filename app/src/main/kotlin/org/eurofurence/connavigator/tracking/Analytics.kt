@@ -6,8 +6,11 @@ import android.preference.PreferenceManager
 import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
+import com.google.firebase.analytics.FirebaseAnalytics
+import net.hockeyapp.android.metrics.MetricsManager
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.util.extensions.limit
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.logv
 
@@ -44,6 +47,7 @@ class Analytics {
         val LOGTAG = "ANAL"
         lateinit var tracker: Tracker
         lateinit var context: Context
+        lateinit var firebaseAnalytics: FirebaseAnalytics
 
         fun init(context: Context) {
             logd { "Initializing Google Analytics Tracking" }
@@ -53,13 +57,19 @@ class Analytics {
 
             this.context = context
 
+
+            // Get the new tracking
             updateTracking(preferences)
         }
 
         fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
             if (key.contains("analytics")) {
                 logd { "Analytics settings have been updated" }
-                updateTracking(sharedPreferences);
+                updateTracking(sharedPreferences)
+
+                // Get firebase analytics
+                firebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
             }
         }
 
@@ -110,11 +120,14 @@ class Analytics {
         /**
          * Send an event to analytics using predefined statuses
          */
-        fun event(category: String, action: String, label: String) =
-                event(HitBuilders.EventBuilder()
-                        .setCategory(category)
-                        .setAction(action)
-                        .setLabel(label))
+        fun event(category: String, action: String, label: String) {
+            event(HitBuilders.EventBuilder()
+                    .setCategory(category)
+                    .setAction(action)
+                    .setLabel(label))
+
+            MetricsManager.trackEvent("$category-$action-$label".limit(300))
+        }
 
         /**
          * Track an exception

@@ -3,9 +3,10 @@ package io.swagger.client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import io.swagger.client.model.*;
+
 import java.lang.reflect.Type;
 import java.util.List;
-import io.swagger.client.model.*;
 
 public class JsonUtil {
   public static GsonBuilder gsonBuilder;
@@ -172,4 +173,4 @@ public class JsonUtil {
     return new TypeToken<Object>(){}.getType();
   }
 
-};
+}

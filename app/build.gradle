@@ -10,9 +10,14 @@ android {
         applicationId "org.eurofurence.connavigator"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 22
-        versionName "1.9"
+        versionCode 32
+        versionName "1.9.10"
         multiDexEnabled true
+        manifestPlaceholders = [HOCKEYAPP_APP_ID: "dbc2f84c571a4b6f85df130813bfaa44"]
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 
     lintOptions {
@@ -82,7 +87,7 @@ ext {
     volley_version = "1.0.1"
     junit_version = "4.8.1"
     android_support_version = "23.2.1"
-    google_play_version = "9.0.2"
+    google_play_version = "9.2.1"
 }
 
 // Embedded swagger
@@ -118,12 +123,14 @@ dependencies {
     compile "com.nostra13.universalimageloader:universal-image-loader:1.9.5"
 
     // Firebase
-    compile "com.google.firebase:firebase-core:$google_play_version"
     compile "com.google.firebase:firebase-messaging:$google_play_version"
     compile "com.google.firebase:firebase-config:$google_play_version"
 
     // Analytics
     compile "com.google.android.gms:play-services-analytics:$google_play_version"
+
+    // Hockeyapp Analytics
+    compile 'net.hockeyapp.android:HockeySDK:4.1.0'
 
     // Maps
     compile "com.google.android.gms:play-services-maps:$google_play_version"

@@ -9,7 +9,9 @@ import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
 import org.eurofurence.connavigator.BuildConfig
+import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.store.SyncIDB
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.*
@@ -79,11 +81,14 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
              * @param db The database to synchronize
              * @param provider The provider of data, relative to a delta
              */
-            fun  <T> checkedUpdate(name: String, db: SyncIDB<T>, provider: (Date?) -> List<T>) {
+            fun <T> checkedUpdate(name: String, db: SyncIDB<T>, provider: (Date?) -> List<T>) {
                 if (oldDate lt endpoint[name]?.deltaStartDateTimeUtc)
                     db.items = provider(null)
-                else
+                else if (oldDate lt endpoint[name]?.lastChangeDateTimeUtc) {
+                    logd { "New data for $name" }
                     db.syncWith(provider(oldDate))
+                } else
+                    logd { "No new data for $name" }
             }
 
             // Update or replace tables
@@ -97,7 +102,7 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
             checkedUpdate("Info", database.infoDb, { loadInfos(it) })
             checkedUpdate("InfoGroup", database.infoGroupDb, { loadInfoGroups(it) })
             checkedUpdate("MapEntry", database.mapEntryDb, { loadMapEntry(it) })
-            checkedUpdate("MapEntity", database.mapEntityDb, { loadMapEntity(it) })
+            checkedUpdate("Map", database.mapEntityDb, { loadMapEntity(it) })
             // Set the new server date
             database.dateDb.items = listOf(newDate)
 
@@ -159,7 +164,12 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
 
     private fun loadEvents(oldDate: Date?) = apiService.api.eventEntryGet(oldDate)
 
-    private fun loadImages(oldDate: Date?) = apiService.api.imageGet(oldDate)
+    private fun loadImages(oldDate: Date?): List<Image> {
+        val images = apiService.api.imageGet(oldDate)
+        images.forEach { imageService.recache(it) }
+
+        return images
+    }
 
     private fun loadInfos(oldDate: Date?) = apiService.api.infoGet(oldDate)
 

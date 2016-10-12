@@ -15,6 +15,7 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.dialogs.DealerDialog
 import org.eurofurence.connavigator.util.Formatter
+import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
@@ -36,12 +37,13 @@ class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Da
 
     override fun onBindViewHolder(holder: DealerDataHolder, position: Int) {
         val dealer = effective_events[position]
+        val vibrator = TouchVibrator(database.context)
 
         holder.dealerName.text = Formatter.dealerName(dealer)
         holder.dealerSubText.text = dealer.shortDescription ?: "This dealer did not provide a short description"
 
         // If no dealer preview was provided, load the YCH icon
-        if (database.imageDb[dealer.artPreviewImageId] != null) {
+        if (database.imageDb[dealer.artistThumbnailImageId] != null) {
             imageService.load(database.imageDb[dealer.artistThumbnailImageId], holder.dealerPreviewImage, false)
         } else {
             holder.dealerPreviewImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_black))
@@ -49,10 +51,12 @@ class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Da
 
         holder.layout.setOnClickListener {
             fragment.applyOnRoot { navigateToDealer(dealer) }
+            vibrator.long().let { true }
         }
 
         holder.layout.setOnLongClickListener {
-            DealerDialog(dealer).show(fragment.childFragmentManager, "Dealer menu").let { true }
+            DealerDialog(dealer).show(fragment.childFragmentManager, "Dealer menu")
+            vibrator.long().let { true }
         }
     }
 

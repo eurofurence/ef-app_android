@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
@@ -25,6 +26,7 @@ import org.eurofurence.connavigator.util.extensions.logd
 class ActivityStart : AppCompatActivity() {
     val buttonStart by view(Button::class.java)
     val textHelp by view(TextView::class.java)
+    val progressBar by view(ProgressBar::class.java)
 
     val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
         if (it.booleans["success"]) {
@@ -41,6 +43,8 @@ class ActivityStart : AppCompatActivity() {
                 imageService.preload(image)
             }
 
+            progressBar.visibility = View.GONE
+
             textHelp.text = "There, all done!"
             buttonStart.text = "Get Started!"
             buttonStart.visibility = View.VISIBLE
@@ -48,10 +52,15 @@ class ActivityStart : AppCompatActivity() {
             buttonStart.setOnClickListener { startRootActivity() }
         } else {
             textHelp.text = "Failed to successfully get data. Are you connected to the internet?"
+            progressBar.visibility = View.GONE
             buttonStart.visibility = View.VISIBLE
             buttonStart.text = "Retry"
-            buttonStart.setOnClickListener { UpdateIntentService.dispatchUpdate(this) }
+            buttonStart.setOnClickListener {
+                UpdateIntentService.dispatchUpdate(this)
+                progressBar.visibility = View.VISIBLE
+            }
         }
+
     }
     val database by lazy { Database(this) }
 

@@ -37,9 +37,12 @@ object Formatter {
         return Html.fromHtml(string)
     }
 
-    fun shortTime(string: String): String {
-        return string.subSequence(0, 5).toString()
-    }
+    fun shortTime(string: String, date: DateTime? = null) =
+            if (date == null) {
+                string.subSequence(0, 5).toString()
+            } else {
+                string.subSequence(0, 5).toString() + " ${date.toString("EE")}"
+            }
 
     /*
     Formats an event title accoding to our rules
@@ -125,11 +128,11 @@ object Formatter {
     }
 
     fun wikiToMarkdown(text: String): Spanned =
-            Html.fromHtml(text.replace("\\\\", "<br />")
-                    .replace("\n", "<br />")
+            Html.fromHtml(text.replace("\\\\", "<br>")
+                    .replace("\n\n", "<br><br>")
                     .replace(Regex("^([^ ]+.*$)(\\n^)(  \\*)", RegexOption.MULTILINE), "$1<br><br>$2$3")
                     .replace(Regex("(^  \\*[^\\n]+$\\n^)(?!  \\* )", RegexOption.MULTILINE), "$1<br><br>")
-                    .replace(Regex("^\\s*\\* (.*)$", RegexOption.MULTILINE), " - $1")
+                    .replace(Regex("^  \\* (.*)$", RegexOption.MULTILINE), "&nbsp;&nbsp;&nbsp;&nbsp; &bull; $1 <br/>")
                     .replace(Regex("\\*\\*([^\\*]*)\\*\\*"), "<b>$1</b>")
                     .replace(Regex("\\*([^\\*]*)\\*"), "<i>$1</i>"))
 

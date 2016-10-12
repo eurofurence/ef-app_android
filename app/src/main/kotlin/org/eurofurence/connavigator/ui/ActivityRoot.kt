@@ -25,6 +25,8 @@ import android.widget.TextView
 import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
+import net.hockeyapp.android.CrashManager
+import net.hockeyapp.android.FeedbackManager
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
@@ -33,7 +35,7 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.communication.RootAPI
-import org.eurofurence.connavigator.ui.fragments.FragmentMap
+import org.eurofurence.connavigator.ui.fragments.FragmentPoiMap
 import org.eurofurence.connavigator.util.RemoteConfig
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
@@ -92,7 +94,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
 
         // Make a snackbar for the result
-        makeSnackbar("Database reload ${if (success) "successful" else "failed"}, version $time");
+        makeSnackbar("Database reload ${if (success) "successful" else "failed"}, version $time")
 
         // Update content data if fragments implement content API
         applyOnContent {
@@ -125,6 +127,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         }
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
+
+        CrashManager.register(this)
     }
 
     /**
@@ -156,7 +160,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     if (infoValue != null) {
                         Analytics.event(Analytics.Category.INFO, Analytics.Action.INCOMING, infoValue.title)
                         navigateToInfo(infoValue)
-                        return true;
+                        return true
                     } else {
                         makeSnackbar("I'm sorry, but we didn't find any info!")
                     }
@@ -169,14 +173,14 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     if (dealerValue != null) {
                         Analytics.event(Analytics.Category.DEALER, Analytics.Action.INCOMING, dealerValue.attendeeNickname)
                         navigateToDealer(dealerValue)
-                        return true;
+                        return true
                     } else {
                         makeSnackbar("I'm sorry, but we didn't find any dealer!")
                     }
                 }
             }
         }
-        return false;
+        return false
     }
 
     private fun setupContent() =
@@ -185,6 +189,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     override fun onResume() {
         super.onResume()
         updateReceiver.register()
+        UpdateIntentService.dispatchUpdate(this)
+        RemoteConfig().intitialize(this)
     }
 
     override fun onPause() {
@@ -267,18 +273,20 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
                 R.id.navEvents -> navigateRoot(FragmentViewEvents::class.java, ActionBarMode.SEARCHTABS)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
+                R.id.navMaps -> navigateRoot(FragmentViewMaps::class.java, ActionBarMode.TABS)
                 R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCH)
-                R.id.navAbout -> navigateRoot(FragmentAbout::class.java)
+                R.id.navAbout -> navigateRoot(FragmentViewAbout::class.java)
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
                 R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this)
-                R.id.navMap -> navigateRoot(FragmentMap::class.java)
+                R.id.navMap -> navigateRoot(FragmentPoiMap::class.java)
+                R.id.navFeedback -> FeedbackManager.showFeedbackActivity(this@ActivityRoot)
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
                     AlertDialog.Builder(ContextThemeWrapper(this, R.style.appcompatDialog))
                             .setTitle("Clearing Database")
                             .setMessage("This will get rid of all cached items you have stored locally. You will need an internet connection to restart!")
-                            .setPositiveButton("Clear", { dialogInterface, i -> database.clear(); imageService.clear(); preferences.edit().clear().commit(); System.exit(0) })
+                            .setPositiveButton("Clear", { dialogInterface, i -> database.clear(); imageService.clear(); preferences.edit().clear().commit(); RemoteConfig.clear(); System.exit(0) })
                             .setNegativeButton("Cancel", { dialogInterface, i -> })
                             .show()
                 }
@@ -291,7 +299,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
         // Set up dates to EF
         // Manually set the first date, since the database is not updated with EF 22
-        val firstDay = DateTime(2016, 8, 17, 0, 0)
+        val firstDay = DateTime(2017, 8, 16, 0, 0)
 
         // Calculate the days between, using the current time. Todo: timezones
         val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
@@ -350,5 +358,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         logv { "Starting settings activity" }
         intent = Intent(this, ActivitySettings::class.java)
         startActivity(intent)
+    }
+
+    override fun changeTheme(newTheme: Int) {
+        setTheme(newTheme)
     }
 }
