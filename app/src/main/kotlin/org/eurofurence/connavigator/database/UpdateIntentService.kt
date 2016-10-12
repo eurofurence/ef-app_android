@@ -1,10 +1,13 @@
 package org.eurofurence.connavigator.database
 
+import android.app.AlarmManager
 import android.app.IntentService
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
+import android.util.Log
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.store.SyncIDB
@@ -20,6 +23,7 @@ import java.util.*
 class UpdateIntentService() : IntentService("UpdateIntentService") {
     companion object {
         val UPDATE_COMPLETE = "org.eurofurence.connavigator.driver.UPDATE_COMPLETE"
+        val REQUEST_CODE = 1337
 
         /**
          * Dispatches an update
@@ -28,6 +32,19 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
         fun dispatchUpdate(context: Context) {
             logv("UIS") { "Dispatching update" }
             context.startService(Intent(context, UpdateIntentService::class.java))
+        }
+
+        private fun schedule(context: Context) {
+            Log.d("UIS", "Scheduling the next data update")
+
+            val intent = Intent(context, UpdateIntentService::class.java)
+            val pendingIntent = PendingIntent.getService(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().plusMinutes(1).millis, pendingIntent)
+
+            Log.d("UIS", "Next update scheduled at ${DateTime.now().plusMinutes(1).toString()}")
         }
     }
 
@@ -99,6 +116,8 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
 
             loge("UIS", ex) { "Completed update with error" }
         }
+
+        schedule(this)
 
         // Send a broadcast notifying completion of this action
         LocalBroadcastManager.getInstance(this).sendBroadcast(response)
