@@ -1,0 +1,1 @@
+Various changes. Kinda forgot some of them. Biggest changes are dealers and image/map loading.

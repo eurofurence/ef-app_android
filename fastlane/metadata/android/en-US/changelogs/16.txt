@@ -1,0 +1,7 @@
+Events now display subtitles!
+
+Dealers are now actually sorted in a sane fashion
+
+Removed the mysterious map icon
+
+Added awooing functionality

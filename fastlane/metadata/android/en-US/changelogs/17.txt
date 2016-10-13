@@ -1,0 +1,8 @@
+IMPORTANT: If you have crashes, please remove and reinstall the application! You have a caching problem!
+
+Fixed subtitles for events crashing on older versions
+Fixed odd colouring issues for events
+You can now schedule how many minutes before an event you want a notification
+Announcements now only display when they are valid
+You can still view old announcements via settings
+Screens now get updated on a settings change

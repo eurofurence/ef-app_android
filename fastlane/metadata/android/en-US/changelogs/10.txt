@@ -1,0 +1,5 @@
+Fixed most of zefiro's complaints
+
+Reworked the home screen
+
+man just check github

@@ -1,0 +1,3 @@
+Fixed the announcements showing in 5 secs even without debug mode
+Added custom icons
+App now shows number of days until EF

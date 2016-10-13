@@ -1,0 +1,2 @@
+Version is being tracked to automatically remove incorrect data.
+Added about section and re-ordered so it'd fit with the other apps

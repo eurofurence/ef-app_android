@@ -1,0 +1,3 @@
+Reworked the individual dealer page
+
+Now using the AWS backend

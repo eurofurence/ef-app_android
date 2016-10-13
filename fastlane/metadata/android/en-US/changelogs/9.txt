@@ -1,0 +1,5 @@
+Announcements are now working perfectly!
+
+Added icons to everything
+
+Pretty much release ready! All important features are in, we've only got UI stuff and refactoring left to do

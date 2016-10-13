@@ -1,0 +1,1 @@
+Fixed crash on boot for devices running android devices with the Dalvik runtime
