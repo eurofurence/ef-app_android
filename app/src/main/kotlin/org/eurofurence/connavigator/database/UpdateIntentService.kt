@@ -8,7 +8,6 @@ import android.content.Intent
 import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
-import org.eurofurence.connavigator.BuildConfig
 import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.net.imageService
@@ -17,6 +16,8 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -39,14 +40,27 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
         private fun schedule(context: Context) {
             Log.d("UIS", "Scheduling the next data update")
 
+            val database = Database(context)
+
+            var nextUpdate = DateTime.now()
+
+            if (database.eventConferenceDayDb.items
+                    .map { DateTime.parse(it.date) }
+                    .filter { it.toDate().equals(DateTime.now().toDate()) }
+                    .isNotEmpty()) {
+                nextUpdate = nextUpdate.plusMinutes(1)
+            } else {
+                nextUpdate = nextUpdate.plusDays(1)
+            }
+
             val intent = Intent(context, UpdateIntentService::class.java)
             val pendingIntent = PendingIntent.getService(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-            alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().plusMinutes(1).millis, pendingIntent)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, nextUpdate.millis, pendingIntent)
 
-            Log.d("UIS", "Next update scheduled at ${DateTime.now().plusMinutes(1).toString()}")
+            Log.d("UIS", "Next update scheduled at ${nextUpdate.toString()}")
         }
     }
 
