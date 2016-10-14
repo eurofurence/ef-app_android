@@ -1,0 +1,1 @@
+Fixed a rare crash when data was incorrectly loaded and the user had upcoming events

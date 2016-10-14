@@ -1,0 +1,5 @@
+Vibrate on touching events, dealers and info
+Showing all the browseable maps
+About now has clickable items
+Enlarged dealers den preview image
+Reworked pub-sub system for better notifications

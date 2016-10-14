@@ -1,0 +1,1 @@
+Fixed a ton of bugs related to older versions of android. Crashes should be a thing of the past now!

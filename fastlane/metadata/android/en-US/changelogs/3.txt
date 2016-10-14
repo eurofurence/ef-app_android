@@ -1,0 +1,1 @@
+Completely revamped the UI of the application. New features and UI's can be developed rapidly now

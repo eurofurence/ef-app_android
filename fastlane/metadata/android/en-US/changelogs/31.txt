@@ -1,0 +1,5 @@
+Here we go! Enjoy the con!
+
+Maps are now in viewpagers
+
+Fixed the glyphs accidentally showing
