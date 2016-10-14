@@ -8,16 +8,16 @@ import android.content.Intent
 import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
+import io.swagger.client.model.Announcement
 import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.store.SyncIDB
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.util.NotificationFactory
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -146,7 +146,13 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
 
     private fun loadMapEntry(oldDate: Date?) = apiService.api.mapEntryGet(oldDate)
 
-    private fun loadAnnouncements(oldDate: Date?) = apiService.api.announcementGet(oldDate)
+    private fun loadAnnouncements(oldDate: Date?): List<Announcement> {
+        val announcements = apiService.api.announcementGet(oldDate)
+
+        announcements.forEach { NotificationFactory(this).showNotification(it.title, it.content)}
+
+        return announcements
+    }
 
     private fun loadDealers(oldDate: Date?) = apiService.api.dealerGet(oldDate)
 
