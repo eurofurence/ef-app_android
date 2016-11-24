@@ -1,15 +1,20 @@
 package org.eurofurence.connavigator.database
 
+import android.app.AlarmManager
 import android.app.IntentService
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
+import android.util.Log
+import io.swagger.client.model.Announcement
 import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.store.SyncIDB
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.util.NotificationFactory
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
@@ -21,6 +26,7 @@ import java.util.*
 class UpdateIntentService() : IntentService("UpdateIntentService") {
     companion object {
         val UPDATE_COMPLETE = "org.eurofurence.connavigator.driver.UPDATE_COMPLETE"
+        val REQUEST_CODE = 1337
 
         /**
          * Dispatches an update
@@ -29,6 +35,32 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
         fun dispatchUpdate(context: Context) {
             logv("UIS") { "Dispatching update" }
             context.startService(Intent(context, UpdateIntentService::class.java))
+        }
+
+        private fun schedule(context: Context) {
+            Log.d("UIS", "Scheduling the next data update")
+
+            val database = Database(context)
+
+            var nextUpdate = DateTime.now()
+
+            if (database.eventConferenceDayDb.items
+                    .map { DateTime.parse(it.date) }
+                    .filter { it.toDate().equals(DateTime.now().toDate()) }
+                    .isNotEmpty()) {
+                nextUpdate = nextUpdate.plusMinutes(1)
+            } else {
+                nextUpdate = nextUpdate.plusDays(1)
+            }
+
+            val intent = Intent(context, UpdateIntentService::class.java)
+            val pendingIntent = PendingIntent.getService(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, nextUpdate.millis, pendingIntent)
+
+            Log.d("UIS", "Next update scheduled at ${nextUpdate.toString()}")
         }
     }
 
@@ -104,6 +136,8 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
             loge("UIS", ex) { "Completed update with error" }
         }
 
+        schedule(this)
+
         // Send a broadcast notifying completion of this action
         LocalBroadcastManager.getInstance(this).sendBroadcast(response)
     }
@@ -112,7 +146,13 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
 
     private fun loadMapEntry(oldDate: Date?) = apiService.api.mapEntryGet(oldDate)
 
-    private fun loadAnnouncements(oldDate: Date?) = apiService.api.announcementGet(oldDate)
+    private fun loadAnnouncements(oldDate: Date?): List<Announcement> {
+        val announcements = apiService.api.announcementGet(oldDate)
+
+        announcements.forEach { NotificationFactory(this).showNotification(it.title, it.content)}
+
+        return announcements
+    }
 
     private fun loadDealers(oldDate: Date?) = apiService.api.dealerGet(oldDate)
 

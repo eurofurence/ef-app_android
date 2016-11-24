@@ -57,6 +57,17 @@ class NotificationFactory {
         return builder.build()
     }
 
+    fun showNotification(title: String, content: String){
+        val  notification = buildNotification(title, content)
+
+        val intent = Intent(context, NotificationPublisher::class.java)
+
+        intent.putExtra(NotificationPublisher.NOTIFICATION_ID, notification.hashCode())
+        intent.putExtra(NotificationPublisher.NOTIFICATION, notification)
+
+        context.sendBroadcast(intent)
+    }
+
     /**
      * Creates a pending notification that can be executed in the future
      */
