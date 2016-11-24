@@ -85,7 +85,7 @@ ext {
     httpclient_version = "4.3.3"
     volley_version = "1.0.1"
     junit_version = "4.8.1"
-    android_support_version = "23.2.1"
+    android_support_version = "24.2.1"
     google_play_version = "9.2.1"
 }
 
@@ -103,9 +103,6 @@ dependencies {
     compile "com.android.support:design:$android_support_version"
     compile "com.android.support:support-v4:$android_support_version"
     compile "com.google.guava:guava:19.0"
-    compile "com.android.support:appcompat-v7:$android_support_version"
-    compile "com.android.support:design:$android_support_version"
-    compile "com.android.support:support-v4:$android_support_version"
     compile "com.android.support:cardview-v7:$android_support_version"
     compile "com.android.support:recyclerview-v7:$android_support_version"
     compile "com.android.support:cardview-v7:$android_support_version"
