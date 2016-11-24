@@ -1,5 +1,0 @@
-- New home screen! This will show your current favorited events and latest announcements straight from EF.
-- You can now favourite events! Simply go to the events, click one and press the button! You will receive a notification 30 minutes before the event starts
--- Has a debug mode to send notifications in 5 seconds to test
-- You can offset the date of the events for testing. These are found in settings.
-- Dealers den are now visible! Browse and search dealers!

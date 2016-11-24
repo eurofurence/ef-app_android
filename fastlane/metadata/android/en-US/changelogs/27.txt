@@ -1,8 +1,0 @@
-Implemented all final changes that were suggested.
-
-- Home now sorts by day then time (and also shows day)
-- Map view is scrollable
-- Reduced the amount of network requests made (from 20 to ~2-3)
-- Made event FAB open a dialog
-- Added a loader to the start screen
-- Added fenrikur to attributation

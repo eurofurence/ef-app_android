@@ -1,3 +1,0 @@
-Fixed map loading
-
-Added some background features

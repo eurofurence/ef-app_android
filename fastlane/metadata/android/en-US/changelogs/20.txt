@@ -1,1 +1,0 @@
-Fixed the crashes on rotating while on a dealers page

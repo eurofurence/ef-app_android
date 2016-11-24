@@ -1,4 +1,0 @@
-Info now shows the actual layout as intended.
-Fixed a crash on going to about from home
-Multiple minor fixes
-Refactored some code for less headaches

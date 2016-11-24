@@ -1,4 +1,0 @@
-Last tiny fixes
-
-- thumbnails for artists are now loading correctly
-- Reduced the number of API calls down to usually one

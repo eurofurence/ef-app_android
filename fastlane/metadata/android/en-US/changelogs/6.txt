@@ -1,5 +1,0 @@
-Changes in UI:
-- Made UI cards less obnoxious
-- Removed a lot of bloat to make the app prettier
-- Added animations to loading events and information
-- Now neatly formatting titles, rooms, dates and times

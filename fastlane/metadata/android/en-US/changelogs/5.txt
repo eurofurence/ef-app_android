@@ -1,1 +1,0 @@
-Revamped the way events are displayed. Also including some minor fixes for odd crashes

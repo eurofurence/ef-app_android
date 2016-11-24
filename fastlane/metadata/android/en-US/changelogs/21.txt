@@ -1,6 +1,0 @@
-Stopped allowing rotation due to instability
-Added the loading of dealers location on a map
-Added some slight fixes on info
-Added countdown on upcoming events
-Allowed longer dates and times on things
-Added background loading for all event viewpagers
