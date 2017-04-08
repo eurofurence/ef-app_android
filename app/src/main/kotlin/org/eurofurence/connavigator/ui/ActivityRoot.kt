@@ -25,8 +25,6 @@ import android.widget.TextView
 import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
-import net.hockeyapp.android.CrashManager
-import net.hockeyapp.android.FeedbackManager
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
@@ -35,7 +33,6 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.communication.RootAPI
-import org.eurofurence.connavigator.ui.fragments.FragmentPoiMap
 import org.eurofurence.connavigator.util.RemoteConfig
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
@@ -127,8 +124,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         }
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
-
-        CrashManager.register(this)
     }
 
     /**
@@ -279,8 +274,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
                 R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this)
-                R.id.navMap -> navigateRoot(FragmentPoiMap::class.java)
-                R.id.navFeedback -> FeedbackManager.showFeedbackActivity(this@ActivityRoot)
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
                     AlertDialog.Builder(ContextThemeWrapper(this, R.style.appcompatDialog))

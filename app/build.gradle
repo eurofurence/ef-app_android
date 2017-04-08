@@ -12,7 +12,6 @@ android {
         versionCode 32
         versionName "1.9.10"
         multiDexEnabled true
-        manifestPlaceholders = [HOCKEYAPP_APP_ID: "dbc2f84c571a4b6f85df130813bfaa44"]
     }
 
     dexOptions {
@@ -122,22 +121,17 @@ dependencies {
     // Firebase
     compile "com.google.firebase:firebase-messaging:$google_play_version"
     compile "com.google.firebase:firebase-config:$google_play_version"
-
     // Analytics
     compile "com.google.android.gms:play-services-analytics:$google_play_version"
-
-    // Hockeyapp Analytics
-    compile 'net.hockeyapp.android:HockeySDK:4.1.0'
-
-    // Maps
-    compile "com.google.android.gms:play-services-maps:$google_play_version"
-
     // Photoview
-    compile "com.github.chrisbanes:PhotoView:1.2.6"
-
-    compile "us.feras.mdv:markdownview:1.1.0"
-
+    compile 'com.github.chrisbanes:PhotoView:1.2.6'
+    compile 'us.feras.mdv:markdownview:1.1.0'
+    compile 'nl.komponents.kovenant:kovenant:3.3.0'
     testCompile "junit:junit:$junit_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 
 apply plugin: "com.google.gms.google-services"
+repositories {
+    mavenCentral()
+}

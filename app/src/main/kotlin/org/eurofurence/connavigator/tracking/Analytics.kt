@@ -7,7 +7,6 @@ import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
 import com.google.firebase.analytics.FirebaseAnalytics
-import net.hockeyapp.android.metrics.MetricsManager
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.limit
@@ -124,10 +123,7 @@ class Analytics {
             event(HitBuilders.EventBuilder()
                     .setCategory(category)
                     .setAction(action)
-                    .setLabel(label))
-
-            MetricsManager.trackEvent("$category-$action-$label".limit(300))
-        }
+                    .setLabel(label)) }
 
         /**
          * Track an exception
