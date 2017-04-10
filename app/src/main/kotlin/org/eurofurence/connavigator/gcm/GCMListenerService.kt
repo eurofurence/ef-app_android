@@ -31,10 +31,13 @@ class MyGCMListenerService : FirebaseMessagingService() {
         } else if (p0.data.containsKey("message")) {
             sendNotification(p0.data.get("message").toString())
         } else if (p0.notification != null) {
-            if (p0.notification.title == null) {
-                sendNotification(p0.notification.body)
-            } else {
-                sendNotification(p0.notification.body, p0.notification.title)
+            val title = p0.notification.title
+            val body = p0.notification.body
+            if (body != null) {
+                if (title == null)
+                    sendNotification(body)
+                else
+                    sendNotification(body, title)
             }
         }
     }
