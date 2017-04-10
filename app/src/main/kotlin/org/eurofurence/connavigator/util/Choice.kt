@@ -26,6 +26,22 @@ class Choice<out T, out U> private constructor(val isPrimary: Boolean, private v
     val secondary: U get() = item as U
 
     /**
+     * Applies the function if choice is primary, returns the choice itself.
+     */
+    fun onPrimary(block: (T) -> Unit) = apply {
+        if (isPrimary)
+            block(primary)
+    }
+
+    /**
+     * Applies the function if choice is secondary, returns the choice itself.
+     */
+    fun onSecondary(block: (U) -> Unit) = apply {
+        if (!isPrimary)
+            block(secondary)
+    }
+
+    /**
      * Applies the appropriate function for the choice's type.
      */
     fun apply(blockPrimary: T.() -> Unit, blockSecondary: U.() -> Unit) =
