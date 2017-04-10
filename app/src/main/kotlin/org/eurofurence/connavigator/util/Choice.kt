@@ -4,7 +4,7 @@ package org.eurofurence.connavigator.util
  * A choice between two items. See [isPrimary], [primary] and [secondary].
  * @param isPrimary True if the choice is of the primary type.
  */
-class Choice<out T, out U> private constructor(val isPrimary: Boolean, private val item: Any?) {
+class Choice<T, U> private constructor(val isPrimary: Boolean, private val item: Any?) {
     companion object {
         /**
          * Creates the choice of the primary type.
@@ -19,6 +19,34 @@ class Choice<out T, out U> private constructor(val isPrimary: Boolean, private v
         fun <T, U> snd(u: U) = Choice<T, U>(false, u)
     }
 
+    /**
+     * Semi configured handler
+     */
+    inner class PrimaryHandled<R>(val primaryBlock: (T) -> R) {
+        /**
+         * Finishes configuration and executes the handler
+         */
+        infix fun onSecondary(secondaryBlock: (U) -> R) =
+                if (isPrimary)
+                    primaryBlock(primary)
+                else
+                    secondaryBlock(secondary)
+    }
+
+    /**
+     * Semi configured handler
+     */
+    inner class SecondaryHandled<R>(val secondaryBlock: (U) -> R) {
+        /**
+         * Finishes configuration and executes the handler
+         */
+        infix fun onPrimary(primaryBlock: (T) -> R) =
+                if (isPrimary)
+                    primaryBlock(primary)
+                else
+                    secondaryBlock(secondary)
+    }
+
     @Suppress("UNCHECKED_CAST")
     val primary: T get() = item as T
 
@@ -26,20 +54,14 @@ class Choice<out T, out U> private constructor(val isPrimary: Boolean, private v
     val secondary: U get() = item as U
 
     /**
-     * Applies the function if choice is primary, returns the choice itself.
+     * Starts a semi configured handler
      */
-    fun onPrimary(block: (T) -> Unit) = apply {
-        if (isPrimary)
-            block(primary)
-    }
+    infix fun <R> onPrimary(block: (T) -> R) = PrimaryHandled(block)
 
     /**
-     * Applies the function if choice is secondary, returns the choice itself.
+     * Starts a semi configured handler
      */
-    fun onSecondary(block: (U) -> Unit) = apply {
-        if (!isPrimary)
-            block(secondary)
-    }
+    infix fun <R> onSecondary(block: (U) -> R) = SecondaryHandled(block)
 
     /**
      * Applies the appropriate function for the choice's type.
