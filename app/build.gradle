@@ -7,7 +7,7 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 25
         versionCode 32
         versionName "1.9.10"
@@ -67,7 +67,7 @@ android {
         }
         prod {
             // The actual minSdkVersion for the application.
-            minSdkVersion 14
+            minSdkVersion 15
             applicationId "org.eurofurence.connavigator"
         }
     }
@@ -126,9 +126,20 @@ dependencies {
     // Photoview
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
     compile 'us.feras.mdv:markdownview:1.1.0'
-    compile 'nl.komponents.kovenant:kovenant:3.3.0'
+
+    // Promises
+    compile 'nl.komponents.kovenant:kovenant-core:3.3.0'
+    compile 'nl.komponents.kovenant:kovenant-android:3.3.0'
+    compile 'nl.komponents.kovenant:kovenant-combine:3.3.0'
+    compile 'nl.komponents.kovenant:kovenant-jvm:3.3.0'
+    compile 'nl.komponents.kovenant:kovenant-functional:3.3.0'
+
+    // DSL for views
+    compile 'org.jetbrains.anko:anko-sdk15:+' // sdk19, sdk21, sdk23 are also available
+    compile 'org.jetbrains.anko:anko-support-v4:+' // In case you need support-v4 bindings
+    compile 'org.jetbrains.anko:anko-appcompat-v7:+' // For appcompat-v7 bindings
+
     testCompile "junit:junit:$junit_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 
 apply plugin: "com.google.gms.google-services"

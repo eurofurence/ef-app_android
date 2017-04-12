@@ -3,7 +3,6 @@ package org.eurofurence.connavigator.ui.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -19,6 +18,7 @@ import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
+import org.jetbrains.anko.*
 
 /**
  * Created by David on 15-5-2016.
@@ -61,9 +61,31 @@ class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Da
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DealerDataHolder =
-            DealerDataHolder(LayoutInflater
-                    .from(parent.context)
-                    .inflate(R.layout.fragment_dealer, parent, false)
-            )
+            DealerDataHolder(DealerListItemUI().createView(AnkoContext.Companion.create(parent!!.context, parent)))
+}
 
+class DealerListItemUI : AnkoComponent<ViewGroup> {
+    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+        linearLayout {
+            lparams(width = matchParent, height = wrapContent)
+            backgroundResource = R.color.cardview_light_background
+            id= R.id.layout
+            imageView {
+                padding = dip(5)
+                id = R.id.dealerPreviewImage
+                scaleType = ImageView.ScaleType.FIT_CENTER
+            }.lparams(width = dip(75), height = dip(75))
+            verticalLayout {
+                padding= dip(10)
+                textView{
+                    setTextAppearance(android.R.style.TextAppearance_Large)
+                    id = R.id.dealerName
+                }
+                textView{
+                    setTextAppearance(android.R.style.TextAppearance_Small)
+                    id = R.id.dealerSubText
+                }
+            }
+        }
+    }
 }
