@@ -61,7 +61,7 @@ class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Da
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DealerDataHolder =
-            DealerDataHolder(DealerListItemUI().createView(AnkoContext.Companion.create(parent!!.context, parent)))
+            DealerDataHolder(DealerListItemUI().createView(AnkoContext.Companion.create(parent.context, parent)))
 }
 
 class DealerListItemUI : AnkoComponent<ViewGroup> {
@@ -72,8 +72,8 @@ class DealerListItemUI : AnkoComponent<ViewGroup> {
             id= R.id.layout
             imageView {
                 padding = dip(5)
-                id = R.id.dealerPreviewImage
                 scaleType = ImageView.ScaleType.FIT_CENTER
+                id = R.id.dealerPreviewImage
             }.lparams(width = dip(75), height = dip(75))
             verticalLayout {
                 padding= dip(10)
