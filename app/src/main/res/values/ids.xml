@@ -3,4 +3,6 @@
     <item name="date" type="id" />
     <item name="fragment_main_event" type="id" />
     <item name="test_title" type="id" />
+    <item name="dealerSubText" type="id"/>
+    <item name="dealerPreviewImage" type="id"/>
 </resources>

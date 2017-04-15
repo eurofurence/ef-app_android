@@ -4,9 +4,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.ui.filters.enums.EnumEventRecyclerViewmode
-import org.eurofurence.connavigator.ui.filters.factory.EventFilterFactory
-import org.eurofurence.connavigator.ui.fragments.EmptyCard
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 
 /**
@@ -14,7 +11,7 @@ import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
  */
 class FavoriteFragmentStateAdapter(val fragmentManager: FragmentManager, val database: Database) : FragmentStatePagerAdapter(fragmentManager) {
     override fun getItem(position: Int): Fragment? {
-        return EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.FAVORITED))
+        return EventRecyclerFragment(database.filterEvents().isFavorited())
     }
 
     override fun getCount(): Int {

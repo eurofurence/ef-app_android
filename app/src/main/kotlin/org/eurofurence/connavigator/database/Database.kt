@@ -5,6 +5,7 @@ import io.swagger.client.model.*
 import org.eurofurence.connavigator.store.cached
 import org.eurofurence.connavigator.store.createGson
 import org.eurofurence.connavigator.store.createSerialized
+import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.util.extensions.cachedApiDB
 import org.eurofurence.connavigator.util.extensions.get
 import org.joda.time.DateTime
@@ -158,7 +159,6 @@ class Database(val context: Context) {
             return eventDay(eventEntry).plusDays(1).withTime(et)
         else
             return eventDay(eventEntry).withTime(et)
-
     }
 
 
@@ -177,4 +177,7 @@ class Database(val context: Context) {
                     .filter { it.id != eventEntry.id }
                     .filter { eventInterval(eventEntry).overlaps(eventInterval(it)) }
                     .size > 0 // If this list is bigger then 0, we have conflicting events
+
+    fun filterEvents() =
+            EventList(this)
 }

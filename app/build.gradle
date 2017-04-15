@@ -135,9 +135,12 @@ dependencies {
     compile 'nl.komponents.kovenant:kovenant-functional:3.3.0'
 
     // DSL for views
-    compile 'org.jetbrains.anko:anko-sdk15:+' // sdk19, sdk21, sdk23 are also available
-    compile 'org.jetbrains.anko:anko-support-v4:+' // In case you need support-v4 bindings
-    compile 'org.jetbrains.anko:anko-appcompat-v7:+' // For appcompat-v7 bindings
+    compile 'org.jetbrains.anko:anko-sdk15:0.10.0-beta-2' // sdk19, sdk21, sdk23 are also available
+    compile 'org.jetbrains.anko:anko-support-v4:0.10.0-beta-2' // In case you need support-v4 bindings
+    compile 'org.jetbrains.anko:anko-appcompat-v7:0.10.0-beta-2' // For appcompat-v7 bindings
+
+    // Kandroid for easier components
+    compile 'com.pawegio.kandroid:kandroid:0.7.0@aar'
 
     testCompile "junit:junit:$junit_version"
 }

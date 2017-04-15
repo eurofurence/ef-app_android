@@ -12,12 +12,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.ui.filters.enums.EnumEventRecyclerViewmode
-import org.eurofurence.connavigator.ui.filters.factory.EventFilterFactory
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
@@ -29,21 +28,7 @@ import org.joda.time.format.DateTimeFormat
 /**
  * Created by David on 5/3/2016.
  */
-class FragmentViewEvents : Fragment(), ContentAPI, TextWatcher {
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-        searchFragment.filterVal = eventSearchBar.text
-        searchFragment.dataUpdatedLong()
-    }
-
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        // pass
-    }
-
-    override fun afterTextChanged(s: Editable?) {
-        // pass
-    }
-
+class FragmentViewEvents : Fragment(), ContentAPI {
     inner class EventFragmentPagerAdapter(val fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int): CharSequence? {
             if (settings.getBoolean(context.getString(R.string.date_short), true)) {
@@ -54,7 +39,8 @@ class FragmentViewEvents : Fragment(), ContentAPI, TextWatcher {
         }
 
         override fun getItem(position: Int): Fragment? {
-            return EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.DAY), database.eventConferenceDayDb.asc { it.date }[position])
+            return EventRecyclerFragment(database.filterEvents()
+                    .onDay(database.eventConferenceDayDb.asc { it.date }[position].id))
         }
 
         override fun getCount(): Int {
@@ -67,7 +53,9 @@ class FragmentViewEvents : Fragment(), ContentAPI, TextWatcher {
     val eventPager by view(ViewPager::class.java)
     val eventSearchBar by view(EditText::class.java)
 
-    val searchFragment by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.SEARCH)) }
+    val searchEventFilter by lazy { database.filterEvents() }
+
+    val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
 
     val settings: SharedPreferences get() = letRoot { it.preferences }!!
 
@@ -84,7 +72,12 @@ class FragmentViewEvents : Fragment(), ContentAPI, TextWatcher {
                 .replace(R.id.eventSearch, searchFragment)
                 .commitAllowingStateLoss()
 
-        eventSearchBar.addTextChangedListener(this)
+        eventSearchBar.textWatcher {
+            afterTextChanged { text ->
+                searchEventFilter.byTitle(text.toString())
+                searchFragment.dataUpdated()
+            }
+        }
 
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
         applyOnRoot { changeTitle("Event Schedule") }
@@ -100,12 +93,15 @@ class FragmentViewEvents : Fragment(), ContentAPI, TextWatcher {
     }
 
     override fun onSearchButtonClick() {
-        if (eventPager.visibility == View.VISIBLE) {
-            eventPager.visibility = View.GONE
-            activity.findViewById(R.id.searchLayout).visibility = View.VISIBLE
-        } else {
-            eventPager.visibility = View.VISIBLE
-            activity.findViewById(R.id.searchLayout).visibility = View.GONE
+        when(eventPager.visibility) {
+            View.VISIBLE -> {
+                eventPager.visibility = View.GONE
+                activity.findViewById(R.id.searchLayout).visibility = View.VISIBLE
+            }
+            else -> {
+                eventPager.visibility = View.VISIBLE
+                activity.findViewById(R.id.searchLayout).visibility = View.GONE
+            }
         }
     }
 }
