@@ -113,11 +113,11 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
             imageService.load(database.imageDb[event.imageId], holder.eventImage)
 
             // Assign the on-click action
-            holder.layout.setOnClickListener {
+            holder.itemView.setOnClickListener {
                 logd { "Short event click" }
                 applyOnRoot { navigateToEvent(event) }
             }
-            holder.layout.setOnLongClickListener {
+            holder.itemView.setOnLongClickListener {
                 EventDialog(event).show(activity.supportFragmentManager, "Kek")
                 vibrator.long().let { true }
             }
@@ -194,10 +194,10 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
         linearLayout {
             id = R.id.layout
             lparams(matchParent, wrapContent)
+            isClickable = true
+            isLongClickable = true
             verticalLayout {
                 lparams(matchParent, wrapContent)
-                isClickable = true
-                isLongClickable = true
                 backgroundResource = R.color.cardview_light_background
                 linearLayout {
                     lparams(matchParent, matchParent)
