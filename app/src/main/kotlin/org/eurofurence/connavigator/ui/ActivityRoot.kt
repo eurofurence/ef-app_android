@@ -90,13 +90,15 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         val time = it.objects["time", Date::class.java]
 
 
-        // Make a snackbar for the result
-        makeSnackbar("Database reload ${if (success) "successful" else "failed"}, version $time")
+        if(!success) {
+            // Make a snackbar for the result
+            makeSnackbar("Database reload ${if (success) "successful" else "failed"}, version $time")
 
-        // Update content data if fragments implement content API
-        applyOnContent {
-            logv { "Updated the data and dispatching to $this" }
-            dataUpdated()
+            // Update content data if fragments implement content API
+            applyOnContent {
+                logv { "Updated the data and dispatching to $this" }
+                dataUpdated()
+            }
         }
     }
 
