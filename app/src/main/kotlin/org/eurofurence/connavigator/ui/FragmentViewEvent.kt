@@ -11,13 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.pawegio.kandroid.IntentFor
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
-import org.eurofurence.connavigator.util.EventFavouriter
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.contains
@@ -88,11 +89,7 @@ class FragmentViewEvent() : Fragment() {
             }
 
             buttonSave.setOnLongClickListener {
-                if (EventFavouriter(context).toNotifications(eventEntry)) {
-                    Snackbar.make(buttonSave, "Favorited this event!", Snackbar.LENGTH_SHORT).show()
-                } else {
-                    Snackbar.make(buttonSave, "Removed this event from favorites!", Snackbar.LENGTH_SHORT).show()
-                }
+                context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["eventEntry"] = eventEntry })
 
                 changeFabIcon(eventEntry)
 
