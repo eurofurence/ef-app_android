@@ -8,14 +8,16 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import android.support.design.widget.Snackbar
 import android.support.v4.app.DialogFragment
+import com.pawegio.kandroid.IntentFor
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.EventFavouriter
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.SharingUtility
 import org.eurofurence.connavigator.util.extensions.get
+import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.logd
 
 /**
@@ -38,7 +40,7 @@ class EventDialog(val event: EventEntry) : DialogFragment() {
         when (i) {
             0 -> {
                 logd { "Favouriting event for user" }
-                EventFavouriter(context).toNotifications(event)
+                context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["eventEntry"] = event })
 
                 Snackbar.make(activity.findViewById(R.id.content), "Favourited event!", Snackbar.LENGTH_SHORT)
             }

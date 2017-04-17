@@ -68,6 +68,8 @@
         <!-- Pending intents -->
         <receiver android:name=".gcm.NotificationPublisher"/>
 
+        <receiver android:name=".broadcast.EventFavoriteBroadcast" />
+
         <service
                 android:name=".gcm.MyGCMListenerService"
                 android:exported="false">

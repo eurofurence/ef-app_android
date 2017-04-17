@@ -161,6 +161,11 @@ class IntentContextJsonObjects(val intent: Intent) {
      */
     operator fun <T> get(key: String, classOfT: Class<T>) =
             JsonUtil.deserializeToObject<T>(intent.getStringExtra(key), classOfT)
+    /**
+     * Gets the corresponding object extra or null if not present.
+     */
+    inline operator fun <reified  T> get(key: String) =
+            JsonUtil.deserializeToObject<T>(intent.getStringExtra(key), T::class.java)
 
     /**
      * Puts an object into the intent or removes it if null specified
