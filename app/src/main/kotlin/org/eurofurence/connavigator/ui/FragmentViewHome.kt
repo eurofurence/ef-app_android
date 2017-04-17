@@ -14,8 +14,6 @@ import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.ui.filters.enums.EnumEventRecyclerViewmode
-import org.eurofurence.connavigator.ui.filters.factory.EventFilterFactory
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
@@ -31,9 +29,9 @@ class FragmentViewHome : Fragment(), ContentAPI {
     val database: Database get() = letRoot { it.database }!!
     val preferences: SharedPreferences get() = letRoot { it.preferences }!!
 
-    val upcoming by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.UPCOMING)) }
-    val current by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.CURRENT)) }
-    val favourited by lazy { EventRecyclerFragment(EventFilterFactory.create(EnumEventRecyclerViewmode.FAVORITED)) }
+    val upcoming by lazy { EventRecyclerFragment(database.filterEvents().isUpcoming()) }
+    val current by lazy { EventRecyclerFragment(database.filterEvents().isCurrent()) }
+    val favourited by lazy { EventRecyclerFragment(database.filterEvents().isFavorited()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_home, container, false)
@@ -59,7 +57,7 @@ class FragmentViewHome : Fragment(), ContentAPI {
         announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
         announcementsRecycler.itemAnimator = DefaultItemAnimator()
 
-        if (database.announcementDb.size == 0) {
+        if (announcements.count() == 0) {
             announcementsRecycler.visibility = View.GONE
             announcementsTitle.visibility = View.GONE
         }
@@ -76,7 +74,7 @@ class FragmentViewHome : Fragment(), ContentAPI {
 
     private fun updateContents() {
         val now = DateTime.now()
-        var announcements = database.announcementDb.items.filterIf(
+        val announcements = database.announcementDb.items.filterIf(
                 !preferences.getBoolean(this.getString(R.string.announcement_show_old), false),
                 { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis })
                 .sortedByDescending { it.lastChangeDateTimeUtc }
@@ -88,7 +86,7 @@ class FragmentViewHome : Fragment(), ContentAPI {
         current.dataUpdated()
         favourited.dataUpdated()
 
-        if (database.announcementDb.size == 0) {
+        if (announcements.isEmpty()) {
             announcementsRecycler.visibility = View.GONE
             announcementsTitle.visibility = View.GONE
         }
