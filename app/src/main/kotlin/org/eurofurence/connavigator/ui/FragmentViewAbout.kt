@@ -23,10 +23,10 @@ import us.feras.mdv.MarkdownView
 class FragmentViewAbout : Fragment(), ContentAPI {
     private val attributations = "Google Map\n\nIcons8"
 
-    val textVersion by view(TextView::class.java)
-    val markdownAttributation by view(MarkdownView::class.java)
-    val aboutRequinard by view(LinearLayout::class.java)
-    val aboutPazuzu by view(LinearLayout::class.java)
+    val textVersion: TextView by view()
+    val markdownAttributation: MarkdownView by view()
+    val aboutRequinard: LinearLayout by view()
+    val aboutPazuzu: LinearLayout by view()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_about, container, false)

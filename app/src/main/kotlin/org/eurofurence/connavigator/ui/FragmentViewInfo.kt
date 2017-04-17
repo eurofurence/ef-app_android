@@ -35,10 +35,10 @@ class FragmentViewInfo() : Fragment() {
     }
 
     // Views
-    val image by view(ImageView::class.java)
-    val title by view(TextView::class.java)
-    val text by view(TextView::class.java)
-    val layout by view(LinearLayout::class.java)
+    val image: ImageView by view()
+    val title: TextView by view()
+    val text: TextView by view()
+    val layout: LinearLayout by view()
 
     val database: Database get() = letRoot { it.database }!!
 
@@ -54,7 +54,7 @@ class FragmentViewInfo() : Fragment() {
         applyOnRoot { changeTitle("Information") }
         // Get info if it exists
         if ("info" in arguments) {
-            val info = arguments.jsonObjects["info", Info::class.java]
+            val info: Info = arguments.jsonObjects["info"]
 
             Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, info.title)
 

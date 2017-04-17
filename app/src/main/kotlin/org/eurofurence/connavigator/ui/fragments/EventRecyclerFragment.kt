@@ -44,13 +44,13 @@ import org.joda.time.DateTime
 class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val eventImage by view(ImageView::class.java)
-        val eventTitle by view(TextView::class.java)
-        val eventStartTime by view(TextView::class.java)
-        val eventEndTime by view(TextView::class.java)
-        val eventRoom by view(TextView::class.java)
-        val eventCard by view(LinearLayout::class.java)
-        val layout by view(LinearLayout::class.java)
+        val eventImage: ImageView by view()
+        val eventTitle: TextView by view()
+        val eventStartTime: TextView by view()
+        val eventEndTime: TextView by view()
+        val eventRoom: TextView by view()
+        val eventCard: LinearLayout by view()
+        val layout: LinearLayout by view()
     }
 
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
@@ -124,12 +124,12 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
         }
     }
 
-    val events by view(RecyclerView::class.java)
-    val progress by view(ProgressBar::class.java)
+    val events: RecyclerView by view()
+    val progress: ProgressBar by view()
 
     var effectiveEvents = emptyList<EventEntry>()
 
-    val eventsTitle by view(TextView::class.java)
+    val eventsTitle: TextView by view()
 
     val database: Database get() = letRoot { it.database }!!
 
@@ -152,7 +152,7 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
         // Filter the data
         dataUpdated()
 
-        events.layoutManager =  LinearLayoutManager(activity)
+        events.layoutManager = LinearLayoutManager(activity)
 
         events.itemAnimator = DefaultItemAnimator()
 

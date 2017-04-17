@@ -18,16 +18,17 @@ import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.letRoot
+import android.support.v7.widget.CardView
 
 /**
  * Created by David on 5/4/2016.
  */
 class EventCard(val eventEntry: EventEntry) : Fragment(), ContentAPI {
-    val eventTitle by view(TextView::class.java)
-    val eventDate by view(TextView::class.java)
-    val eventImage by view(ImageView::class.java)
+    val eventTitle: TextView by view()
+    val eventDate: TextView by view()
+    val eventImage: ImageView by view()
 
-    val eventCard by view(android.support.v7.widget.CardView::class.java)
+    val eventCard: CardView by view()
 
     val database: Database get() = letRoot { it.database }!!
 

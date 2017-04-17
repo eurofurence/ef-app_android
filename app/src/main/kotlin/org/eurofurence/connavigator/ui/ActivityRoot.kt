@@ -61,16 +61,16 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     var menu: Menu? = null
 
     // Views
-    val toolbar by view(Toolbar::class.java)
-    override val tabs by view(TabLayout::class.java)
-    val drawer by view(DrawerLayout::class.java)
-    val fab by view(FloatingActionButton::class.java)
+    val toolbar: Toolbar by view()
+    override val tabs: TabLayout by view()
+    val drawer: DrawerLayout by view()
+    val fab: FloatingActionButton by view()
 
     // Views in navigation view
-    val navView by view(NavigationView::class.java)
-    val navDays by header(TextView::class.java, { navView })
-    val navTitle by header(TextView::class.java, { navView })
-    val navSubtitle by header(TextView::class.java, { navView })
+    val navView: NavigationView by view()
+    val navDays: TextView by header({ navView })
+    val navTitle: TextView by header({ navView })
+    val navSubtitle: TextView by header({ navView })
 
     // Content API aggregator
     var content: Set<ContentAPI> = setOf()
@@ -90,7 +90,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         val time = it.objects["time", Date::class.java]
 
 
-        if(!success) {
+        if (!success) {
             // Make a snackbar for the result
             makeSnackbar("Database reload ${if (success) "successful" else "failed"}, version $time")
 
@@ -234,7 +234,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         toggle.syncState()
     }
 
-    private fun<T : Fragment> navigateRoot(type: Class<T>, mode: ActionBarMode = ActionBarMode.NONE) {
+    private fun <T : Fragment> navigateRoot(type: Class<T>, mode: ActionBarMode = ActionBarMode.NONE) {
         setActionBarMode(mode)
 
         // If not already there, navigate with fragment transaction

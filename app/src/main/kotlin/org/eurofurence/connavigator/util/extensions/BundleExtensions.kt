@@ -159,8 +159,8 @@ class BundleContextJsonObjects(val bundle: Bundle) {
     /**
      * Gets the corresponding object extra or null if not present.
      */
-    operator fun <T> get(key: String, classOfT: Class<T>) =
-            JsonUtil.deserializeToObject<T>(bundle.getString(key), classOfT)
+    inline operator fun <reified T> get(key: String): T =
+            JsonUtil.deserializeToObject<T>(bundle.getString(key), T::class.java)
 
     /**
      * Puts an object into the bundle or removes it if null specified
@@ -183,8 +183,8 @@ class BundleContextJsonLists(val bundle: Bundle) {
     /**
      * Gets the corresponding object extra or null if not present.
      */
-    operator fun <T> get(key: String, classOfT: Class<T>) =
-            JsonUtil.deserializeToList<T>(bundle.getString(key), classOfT)
+    inline operator fun <reified T, reified U : List<T>> get(key: String): U =
+            JsonUtil.deserializeToList<T>(bundle.getString(key), T::class.java) as U
 
     /**
      * Puts an object into the bundle or removes it if null specified

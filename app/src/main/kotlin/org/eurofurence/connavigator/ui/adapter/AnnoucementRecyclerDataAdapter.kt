@@ -18,10 +18,10 @@ import org.joda.time.format.DateTimeFormat
  * Created by David on 15-5-2016.
  */
 class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-    val announcementTitle by view(TextView::class.java)
-    val announcementDate by view(TextView::class.java)
-    val announcementContent by view(TextView::class.java)
-    val announcementCaret by view(ImageView::class.java)
+    val announcementTitle: TextView by view()
+    val announcementDate: TextView by view()
+    val announcementContent: TextView by view()
+    val announcementCaret: ImageView by view()
 }
 
 class AnnoucementRecyclerDataAdapter(val announcements: List<Announcement>) : RecyclerView.Adapter<AnnouncementDataholder>() {

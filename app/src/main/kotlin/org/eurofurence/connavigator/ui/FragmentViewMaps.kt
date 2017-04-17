@@ -36,7 +36,7 @@ class FragmentViewMaps : Fragment(), ContentAPI {
 
     val maps by lazy { database.mapEntityDb.items.filter { it.isBrowseable.toInt() != 0 } }
 
-    val mapViewPager by view(ViewPager::class.java)
+    val mapViewPager: ViewPager by view()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_maps, container, false)

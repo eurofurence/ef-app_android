@@ -24,9 +24,9 @@ import org.eurofurence.connavigator.util.extensions.logd
  * Created by David on 28-4-2016.
  */
 class ActivityStart : AppCompatActivity() {
-    val buttonStart by view(Button::class.java)
-    val textHelp by view(TextView::class.java)
-    val progressBar by view(ProgressBar::class.java)
+    val buttonStart: Button by view()
+    val textHelp: TextView by view()
+    val progressBar: ProgressBar by view()
 
     val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
         if (it.booleans["success"]) {

@@ -42,13 +42,13 @@ class FragmentViewEvent() : Fragment() {
         arguments.jsonObjects["eventEntry"] = eventEntry
     }
 
-    val title by view(TextView::class.java)
-    val description by view(MarkdownView::class.java)
-    val image by view(ImageView::class.java)
-    val organizers by view(TextView::class.java)
-    val room by view(TextView::class.java)
-    val time by view(TextView::class.java)
-    val buttonSave by view(FloatingActionButton::class.java)
+    val title: TextView by view()
+    val description: MarkdownView by view()
+    val image: ImageView by view()
+    val organizers: TextView by view()
+    val room: TextView by view()
+    val time: TextView by view()
+    val buttonSave: FloatingActionButton by view()
 
     val preferences: SharedPreferences get() = letRoot { it.preferences }!!
 
@@ -64,7 +64,7 @@ class FragmentViewEvent() : Fragment() {
 
 
         if ("eventEntry" in arguments) {
-            val eventEntry = arguments.jsonObjects["eventEntry", EventEntry::class.java]
+            val eventEntry: EventEntry = arguments.jsonObjects["eventEntry"]
 
             Analytics.event(Analytics.Category.EVENT, Analytics.Action.OPENED, eventEntry.title)
 

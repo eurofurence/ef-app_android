@@ -40,15 +40,15 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
 
     // Event view holder finds and memorizes the views in an event card
     inner class InfoGroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title by view(TextView::class.java)
-        val description by view(TextView::class.java)
-        val image by view(ImageView::class.java)
+        val title: TextView by view()
+        val description: TextView by view()
+        val image: ImageView by view()
     }
 
     // Event view holder finds and memorizes the views in an event card
     inner class InfoGroupItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title by view(TextView::class.java)
-        val layout by view(LinearLayout::class.java)
+        val title: TextView by view()
+        val layout: LinearLayout by view()
     }
 
     inner class DataAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -108,7 +108,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
     val database: Database get() = letRoot { it.database }!!
 
     // View
-    val infoGroups  by view(RecyclerView::class.java)
+    val infoGroups: RecyclerView by view()
 
     val vibrator by lazy { TouchVibrator(context) }
 
