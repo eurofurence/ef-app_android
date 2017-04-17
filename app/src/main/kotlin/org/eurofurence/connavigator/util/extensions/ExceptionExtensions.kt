@@ -3,6 +3,8 @@ package org.eurofurence.connavigator.util.extensions
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.Choice
 import org.eurofurence.connavigator.util.Dispatcher
+import org.eurofurence.connavigator.util.left
+import org.eurofurence.connavigator.util.right
 
 /**
  * Utilities for handling exceptions with automatic analytics handling.
@@ -201,14 +203,14 @@ inline fun <reified E : Throwable> catchToFalse(block: () -> Boolean): Boolean {
  */
 inline infix fun <reified R, reified E : Throwable> (() -> R).catchToChoice(handler: (E) -> Unit): Choice<R, E> {
     try {
-        return Choice.pri(this())
+        return left(this())
     } catch(t: Throwable) {
         if (t !is E)
             throw t
 
         proxyException(t)
         handler(t)
-        return Choice.snd(t)
+        return right(t)
     }
 }
 
@@ -225,13 +227,13 @@ inline infix fun <reified R, reified E : Throwable> (() -> R).catchToChoice(hand
  */
 inline fun <reified R, reified E : Throwable> catchToChoice(block: () -> R): Choice<R, E> {
     try {
-        return Choice.pri(block())
+        return left(block())
     } catch(t: Throwable) {
         if (t !is E)
             throw t
 
         proxyException(t)
-        return Choice.snd(t)
+        return right(t)
     }
 }
 
@@ -384,7 +386,7 @@ fun catchToChoiceExample() {
         "Success"
     } catchToChoice { _: ArithmeticException ->
     } shouldSatisfy {
-        it.isPrimary && it.primary == "Success"
+        it.isLeft && it.left == "Success"
     }
 
     {
@@ -392,7 +394,7 @@ fun catchToChoiceExample() {
         "Fail"
     } catchToChoice { _: ArithmeticException ->
     } shouldSatisfy {
-        !it.isPrimary && it.secondary is ArithmeticException
+        it.isRight && it.right is ArithmeticException
     }
 }
 
