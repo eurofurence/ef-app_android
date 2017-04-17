@@ -16,7 +16,7 @@ fun Fragment.findRoot(): RootAPI? = context.let {
 /**
  * Invokes the code if the container is a root API.
  */
-fun Fragment.applyOnRoot(block: RootAPI.() -> Unit) = findRoot().let {
+inline fun Fragment.applyOnRoot(block: RootAPI.() -> Unit) = findRoot().let {
     if (it is RootAPI)
         it.block()
 }
@@ -24,7 +24,7 @@ fun Fragment.applyOnRoot(block: RootAPI.() -> Unit) = findRoot().let {
 /**
  * Invokes the code if the container is a root API.
  */
-fun <R> Fragment.letRoot(block: (RootAPI) -> R): R? = findRoot().let {
+inline fun <R> Fragment.letRoot(block: (RootAPI) -> R): R? = findRoot().let {
     if (it is RootAPI)
         block(it)
     else
@@ -60,5 +60,5 @@ fun Fragment.applyOnContent(block: ContentAPI.() -> Unit) {
 /**
  * Invokes the code if the item is a content API.
  */
-fun <R> FragmentActivity.letContent(block: (ContentAPI) -> R): List<R> =
+inline fun <R> FragmentActivity.letContent(block: (ContentAPI) -> R): List<R> =
         supportFragmentManager.fragments.filterIsInstance(ContentAPI::class.java).map(block)
