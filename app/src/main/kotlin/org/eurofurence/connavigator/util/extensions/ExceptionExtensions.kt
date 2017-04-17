@@ -30,6 +30,38 @@ inline fun <reified R> dismissExceptionIn(block: () -> R) {
     }
 }
 
+
+@kotlin.jvm.JvmName("blockUnit")
+inline fun <reified T> block(noinline block: (T) -> Unit) = block
+
+@kotlin.jvm.JvmName("blockReturn")
+inline fun <reified T, reified U> block(noinline block: (T) -> U) = block
+
+@kotlin.jvm.JvmName("handlerUnit")
+fun block(block: (Unit) -> Unit) = block
+
+@kotlin.jvm.JvmName("handlerReturn")
+inline fun <reified U> block(noinline block: (Unit) -> U) = block
+
+/**
+ * Catches an exception of type [E] in the receiver.
+ *
+ * @param E Type of the exception
+ * @receiver The block to execute that might throw an exception
+ * @param handler The handler to execute on an exception
+ */
+inline infix fun <reified E : Throwable> (() -> Unit).catchHandle(handler: (E) -> Unit) {
+    try {
+        this()
+    } catch(t: Throwable) {
+        if (t !is E)
+            throw t
+
+        proxyException(t)
+        handler(t)
+    }
+}
+
 /**
  * Catches an exception of type [E] in the receiver. If the receiver succeeded, uses it's return value, otherwise
  * uses the [handler]s return value.
