@@ -67,46 +67,4 @@ class NotificationFactory {
 
         context.sendBroadcast(intent)
     }
-
-    /**
-     * Creates a pending notification that can be executed in the future
-     */
-    fun createPendingNotification(notification: Notification, wakeUpTime: Long, notificationId: Int) {
-        // Create intent to wake up to that is handled by notificationPublisher
-        val pendingIntent = createPendingIntent(notification, notificationId)
-
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.resources.getString(R.string.debug_notifications_schedule), false)) {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().plusSeconds(5).millis, pendingIntent)
-        } else {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent)
-        }
-    }
-
-    /**
-     * Cancels a pending notification
-     */
-    fun cancelPendingNotification(notification: Notification, notificationId: Int) {
-        // Create intent to wake up to that is handled by notificationPublisher
-        val pendingIntent = createPendingIntent(notification, notificationId)
-
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        alarmManager.cancel(pendingIntent)
-    }
-
-    private fun createPendingIntent(notification: Notification, notificationId: Int): PendingIntent? {
-        val notificationIntent = Intent(context, NotificationPublisher::class.java)
-
-        // Give the notification an assignable ID
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 0)
-
-        // Give it the actual notification
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification)
-
-        // Create notification that will be handled
-        return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-    }
 }

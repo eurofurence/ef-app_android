@@ -149,7 +149,9 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
     private fun loadAnnouncements(oldDate: Date?): List<Announcement> {
         val announcements = apiService.api.announcementGet(oldDate)
 
-        announcements.forEach { NotificationFactory(this).showNotification(it.title, it.content)}
+        announcements.filter { DateTime.now().isAfter(it.validFromDateTimeUtc.time) }
+                .filter { DateTime.now().isBefore(it.validUntilDateTimeUtc.time) }
+                .forEach { NotificationFactory(this).showNotification(it.title, it.content) }
 
         return announcements
     }
