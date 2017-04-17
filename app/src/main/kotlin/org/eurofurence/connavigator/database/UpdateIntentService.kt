@@ -82,7 +82,7 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
         val response = Intent(UPDATE_COMPLETE)
 
         // The following code is net and IO oriented, it could fail
-        try {
+        {
             // Get the current endpoint status and its date
             val endpoint = apiService.api.endpointGet()
             val newDate = endpoint.currentDateTimeUtc
@@ -125,9 +125,7 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
             response.objects["time"] = newDate
 
             logv("UIS") { "Completed update successfully" }
-        } catch(ex: Throwable) {
-            Analytics.exception(ex)
-
+        } catchToAlternative { ex: Throwable ->
             // Make the fail response message, transfer exception
             response.booleans["success"] = false
             response.objects["time"] = oldDate

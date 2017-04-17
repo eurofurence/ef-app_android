@@ -99,7 +99,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
 
             // Handle the FAB that links out
             dealerButtonMore.setOnClickListener {
-                try {
+                {
                     if (dealer.websiteUri.startsWith("http")) {
                         Analytics.event(Analytics.Category.DEALER, Analytics.Action.LINK_CLICKED, dealer.displayName ?: dealer.attendeeNickname)
 
@@ -107,8 +107,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
                     } else {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://" + dealer.websiteUri)))
                     }
-                } catch(e: Exception) {
-                    Analytics.exception(e)
+                } catchAlternative { _: Exception ->
                     logv { "User tried clicking on a dealer with no url" }
                 }
             }

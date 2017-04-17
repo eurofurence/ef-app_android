@@ -65,10 +65,8 @@ class FragmentViewHome : Fragment(), ContentAPI {
 
     override fun dataUpdated() {
         logd { "Updating home screen data" }
-        try {
+        catchToAnyException {
             updateContents()
-        } catch(throwable: Throwable) {
-            Analytics.exception(throwable)
         }
     }
 

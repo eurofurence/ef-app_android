@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.store
 
 import com.google.common.base.Preconditions
+import org.eurofurence.connavigator.util.extensions.catchAlternative
 import org.eurofurence.connavigator.util.extensions.safeInStream
 import org.eurofurence.connavigator.util.extensions.safeOutStream
 import org.eurofurence.connavigator.util.extensions.substitute
@@ -29,10 +30,10 @@ class SerializableDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
                 Iterable {
                     object : AbstractIterator<T>() {
                         override fun computeNext() =
-                                try {
+                                {
                                     // Set data if there is some
                                     setNext(elementClass.cast(os.readObject()))
-                                } catch(e: EOFException) {
+                                } catchAlternative { _: EOFException ->
                                     // Otherwise the stream is done
                                     done()
                                 }
@@ -42,7 +43,6 @@ class SerializableDB<T>(val from: File, val elementClass: Class<T>) : DB<T> {
             }
         else
             emptyList()
-
         set(values) = from.substitute {
             ObjectOutputStream(it.safeOutStream()).use { os ->
                 // Write all objects to the stream

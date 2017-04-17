@@ -103,30 +103,8 @@ inline fun <reified R, reified E : Throwable> catchToNull(block: () -> R): R? {
 }
 
 /**
- * Catches an exception of type [E] in the receiver. Returns true only if the receiver succeeded.
- *
- * @param E Type of the exception
- * @receiver The block to execute that might throw an exception
- * @param handler The handler to execute on an exception
- * @return Returns true only if the receiver succeeded.
- * @sample catchToFalseFromTrueExample
- */
-@kotlin.jvm.JvmName("catchToFalseFromTrue")
-inline infix fun <reified E : Throwable> (() -> Unit).catchToFalse(handler: (E) -> Unit): Boolean {
-    try {
-        this()
-        return true
-    } catch(t: Throwable) {
-        if (t !is E)
-            throw t
-        proxyException(t)
-        handler(t)
-        return false
-    }
-}
-
-/**
- * Catches an exception of type [E] in the receiver. Returns true only if the receiver succeeded and returned true.
+ * Catches an exception of type [E] in the receiver. If [R] is boolean, returns the result of the receiver if succeeded,
+ * otherwise returns true if the receiver succeeded.
  *
  * @param E Type of the exception
  * @receiver The block to execute that might throw an exception
@@ -134,10 +112,9 @@ inline infix fun <reified E : Throwable> (() -> Unit).catchToFalse(handler: (E) 
  * @return Returns true only if the receiver succeeded and returned true.
  * @sample catchToFalseFromReturnExample
  */
-@kotlin.jvm.JvmName("catchToFalseFromReturn")
-inline infix fun <reified E : Throwable> (() -> Boolean).catchToFalse(handler: (E) -> Unit): Boolean {
+inline infix fun <reified E : Throwable, reified R> (() -> R).catchToFalse(handler: (E) -> Unit): Boolean {
     try {
-        return this()
+        return this() as? Boolean ?: true
     } catch(t: Throwable) {
         if (t !is E)
             throw t
@@ -148,19 +125,17 @@ inline infix fun <reified E : Throwable> (() -> Boolean).catchToFalse(handler: (
 }
 
 /**
- * Catches an exception of type [E] in the [block]. Returns true only if the [block] succeeded. Exceptions are just
- * handled by logging with [proxyException].
+ * Catches an exception of type [E] in the [block]. If [R] is boolean, returns the result of the [block] if succeeded,
+ * otherwise returns true if the [block] succeeded. Exceptions are just handled by logging with [proxyException].
  *
  * @param E Type of the exception
  * @param block The block to execute that might throw an exception
- * @return Returns true only if the [block] succeeded.
- * @sample catchToFalseFromTrueExample
+ * @return Returns true only if the [block] succeeded and returned true.
+ * @sample catchToFalseFromReturnExample
  */
-@kotlin.jvm.JvmName("catchToFalseFromTrue")
-inline fun <reified E : Throwable> catchToFalse(block: () -> Unit): Boolean {
+inline fun <reified E : Throwable, reified R> catchToFalse(block: () -> R): Boolean {
     try {
-        block()
-        return true
+        return block() as? Boolean ?: true
     } catch(t: Throwable) {
         if (t !is E)
             throw t
@@ -169,22 +144,35 @@ inline fun <reified E : Throwable> catchToFalse(block: () -> Unit): Boolean {
     }
 }
 
+
 /**
- * Catches an exception of type [E] in the [block]. Returns true only if the [block] succeeded and returned true.
+ * Catches an exception in the [block]. If [R] is boolean, returns the result of the [block] if succeeded, otherwise
+ * returns true if the [block] succeeded. Exceptions are just handled by logging with [proxyException].
+ *
+ * @param block The block to execute that might throw an exception
+ * @return Returns true only if the [block] succeeded.
+ */
+inline fun <reified R> catchToAnyFalse(block: () -> R): Boolean {
+    try {
+        return block() as? Boolean ?: true
+    } catch(t: Throwable) {
+        proxyException(t)
+        return false
+    }
+}
+
+/**
+ * Catches an exception in the [block]. Returns true only if the [block] succeeded and returned true.
  * Exceptions are just handled by logging with [proxyException].
  *
- * @param E Type of the exception
  * @param block The block to execute that might throw an exception
  * @return Returns true only if the [block] succeeded and returned true.
- * @sample catchToFalseFromReturnExample
  */
-@kotlin.jvm.JvmName("catchToFalseFromReturn")
-inline fun <reified E : Throwable> catchToFalse(block: () -> Boolean): Boolean {
+@kotlin.jvm.JvmName("catchToAnyFalseFromReturn")
+inline fun catchToAnyFalse(block: () -> Boolean): Boolean {
     try {
         return block()
     } catch(t: Throwable) {
-        if (t !is E)
-            throw t
         proxyException(t)
         return false
     }
