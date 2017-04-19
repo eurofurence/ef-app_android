@@ -38,17 +38,17 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
         arguments.jsonObjects["dealer"] = dealer
     }
 
-    val dealerName by view(TextView::class.java)
-    val dealerShortDescription by view(TextView::class.java)
-    val dealerArtistDescription by view(MarkdownView::class.java)
-    val dealerArtDescription by view(MarkdownView::class.java)
-    val dealerImage by view(ImageView::class.java)
-    val dealerButtonMore by view(FloatingActionButton::class.java)
-    val dealerPreviewArtImage by view(ImageView::class.java)
-    val dealerPreviewCaption by view(TextView::class.java)
-    val dealerMap by view(ImageView::class.java)
+    val dealerName: TextView by view()
+    val dealerShortDescription: TextView by view()
+    val dealerArtistDescription: MarkdownView by view()
+    val dealerArtDescription: MarkdownView by view()
+    val dealerImage: ImageView by view()
+    val dealerButtonMore: FloatingActionButton by view()
+    val dealerPreviewArtImage: ImageView by view()
+    val dealerPreviewCaption: TextView by view()
+    val dealerMap: ImageView by view()
 
-    val dealerPreviewArtLayout by view(LinearLayout::class.java)
+    val dealerPreviewArtLayout: LinearLayout by view()
 
     val database: Database get() = letRoot { it.database }!!
     val remoteConfig: RemoteConfig get () = letRoot { it.remotePreferences }!!
@@ -61,7 +61,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
         Analytics.screen("View Dealer Details")
 
         if ("dealer" in arguments) {
-            val dealer = arguments.jsonObjects["dealer", Dealer::class.java]
+            val dealer: Dealer = arguments.jsonObjects["dealer"]
 
             Analytics.event(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName ?: dealer.attendeeNickname)
 
@@ -99,7 +99,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
 
             // Handle the FAB that links out
             dealerButtonMore.setOnClickListener {
-                try {
+                {
                     if (dealer.websiteUri.startsWith("http")) {
                         Analytics.event(Analytics.Category.DEALER, Analytics.Action.LINK_CLICKED, dealer.displayName ?: dealer.attendeeNickname)
 
@@ -107,8 +107,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
                     } else {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://" + dealer.websiteUri)))
                     }
-                } catch(e: Exception) {
-                    Analytics.exception(e)
+                } catchAlternative { _: Exception ->
                     logv { "User tried clicking on a dealer with no url" }
                 }
             }

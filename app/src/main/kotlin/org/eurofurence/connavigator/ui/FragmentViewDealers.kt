@@ -44,9 +44,9 @@ class FragmentViewDealers : Fragment(), TextWatcher, ContentAPI {
     }
 
     val database: Database get() = letRoot { it.database }!!
-    val dealersRecycler by view(RecyclerView::class.java)
-    val dealersSearch by view(EditText::class.java)
-    val dealersSearchLayout by view(LinearLayout::class.java)
+    val dealersRecycler: RecyclerView by view()
+    val dealersSearch: EditText by view()
+    val dealersSearchLayout: LinearLayout by view()
 
     var effectiveDealers = emptyList<Dealer>()
 

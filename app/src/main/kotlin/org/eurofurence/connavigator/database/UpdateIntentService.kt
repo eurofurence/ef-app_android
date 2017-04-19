@@ -23,7 +23,7 @@ import java.util.*
 /**
  * Updates the database on request.
  */
-class UpdateIntentService() : IntentService("UpdateIntentService") {
+class UpdateIntentService : IntentService("UpdateIntentService") {
     companion object {
         val UPDATE_COMPLETE = "org.eurofurence.connavigator.driver.UPDATE_COMPLETE"
         val REQUEST_CODE = 1337
@@ -69,7 +69,6 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
     val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
 
     // TODO: Sticky intent since there should only be one pending update
-
     override fun onHandleIntent(intent: Intent?) {
         logv("UIS") { "Handling update intent service intent" }
 
@@ -78,11 +77,8 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
 
         logv("UIS") { "Old date in database: $oldDate" }
 
-        // Initialize the response
-        val response = Intent(UPDATE_COMPLETE)
-
-        // The following code is net and IO oriented, it could fail
-        try {
+        // Initialize the response, the following code is net and IO oriented, it could fail
+        val response = {
             // Get the current endpoint status and its date
             val endpoint = apiService.api.endpointGet()
             val newDate = endpoint.currentDateTimeUtc
@@ -120,20 +116,21 @@ class UpdateIntentService() : IntentService("UpdateIntentService") {
             // Set the new server date
             database.dateDb.items = listOf(newDate)
 
+
             // Make the success response message
-            response.booleans["success"] = true
-            response.objects["time"] = newDate
-
             logv("UIS") { "Completed update successfully" }
-        } catch(ex: Throwable) {
-            Analytics.exception(ex)
-
+            UPDATE_COMPLETE.toIntent {
+                booleans["success"] = true
+                objects["time"] = newDate
+            }
+        } catchAlternative { ex: Throwable ->
             // Make the fail response message, transfer exception
-            response.booleans["success"] = false
-            response.objects["time"] = oldDate
-            response.objects["reason"] = ex
-
             loge("UIS", ex) { "Completed update with error" }
+            UPDATE_COMPLETE.toIntent {
+                booleans["success"] = false
+                objects["time"] = oldDate
+                objects["reason"] = ex
+            }
         }
 
         schedule(this)

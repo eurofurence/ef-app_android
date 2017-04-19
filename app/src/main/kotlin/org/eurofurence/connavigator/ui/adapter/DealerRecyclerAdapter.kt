@@ -24,10 +24,10 @@ import org.jetbrains.anko.*
  * Created by David on 15-5-2016.
  */
 class DealerDataHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-    val dealerName by view(TextView::class.java)
-    val dealerSubText by view(TextView::class.java)
-    val dealerPreviewImage by view(ImageView::class.java)
-    val layout by view(LinearLayout::class.java)
+    val dealerName: TextView by view()
+    val dealerSubText: TextView by view()
+    val dealerPreviewImage: ImageView by view()
+    val layout: LinearLayout by view()
 }
 
 class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Database, val fragment: Fragment) : RecyclerView.Adapter<DealerDataHolder>() {
@@ -69,19 +69,19 @@ class DealerListItemUI : AnkoComponent<ViewGroup> {
         linearLayout {
             lparams(width = matchParent, height = wrapContent)
             backgroundResource = R.color.cardview_light_background
-            id= R.id.layout
+            id = R.id.layout
             imageView {
                 padding = dip(5)
                 scaleType = ImageView.ScaleType.FIT_CENTER
                 id = R.id.dealerPreviewImage
             }.lparams(width = dip(75), height = dip(75))
             verticalLayout {
-                padding= dip(10)
-                textView{
+                padding = dip(10)
+                textView {
                     setTextAppearance(android.R.style.TextAppearance_Large)
                     id = R.id.dealerName
                 }
-                textView{
+                textView {
                     setTextAppearance(android.R.style.TextAppearance_Small)
                     id = R.id.dealerSubText
                 }

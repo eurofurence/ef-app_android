@@ -50,8 +50,8 @@ class FragmentViewEvents : Fragment(), ContentAPI {
 
     val database: Database get() = letRoot { it.database }!!
 
-    val eventPager by view(ViewPager::class.java)
-    val eventSearchBar by view(EditText::class.java)
+    val eventPager: ViewPager by view()
+    val eventSearchBar: EditText by view()
 
     val searchEventFilter by lazy { database.filterEvents() }
 
@@ -93,7 +93,7 @@ class FragmentViewEvents : Fragment(), ContentAPI {
     }
 
     override fun onSearchButtonClick() {
-        when(eventPager.visibility) {
+        when (eventPager.visibility) {
             View.VISIBLE -> {
                 eventPager.visibility = View.GONE
                 activity.findViewById(R.id.searchLayout).visibility = View.VISIBLE

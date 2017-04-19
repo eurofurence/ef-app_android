@@ -24,8 +24,8 @@ import org.joda.time.DateTime
  * Created by David on 5/14/2016.
  */
 class FragmentViewHome : Fragment(), ContentAPI {
-    val announcementsRecycler by view(RecyclerView::class.java)
-    val announcementsTitle by view(TextView::class.java)
+    val announcementsRecycler: RecyclerView by view()
+    val announcementsTitle: TextView by view()
     val database: Database get() = letRoot { it.database }!!
     val preferences: SharedPreferences get() = letRoot { it.preferences }!!
 
@@ -65,10 +65,8 @@ class FragmentViewHome : Fragment(), ContentAPI {
 
     override fun dataUpdated() {
         logd { "Updating home screen data" }
-        try {
+        catchToAnyException {
             updateContents()
-        } catch(throwable: Throwable) {
-            Analytics.exception(throwable)
         }
     }
 

@@ -3,11 +3,12 @@ apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
 android {
+
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 32
         versionName "1.9.10"
@@ -67,7 +68,7 @@ android {
         }
         prod {
             // The actual minSdkVersion for the application.
-            minSdkVersion 15
+            minSdkVersion 16
             applicationId "org.eurofurence.connavigator"
         }
     }

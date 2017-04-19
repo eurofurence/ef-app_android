@@ -12,8 +12,8 @@ import org.eurofurence.connavigator.util.delegators.view
 /**
  * Created by David on 24-5-2016.
  */
-class EmptyCard(val message:String) : Fragment() {
-    val emptyMessage by view(TextView::class.java)
+class EmptyCard(val message: String) : Fragment() {
+    val emptyMessage: TextView by view()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fragment_empty, container, false)
 

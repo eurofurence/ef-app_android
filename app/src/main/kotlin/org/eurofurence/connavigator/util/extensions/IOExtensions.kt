@@ -32,7 +32,7 @@ fun File.safeInStream() = BufferedInputStream(FileInputStream(this))
  * exception thrown), renames the temporary file to the original.
  * @param block The block to execute
  */
-fun File.substitute(block: (File) -> Unit) {
+inline fun File.substitute(block: (File) -> Unit) {
     File.createTempFile(name, ".$extension", parentFile).let {
         block(it)
         if (!it.renameTo(this))

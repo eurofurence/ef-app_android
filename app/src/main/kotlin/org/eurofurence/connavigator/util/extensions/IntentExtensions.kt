@@ -5,6 +5,11 @@ import io.swagger.client.JsonUtil
 import java.io.Serializable
 
 /**
+ * Creates an intent from the string, using a configuration method.
+ */
+inline  fun String.toIntent(configure: Intent.() -> Unit) = Intent(this).apply(configure)
+
+/**
  * Checks if the intent has the given extra defined.
  */
 operator fun Intent.contains(key: String) = this.hasExtra(key)
@@ -161,10 +166,11 @@ class IntentContextJsonObjects(val intent: Intent) {
      */
     operator fun <T> get(key: String, classOfT: Class<T>) =
             JsonUtil.deserializeToObject<T>(intent.getStringExtra(key), classOfT)
+
     /**
      * Gets the corresponding object extra or null if not present.
      */
-    inline operator fun <reified  T> get(key: String) =
+    inline operator fun <reified T> get(key: String) =
             JsonUtil.deserializeToObject<T>(intent.getStringExtra(key), T::class.java)
 
     /**
