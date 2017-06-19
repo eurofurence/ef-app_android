@@ -3,10 +3,9 @@ package io.swagger.client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import io.swagger.client.model.*;
-
 import java.lang.reflect.Type;
 import java.util.List;
+import io.swagger.client.model.*;
 
 public class JsonUtil {
   public static GsonBuilder gsonBuilder;
@@ -36,68 +35,124 @@ public class JsonUtil {
   public static Type getListTypeForDeserialization(Class cls) {
     String className = cls.getSimpleName();
     
-    if ("Announcement".equalsIgnoreCase(className)) {
-      return new TypeToken<List<Announcement>>(){}.getType();
+    if ("AggregatedDeltaResponse".equalsIgnoreCase(className)) {
+      return new TypeToken<List<AggregatedDeltaResponse>>(){}.getType();
     }
     
-    if ("Dealer".equalsIgnoreCase(className)) {
-      return new TypeToken<List<Dealer>>(){}.getType();
+    if ("AnnouncementRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<AnnouncementRecord>>(){}.getType();
     }
     
-    if ("Endpoint".equalsIgnoreCase(className)) {
-      return new TypeToken<List<Endpoint>>(){}.getType();
+    if ("AuthenticationResponse".equalsIgnoreCase(className)) {
+      return new TypeToken<List<AuthenticationResponse>>(){}.getType();
     }
     
-    if ("EndpointConfiguration".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EndpointConfiguration>>(){}.getType();
+    if ("DealerRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DealerRecord>>(){}.getType();
     }
     
-    if ("EndpointEntity".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EndpointEntity>>(){}.getType();
+    if ("DeltaResponseAnnouncementRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DeltaResponseAnnouncementRecord>>(){}.getType();
     }
     
-    if ("EntityBase".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EntityBase>>(){}.getType();
+    if ("DeltaResponseDealerRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DeltaResponseDealerRecord>>(){}.getType();
     }
     
-    if ("EventConferenceDay".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventConferenceDay>>(){}.getType();
+    if ("DeltaResponseEventConferenceDayRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DeltaResponseEventConferenceDayRecord>>(){}.getType();
     }
     
-    if ("EventConferenceRoom".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventConferenceRoom>>(){}.getType();
+    if ("DeltaResponseEventConferenceRoomRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DeltaResponseEventConferenceRoomRecord>>(){}.getType();
     }
     
-    if ("EventConferenceTrack".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventConferenceTrack>>(){}.getType();
+    if ("DeltaResponseEventConferenceTrackRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DeltaResponseEventConferenceTrackRecord>>(){}.getType();
     }
     
-    if ("EventEntry".equalsIgnoreCase(className)) {
-      return new TypeToken<List<EventEntry>>(){}.getType();
+    if ("DeltaResponseEventRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DeltaResponseEventRecord>>(){}.getType();
     }
     
-    if ("Image".equalsIgnoreCase(className)) {
-      return new TypeToken<List<Image>>(){}.getType();
+    if ("DeltaResponseImageRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DeltaResponseImageRecord>>(){}.getType();
     }
     
-    if ("Info".equalsIgnoreCase(className)) {
-      return new TypeToken<List<Info>>(){}.getType();
+    if ("DeltaResponseKnowledgeEntryRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DeltaResponseKnowledgeEntryRecord>>(){}.getType();
     }
     
-    if ("InfoGroup".equalsIgnoreCase(className)) {
-      return new TypeToken<List<InfoGroup>>(){}.getType();
+    if ("DeltaResponseKnowledgeGroupRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DeltaResponseKnowledgeGroupRecord>>(){}.getType();
     }
     
-    if ("MapEntity".equalsIgnoreCase(className)) {
-      return new TypeToken<List<MapEntity>>(){}.getType();
+    if ("DeltaResponseMapRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<DeltaResponseMapRecord>>(){}.getType();
     }
     
-    if ("MapEntry".equalsIgnoreCase(className)) {
-      return new TypeToken<List<MapEntry>>(){}.getType();
+    if ("EventConferenceDayRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventConferenceDayRecord>>(){}.getType();
     }
     
-    if ("NamedUrl".equalsIgnoreCase(className)) {
-      return new TypeToken<List<NamedUrl>>(){}.getType();
+    if ("EventConferenceRoomRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventConferenceRoomRecord>>(){}.getType();
+    }
+    
+    if ("EventConferenceTrackRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventConferenceTrackRecord>>(){}.getType();
+    }
+    
+    if ("EventFeedbackRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventFeedbackRecord>>(){}.getType();
+    }
+    
+    if ("EventRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<EventRecord>>(){}.getType();
+    }
+    
+    if ("ImageRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<ImageRecord>>(){}.getType();
+    }
+    
+    if ("KnowledgeEntryRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<KnowledgeEntryRecord>>(){}.getType();
+    }
+    
+    if ("KnowledgeGroupRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<KnowledgeGroupRecord>>(){}.getType();
+    }
+    
+    if ("LinkFragment".equalsIgnoreCase(className)) {
+      return new TypeToken<List<LinkFragment>>(){}.getType();
+    }
+    
+    if ("MapEntryRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<MapEntryRecord>>(){}.getType();
+    }
+    
+    if ("MapRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<MapRecord>>(){}.getType();
+    }
+    
+    if ("PostWnsChannelRegistrationRequest".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PostWnsChannelRegistrationRequest>>(){}.getType();
+    }
+    
+    if ("PrivateMessageRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PrivateMessageRecord>>(){}.getType();
+    }
+    
+    if ("RegSysAuthenticationRequest".equalsIgnoreCase(className)) {
+      return new TypeToken<List<RegSysAuthenticationRequest>>(){}.getType();
+    }
+    
+    if ("SendPrivateMessageRequest".equalsIgnoreCase(className)) {
+      return new TypeToken<List<SendPrivateMessageRequest>>(){}.getType();
+    }
+    
+    if ("ToastTest".equalsIgnoreCase(className)) {
+      return new TypeToken<List<ToastTest>>(){}.getType();
     }
     
     return new TypeToken<List<Object>>(){}.getType();
@@ -106,71 +161,127 @@ public class JsonUtil {
   public static Type getTypeForDeserialization(Class cls) {
     String className = cls.getSimpleName();
     
-    if ("Announcement".equalsIgnoreCase(className)) {
-      return new TypeToken<Announcement>(){}.getType();
+    if ("AggregatedDeltaResponse".equalsIgnoreCase(className)) {
+      return new TypeToken<AggregatedDeltaResponse>(){}.getType();
     }
     
-    if ("Dealer".equalsIgnoreCase(className)) {
-      return new TypeToken<Dealer>(){}.getType();
+    if ("AnnouncementRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<AnnouncementRecord>(){}.getType();
     }
     
-    if ("Endpoint".equalsIgnoreCase(className)) {
-      return new TypeToken<Endpoint>(){}.getType();
+    if ("AuthenticationResponse".equalsIgnoreCase(className)) {
+      return new TypeToken<AuthenticationResponse>(){}.getType();
     }
     
-    if ("EndpointConfiguration".equalsIgnoreCase(className)) {
-      return new TypeToken<EndpointConfiguration>(){}.getType();
+    if ("DealerRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DealerRecord>(){}.getType();
     }
     
-    if ("EndpointEntity".equalsIgnoreCase(className)) {
-      return new TypeToken<EndpointEntity>(){}.getType();
+    if ("DeltaResponseAnnouncementRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DeltaResponseAnnouncementRecord>(){}.getType();
     }
     
-    if ("EntityBase".equalsIgnoreCase(className)) {
-      return new TypeToken<EntityBase>(){}.getType();
+    if ("DeltaResponseDealerRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DeltaResponseDealerRecord>(){}.getType();
     }
     
-    if ("EventConferenceDay".equalsIgnoreCase(className)) {
-      return new TypeToken<EventConferenceDay>(){}.getType();
+    if ("DeltaResponseEventConferenceDayRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DeltaResponseEventConferenceDayRecord>(){}.getType();
     }
     
-    if ("EventConferenceRoom".equalsIgnoreCase(className)) {
-      return new TypeToken<EventConferenceRoom>(){}.getType();
+    if ("DeltaResponseEventConferenceRoomRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DeltaResponseEventConferenceRoomRecord>(){}.getType();
     }
     
-    if ("EventConferenceTrack".equalsIgnoreCase(className)) {
-      return new TypeToken<EventConferenceTrack>(){}.getType();
+    if ("DeltaResponseEventConferenceTrackRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DeltaResponseEventConferenceTrackRecord>(){}.getType();
     }
     
-    if ("EventEntry".equalsIgnoreCase(className)) {
-      return new TypeToken<EventEntry>(){}.getType();
+    if ("DeltaResponseEventRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DeltaResponseEventRecord>(){}.getType();
     }
     
-    if ("Image".equalsIgnoreCase(className)) {
-      return new TypeToken<Image>(){}.getType();
+    if ("DeltaResponseImageRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DeltaResponseImageRecord>(){}.getType();
     }
     
-    if ("Info".equalsIgnoreCase(className)) {
-      return new TypeToken<Info>(){}.getType();
+    if ("DeltaResponseKnowledgeEntryRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DeltaResponseKnowledgeEntryRecord>(){}.getType();
     }
     
-    if ("InfoGroup".equalsIgnoreCase(className)) {
-      return new TypeToken<InfoGroup>(){}.getType();
+    if ("DeltaResponseKnowledgeGroupRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DeltaResponseKnowledgeGroupRecord>(){}.getType();
     }
     
-    if ("MapEntity".equalsIgnoreCase(className)) {
-      return new TypeToken<MapEntity>(){}.getType();
+    if ("DeltaResponseMapRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<DeltaResponseMapRecord>(){}.getType();
     }
     
-    if ("MapEntry".equalsIgnoreCase(className)) {
-      return new TypeToken<MapEntry>(){}.getType();
+    if ("EventConferenceDayRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<EventConferenceDayRecord>(){}.getType();
     }
     
-    if ("NamedUrl".equalsIgnoreCase(className)) {
-      return new TypeToken<NamedUrl>(){}.getType();
+    if ("EventConferenceRoomRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<EventConferenceRoomRecord>(){}.getType();
+    }
+    
+    if ("EventConferenceTrackRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<EventConferenceTrackRecord>(){}.getType();
+    }
+    
+    if ("EventFeedbackRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<EventFeedbackRecord>(){}.getType();
+    }
+    
+    if ("EventRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<EventRecord>(){}.getType();
+    }
+    
+    if ("ImageRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<ImageRecord>(){}.getType();
+    }
+    
+    if ("KnowledgeEntryRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<KnowledgeEntryRecord>(){}.getType();
+    }
+    
+    if ("KnowledgeGroupRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<KnowledgeGroupRecord>(){}.getType();
+    }
+    
+    if ("LinkFragment".equalsIgnoreCase(className)) {
+      return new TypeToken<LinkFragment>(){}.getType();
+    }
+    
+    if ("MapEntryRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<MapEntryRecord>(){}.getType();
+    }
+    
+    if ("MapRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<MapRecord>(){}.getType();
+    }
+    
+    if ("PostWnsChannelRegistrationRequest".equalsIgnoreCase(className)) {
+      return new TypeToken<PostWnsChannelRegistrationRequest>(){}.getType();
+    }
+    
+    if ("PrivateMessageRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<PrivateMessageRecord>(){}.getType();
+    }
+    
+    if ("RegSysAuthenticationRequest".equalsIgnoreCase(className)) {
+      return new TypeToken<RegSysAuthenticationRequest>(){}.getType();
+    }
+    
+    if ("SendPrivateMessageRequest".equalsIgnoreCase(className)) {
+      return new TypeToken<SendPrivateMessageRequest>(){}.getType();
+    }
+    
+    if ("ToastTest".equalsIgnoreCase(className)) {
+      return new TypeToken<ToastTest>(){}.getType();
     }
     
     return new TypeToken<Object>(){}.getType();
   }
 
-}
+};

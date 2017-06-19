@@ -190,6 +190,7 @@ public class ApiInvoker {
 
      // Setup authentications (key: authentication name, value: authentication).
      INSTANCE.authentications = new HashMap<String, Authentication>();
+     INSTANCE.authentications.put("Bearer", new ApiKeyAuth("header", "Authorization"));
      // Prevent the authentications from being modified.
      INSTANCE.authentications = Collections.unmodifiableMap(INSTANCE.authentications);
   }

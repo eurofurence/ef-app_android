@@ -9,18 +9,10 @@ public class Pair {
         setValue(value);
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     private void setName(String name) {
         if (!isValidString(name)) return;
 
         this.name = name;
-    }
-
-    public String getValue() {
-        return this.value;
     }
 
     private void setValue(String value) {
@@ -29,9 +21,18 @@ public class Pair {
         this.value = value;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
     private boolean isValidString(String arg) {
         if (arg == null) return false;
-        return !arg.trim().isEmpty();
+        if (arg.trim().isEmpty()) return false;
 
+        return true;
     }
 }
