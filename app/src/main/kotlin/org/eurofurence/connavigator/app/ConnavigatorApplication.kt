@@ -4,7 +4,7 @@ import android.support.multidex.MultiDexApplication
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.database.UpdateIntentService
-import org.eurofurence.connavigator.gcm.MyGCMListenerService
+import org.eurofurence.connavigator.gcm.PushListenerService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.webapi.apiService
@@ -26,7 +26,7 @@ class ConnavigatorApplication : MultiDexApplication() {
         logService.initialize(this)
         Analytics.init(this)
         startKovenant()
-        MyGCMListenerService().subscribe()
+        PushListenerService().subscribe()
         UpdateIntentService.dispatchUpdate(this)
     }
 }

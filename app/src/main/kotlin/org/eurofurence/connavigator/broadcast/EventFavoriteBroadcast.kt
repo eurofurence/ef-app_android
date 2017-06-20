@@ -10,7 +10,7 @@ import com.pawegio.kandroid.i
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.gcm.NotificationPublisher
-import org.eurofurence.connavigator.util.NotificationFactory
+import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.jetbrains.anko.alarmManager

@@ -13,8 +13,7 @@ import io.swagger.client.model.Image
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.store.SyncIDB
-import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.NotificationFactory
+import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
