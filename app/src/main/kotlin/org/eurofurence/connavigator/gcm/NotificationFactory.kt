@@ -18,6 +18,7 @@ import org.jetbrains.anko.intentFor
  * Creates a basic notificaiton
  */
 class NotificationFactory(var context: Context) {
+    @Deprecated("This function should no longer be used")
     fun buildNotification(title: String, message: String, pendingActivity: Class<*> = ActivityRoot::class.java): Notification {
         Preconditions.checkArgument(Activity::class.java.isAssignableFrom(pendingActivity), "Pending activity is not actually an activity")
 
@@ -45,6 +46,7 @@ class NotificationFactory(var context: Context) {
     }
 
 
+    @Deprecated("Deprecated in favor of composable builders and it's broadcaster")
     fun showNotification(title: String, content: String) {
         val notification = buildNotification(title, content)
 
