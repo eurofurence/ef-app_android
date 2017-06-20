@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.app
 
 import android.support.multidex.MultiDexApplication
+import com.chibatching.kotpref.Kotpref
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.database.UpdateIntentService
@@ -26,6 +27,7 @@ class ConnavigatorApplication : MultiDexApplication() {
         logService.initialize(this)
         Analytics.init(this)
         startKovenant()
+        Kotpref.init(this)
         MyGCMListenerService().subscribe()
         UpdateIntentService.dispatchUpdate(this)
     }
