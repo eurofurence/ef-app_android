@@ -5,7 +5,7 @@ import android.support.design.widget.TabLayout
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventRecord
 import io.swagger.client.model.KnowledgeEntryRecord
-import org.eurofurence.connavigator.util.RemoteConfig
+import org.eurofurence.connavigator.pref.RemoteConfig
 
 /**
  * Created by Pazuzu on 12.04.2016.

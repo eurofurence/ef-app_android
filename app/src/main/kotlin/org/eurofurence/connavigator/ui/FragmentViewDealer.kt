@@ -22,7 +22,7 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Formatter
-import org.eurofurence.connavigator.util.RemoteConfig
+import org.eurofurence.connavigator.pref.RemoteConfig
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get

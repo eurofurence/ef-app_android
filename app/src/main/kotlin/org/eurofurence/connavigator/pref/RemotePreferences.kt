@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.util
+package org.eurofurence.connavigator.pref
 
 import android.content.Context
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
