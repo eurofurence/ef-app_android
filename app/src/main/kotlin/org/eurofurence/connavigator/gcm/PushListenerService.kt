@@ -19,7 +19,11 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
     fun subscribe() {
         val messaging = FirebaseMessaging.getInstance()
         if (BuildConfig.DEBUG) {
+            messaging.unsubscribeFromTopic("live")
             messaging.subscribeToTopic("test")
+        } else {
+            messaging.unsubscribeFromTopic("test")
+            messaging.subscribeToTopic("live")
         }
         messaging.subscribeToTopic("announcements")
     }
