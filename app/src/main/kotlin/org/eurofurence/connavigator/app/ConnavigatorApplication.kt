@@ -29,6 +29,7 @@ class ConnavigatorApplication : MultiDexApplication() {
         Analytics.init(this)
         startKovenant()
         PushListenerService().subscribe()
+        Kotpref.init(this)
         UpdateIntentService.dispatchUpdate(this)
     }
 }
