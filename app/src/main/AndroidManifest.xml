@@ -71,7 +71,7 @@
         <receiver android:name=".broadcast.EventFavoriteBroadcast" />
 
         <service
-                android:name=".gcm.MyGCMListenerService"
+                android:name=".gcm.PushListenerService"
                 android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

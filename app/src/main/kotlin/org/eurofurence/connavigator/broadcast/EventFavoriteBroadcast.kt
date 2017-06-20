@@ -11,7 +11,7 @@ import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.database.RootDb
 import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.gcm.NotificationPublisher
-import org.eurofurence.connavigator.util.NotificationFactory
+import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.alarmManager

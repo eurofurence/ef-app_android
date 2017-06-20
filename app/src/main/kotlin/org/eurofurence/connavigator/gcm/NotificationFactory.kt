@@ -1,7 +1,6 @@
-package org.eurofurence.connavigator.util
+package org.eurofurence.connavigator.gcm
 
 import android.app.Activity
-import android.app.AlarmManager
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
@@ -9,28 +8,16 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
-import android.preference.PreferenceManager
 import android.support.v4.app.NotificationCompat
 import com.google.common.base.Preconditions
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.gcm.NotificationPublisher
 import org.eurofurence.connavigator.ui.ActivityRoot
-import org.joda.time.DateTime
+import org.jetbrains.anko.intentFor
 
 /**
- * Handles the creation of notications as a general entrypoint for more concurrent notifications
+ * Creates a basic notificaiton
  */
-class NotificationFactory {
-    companion object {
-        val group = "EUROFURENCE_EVENT"
-    }
-
-    lateinit var context: Context
-
-    constructor(context: Context) {
-        this.context = context
-    }
-
+class NotificationFactory(var context: Context) {
     fun buildNotification(title: String, message: String, pendingActivity: Class<*> = ActivityRoot::class.java): Notification {
         Preconditions.checkArgument(Activity::class.java.isAssignableFrom(pendingActivity), "Pending activity is not actually an activity")
 
@@ -57,8 +44,9 @@ class NotificationFactory {
         return builder.build()
     }
 
-    fun showNotification(title: String, content: String){
-        val  notification = buildNotification(title, content)
+
+    fun showNotification(title: String, content: String) {
+        val notification = buildNotification(title, content)
 
         val intent = Intent(context, NotificationPublisher::class.java)
 
@@ -66,5 +54,47 @@ class NotificationFactory {
         intent.putExtra(NotificationPublisher.NOTIFICATION, notification)
 
         context.sendBroadcast(intent)
+    }
+
+    fun broadcastNotification(builder: NotificationCompat.Builder) {
+        val notification = builder.build()
+
+        val intent = context.intentFor<NotificationPublisher>(
+                NotificationPublisher.NOTIFICATION_ID to notification.hashCode(),
+                NotificationPublisher.NOTIFICATION to notification
+        )
+
+        context.sendBroadcast(intent)
+    }
+
+    /**
+     * Creates a basic notification that features the EF logo, colours and vibration
+     */
+    fun createBasicNotification(): NotificationCompat.Builder = NotificationCompat.Builder(context)
+            .setSmallIcon(R.drawable.ic_launcher_negative)
+            .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
+            .setLights(Color.argb(255, 0, 100, 89), 1000, 1000)
+            .setVibrate(longArrayOf(250, 100, 250, 100))
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+
+    /**
+     * Sets an activity to launch on notication taps
+     */
+    fun setActivity(builder: NotificationCompat.Builder, targetClass: Any): NotificationCompat.Builder {
+        // On a click event we want to start an activity
+        val intentToExecute = Intent(context, targetClass::class.java)
+
+        // Attach the intent to a pending intent that our app can consume
+        val pendingIntent = PendingIntent.getActivity(context, 0, intentToExecute, 0)
+
+        return builder.setContentIntent(pendingIntent)
+    }
+
+    /**
+     * Makes a notification high priority and persistent
+     */
+    fun makeHighPriority(builder: NotificationCompat.Builder) = builder.apply {
+        priority = Notification.PRIORITY_HIGH
+        setOngoing(true)
     }
 }
