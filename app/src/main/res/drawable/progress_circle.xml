@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="?android:progressBackgroundTint"/>
+    <item>
+        <shape
+                android:innerRadiusRatio="3.4"
+                android:shape="ring"
+                android:thicknessRatio="6.0" >
+            <gradient
+                    android:endColor="#ffffffff"
+                    android:startColor="#ffffff"
+                    android:type="sweep"
+                    android:useLevel="true" />
+        </shape>
+    </item>
+    <item>
+        <rotate
+                android:drawable="?android:progressDrawable"
+                android:fromDegrees="0"
+                android:pivotX="50%"
+                android:pivotY="50%"
+                android:toDegrees="360" />
+    </item>
+</selector>
