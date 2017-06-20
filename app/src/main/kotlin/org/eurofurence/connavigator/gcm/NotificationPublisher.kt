@@ -1,16 +1,18 @@
 package org.eurofurence.connavigator.gcm
 
 import android.app.Notification
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.util.extensions.objects
-import java.util.*
+import com.pawegio.kandroid.d
+import org.jetbrains.anko.notificationManager
 
 /**
- * Created by David on 5/15/2016.
+ * Notification Publisher
+ *
+ * Manages the receiving of a broadcast for a notifiction and exporting said notification
+ *
+ *
  */
 class NotificationPublisher : BroadcastReceiver() {
     companion object {
