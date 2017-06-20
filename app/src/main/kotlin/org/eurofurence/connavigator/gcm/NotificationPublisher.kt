@@ -21,12 +21,11 @@ class NotificationPublisher : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
+        d { "Received intent to send a notification" }
         val notification = intent.getParcelableExtra<Notification>(NOTIFICATION)
         val id = intent.getIntExtra(NOTIFICATION_ID, 0)
 
-        logd{ "NOT: notification ID is $id"}
-        notificationManager.notify(id, notification)
+        d { "Sending notification to system" }
+        context.notificationManager.notify(id, notification)
     }
 }
