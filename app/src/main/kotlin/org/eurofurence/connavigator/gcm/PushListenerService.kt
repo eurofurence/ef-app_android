@@ -7,6 +7,8 @@ import com.pawegio.kandroid.d
 import com.pawegio.kandroid.i
 import com.pawegio.kandroid.w
 import org.eurofurence.connavigator.BuildConfig
+import org.eurofurence.connavigator.database.UpdateIntentService
+import org.jetbrains.anko.intentFor
 
 /**
  * Created by David on 14-4-2016.
@@ -38,6 +40,8 @@ class PushListenerService : FirebaseMessagingService() {
 
     private fun syncData(message: RemoteMessage) {
         i { "Received request to sync data" }
+
+        applicationContext.sendBroadcast(intentFor<UpdateIntentService>())
     }
 
     private fun createAnnouncement(message: RemoteMessage) {
