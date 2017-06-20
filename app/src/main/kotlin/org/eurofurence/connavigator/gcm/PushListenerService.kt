@@ -8,12 +8,12 @@ import com.pawegio.kandroid.i
 import com.pawegio.kandroid.w
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.database.UpdateIntentService
-import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.*
 
 /**
  * Created by David on 14-4-2016.
  */
-class PushListenerService : FirebaseMessagingService() {
+class PushListenerService : FirebaseMessagingService(), AnkoLogger {
     val factory by lazy { NotificationFactory(applicationContext) }
 
     fun subscribe() {
@@ -25,27 +25,27 @@ class PushListenerService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        i { "Received push message" }
-        d { "Message payload :" + message.data }
+        info { "Received push message" }
+        debug { "Message payload :" + message.data }
 
         when (message.data["Event"]) {
             "Announcement" -> createAnnouncement(message)
             "ImportantAnnouncement" -> createHighPriorityAnnouncement(message)
             "Sync" -> syncData(message)
-            else -> w("Message did not contain a valid event. Abandoning!")
+            else -> warn("Message did not contain a valid event. Abandoning!")
         }
 
 
     }
 
     private fun syncData(message: RemoteMessage) {
-        i { "Received request to sync data" }
+        info { "Received request to sync data" }
 
         applicationContext.sendBroadcast(intentFor<UpdateIntentService>())
     }
 
     private fun createAnnouncement(message: RemoteMessage) {
-        i { "Received request to create announcement notification" }
+        info { "Received request to create announcement notification" }
 
         val notification = factory.createBasicNotification()
                 .setContentTitle(message.data["Title"])
@@ -55,7 +55,7 @@ class PushListenerService : FirebaseMessagingService() {
     }
 
     private fun createHighPriorityAnnouncement(message: RemoteMessage) {
-        i { "Received request to make high priority announcement" }
+        info { "Received request to make high priority announcement" }
 
         val notification = factory.createBasicNotification()
                 .setContentTitle(message.data["Title"])
