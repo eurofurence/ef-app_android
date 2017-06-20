@@ -30,7 +30,7 @@ class PushListenerService : FirebaseMessagingService() {
 
         when (message.data["Event"]) {
             "Announcement" -> createAnnouncement(message)
-            "Lassie" -> createHighPriorityAnnouncement(message)
+            "ImportantAnnouncement" -> createHighPriorityAnnouncement(message)
             "Sync" -> syncData(message)
             else -> w("Message did not contain a valid event. Abandoning!")
         }
