@@ -7,6 +7,7 @@ import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.gcm.PushListenerService
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.logv
@@ -23,15 +24,25 @@ class ConnavigatorApplication : MultiDexApplication() {
         // impractical database of JODAgst
         JodaTimeAndroid.init(this)
 
-        // Initialize some services
+        // Preferences
         Kotpref.init(this)
+
+        // Initialize some services
         imageService.initialize(this)
         logService.initialize(this)
+
+        RemotePreferences.init()
+
         apiService.initialize(this)
         Analytics.init(this)
+
+        // Promises
         startKovenant()
-        Kotpref.init(this)
+
+        // Listen to cloud updates
         PushListenerService().subscribe()
+
+        // Update every 5 minutes
         UpdateIntentService.dispatchUpdate(this)
     }
 }

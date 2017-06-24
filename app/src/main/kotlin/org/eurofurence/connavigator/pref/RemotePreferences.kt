@@ -5,51 +5,46 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.logd
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import org.jetbrains.anko.warn
 import org.joda.time.DateTime
 
 /**
  * Created by David on 30-7-2016.
  */
-class RemoteConfig {
-    companion object {
-        val remoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 
+object RemotePreferences : AnkoLogger {
+    private val remoteConfig by lazy { FirebaseRemoteConfig.getInstance() }
 
-        val cacheExpiration: Long = when (BuildConfig.DEBUG) {
-            true -> 5L
-            else -> 3600L
-        }
+    private val cacheExpiration = if (BuildConfig.DEBUG) 0L else 3600L
 
-        fun clear() {
-            remoteConfig.setDefaults(R.xml.remote)
-        }
-
-        fun refresh(seconds: Int = 3600) {
-            remoteConfig.fetch(seconds.toLong()).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    remoteConfig.activateFetched()
-                } else {
-                    logd { "Failed to refresh cache" }
-                }
-            }
+    fun update() {
+        info { "Updating remote configs" }
+        remoteConfig.fetch(cacheExpiration).addOnFailureListener {
+            warn { "Failed to update remote configs" }
+            error { it.localizedMessage }
+            Analytics.exception(it)
+        }.addOnSuccessListener {
+            info { "Successfully updated remote configs" }
+            remoteConfig.activateFetched()
+        }.addOnCompleteListener {
+            info { "Update complete. Last activated config is now ${remoteConfig.info.fetchTimeMillis}" }
         }
     }
 
-    fun intitialize(context: Context) {
-        remoteConfig.setConfigSettings(FirebaseRemoteConfigSettings.Builder()
+    fun init() {
+        info { "Initializing remote configs" }
+        val config = FirebaseRemoteConfigSettings.Builder()
                 .setDeveloperModeEnabled(BuildConfig.DEBUG)
-                .build())
+                .build()
 
+        info { "Develop mode enabled:  ${BuildConfig.DEBUG}" }
+
+        remoteConfig.setConfigSettings(config)
         remoteConfig.setDefaults(R.xml.remote)
-
-        logConfigStatus()
-    }
-
-    private fun logConfigStatus() {
-        val status = remoteConfig.getString("config_working_test")
-        logd { "Config status: $status" }
-        logd { "Config last fetch: ${DateTime(remoteConfig.info.fetchTimeMillis).toString()}}" }
     }
 
     // Booleans
