@@ -68,11 +68,13 @@ class ActivityStart : AppCompatActivity(), AnkoLogger {
     /**
      * Checks the database for the last saved version. If it is not a bugfix release, we clear the database
      *
-     * @return True if builds do not match
+     * @return True if the builds match
      */
     private fun checkIfDifferentVersion() = database.versionDb.items.first().split(".")[1] != BuildConfig.VERSION_NAME.split(".")[1]
 
     private fun proceed() {
+        info { "Writing current version to database" }
+        database.versionDb.items = listOf(BuildConfig.VERSION_NAME)
         info { "Starting Root activity from Start activity" }
         startActivity<ActivityRoot>()
     }
