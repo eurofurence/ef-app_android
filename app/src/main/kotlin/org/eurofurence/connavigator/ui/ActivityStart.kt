@@ -70,7 +70,7 @@ class ActivityStart : AppCompatActivity(), HasDb {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
 
-        Analytics.screen("Start")
+        Analytics.screen(this, "Start")
 
         // Version Check
         val version = version

@@ -59,7 +59,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         // Send analytics pings
-        Analytics.screen("View Dealer Details")
+        Analytics.screen(activity, "View Dealer Details")
 
         if ("dealer" in arguments) {
             val dealer: DealerRecord = arguments.jsonObjects["dealer"]

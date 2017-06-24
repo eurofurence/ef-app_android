@@ -32,7 +32,7 @@ class FragmentViewAbout : Fragment(), ContentAPI {
             inflater.inflate(R.layout.fview_about, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.screen("View About")
+        Analytics.screen(activity, "View About")
 
         applyOnRoot { changeTitle("About") }
         textVersion.text = "Version: %s - Build: %s".format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toString())
