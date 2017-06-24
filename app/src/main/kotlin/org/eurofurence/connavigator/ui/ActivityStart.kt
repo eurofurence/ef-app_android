@@ -5,11 +5,13 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
+import com.chibatching.kotpref.bulk
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
@@ -106,6 +108,17 @@ class StartUi : AnkoComponent<ActivityStart> {
             }
 
             downloadProgress = progressBar()
+
+            checkBox {
+                text = "Let us anonymously track some analytical and performance data. This can be changed in your settings"
+                isChecked = true
+                setOnCheckedChangeListener { _, value ->
+                    AnalyticsPreferences.bulk {
+                        enabled = value
+                        performanceTracking = value
+                    }
+                }
+            }
         }
     }
 

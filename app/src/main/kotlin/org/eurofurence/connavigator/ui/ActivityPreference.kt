@@ -28,16 +28,16 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                     title = "Settings"
                     backgroundResource = R.color.primary
                 }
-                verticalLayout{
+                verticalLayout {
                     textView("UI settings")
 
                     checkBox {
-                        text =  "Show old announcements"
+                        text = "Show old announcements"
                         isChecked = AppPreferences.showOldAnnouncements
                         setOnClickListener { AppPreferences.showOldAnnouncements = !AppPreferences.showOldAnnouncements }
                     }
 
-                    checkBox  {
+                    checkBox {
                         text = "Use shortened dates (Wed, Fri) instead of complete dates (Aug 18)"
                         isChecked = AppPreferences.shortenDates
                         setOnClickListener { AppPreferences.shortenDates = !AppPreferences.shortenDates }
@@ -51,14 +51,14 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                     checkBox {
                         text = "Track usage with analytics"
                         isChecked = AnalyticsPreferences.enabled
-                        setOnClickListener { AnalyticsPreferences.enabled = !AnalyticsPreferences.enabled }
+                        setOnCheckedChangeListener { _, value -> AnalyticsPreferences.enabled = value }
                         padding = dip(25)
                     }
 
                     checkBox {
                         text = "Track performance statistics"
-                        isChecked = false
-                        isEnabled = false
+                        isChecked = AnalyticsPreferences.performanceTracking
+                        setOnCheckedChangeListener { _, value -> AnalyticsPreferences.performanceTracking = value }
                         padding = dip(25)
                     }
                 }
