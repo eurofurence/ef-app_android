@@ -14,15 +14,13 @@ import com.github.lzyzsd.circleprogress.ArcProgress
 import com.pawegio.kandroid.displayWidth
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.arcProgress
-import org.eurofurence.connavigator.util.extensions.letRoot
-import org.eurofurence.connavigator.util.extensions.recycler
+import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.Days
@@ -37,7 +35,10 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     val now by lazy { DateTime.now() }
 
     val announcements by lazy {
-        database.announcementDb.items
+        database.announcementDb.items.filterIf(
+                !AppPreferences.showOldAnnouncements,
+                { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis }
+        )
     }
 
 
@@ -67,6 +68,12 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
 
     private fun configureEventRecyclers() {
         info { "Configuring event recyclers" }
+
+        fragmentManager.beginTransaction()
+                .replace(5000, upcoming)
+                .replace(5001, current)
+                .replace(5002, favourited)
+                .commitAllowingStateLoss()
     }
 
     private fun configureAnnouncements() {
