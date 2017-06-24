@@ -30,7 +30,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger {
             info { "Caching ${database.imageDb.items.count()} images" }
             database.imageDb.items.map { imageService.preload(it) }
 
-            info { "Image caching done"}
+            info { "Image caching done" }
 
             allowProceed()
         } else {
@@ -55,7 +55,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger {
             info { "Database has already been filled" }
             proceed()
         } else {
-            info {"No data in database yet, dispatching update"}
+            info { "No data in database yet, dispatching update" }
             database.clear()
             dispatchUpdate()
             ui.nextButton.setOnClickListener { proceed() }
@@ -77,7 +77,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger {
         startActivity<ActivityRoot>()
     }
 
-    private fun allowProceed(){
+    private fun allowProceed() {
         ui.nextButton.isEnabled = true
         ui.nextButton.text = "Cached data and images offline, we're good to go!"
         ui.downloadProgress.visibility = View.GONE

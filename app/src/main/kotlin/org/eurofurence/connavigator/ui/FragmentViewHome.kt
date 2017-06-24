@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
@@ -132,13 +133,16 @@ class HomeUi : AnkoComponent<ViewGroup> {
                     bottomText = "Until next EF"
                     bottomTextSize = dip(20F).toFloat()
                     suffixTextSize = dip(20F).toFloat()
-                    finishedStrokeColor = R.color.primary
-                    unfinishedStrokeColor = R.color.textWhite
-                    textColor = R.color.textBlack
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        finishedStrokeColor = ctx.getColor(R.color.accentLight)
+                        unfinishedStrokeColor = ctx.getColor(R.color.primary)
+                        textColor = ctx.getColor(R.color.textBlack)
+                    }
                     padding = dip(50)
                 }
 
-                announcementsTitle = textView("Latest announcements").lparams(matchParent, wrapContent){
+                announcementsTitle = textView("Latest announcements").lparams(matchParent, wrapContent) {
                     padding = dip(15)
                 }.applyRecursively { android.R.style.TextAppearance_Large }
 
