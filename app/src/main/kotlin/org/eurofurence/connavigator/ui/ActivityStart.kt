@@ -1,106 +1,110 @@
 package org.eurofurence.connavigator.ui
 
-import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
-import android.widget.TextView
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.booleans
-import org.eurofurence.connavigator.util.extensions.get
 import org.eurofurence.connavigator.util.extensions.localReceiver
-import org.eurofurence.connavigator.util.extensions.logd
+import org.jetbrains.anko.*
 
 /**
  * Created by David on 28-4-2016.
  */
-class ActivityStart : AppCompatActivity() {
-    val buttonStart: Button by view()
-    val textHelp: TextView by view()
-    val progressBar: ProgressBar by view()
+class ActivityStart : AppCompatActivity(), AnkoLogger {
+    private lateinit var ui: StartUi
+    private val database by lazy { Database(this) }
 
-    val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
+    private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
         if (it.booleans["success"]) {
-            val database = Database(this)
+            info { "Data update success" }
+            ui.nextButton.text = "Got your data, now caching the images!"
 
-            for (map in database.mapEntityDb.items) {
-                logd { "Preloading map ${map.description}" }
-                val image = database.imageDb[map.imageId]!!
-                imageService.preload(image)
-            }
+            info { "Caching ${database.imageDb.items.count()} images" }
+            database.imageDb.items.map { imageService.preload(it) }
 
-            for (image in database.imageDb.items) {
-                logd { "Preloading image ${image.title}" }
-                imageService.preload(image)
-            }
+            info { "Image caching done"}
 
-            progressBar.visibility = View.GONE
-
-            textHelp.text = "There, all done!"
-            buttonStart.text = "Get Started!"
-            buttonStart.visibility = View.VISIBLE
-
-            buttonStart.setOnClickListener { startRootActivity() }
+            allowProceed()
         } else {
-            textHelp.text = "Failed to successfully get data. Are you connected to the internet?"
-            progressBar.visibility = View.GONE
-            buttonStart.visibility = View.VISIBLE
-            buttonStart.text = "Retry"
-            buttonStart.setOnClickListener {
-                UpdateIntentService.dispatchUpdate(this)
-                progressBar.visibility = View.VISIBLE
-            }
+            ui.nextButton.text = "It seems like something went wrong during caching. We'll clear the database and let you try again"
+            database.clear()
         }
 
     }
-    val database by lazy { Database(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_start)
 
+        info { "Starting start activity" }
         Analytics.screen(this, "Start")
 
-        // Version Check
+        ui = StartUi()
+        ui.setContentView(this)
 
-        if (database.versionDb.items.count() > 0 && database.versionDb.items.first().split(".")[1] != BuildConfig.VERSION_NAME.split(".")[1]) {
-            // We're on an old version (v1.8 instead of v1.9 So we empty the database and exit
-            AlertDialog.Builder(this)
-                    .setTitle("Outdated version found")
-                    .setMessage("Your version is outdated. Because you might be missing critical data in your synced versions. Sadly you will need a complete resync.")
-                    .setPositiveButton("Clear Data and restart", { dialogInterface, i -> database.clear(); System.exit(1) })
-                    .setNeutralButton("No, just exit", { dialogInterface, i -> System.exit(1) })
-                    .show()
+        info { "Checking if database is filled" }
+
+        if (database.versionDb.items.count() > 0 && !checkIfDifferentVersion()) {
+            info { "Database has already been filled" }
+            proceed()
         } else {
-            // Data is present, if a database has a backing file
-            if (database.eventConferenceDayDb.time != null)
-                startRootActivity()
+            info {"No data in database yet, dispatching update"}
+            database.clear()
+            dispatchUpdate()
+            ui.nextButton.setOnClickListener { proceed() }
+            updateReceiver.register()
+        }
+
+        Analytics.screen("Start")
+    }
+
+    /**
+     * Checks the database for the last saved version. If it is not a bugfix release, we clear the database
+     *
+     * @return True if builds do not match
+     */
+    private fun checkIfDifferentVersion() = database.versionDb.items.first().split(".")[1] != BuildConfig.VERSION_NAME.split(".")[1]
+
+    private fun proceed() {
+        info { "Starting Root activity from Start activity" }
+        startActivity<ActivityRoot>()
+    }
+
+    private fun allowProceed(){
+        ui.nextButton.isEnabled = true
+        ui.nextButton.text = "Cached data and images offline, we're good to go!"
+        ui.downloadProgress.visibility = View.GONE
+    }
+
+    private fun dispatchUpdate() {
+        info { "Asking for database update from API" }
+        sendBroadcast(intentFor<UpdateIntentService>())
+    }
+}
+
+class StartUi : AnkoComponent<ActivityStart> {
+    lateinit var nextButton: Button
+    lateinit var downloadProgress: ProgressBar
+
+    override fun createView(ui: AnkoContext<ActivityStart>) = with(ui) {
+        verticalLayout {
+            backgroundResource = R.color.primary
+
+            imageView { imageResource = R.drawable.logo }
+
+            nextButton = button("We're just loading some data for you. Hang tight!") {
+                isEnabled = false
+            }
+
+            downloadProgress = progressBar()
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateReceiver.register()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        updateReceiver.unregister()
-    }
-
-    private fun startRootActivity() {
-        database.versionDb.items = listOf(BuildConfig.VERSION_NAME)
-
-        startActivity(Intent(this, ActivityRoot::class.java))
-        finish()
-    }
 }
