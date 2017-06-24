@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.tracking
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
@@ -7,8 +8,10 @@ import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.pawegio.kandroid.e
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.util.extensions.limit
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.logv
@@ -46,18 +49,16 @@ class Analytics {
     companion object {
         lateinit var analytics: FirebaseAnalytics
         fun init(context: Context){
-            analytics = FirebaseAnalytics.getInstance(context)
+            analytics = FirebaseAnalytics.getInstance(context).apply{
+                setAnalyticsCollectionEnabled(AnalyticsPreferences.enabled)
+            }
         }
-
 
         /**
          * Change screen and report
          */
-        fun screen(screenName: String) = analytics.logEvent(
-                FirebaseAnalytics.Event.VIEW_ITEM,
-                bundleOf(FirebaseAnalytics.Param.ITEM_NAME to screenName,
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "screen")
-        )
+        fun screen(activity: Activity, fragmentName: String) = analytics.setCurrentScreen(activity, fragmentName, null)
+
 
         fun event(category: String, action: String, label: String) = analytics.logEvent(
                 FirebaseAnalytics.Event.SELECT_CONTENT,
