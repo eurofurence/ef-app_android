@@ -23,6 +23,7 @@ import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.dip
 import org.joda.time.DateTime
 import org.joda.time.Days
 
@@ -88,7 +89,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         ui.announcementsRecycler.itemAnimator = DefaultItemAnimator()
 
         if (announcements.count() == 0) {
-            ui.announcementsRecycler.visibility = View.GONE
+            ui.announcementsTitle.text = "There's no announcements right now :)"
             ui.announcementsRecycler.visibility = View.GONE
         }
     }
@@ -106,10 +107,6 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
 
         ui.countdownArc.max = totalDaysBetween.days
         ui.countdownArc.progress = totalDaysToNextCon.days
-        ui.countdownArc.layoutParams = LinearLayout.LayoutParams(
-                context.displayWidth,
-                context.displayWidth
-        )
 
         if (totalDaysToNextCon.days <= 0) {
             info { "Hiding countdown to next con" }
@@ -133,9 +130,9 @@ class HomeUi : AnkoComponent<ViewGroup> {
         scrollView {
             lparams(matchParent, matchParent)
             verticalLayout {
-
                 lparams(matchParent, matchParent)
                 countdownArc = arcProgress {
+                    lparams(matchParent, dip(400))
                     strokeWidth = 25F
                     suffixText = "Days"
                     bottomText = "Until next EF"
@@ -147,12 +144,11 @@ class HomeUi : AnkoComponent<ViewGroup> {
                         unfinishedStrokeColor = ctx.getColor(R.color.primary)
                         textColor = ctx.getColor(R.color.textBlack)
                     }
-                    padding = dip(50)
                 }
 
                 announcementsTitle = textView("Latest announcements").lparams(matchParent, wrapContent) {
                     padding = dip(15)
-                }.applyRecursively { android.R.style.TextAppearance_Large }
+                }
 
                 announcementsRecycler = recycler {
                     lparams(matchParent, wrapContent)
