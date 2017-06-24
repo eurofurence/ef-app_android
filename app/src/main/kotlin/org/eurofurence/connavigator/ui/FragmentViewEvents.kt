@@ -63,7 +63,7 @@ class FragmentViewEvents : Fragment(), ContentAPI {
             inflater.inflate(R.layout.fview_events_viewpager, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.screen("Events Listing")
+        Analytics.screen(activity, "Events Listing")
 
         eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager)
         eventPager.offscreenPageLimit = 1

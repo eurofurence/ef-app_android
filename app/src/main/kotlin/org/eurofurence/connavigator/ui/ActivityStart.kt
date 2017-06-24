@@ -68,7 +68,7 @@ class ActivityStart : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
 
-        Analytics.screen("Start")
+        Analytics.screen(this, "Start")
 
         // Version Check
 

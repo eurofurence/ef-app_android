@@ -48,7 +48,7 @@ class FragmentViewInfo() : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.screen("Info Specific")
+        Analytics.screen(activity, "Info Specific")
 
 
         applyOnRoot { changeTitle("Information") }

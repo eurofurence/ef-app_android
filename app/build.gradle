@@ -87,7 +87,7 @@ ext {
     volley_version = "1.0.1"
     junit_version = "4.8.1"
     android_support_version = "25.3.1"
-    google_play_version = "10.2.1"
+    google_play_version = "11.0.1"
 }
 
 // Embedded swagger
@@ -122,8 +122,8 @@ dependencies {
     // Firebase
     compile "com.google.firebase:firebase-messaging:$google_play_version"
     compile "com.google.firebase:firebase-config:$google_play_version"
-    // Analytics
-    compile "com.google.android.gms:play-services-analytics:$google_play_version"
+    compile "com.google.firebase:firebase-crash:$google_play_version"
+
     // Photoview
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
     compile 'us.feras.mdv:markdownview:1.1.0'

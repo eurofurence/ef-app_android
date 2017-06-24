@@ -61,7 +61,7 @@ class FragmentViewEvent() : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.screen("Event Specific")
+        Analytics.screen(activity, "Event Specific")
 
 
         if ("eventEntry" in arguments) {

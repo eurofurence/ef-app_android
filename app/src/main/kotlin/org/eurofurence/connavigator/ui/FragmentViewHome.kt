@@ -48,7 +48,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
             inflater.inflate(R.layout.fview_home, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.screen("Home")
+        Analytics.screen(activity, "Home")
 
         applyOnRoot { changeTitle("Home") }
 

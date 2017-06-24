@@ -18,18 +18,17 @@ class ConnavigatorApplication : MultiDexApplication() {
         super.onCreate()
 
         // This configures the timezone database for JODA time, that way timezone info can be used without having the
-        // impractical database of JODA
+        // impractical database of JODAgst
         JodaTimeAndroid.init(this)
 
         // Initialize some services
-          Kotpref.init(this)
+        Kotpref.init(this)
         imageService.initialize(this)
         apiService.initialize(this)
         logService.initialize(this)
         Analytics.init(this)
         startKovenant()
         PushListenerService().subscribe()
-        Kotpref.init(this)
         UpdateIntentService.dispatchUpdate(this)
     }
 }
