@@ -9,6 +9,7 @@ import com.pawegio.kandroid.i
 import com.pawegio.kandroid.w
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.jetbrains.anko.*
 
 /**
@@ -47,6 +48,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         info { "Received request to sync data" }
 
         applicationContext.sendBroadcast(intentFor<UpdateIntentService>())
+        RemotePreferences.update()
     }
 
     private fun createAnnouncement(message: RemoteMessage) {
