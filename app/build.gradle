@@ -143,8 +143,14 @@ dependencies {
     // Kandroid for easier components
     compile 'com.pawegio.kandroid:kandroid:0.7.0@aar'
 
+    // Preferences
+
+    compile "com.chibatching.kotpref:kotpref:2.1.1"
+    compile "com.chibatching.kotpref:enum-support:2.1.1"
+
     //  Circular progress that don't make me consider suicide
     compile 'com.github.lzyzsd:circleprogress:1.2.1'
+
 
     testCompile "junit:junit:$junit_version"
 }

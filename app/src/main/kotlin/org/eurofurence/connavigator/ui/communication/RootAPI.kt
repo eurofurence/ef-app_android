@@ -7,7 +7,7 @@ import io.swagger.client.model.Dealer
 import io.swagger.client.model.EventEntry
 import io.swagger.client.model.Info
 import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.util.RemoteConfig
+import org.eurofurence.connavigator.pref.RemoteConfig
 
 /**
  * Created by Pazuzu on 12.04.2016.
