@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crash.FirebaseCrash
+import com.google.firebase.perf.FirebasePerformance
+import com.pawegio.kandroid.i
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.jetbrains.anko.bundleOf
 
@@ -38,10 +40,13 @@ class Analytics {
 
     companion object {
         lateinit var analytics: FirebaseAnalytics
+        val performance by lazy { FirebasePerformance.getInstance() }
         fun init(context: Context) {
             analytics = FirebaseAnalytics.getInstance(context).apply {
                 setAnalyticsCollectionEnabled(AnalyticsPreferences.enabled)
             }
+
+            performance.isPerformanceCollectionEnabled = AnalyticsPreferences.performanceTracking
         }
 
         /**

@@ -8,5 +8,6 @@ import com.chibatching.kotpref.KotprefModel
  */
 object AnalyticsPreferences: KotprefModel() {
     var enabled by booleanPref(true)
+    var performanceTracking by booleanPref(true)
     var pollingInterval by intPref(100)
 }
