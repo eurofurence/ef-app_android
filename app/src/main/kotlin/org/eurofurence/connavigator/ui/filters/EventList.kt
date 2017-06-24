@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui.filters
 
+import com.google.firebase.perf.metrics.AddTrace
 import io.swagger.client.model.EventEntry
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.util.extensions.get
@@ -13,6 +14,7 @@ class EventList(val database: Database) {
     val filters = HashMap<FilterType, Any>()
     val UPCOMING_TIME_IN_MINUTES = 30
 
+    @AddTrace(name = "applyEventFilters", enabled = true)
     fun applyFilters(): List<EventEntry> {
         var events = database.eventEntryDb.items
 
