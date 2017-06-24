@@ -30,4 +30,12 @@
         <key>dealer_map_height</key>
         <value>400</value>
     </entry>
+    <entry>
+        <key>nextConStart</key>
+        <value>1502834400000</value>
+    </entry>
+    <entry>
+        <key>lastConEnd</key>
+        <value>1471471200000</value>
+    </entry>
 </defaultsMap>
