@@ -282,7 +282,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
         // Set up dates to EF
         // Manually set the first date, since the database is not updated with EF 22
-        val firstDay = DateTime(2017, 8, 16, 0, 0)
+        val firstDay = DateTime(RemotePreferences.nextConStart)
 
         // Calculate the days between, using the current time. Todo: timezones
         val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
