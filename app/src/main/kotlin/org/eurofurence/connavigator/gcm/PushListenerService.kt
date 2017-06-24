@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.gcm
 
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -26,6 +27,8 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
             messaging.subscribeToTopic("live")
         }
         messaging.subscribeToTopic("announcements")
+
+        info { "Push token: " + FirebaseInstanceId.getInstance().token }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -38,8 +41,6 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
             "Sync" -> syncData(message)
             else -> warn("Message did not contain a valid event. Abandoning!")
         }
-
-
     }
 
     private fun syncData(message: RemoteMessage) {
@@ -52,10 +53,10 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         info { "Received request to create announcement notification" }
 
         val notification = factory.createBasicNotification()
-                .setContentTitle(message.data["Title"])
-                .setContentText(message.data["Text"])
+                .setContentTitle("A new announcement from Eurofurence")
+                .setContentText(message.data["Title"])
 
-        factory.broadcastNotification(notification)
+        factory.broadcastNotification(factory.addBigText(notification, message.data["Text"]))
     }
 
     private fun createHighPriorityAnnouncement(message: RemoteMessage) {

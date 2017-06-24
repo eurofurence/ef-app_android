@@ -99,4 +99,9 @@ class NotificationFactory(var context: Context) {
         priority = Notification.PRIORITY_HIGH
         setOngoing(true)
     }
+
+    fun addBigText(builder: NotificationCompat.Builder, bigText: String?) = builder.setStyle(
+            NotificationCompat.BigTextStyle()
+                    .bigText(bigText)
+    )
 }
