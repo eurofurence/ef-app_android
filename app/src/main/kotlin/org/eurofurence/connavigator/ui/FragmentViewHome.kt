@@ -17,6 +17,7 @@ import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.filterEvents
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -96,8 +97,8 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
 
     private fun configureProgressBar() {
         info { "configuring progress bar" }
-        val lastConDay = DateTime(1471471200000)
-        val nextConDay = DateTime(1502834400000)
+        val lastConDay = DateTime(RemotePreferences.lastConEnd)
+        val nextConDay = DateTime(RemotePreferences.nextConStart)
 
         val totalDaysBetween = Days.daysBetween(lastConDay, nextConDay)
         val totalDaysToNextCon = Days.daysBetween(now, nextConDay)

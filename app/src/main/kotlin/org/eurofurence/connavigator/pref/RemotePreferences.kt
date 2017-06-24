@@ -1,16 +1,13 @@
 package org.eurofurence.connavigator.pref
 
-import android.content.Context
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.extensions.logd
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
-import org.joda.time.DateTime
 
 /**
  * Created by David on 30-7-2016.
@@ -32,6 +29,7 @@ object RemotePreferences : AnkoLogger {
             remoteConfig.activateFetched()
         }.addOnCompleteListener {
             info { "Update complete. Last activated config is now ${remoteConfig.info.fetchTimeMillis}" }
+            info {  }
         }
     }
 
@@ -45,6 +43,8 @@ object RemotePreferences : AnkoLogger {
 
         remoteConfig.setConfigSettings(config)
         remoteConfig.setDefaults(R.xml.remote)
+
+        update()
     }
 
     // Booleans
@@ -56,4 +56,6 @@ object RemotePreferences : AnkoLogger {
     // Longs
     val dealerMapWidth = remoteConfig.getLong("dealer_map_width")
     val dealerMapHeight = remoteConfig.getLong("dealer_map_height")
+    val nextConStart = remoteConfig.getLong("nextConStart")
+    val lastConEnd = remoteConfig.getLong("lastConEnd")
 }
