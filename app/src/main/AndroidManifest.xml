@@ -21,6 +21,7 @@
         <activity
                 android:name=".ui.ActivityStart"
                 android:label="Eurofurence"
+                android:noHistory="true"
                 android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
