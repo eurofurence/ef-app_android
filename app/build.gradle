@@ -123,6 +123,8 @@ dependencies {
     compile "com.google.firebase:firebase-messaging:$google_play_version"
     compile "com.google.firebase:firebase-config:$google_play_version"
     compile "com.google.firebase:firebase-crash:$google_play_version"
+    compile "com.google.firebase:firebase-perf:$google_play_version"
+
 
     // Photoview
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
@@ -144,7 +146,6 @@ dependencies {
     compile 'com.pawegio.kandroid:kandroid:0.7.0@aar'
 
     // Preferences
-
     compile "com.chibatching.kotpref:kotpref:2.1.1"
     compile "com.chibatching.kotpref:enum-support:2.1.1"
 
@@ -156,6 +157,7 @@ dependencies {
 }
 
 apply plugin: "com.google.gms.google-services"
+apply plugin: 'com.google.firebase.firebase-perf'
 repositories {
     mavenCentral()
 }
