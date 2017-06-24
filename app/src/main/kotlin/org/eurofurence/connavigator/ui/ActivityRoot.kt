@@ -49,7 +49,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         }
 
         applyOnContent { dataUpdated() }
-        Analytics.onSharedPreferenceChanged(sharedPreferences, key)
     }
 
     override fun changeTitle(text: String) {

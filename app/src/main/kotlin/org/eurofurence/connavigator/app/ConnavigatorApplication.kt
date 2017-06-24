@@ -5,7 +5,7 @@ import com.chibatching.kotpref.Kotpref
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.database.UpdateIntentService
-import org.eurofurence.connavigator.gcm.MyGCMListenerService
+import org.eurofurence.connavigator.gcm.PushListenerService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.webapi.apiService
@@ -22,13 +22,13 @@ class ConnavigatorApplication : MultiDexApplication() {
         JodaTimeAndroid.init(this)
 
         // Initialize some services
+          Kotpref.init(this)
         imageService.initialize(this)
         apiService.initialize(this)
         logService.initialize(this)
         Analytics.init(this)
         startKovenant()
-        Kotpref.init(this)
-        MyGCMListenerService().subscribe()
+        PushListenerService().subscribe()
         UpdateIntentService.dispatchUpdate(this)
     }
 }

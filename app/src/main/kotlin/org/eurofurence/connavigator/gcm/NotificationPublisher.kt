@@ -1,16 +1,18 @@
 package org.eurofurence.connavigator.gcm
 
 import android.app.Notification
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.util.extensions.objects
-import java.util.*
+import com.pawegio.kandroid.d
+import org.jetbrains.anko.notificationManager
 
 /**
- * Created by David on 5/15/2016.
+ * Notification Publisher
+ *
+ * Manages the receiving of a broadcast for a notifiction and exporting said notification
+ *
+ *
  */
 class NotificationPublisher : BroadcastReceiver() {
     companion object {
@@ -19,12 +21,11 @@ class NotificationPublisher : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
+        d { "Received intent to send a notification" }
         val notification = intent.getParcelableExtra<Notification>(NOTIFICATION)
         val id = intent.getIntExtra(NOTIFICATION_ID, 0)
 
-        logd{ "NOT: notification ID is $id"}
-        notificationManager.notify(id, notification)
+        d { "Sending notification to system" }
+        context.notificationManager.notify(id, notification)
     }
 }
