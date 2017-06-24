@@ -1,6 +1,5 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
@@ -9,10 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import com.github.lzyzsd.circleprogress.ArcProgress
-import com.pawegio.kandroid.displayHeight
 import com.pawegio.kandroid.displayWidth
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
@@ -21,12 +18,11 @@ import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
-import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
-import org.jetbrains.anko.info
-import org.jetbrains.anko.windowManager
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.arcProgress
+import org.eurofurence.connavigator.util.extensions.letRoot
+import org.eurofurence.connavigator.util.extensions.recycler
+import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.Days
 
@@ -34,18 +30,28 @@ import org.joda.time.Days
  * Created by David on 5/14/2016.
  */
 class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
-    val announcementsRecycler: RecyclerView by view()
-    val announcementsTitle: TextView by view()
+    lateinit var ui: HomeUi
+
     val database: Database get() = letRoot { it.database }!!
-    val preferences: SharedPreferences get() = letRoot { it.preferences }!!
-    val progressBar : ArcProgress by view()
+    val now by lazy { DateTime.now() }
+
+    val announcements by lazy {
+        database.announcementDb.items
+    }
+
 
     val upcoming by lazy { EventRecyclerFragment(database.filterEvents().isUpcoming()) }
     val current by lazy { EventRecyclerFragment(database.filterEvents().isCurrent()) }
     val favourited by lazy { EventRecyclerFragment(database.filterEvents().isFavorited()) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fview_home, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        container!!
+
+        info { "Initializing home view" }
+        ui = HomeUi()
+
+        return ui.createView(AnkoContext.Companion.create(container.context, container))
+    }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.screen(activity, "Home")
@@ -53,79 +59,108 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         applyOnRoot { changeTitle("Home") }
 
         configureProgressBar()
+        configureAnnouncements()
+        configureEventRecyclers()
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.upcomingEventRecycler, upcoming)
-                .replace(R.id.currentEventsRecycler, current)
-                .replace(R.id.favouritedEventsRecycler, favourited)
-                .commitAllowingStateLoss()
+    }
 
-        val now = DateTime.now()
-        var announcements = database.announcementDb.items.filterIf(
-                !preferences.getBoolean(this.getString(R.string.announcement_show_old), false),
-                { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis }
+    private fun configureEventRecyclers() {
+        info { "Configuring event recyclers" }
+    }
+
+    private fun configureAnnouncements() {
+        info { "Configuring announcement recycler" }
+        info { "There are ${announcements.count()} announcements" }
+        ui.announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(
+                announcements.sortedByDescending { it.lastChangeDateTimeUtc }
+                        .toList()
         )
-
-        announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(announcements.sortedByDescending { it.lastChangeDateTimeUtc }.toList())
-        announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
-        announcementsRecycler.itemAnimator = DefaultItemAnimator()
+        ui.announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
+        ui.announcementsRecycler.itemAnimator = DefaultItemAnimator()
 
         if (announcements.count() == 0) {
-            announcementsRecycler.visibility = View.GONE
-            announcementsTitle.visibility = View.GONE
+            ui.announcementsRecycler.visibility = View.GONE
+            ui.announcementsRecycler.visibility = View.GONE
         }
     }
 
     private fun configureProgressBar() {
-        info { "configuring progress bar"}
-        val now = DateTime.now()
+        info { "configuring progress bar" }
         val lastConDay = DateTime(1471471200000)
         val nextConDay = DateTime(1502834400000)
 
         val totalDaysBetween = Days.daysBetween(lastConDay, nextConDay)
         val totalDaysToNextCon = Days.daysBetween(now, nextConDay)
 
-        info { "Days between cons : ${totalDaysBetween.days}"}
-        info { "Days to next con: ${totalDaysToNextCon.days}"}
+        info { "Days between cons : ${totalDaysBetween.days}" }
+        info { "Days to next con: ${totalDaysToNextCon.days}" }
 
-
-
-        progressBar.max  = totalDaysBetween.days
-        progressBar.progress = totalDaysToNextCon.days
-        progressBar.layoutParams = LinearLayout.LayoutParams(
+        ui.countdownArc.max = totalDaysBetween.days
+        ui.countdownArc.progress = totalDaysToNextCon.days
+        ui.countdownArc.layoutParams = LinearLayout.LayoutParams(
                 context.displayWidth,
                 context.displayWidth
         )
 
-        if(totalDaysToNextCon.days <= 0 ){
-            progressBar.visibility = View.GONE
+        if (totalDaysToNextCon.days <= 0) {
+            info { "Hiding countdown to next con" }
+            ui.countdownArc.visibility = View.GONE
         }
     }
+}
 
-    override fun dataUpdated() {
-        logd { "Updating home screen data" }
-        catchToAnyException {
-            updateContents()
-        }
-    }
+class HomeUi : AnkoComponent<ViewGroup> {
+    lateinit var countdownArc: ArcProgress
+    lateinit var announcementsTitle: TextView
+    lateinit var announcementsRecycler: RecyclerView
 
-    private fun updateContents() {
-        val now = DateTime.now()
-        val announcements = database.announcementDb.items.filterIf(
-                !preferences.getBoolean(this.getString(R.string.announcement_show_old), false),
-                { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis })
-                .sortedByDescending { it.lastChangeDateTimeUtc }
+    lateinit var upcomingFragment: ViewGroup
 
-        announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(announcements)
-        announcementsRecycler.adapter.notifyDataSetChanged()
+    lateinit var currentFragment: ViewGroup
 
-        upcoming.dataUpdated()
-        current.dataUpdated()
-        favourited.dataUpdated()
+    lateinit var favoritedFragment: ViewGroup
 
-        if (announcements.isEmpty()) {
-            announcementsRecycler.visibility = View.GONE
-            announcementsTitle.visibility = View.GONE
+    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+        scrollView {
+            lparams(matchParent, matchParent)
+            verticalLayout {
+
+                lparams(matchParent, matchParent)
+                countdownArc = arcProgress {
+                    strokeWidth = 25F
+                    suffixText = "Days"
+                    bottomText = "Until next EF"
+                    bottomTextSize = dip(20F).toFloat()
+                    suffixTextSize = dip(20F).toFloat()
+                    finishedStrokeColor = R.color.primary
+                    unfinishedStrokeColor = R.color.textWhite
+                    textColor = R.color.textBlack
+                    padding = dip(50)
+                }
+
+                announcementsTitle = textView("Latest announcements").lparams(matchParent, wrapContent){
+                    padding = dip(15)
+                }.applyRecursively { android.R.style.TextAppearance_Large }
+
+                announcementsRecycler = recycler {
+                    lparams(matchParent, wrapContent)
+                }
+
+                upcomingFragment = linearLayout {
+                    id = 5000
+                    lparams(matchParent, wrapContent)
+                }
+
+                currentFragment = linearLayout {
+                    id = 5001
+                    lparams(matchParent, wrapContent)
+                }
+
+                favoritedFragment = linearLayout {
+                    id = 5002
+                    lparams(matchParent, wrapContent)
+                }
+            }
         }
     }
 }
