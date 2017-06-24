@@ -62,7 +62,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger {
             updateReceiver.register()
         }
 
-        Analytics.screen("Start")
+        Analytics.screen(this, "Start")
     }
 
     /**

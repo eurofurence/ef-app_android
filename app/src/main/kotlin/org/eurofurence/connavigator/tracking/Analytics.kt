@@ -5,11 +5,10 @@ import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crash.FirebaseCrash
 import com.google.firebase.perf.FirebasePerformance
-import com.pawegio.kandroid.i
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.jetbrains.anko.bundleOf
 
-/**
+/**o
  * Created by David on 20-4-2016.
  */
 class Analytics {

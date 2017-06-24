@@ -17,6 +17,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.util.Formatter
@@ -51,8 +52,6 @@ class FragmentViewEvent() : Fragment() {
     val time: TextView by view()
     val buttonSave: FloatingActionButton by view()
 
-    val preferences: SharedPreferences get() = letRoot { it.preferences }!!
-
     val database: Database get() = letRoot { it.database }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -76,7 +75,7 @@ class FragmentViewEvent() : Fragment() {
 
             description.loadMarkdown(eventEntry.description)
 
-            time.text = Formatter.eventToTimes(eventEntry, database, preferences.getBoolean(context.getString(R.string.date_short), true))
+            time.text = Formatter.eventToTimes(eventEntry, database, AppPreferences.shortenDates)
             organizers.text = Formatter.eventOwner(eventEntry)
             room.text = Formatter.roomFull(conferenceRoom!!)
 

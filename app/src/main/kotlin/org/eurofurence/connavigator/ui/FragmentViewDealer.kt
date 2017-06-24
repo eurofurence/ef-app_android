@@ -20,10 +20,10 @@ import io.swagger.client.model.MapEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Formatter
-import org.eurofurence.connavigator.pref.RemoteConfig
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import us.feras.mdv.MarkdownView
@@ -51,7 +51,6 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
     val dealerPreviewArtLayout: LinearLayout by view()
 
     val database: Database get() = letRoot { it.database }!!
-    val remoteConfig: RemoteConfig get () = letRoot { it.remotePreferences }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_dealer, container, false)
@@ -138,8 +137,8 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
 
         val dealerCoords = mapEntry.asRelatedCoordinates(mapImage)
 
-        var width = remoteConfig.dealerMapWidth.toInt()
-        var height = remoteConfig.dealerMapHeight.toInt()
+        var width = RemotePreferences.dealerMapWidth.toInt()
+        var height = RemotePreferences.dealerMapHeight.toInt()
 
         val matrix = Matrix()
 

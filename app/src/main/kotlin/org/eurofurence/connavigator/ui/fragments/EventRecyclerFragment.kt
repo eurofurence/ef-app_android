@@ -22,13 +22,13 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
-import org.eurofurence.connavigator.pref.RemoteConfig
 import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -66,7 +66,7 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
 
             SpannableStringBuilder()
                     .apply {
-                        if (remoteConfig.showEventGlyphs) {
+                        if (RemotePreferences.showEventGlyphs) {
                             if (isFavourite) {
                                 this.append(" ")
                                 this.setSpan(
@@ -130,8 +130,6 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
     val eventsTitle: TextView by view()
 
     val database: Database get() = letRoot { it.database }!!
-
-    val remoteConfig: RemoteConfig get() = letRoot { it.remotePreferences }!!
 
     val vibrator by lazy { TouchVibrator(context) }
 

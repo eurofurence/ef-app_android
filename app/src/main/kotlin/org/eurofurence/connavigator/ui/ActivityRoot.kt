@@ -30,10 +30,10 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.communication.RootAPI
-import org.eurofurence.connavigator.pref.RemoteConfig
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -74,12 +74,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     // Content API aggregator
     var content: Set<ContentAPI> = setOf()
 
-    // Settings
-    override val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
-
-    override val remotePreferences = RemoteConfig()
-
-
     /**
      * Listens to update responses, since the event recycler holds database related data
      */
@@ -109,7 +103,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         super.onCreate(savedInstanceState)
 
         // Stop the rotation
-        if (remotePreferences.rotationEnabled == false) {
+        if (RemotePreferences.rotationEnabled == false) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         // Assign the layout
@@ -185,8 +179,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     override fun onResume() {
         super.onResume()
         updateReceiver.register()
-        UpdateIntentService.dispatchUpdate(this)
-        RemoteConfig().intitialize(this)
     }
 
     override fun onPause() {
@@ -280,7 +272,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     AlertDialog.Builder(ContextThemeWrapper(this, R.style.appcompatDialog))
                             .setTitle("Clearing Database")
                             .setMessage("This will get rid of all cached items you have stored locally. You will need an internet connection to restart!")
-                            .setPositiveButton("Clear", { dialogInterface, i -> database.clear(); imageService.clear(); preferences.edit().clear().commit(); RemoteConfig.clear(); System.exit(0) })
+                            .setPositiveButton("Clear", { dialogInterface, i -> database.clear(); imageService.clear(); System.exit(0) })
                             .setNegativeButton("Cancel", { dialogInterface, i -> })
                             .show()
                 }
@@ -298,7 +290,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         // Calculate the days between, using the current time. Todo: timezones
         val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
 
-        if (remotePreferences.mapsEnabled == false) {
+        if (!RemotePreferences.mapsEnabled) {
             navView.menu.findItem(R.id.navMap).isVisible = false
         }
 

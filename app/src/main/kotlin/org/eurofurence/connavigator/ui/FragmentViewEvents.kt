@@ -15,6 +15,7 @@ import android.widget.EditText
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
@@ -31,7 +32,7 @@ import org.joda.time.format.DateTimeFormat
 class FragmentViewEvents : Fragment(), ContentAPI {
     inner class EventFragmentPagerAdapter(val fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int): CharSequence? {
-            if (settings.getBoolean(context.getString(R.string.date_short), true)) {
+            if (AppPreferences.shortenDates) {
                 return DateTime(database.eventConferenceDayDb.asc { it.date }[position].date).dayOfWeek().asShortText
             } else {
                 return DateTime(database.eventConferenceDayDb.asc { it.date }[position].date).toString(DateTimeFormat.forPattern("MMM d"))
@@ -57,7 +58,6 @@ class FragmentViewEvents : Fragment(), ContentAPI {
 
     val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
 
-    val settings: SharedPreferences get() = letRoot { it.preferences }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_events_viewpager, container, false)
