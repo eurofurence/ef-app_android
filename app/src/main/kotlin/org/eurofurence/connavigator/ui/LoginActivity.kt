@@ -31,7 +31,8 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
 
         if (success) {
             info { "Login was success! Closing activity" }
-            toast("Logged in as ${AuthPreferences.username}")
+            longToast("Logged in as ${AuthPreferences.username}")
+            finish()
         } else {
             info { "Login failed! Showing error message" }
             ui.errorText.visibility = View.VISIBLE
@@ -46,6 +47,13 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
         ui.setContentView(this)
 
         ui.submit.setOnClickListener { attemptSubmit() }
+
+        ui.logout.setOnClickListener {
+            info { "Logging user out" }
+            longToast("Logging you out, goodbye!")
+            AuthPreferences.logout()
+            finish()
+        }
 
         loginReceiver.register()
     }
@@ -85,6 +93,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
     lateinit var password: EditText
     lateinit var errorText: TextView
     lateinit var submit: Button
+    lateinit var logout: Button
 
     override fun createView(ui: AnkoContext<LoginActivity>) = with(ui) {
         linearLayout {
@@ -137,6 +146,8 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
                 textView("Username: ${AuthPreferences.username}")
                 textView("Login is valid until: ${DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime()}")
+
+                logout = button("Logout")
             }
         }
     }

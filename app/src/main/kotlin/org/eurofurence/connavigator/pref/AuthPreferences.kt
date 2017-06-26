@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.pref
 
 import com.chibatching.kotpref.KotprefModel
+import com.chibatching.kotpref.bulk
 import org.joda.time.DateTime
 
 object AuthPreferences: KotprefModel() {
@@ -12,4 +13,6 @@ object AuthPreferences: KotprefModel() {
     fun isLoggedIn() = token.isNotEmpty()
     fun asBearer() = "Bearer $token"
     fun isValid() = DateTime.now().isBefore(tokenValidUntil)
+
+    fun logout() = AuthPreferences.clear()
 }
