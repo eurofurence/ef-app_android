@@ -50,6 +50,8 @@
 
         <activity android:name=".ui.ActivitySettings"/>
 
+        <activity android:name=".ui.LoginActivity" />
+
         <!-- Service providing a detached retrieval of data from the internet. -->
         <service
                 android:name=".database.UpdateIntentService"
