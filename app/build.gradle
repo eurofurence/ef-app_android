@@ -88,6 +88,7 @@ ext {
     junit_version = "4.8.1"
     android_support_version = "25.3.1"
     google_play_version = "11.0.1"
+    fuel_version = "1.8.0"
 }
 
 // Embedded swagger
@@ -151,6 +152,10 @@ dependencies {
 
     //  Circular progress that don't make me consider suicide
     compile 'com.github.lzyzsd:circleprogress:1.2.1'
+
+    // Fuel for networking
+    compile "com.github.kittinunf.fuel:fuel:$fuel_version" //for JVM
+    compile "com.github.kittinunf.fuel:fuel-android:$fuel_version" //for Android
 
 
     testCompile "junit:junit:$junit_version"
