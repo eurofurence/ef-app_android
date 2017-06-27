@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.google.firebase.perf.metrics.AddTrace
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.ImageRecord
 import io.swagger.client.model.MapEntryRecord
@@ -135,6 +136,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb {
         }
     }
 
+    @AddTrace(name = "FragmentViewDealer:resizeMap", enabled = true)
     private fun resizeMap(mapEntry: MapEntryRecord?, mapImage: ImageRecord?) {
         if (mapEntry == null || mapImage == null) {
             dealerMap.visibility = View.GONE

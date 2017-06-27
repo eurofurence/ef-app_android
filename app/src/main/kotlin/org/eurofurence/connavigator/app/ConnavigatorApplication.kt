@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.app
 
 import android.support.multidex.MultiDexApplication
 import com.chibatching.kotpref.Kotpref
+import com.google.firebase.perf.metrics.AddTrace
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.database.UpdateIntentService
@@ -17,6 +18,7 @@ import org.eurofurence.connavigator.webapi.apiService
  * The application initialization point.
  */
 class ConnavigatorApplication : MultiDexApplication() {
+    @AddTrace(name = "ConnavigatorApplication:onCreate", enabled = true)
     override fun onCreate() {
         super.onCreate()
 
