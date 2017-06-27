@@ -137,15 +137,17 @@ interface Db {
  */
 fun Any.locateDb(): Db =
         when (this) {
-        // Return new root db on context
+        // If context, make new root DB
             is Context -> RootDb(this)
 
-        // Try to find for the containing context
-            is Fragment -> context.locateDb()
+        // If fragment, check if context is DB, otherwise make new root DB
+            is Fragment -> context.let {
+                if (it is Db) it else RootDb(context)
+            }
 
         // Otherwise fail
             else -> throw IllegalStateException(
-                    "Cannot use automatic database from objects other than DB, Context or Fragment.")
+                    "Cannot use automatic database from objects other than Context or Fragment.")
         }
 
 fun Any.lazyLocateDb() = lazy { locateDb() }
