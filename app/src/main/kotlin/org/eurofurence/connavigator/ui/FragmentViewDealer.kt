@@ -20,10 +20,10 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.Formatter
-import org.eurofurence.connavigator.pref.RemoteConfig
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
@@ -52,8 +52,6 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb {
     val dealerMap: ImageView by view()
 
     val dealerPreviewArtLayout: LinearLayout by view()
-
-    val remoteConfig: RemoteConfig get () = letRoot { it.remotePreferences }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_dealer, container, false)
@@ -149,8 +147,8 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb {
 
         val dealerCoords = mapEntry.asRelatedCoordinates(mapImage)
 
-        var width = remoteConfig.dealerMapWidth.toInt()
-        var height = remoteConfig.dealerMapHeight.toInt()
+        var width = RemotePreferences.dealerMapWidth.toInt()
+        var height = RemotePreferences.dealerMapHeight.toInt()
 
         val matrix = Matrix()
 

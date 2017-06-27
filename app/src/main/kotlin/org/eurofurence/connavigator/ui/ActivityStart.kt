@@ -9,8 +9,10 @@ import com.chibatching.kotpref.bulk
 import com.google.firebase.perf.metrics.AddTrace
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.database.Db
+import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.tracking.Analytics
@@ -21,25 +23,27 @@ import org.jetbrains.anko.*
 /**
  * Created by David on 28-4-2016.
  */
-class ActivityStart : AppCompatActivity(), AnkoLogger {
-    private lateinit var ui: StartUi
-    private val database by lazy { Database(this) }
+class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
+    override val db: Db
+        get() = locateDb()
 
-    @AddTrace(name =  "ActivityStart:UpdateIntentService", enabled = true)
+    private lateinit var ui: StartUi
+
+    @AddTrace(name = "ActivityStart:UpdateIntentService", enabled = true)
     private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
         if (it.booleans["success"]) {
             info { "Data update success" }
             ui.nextButton.text = "Got your data, now caching the images!"
 
-            info { "Caching ${database.imageDb.items.count()} images" }
-            database.imageDb.items.map { imageService.preload(it) }
+            info { "Caching ${db.images.items.count()} images" }
+            db.images.items.map { imageService.preload(it) }
 
             info { "Image caching done" }
 
             allowProceed()
         } else {
             ui.nextButton.text = "It seems like something went wrong during caching. We'll clear the database and let you try again"
-            database.clear()
+            db.clear()
         }
 
     }
@@ -55,12 +59,12 @@ class ActivityStart : AppCompatActivity(), AnkoLogger {
 
         info { "Checking if database is filled" }
 
-        if (database.versionDb.items.count() > 0 && !checkIfDifferentVersion()) {
+        if (db.version !== null && !checkIfDifferentVersion()) {
             info { "Database has already been filled" }
             proceed()
         } else {
             info { "No data in database yet, dispatching update" }
-            database.clear()
+            db.clear()
             dispatchUpdate()
             ui.nextButton.setOnClickListener { proceed() }
             updateReceiver.register()
@@ -74,11 +78,11 @@ class ActivityStart : AppCompatActivity(), AnkoLogger {
      *
      * @return True if the builds match
      */
-    private fun checkIfDifferentVersion() = database.versionDb.items.first().split(".")[1] != BuildConfig.VERSION_NAME.split(".")[1]
+    private fun checkIfDifferentVersion() = db.version!!.split(".")[1] != BuildConfig.VERSION_NAME.split(".")[1]
 
     private fun proceed() {
         info { "Writing current version to database" }
-        database.versionDb.items = listOf(BuildConfig.VERSION_NAME)
+        db.version = BuildConfig.VERSION_NAME
         info { "Starting Root activity from Start activity" }
         startActivity<ActivityRoot>()
     }

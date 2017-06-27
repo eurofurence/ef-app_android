@@ -9,8 +9,8 @@ import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.util.NotificationFactory
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.webapi.apiService

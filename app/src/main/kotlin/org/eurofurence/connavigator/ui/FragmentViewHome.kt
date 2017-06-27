@@ -8,24 +8,23 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.lzyzsd.circleprogress.ArcProgress
-import com.pawegio.kandroid.displayWidth
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.pref.AppPreferences
-import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.filterEvents
-import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
+import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.arcProgress
+import org.eurofurence.connavigator.util.extensions.filterIf
+import org.eurofurence.connavigator.util.extensions.recycler
 import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.dip
 import org.joda.time.DateTime
 import org.joda.time.Days
 
@@ -35,20 +34,20 @@ import org.joda.time.Days
 class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     lateinit var ui: HomeUi
 
-    val database: Database get() = letRoot { it.database }!!
+    val database by lazy { locateDb() }
     val now by lazy { DateTime.now() }
 
     val announcements by lazy {
-        database.announcementDb.items.filterIf(
+        database.announcements.items.filterIf(
                 !AppPreferences.showOldAnnouncements,
                 { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis }
         )
     }
 
 
-    val upcoming by lazy { EventRecyclerFragment(filterEvents().isUpcoming()) }
-    val current by lazy { EventRecyclerFragment(filterEvents().isCurrent()) }
-    val favourited by lazy { EventRecyclerFragment(filterEvents().isFavorited()) }
+    val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming()) }
+    val current by lazy { EventRecyclerFragment(EventList(database).isCurrent()) }
+    val favourited by lazy { EventRecyclerFragment(EventList(database).isFavorited()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         container!!

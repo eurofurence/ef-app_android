@@ -21,17 +21,16 @@ import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.*
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
-import org.eurofurence.connavigator.pref.RemoteConfig
 import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.letRoot
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.v2.get
@@ -71,7 +70,7 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI, 
 
             SpannableStringBuilder()
                     .apply {
-                        if (remoteConfig.showEventGlyphs) {
+                        if (RemotePreferences.showEventGlyphs) {
                             if (isFavourite) {
                                 this.append(" ")
                                 this.setSpan(
@@ -136,8 +135,6 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI, 
     var effectiveEvents = emptyList<EventRecord>()
 
     val eventsTitle: TextView by view()
-
-    val remoteConfig: RemoteConfig get() = letRoot { it.remotePreferences }!!
 
     val vibrator by lazy { TouchVibrator(context) }
 
