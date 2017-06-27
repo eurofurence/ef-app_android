@@ -15,6 +15,7 @@ import com.pawegio.kandroid.displayWidth
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
 import org.eurofurence.connavigator.pref.AppPreferences
+import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
@@ -130,6 +131,10 @@ class HomeUi : AnkoComponent<ViewGroup> {
         scrollView {
             lparams(matchParent, matchParent)
             verticalLayout {
+                themedTextView{
+                    visibility = if(AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
+                    text = "Hello ${AuthPreferences.username}"
+                }
                 lparams(matchParent, matchParent)
                 countdownArc = arcProgress {
                     lparams(matchParent, dip(400))

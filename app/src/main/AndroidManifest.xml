@@ -50,26 +50,19 @@
 
         <activity android:name=".ui.ActivitySettings"/>
 
+        <activity android:name=".ui.LoginActivity" />
+
         <!-- Service providing a detached retrieval of data from the internet. -->
         <service
                 android:name=".database.UpdateIntentService"
                 android:exported="false"/>
 
-        <!-- Analytics -->
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-                  android:enabled="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH"/>
-            </intent-filter>
-        </receiver>
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
-                 android:enabled="true"
-                 android:exported="false"/>
-
         <!-- Pending intents -->
         <receiver android:name=".gcm.NotificationPublisher"/>
 
         <receiver android:name=".broadcast.EventFavoriteBroadcast" />
+
+        <receiver android:name=".broadcast.LoginReceiver" />
 
         <service
                 android:name=".gcm.PushListenerService"

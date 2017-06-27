@@ -32,6 +32,14 @@
                 android:title="Points of Interest"/>
     </group>
 
+    <item android:title="Personal">
+        <menu>
+            <item
+                    android:id="@+id/navLogin"
+                    android:icon="@drawable/icon_home"
+                    android:title="Login"/>
+        </menu>
+    </item>
     <item android:title="External">
         <menu>
             <item android:id="@+id/navWebSite"
