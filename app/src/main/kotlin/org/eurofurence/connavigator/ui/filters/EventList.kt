@@ -1,30 +1,43 @@
 package org.eurofurence.connavigator.ui.filters
 
-import io.swagger.client.model.EventEntry
-import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.util.extensions.get
+import io.swagger.client.model.EventRecord
+import org.eurofurence.connavigator.database.Db
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.eventIsHappening
+import org.eurofurence.connavigator.database.eventIsUpcoming
 import java.util.*
 import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.filter
+import kotlin.collections.forEach
+import kotlin.collections.set
+import kotlin.collections.sortedBy
+import kotlin.collections.toList
 
 /**
  * Wraps event entries and provides sorting for these. Filters are async
  */
-class EventList(val database: Database) {
+class EventList(override val db: Db) : HasDb {
     val filters = HashMap<FilterType, Any>()
     val UPCOMING_TIME_IN_MINUTES = 30
 
-    fun applyFilters(): List<EventEntry> {
-        var events = database.eventEntryDb.items
+    fun applyFilters(): List<EventRecord> {
+        var events = events.items
 
         this.filters.keys.forEach { key ->
             when (key) {
-                FilterType.ON_DAY -> events = events.filter { it -> it.conferenceDayId == filters[key] }
-                FilterType.ON_TRACK -> events = events.filter { it -> it.conferenceTrackId == filters[key] }
-                FilterType.IN_ROOM -> events = events.filter { it -> it.conferenceRoomId == filters[key] }
-                FilterType.BY_TITLE -> events = events.filter { it -> it.title.contains(filters[key] as String, true) }
-                FilterType.IS_UPCOMING -> events = events.filter { database.eventIsUpcoming(it, org.joda.time.DateTime.now(), UPCOMING_TIME_IN_MINUTES) }
-                FilterType.IS_FAVORITED -> events = events.filter { database.favoritedDb[it.id] != null }
-                FilterType.IS_CURRENT -> events = events.filter { database.eventIsHappening(it, org.joda.time.DateTime.now()) }
+                FilterType.ON_DAY -> events = events.filter { it.conferenceDayId == filters[key] }
+                FilterType.ON_TRACK -> events = events.filter { it.conferenceTrackId == filters[key] }
+                FilterType.IN_ROOM -> events = events.filter { it.conferenceRoomId == filters[key] }
+                FilterType.BY_TITLE -> events = events.filter { it.title.contains(filters[key] as String, true) }
+                FilterType.IS_UPCOMING -> events = events.filter {
+                    eventIsUpcoming(it, org.joda.time.DateTime.now()
+                            , UPCOMING_TIME_IN_MINUTES)
+                }
+                FilterType.IS_FAVORITED -> events = events.filter { it.id in faves }
+                FilterType.IS_CURRENT -> events = events.filter {
+                    eventIsHappening(it, org.joda.time.DateTime.now())
+                }
                 FilterType.ORDER_START_TIME -> events = events.sortedBy { it.startTime }.sortedBy { it.endTime }
             }
         }

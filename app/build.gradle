@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 32
-        versionName "1.9.10"
+        versionCode 64
+        versionName "2.0.00"
         multiDexEnabled true
     }
 
@@ -82,6 +82,7 @@ ext {
     // Dependency versions
     swagger_annotations_version = "1.5.0"
     gson_version = "2.6.1"
+    anko_version = "0.10.1"
     httpclient_version = "4.3.3"
     volley_version = "1.0.1"
     junit_version = "4.8.1"
@@ -118,6 +119,11 @@ dependencies {
     compile "com.mcxiaoke.volley:library-aar:$volley_version"
     compile "com.nostra13.universalimageloader:universal-image-loader:1.9.5"
 
+    // Coroutines
+    //compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    //compile "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutines_version"
+    //compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
     // Firebase
     compile "com.google.firebase:firebase-messaging:$google_play_version"
     compile "com.google.firebase:firebase-config:$google_play_version"
@@ -135,9 +141,11 @@ dependencies {
     compile 'nl.komponents.kovenant:kovenant-functional:3.3.0'
 
     // DSL for views
-    compile 'org.jetbrains.anko:anko-sdk15:0.10.0-beta-2' // sdk19, sdk21, sdk23 are also available
-    compile 'org.jetbrains.anko:anko-support-v4:0.10.0-beta-2' // In case you need support-v4 bindings
-    compile 'org.jetbrains.anko:anko-appcompat-v7:0.10.0-beta-2' // For appcompat-v7 bindings
+    compile "org.jetbrains.anko:anko-sdk15:$anko_version" // sdk19, sdk21, sdk23 are also available
+    compile "org.jetbrains.anko:anko-appcompat-v7-coroutines:$anko_version"
+    compile "org.jetbrains.anko:anko-support-v4:$anko_version" // In case you need support-v4 bindings
+    compile "org.jetbrains.anko:anko-appcompat-v7:$anko_version" // For appcompat-v7 bindings
+    compile "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     // Kandroid for easier components
     compile 'com.pawegio.kandroid:kandroid:0.7.0@aar'

@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui.adapter
 
+import android.os.Build
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
@@ -8,16 +9,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import io.swagger.client.model.Dealer
+import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.database.Db
+import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.dialogs.DealerDialog
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.get
+import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 
 /**
@@ -30,23 +32,25 @@ class DealerDataHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     val layout: LinearLayout by view()
 }
 
-class DealerRecyclerAdapter(val effective_events: List<Dealer>, val database: Database, val fragment: Fragment) : RecyclerView.Adapter<DealerDataHolder>() {
+class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override val db: Db, val fragment: Fragment) :
+        RecyclerView.Adapter<DealerDataHolder>(), HasDb {
     override fun getItemCount(): Int {
         return effective_events.count()
     }
 
     override fun onBindViewHolder(holder: DealerDataHolder, position: Int) {
         val dealer = effective_events[position]
-        val vibrator = TouchVibrator(database.context)
+        val vibrator = TouchVibrator(fragment.context)
 
         holder.dealerName.text = Formatter.dealerName(dealer)
         holder.dealerSubText.text = dealer.shortDescription ?: "This dealer did not provide a short description"
 
         // If no dealer preview was provided, load the YCH icon
-        if (database.imageDb[dealer.artistThumbnailImageId] != null) {
-            imageService.load(database.imageDb[dealer.artistThumbnailImageId], holder.dealerPreviewImage, false)
+        if (dealer[toThumbnail] != null) {
+            imageService.load(dealer[toThumbnail], holder.dealerPreviewImage, false)
         } else {
-            holder.dealerPreviewImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_black))
+            holder.dealerPreviewImage.setImageDrawable(
+                    ContextCompat.getDrawable(fragment.context, R.drawable.dealer_black))
         }
 
         holder.layout.setOnClickListener {
@@ -78,11 +82,14 @@ class DealerListItemUI : AnkoComponent<ViewGroup> {
             verticalLayout {
                 padding = dip(10)
                 textView {
-                    setTextAppearance(android.R.style.TextAppearance_Large)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                        setTextAppearance(android.R.style.TextAppearance_Large)
                     id = R.id.dealerName
                 }
                 textView {
-                    setTextAppearance(android.R.style.TextAppearance_Small)
+                    // TODO I added these cuz min leve is 21, required is 23
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                        setTextAppearance(android.R.style.TextAppearance_Small)
                     id = R.id.dealerSubText
                 }
             }

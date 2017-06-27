@@ -12,10 +12,10 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class MapRecord  {
   
-  @SerializedName("Id")
-  private UUID id = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Id")
+  private UUID id = null;
   @SerializedName("ImageId")
   private UUID imageId = null;
   @SerializedName("Description")
@@ -28,21 +28,21 @@ public class MapRecord  {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
   public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
     this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public UUID getId() {
+    return id;
+  }
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -95,8 +95,8 @@ public class MapRecord  {
       return false;
     }
     MapRecord mapRecord = (MapRecord) o;
-    return (id == null ? mapRecord.id == null : id.equals(mapRecord.id)) &&
-        (lastChangeDateTimeUtc == null ? mapRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(mapRecord.lastChangeDateTimeUtc)) &&
+    return (lastChangeDateTimeUtc == null ? mapRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(mapRecord.lastChangeDateTimeUtc)) &&
+        (id == null ? mapRecord.id == null : id.equals(mapRecord.id)) &&
         (imageId == null ? mapRecord.imageId == null : imageId.equals(mapRecord.imageId)) &&
         (description == null ? mapRecord.description == null : description.equals(mapRecord.description)) &&
         (isBrowseable == null ? mapRecord.isBrowseable == null : isBrowseable.equals(mapRecord.isBrowseable)) &&
@@ -106,8 +106,8 @@ public class MapRecord  {
   @Override 
   public int hashCode() {
     int result = 17;
-    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
+    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (imageId == null ? 0: imageId.hashCode());
     result = 31 * result + (description == null ? 0: description.hashCode());
     result = 31 * result + (isBrowseable == null ? 0: isBrowseable.hashCode());
@@ -120,8 +120,8 @@ public class MapRecord  {
     StringBuilder sb = new StringBuilder();
     sb.append("class MapRecord {\n");
     
-    sb.append("  id: ").append(id).append("\n");
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  id: ").append(id).append("\n");
     sb.append("  imageId: ").append(imageId).append("\n");
     sb.append("  description: ").append(description).append("\n");
     sb.append("  isBrowseable: ").append(isBrowseable).append("\n");

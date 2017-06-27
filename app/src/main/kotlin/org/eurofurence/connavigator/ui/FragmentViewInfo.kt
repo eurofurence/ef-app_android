@@ -1,37 +1,37 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import io.swagger.client.model.Info
+import io.swagger.client.model.KnowledgeEntryRecord
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.*
-import java.util.*
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.contains
+import org.eurofurence.connavigator.util.extensions.jsonObjects
 
 
 /**
  * Views an info based on an ID passed to the intent
  */
-class FragmentViewInfo() : Fragment() {
+class FragmentViewInfo() : Fragment(), HasDb {
+    override val db by lazyLocateDb()
+
     /**
      * Constructs the info view with an assigned bundle
      */
-    constructor(info: Info) : this() {
+    constructor(knowledgeEntry: KnowledgeEntryRecord) : this() {
         arguments = Bundle()
-        arguments.jsonObjects["info"] = info
+        arguments.jsonObjects["knowledgeEntry"] = knowledgeEntry
     }
 
     // Views
@@ -39,8 +39,6 @@ class FragmentViewInfo() : Fragment() {
     val title: TextView by view()
     val text: TextView by view()
     val layout: LinearLayout by view()
-
-    val database: Database get() = letRoot { it.database }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_info, container, false)
@@ -53,23 +51,24 @@ class FragmentViewInfo() : Fragment() {
 
         applyOnRoot { changeTitle("Information") }
         // Get info if it exists
-        if ("info" in arguments) {
-            val info: Info = arguments.jsonObjects["info"]
+        if ("knowledgeEntry" in arguments) {
+            val knowledgeEntry: KnowledgeEntryRecord = arguments.jsonObjects["knowledgeEntry"]
 
-            Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, info.title)
+            Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
 
             // Set the properties of the view
-            title.text = info.title
-            text.text = Formatter.wikiToMarkdown(info.text)
+            title.text = knowledgeEntry.title
+            text.text = Formatter.wikiToMarkdown(knowledgeEntry.text)
             image.scaleType = ImageView.ScaleType.CENTER_CROP
 
-            if (info.imageIds.isNotEmpty()) {
-                imageService.load(database.imageDb[UUID.fromString(info.imageIds.first())], image, showHide = false)
+            /* TODO
+            if (knowledgeEntry.imageIds.isNotEmpty()) {
+                imageService.load(database.imageDb[UUID.fromString(knowledgeEntry.imageIds.first())], image, showHide = false)
             } else {
                 image.visibility = View.GONE
             }
 
-            for (url in info.urls) {
+            for (url in knowledgeEntry.urls) {
                 val button = Button(context)
                 button.text = url.text
                 button.setOnClickListener {
@@ -80,6 +79,7 @@ class FragmentViewInfo() : Fragment() {
 
                 layout.addView(button)
             }
+            */
         }
     }
 }

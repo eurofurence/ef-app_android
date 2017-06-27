@@ -38,58 +38,87 @@ class ViewProperty<in T, U : View>(val findView: (T, String) -> U) {
  * Returns a property delegate for view injection, returns a [ViewProperty]. The context is an activity.
  * @param T The class of the view to inject
  */
-inline fun <reified T : View> view() = ViewProperty {
+inline fun <reified T : View> view(nameInResource: String? = null) = ViewProperty {
     container: Activity, name ->
     // Find view by name, cast it
-    container.findViewById(container.resources.getIdentifier(name, "id", container.packageName)) as T
+    val r = container.findViewById(
+            container.resources.getIdentifier(nameInResource ?: name, "id", container.packageName))
+
+    if (r == null)
+        throw IllegalArgumentException("Cannot locate ${nameInResource ?: name} in $container.")
+    else
+        r as T
 }
 
 /**
  * Returns a property delegate for view injection, returns a [ViewProperty]. The context is a fragment.
  * @param T The class of the view to inject
  */
-inline fun <reified T : View> Fragment.view() = ViewProperty {
+inline fun <reified T : View> Fragment.view(nameInResource: String? = null) = ViewProperty {
     container: Fragment, name ->
     if (container.view == null)
         throw NullPointerException("Fragments view is not populated")
 
     // Find view by name, cast it
-    container.view!!.findViewById(container.resources.getIdentifier(name, "id", container.context.packageName)) as T
+    val r = container.view!!.findViewById(
+            container.resources.getIdentifier(nameInResource ?: name, "id", container.context.packageName))
+
+    if (r == null)
+        throw IllegalArgumentException("Cannot locate ${nameInResource ?: name} in $container.")
+    else
+        r as T
 }
 
 /**
  * Returns a property delegate for view injection, returns a [ViewProperty]. The context is a view.
  * @param T The class of the view to inject
  */
-inline fun <reified T : View> View.view() = ViewProperty {
+inline fun <reified T : View> View.view(nameInResource: String? = null) = ViewProperty {
     container: View, name ->
     // Find view by name, cast it
-    container.findViewById(container.resources.getIdentifier(name, "id", container.context.packageName)) as T
+    val r = container.findViewById(
+            container.resources.getIdentifier(nameInResource ?: name, "id", container.context.packageName))
+    if (r == null)
+        throw IllegalArgumentException("Cannot locate ${nameInResource ?: name} in $container.")
+    else
+        r as T
 }
 
 /**
  * Returns a property delegate for view injection, returns a [ViewProperty]. The context is a view holder.
  * @param T The class of the view to inject
  */
-inline fun <reified T : View> ViewHolder.view() = ViewProperty {
+inline fun <reified T : View> ViewHolder.view(nameInResource: String? = null) = ViewProperty {
     container: ViewHolder, name ->
     // Find view by name, cast it
-    container.itemView.findViewById(container
-            .itemView
-            .resources
-            .getIdentifier(name, "id", container.itemView.context.packageName)) as T
+    val r = container.itemView.findViewById(
+            container.itemView.resources.getIdentifier(
+                    nameInResource ?: name, "id",
+                    container.itemView.context.packageName))
+    if (r == null)
+        throw IllegalArgumentException("Cannot locate ${nameInResource ?: name} in $container.")
+    else
+        r as T
 }
 
 /**
  * Returns a property delegate for view injection, returns a [ViewProperty]. The context is a view.
  * @param T The class of the view to inject
  */
-inline fun <reified T : View> Activity.header(crossinline navigationView: () -> NavigationView, index: Int = 0) =
+inline fun <reified T : View> Activity.header(
+        crossinline navigationView: () -> NavigationView, index: Int = 0, nameInResource: String? = null) =
         ViewProperty {
             container: Activity, name ->
             // Resolve header
             val header = navigationView().getHeaderView(index)
 
             // Find view by name, cast it
-            header.findViewById(container.resources.getIdentifier(name, "id", container.packageName)) as T
+            val r = header.findViewById(container.resources.getIdentifier(
+                    nameInResource ?: name, "id",
+                    container.packageName))
+
+            if (r == null)
+                throw IllegalArgumentException("Cannot locate ${nameInResource ?: name} in $container.")
+            else
+                r as T
         }

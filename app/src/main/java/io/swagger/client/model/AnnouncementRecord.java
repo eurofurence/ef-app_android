@@ -10,10 +10,10 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class AnnouncementRecord  {
   
-  @SerializedName("Id")
-  private UUID id = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Id")
+  private UUID id = null;
   @SerializedName("ValidFromDateTimeUtc")
   private Date validFromDateTimeUtc = null;
   @SerializedName("ValidUntilDateTimeUtc")
@@ -30,21 +30,21 @@ public class AnnouncementRecord  {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
   public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
     this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public UUID getId() {
+    return id;
+  }
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -117,8 +117,8 @@ public class AnnouncementRecord  {
       return false;
     }
     AnnouncementRecord announcementRecord = (AnnouncementRecord) o;
-    return (id == null ? announcementRecord.id == null : id.equals(announcementRecord.id)) &&
-        (lastChangeDateTimeUtc == null ? announcementRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(announcementRecord.lastChangeDateTimeUtc)) &&
+    return (lastChangeDateTimeUtc == null ? announcementRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(announcementRecord.lastChangeDateTimeUtc)) &&
+        (id == null ? announcementRecord.id == null : id.equals(announcementRecord.id)) &&
         (validFromDateTimeUtc == null ? announcementRecord.validFromDateTimeUtc == null : validFromDateTimeUtc.equals(announcementRecord.validFromDateTimeUtc)) &&
         (validUntilDateTimeUtc == null ? announcementRecord.validUntilDateTimeUtc == null : validUntilDateTimeUtc.equals(announcementRecord.validUntilDateTimeUtc)) &&
         (area == null ? announcementRecord.area == null : area.equals(announcementRecord.area)) &&
@@ -130,8 +130,8 @@ public class AnnouncementRecord  {
   @Override 
   public int hashCode() {
     int result = 17;
-    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
+    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (validFromDateTimeUtc == null ? 0: validFromDateTimeUtc.hashCode());
     result = 31 * result + (validUntilDateTimeUtc == null ? 0: validUntilDateTimeUtc.hashCode());
     result = 31 * result + (area == null ? 0: area.hashCode());
@@ -146,8 +146,8 @@ public class AnnouncementRecord  {
     StringBuilder sb = new StringBuilder();
     sb.append("class AnnouncementRecord {\n");
     
-    sb.append("  id: ").append(id).append("\n");
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  id: ").append(id).append("\n");
     sb.append("  validFromDateTimeUtc: ").append(validFromDateTimeUtc).append("\n");
     sb.append("  validUntilDateTimeUtc: ").append(validUntilDateTimeUtc).append("\n");
     sb.append("  area: ").append(area).append("\n");

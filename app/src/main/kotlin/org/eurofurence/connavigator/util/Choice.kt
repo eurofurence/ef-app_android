@@ -176,34 +176,3 @@ inline fun <T, reified U : Throwable> tryFor(block: () -> T): Choice<T, U> = try
  * @return Returns a choice of either the result or the exception of the block
  */
 inline fun <T> tryForThrowable(block: () -> T): Choice<T, Throwable> = tryFor(block)
-
-fun main(args: Array<String>) {
-    // Some choices between number and string
-    val a: Choice<Number, String> = left(34.5f)
-    val b: Choice<Number, String> = left(40)
-    val c: Choice<Number, String> = right("Hello")
-
-    // A method handling that choice type
-    val f = { u: Choice<Number, String> ->
-        // Map either side accordingly
-        val d = u onLeft {
-            it.toDouble() / 2
-        } onRight {
-            it.length.toDouble()
-        }
-
-        println(d)
-    }
-
-    // Invoke!
-    f(a)
-    f(b)
-    f(c)
-
-    // Do some deconstruction
-    val (n, s) = a.deconstructed
-    println(n)
-    println(s)
-
-    println(tryForThrowable { 1 / 0 })
-}

@@ -6,7 +6,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import io.swagger.client.model.Dealer
+import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.Formatter
@@ -16,7 +16,7 @@ import org.eurofurence.connavigator.util.extensions.logd
 /**
  * Created by David on 6/5/2016.
  */
-class DealerDialog(val dealer: Dealer) : DialogFragment() {
+class DealerDialog(val dealer: DealerRecord) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
 

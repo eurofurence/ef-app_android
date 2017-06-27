@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**UUID**](UUID.md) |  | 
 **lastChangeDateTimeUtc** | [**Date**](Date.md) |  | 
+**id** | [**UUID**](UUID.md) |  | 
 **knowledgeGroupId** | [**UUID**](UUID.md) |  | 
 **title** | **String** |  | 
 **text** | **String** |  | 

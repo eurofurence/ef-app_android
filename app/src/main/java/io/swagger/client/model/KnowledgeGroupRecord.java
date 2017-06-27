@@ -10,10 +10,10 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class KnowledgeGroupRecord  {
   
-  @SerializedName("Id")
-  private UUID id = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Id")
+  private UUID id = null;
   @SerializedName("Name")
   private String name = null;
   @SerializedName("Description")
@@ -28,21 +28,21 @@ public class KnowledgeGroupRecord  {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
   public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
     this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public UUID getId() {
+    return id;
+  }
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -105,8 +105,8 @@ public class KnowledgeGroupRecord  {
       return false;
     }
     KnowledgeGroupRecord knowledgeGroupRecord = (KnowledgeGroupRecord) o;
-    return (id == null ? knowledgeGroupRecord.id == null : id.equals(knowledgeGroupRecord.id)) &&
-        (lastChangeDateTimeUtc == null ? knowledgeGroupRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(knowledgeGroupRecord.lastChangeDateTimeUtc)) &&
+    return (lastChangeDateTimeUtc == null ? knowledgeGroupRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(knowledgeGroupRecord.lastChangeDateTimeUtc)) &&
+        (id == null ? knowledgeGroupRecord.id == null : id.equals(knowledgeGroupRecord.id)) &&
         (name == null ? knowledgeGroupRecord.name == null : name.equals(knowledgeGroupRecord.name)) &&
         (description == null ? knowledgeGroupRecord.description == null : description.equals(knowledgeGroupRecord.description)) &&
         (order == null ? knowledgeGroupRecord.order == null : order.equals(knowledgeGroupRecord.order)) &&
@@ -117,8 +117,8 @@ public class KnowledgeGroupRecord  {
   @Override 
   public int hashCode() {
     int result = 17;
-    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
+    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (name == null ? 0: name.hashCode());
     result = 31 * result + (description == null ? 0: description.hashCode());
     result = 31 * result + (order == null ? 0: order.hashCode());
@@ -132,8 +132,8 @@ public class KnowledgeGroupRecord  {
     StringBuilder sb = new StringBuilder();
     sb.append("class KnowledgeGroupRecord {\n");
     
-    sb.append("  id: ").append(id).append("\n");
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  id: ").append(id).append("\n");
     sb.append("  name: ").append(name).append("\n");
     sb.append("  description: ").append(description).append("\n");
     sb.append("  order: ").append(order).append("\n");

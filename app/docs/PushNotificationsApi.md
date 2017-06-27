@@ -4,9 +4,48 @@ All URIs are relative to *https://localhost/*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**apiV2PushNotificationsSyncRequestPost**](PushNotificationsApi.md#apiV2PushNotificationsSyncRequestPost) | **POST** /Api/v2/PushNotifications/SyncRequest | 
 [**apiV2PushNotificationsWnsChannelRegistrationPost**](PushNotificationsApi.md#apiV2PushNotificationsWnsChannelRegistrationPost) | **POST** /Api/v2/PushNotifications/WnsChannelRegistration | 
 [**apiV2PushNotificationsWnsToastPost**](PushNotificationsApi.md#apiV2PushNotificationsWnsToastPost) | **POST** /Api/v2/PushNotifications/WnsToast | 
 
+
+<a name="apiV2PushNotificationsSyncRequestPost"></a>
+# **apiV2PushNotificationsSyncRequestPost**
+> apiV2PushNotificationsSyncRequestPost()
+
+
+
+  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.PushNotificationsApi;
+
+PushNotificationsApi apiInstance = new PushNotificationsApi();
+try {
+    apiInstance.apiV2PushNotificationsSyncRequestPost();
+} catch (ApiException e) {
+    System.err.println("Exception when calling PushNotificationsApi#apiV2PushNotificationsSyncRequestPost");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 <a name="apiV2PushNotificationsWnsChannelRegistrationPost"></a>
 # **apiV2PushNotificationsWnsChannelRegistrationPost**

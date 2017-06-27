@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 
 @ApiModel(description = "")
 public class DeltaResponseAnnouncementRecord  {
-  
+
   @SerializedName("StorageLastChangeDateTimeUtc")
   private Date storageLastChangeDateTimeUtc = null;
   @SerializedName("StorageDeltaStartChangeDateTimeUtc")
@@ -90,7 +90,7 @@ public class DeltaResponseAnnouncementRecord  {
         (deletedEntities == null ? deltaResponseAnnouncementRecord.deletedEntities == null : deletedEntities.equals(deltaResponseAnnouncementRecord.deletedEntities));
   }
 
-  @Override 
+  @Override
   public int hashCode() {
     int result = 17;
     result = 31 * result + (storageLastChangeDateTimeUtc == null ? 0: storageLastChangeDateTimeUtc.hashCode());
@@ -105,7 +105,7 @@ public class DeltaResponseAnnouncementRecord  {
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class DeltaResponseAnnouncementRecord {\n");
-    
+
     sb.append("  storageLastChangeDateTimeUtc: ").append(storageLastChangeDateTimeUtc).append("\n");
     sb.append("  storageDeltaStartChangeDateTimeUtc: ").append(storageDeltaStartChangeDateTimeUtc).append("\n");
     sb.append("  removeAllBeforeInsert: ").append(removeAllBeforeInsert).append("\n");

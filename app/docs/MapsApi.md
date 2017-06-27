@@ -107,7 +107,7 @@ No authorization required
 
 Create or Update an existing map entry in a specific map
 
-  * Requires authorization     * Requires any of the following roles: **&#x60;Admin&#x60;**, **&#x60;Developer&#x60;**  This both works for updating an existing entry and creating a new entry. The id property of the              model (request body) must match the {EntryId} part of the uri.
+  * Requires authorization     * Requires any of the following roles: **&#x60;Admin&#x60;**, **&#x60;Developer&#x60;**  This both works for updating an existing entry and creating a new entry. The id property of the  model (request body) must match the {EntryId} part of the uri.
 
 ### Example
 ```java

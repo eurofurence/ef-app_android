@@ -10,22 +10,12 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class EventConferenceRoomRecord  {
   
-  @SerializedName("Id")
-  private UUID id = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Id")
+  private UUID id = null;
   @SerializedName("Name")
   private String name = null;
-
-  /**
-   **/
-  @ApiModelProperty(required = true, value = "")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
 
   /**
    **/
@@ -35,6 +25,16 @@ public class EventConferenceRoomRecord  {
   }
   public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
     this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public UUID getId() {
+    return id;
+  }
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -57,16 +57,16 @@ public class EventConferenceRoomRecord  {
       return false;
     }
     EventConferenceRoomRecord eventConferenceRoomRecord = (EventConferenceRoomRecord) o;
-    return (id == null ? eventConferenceRoomRecord.id == null : id.equals(eventConferenceRoomRecord.id)) &&
-        (lastChangeDateTimeUtc == null ? eventConferenceRoomRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(eventConferenceRoomRecord.lastChangeDateTimeUtc)) &&
+    return (lastChangeDateTimeUtc == null ? eventConferenceRoomRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(eventConferenceRoomRecord.lastChangeDateTimeUtc)) &&
+        (id == null ? eventConferenceRoomRecord.id == null : id.equals(eventConferenceRoomRecord.id)) &&
         (name == null ? eventConferenceRoomRecord.name == null : name.equals(eventConferenceRoomRecord.name));
   }
 
   @Override 
   public int hashCode() {
     int result = 17;
-    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
+    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (name == null ? 0: name.hashCode());
     return result;
   }
@@ -76,8 +76,8 @@ public class EventConferenceRoomRecord  {
     StringBuilder sb = new StringBuilder();
     sb.append("class EventConferenceRoomRecord {\n");
     
-    sb.append("  id: ").append(id).append("\n");
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  id: ").append(id).append("\n");
     sb.append("  name: ").append(name).append("\n");
     sb.append("}\n");
     return sb.toString();

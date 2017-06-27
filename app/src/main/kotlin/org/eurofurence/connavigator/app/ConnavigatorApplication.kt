@@ -7,6 +7,8 @@ import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.gcm.MyGCMListenerService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.util.extensions.logd
+import org.eurofurence.connavigator.util.extensions.logv
 import org.eurofurence.connavigator.webapi.apiService
 
 /**
@@ -22,11 +24,12 @@ class ConnavigatorApplication : MultiDexApplication() {
 
         // Initialize some services
         imageService.initialize(this)
-        apiService.initialize(this)
         logService.initialize(this)
+        apiService.initialize(this)
         Analytics.init(this)
         startKovenant()
         MyGCMListenerService().subscribe()
+
         UpdateIntentService.dispatchUpdate(this)
     }
 }

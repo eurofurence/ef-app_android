@@ -12,10 +12,10 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class KnowledgeEntryRecord  {
   
-  @SerializedName("Id")
-  private UUID id = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Id")
+  private UUID id = null;
   @SerializedName("KnowledgeGroupId")
   private UUID knowledgeGroupId = null;
   @SerializedName("Title")
@@ -30,21 +30,21 @@ public class KnowledgeEntryRecord  {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
   public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
     this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public UUID getId() {
+    return id;
+  }
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -107,8 +107,8 @@ public class KnowledgeEntryRecord  {
       return false;
     }
     KnowledgeEntryRecord knowledgeEntryRecord = (KnowledgeEntryRecord) o;
-    return (id == null ? knowledgeEntryRecord.id == null : id.equals(knowledgeEntryRecord.id)) &&
-        (lastChangeDateTimeUtc == null ? knowledgeEntryRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(knowledgeEntryRecord.lastChangeDateTimeUtc)) &&
+    return (lastChangeDateTimeUtc == null ? knowledgeEntryRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(knowledgeEntryRecord.lastChangeDateTimeUtc)) &&
+        (id == null ? knowledgeEntryRecord.id == null : id.equals(knowledgeEntryRecord.id)) &&
         (knowledgeGroupId == null ? knowledgeEntryRecord.knowledgeGroupId == null : knowledgeGroupId.equals(knowledgeEntryRecord.knowledgeGroupId)) &&
         (title == null ? knowledgeEntryRecord.title == null : title.equals(knowledgeEntryRecord.title)) &&
         (text == null ? knowledgeEntryRecord.text == null : text.equals(knowledgeEntryRecord.text)) &&
@@ -119,8 +119,8 @@ public class KnowledgeEntryRecord  {
   @Override 
   public int hashCode() {
     int result = 17;
-    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
+    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (knowledgeGroupId == null ? 0: knowledgeGroupId.hashCode());
     result = 31 * result + (title == null ? 0: title.hashCode());
     result = 31 * result + (text == null ? 0: text.hashCode());
@@ -134,8 +134,8 @@ public class KnowledgeEntryRecord  {
     StringBuilder sb = new StringBuilder();
     sb.append("class KnowledgeEntryRecord {\n");
     
-    sb.append("  id: ").append(id).append("\n");
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  id: ").append(id).append("\n");
     sb.append("  knowledgeGroupId: ").append(knowledgeGroupId).append("\n");
     sb.append("  title: ").append(title).append("\n");
     sb.append("  text: ").append(text).append("\n");

@@ -2,12 +2,12 @@ package org.eurofurence.connavigator.util
 
 import android.text.Html
 import android.text.Spanned
-import io.swagger.client.model.Dealer
-import io.swagger.client.model.EventConferenceRoom
-import io.swagger.client.model.EventEntry
-import io.swagger.client.model.Info
-import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.util.extensions.get
+import io.swagger.client.model.DealerRecord
+import io.swagger.client.model.EventConferenceRoomRecord
+import io.swagger.client.model.EventRecord
+import io.swagger.client.model.KnowledgeEntryRecord
+import org.eurofurence.connavigator.database.Db
+import org.eurofurence.connavigator.util.v2.get
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import java.util.*
@@ -22,16 +22,16 @@ object Formatter {
     /*
     Formats an event starting and ending times to conform to our standards
      */
-    fun eventToTimes(eventEntry: EventEntry, database: Database, short: Boolean): Spanned {
+    fun eventToTimes(event: EventRecord, db: Db, short: Boolean): Spanned {
         val date: String = if (short) {
-            DateTime(database.eventConferenceDayDb.keyValues[eventEntry.conferenceDayId]!!.date).dayOfWeek().asText
+            DateTime(event[db.toDay]!!.date).dayOfWeek().asText
         } else {
-            DateTime(database.eventConferenceDayDb[eventEntry.conferenceDayId]!!.date).toString(DateTimeFormat.forPattern("MMM d"))
+            DateTime(event[db.toDay]!!.date).toString(DateTimeFormat.forPattern("MMM d"))
         }
         val string = "<b>%s</b> from <b>%s</b> to <b>%s</b>".format(
                 date,
-                eventEntry.startTime.subSequence(0, 5),
-                eventEntry.endTime.subSequence(0, 5)
+                event.startTime.subSequence(0, 5),
+                event.endTime.subSequence(0, 5)
         )
 
         return Html.fromHtml(string)
@@ -47,22 +47,23 @@ object Formatter {
     /*
     Formats an event title accoding to our rules
      */
-    fun eventTitle(eventEntry: EventEntry): Spanned {
-        if (eventEntry.subTitle.isNullOrEmpty()) {
-            return formatHTML(eventEntry.title)
+    fun eventTitle(event: EventRecord): Spanned {
+        if (event.subTitle.isNullOrEmpty()) {
+            return formatHTML(event.title)
         } else {
-            val format = if (eventEntry.isDeviatingFromConBook.toInt() == 0) {
-                (eventEntry.title).toString().trim() + ":<br /> <i>${eventEntry.subTitle}</i>"
+            val format = if (event.isDeviatingFromConBook) {
+                (event.title).toString().trim() + ":<br /> <i>${event.subTitle}</i>"
             } else {
-                (eventEntry.title).toString().trim() + ":<br /> <i>${eventEntry.subTitle}</i><br />This item differs from the conbook!"
+                (event.title).toString().trim() + ":<br /> <i>${event.subTitle}</i><br />This item differs from " +
+                        "the conbook!"
             }
             return Html.fromHtml(format)
         }
     }
 
-    fun dealerName(dealer: Dealer): String {
+    fun dealerName(dealer: DealerRecord): String {
         if (dealer.displayName != "")
-            return "${dealer.displayName}"
+            return dealer.displayName
         else
             return dealer.attendeeNickname
     }
@@ -70,19 +71,19 @@ object Formatter {
     /*
         Formats the full room using an html element
      */
-    fun roomFull(room: EventConferenceRoom): Spanned {
+    fun roomFull(room: EventConferenceRoomRecord): Spanned {
         return formatHTML(room.name)
     }
 
     /*
     Get's the room name that we assign
      */
-    fun roomName(room: EventConferenceRoom): String {
+    fun roomName(room: EventConferenceRoomRecord): String {
         return split(room.name)[0]
     }
 
-    fun eventOwner(eventEntry: EventEntry): Spanned {
-        return Html.fromHtml("Hosted by <i>%s</i>".format(eventEntry.panelHosts))
+    fun eventOwner(event: EventRecord): Spanned {
+        return Html.fromHtml("Hosted by <i>%s</i>".format(event.panelHosts))
     }
 
     /*
@@ -111,16 +112,16 @@ object Formatter {
         return title_split
     }
 
-    fun shareEvent(eventEntry: EventEntry): String {
-        return "Check out ${eventEntry.title}!\n${createUrl("event", eventEntry.id)}"
+    fun shareEvent(event: EventRecord): String {
+        return "Check out ${event.title}!\n${createUrl("event", event.id)}"
     }
 
-    fun shareDealer(dealer: Dealer): String {
+    fun shareDealer(dealer: DealerRecord): String {
         return "Check out ${dealer.displayName} at the dealers den!\n${createUrl("dealer", dealer.id)}"
     }
 
-    fun shareInfo(info: Info): String {
-        return "Hey, this might help: ${info.title}!\n${createUrl("info", info.id)}"
+    fun shareInfo(knowledgeEntry: KnowledgeEntryRecord): String {
+        return "Hey, this might help: ${knowledgeEntry.title}!\n${createUrl("info", knowledgeEntry.id)}"
     }
 
     fun createUrl(type: String, id: UUID): String {

@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 Marks a given private message as read (reading receipt).
 
-  * Requires authorization     * Requires any of the following roles: **&#x60;Attendee&#x60;**  Calling this on a message that has already been marked as read   will not update the &#x60;ReadDateTimeUtc&#x60; property, but return the  &#x60;ReadDateTimeUtc&#x60; value of the first call.
+  * Requires authorization     * Requires any of the following roles: **&#x60;Attendee&#x60;**  Calling this on a message that has already been marked as read  will not update the &#x60;ReadDateTimeUtc&#x60; property, but return the  &#x60;ReadDateTimeUtc&#x60; value of the first call.
 
 ### Example
 ```java
@@ -97,7 +97,7 @@ This endpoint does not need any parameter.
 
 Sends a private message to a specific recipient/attendee.
 
-  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**  If the backend has a push-channel available to any given device(s) that are currently signed into the app   with the same recipient uid, it will push a toast message to those devices.    The toast message content is defined by the &#x60;ToastTitle&#x60; and &#x60;ToastMessage&#x60; properties.
+  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**  If the backend has a push-channel available to any given device(s) that are currently signed into the app  with the same recipient uid, it will push a toast message to those devices.  The toast message content is defined by the &#x60;ToastTitle&#x60; and &#x60;ToastMessage&#x60; properties.
 
 ### Example
 ```java

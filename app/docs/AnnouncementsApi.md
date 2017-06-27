@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**apiV2AnnouncementsDelete**](AnnouncementsApi.md#apiV2AnnouncementsDelete) | **DELETE** /Api/v2/Announcements | 
 [**apiV2AnnouncementsGet**](AnnouncementsApi.md#apiV2AnnouncementsGet) | **GET** /Api/v2/Announcements | Retrieves a list of all announcement entries.
 [**apiV2AnnouncementsPost**](AnnouncementsApi.md#apiV2AnnouncementsPost) | **POST** /Api/v2/Announcements | 
+[**apiV2AnnouncementsPut**](AnnouncementsApi.md#apiV2AnnouncementsPut) | **PUT** /Api/v2/Announcements | 
 
 
 <a name="apiV2AnnouncementsByIdDelete"></a>
@@ -188,6 +189,48 @@ try {
     apiInstance.apiV2AnnouncementsPost(record);
 } catch (ApiException e) {
     System.err.println("Exception when calling AnnouncementsApi#apiV2AnnouncementsPost");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **record** | [**AnnouncementRecord**](AnnouncementRecord.md)|  | [optional]
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, text/json, application/json-patch+json
+ - **Accept**: Not defined
+
+<a name="apiV2AnnouncementsPut"></a>
+# **apiV2AnnouncementsPut**
+> apiV2AnnouncementsPut(record)
+
+
+
+  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.AnnouncementsApi;
+
+AnnouncementsApi apiInstance = new AnnouncementsApi();
+AnnouncementRecord record = new AnnouncementRecord(); // AnnouncementRecord | 
+try {
+    apiInstance.apiV2AnnouncementsPut(record);
+} catch (ApiException e) {
+    System.err.println("Exception when calling AnnouncementsApi#apiV2AnnouncementsPut");
     e.printStackTrace();
 }
 ```

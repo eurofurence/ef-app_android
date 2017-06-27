@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**UUID**](UUID.md) |  | 
 **lastChangeDateTimeUtc** | [**Date**](Date.md) |  | 
+**id** | [**UUID**](UUID.md) |  | 
 **recipientUid** | **String** |  | 
 **createdDateTimeUtc** | [**Date**](Date.md) |  | 
 **receivedDateTimeUtc** | [**Date**](Date.md) |  |  [optional]

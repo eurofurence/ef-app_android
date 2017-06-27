@@ -10,10 +10,10 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class EventRecord  {
   
-  @SerializedName("Id")
-  private UUID id = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Id")
+  private UUID id = null;
   @SerializedName("Slug")
   private String slug = null;
   @SerializedName("Title")
@@ -48,21 +48,21 @@ public class EventRecord  {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
   public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
     this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public UUID getId() {
+    return id;
+  }
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -225,8 +225,8 @@ public class EventRecord  {
       return false;
     }
     EventRecord eventRecord = (EventRecord) o;
-    return (id == null ? eventRecord.id == null : id.equals(eventRecord.id)) &&
-        (lastChangeDateTimeUtc == null ? eventRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(eventRecord.lastChangeDateTimeUtc)) &&
+    return (lastChangeDateTimeUtc == null ? eventRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(eventRecord.lastChangeDateTimeUtc)) &&
+        (id == null ? eventRecord.id == null : id.equals(eventRecord.id)) &&
         (slug == null ? eventRecord.slug == null : slug.equals(eventRecord.slug)) &&
         (title == null ? eventRecord.title == null : title.equals(eventRecord.title)) &&
         (subTitle == null ? eventRecord.subTitle == null : subTitle.equals(eventRecord.subTitle)) &&
@@ -247,8 +247,8 @@ public class EventRecord  {
   @Override 
   public int hashCode() {
     int result = 17;
-    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
+    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (slug == null ? 0: slug.hashCode());
     result = 31 * result + (title == null ? 0: title.hashCode());
     result = 31 * result + (subTitle == null ? 0: subTitle.hashCode());
@@ -272,8 +272,8 @@ public class EventRecord  {
     StringBuilder sb = new StringBuilder();
     sb.append("class EventRecord {\n");
     
-    sb.append("  id: ").append(id).append("\n");
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  id: ").append(id).append("\n");
     sb.append("  slug: ").append(slug).append("\n");
     sb.append("  title: ").append(title).append("\n");
     sb.append("  subTitle: ").append(subTitle).append("\n");

@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import io.swagger.client.model.Announcement
+import io.swagger.client.model.AnnouncementRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.delegators.view
@@ -24,7 +24,8 @@ class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView
     val announcementCaret: ImageView by view()
 }
 
-class AnnoucementRecyclerDataAdapter(val announcements: List<Announcement>) : RecyclerView.Adapter<AnnouncementDataholder>() {
+class AnnoucementRecyclerDataAdapter(val announcements: List<AnnouncementRecord>) :
+        RecyclerView.Adapter<AnnouncementDataholder>() {
     override fun onBindViewHolder(holder: AnnouncementDataholder, position: Int) {
         val announcement = announcements[position]
 

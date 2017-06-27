@@ -10,10 +10,10 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class EventFeedbackRecord  {
   
-  @SerializedName("Id")
-  private UUID id = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Id")
+  private UUID id = null;
   @SerializedName("EventId")
   private UUID eventId = null;
   @SerializedName("AuthorUid")
@@ -28,21 +28,21 @@ public class EventFeedbackRecord  {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
   public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
     this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public UUID getId() {
+    return id;
+  }
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -105,8 +105,8 @@ public class EventFeedbackRecord  {
       return false;
     }
     EventFeedbackRecord eventFeedbackRecord = (EventFeedbackRecord) o;
-    return (id == null ? eventFeedbackRecord.id == null : id.equals(eventFeedbackRecord.id)) &&
-        (lastChangeDateTimeUtc == null ? eventFeedbackRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(eventFeedbackRecord.lastChangeDateTimeUtc)) &&
+    return (lastChangeDateTimeUtc == null ? eventFeedbackRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(eventFeedbackRecord.lastChangeDateTimeUtc)) &&
+        (id == null ? eventFeedbackRecord.id == null : id.equals(eventFeedbackRecord.id)) &&
         (eventId == null ? eventFeedbackRecord.eventId == null : eventId.equals(eventFeedbackRecord.eventId)) &&
         (authorUid == null ? eventFeedbackRecord.authorUid == null : authorUid.equals(eventFeedbackRecord.authorUid)) &&
         (rating == null ? eventFeedbackRecord.rating == null : rating.equals(eventFeedbackRecord.rating)) &&
@@ -117,8 +117,8 @@ public class EventFeedbackRecord  {
   @Override 
   public int hashCode() {
     int result = 17;
-    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
+    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (eventId == null ? 0: eventId.hashCode());
     result = 31 * result + (authorUid == null ? 0: authorUid.hashCode());
     result = 31 * result + (rating == null ? 0: rating.hashCode());
@@ -132,8 +132,8 @@ public class EventFeedbackRecord  {
     StringBuilder sb = new StringBuilder();
     sb.append("class EventFeedbackRecord {\n");
     
-    sb.append("  id: ").append(id).append("\n");
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  id: ").append(id).append("\n");
     sb.append("  eventId: ").append(eventId).append("\n");
     sb.append("  authorUid: ").append(authorUid).append("\n");
     sb.append("  rating: ").append(rating).append("\n");

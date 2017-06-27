@@ -72,7 +72,6 @@ inline infix fun <reified E : Throwable> (() -> Unit).catchHandle(handler: (E) -
  * @param handler The handler to execute on an exception
  * @return Returns the return value of the receiver if no exception occurred, otherwise returns the handlers return
  * value
- * @sample catchAlternativeExample
  */
 inline infix fun <reified R, reified E : Throwable> (() -> R).catchAlternative(handler: (E) -> R): R {
     try {
@@ -96,7 +95,6 @@ inline infix fun <reified R, reified E : Throwable> (() -> R).catchAlternative(h
  * @param handler The handler to execute on an exception
  * @return Returns the return value of the receiver if no exception occurred, otherwise returns null
  * value
- * @sample catchToNullExample
  */
 inline infix fun <reified R, reified E : Throwable> (() -> R).catchToNull(handler: (E) -> Unit): R? {
     try {
@@ -120,7 +118,6 @@ inline infix fun <reified R, reified E : Throwable> (() -> R).catchToNull(handle
  * @param block The block to execute that might throw an exception
  * @return Returns the return value of the [block] if no exception occurred, otherwise returns null
  * value
- * @sample catchToNullExample
  */
 inline fun <reified R, reified E : Throwable> catchToNull(block: () -> R): R? {
     try {
@@ -142,7 +139,6 @@ inline fun <reified R, reified E : Throwable> catchToNull(block: () -> R): R? {
  * @receiver The block to execute that might throw an exception
  * @param handler The handler to execute on an exception
  * @return Returns true only if the receiver succeeded and returned true.
- * @sample catchToFalseFromReturnExample
  */
 inline infix fun <reified E : Throwable, reified R> (() -> R).catchToFalse(handler: (E) -> Unit): Boolean {
     try {
@@ -163,7 +159,6 @@ inline infix fun <reified E : Throwable, reified R> (() -> R).catchToFalse(handl
  * @param E Type of the exception
  * @param block The block to execute that might throw an exception
  * @return Returns true only if the [block] succeeded and returned true.
- * @sample catchToFalseFromReturnExample
  */
 inline fun <reified E : Throwable, reified R> catchToFalse(block: () -> R): Boolean {
     try {
@@ -219,7 +214,6 @@ inline fun catchToAnyFalse(block: () -> Boolean): Boolean {
  * @receiver The block to execute that might throw an exception
  * @param handler The handler to execute on an exception
  * @return Returns a choice of either receivers return value or the exception itself on failure.
- * @sample catchToChoiceExample
  */
 inline infix fun <reified R, reified E : Throwable> (() -> R).catchToChoice(handler: (E) -> Unit): Choice<R, E> {
     try {
@@ -243,7 +237,6 @@ inline infix fun <reified R, reified E : Throwable> (() -> R).catchToChoice(hand
  * @param E Type of the exception
  * @param block The block to execute that might throw an exception
  * @return Returns a choice of either [block]s return value or the exception itself on failure.
- * @sample catchToChoiceExample
  */
 inline fun <reified R, reified E : Throwable> catchToChoice(block: () -> R): Choice<R, E> {
     try {
@@ -266,7 +259,6 @@ inline fun <reified R, reified E : Throwable> catchToChoice(block: () -> R): Cho
  * @receiver The block to execute that might throw an exception
  * @param handler The handler to execute on an exception
  * @return Returns the exception or null if succeeded.
- * @sample catchToExceptionExample
  */
 inline infix fun <reified R, reified E : Throwable> (() -> R).catchToException(handler: (E) -> Unit): E? {
     try {
@@ -290,7 +282,6 @@ inline infix fun <reified R, reified E : Throwable> (() -> R).catchToException(h
  * @param E Type of the exception
  * @receiver The block to execute that might throw an exception
  * @return Returns the exception or null if succeeded.
- * @sample catchToExceptionExample
  */
 inline fun <reified R, reified E : Throwable> catchToException(block: () -> R): E? {
     try {
@@ -326,126 +317,4 @@ private infix fun Any?.shouldBe(value: Any?) {
 private inline infix fun <reified R> R.shouldSatisfy(predicate: (R) -> Boolean) {
     if (!predicate(this))
         throw IllegalStateException("$this should satisfy condition")
-}
-
-/**
- * Catch and handle exception, use return value of handler block on failure.
- */
-fun catchAlternativeExample() {
-    {
-        val success = 1 / 1
-        "Success"
-    } catchAlternative { _: ArithmeticException ->
-        "Fail"
-    } shouldBe "Success"
-
-    {
-        val fail = 1 / 0
-        "Success"
-    } catchAlternative { _: ArithmeticException ->
-        "Fail"
-    } shouldBe "Fail"
-}
-
-/**
- * Catch and handle exception, use null on failure.
- */
-fun catchToNullExample() {
-    {
-        val success = 1 / 1
-        "Success"
-    } catchToNull { _: ArithmeticException ->
-    } shouldBe "Success"
-
-    {
-        val fail = 1 / 0
-        "Success"
-    } catchToNull { _: ArithmeticException ->
-    } shouldBe null
-
-}
-
-/**
- * Catch and handle exception, use false on failure.
- */
-fun catchToFalseFromReturnExample() {
-    {
-        val success = 1 / 1
-        true
-    } catchToFalse { _: ArithmeticException ->
-    } shouldBe true
-
-    {
-        val fail = 1 / 0
-        true
-    } catchToFalse { _: ArithmeticException ->
-    } shouldBe false
-}
-
-/**
- * Catch and handle exception, use false on failure.
- */
-fun catchToFalseFromTrueExample() {
-    {
-        val success = 1 / 1
-    } catchToFalse { _: ArithmeticException ->
-    } shouldBe true
-
-    {
-        val fail = 1 / 0
-    } catchToFalse { _: ArithmeticException ->
-    } shouldBe false
-}
-
-/**
- * Catch and handle exception, use false on failure.
- */
-fun catchToChoiceExample() {
-    {
-        val success = 1 / 1
-        "Success"
-    } catchToChoice { _: ArithmeticException ->
-    } shouldSatisfy {
-        it.isLeft && it.left == "Success"
-    }
-
-    {
-        val fail = 1 / 0
-        "Fail"
-    } catchToChoice { _: ArithmeticException ->
-    } shouldSatisfy {
-        it.isRight && it.right is ArithmeticException
-    }
-}
-
-fun catchToExceptionExample() {
-    {
-        val success = 1 / 1
-        "Success"
-    } catchToException { _: ArithmeticException ->
-    } shouldBe null
-
-    {
-        val fail = 1 / 0
-        "Fail"
-    } catchToException { _: ArithmeticException ->
-    } shouldSatisfy {
-        it is ArithmeticException
-    }
-}
-
-fun main(args: Array<String>) {
-    // Reroute for testing
-    proxyException.clear()
-    proxyException += {
-        println("Exception was caught: ${it.javaClass.simpleName}")
-    }
-
-    // Run all examples
-    catchAlternativeExample()
-    catchToNullExample()
-    catchToFalseFromReturnExample()
-    catchToFalseFromTrueExample()
-    catchToChoiceExample()
-    catchToExceptionExample()
 }

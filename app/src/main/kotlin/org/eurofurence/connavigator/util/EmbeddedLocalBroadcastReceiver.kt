@@ -15,9 +15,9 @@ import android.support.v4.content.LocalBroadcastManager
 class EmbeddedLocalBroadcastReceiver(
         val context: Context,
         val intentFilter: IntentFilter,
-        val method: (Intent) -> Unit) : BroadcastReceiver(), Registered {
+        val method: Context.(Intent) -> Unit) : BroadcastReceiver(), Registered {
     override fun onReceive(context: Context, intent: Intent) =
-            method(intent)
+            context.method(intent)
 
     override fun register() =
             LocalBroadcastManager.getInstance(context).registerReceiver(this, intentFilter).let { true }

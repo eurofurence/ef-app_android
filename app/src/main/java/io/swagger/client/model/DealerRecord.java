@@ -12,10 +12,10 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class DealerRecord  {
   
-  @SerializedName("Id")
-  private UUID id = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Id")
+  private UUID id = null;
   @SerializedName("RegistrationNumber")
   private Integer registrationNumber = null;
   @SerializedName("AttendeeNickname")
@@ -54,21 +54,21 @@ public class DealerRecord  {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
   public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
     this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public UUID getId() {
+    return id;
+  }
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -251,8 +251,8 @@ public class DealerRecord  {
       return false;
     }
     DealerRecord dealerRecord = (DealerRecord) o;
-    return (id == null ? dealerRecord.id == null : id.equals(dealerRecord.id)) &&
-        (lastChangeDateTimeUtc == null ? dealerRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(dealerRecord.lastChangeDateTimeUtc)) &&
+    return (lastChangeDateTimeUtc == null ? dealerRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(dealerRecord.lastChangeDateTimeUtc)) &&
+        (id == null ? dealerRecord.id == null : id.equals(dealerRecord.id)) &&
         (registrationNumber == null ? dealerRecord.registrationNumber == null : registrationNumber.equals(dealerRecord.registrationNumber)) &&
         (attendeeNickname == null ? dealerRecord.attendeeNickname == null : attendeeNickname.equals(dealerRecord.attendeeNickname)) &&
         (displayName == null ? dealerRecord.displayName == null : displayName.equals(dealerRecord.displayName)) &&
@@ -275,8 +275,8 @@ public class DealerRecord  {
   @Override 
   public int hashCode() {
     int result = 17;
-    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
+    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (registrationNumber == null ? 0: registrationNumber.hashCode());
     result = 31 * result + (attendeeNickname == null ? 0: attendeeNickname.hashCode());
     result = 31 * result + (displayName == null ? 0: displayName.hashCode());
@@ -302,8 +302,8 @@ public class DealerRecord  {
     StringBuilder sb = new StringBuilder();
     sb.append("class DealerRecord {\n");
     
-    sb.append("  id: ").append(id).append("\n");
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  id: ").append(id).append("\n");
     sb.append("  registrationNumber: ").append(registrationNumber).append("\n");
     sb.append("  attendeeNickname: ").append(attendeeNickname).append("\n");
     sb.append("  displayName: ").append(displayName).append("\n");

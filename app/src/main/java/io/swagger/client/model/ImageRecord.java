@@ -10,10 +10,10 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class ImageRecord  {
   
-  @SerializedName("Id")
-  private UUID id = null;
   @SerializedName("LastChangeDateTimeUtc")
   private Date lastChangeDateTimeUtc = null;
+  @SerializedName("Id")
+  private UUID id = null;
   @SerializedName("InternalReference")
   private String internalReference = null;
   @SerializedName("Width")
@@ -30,21 +30,21 @@ public class ImageRecord  {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  public UUID getId() {
-    return id;
-  }
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
   public void setLastChangeDateTimeUtc(Date lastChangeDateTimeUtc) {
     this.lastChangeDateTimeUtc = lastChangeDateTimeUtc;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public UUID getId() {
+    return id;
+  }
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -117,8 +117,8 @@ public class ImageRecord  {
       return false;
     }
     ImageRecord imageRecord = (ImageRecord) o;
-    return (id == null ? imageRecord.id == null : id.equals(imageRecord.id)) &&
-        (lastChangeDateTimeUtc == null ? imageRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(imageRecord.lastChangeDateTimeUtc)) &&
+    return (lastChangeDateTimeUtc == null ? imageRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(imageRecord.lastChangeDateTimeUtc)) &&
+        (id == null ? imageRecord.id == null : id.equals(imageRecord.id)) &&
         (internalReference == null ? imageRecord.internalReference == null : internalReference.equals(imageRecord.internalReference)) &&
         (width == null ? imageRecord.width == null : width.equals(imageRecord.width)) &&
         (height == null ? imageRecord.height == null : height.equals(imageRecord.height)) &&
@@ -130,8 +130,8 @@ public class ImageRecord  {
   @Override 
   public int hashCode() {
     int result = 17;
-    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
+    result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (internalReference == null ? 0: internalReference.hashCode());
     result = 31 * result + (width == null ? 0: width.hashCode());
     result = 31 * result + (height == null ? 0: height.hashCode());
@@ -146,8 +146,8 @@ public class ImageRecord  {
     StringBuilder sb = new StringBuilder();
     sb.append("class ImageRecord {\n");
     
-    sb.append("  id: ").append(id).append("\n");
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
+    sb.append("  id: ").append(id).append("\n");
     sb.append("  internalReference: ").append(internalReference).append("\n");
     sb.append("  width: ").append(width).append("\n");
     sb.append("  height: ").append(height).append("\n");

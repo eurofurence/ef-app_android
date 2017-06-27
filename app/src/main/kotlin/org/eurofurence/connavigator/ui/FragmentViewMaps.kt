@@ -9,32 +9,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.FragmentMap
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.letRoot
 
 /**
  * Created by david on 8/3/16.
  */
-class FragmentViewMaps : Fragment(), ContentAPI {
+class FragmentViewMaps : Fragment(), ContentAPI, HasDb {
+    override val db by lazyLocateDb()
+
     inner class MapFragmentPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int) =
-                maps[position].description
+                browseableMaps[position].description
 
         override fun getItem(position: Int) =
-                FragmentMap(maps[position])
+                FragmentMap(browseableMaps[position])
 
 
         override fun getCount() =
-                maps.size
+                browseableMaps.size
     }
 
-    val database: Database get() = letRoot { it.database }!!
-
-    val maps by lazy { database.mapEntityDb.items.filter { it.isBrowseable.toInt() != 0 } }
+    val browseableMaps by lazy { maps.items.filter { it.isBrowseable } }
 
     val mapViewPager: ViewPager by view()
 

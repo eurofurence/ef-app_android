@@ -1,9 +1,7 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
@@ -14,11 +12,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import io.swagger.client.model.Dealer
-import io.swagger.client.model.Image
-import io.swagger.client.model.MapEntry
+import io.swagger.client.model.DealerRecord
+import io.swagger.client.model.ImageRecord
+import io.swagger.client.model.MapEntryRecord
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -26,17 +25,20 @@ import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.RemoteConfig
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.v2.get
 import us.feras.mdv.MarkdownView
 
 /**
  * Created by David on 16-5-2016.
  */
-class FragmentViewDealer() : Fragment(), ContentAPI {
-    constructor(dealer: Dealer) : this() {
+class FragmentViewDealer() : Fragment(), ContentAPI, HasDb {
+    constructor(dealer: DealerRecord) : this() {
         arguments = Bundle()
 
         arguments.jsonObjects["dealer"] = dealer
     }
+
+    override val db by lazyLocateDb()
 
     val dealerName: TextView by view()
     val dealerShortDescription: TextView by view()
@@ -50,7 +52,6 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
 
     val dealerPreviewArtLayout: LinearLayout by view()
 
-    val database: Database get() = letRoot { it.database }!!
     val remoteConfig: RemoteConfig get () = letRoot { it.remotePreferences }!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -61,29 +62,32 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
         Analytics.screen("View Dealer Details")
 
         if ("dealer" in arguments) {
-            val dealer: Dealer = arguments.jsonObjects["dealer"]
+            val dealer: DealerRecord = arguments.jsonObjects["dealer"]
 
             Analytics.event(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName ?: dealer.attendeeNickname)
 
             // Retrieve top image
-            val image = database.imageDb[dealer.artistImageId]
+            val image = dealer[toArtistImage]
 
             // Load the map
+
+            /* TODO
             val mapEntry = database.mapEntryDb.items.find { it.targetId == dealer.id }
 
             val mapImage = database.imageDb[database.mapEntityDb[mapEntry?.mapId]?.imageId]
 
-            resizeMap(dealer, mapEntry, mapImage)
+            resizeMap(mapEntry, mapImage)
+            */
 
             // Set image on top
             if (image != null) {
                 imageService.load(image, dealerImage, false)
             } else {
-                dealerImage.setImageDrawable(ContextCompat.getDrawable(database.context, R.drawable.dealer_white_full))
+                dealerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.dealer_white_full))
             }
 
             // Load art preview image
-            imageService.load(database.imageDb[dealer.artPreviewImageId], dealerPreviewArtImage)
+            imageService.load(dealer[toPreview], dealerPreviewArtImage)
 
             if (dealerPreviewArtImage.visibility == View.GONE) {
                 dealerPreviewArtLayout.visibility = View.GONE
@@ -100,6 +104,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
             // Handle the FAB that links out
             dealerButtonMore.setOnClickListener {
                 {
+                    /* TODO
                     if (dealer.websiteUri.startsWith("http")) {
                         Analytics.event(Analytics.Category.DEALER, Analytics.Action.LINK_CLICKED, dealer.displayName ?: dealer.attendeeNickname)
 
@@ -107,14 +112,17 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
                     } else {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://" + dealer.websiteUri)))
                     }
+                    */
                 } catchAlternative { _: Exception ->
                     logv { "User tried clicking on a dealer with no url" }
                 }
             }
 
             // Load empty texts
+            /* TODO
             if (dealer.websiteUri.isEmpty())
                 dealerButtonMore.visibility = View.GONE
+            */
 
             if (dealer.aboutTheArtText.isEmpty())
                 dealerArtistDescription.loadMarkdown("This artist did not supply any artist description to show to you :(")
@@ -127,7 +135,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
         }
     }
 
-    private fun resizeMap(dealer: Dealer, mapEntry: MapEntry?, mapImage: Image?) {
+    private fun resizeMap(mapEntry: MapEntryRecord?, mapImage: ImageRecord?) {
         if (mapEntry == null || mapImage == null) {
             dealerMap.visibility = View.GONE
             return
@@ -135,6 +143,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI {
 
 
         val bitmap = imageService.getBitmap(mapImage)
+
 
         val dealerCoords = mapEntry.asRelatedCoordinates(mapImage)
 

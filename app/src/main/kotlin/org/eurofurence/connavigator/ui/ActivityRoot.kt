@@ -22,13 +22,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import io.swagger.client.model.Dealer
-import io.swagger.client.model.EventEntry
-import io.swagger.client.model.Info
+import io.swagger.client.model.*
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -41,7 +38,7 @@ import org.joda.time.DateTime
 import org.joda.time.Days
 import java.util.*
 
-class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPreferenceChangeListener {
+class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPreferenceChangeListener, HasDb {
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         logd { "Updating content data after preference change" }
 
@@ -140,7 +137,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             // Handle event links
                 intent.dataString.contains("/event/") -> {
                     val uuid = intent.data.lastPathSegment
-                    val eventValue = database.eventEntryDb[UUID.fromString(uuid)]
+                    val eventValue = events[UUID.fromString(uuid)]
                     if (eventValue != null) {
                         Analytics.event(Analytics.Category.EVENT, Analytics.Action.INCOMING, eventValue.title)
                         navigateToEvent(eventValue)
@@ -153,10 +150,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             // Handle info links
                 intent.dataString.contains("/info/") -> {
                     val uuid = intent.data.lastPathSegment
-                    val infoValue = database.infoDb[UUID.fromString(uuid)]
-                    if (infoValue != null) {
-                        Analytics.event(Analytics.Category.INFO, Analytics.Action.INCOMING, infoValue.title)
-                        navigateToInfo(infoValue)
+                    val knowledgeEntryValue = knowledgeEntries[UUID.fromString(uuid)]
+                    if (knowledgeEntryValue != null) {
+                        Analytics.event(Analytics.Category.INFO, Analytics.Action.INCOMING, knowledgeEntryValue.title)
+                        navigateToKnowledgeEntry(knowledgeEntryValue)
                         return true
                     } else {
                         makeSnackbar("I'm sorry, but we didn't find any info!")
@@ -166,7 +163,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             // Handle dealer links
                 intent.dataString.contains("/dealer/") -> {
                     val uuid = intent.data.lastPathSegment
-                    val dealerValue = database.dealerDb[UUID.fromString(uuid)]
+                    val dealerValue = dealers[UUID.fromString(uuid)]
                     if (dealerValue != null) {
                         Analytics.event(Analytics.Category.DEALER, Analytics.Action.INCOMING, dealerValue.attendeeNickname)
                         navigateToDealer(dealerValue)
@@ -281,7 +278,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     AlertDialog.Builder(ContextThemeWrapper(this, R.style.appcompatDialog))
                             .setTitle("Clearing Database")
                             .setMessage("This will get rid of all cached items you have stored locally. You will need an internet connection to restart!")
-                            .setPositiveButton("Clear", { dialogInterface, i -> database.clear(); imageService.clear(); preferences.edit().clear().commit(); RemoteConfig.clear(); System.exit(0) })
+                            .setPositiveButton("Clear", { dialogInterface, i -> db.clear(); imageService.clear();
+                                preferences.edit().clear().commit(); RemoteConfig.clear(); System.exit(0) })
                             .setNegativeButton("Cancel", { dialogInterface, i -> })
                             .show()
                 }
@@ -299,7 +297,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         // Calculate the days between, using the current time. Todo: timezones
         val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
 
-        if (remotePreferences.mapsEnabled == false) {
+        if (!remotePreferences.mapsEnabled) {
             navView.menu.findItem(R.id.navMap).isVisible = false
         }
 
@@ -310,16 +308,16 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             navDays.text = "Only $days days left!"
     }
 
-    override fun navigateToEvent(eventEntry: EventEntry) {
-        navigateToSubFragment(FragmentViewEvent(eventEntry))
+    override fun navigateToEvent(event: EventRecord) {
+        navigateToSubFragment(FragmentViewEvent(event))
     }
 
-    override fun navigateToInfo(info: Info) {
-        navigateToSubFragment(FragmentViewInfo(info))
+    override fun navigateToKnowledgeEntry(knowledgeEntry: KnowledgeEntryRecord) {
+        navigateToSubFragment(FragmentViewInfo(knowledgeEntry))
     }
 
 
-    override fun navigateToDealer(dealer: Dealer) {
+    override fun navigateToDealer(dealer: DealerRecord) {
         navigateToSubFragment(FragmentViewDealer(dealer))
     }
 
@@ -331,10 +329,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     .addToBackStack(null)
                     .commit()
 
-    /**
-     * Database is lazily initialized and then provided as part of the root API
-     */
-    override val database by lazy { Database(this) }
+    override val db by lazyLocateDb()
 
     private fun setupFab() {
         fab.setOnClickListener { view ->

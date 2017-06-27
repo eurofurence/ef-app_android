@@ -10,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.filterEvents
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -23,15 +25,16 @@ import org.joda.time.DateTime
 /**
  * Created by David on 5/14/2016.
  */
-class FragmentViewHome : Fragment(), ContentAPI {
+class FragmentViewHome : Fragment(), ContentAPI, HasDb {
+    override val db by lazyLocateDb()
+
     val announcementsRecycler: RecyclerView by view()
     val announcementsTitle: TextView by view()
-    val database: Database get() = letRoot { it.database }!!
     val preferences: SharedPreferences get() = letRoot { it.preferences }!!
 
-    val upcoming by lazy { EventRecyclerFragment(database.filterEvents().isUpcoming()) }
-    val current by lazy { EventRecyclerFragment(database.filterEvents().isCurrent()) }
-    val favourited by lazy { EventRecyclerFragment(database.filterEvents().isFavorited()) }
+    val upcoming by lazy { EventRecyclerFragment(filterEvents().isUpcoming()) }
+    val current by lazy { EventRecyclerFragment(filterEvents().isCurrent()) }
+    val favourited by lazy { EventRecyclerFragment(filterEvents().isFavorited()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_home, container, false)
@@ -48,7 +51,7 @@ class FragmentViewHome : Fragment(), ContentAPI {
                 .commitAllowingStateLoss()
 
         val now = DateTime.now()
-        var announcements = database.announcementDb.items.filterIf(
+        var announcements = announcements.items.filterIf(
                 !preferences.getBoolean(this.getString(R.string.announcement_show_old), false),
                 { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis }
         )
@@ -72,7 +75,7 @@ class FragmentViewHome : Fragment(), ContentAPI {
 
     private fun updateContents() {
         val now = DateTime.now()
-        val announcements = database.announcementDb.items.filterIf(
+        val announcements = announcements.items.filterIf(
                 !preferences.getBoolean(this.getString(R.string.announcement_show_old), false),
                 { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis })
                 .sortedByDescending { it.lastChangeDateTimeUtc }

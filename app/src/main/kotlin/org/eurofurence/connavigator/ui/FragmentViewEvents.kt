@@ -14,46 +14,45 @@ import android.view.ViewGroup
 import android.widget.EditText
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.Database
+import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.letRoot
-import org.eurofurence.connavigator.util.extensions.size
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
 /**
  * Created by David on 5/3/2016.
  */
-class FragmentViewEvents : Fragment(), ContentAPI {
+class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
+    override val db by lazyLocateDb()
+
     inner class EventFragmentPagerAdapter(val fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int): CharSequence? {
             if (settings.getBoolean(context.getString(R.string.date_short), true)) {
-                return DateTime(database.eventConferenceDayDb.asc { it.date }[position].date).dayOfWeek().asShortText
+                return DateTime(days.asc { it.date }[position].date).dayOfWeek().asShortText
             } else {
-                return DateTime(database.eventConferenceDayDb.asc { it.date }[position].date).toString(DateTimeFormat.forPattern("MMM d"))
+                return DateTime(days.asc { it.date }[position].date).toString(DateTimeFormat.forPattern("MMM d"))
             }
         }
 
         override fun getItem(position: Int): Fragment? {
-            return EventRecyclerFragment(database.filterEvents()
-                    .onDay(database.eventConferenceDayDb.asc { it.date }[position].id))
+            return EventRecyclerFragment(filterEvents()
+                    .onDay(days.asc { it.date }[position].id))
         }
 
         override fun getCount(): Int {
-            return database.eventConferenceDayDb.size
+            return days.size
         }
     }
-
-    val database: Database get() = letRoot { it.database }!!
 
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()
 
-    val searchEventFilter by lazy { database.filterEvents() }
+    val searchEventFilter by lazy { filterEvents() }
 
     val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
 

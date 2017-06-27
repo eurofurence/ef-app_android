@@ -11,9 +11,10 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.assist.ImageSize
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils
-import io.swagger.client.model.Image
+import io.swagger.client.model.ImageRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.logd
+import org.eurofurence.connavigator.util.extensions.url
 import org.eurofurence.connavigator.webapi.apiService
 
 /**
@@ -52,10 +53,10 @@ object imageService {
     /**
      * Loads the image at the URL and displays it in the image view.
      */
-    fun load(image: Image?, imageView: ImageView, showHide: Boolean = true) {
+    fun load(image: ImageRecord?, imageView: ImageView, showHide: Boolean = true) {
         // Load image if not null
         if (image != null)
-            imageLoader.displayImage(apiService.formatUrl(image.url), imageView, ImageSize(image.width, image.height))
+            imageLoader.displayImage(image.url, imageView, ImageSize(image.width, image.height))
         else
             imageLoader.displayImage("", imageView)
 
@@ -67,8 +68,8 @@ object imageService {
     /**
      * Preloads an image too memory
      */
-    fun preload(image: Image) =
-            imageLoader.loadImage(apiService.formatUrl(image.url), ImageSize(image.width, image.height), object : SimpleImageLoadingListener() {
+    fun preload(image: ImageRecord) =
+            imageLoader.loadImage(image.url, ImageSize(image.width, image.height), object : SimpleImageLoadingListener() {
                 override fun onLoadingComplete(imageUri: String, view: View?, loadedImage: Bitmap) {
 
                     if (imageUri.contains("1f70fd04-39e5-11e6-bae0-066e23d209cf")) {
@@ -78,8 +79,8 @@ object imageService {
                 }
             })
 
-    fun getBitmap(image: Image): Bitmap =
-            imageLoader.loadImageSync(apiService.formatUrl(image.url), ImageSize(image.width, image.height))
+    fun getBitmap(image: ImageRecord): Bitmap =
+            imageLoader.loadImageSync(image.url, ImageSize(image.width, image.height))
 
     fun clear() {
         logd { "Clearing image cache" }
@@ -90,8 +91,8 @@ object imageService {
     /**
      * Reload an image
      */
-    fun recache(image: Image) {
-        val imageFile = imageLoader.diskCache.get(apiService.formatUrl(image.url))
+    fun recache(image: ImageRecord) {
+        val imageFile = imageLoader.diskCache.get(image.url)
 
         if (imageFile.exists()) {
             logd { "Deleting cached image" }
@@ -99,6 +100,6 @@ object imageService {
             preload(image)
         }
 
-        MemoryCacheUtils.removeFromCache(apiService.formatUrl(image.url), imageLoader.memoryCache)
+        MemoryCacheUtils.removeFromCache(image.url, imageLoader.memoryCache)
     }
 }

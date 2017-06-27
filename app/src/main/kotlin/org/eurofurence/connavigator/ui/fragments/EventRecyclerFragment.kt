@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.SpannableStringBuilder
 import android.text.style.ImageSpan
-import android.util.Log.v
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,24 +15,26 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import io.swagger.client.model.EventEntry
+import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
-import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.RemoteConfig
 import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.letRoot
+import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.logd
+import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
 
@@ -41,7 +42,9 @@ import org.joda.time.DateTime
  * Event view recycler to hold the viewpager items
  * TODO: Refactor the everliving fuck out of this shitty software
  */
-class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
+class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI, HasDb {
+    override val db by lazyLocateDb()
+
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val eventImage: ImageView by view()
@@ -49,7 +52,7 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
         val eventStartTime: TextView by view()
         val eventEndTime: TextView by view()
         val eventRoom: TextView by view()
-        val eventCard: LinearLayout by view()
+        val eventCard: LinearLayout by view("layout") // TODO Layout mismatch
         val layout: LinearLayout by view()
     }
 
@@ -64,7 +67,7 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
             // Get the event for the position
             val event = effectiveEvents[pos]
 
-            val isFavourite = database.favoritedDb[event.id] != null
+            val isFavourite = event.id in faves
 
             SpannableStringBuilder()
                     .apply {
@@ -83,18 +86,18 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
                     .apply { holder.eventTitle.text = this }
 
             when {
-                database.eventIsHappening(event, DateTime.now()) -> { // It's happening now
+                eventIsHappening(event, DateTime.now()) -> { // It's happening now
                     holder.eventStartTime.text = "NOW"
                     holder.eventCard.setBackgroundColor(getColor(context, R.color.accentLighter))
                 }
-                database.eventStart(event).isBeforeNow -> // It's already happened
+                eventStart(event).isBeforeNow -> // It's already happened
                     holder.eventStartTime.text = "DONE"
-                database.eventIsUpcoming(event, DateTime.now(), 30) -> { //it's happening in 30 minutes
+                eventIsUpcoming(event, DateTime.now(), 30) -> { //it's happening in 30 minutes
                     // It's upcoming, so we give a timer
-                    val countdown = database.eventStart(event).minus(DateTime.now().millis).millis / 1000 / 60
+                    val countdown = eventStart(event).minus(DateTime.now().millis).millis / 1000 / 60
                     holder.eventStartTime.text = "IN $countdown MIN"
                 }
-                database.eventEnd(event).isBeforeNow -> {// Event end is before the current time, so it has already occurred thus it is gray
+                eventEnd(event).isBeforeNow -> {// Event end is before the current time, so it has already occurred thus it is gray
                     holder.eventCard.setBackgroundColor(getColor(context, R.color.backgroundGrey))
                 }
                 isFavourite -> {// Event is in favourites, thus it is coloured in primary
@@ -107,10 +110,12 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
             }
 
             holder.eventEndTime.text = "until ${Formatter.shortTime(event.endTime)}"
-            holder.eventRoom.text = Formatter.roomFull(database.eventConferenceRoomDb[event.conferenceRoomId]!!)
+            holder.eventRoom.text = Formatter.roomFull(event[toRoom]!!)
 
             // Load image
-            imageService.load(database.imageDb[event.imageId], holder.eventImage)
+            /* TODO
+            imageService.load( database.imageDb[event.imageId], holder.eventImage)
+            */
 
             // Assign the on-click action
             holder.itemView.setOnClickListener {
@@ -124,14 +129,13 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
         }
     }
 
-    val events: RecyclerView by view()
+    val eventsView: RecyclerView by view("events") // TODO: Anko the shit outta this
+
     val progress: ProgressBar by view()
 
-    var effectiveEvents = emptyList<EventEntry>()
+    var effectiveEvents = emptyList<EventRecord>()
 
     val eventsTitle: TextView by view()
-
-    val database: Database get() = letRoot { it.database }!!
 
     val remoteConfig: RemoteConfig get() = letRoot { it.remotePreferences }!!
 
@@ -146,15 +150,15 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
         super.onViewCreated(view, savedInstanceState)
 
         // Configure the recycler
-        events.setHasFixedSize(true)
-        events.adapter = DataAdapter()
+        eventsView.setHasFixedSize(true)
+        eventsView.adapter = DataAdapter()
 
         // Filter the data
         dataUpdated()
 
-        events.layoutManager = LinearLayoutManager(activity)
+        eventsView.layoutManager = LinearLayoutManager(activity)
 
-        events.itemAnimator = DefaultItemAnimator()
+        eventsView.itemAnimator = DefaultItemAnimator()
 
         updateReceiver = context.localReceiver(FragmentViewEvent.EVENT_STATUS_CHANGED) {
             dataUpdated()
@@ -175,15 +179,15 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI {
 
     override fun dataUpdated() {
         promiseOnUi {
-            events.visibility = View.GONE
+            eventsView.visibility = View.GONE
             eventsTitle.visibility = View.GONE
             progress.visibility = View.VISIBLE
         } then {
             effectiveEvents = eventList.applyFilters()
         } successUi {
-            events.adapter.notifyDataSetChanged()
+            eventsView.adapter.notifyDataSetChanged()
             progress.visibility = View.GONE
-            events.visibility = View.VISIBLE
+            eventsView.visibility = View.VISIBLE
             eventsTitle.visibility = View.GONE
         }
     }

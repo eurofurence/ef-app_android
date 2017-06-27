@@ -12,20 +12,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import io.swagger.client.model.Info
-import io.swagger.client.model.InfoGroup
+import io.swagger.client.model.KnowledgeEntryRecord
+import io.swagger.client.model.KnowledgeGroupRecord
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.Database
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.*
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.get
-import org.eurofurence.connavigator.util.extensions.letRoot
+import org.eurofurence.connavigator.util.v2.get
 
-class FragmentViewInfoGroups : Fragment(), ContentAPI {
+class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
+    override val db by lazyLocateDb()
+
     companion object {
         fun <T : Any, U : Any> weave(parents: List<T>, children: Map<T, List<U>>): List<Choice<T, U>> =
                 parents.flatMap {
@@ -69,28 +70,30 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
 
 
         override fun onBindViewHolder(rawHolder: ViewHolder, pos: Int) {
-            effectiveInterleaved[pos] onLeft { infoGroup ->
+            effectiveInterleaved[pos] onLeft { group ->
                 // Cast holder
                 val holder = rawHolder as InfoGroupViewHolder
 
                 // Set data
-                holder.title.text = infoGroup.name
-                holder.description.text = infoGroup.description
-                imageService.load(database.imageDb[infoGroup.imageId], holder.image)
-            } onRight { info ->
+                holder.title.text = group.name
+                holder.description.text = group.description
+                /* TODO
+                imageService.load(database.imageDb[group.imageId], holder.image)
+                */
+            } onRight { entry ->
                 // Cast holder
                 val holder = rawHolder as InfoGroupItemViewHolder
 
                 // Set data
-                holder.title.text = info.title
+                holder.title.text = entry.title
 
                 // Handle clicks
                 holder.itemView.setOnClickListener {
-                    applyOnRoot { navigateToInfo(info) }
+                    applyOnRoot { navigateToKnowledgeEntry(entry) }
                     vibrator.short()
                 }
                 holder.itemView.setOnLongClickListener {
-                    startActivity(SharingUtility.share(Formatter.shareInfo(info))).let { true }
+                    startActivity(SharingUtility.share(Formatter.shareInfo(entry))).let { true }
                     vibrator.long().let { true }
                 }
             }
@@ -98,15 +101,13 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
     }
 
 
-    val database: Database get() = letRoot { it.database }!!
-
     // View
     val infoGroups: RecyclerView by view()
 
     val vibrator by lazy { TouchVibrator(context) }
 
     // Store of currently displayed info groups and items
-    var effectiveInterleaved = emptyList<Choice<InfoGroup, Info>>()
+    var effectiveInterleaved = emptyList<Choice<KnowledgeGroupRecord, KnowledgeEntryRecord>>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_info_groups, container, false)
@@ -131,11 +132,10 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI {
 
     private fun dataInit() {
         // Calibrate groups and elements
-        val groups = database.infoGroupDb.items
-                .sortedBy { it.position }
-        val elements = database.infoDb.items
-                .groupBy { database.infoGroupDb.keyValues[it.infoGroupId]!! }
-                .mapValues { it.value.sortedBy { it.position } }
+        val groups = knowledgeGroups.asc { it.order }
+        val elements = knowledgeEntries.items
+                .groupBy { it[toGroup] ?: error("Entry without group mapping.") }
+                .mapValues { it.value.sortedBy { it.order } }
 
         // Weave them
         effectiveInterleaved = weave(groups, elements)
