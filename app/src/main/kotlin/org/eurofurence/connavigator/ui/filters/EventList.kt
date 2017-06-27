@@ -14,7 +14,7 @@ class EventList(val database: Database) {
     val filters = HashMap<FilterType, Any>()
     val UPCOMING_TIME_IN_MINUTES = 30
 
-    @AddTrace(name = "applyEventFilters", enabled = true)
+    @AddTrace(name = "EventList:applyEventFilters", enabled = true)
     fun applyFilters(): List<EventEntry> {
         var events = database.eventEntryDb.items
 

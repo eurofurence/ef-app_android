@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import com.chibatching.kotpref.bulk
+import com.google.firebase.perf.metrics.AddTrace
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Database
@@ -24,6 +25,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger {
     private lateinit var ui: StartUi
     private val database by lazy { Database(this) }
 
+    @AddTrace(name =  "ActivityStart:UpdateIntentService", enabled = true)
     private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
         if (it.booleans["success"]) {
             info { "Data update success" }

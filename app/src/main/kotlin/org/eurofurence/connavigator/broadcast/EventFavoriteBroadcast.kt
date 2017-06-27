@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.google.firebase.perf.metrics.AddTrace
 import com.pawegio.kandroid.d
 import com.pawegio.kandroid.i
 import io.swagger.client.model.EventEntry
@@ -20,6 +21,7 @@ import org.joda.time.DurationFieldType
  * Created by requinard on 4/17/17.
  */
 class EventFavoriteBroadcast : BroadcastReceiver() {
+    @AddTrace(name="EventFavoriteBroadcast:onReceive",enabled = true)
     override fun onReceive(context: Context, intent: Intent) {
         val eventEntry: EventEntry = intent.jsonObjects["eventEntry"]
         val database = Database(context)
