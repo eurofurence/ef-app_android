@@ -36,6 +36,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     val mapImage: PhotoView by view()
 
     var mapRecord by notNull<MapRecord>()
+    val image by lazy { db.images[mapRecord.imageId]!! }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fragment_map, container, false)
@@ -46,13 +47,20 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         if ("mapRecord" in arguments) {
             mapRecord = arguments.jsonObjects["mapRecord"]
 
-            info { "Browsing to map"}
+            info { "Browsing to map ${mapRecord.description}" }
 
             mapTitle.text = mapRecord.description
-
             mapTitle.visibility = View.GONE
 
             imageService.load(db.images[mapRecord.imageId]!!, mapImage, false)
+
+            val mapScale = Math.abs(image.width.toFloat() / image.height.toFloat())
+
+            mapImage.minimumScale = 1F
+            mapImage.mediumScale = mapScale / 2
+            mapImage.maximumScale = mapScale
+
+            mapImage.setScale(mapScale / 2, true)
         } else {
             mapImage.setImageResource(R.drawable.placeholder_event)
         }
