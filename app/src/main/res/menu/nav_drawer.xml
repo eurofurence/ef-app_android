@@ -38,6 +38,9 @@
                     android:id="@+id/navLogin"
                     android:icon="@drawable/icon_home"
                     android:title="Login"/>
+            <item
+                android:id="@+id/navMessages"
+                android:title="Private Messages" />
         </menu>
     </item>
     <item android:title="External">
