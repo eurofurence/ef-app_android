@@ -2,7 +2,11 @@ package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.InputType
 import android.view.View
+import android.widget.TextView
+import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
@@ -70,6 +74,17 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                         text = "Tweak event days so it seems like it's the current date"
                         isChecked = DebugPreferences.debugDates
                         setOnClickListener { DebugPreferences.debugDates = !DebugPreferences.debugDates }
+                    }
+
+                    editText {
+                        hint = "The amount of days to offset by. Must be integer"
+                        setText(DebugPreferences.eventDateOffset.toString(), TextView.BufferType.EDITABLE)
+                        textWatcher {
+                            afterTextChanged { text ->
+                                if(text!!.isNotEmpty())DebugPreferences.eventDateOffset = text.toString().toInt()
+                            }
+                        }
+                        inputType = InputType.TYPE_CLASS_NUMBER
                     }
 
                     checkBox {
