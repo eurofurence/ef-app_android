@@ -11,6 +11,7 @@ import android.util.Log
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.webapi.apiService
@@ -38,8 +39,6 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
 
     override val db by lazyLocateDb()
 
-    val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
-
     // TODO: Sticky intent since there should only be one pending update
     override fun onHandleIntent(intent: Intent?) {
         logv("UIS") { "Handling update intent service intent" }
@@ -53,9 +52,8 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
 
             logv("UIS") { sync }
 
-            // TODO Check if these are implemented correctly
-            val shift = preferences.getBoolean(resources.getString(R.string.debug_date_enabled), false)
-            val shiftOffset = preferences.getString(resources.getString(R.string.debug_date_setting), "0").toInt()
+            val shift = DebugPreferences.debugDates
+            val shiftOffset = DebugPreferences.eventDateOffset
 
             if (shift) {
                 logd { "Changing dates instead of updating" }
