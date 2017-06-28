@@ -121,6 +121,8 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
 
     private fun schedule(context: Context) {
         // TODO, this could use some anko refactoring I guess
+        // D: Actually, this is somewhat obsolete. On a change in the backend it will automatically push a message
+        // to the user, automatically updating (Push vs pull)
 
         Log.d("UIS", "Scheduling the next data update")
 
