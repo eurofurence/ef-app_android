@@ -40,7 +40,7 @@ class EventList(override val db: Db) : HasDb {
                 FilterType.IS_CURRENT -> events = events.filter {
                     eventIsHappening(it, org.joda.time.DateTime.now())
                 }
-                FilterType.ORDER_START_TIME -> events = events.sortedBy { it.startTime }.sortedBy { it.endTime }
+                FilterType.ORDER_START_TIME -> events = events.sortedBy { it.startTime }
             }
         }
 
@@ -88,6 +88,12 @@ class EventList(override val db: Db) : HasDb {
      */
     fun isUpcoming() =
             this.apply { filters[FilterType.IS_UPCOMING] = "" }
+
+    /**
+     * Sort events by date
+     */
+    fun sortByDate() =
+            this.apply{ filters[FilterType.ORDER_START_TIME] = ""}
 }
 
 enum class FilterType {
@@ -99,5 +105,4 @@ enum class FilterType {
     IS_UPCOMING,
     IS_FAVORITED,
     IS_CURRENT,
-
 }

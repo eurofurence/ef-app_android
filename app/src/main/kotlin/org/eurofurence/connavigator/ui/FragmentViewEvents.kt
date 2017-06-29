@@ -42,7 +42,8 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
 
         override fun getItem(position: Int): Fragment? {
             return EventRecyclerFragment(filterEvents()
-                    .onDay(days.asc { it.date }[position].id))
+                    .onDay(days.asc { it.date }[position].id)
+                    .sortByDate())
         }
 
         override fun getCount(): Int {
