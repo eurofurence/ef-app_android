@@ -133,7 +133,7 @@ dependencies {
 
 
     // Photoview
-    compile 'com.github.chrisbanes:PhotoView:1.2.6'
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'us.feras.mdv:markdownview:1.1.0'
 
     // Promises

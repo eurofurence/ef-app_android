@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.github.chrisbanes.photoview.PhotoView
 import io.swagger.client.model.MapRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -17,7 +18,6 @@ import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
-import uk.co.senab.photoview.PhotoView
 import kotlin.properties.Delegates.notNull
 
 /**

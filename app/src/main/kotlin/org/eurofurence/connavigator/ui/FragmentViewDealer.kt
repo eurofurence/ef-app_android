@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.github.chrisbanes.photoview.PhotoView
 import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -23,7 +24,6 @@ import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.photoView
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
-import uk.co.senab.photoview.PhotoView
 import us.feras.mdv.MarkdownView
 
 /**
@@ -83,6 +83,8 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     else
                         "this artist did not supply any art descriptions to show to you :("
             )
+
+            ui.map.setScale(2.5F, true)
         }
     }
 }
