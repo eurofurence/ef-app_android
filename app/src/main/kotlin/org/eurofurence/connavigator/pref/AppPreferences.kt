@@ -8,4 +8,5 @@ import com.chibatching.kotpref.KotprefModel
 object AppPreferences: KotprefModel() {
     var showOldAnnouncements by booleanPref()
     var shortenDates by booleanPref(true)
+    var notificationMinutesBefore by intPref(30)
 }

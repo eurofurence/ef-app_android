@@ -11,8 +11,9 @@ import com.pawegio.kandroid.i
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.database.RootDb
 import org.eurofurence.connavigator.database.eventStart
-import org.eurofurence.connavigator.gcm.NotificationPublisher
 import org.eurofurence.connavigator.gcm.NotificationFactory
+import org.eurofurence.connavigator.gcm.NotificationPublisher
+import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.alarmManager
@@ -22,14 +23,14 @@ import org.joda.time.DurationFieldType
  * Created by requinard on 4/17/17.
  */
 class EventFavoriteBroadcast : BroadcastReceiver() {
-    @AddTrace(name="EventFavoriteBroadcast:onReceive",enabled = true)
+    @AddTrace(name = "EventFavoriteBroadcast:onReceive", enabled = true)
     override fun onReceive(context: Context, intent: Intent) {
         val event: EventRecord = intent.jsonObjects["event"]
         val db = RootDb(context)
 
         i("Changing status of event ${event.title}")
 
-        val notificationTime = db.eventStart(event).withFieldAdded(DurationFieldType.minutes(), -30)
+        val notificationTime = db.eventStart(event).withFieldAdded(DurationFieldType.minutes(), -(AppPreferences.notificationMinutesBefore))
 
         d("Notification time is $notificationTime")
 
