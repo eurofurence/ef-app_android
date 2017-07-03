@@ -36,10 +36,11 @@
         <menu>
             <item
                     android:id="@+id/navLogin"
-                    android:icon="@drawable/icon_home"
+                    android:icon="@drawable/icon_user"
                     android:title="Login"/>
             <item
                 android:id="@+id/navMessages"
+                android:icon="@drawable/icon_message"
                 android:title="Private Messages" />
         </menu>
     </item>
