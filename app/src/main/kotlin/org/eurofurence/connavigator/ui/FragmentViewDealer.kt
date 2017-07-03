@@ -1,6 +1,5 @@
 package org.eurofurence.connavigator.ui
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -119,27 +118,25 @@ class DealerUi : AnkoComponent<ViewGroup> {
                         name = textView {
                             text = "Dealer Name"
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                setTextAppearance(android.R.style.TextAppearance_Large_Inverse)
-                            }
+                            setTextAppearance(ctx, android.R.style.TextAppearance_Large_Inverse)
+
                             padding = dip(10)
                         }
 
                         shortDescription = textView {
                             text = "Short description"
                             padding = dip(10)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                setTextAppearance(android.R.style.TextAppearance_Medium_Inverse)
-                            }
+
+                            setTextAppearance(ctx, android.R.style.TextAppearance_Medium_Inverse)
+
                         }
                     }
 
                     textView {
                         text = "About the Artist"
                         padding = dip(15)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            setTextAppearance(R.style.TextAppearance_AppCompat_Large)
-                        }
+                        setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
+
                     }
 
                     aboutArtist = markdownView { }
@@ -154,16 +151,13 @@ class DealerUi : AnkoComponent<ViewGroup> {
                         textAlignment = View.TEXT_ALIGNMENT_CENTER
                         padding = dip(15)
                         backgroundResource = R.color.primary
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            setTextAppearance(R.style.TextAppearance_AppCompat_Medium_Inverse)
-                        }
+                        setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium_Inverse)
+
                     }
 
                     textView("About the Art") {
                         padding = dip(15)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            setTextAppearance(R.style.TextAppearance_AppCompat_Large)
-                        }
+                        setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
                     }
                     aboutArt = markdownView { }
 

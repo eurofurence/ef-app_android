@@ -151,7 +151,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         }
     }
 
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             ui.createView(AnkoContext.Companion.create(container!!.context, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -242,22 +242,29 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                     weightSum = 10f
                     verticalLayout {
                         lparams(wrapContent, wrapContent)
-                        padding = dip(15)
 
                         textView {
                             id = R.id.eventStartTime
                             maxLines = 1
-                        }.applyRecursively { android.R.style.TextAppearance_Medium }
+                            setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
+                        }
 
                         textView {
                             id = R.id.eventEndTime
                             maxLines = 1
-                        }.applyRecursively { android.R.style.TextAppearance_Small }
+                            setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                        }
                     }
                     verticalLayout {
                         lparams(wrapContent, wrapContent)
-                        textView { id = R.id.eventTitle }.applyRecursively { android.R.style.TextAppearance_Large }
-                        textView { id = R.id.eventRoom }.applyRecursively { android.R.style.TextAppearance_Small }
+                        textView {
+                            id = R.id.eventTitle
+                            setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
+                        }
+                        textView {
+                            id = R.id.eventRoom
+                            setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                        }
                     }
                 }
             }

@@ -80,6 +80,7 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
 
                 textView {
                     id = R.id.announcementTitle
+                    setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
                 }.lparams(matchParent, wrapContent, 9F)
 
                 imageView {
@@ -91,6 +92,7 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
 
             textView {
                 id = R.id.announcementDate
+                setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Small)
             }.lparams(wrapContent, wrapContent)
 
             textView {

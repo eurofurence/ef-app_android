@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -152,9 +153,10 @@ class HomeUi : AnkoComponent<ViewGroup> {
                     }
                 }
 
-                announcementsTitle = textView("Latest announcements").lparams(matchParent, wrapContent) {
+                announcementsTitle = textView("Latest announcements") {
+                    setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
                     padding = dip(15)
-                }
+                }.lparams(matchParent, wrapContent)
 
                 announcementsRecycler = recycler {
                     lparams(matchParent, wrapContent)
