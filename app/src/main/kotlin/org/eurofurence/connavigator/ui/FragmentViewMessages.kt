@@ -8,10 +8,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.pawegio.kandroid.longToast
 import io.swagger.client.model.PrivateMessageRecord
-import nl.komponents.kovenant.task
+import nl.komponents.kovenant.then
+import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -66,15 +68,20 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
 
         info { "Filling in messages" }
 
-        task {
+        promiseOnUi {
+            ui.loading.visibility = View.VISIBLE
+            ui.messageList.visibility = View.GONE
+        } then {
             info { "Fetching messages" }
             apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
             messages = apiService.communications.apiV2CommunicationPrivateMessagesGet()
-        } success {
-            messages.forEach { it.markAsRead() }
         } successUi {
             info("Succesfully retrieved ${messages.size} messages")
             configureRecycler()
+            ui.loading.visibility = View.GONE
+            ui.messageList.visibility = View.VISIBLE
+        } then {
+          messages.forEach {if(it.readDateTimeUtc == null) it.markAsRead()}
         } fail {
             warn { "Failed to retrieve messages" }
             longToast("Failed to retrieve messages!")
@@ -93,10 +100,11 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
 class SingleItemUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
+            padding = dip(15)
             textView {
                 id = R.id.title
 
-                setTextAppearance(R.style.TextAppearance_AppCompat_Large)
+                setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
             }
 
             textView {
@@ -108,11 +116,15 @@ class SingleItemUi : AnkoComponent<ViewGroup> {
 }
 
 class MessagesUi : AnkoComponent<ViewGroup> {
+    lateinit var loading: ProgressBar
     lateinit var messageList: RecyclerView
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
-            messageList = recycler { }
+            lparams(matchParent, matchParent)
+
+            loading = progressBar().lparams(matchParent, wrapContent)
+            messageList = recycler { }.lparams(matchParent, matchParent)
         }
     }
-
 }
+
