@@ -6,7 +6,6 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.database.UpdateIntentService
-import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.jetbrains.anko.*
 
@@ -38,6 +37,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
             "Announcement" -> createAnnouncement(message)
             "ImportantAnnouncement" -> createHighPriorityAnnouncement(message)
             "Sync" -> syncData(message)
+            "Notification" -> createNotification(message)
             else -> warn("Message did not contain a valid event. Abandoning!")
         }
     }
@@ -57,6 +57,15 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
                 .setContentText(message.data["Title"])
 
         factory.broadcastNotification(factory.addBigText(notification, message.data["Text"]))
+    }
+
+    private fun createNotification(message: RemoteMessage) {
+        info { "Received request to create generic notification" }
+
+        factory.broadcastNotification(factory.createBasicNotification()
+                .setContentTitle(message.data["Title"])
+                .setContentText(message.data["Message"])
+        )
     }
 
     private fun createHighPriorityAnnouncement(message: RemoteMessage) {
