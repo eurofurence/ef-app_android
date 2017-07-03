@@ -10,6 +10,8 @@ object AuthPreferences: KotprefModel() {
     var uid by stringPref("")
     var username by stringPref("")
 
+    var lastReportedFirebaseToken by stringPref("")
+
     fun isLoggedIn() = token.isNotEmpty()
     fun asBearer() = "Bearer $token"
     fun isValid() = DateTime.now().isBefore(tokenValidUntil)
