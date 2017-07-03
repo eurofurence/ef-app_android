@@ -63,21 +63,8 @@ class InstanceIdService : FirebaseInstanceIdService(), AnkoLogger {
         }
     }
 
-    fun removeToken() {
-        if (AuthPreferences.lastReportedFirebaseToken.isNullOrEmpty()) {
-            info { "No known token to remove" }
-            return
-        }
-
-        info { "Removing old token" }
-        info { "Last known token is ${AuthPreferences.lastReportedFirebaseToken}"}
-
-        setHeaders()
-    }
-
     override fun onTokenRefresh() {
         info { "Token refreshed" }
-        removeToken()
         reportToken()
     }
 }
