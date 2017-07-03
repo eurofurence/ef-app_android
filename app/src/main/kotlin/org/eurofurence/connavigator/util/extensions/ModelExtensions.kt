@@ -2,8 +2,15 @@ package org.eurofurence.connavigator.util.extensions
 
 import android.graphics.Point
 import android.graphics.Rect
-import io.swagger.client.model.*
+import android.util.Log
+import io.swagger.client.model.ImageRecord
+import io.swagger.client.model.MapEntryRecord
+import io.swagger.client.model.PrivateMessageRecord
+import nl.komponents.kovenant.Promise
+import nl.komponents.kovenant.task
+import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.webapi.apiService
+import java.util.*
 
 /**
  * Gets the fixed coordinates of a map entity, fitted to a map
@@ -19,3 +26,16 @@ fun MapEntryRecord.asRectangle(image: ImageRecord): Rect {
 }
 
 val ImageRecord.url: String get() = "${apiService.apiPath}/Api/v2/Images/$id/Content"
+
+fun PrivateMessageRecord.markAsRead(): Promise<Date, java.lang.Exception> {
+    return task {
+        if (AuthPreferences.isLoggedIn()) {
+            Log.i("PMR", "Marking message ${this.id} as read")
+
+            apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
+            apiService.communications.apiV2CommunicationPrivateMessagesByMessageIdReadPost(this.id)
+        } else{
+            throw Exception("User is not logged in!")
+        }
+    }
+}

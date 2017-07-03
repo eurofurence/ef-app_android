@@ -16,13 +16,12 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.locateDb
-import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnContent
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.markAsRead
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
@@ -36,12 +35,12 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
 
     var messages = emptyList<PrivateMessageRecord>()
 
-    inner class MessageViewholder(itemview: View) : RecyclerView.ViewHolder(itemview){
+    inner class MessageViewholder(itemview: View) : RecyclerView.ViewHolder(itemview) {
         val title: TextView by view()
         val text: TextView by view()
     }
 
-    inner class MessageAdapter: RecyclerView.Adapter<MessageViewholder>(){
+    inner class MessageAdapter : RecyclerView.Adapter<MessageViewholder>() {
         override fun onBindViewHolder(holder: MessageViewholder, position: Int) {
             val message = messages[position]
 
@@ -56,13 +55,14 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
         override fun getItemCount() = messages.size
 
     }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             ui.createView(AnkoContext.Companion.create(container!!.context, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        applyOnRoot{ changeTitle("Private Messages") }
+        applyOnRoot { changeTitle("Private Messages") }
 
         info { "Filling in messages" }
 
@@ -70,7 +70,9 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
             info { "Fetching messages" }
             apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
             messages = apiService.communications.apiV2CommunicationPrivateMessagesGet()
-        } successUi  {
+        } success {
+            messages.forEach { it.markAsRead() }
+        } successUi {
             info("Succesfully retrieved ${messages.size} messages")
             configureRecycler()
         } fail {
@@ -91,13 +93,13 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
 class SingleItemUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
-            textView{
+            textView {
                 id = R.id.title
 
                 setTextAppearance(R.style.TextAppearance_AppCompat_Large)
             }
 
-            textView{
+            textView {
                 id = R.id.text
             }
         }
