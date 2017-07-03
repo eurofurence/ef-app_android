@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **description** | **String** |  | 
 **order** | **Integer** |  | 
 **showInHamburgerMenu** | **Boolean** |  |  [optional]
-**fontAwesomeIconCharacter** | **String** |  |  [optional]
+**fontAwesomeIconCharacterUnicodeAddress** | **String** |  |  [optional]
 
 
 

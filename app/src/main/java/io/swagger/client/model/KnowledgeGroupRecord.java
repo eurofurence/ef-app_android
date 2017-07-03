@@ -22,8 +22,8 @@ public class KnowledgeGroupRecord  {
   private Integer order = null;
   @SerializedName("ShowInHamburgerMenu")
   private Boolean showInHamburgerMenu = null;
-  @SerializedName("FontAwesomeIconCharacter")
-  private String fontAwesomeIconCharacter = null;
+  @SerializedName("FontAwesomeIconCharacterUnicodeAddress")
+  private String fontAwesomeIconCharacterUnicodeAddress = null;
 
   /**
    **/
@@ -88,11 +88,11 @@ public class KnowledgeGroupRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public String getFontAwesomeIconCharacter() {
-    return fontAwesomeIconCharacter;
+  public String getFontAwesomeIconCharacterUnicodeAddress() {
+    return fontAwesomeIconCharacterUnicodeAddress;
   }
-  public void setFontAwesomeIconCharacter(String fontAwesomeIconCharacter) {
-    this.fontAwesomeIconCharacter = fontAwesomeIconCharacter;
+  public void setFontAwesomeIconCharacterUnicodeAddress(String fontAwesomeIconCharacterUnicodeAddress) {
+    this.fontAwesomeIconCharacterUnicodeAddress = fontAwesomeIconCharacterUnicodeAddress;
   }
 
 
@@ -111,7 +111,7 @@ public class KnowledgeGroupRecord  {
         (description == null ? knowledgeGroupRecord.description == null : description.equals(knowledgeGroupRecord.description)) &&
         (order == null ? knowledgeGroupRecord.order == null : order.equals(knowledgeGroupRecord.order)) &&
         (showInHamburgerMenu == null ? knowledgeGroupRecord.showInHamburgerMenu == null : showInHamburgerMenu.equals(knowledgeGroupRecord.showInHamburgerMenu)) &&
-        (fontAwesomeIconCharacter == null ? knowledgeGroupRecord.fontAwesomeIconCharacter == null : fontAwesomeIconCharacter.equals(knowledgeGroupRecord.fontAwesomeIconCharacter));
+        (fontAwesomeIconCharacterUnicodeAddress == null ? knowledgeGroupRecord.fontAwesomeIconCharacterUnicodeAddress == null : fontAwesomeIconCharacterUnicodeAddress.equals(knowledgeGroupRecord.fontAwesomeIconCharacterUnicodeAddress));
   }
 
   @Override 
@@ -123,7 +123,7 @@ public class KnowledgeGroupRecord  {
     result = 31 * result + (description == null ? 0: description.hashCode());
     result = 31 * result + (order == null ? 0: order.hashCode());
     result = 31 * result + (showInHamburgerMenu == null ? 0: showInHamburgerMenu.hashCode());
-    result = 31 * result + (fontAwesomeIconCharacter == null ? 0: fontAwesomeIconCharacter.hashCode());
+    result = 31 * result + (fontAwesomeIconCharacterUnicodeAddress == null ? 0: fontAwesomeIconCharacterUnicodeAddress.hashCode());
     return result;
   }
 
@@ -138,7 +138,7 @@ public class KnowledgeGroupRecord  {
     sb.append("  description: ").append(description).append("\n");
     sb.append("  order: ").append(order).append("\n");
     sb.append("  showInHamburgerMenu: ").append(showInHamburgerMenu).append("\n");
-    sb.append("  fontAwesomeIconCharacter: ").append(fontAwesomeIconCharacter).append("\n");
+    sb.append("  fontAwesomeIconCharacterUnicodeAddress: ").append(fontAwesomeIconCharacterUnicodeAddress).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

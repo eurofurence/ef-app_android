@@ -97,7 +97,7 @@ This endpoint does not need any parameter.
 
 Sends a private message to a specific recipient/attendee.
 
-  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**  If the backend has a push-channel available to any given device(s) that are currently signed into the app  with the same recipient uid, it will push a toast message to those devices.  The toast message content is defined by the &#x60;ToastTitle&#x60; and &#x60;ToastMessage&#x60; properties.
+  * Requires authorization     * Requires any of the following roles: **&#x60;Action-PrivateMessages-Send&#x60;**, **&#x60;Developer&#x60;**, **&#x60;System&#x60;**  If the backend has a push-channel available to any given device(s) that are currently signed into the app  with the same recipient uid, it will push a toast message to those devices.  The toast message content is defined by the &#x60;ToastTitle&#x60; and &#x60;ToastMessage&#x60; properties.
 
 ### Example
 ```java

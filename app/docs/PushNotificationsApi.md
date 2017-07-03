@@ -4,10 +4,51 @@ All URIs are relative to *https://localhost/*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**apiV2PushNotificationsFcmDeviceRegistrationPost**](PushNotificationsApi.md#apiV2PushNotificationsFcmDeviceRegistrationPost) | **POST** /Api/v2/PushNotifications/FcmDeviceRegistration | 
 [**apiV2PushNotificationsSyncRequestPost**](PushNotificationsApi.md#apiV2PushNotificationsSyncRequestPost) | **POST** /Api/v2/PushNotifications/SyncRequest | 
 [**apiV2PushNotificationsWnsChannelRegistrationPost**](PushNotificationsApi.md#apiV2PushNotificationsWnsChannelRegistrationPost) | **POST** /Api/v2/PushNotifications/WnsChannelRegistration | 
 [**apiV2PushNotificationsWnsToastPost**](PushNotificationsApi.md#apiV2PushNotificationsWnsToastPost) | **POST** /Api/v2/PushNotifications/WnsToast | 
 
+
+<a name="apiV2PushNotificationsFcmDeviceRegistrationPost"></a>
+# **apiV2PushNotificationsFcmDeviceRegistrationPost**
+> apiV2PushNotificationsFcmDeviceRegistrationPost(request)
+
+
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.PushNotificationsApi;
+
+PushNotificationsApi apiInstance = new PushNotificationsApi();
+PostFcmDeviceRegistrationRequest request = new PostFcmDeviceRegistrationRequest(); // PostFcmDeviceRegistrationRequest | 
+try {
+    apiInstance.apiV2PushNotificationsFcmDeviceRegistrationPost(request);
+} catch (ApiException e) {
+    System.err.println("Exception when calling PushNotificationsApi#apiV2PushNotificationsFcmDeviceRegistrationPost");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**PostFcmDeviceRegistrationRequest**](PostFcmDeviceRegistrationRequest.md)|  | [optional]
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, text/json, application/json-patch+json
+ - **Accept**: Not defined
 
 <a name="apiV2PushNotificationsSyncRequestPost"></a>
 # **apiV2PushNotificationsSyncRequestPost**

@@ -26,6 +26,8 @@ public class KnowledgeEntryRecord  {
   private Integer order = null;
   @SerializedName("Links")
   private List<LinkFragment> links = null;
+  @SerializedName("ImageIds")
+  private List<UUID> imageIds = null;
 
   /**
    **/
@@ -97,6 +99,16 @@ public class KnowledgeEntryRecord  {
     this.links = links;
   }
 
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public List<UUID> getImageIds() {
+    return imageIds;
+  }
+  public void setImageIds(List<UUID> imageIds) {
+    this.imageIds = imageIds;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -113,7 +125,8 @@ public class KnowledgeEntryRecord  {
         (title == null ? knowledgeEntryRecord.title == null : title.equals(knowledgeEntryRecord.title)) &&
         (text == null ? knowledgeEntryRecord.text == null : text.equals(knowledgeEntryRecord.text)) &&
         (order == null ? knowledgeEntryRecord.order == null : order.equals(knowledgeEntryRecord.order)) &&
-        (links == null ? knowledgeEntryRecord.links == null : links.equals(knowledgeEntryRecord.links));
+        (links == null ? knowledgeEntryRecord.links == null : links.equals(knowledgeEntryRecord.links)) &&
+        (imageIds == null ? knowledgeEntryRecord.imageIds == null : imageIds.equals(knowledgeEntryRecord.imageIds));
   }
 
   @Override 
@@ -126,6 +139,7 @@ public class KnowledgeEntryRecord  {
     result = 31 * result + (text == null ? 0: text.hashCode());
     result = 31 * result + (order == null ? 0: order.hashCode());
     result = 31 * result + (links == null ? 0: links.hashCode());
+    result = 31 * result + (imageIds == null ? 0: imageIds.hashCode());
     return result;
   }
 
@@ -141,6 +155,7 @@ public class KnowledgeEntryRecord  {
     sb.append("  text: ").append(text).append("\n");
     sb.append("  order: ").append(order).append("\n");
     sb.append("  links: ").append(links).append("\n");
+    sb.append("  imageIds: ").append(imageIds).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

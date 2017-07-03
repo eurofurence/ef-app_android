@@ -135,6 +135,10 @@ public class JsonUtil {
       return new TypeToken<List<MapRecord>>(){}.getType();
     }
     
+    if ("PostFcmDeviceRegistrationRequest".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PostFcmDeviceRegistrationRequest>>(){}.getType();
+    }
+    
     if ("PostWnsChannelRegistrationRequest".equalsIgnoreCase(className)) {
       return new TypeToken<List<PostWnsChannelRegistrationRequest>>(){}.getType();
     }
@@ -259,6 +263,10 @@ public class JsonUtil {
     
     if ("MapRecord".equalsIgnoreCase(className)) {
       return new TypeToken<MapRecord>(){}.getType();
+    }
+    
+    if ("PostFcmDeviceRegistrationRequest".equalsIgnoreCase(className)) {
+      return new TypeToken<PostFcmDeviceRegistrationRequest>(){}.getType();
     }
     
     if ("PostWnsChannelRegistrationRequest".equalsIgnoreCase(className)) {

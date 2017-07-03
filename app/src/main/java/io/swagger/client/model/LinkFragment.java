@@ -39,8 +39,9 @@ public class LinkFragment  {
   }
 
   /**
+   * * For FragmentType `DealerDetail`: The `Id` of the dealer record the link is referencing to.
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(required = true, value = "* For FragmentType `DealerDetail`: The `Id` of the dealer record the link is referencing to.")
   public String getTarget() {
     return target;
   }

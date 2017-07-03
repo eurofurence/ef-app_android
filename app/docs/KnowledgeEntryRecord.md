@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **text** | **String** |  | 
 **order** | **Integer** |  | 
 **links** | [**List&lt;LinkFragment&gt;**](LinkFragment.md) |  |  [optional]
+**imageIds** | [**List&lt;UUID&gt;**](UUID.md) |  |  [optional]
 
 
 
