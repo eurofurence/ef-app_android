@@ -28,11 +28,11 @@ import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
-import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.logd
+import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
@@ -41,8 +41,27 @@ import org.joda.time.DateTime
  * Event view recycler to hold the viewpager items
  * TODO: Refactor the everliving fuck out of this shitty software
  */
-class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI, HasDb {
+class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
+
+    val ui by lazy { EventListView() }
+    val updateReceiver: EmbeddedLocalBroadcastReceiver by lazy {
+        context.localReceiver(FragmentViewEvent.EVENT_STATUS_CHANGED) {
+            dataUpdated()
+        }
+    }
+
+    lateinit var eventList: EventList
+    lateinit var title: String
+
+    var effectiveEvents = emptyList<EventRecord>()
+
+    constructor(eventList: EventList, title: String = "") : this() {
+        info { "Constructing event recycler $title" }
+        this.eventList = eventList
+        this.title = title
+    }
+
 
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -123,45 +142,48 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI, 
             }
             holder.itemView.setOnLongClickListener {
                 EventDialog(event).show(activity.supportFragmentManager, "Kek")
-                vibrator.long().let { true }
+                true
             }
         }
     }
 
-    val eventsView: RecyclerView by view("events") // TODO: Anko the shit outta this
-
-    val progress: ProgressBar by view()
-
-    var effectiveEvents = emptyList<EventRecord>()
-
-    val eventsTitle: TextView by view()
-
-    val vibrator by lazy { TouchVibrator(context) }
-
-    lateinit var updateReceiver: EmbeddedLocalBroadcastReceiver
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_events, container, false)
+            ui.createView(AnkoContext.Companion.create(container!!.context, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        info { "Filling in view" }
+
         // Configure the recycler
-        eventsView.setHasFixedSize(true)
-        eventsView.adapter = DataAdapter()
+        configureList()
+
+        configureTitle()
 
         // Filter the data
         dataUpdated()
 
-        eventsView.layoutManager = LinearLayoutManager(activity)
-
-        eventsView.itemAnimator = DefaultItemAnimator()
-
-        updateReceiver = context.localReceiver(FragmentViewEvent.EVENT_STATUS_CHANGED) {
-            dataUpdated()
-        }
-
         updateReceiver.register()
+    }
+
+    private fun configureTitle() {
+        info { "Configuring title" }
+        if (this.title.isNotEmpty()) {
+            info { "Showing title $title" }
+            ui.title.text = this.title
+            ui.title.visibility = View.VISIBLE
+        } else {
+            info { "No title presents" }
+            ui.title.visibility = View.GONE
+        }
+    }
+
+    private fun configureList() {
+        info { "Configuring recycler" }
+        ui.eventList.setHasFixedSize(true)
+        ui.eventList.adapter = DataAdapter()
+        ui.eventList.layoutManager = LinearLayoutManager(activity)
+        ui.eventList.itemAnimator = DefaultItemAnimator()
     }
 
     override fun onPause() {
@@ -175,17 +197,22 @@ class EventRecyclerFragment(val eventList: EventList) : Fragment(), ContentAPI, 
     }
 
     override fun dataUpdated() {
+        info { "Data was updated, redoing UI" }
         promiseOnUi {
-            eventsView.visibility = View.GONE
-            eventsTitle.visibility = View.GONE
-            progress.visibility = View.VISIBLE
+            info { "Hiding critical UI elements" }
+            ui.eventList.visibility = View.GONE
+            ui.title.visibility = View.GONE
+            ui.loading.visibility = View.VISIBLE
         } then {
+            info { "Refiltering data" }
             effectiveEvents = eventList.applyFilters()
         } successUi {
-            eventsView.adapter.notifyDataSetChanged()
-            progress.visibility = View.GONE
-            eventsView.visibility = View.VISIBLE
-            eventsTitle.visibility = View.GONE
+            info { "Revealing new data" }
+            ui.eventList.adapter.notifyDataSetChanged()
+            ui.loading.visibility = View.GONE
+            ui.eventList.visibility = View.VISIBLE
+
+            configureTitle()
         }
     }
 }
@@ -231,6 +258,27 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                 scaleType = ImageView.ScaleType.CENTER_CROP
                 id = R.id.eventImage
             }
+        }
+    }
+}
+
+class EventListView : AnkoComponent<ViewGroup> {
+    lateinit var title: TextView
+    lateinit var loading: ProgressBar
+    lateinit var eventList: RecyclerView
+
+    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+        verticalLayout {
+            lparams(matchParent, matchParent)
+            backgroundResource = R.color.backgroundGrey
+
+            title = textView("") {
+                padding = dip(15)
+            }.lparams(matchParent, wrapContent)
+
+            loading = progressBar().lparams(matchParent, wrapContent)
+
+            eventList = recycler {}.lparams(matchParent, matchParent)
         }
     }
 }
