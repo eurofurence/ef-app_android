@@ -46,6 +46,17 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                         isChecked = AppPreferences.shortenDates
                         setOnClickListener { AppPreferences.shortenDates = !AppPreferences.shortenDates }
                     }
+
+                    editText {
+                        hint = "The count of minutes before an event that we'll send a notification"
+                        setText(AppPreferences.notificationMinutesBefore.toString(), TextView.BufferType.EDITABLE)
+                        textWatcher {
+                            afterTextChanged { text ->
+                                if(text!!.isNotEmpty())AppPreferences.notificationMinutesBefore = text.toString().toInt()
+                            }
+                        }
+                        inputType = InputType.TYPE_CLASS_NUMBER
+                    }
                 }
                 verticalLayout {
                     textView("Analytics settings") {
