@@ -151,7 +151,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             ui.createView(AnkoContext.Companion.create(container!!.context, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

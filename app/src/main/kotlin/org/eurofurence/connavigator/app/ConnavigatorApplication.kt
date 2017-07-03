@@ -6,6 +6,7 @@ import com.google.firebase.perf.metrics.AddTrace
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.gcm.InstanceIdService
 import org.eurofurence.connavigator.gcm.PushListenerService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.RemotePreferences

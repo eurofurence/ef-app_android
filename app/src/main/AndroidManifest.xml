@@ -57,12 +57,12 @@
                 android:name=".database.UpdateIntentService"
                 android:exported="false"/>
 
-        <!-- Pending intents -->
-        <receiver android:name=".gcm.NotificationPublisher"/>
-
-        <receiver android:name=".broadcast.EventFavoriteBroadcast" />
-
-        <receiver android:name=".broadcast.LoginReceiver" />
+        <service android:name=".gcm.InstanceIdService"
+                 android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
 
         <service
                 android:name=".gcm.PushListenerService"
@@ -71,5 +71,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+        <!-- Pending intents -->
+        <receiver android:name=".gcm.NotificationPublisher"/>
+
+        <receiver android:name=".broadcast.EventFavoriteBroadcast" />
+
+        <receiver android:name=".broadcast.LoginReceiver" />
     </application>
 </manifest>

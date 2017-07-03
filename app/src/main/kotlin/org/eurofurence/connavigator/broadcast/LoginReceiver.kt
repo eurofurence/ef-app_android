@@ -8,6 +8,7 @@ import com.chibatching.kotpref.bulk
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.google.gson.Gson
+import org.eurofurence.connavigator.gcm.InstanceIdService
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
@@ -69,6 +70,8 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
                                     uid = data.getString("Uid")
                                     this@bulk.username = data.getString("Username")
                                 }
+
+                                InstanceIdService().reportToken()
 
                                 info { "Saved auth to preferences" }
 

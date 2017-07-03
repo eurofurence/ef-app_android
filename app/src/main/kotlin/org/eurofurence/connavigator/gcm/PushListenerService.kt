@@ -4,11 +4,9 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.pawegio.kandroid.d
-import com.pawegio.kandroid.i
-import com.pawegio.kandroid.w
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.jetbrains.anko.*
 
