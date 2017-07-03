@@ -17,6 +17,7 @@ import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.alarmManager
+import org.jetbrains.anko.longToast
 import org.joda.time.DurationFieldType
 
 /**
@@ -48,10 +49,12 @@ class EventFavoriteBroadcast : BroadcastReceiver() {
         if (event.id in db.faves) {
             // Remove item from favorites
             d("Event is already favorited. Removing from favorites")
+            context.longToast("Added ${event.title} to favorites")
             context.alarmManager.cancel(pendingIntent)
             db.faves = db.faves.filter { it != event.id }
         } else {
             d("Event is not yet favorited. Adding it to favorites")
+            context.longToast("Removed ${event.title} from favorites")
             context.alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
             db.faves += event.id
         }
