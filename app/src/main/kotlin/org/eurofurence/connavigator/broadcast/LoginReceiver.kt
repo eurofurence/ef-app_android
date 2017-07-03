@@ -6,18 +6,18 @@ import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
 import com.chibatching.kotpref.bulk
 import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.android.extension.responseJson
-import com.google.gson.Gson
+import io.swagger.client.model.RegSysAuthenticationRequest
+import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.gcm.InstanceIdService
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.toIntent
+import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
+import org.jetbrains.anko.error
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
-import org.joda.time.DateTime
 
 /**
  * Receives a login attempt and tries to follow through with it
@@ -40,59 +40,46 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
 
         info { "Attempting login for ${username} with reg number ${regNumber}" }
 
-        val payload = Gson().toJson(mapOf(
-                "RegNo" to regNumber,
-                "Username" to username,
-                "Password" to password
-        ))
+        task {
+            apiService.tokens.apiV2TokensRegSysPost(RegSysAuthenticationRequest().apply {
+                this.regNo = regNumber.toInt()
+                this.username = username
+                this.password = password
+            })
+        } success {
+            info { "Succesfully logged in" }
+            info {
+                "UID: ${it.uid}\n" +
+                        "Username: ${it.username}\n" +
+                        "Token: ${it.token}"
+            }
 
-        Fuel.post("https://app.eurofurence.org/Api/v2/Tokens/RegSys")
-                .body(payload)
-                .header(mapOf(
-                        "Content-Length" to payload.length,
-                        "Content-Type" to "application/json"
-                ))
-                .responseJson { request, response, result ->
-                    result.fold(
-                            { incoming ->
-                                val data = incoming.obj()
+            AuthPreferences.bulk {
+                token = it.token
+                tokenValidUntil = it.tokenValidUntil.time
+                uid = it.uid
+                this@bulk.username = it.username
+            }
 
-                                info { "Succesfully logged in" }
-                                info {
-                                    "UID: ${data.getString("Uid")}\n" +
-                                            "Username: ${data.getString("Username")}\n" +
-                                            "Token: ${data.getString("Token")}"
-                                }
+            InstanceIdService().reportToken()
 
-                                AuthPreferences.bulk {
-                                    token = data.getString("Token")
-                                    tokenValidUntil = DateTime.parse(data.getString("TokenValidUntil")).millis
-                                    uid = data.getString("Uid")
-                                    this@bulk.username = data.getString("Username")
-                                }
+            info { "Saved auth to preferences" }
 
-                                InstanceIdService().reportToken()
+            val intent = LOGIN_RESULT.toIntent {
+                booleans["success"] = true
+            }
 
-                                info { "Saved auth to preferences" }
+            LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent)
+        } fail {
+            warn { "Failed to retrieve tokens" }
+            error { it.message }
+            Analytics.exception(it)
 
-                                val intent = LOGIN_RESULT.toIntent {
-                                    booleans["success"] = true
-                                }
+            val intent = LOGIN_RESULT.toIntent {
+                booleans["success"] = false
+            }
 
-                                LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent)
-                            },
-                            { err ->
-                                warn { "Failed to retrieve tokens" }
-                                debug { err.errorData }
-                                Analytics.exception(err.exception)
-
-                                val intent = LOGIN_RESULT.toIntent {
-                                    booleans["success"] = false
-                                }
-
-                                LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent)
-                            }
-                    )
-                }
+            LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent)
+        }
     }
 }
