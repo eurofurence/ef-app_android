@@ -224,9 +224,10 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
             lparams(matchParent, wrapContent)
             isClickable = true
             isLongClickable = true
+            verticalPadding = dip(10)
+            backgroundResource = R.color.cardview_light_background
             verticalLayout {
                 lparams(matchParent, wrapContent)
-                backgroundResource = R.color.cardview_light_background
                 linearLayout {
                     lparams(matchParent, matchParent)
                     weightSum = 10f
