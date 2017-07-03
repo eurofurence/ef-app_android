@@ -133,24 +133,31 @@ class HomeUi : AnkoComponent<ViewGroup> {
         scrollView {
             lparams(matchParent, matchParent)
             verticalLayout {
+                lparams(matchParent, matchParent)
                 themedTextView{
                     visibility = if(AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
                     text = "Hello ${AuthPreferences.username}"
+                    setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
+                    padding = dip(15)
                 }
-                lparams(matchParent, matchParent)
-                countdownArc = arcProgress {
-                    lparams(matchParent, dip(400))
-                    strokeWidth = 25F
-                    suffixText = "Days"
-                    bottomText = "Until next EF"
-                    bottomTextSize = dip(20F).toFloat()
-                    suffixTextSize = dip(20F).toFloat()
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        finishedStrokeColor = ctx.getColor(R.color.accentLight)
-                        unfinishedStrokeColor = ctx.getColor(R.color.primary)
-                        textColor = ctx.getColor(R.color.textBlack)
+                linearLayout {
+                    countdownArc = arcProgress {
+                        lparams(matchParent, dip(400))
+                        strokeWidth = 25F
+                        suffixText = "Days"
+                        bottomText = "Until next EF"
+                        bottomTextSize = dip(20F).toFloat()
+                        suffixTextSize = dip(20F).toFloat()
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            finishedStrokeColor = ctx.getColor(R.color.accentLight)
+                            unfinishedStrokeColor = ctx.getColor(R.color.primary)
+                            textColor = ctx.getColor(R.color.textBlack)
+                        }
                     }
+
+                    padding = dip(20)
                 }
 
                 announcementsTitle = textView("Latest announcements") {
