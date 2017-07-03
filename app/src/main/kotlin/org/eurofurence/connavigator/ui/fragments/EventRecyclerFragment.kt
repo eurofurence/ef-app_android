@@ -233,15 +233,15 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
             lparams(matchParent, wrapContent)
             isClickable = true
             isLongClickable = true
-            verticalPadding = dip(10)
+            verticalPadding = dip(5)
             backgroundResource = R.color.cardview_light_background
             verticalLayout {
                 lparams(matchParent, wrapContent)
                 linearLayout {
                     lparams(matchParent, matchParent)
-                    weightSum = 10f
                     verticalLayout {
-                        lparams(wrapContent, wrapContent)
+                        padding = dip(10)
+                        lparams(displayMetrics.widthPixels / 10 * 2, wrapContent)
 
                         textView {
                             id = R.id.eventStartTime
@@ -256,7 +256,8 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         }
                     }
                     verticalLayout {
-                        lparams(wrapContent, wrapContent)
+                        padding = dip(10)
+                        lparams(displayMetrics.widthPixels / 10 * 8, wrapContent)
                         textView {
                             id = R.id.eventTitle
                             setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
