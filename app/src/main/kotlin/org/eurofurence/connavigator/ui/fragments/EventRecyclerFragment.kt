@@ -26,6 +26,7 @@ import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
+import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
@@ -52,14 +53,17 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     lateinit var eventList: EventList
-    lateinit var title: String
+    var title = ""
+    var scrolling = true
+
 
     var effectiveEvents = emptyList<EventRecord>()
 
-    constructor(eventList: EventList, title: String = "") : this() {
+    constructor(eventList: EventList, title: String = "", scrolling: Boolean = true) : this() {
         info { "Constructing event recycler $title" }
         this.eventList = eventList
         this.title = title
+        this.scrolling = scrolling
     }
 
 
@@ -182,7 +186,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         info { "Configuring recycler" }
         ui.eventList.setHasFixedSize(true)
         ui.eventList.adapter = DataAdapter()
-        ui.eventList.layoutManager = LinearLayoutManager(activity)
+        ui.eventList.layoutManager = if (scrolling) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
         ui.eventList.itemAnimator = DefaultItemAnimator()
     }
 
@@ -209,6 +213,11 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         } successUi {
             info { "Revealing new data" }
             ui.eventList.adapter.notifyDataSetChanged()
+            ui.loading.visibility = View.GONE
+            ui.eventList.visibility = View.VISIBLE
+
+            configureTitle()
+        } fail {
             ui.loading.visibility = View.GONE
             ui.eventList.visibility = View.VISIBLE
 

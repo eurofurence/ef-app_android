@@ -46,9 +46,9 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     }
 
 
-    val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming(), "Upcoming events") }
-    val current by lazy { EventRecyclerFragment(EventList(database).isCurrent(), "Current events") }
-    val favourited by lazy { EventRecyclerFragment(EventList(database).isFavorited(), "Your favorited events") }
+    val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
+    val current by lazy { EventRecyclerFragment(EventList(database).isCurrent().sortByStartTime(), "Current events", false)}
+    val favorited by lazy { EventRecyclerFragment(EventList(database).isFavorited().sortByDate().sortByStartTime(), "Your favorited events", false) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         container!!
@@ -76,7 +76,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         fragmentManager.beginTransaction()
                 .replace(5000, upcoming)
                 .replace(5001, current)
-                .replace(5002, favourited)
+                .replace(5002, favorited)
                 .commitAllowingStateLoss()
     }
 

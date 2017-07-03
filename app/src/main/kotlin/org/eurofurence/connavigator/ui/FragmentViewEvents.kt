@@ -1,13 +1,10 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +18,6 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.letRoot
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
@@ -43,7 +39,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         override fun getItem(position: Int): Fragment? {
             return EventRecyclerFragment(filterEvents()
                     .onDay(days.asc { it.date }[position].id)
-                    .sortByDate())
+                    .sortByStartTime())
         }
 
         override fun getCount(): Int {
