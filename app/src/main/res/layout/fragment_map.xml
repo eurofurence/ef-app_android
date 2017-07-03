@@ -9,7 +9,7 @@
               android:textAppearance="?android:textAppearanceLarge"
               android:id="@+id/mapTitle"/>
 
-    <uk.co.senab.photoview.PhotoView android:layout_width="match_parent"
+    <com.github.chrisbanes.photoview.PhotoView android:layout_width="match_parent"
                                      android:layout_height="match_parent"
                                      android:scaleType="fitCenter"
                                      android:id="@+id/mapImage"/>
