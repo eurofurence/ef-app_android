@@ -3,7 +3,6 @@ package org.eurofurence.connavigator.ui
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -131,7 +130,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
 
     lateinit var upcomingFragment: ViewGroup
     lateinit var currentFragment: ViewGroup
-    lateinit var favoritedFragment: ViewGroup
+    lateinit var favoritesFragment: ViewGroup
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         scrollView {
@@ -183,7 +182,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
                     lparams(matchParent, wrapContent)
                 }
 
-                favoritedFragment = linearLayout {
+                favoritesFragment = linearLayout {
                     id = 5002
                     lparams(matchParent, wrapContent)
                 }
