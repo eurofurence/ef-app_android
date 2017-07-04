@@ -27,6 +27,9 @@ import org.eurofurence.connavigator.util.extensions.markAsRead
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormatter
+import org.joda.time.format.DateTimeFormatterBuilder
 
 /**
  * Created by requinard on 6/28/17.
@@ -40,6 +43,7 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
     inner class MessageViewholder(itemview: View) : RecyclerView.ViewHolder(itemview) {
         val title: TextView by view()
         val text: TextView by view()
+        val date: TextView by view()
     }
 
     inner class MessageAdapter : RecyclerView.Adapter<MessageViewholder>() {
@@ -47,6 +51,7 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
             val message = messages[position]
 
             holder.title.text = message.subject
+            holder.date.text = "Sent on ${DateTime(message.createdDateTimeUtc.time).toString("dd-MM HH:mm")} by ${message.authorName}"
             holder.text.text = message.message
         }
 
@@ -74,14 +79,14 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
         } then {
             info { "Fetching messages" }
             apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
-            messages = apiService.communications.apiV2CommunicationPrivateMessagesGet()
+            messages = apiService.communications.apiV2CommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
         } successUi {
             info("Succesfully retrieved ${messages.size} messages")
             configureRecycler()
             ui.loading.visibility = View.GONE
             ui.messageList.visibility = View.VISIBLE
         } then {
-          messages.forEach {if(it.readDateTimeUtc == null) it.markAsRead()}
+            messages.forEach { if (it.readDateTimeUtc == null) it.markAsRead() }
         } fail {
             warn { "Failed to retrieve messages" }
             longToast("Failed to retrieve messages!")
@@ -108,6 +113,12 @@ class SingleItemUi : AnkoComponent<ViewGroup> {
             }
 
             textView {
+                id = R.id.date
+                setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+            }
+
+            textView {
+                padding = dip(10)
                 id = R.id.text
             }
         }
