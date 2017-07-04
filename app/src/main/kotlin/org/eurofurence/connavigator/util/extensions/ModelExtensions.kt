@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.util.extensions
 import android.graphics.Point
 import android.graphics.Rect
 import android.util.Log
+import io.swagger.client.model.EventRecord
 import io.swagger.client.model.ImageRecord
 import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.PrivateMessageRecord
@@ -38,4 +39,15 @@ fun PrivateMessageRecord.markAsRead(): Promise<Date, java.lang.Exception> {
             throw Exception("User is not logged in!")
         }
     }
+}
+
+fun EventRecord.fullTitle(): String {
+    val builder = StringBuilder(this.title.trim().removeSuffix("\n"))
+
+    if(this.subTitle.isNotEmpty()) {
+        builder.append(": ")
+        builder.append(this.subTitle.trim().removeSuffix("\n"))
+    }
+
+    return builder.toString()
 }

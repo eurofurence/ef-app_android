@@ -20,6 +20,7 @@ import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.FragmentViewEvent
@@ -30,10 +31,7 @@ import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.localReceiver
-import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.util.extensions.recycler
+import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
@@ -46,8 +44,8 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     val ui by lazy { EventListView() }
-    val updateReceiver: EmbeddedLocalBroadcastReceiver by lazy {
-        context.localReceiver(FragmentViewEvent.EVENT_STATUS_CHANGED) {
+    val updateReceiver by lazy {
+        context.localReceiver(DataChanged.DATACHANGED){
             dataUpdated()
         }
     }
@@ -55,7 +53,6 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     lateinit var eventList: EventList
     var title = ""
     var scrolling = true
-
 
     var effectiveEvents = emptyList<EventRecord>()
 
@@ -89,23 +86,18 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             // Get the event for the position
             val event = effectiveEvents[pos]
 
-            val isFavourite = event.id in faves
+            val isFavorite = event.id in faves
 
-            SpannableStringBuilder()
-                    .apply {
-                        if (RemotePreferences.showEventGlyphs) {
-                            if (isFavourite) {
-                                this.append(" ")
-                                this.setSpan(
-                                        ImageSpan(activity, R.drawable.icon_like_filled_small),
-                                        this.length - 1,
-                                        this.length, 0)
-                                this.append(" ")
-                            }
-                        }
-                    }
-                    .append(Formatter.eventTitle(event))
-                    .apply { holder.eventTitle.text = this }
+            val titleBuilder = StringBuilder()
+
+            if(RemotePreferences.showEventGlyphs) {
+                if (isFavorite) titleBuilder.append("{fa-heart} ")
+                if(event.isDeviatingFromConBook) titleBuilder.append("{fa-pencil} ")
+            }
+
+            titleBuilder.append(event.fullTitle())
+
+            holder.eventTitle.text = titleBuilder.toString()
 
             when {
                 eventIsHappening(event, DateTime.now()) -> { // It's happening now
@@ -116,13 +108,14 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     holder.eventStartTime.text = "DONE"
                 eventIsUpcoming(event, DateTime.now(), 30) -> { //it's happening in 30 minutes
                     // It's upcoming, so we give a timer
-                    val countdown = eventStart(event).minus(DateTime.now().millis).millis / 1000 / 60
+                    val countdown = eventStart(event).minus(DateTime.now().millis).toString("m").trim()
                     holder.eventStartTime.text = "IN $countdown MIN"
                 }
                 eventEnd(event).isBeforeNow -> {// Event end is before the current time, so it has already occurred thus it is gray
                     holder.eventCard.setBackgroundColor(getColor(context, R.color.backgroundGrey))
                 }
-                isFavourite -> {// Event is in favourites, thus it is coloured in primary
+                isFavorite -> {// Event is in favourites, thus it is coloured in primary
+                    holder.eventStartTime.text = Formatter.shortTime(event.startTime)
                     holder.eventCard.setBackgroundColor(getColor(context, R.color.primaryLighter))
                 }
                 else -> {
@@ -258,12 +251,14 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                     verticalLayout {
                         padding = dip(10)
                         lparams(displayMetrics.widthPixels / 10 * 8, wrapContent)
-                        textView {
+                        fontAwesomeView {
                             id = R.id.eventTitle
+                            maxLines = 1
                             setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
                         }
                         textView {
                             id = R.id.eventRoom
+                            maxLines = 1
                             setTextAppearance(ctx, android.R.style.TextAppearance_Small)
                         }
                     }
