@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.github.lzyzsd.circleprogress.ArcProgress
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences
@@ -22,10 +23,7 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.arcProgress
-import org.eurofurence.connavigator.util.extensions.filterIf
-import org.eurofurence.connavigator.util.extensions.recycler
+import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.Days
@@ -44,6 +42,12 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
                 !AppPreferences.showOldAnnouncements,
                 { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis }
         )
+    }
+
+    val dataChanged by lazy {
+        context.localReceiver(DataChanged.DATACHANGED)  {
+            ui.greeting.invalidate()
+        }
     }
 
 
@@ -69,6 +73,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         configureAnnouncements()
         configureEventRecyclers()
 
+        dataChanged.register()
     }
 
     private fun configureEventRecyclers() {
@@ -122,11 +127,10 @@ class HomeUi : AnkoComponent<ViewGroup> {
     lateinit var countdownArc: ArcProgress
     lateinit var announcementsTitle: TextView
     lateinit var announcementsRecycler: RecyclerView
+    lateinit var greeting: TextView
 
     lateinit var upcomingFragment: ViewGroup
-
     lateinit var currentFragment: ViewGroup
-
     lateinit var favoritedFragment: ViewGroup
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
@@ -134,7 +138,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
             lparams(matchParent, matchParent)
             verticalLayout {
                 lparams(matchParent, matchParent)
-                themedTextView{
+                greeting = textView{
                     visibility = if(AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
                     text = "Hello ${AuthPreferences.username}"
                     setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)

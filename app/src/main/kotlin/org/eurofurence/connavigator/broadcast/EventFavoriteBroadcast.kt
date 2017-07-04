@@ -59,5 +59,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
             context.alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
             db.faves += event.id
         }
+
+        DataChanged.fire(context, "Favorites")
     }
 }

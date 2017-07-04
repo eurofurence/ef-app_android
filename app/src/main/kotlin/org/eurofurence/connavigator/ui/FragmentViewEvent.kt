@@ -15,6 +15,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import com.pawegio.kandroid.IntentFor
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
@@ -27,8 +28,10 @@ import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.letRoot
+import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.v2.get
 import us.feras.mdv.MarkdownView
+import java.util.*
 
 /**
  * Created by David on 4/9/2016.
@@ -39,6 +42,13 @@ class FragmentViewEvent() : Fragment(), HasDb {
     }
 
     override val db by lazyLocateDb()
+    val dataChanged by lazy {
+        context.localReceiver(DataChanged.DATACHANGED){
+            changeFabIcon()
+        }
+    }
+
+    lateinit var eventId: UUID
 
     /**
      * Constructs the info view with an assigned bundle
@@ -64,9 +74,12 @@ class FragmentViewEvent() : Fragment(), HasDb {
 
         Analytics.screen(activity, "Event Specific")
 
-
         if ("event" in arguments) {
             val event: EventRecord = arguments.jsonObjects["event"]
+
+            eventId = event.id
+
+            dataChanged.register()
 
             Analytics.event(Analytics.Category.EVENT, Analytics.Action.OPENED, event.title)
 
@@ -85,7 +98,7 @@ class FragmentViewEvent() : Fragment(), HasDb {
             imageService.load(database.imageDb[eventEntry.imageId], image)
             */
             
-            changeFabIcon(event)
+            changeFabIcon()
 
             buttonSave.setOnClickListener {
                 EventDialog(event).show(activity.supportFragmentManager, "Event Dialog").let { true }
@@ -93,9 +106,6 @@ class FragmentViewEvent() : Fragment(), HasDb {
 
             buttonSave.setOnLongClickListener {
                 context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
-
-                changeFabIcon(event)
-
                 true
             }
         }
@@ -104,8 +114,8 @@ class FragmentViewEvent() : Fragment(), HasDb {
     /**
      * Changes the FAB based on if the current event is liked or not
      */
-    private fun changeFabIcon(eventEntry: EventRecord?) {
-        if (eventEntry?.id in faves)
+    private fun changeFabIcon() {
+        if (eventId in db.faves)
             buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart))
         else
             buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart_o))

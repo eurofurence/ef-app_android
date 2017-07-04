@@ -70,6 +70,7 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
             }
 
             LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent)
+            DataChanged.fire(context, "Login successful")
         } fail {
             warn { "Failed to retrieve tokens" }
             error { it.message }
@@ -80,6 +81,7 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
             }
 
             LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent)
+            DataChanged.fire(context, "Login failed")
         }
     }
 }
