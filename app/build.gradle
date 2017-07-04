@@ -167,6 +167,9 @@ dependencies {
     compile "com.github.kittinunf.fuel:fuel:$fuel_version" //for JVM
     compile "com.github.kittinunf.fuel:fuel-android:$fuel_version" //for Android
 
+    // Font awesome
+    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.1'
+
     testCompile "junit:junit:$junit_version"
 }
 

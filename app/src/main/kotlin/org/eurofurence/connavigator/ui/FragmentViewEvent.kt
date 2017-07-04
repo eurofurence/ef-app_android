@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.joanzapata.iconify.IconDrawable
+import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import com.pawegio.kandroid.IntentFor
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
@@ -104,9 +106,8 @@ class FragmentViewEvent() : Fragment(), HasDb {
      */
     private fun changeFabIcon(eventEntry: EventRecord?) {
         if (eventEntry?.id in faves)
-            buttonSave.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_like_filled))
+            buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart))
         else
-            buttonSave.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_menu))
+            buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart_o))
     }
-
 }
