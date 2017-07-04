@@ -44,14 +44,14 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     }
 
     val dataChanged by lazy {
-        context.localReceiver(DataChanged.DATACHANGED)  {
+        context.localReceiver(DataChanged.DATACHANGED) {
             ui.greeting.invalidate()
         }
     }
 
 
     val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
-    val current by lazy { EventRecyclerFragment(EventList(database).isCurrent().sortByStartTime(), "Current events", false)}
+    val current by lazy { EventRecyclerFragment(EventList(database).isCurrent().sortByStartTime(), "Current events", false) }
     val favorited by lazy { EventRecyclerFragment(EventList(database).isFavorited().sortByDate().sortByStartTime(), "Your favorited events", false) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -137,9 +137,9 @@ class HomeUi : AnkoComponent<ViewGroup> {
             lparams(matchParent, matchParent)
             verticalLayout {
                 lparams(matchParent, matchParent)
-                greeting = textView{
-                    visibility = if(AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
-                    text = "Hello ${AuthPreferences.username}"
+                greeting = fontAwesomeView {
+                    visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
+                    text = "{fa-user} Hello ${AuthPreferences.username}"
                     setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
                     padding = dip(15)
                 }
