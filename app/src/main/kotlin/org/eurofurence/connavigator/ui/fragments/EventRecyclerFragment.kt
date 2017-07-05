@@ -35,6 +35,7 @@ import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
+import org.joda.time.Minutes
 
 /**
  * Event view recycler to hold the viewpager items
@@ -108,7 +109,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     holder.eventStartTime.text = "DONE"
                 eventIsUpcoming(event, DateTime.now(), 30) -> { //it's happening in 30 minutes
                     // It's upcoming, so we give a timer
-                    val countdown = eventStart(event).minus(DateTime.now().millis).toString("m").trim()
+                    val countdown = Minutes.minutesBetween(DateTime.now(), eventStart(event)).minutes
                     holder.eventStartTime.text = "IN $countdown MIN"
                 }
                 eventEnd(event).isBeforeNow -> {// Event end is before the current time, so it has already occurred thus it is gray
