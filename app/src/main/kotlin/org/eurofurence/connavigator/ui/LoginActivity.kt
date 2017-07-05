@@ -35,7 +35,11 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
             finish()
         } else {
             info { "Login failed! Showing error message" }
-            ui.errorText.visibility = View.VISIBLE
+            longToast("Failed to log you in!")
+            runOnUiThread {
+                ui.errorText.visibility = View.VISIBLE
+                ui.submit.isEnabled = true
+            }
         }
     }
 
@@ -78,6 +82,8 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
             ui.password.error = emptyText
             return
         }
+
+        ui.submit.isEnabled = false
 
         sendBroadcast(intentFor<LoginReceiver>(
                 LoginReceiver.REGNUMBER to ui.regNumber.text.toString(),
@@ -130,7 +136,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
                     lparams(matchParent, wrapContent)
                 }
 
-                errorText = textView("Your login was unsuccesfull, are you sure you entered the correct data?") {
+                errorText = textView("Your login was unsuccessful, are you sure you entered the correct data?") {
                     visibility = View.GONE
                 }
 

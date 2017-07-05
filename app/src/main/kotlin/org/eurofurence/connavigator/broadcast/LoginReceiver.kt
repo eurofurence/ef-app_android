@@ -61,8 +61,6 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
                 this@bulk.username = it.username
             }
 
-            InstanceIdService().reportToken()
-
             info { "Saved auth to preferences" }
 
             val intent = LOGIN_RESULT.toIntent {
@@ -70,6 +68,7 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
             }
 
             LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent)
+            InstanceIdService().reportToken()
             DataChanged.fire(context, "Login successful")
         } fail {
             warn { "Failed to retrieve tokens" }
