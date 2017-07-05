@@ -27,6 +27,7 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -34,6 +35,7 @@ import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import org.joda.time.DateTime
 import org.joda.time.Days
@@ -263,7 +265,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCH)
                 R.id.navAbout -> navigateRoot(FragmentViewAbout::class.java)
                 R.id.navLogin -> startActivity<LoginActivity>()
-                R.id.navMessages -> navigateRoot(FragmentViewMessages::class.java)
+                R.id.navMessages -> {
+                    if(AuthPreferences.isLoggedIn())
+                        navigateRoot(FragmentViewMessages::class.java)
+                    else
+                        longToast("You need to login before you can see private messages!")
+                }
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
                 R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this)
