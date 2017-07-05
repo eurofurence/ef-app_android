@@ -1,19 +1,17 @@
 package org.eurofurence.connavigator.database
 
-import android.app.Activity
-import android.app.Service
 import android.content.Context
 import android.support.v4.app.Fragment
+import android.util.Log
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.util.v2.*
 import org.eurofurence.connavigator.util.v2.Stored.StoredSource
-import org.eurofurence.connavigator.util.v2.Stored.StoredValues
 import org.joda.time.DateTime
+import org.joda.time.Days
 import org.joda.time.Interval
 import org.joda.time.LocalTime
 import java.util.*
-import kotlin.reflect.KProperty
 
 /**
  * Abstract database interface.
@@ -345,14 +343,14 @@ fun Db.eventIsUpcoming(event: EventRecord, date: DateTime, minutes: Int) =
 /**
  * Gets the day of the event.
  */
-fun Db.eventDay(eventEntry: EventRecord) =
+fun Db.eventDayNumber(eventEntry: EventRecord) =
         DateTime(eventEntry[toDay]?.date)
 
 /**
  * Gets the start time and day of the event.
  */
 fun Db.eventStart(eventEntry: EventRecord): DateTime =
-        eventDay(eventEntry).withTime(LocalTime.parse(eventEntry.startTime))
+        eventDayNumber(eventEntry).withTime(LocalTime.parse(eventEntry.startTime))
 
 
 /**
@@ -364,9 +362,9 @@ fun Db.eventEnd(eventEntry: EventRecord): DateTime {
     val et = LocalTime.parse(eventEntry.endTime)
 
     if (et < st)
-        return eventDay(eventEntry).plusDays(1).withTime(et)
+        return eventDayNumber(eventEntry).plusDays(1).withTime(et)
     else
-        return eventDay(eventEntry).withTime(et)
+        return eventDayNumber(eventEntry).withTime(et)
 }
 
 
@@ -389,3 +387,22 @@ fun Db.eventIsConflicting(eventEntry: EventRecord): Boolean =
 
 fun Db.filterEvents() =
         EventList(this)
+
+/**
+ * see if today is an event day
+ * Returns the current number of the day from 1
+ * returns 0 if before or after the event
+ */
+fun Db.eventDayNumber(): Int {
+    Log.d("DB", "Calulating day of the event")
+    val firstDay = DateTime(this.days.items.first().date.time)
+    val lastDay = DateTime(this.days.items.last().date.time)
+
+    if (firstDay.isAfterNow or lastDay.isBeforeNow) {
+        Log.d("DB", "Today is before or after the event! Returning zero")
+        return 0
+    }
+    val days = Days.daysBetween(firstDay, DateTime.now()).days + 1
+    Log.d("DB", "Today is day $days")
+    return days
+}

@@ -61,8 +61,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.screen(activity, "Events Listing")
 
-        eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager)
-        eventPager.offscreenPageLimit = 1
+        configureViewpager()
 
         childFragmentManager.beginTransaction()
                 .replace(R.id.eventSearch, searchFragment)
@@ -77,6 +76,13 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
 
         applyOnRoot { tabs.setupWithViewPager(eventPager) }
         applyOnRoot { changeTitle("Event Schedule") }
+    }
+
+    private fun configureViewpager() {
+        eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager)
+        eventPager.offscreenPageLimit = 1
+
+        eventPager.currentItem = db.eventDayNumber()
     }
 
     override fun dataUpdated() {
