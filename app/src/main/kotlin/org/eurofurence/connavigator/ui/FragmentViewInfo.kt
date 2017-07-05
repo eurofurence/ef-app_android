@@ -5,19 +5,21 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.github.chrisbanes.photoview.PhotoView
 import io.swagger.client.model.KnowledgeEntryRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.Formatter
-import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.contains
-import org.eurofurence.connavigator.util.extensions.jsonObjects
+import org.eurofurence.connavigator.util.extensions.*
+import org.jetbrains.anko.*
+import us.feras.mdv.MarkdownView
 
 
 /**
@@ -25,6 +27,8 @@ import org.eurofurence.connavigator.util.extensions.jsonObjects
  */
 class FragmentViewInfo() : Fragment(), HasDb {
     override val db by lazyLocateDb()
+
+    val ui by lazy { InfoUi() }
 
     /**
      * Constructs the info view with an assigned bundle
@@ -34,14 +38,8 @@ class FragmentViewInfo() : Fragment(), HasDb {
         arguments.jsonObjects["knowledgeEntry"] = knowledgeEntry
     }
 
-    // Views
-    val image: ImageView by view()
-    val title: TextView by view()
-    val text: TextView by view()
-    val layout: LinearLayout by view()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fview_info, container, false)
+        ui.createView(AnkoContext.Companion.create(context, container!!))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,29 +55,55 @@ class FragmentViewInfo() : Fragment(), HasDb {
             Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
 
             // Set the properties of the view
-            title.text = knowledgeEntry.title
-            text.text = Formatter.wikiToMarkdown(knowledgeEntry.text)
-            image.scaleType = ImageView.ScaleType.CENTER_CROP
+            ui.title.text = knowledgeEntry.title
+            ui.text.loadMarkdown(knowledgeEntry.text)
 
-            /* TODO
             if (knowledgeEntry.imageIds.isNotEmpty()) {
-                imageService.load(database.imageDb[UUID.fromString(knowledgeEntry.imageIds.first())], image, showHide = false)
+                imageService.load(db.images[knowledgeEntry.imageIds.first()], ui.image, showHide = false)
             } else {
-                image.visibility = View.GONE
+                ui.image.visibility = View.GONE
             }
 
-            for (url in knowledgeEntry.urls) {
+            for (url in knowledgeEntry.links) {
                 val button = Button(context)
-                button.text = url.text
+                button.text = url.name
                 button.setOnClickListener {
-                    val target = if (url.target.contains("http")) url.target else "http://${url.target}"
-                    Analytics.event(Analytics.Category.INFO, Analytics.Action.LINK_CLICKED, target)
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(target)))
+                    Analytics.event(Analytics.Category.INFO, Analytics.Action.LINK_CLICKED, url.target)
+                    context.browse(url.target)
                 }
 
-                layout.addView(button)
+                ui.layout.addView(button)
             }
-            */
         }
     }
+}
+
+class InfoUi : AnkoComponent<ViewGroup> {
+    lateinit var layout: LinearLayout
+    lateinit var image: PhotoView
+    lateinit var title: TextView
+    lateinit var text: MarkdownView
+    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+        scrollView {
+            lparams(matchParent, matchParent)
+            backgroundResource = R.color.cardview_light_background
+
+            layout = verticalLayout {
+                image = photoView {
+                    backgroundResource = R.drawable.placeholder_event
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                }.lparams(matchParent, dip(300))
+
+                title = themedTextView(R.style.AppTheme_Header) {
+                    lparams(matchParent, wrapContent)
+                    setTextAppearance(ctx, android.R.style.TextAppearance_Large_Inverse)
+                }
+
+                text = markdownView {
+                    lparams(matchParent, wrapContent)
+                }
+            }
+        }
+    }
+
 }

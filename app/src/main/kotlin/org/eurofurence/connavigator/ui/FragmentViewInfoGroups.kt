@@ -17,12 +17,14 @@ import io.swagger.client.model.KnowledgeGroupRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.*
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.v2.get
+import org.jetbrains.anko.*
 
 class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
     override val db by lazyLocateDb()
@@ -55,12 +57,8 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
 
         override fun onCreateViewHolder(parent: ViewGroup, type: Int): RecyclerView.ViewHolder =
                 when (type) {
-                    0 -> InfoGroupItemViewHolder(LayoutInflater
-                            .from(parent.context)
-                            .inflate(R.layout.layout_info_group_item, parent, false))
-                    1 -> InfoGroupViewHolder(LayoutInflater.
-                            from(parent.context)
-                            .inflate(R.layout.layout_info_group, parent, false))
+                    0 -> InfoGroupItemViewHolder(GroupItemUi().createView(AnkoContext.Companion.create(context, parent)))
+                    1 -> InfoGroupViewHolder(GroupUi().createView(AnkoContext.Companion.create(context, parent)))
                     else -> throw IllegalStateException()
 
                 }
@@ -77,9 +75,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
                 // Set data
                 holder.title.text = group.name
                 holder.description.text = group.description
-                /* TODO
-                imageService.load(database.imageDb[group.imageId], holder.image)
-                */
+
             } onRight { entry ->
                 // Cast holder
                 val holder = rawHolder as InfoGroupItemViewHolder
@@ -140,4 +136,53 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
         // Weave them
         effectiveInterleaved = weave(groups, elements)
     }
+}
+
+class GroupUi : AnkoComponent<ViewGroup> {
+    lateinit var image: ImageView
+    lateinit var title: TextView
+    lateinit var description: TextView
+    lateinit var layout: LinearLayout
+
+    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+        verticalLayout {
+            lparams(matchParent, wrapContent)
+            backgroundResource = android.R.color.background_light
+            id = R.id.layout
+
+            image = imageView {
+                lparams(matchParent, dip(200))
+                visibility = View.GONE
+                scaleType = ImageView.ScaleType.FIT_CENTER
+                id = R.id.image
+            }
+
+            title = themedTextView(R.style.AppTheme_Header) {
+                setTextAppearance(ctx, android.R.style.TextAppearance_Large_Inverse)
+                id = R.id.title
+            }
+
+            description = textView {
+                setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                padding = dip(10)
+                id = R.id.description
+            }
+        }
+    }
+}
+
+class GroupItemUi : AnkoComponent<ViewGroup> {
+    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui){
+        verticalLayout {
+            padding = dip(16)
+            id = R.id.layout
+
+            textView {
+                setTextAppearance(ctx, android.R.style.TextAppearance_Large)
+                lparams(matchParent, wrapContent)
+                id = R.id.title
+            }
+        }
+    }
+
 }
