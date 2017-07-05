@@ -25,10 +25,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.contains
-import org.eurofurence.connavigator.util.extensions.jsonObjects
-import org.eurofurence.connavigator.util.extensions.letRoot
-import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
 import us.feras.mdv.MarkdownView
 import java.util.*
@@ -86,7 +83,7 @@ class FragmentViewEvent() : Fragment(), HasDb {
             val conferenceRoom = event[toRoom]
             val conferenceDay = event[toDay]
 
-            title.text = Formatter.eventTitle(event)
+            title.text = event.fullTitle()
 
             description.loadMarkdown(event.description)
 
@@ -94,9 +91,8 @@ class FragmentViewEvent() : Fragment(), HasDb {
             organizers.text = Formatter.eventOwner(event)
             room.text = Formatter.roomFull(conferenceRoom!!)
 
-            /* TODO
-            imageService.load(database.imageDb[eventEntry.imageId], image)
-            */
+            // temporary fix until we get the actual images
+            imageService.load(db.images[UUID.randomUUID()], image)
             
             changeFabIcon()
 
