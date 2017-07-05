@@ -116,7 +116,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     holder.eventCard.setBackgroundColor(getColor(context, R.color.backgroundGrey))
                 }
                 isFavorite -> {// Event is in favourites, thus it is coloured in primary
-                    holder.eventStartTime.text = Formatter.shortTime(event.startTime)
+                    holder.eventStartTime.text = DateTime(event.startDateTimeUtc.time).toString("EE HH:mm")
                     holder.eventCard.setBackgroundColor(getColor(context, R.color.primaryLighter))
                 }
                 else -> {
