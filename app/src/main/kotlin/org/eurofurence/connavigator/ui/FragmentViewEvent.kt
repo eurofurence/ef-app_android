@@ -92,7 +92,7 @@ class FragmentViewEvent() : Fragment(), HasDb {
             room.text = Formatter.roomFull(conferenceRoom!!)
 
             // temporary fix until we get the actual images
-            imageService.load(db.images[UUID.randomUUID()], image)
+            imageService.load(db.images[event.posterImageId], image)
             
             changeFabIcon()
 

@@ -22,6 +22,7 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.database.*
+import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -129,9 +130,8 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             holder.eventRoom.text = Formatter.roomFull(event[toRoom]!!)
 
             // Load image
-            /* TODO
-            imageService.load( database.imageDb[event.imageId], holder.eventImage)
-            */
+            imageService.load(db.images[event.bannerImageId], holder.eventImage)
+
 
             // Assign the on-click action
             holder.itemView.setOnClickListener {
@@ -268,7 +268,7 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
 
             imageView {
                 maxWidth = matchParent
-                maxHeight = dip(200)
+                maxHeight = displayMetrics.widthPixels / 3
                 scaleType = ImageView.ScaleType.CENTER_CROP
                 id = R.id.eventImage
             }
