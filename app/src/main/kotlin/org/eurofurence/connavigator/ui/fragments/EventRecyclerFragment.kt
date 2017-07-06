@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui.fragments
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat.getColor
+import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -223,7 +224,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
 class SingleEventUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
-        linearLayout {
+        themedLinearLayout(R.style.AppTheme) {
             id = R.id.layout
             lparams(matchParent, wrapContent)
             isClickable = true
@@ -241,13 +242,13 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         textView {
                             id = R.id.eventStartTime
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
+                            TextViewCompat.setTextAppearance(this, android.R.style.TextAppearance_Medium)
                         }
 
                         textView {
                             id = R.id.eventEndTime
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                            TextViewCompat.setTextAppearance(this, android.R.style.TextAppearance_Small)
                         }
                     }
                     verticalLayout {
@@ -261,7 +262,7 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         textView {
                             id = R.id.eventRoom
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                            TextViewCompat.setTextAppearance(this, android.R.style.TextAppearance_Small)
                         }
                     }
                 }
