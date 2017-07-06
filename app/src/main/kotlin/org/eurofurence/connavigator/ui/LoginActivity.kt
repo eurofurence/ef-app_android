@@ -112,9 +112,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
                     title = "Login"
                     lparams(matchParent, wrapContent)
                     backgroundResource = R.color.primary
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        setTitleTextColor(ctx.getColor(R.color.textWhite))
-                    }
+                    setTitleTextAppearance(ctx, android.R.style.TextAppearance_Medium_Inverse)
                 }
 
                 lparams(matchParent, matchParent)
