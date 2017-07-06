@@ -148,27 +148,46 @@ class LoginUi : AnkoComponent<LoginActivity> {
                     regNumber = editText {
                         hint = "Registration number"
                         inputType = InputType.TYPE_CLASS_NUMBER
-                        lparams(matchParent, wrapContent)
+
+                        lparams(matchParent, wrapContent) {
+                            margin = dip(16)
+                        }
                     }
 
                     username = editText {
                         hint = "Username"
-                        lparams(matchParent, wrapContent)
+                        lparams(matchParent, wrapContent) {
+                            margin = dip(16)
+                        }
                     }
 
                     password = editText {
                         hint = "Password"
                         inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                        lparams(matchParent, wrapContent)
+                        lparams(matchParent, wrapContent) {
+                            margin = dip(16)
+                        }
                     }
 
                     errorText = textView("Your login was unsuccessful, are you sure you entered the correct data?") {
                         visibility = View.GONE
+                        textColor = ctx.getColor(R.color.primary)
+                        lparams(matchParent, wrapContent) {
+                            margin = dip(16)
+                        }
+                    }
+
+                    textView("Your login credentials for the app are the same as for the Eurofurence Registration System.\n\nIf you do not remember or have access to them, you can ask for a PIN code to sign in at the ConOps or Security office.") {
+                        lparams(matchParent, wrapContent) {
+                            margin = dip(16)
+                        }
                     }
 
                     submit = button {
-                        text = "Submit"
-                        lparams(matchParent, wrapContent)
+                        text = "Login"
+                        lparams(matchParent, wrapContent) {
+                            margin = dip(16)
+                        }
                     }
                 }
 
