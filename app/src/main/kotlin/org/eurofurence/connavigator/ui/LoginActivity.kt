@@ -3,9 +3,7 @@ package org.eurofurence.connavigator.ui
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutCompat
 import android.text.InputType
-import android.text.Layout
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -20,7 +18,6 @@ import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.custom.style
 import org.joda.time.DateTime
 
 /**
