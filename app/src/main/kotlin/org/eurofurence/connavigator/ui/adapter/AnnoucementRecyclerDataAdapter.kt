@@ -13,6 +13,7 @@ import io.swagger.client.model.AnnouncementRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.delegators.view
+import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -25,7 +26,7 @@ class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView
     val announcementTitle: TextView by view()
     val announcementDate: TextView by view()
     val announcementContent: TextView by view()
-    val announcementCaret: ImageView by view()
+    val announcementCaret: TextView by view()
 }
 
 class AnnoucementRecyclerDataAdapter(val announcements: List<AnnouncementRecord>) :
@@ -48,14 +49,14 @@ class AnnoucementRecyclerDataAdapter(val announcements: List<AnnouncementRecord>
             holder.announcementTitle.setSingleLine(false)
             holder.announcementContent.visibility = View.VISIBLE
 
-            holder.announcementCaret.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.icon_collapse))
+            holder.announcementCaret.text = "{fa-caret-up}"
 
             Analytics.event(Analytics.Category.ANNOUNCEMENT, Analytics.Action.OPENED, holder.announcementTitle.text.toString())
         } else {
             holder.announcementTitle.setSingleLine(true)
             holder.announcementContent.visibility = View.GONE
 
-            holder.announcementCaret.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.icon_expand))
+            holder.announcementCaret.text = "{fa-caret-down}"
         }
     }
 
@@ -80,14 +81,15 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
 
                 textView {
                     id = R.id.announcementTitle
+                    maxLines = 1
                     setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
-                }.lparams(matchParent, wrapContent, 9F)
+                }.lparams(wrapContent, wrapContent, 9F)
 
-                imageView {
+                fontAwesomeView {
                     id = R.id.announcementCaret
-                    scaleType = ImageView.ScaleType.FIT_CENTER
                     textAlignment = TextView.TEXT_ALIGNMENT_VIEW_END
-                }.lparams(dip(40), dip(40), 1F)
+                    text = "{fa-caret-down}"
+                }.lparams(wrapContent, wrapContent, 1F)
             }.lparams(matchParent, wrapContent)
 
             textView {
@@ -97,6 +99,8 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
 
             textView {
                 id = R.id.announcementContent
+                visibility = View.GONE
+                padding = dip(10)
             }.lparams(matchParent, wrapContent)
         }
     }
