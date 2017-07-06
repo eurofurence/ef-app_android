@@ -17,11 +17,11 @@ import java.util.*
  * Gets the fixed coordinates of a map entity, fitted to a map
  */
 fun MapEntryRecord.asRelatedCoordinates(image: ImageRecord) =
-        Point(((this.relativeX.toFloat() / 100) * image.width).toInt(), ((this.relativeY.toFloat() / 100) * image.height).toInt())
+        Point(((this.x.toFloat() / 100) * image.width).toInt(), ((this.y.toFloat() / 100) * image.height).toInt())
 
 fun MapEntryRecord.asRectangle(image: ImageRecord): Rect {
     val point = this.asRelatedCoordinates(image)
-    val jitter = ((this.relativeTapRadius.toFloat() / 100) * image.width).toInt()
+    val jitter = ((this.tapRadius.toFloat() / 100) * image.width).toInt()
 
     return Rect(point.x - jitter, point.y - jitter, point.x + jitter, point.y + jitter)
 }
