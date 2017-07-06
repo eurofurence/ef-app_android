@@ -44,6 +44,10 @@ public class EventRecord  {
   private String panelHosts = null;
   @SerializedName("IsDeviatingFromConBook")
   private Boolean isDeviatingFromConBook = null;
+  @SerializedName("BannerImageId")
+  private UUID bannerImageId = null;
+  @SerializedName("PosterImageId")
+  private UUID posterImageId = null;
 
   /**
    **/
@@ -215,6 +219,28 @@ public class EventRecord  {
     this.isDeviatingFromConBook = isDeviatingFromConBook;
   }
 
+  /**
+   * If set, refers to a banner ([3-4]:1 aspect ratio) that can be used when little  vertical space is available (e.G. event schedule, or a header section).
+   **/
+  @ApiModelProperty(value = "If set, refers to a banner ([3-4]:1 aspect ratio) that can be used when little  vertical space is available (e.G. event schedule, or a header section).")
+  public UUID getBannerImageId() {
+    return bannerImageId;
+  }
+  public void setBannerImageId(UUID bannerImageId) {
+    this.bannerImageId = bannerImageId;
+  }
+
+  /**
+   * If set, refers to an image of any aspect ratio that should be used where enough  vertical space is available (e.G. event detail).
+   **/
+  @ApiModelProperty(value = "If set, refers to an image of any aspect ratio that should be used where enough  vertical space is available (e.G. event detail).")
+  public UUID getPosterImageId() {
+    return posterImageId;
+  }
+  public void setPosterImageId(UUID posterImageId) {
+    this.posterImageId = posterImageId;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -241,7 +267,9 @@ public class EventRecord  {
         (startDateTimeUtc == null ? eventRecord.startDateTimeUtc == null : startDateTimeUtc.equals(eventRecord.startDateTimeUtc)) &&
         (endDateTimeUtc == null ? eventRecord.endDateTimeUtc == null : endDateTimeUtc.equals(eventRecord.endDateTimeUtc)) &&
         (panelHosts == null ? eventRecord.panelHosts == null : panelHosts.equals(eventRecord.panelHosts)) &&
-        (isDeviatingFromConBook == null ? eventRecord.isDeviatingFromConBook == null : isDeviatingFromConBook.equals(eventRecord.isDeviatingFromConBook));
+        (isDeviatingFromConBook == null ? eventRecord.isDeviatingFromConBook == null : isDeviatingFromConBook.equals(eventRecord.isDeviatingFromConBook)) &&
+        (bannerImageId == null ? eventRecord.bannerImageId == null : bannerImageId.equals(eventRecord.bannerImageId)) &&
+        (posterImageId == null ? eventRecord.posterImageId == null : posterImageId.equals(eventRecord.posterImageId));
   }
 
   @Override 
@@ -264,6 +292,8 @@ public class EventRecord  {
     result = 31 * result + (endDateTimeUtc == null ? 0: endDateTimeUtc.hashCode());
     result = 31 * result + (panelHosts == null ? 0: panelHosts.hashCode());
     result = 31 * result + (isDeviatingFromConBook == null ? 0: isDeviatingFromConBook.hashCode());
+    result = 31 * result + (bannerImageId == null ? 0: bannerImageId.hashCode());
+    result = 31 * result + (posterImageId == null ? 0: posterImageId.hashCode());
     return result;
   }
 
@@ -289,6 +319,8 @@ public class EventRecord  {
     sb.append("  endDateTimeUtc: ").append(endDateTimeUtc).append("\n");
     sb.append("  panelHosts: ").append(panelHosts).append("\n");
     sb.append("  isDeviatingFromConBook: ").append(isDeviatingFromConBook).append("\n");
+    sb.append("  bannerImageId: ").append(bannerImageId).append("\n");
+    sb.append("  posterImageId: ").append(posterImageId).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

@@ -1,6 +1,7 @@
 package io.swagger.client.model;
 
 import io.swagger.client.model.LinkFragment;
+import java.util.*;
 import java.util.UUID;
 
 import io.swagger.annotations.*;
@@ -12,14 +13,14 @@ public class MapEntryRecord  {
   
   @SerializedName("Id")
   private UUID id = null;
-  @SerializedName("RelativeX")
-  private Double relativeX = null;
-  @SerializedName("RelativeY")
-  private Double relativeY = null;
-  @SerializedName("RelativeTapRadius")
-  private Double relativeTapRadius = null;
-  @SerializedName("Link")
-  private LinkFragment link = null;
+  @SerializedName("X")
+  private Integer X = null;
+  @SerializedName("Y")
+  private Integer Y = null;
+  @SerializedName("TapRadius")
+  private Integer tapRadius = null;
+  @SerializedName("Links")
+  private List<LinkFragment> links = null;
 
   /**
    **/
@@ -32,46 +33,46 @@ public class MapEntryRecord  {
   }
 
   /**
-   * \"X\" coordinate of the *center* of a *circular area*, expressed as `[Relative Fraction of Map Image Width * 100]`.    *  A value of `RelativeX=50` indicates it's on the horizontal middle of a map, and results in an absolute X of 1000 on a map that is 2000 pixels wide,       or 500 on a map that is 1000 pixels wide. 0 would indicate the far left side, where as 100 indicates the far right side of the image.
+   * \"X\" coordinate of the *center* of a *circular area*, expressed in pixels.
    **/
-  @ApiModelProperty(value = "\"X\" coordinate of the *center* of a *circular area*, expressed as `[Relative Fraction of Map Image Width * 100]`.    *  A value of `RelativeX=50` indicates it's on the horizontal middle of a map, and results in an absolute X of 1000 on a map that is 2000 pixels wide,       or 500 on a map that is 1000 pixels wide. 0 would indicate the far left side, where as 100 indicates the far right side of the image.")
-  public Double getRelativeX() {
-    return relativeX;
+  @ApiModelProperty(value = "\"X\" coordinate of the *center* of a *circular area*, expressed in pixels.")
+  public Integer getX() {
+    return X;
   }
-  public void setRelativeX(Double relativeX) {
-    this.relativeX = relativeX;
+  public void setX(Integer X) {
+    this.X = X;
   }
 
   /**
-   * \"Y\" coordinate of the *center* of a *circular area*, expressed as `[Relative Fraction of Map Image Height * 100]`.   *  A value of `RelativeY=50` indicates it's on the vertical middle of a map, and results in an absolute Y of 1000 on a map that is 2000 pixels in height,      or 500 on a map that is 1000 in height. 0 would indicate the top side, where as 100 indicates the bottom side of the image.
+   * \"Y\" coordinate of the *center* of a *circular area*, expressed in pixels.
    **/
-  @ApiModelProperty(value = "\"Y\" coordinate of the *center* of a *circular area*, expressed as `[Relative Fraction of Map Image Height * 100]`.   *  A value of `RelativeY=50` indicates it's on the vertical middle of a map, and results in an absolute Y of 1000 on a map that is 2000 pixels in height,      or 500 on a map that is 1000 in height. 0 would indicate the top side, where as 100 indicates the bottom side of the image.")
-  public Double getRelativeY() {
-    return relativeY;
+  @ApiModelProperty(value = "\"Y\" coordinate of the *center* of a *circular area*, expressed in pixels.")
+  public Integer getY() {
+    return Y;
   }
-  public void setRelativeY(Double relativeY) {
-    this.relativeY = relativeY;
+  public void setY(Integer Y) {
+    this.Y = Y;
   }
 
   /**
-   * \"Radius\" of a *circular area* (the center of which described with RelativeX and RelativeY), expressed as `[Relative Fraction of Map Image Height]`.   *  A value of `RelativeTapRadius=0.02` indicates that the circle has an absolute tap radius of 20 pixels (and a diameter of 40 pixels) on a map that is       1000 pixels in height, or a tap radius of 10 pixels (and a diameter of 20 pixels) on a map that is 500 pixels in height.
+   * \"Radius\" of a *circular area* (the center of which described with X and Y), expressed in pixels.
    **/
-  @ApiModelProperty(value = "\"Radius\" of a *circular area* (the center of which described with RelativeX and RelativeY), expressed as `[Relative Fraction of Map Image Height]`.   *  A value of `RelativeTapRadius=0.02` indicates that the circle has an absolute tap radius of 20 pixels (and a diameter of 40 pixels) on a map that is       1000 pixels in height, or a tap radius of 10 pixels (and a diameter of 20 pixels) on a map that is 500 pixels in height.")
-  public Double getRelativeTapRadius() {
-    return relativeTapRadius;
+  @ApiModelProperty(value = "\"Radius\" of a *circular area* (the center of which described with X and Y), expressed in pixels.")
+  public Integer getTapRadius() {
+    return tapRadius;
   }
-  public void setRelativeTapRadius(Double relativeTapRadius) {
-    this.relativeTapRadius = relativeTapRadius;
+  public void setTapRadius(Integer tapRadius) {
+    this.tapRadius = tapRadius;
   }
 
   /**
    **/
   @ApiModelProperty(value = "")
-  public LinkFragment getLink() {
-    return link;
+  public List<LinkFragment> getLinks() {
+    return links;
   }
-  public void setLink(LinkFragment link) {
-    this.link = link;
+  public void setLinks(List<LinkFragment> links) {
+    this.links = links;
   }
 
 
@@ -85,20 +86,20 @@ public class MapEntryRecord  {
     }
     MapEntryRecord mapEntryRecord = (MapEntryRecord) o;
     return (id == null ? mapEntryRecord.id == null : id.equals(mapEntryRecord.id)) &&
-        (relativeX == null ? mapEntryRecord.relativeX == null : relativeX.equals(mapEntryRecord.relativeX)) &&
-        (relativeY == null ? mapEntryRecord.relativeY == null : relativeY.equals(mapEntryRecord.relativeY)) &&
-        (relativeTapRadius == null ? mapEntryRecord.relativeTapRadius == null : relativeTapRadius.equals(mapEntryRecord.relativeTapRadius)) &&
-        (link == null ? mapEntryRecord.link == null : link.equals(mapEntryRecord.link));
+        (X == null ? mapEntryRecord.X == null : X.equals(mapEntryRecord.X)) &&
+        (Y == null ? mapEntryRecord.Y == null : Y.equals(mapEntryRecord.Y)) &&
+        (tapRadius == null ? mapEntryRecord.tapRadius == null : tapRadius.equals(mapEntryRecord.tapRadius)) &&
+        (links == null ? mapEntryRecord.links == null : links.equals(mapEntryRecord.links));
   }
 
   @Override 
   public int hashCode() {
     int result = 17;
     result = 31 * result + (id == null ? 0: id.hashCode());
-    result = 31 * result + (relativeX == null ? 0: relativeX.hashCode());
-    result = 31 * result + (relativeY == null ? 0: relativeY.hashCode());
-    result = 31 * result + (relativeTapRadius == null ? 0: relativeTapRadius.hashCode());
-    result = 31 * result + (link == null ? 0: link.hashCode());
+    result = 31 * result + (X == null ? 0: X.hashCode());
+    result = 31 * result + (Y == null ? 0: Y.hashCode());
+    result = 31 * result + (tapRadius == null ? 0: tapRadius.hashCode());
+    result = 31 * result + (links == null ? 0: links.hashCode());
     return result;
   }
 
@@ -108,10 +109,10 @@ public class MapEntryRecord  {
     sb.append("class MapEntryRecord {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  relativeX: ").append(relativeX).append("\n");
-    sb.append("  relativeY: ").append(relativeY).append("\n");
-    sb.append("  relativeTapRadius: ").append(relativeTapRadius).append("\n");
-    sb.append("  link: ").append(link).append("\n");
+    sb.append("  X: ").append(X).append("\n");
+    sb.append("  Y: ").append(Y).append("\n");
+    sb.append("  tapRadius: ").append(tapRadius).append("\n");
+    sb.append("  links: ").append(links).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
