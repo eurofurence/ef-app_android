@@ -3,10 +3,14 @@ package org.eurofurence.connavigator.ui
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutCompat
 import android.text.InputType
+import android.text.Layout
+import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.LoginReceiver
@@ -16,6 +20,7 @@ import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
+import org.jetbrains.anko.custom.style
 import org.joda.time.DateTime
 
 /**
@@ -29,16 +34,17 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
 
         info { "Received broadast from LoginReceiver" }
 
-        if (success) {
-            info { "Login was success! Closing activity" }
-            longToast("Logged in as ${AuthPreferences.username}")
-            finish()
-        } else {
-            info { "Login failed! Showing error message" }
-            longToast("Failed to log you in!")
-            runOnUiThread {
+        runOnUiThread {
+            if (success) {
+                info { "Login was success! Closing activity" }
+                longToast("Logged in as ${AuthPreferences.username}")
+                finish()
+            } else {
+                info { "Login failed! Showing error message" }
+                longToast("Failed to log you in!")
                 ui.errorText.visibility = View.VISIBLE
-                ui.submit.isEnabled = true
+                ui.layoutMain.visibility = View.VISIBLE
+                ui.layoutBusy.visibility = View.GONE
             }
         }
     }
@@ -83,7 +89,8 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
             return
         }
 
-        ui.submit.isEnabled = false
+        ui.layoutMain.visibility = View.GONE
+        ui.layoutBusy.visibility = View.VISIBLE
 
         sendBroadcast(intentFor<LoginReceiver>(
                 LoginReceiver.REGNUMBER to ui.regNumber.text.toString(),
@@ -100,61 +107,88 @@ class LoginUi : AnkoComponent<LoginActivity> {
     lateinit var errorText: TextView
     lateinit var submit: Button
     lateinit var logout: Button
+    lateinit var layoutMain: LinearLayout
+    lateinit var layoutBusy: LinearLayout
 
     override fun createView(ui: AnkoContext<LoginActivity>) = with(ui) {
         linearLayout {
             lparams(matchParent, matchParent)
-            // If not logged in
-            verticalLayout {
-                visibility = if (AuthPreferences.isLoggedIn()) View.GONE else View.VISIBLE
 
-                toolbar {
-                    title = "Login"
+            layoutBusy = verticalLayout {
+                visibility = View.GONE
+                gravity = Gravity.CENTER
+                orientation = LinearLayout.VERTICAL
+
+                progressBar {
+                    lparams(wrapContent, wrapContent)
+                }
+
+                textView("Authenticating...") {
+                    padding = 20
+                    gravity = Gravity.CENTER
+
                     lparams(matchParent, wrapContent)
-                    backgroundResource = R.color.primary
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        setTitleTextColor(ctx.getColor(R.color.textWhite))
-                    }
                 }
 
                 lparams(matchParent, matchParent)
-
-                regNumber = editText {
-                    hint = "Registration number"
-                    inputType = InputType.TYPE_CLASS_NUMBER
-                    lparams(matchParent, wrapContent)
-                }
-
-                username = editText {
-                    hint = "Username"
-                    lparams(matchParent, wrapContent)
-                }
-
-                password = editText {
-                    hint = "Password"
-                    inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                    lparams(matchParent, wrapContent)
-                }
-
-                errorText = textView("Your login was unsuccessful, are you sure you entered the correct data?") {
-                    visibility = View.GONE
-                }
-
-                submit = button {
-                    text = "Submit"
-                    lparams(matchParent, wrapContent)
-                }
             }
 
-            // If logged in
-            verticalLayout {
-                visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
+            layoutMain = verticalLayout {
 
-                textView("Username: ${AuthPreferences.username}")
-                textView("Login is valid until: ${DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime()}")
+                // If not logged in
+                verticalLayout {
+                    visibility = if (AuthPreferences.isLoggedIn()) View.GONE else View.VISIBLE
 
-                logout = button("Logout")
+                    toolbar {
+                        title = "Login"
+                        lparams(matchParent, wrapContent)
+                        backgroundResource = R.color.primary
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            setTitleTextColor(ctx.getColor(R.color.textWhite))
+                        }
+                    }
+
+                    lparams(matchParent, matchParent)
+
+                    regNumber = editText {
+                        hint = "Registration number"
+                        inputType = InputType.TYPE_CLASS_NUMBER
+                        lparams(matchParent, wrapContent)
+                    }
+
+                    username = editText {
+                        hint = "Username"
+                        lparams(matchParent, wrapContent)
+                    }
+
+                    password = editText {
+                        hint = "Password"
+                        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                        lparams(matchParent, wrapContent)
+                    }
+
+                    errorText = textView("Your login was unsuccessful, are you sure you entered the correct data?") {
+                        visibility = View.GONE
+                    }
+
+                    submit = button {
+                        text = "Submit"
+                        lparams(matchParent, wrapContent)
+                    }
+                }
+
+                // If logged in
+                verticalLayout {
+                    visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
+
+                    textView("Username: ${AuthPreferences.username}")
+                    textView("Login is valid until: ${DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime()}")
+
+                    logout = button("Logout")
+                }
+                lparams(matchParent, matchParent)
             }
+
         }
     }
 
