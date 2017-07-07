@@ -242,13 +242,13 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         textView {
                             id = R.id.eventStartTime
                             singleLine = true
-                            TextViewCompat.setTextAppearance(this, android.R.style.TextAppearance_Medium)
+                            TextViewCompat.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)
                         }
 
                         textView {
                             id = R.id.eventEndTime
                             singleLine = true
-                            TextViewCompat.setTextAppearance(this, android.R.style.TextAppearance_Small)
+                            TextViewCompat.setTextAppearance(this, R.style.TextAppearance_AppCompat_Small)
                         }
                     }
                     verticalLayout {
@@ -257,12 +257,12 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         fontAwesomeView {
                             id = R.id.eventTitle
                             singleLine = true
-                            setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
+                            TextViewCompat.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)
                         }
                         textView {
                             id = R.id.eventRoom
                             singleLine = true
-                            TextViewCompat.setTextAppearance(this, android.R.style.TextAppearance_Small)
+                            TextViewCompat.setTextAppearance(this, R.style.TextAppearance_AppCompat_Small)
                         }
                     }
                 }
