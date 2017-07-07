@@ -1,7 +1,5 @@
 package org.eurofurence.connavigator.util.extensions
 
-import com.google.common.base.Predicate
-
 /**
  * Apply filter to iterable, but only if condition is true
  */

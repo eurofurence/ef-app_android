@@ -42,8 +42,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**UUID**](.md)|  |
- **entryId** | [**UUID**](.md)|  |
+ **id** | **UUID**|  |
+ **entryId** | **UUID**|  |
 
 ### Return type
 
@@ -85,8 +85,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**UUID**](.md)|  |
- **entryId** | [**UUID**](.md)|  |
+ **id** | **UUID**|  |
+ **entryId** | **UUID**|  |
 
 ### Return type
 
@@ -131,8 +131,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**UUID**](.md)|  |
- **entryId** | [**UUID**](.md)|  |
+ **id** | **UUID**|  |
+ **entryId** | **UUID**|  |
  **record** | [**MapEntryRecord**](MapEntryRecord.md)| \&quot;Id\&quot; property must match the {EntryId} part of the uri | [optional]
 
 ### Return type
@@ -175,7 +175,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**UUID**](.md)|  |
+ **id** | **UUID**|  |
 
 ### Return type
 
@@ -216,7 +216,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**UUID**](.md)|  |
+ **id** | **UUID**|  |
 
 ### Return type
 
@@ -260,7 +260,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**UUID**](.md)|  |
+ **id** | **UUID**|  |
  **record** | [**MapEntryRecord**](MapEntryRecord.md)| Do not specify the \&quot;Id\&quot; property. It will be auto-assigned and returned in the response. | [optional]
 
 ### Return type
@@ -302,7 +302,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**UUID**](.md)|  |
+ **id** | **UUID**|  |
 
 ### Return type
 

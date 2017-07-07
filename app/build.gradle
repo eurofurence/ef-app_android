@@ -1,6 +1,16 @@
 apply plugin: "idea"
 apply plugin: "com.android.application"
+apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: "kotlin-android"
+apply plugin: "kotlin-serialization"
+
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        verbose = true
+        freeCompilerArgs += ["-Xplugin", "$projectDir/tools/kotlin-serialization-gradle.jar"]
+    }
+}
 
 android {
 
@@ -41,8 +51,6 @@ android {
         exclude "META-INF/NOTICE"
         exclude "META-INF/maven/com.google.guava/guava/pom.xml"
         exclude "META-INF/maven/com.google.guava/guava/pom.properties"
-
-
     }
 
     defaultConfig {
@@ -57,19 +65,20 @@ android {
         main.java.srcDirs += "src/main/kotlin"
         androidTest.java.srcDirs += "src/androidTest/kotlin"
     }
+
+    flavorDimensions "mode"
+
     productFlavors {
         // Define separate dev and prod product flavors.
         dev {
-            // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
-            // to pre-dex each module and produce an APK that can be tested on
-            // Android Lollipop without time consuming dex merging processes.
-            minSdkVersion 21
             applicationId "org.eurofurence.connavigator.debug"
+            dimension "mode"
         }
         prod {
             // The actual minSdkVersion for the application.
             minSdkVersion 16
             applicationId "org.eurofurence.connavigator"
+            dimension "mode"
         }
     }
 }
@@ -83,11 +92,12 @@ ext {
     swagger_annotations_version = "1.5.0"
     gson_version = "2.6.1"
     anko_version = "0.10.1"
-    httpclient_version = "4.3.3"
-    volley_version = "1.0.1"
+    httpcore_version = "4.4.4"
+    httpmime_version = "4.5.2"
+    volley_version = "1.0.0"
     junit_version = "4.8.1"
     android_support_version = "25.3.1"
-    google_play_version = "11.0.1"
+    firebase_version = "11.0.2"
     fuel_version = "1.8.0"
 }
 
@@ -95,7 +105,6 @@ ext {
 apply from: "swagger.gradle"
 
 dependencies {
-    compile fileTree(include: ["*.jar"], dir: "libs")
     testCompile "junit:junit:4.12"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 
@@ -104,7 +113,6 @@ dependencies {
     compile "com.android.support:appcompat-v7:$android_support_version"
     compile "com.android.support:design:$android_support_version"
     compile "com.android.support:support-v4:$android_support_version"
-    compile "com.google.guava:guava:19.0"
     compile "com.android.support:cardview-v7:$android_support_version"
     compile "com.android.support:recyclerview-v7:$android_support_version"
     compile "com.android.support:cardview-v7:$android_support_version"
@@ -114,22 +122,20 @@ dependencies {
     compile "joda-time:joda-time:2.9.2:no-tzdb"
     compile "io.swagger:swagger-annotations:$swagger_annotations_version"
     compile "com.google.code.gson:gson:$gson_version"
-    compile "org.apache.httpcomponents:httpcore:$httpclient_version"
-    compile "org.apache.httpcomponents:httpclient:$httpclient_version"
-    compile "org.apache.httpcomponents:httpmime:$httpclient_version"
-    compile "com.mcxiaoke.volley:library-aar:$volley_version"
+
+    compile "com.android.volley:volley:${volley_version}"
     compile "com.nostra13.universalimageloader:universal-image-loader:1.9.5"
 
-    // Coroutines
-    //compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    //compile "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutines_version"
-    //compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    compile "org.apache.httpcomponents:httpcore:$httpcore_version"
+    compile ("org.apache.httpcomponents:httpmime:$httpmime_version") {
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+    }
 
     // Firebase
-    compile "com.google.firebase:firebase-messaging:$google_play_version"
-    compile "com.google.firebase:firebase-config:$google_play_version"
-    compile "com.google.firebase:firebase-crash:$google_play_version"
-    compile "com.google.firebase:firebase-perf:$google_play_version"
+    compile "com.google.firebase:firebase-messaging:$firebase_version"
+    compile "com.google.firebase:firebase-config:$firebase_version"
+    compile "com.google.firebase:firebase-crash:$firebase_version"
+    compile "com.google.firebase:firebase-perf:$firebase_version"
 
 
     // Photoview
@@ -169,12 +175,10 @@ dependencies {
 
     // Font awesome
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.1'
+    // Serialization
+    compile files("tools/kotlin-serialization-runtime.jar")
 
     testCompile "junit:junit:$junit_version"
 }
 
 apply plugin: "com.google.gms.google-services"
-apply plugin: 'com.google.firebase.firebase-perf'
-repositories {
-    mavenCentral()
-}

@@ -2,12 +2,8 @@ package org.eurofurence.connavigator.app
 
 import android.content.Context
 import android.util.Log
-import com.google.common.io.FileWriteMode
-import com.google.common.io.Files
 import org.eurofurence.connavigator.BuildConfig
 import java.io.File
-import java.io.PrintWriter
-import java.util.*
 
 /**
  * Logging services.
@@ -68,15 +64,6 @@ object logService {
             }
             else -> "Unknown"
         }
-
-        // Write to stream
-        Files.asCharSink(logfile, CHARSET, FileWriteMode.APPEND).openBufferedStream()
-                .let { PrintWriter(it) }
-                .use {
-                    it.println("$severityName $tag ${Date()}")
-                    it.println(m)
-                    it.println()
-                }
     }
 
     /**
@@ -123,19 +110,7 @@ object logService {
             }
             else -> "Unknown"
         }
-
-        // Write to stream
-        Files.asCharSink(logfile, CHARSET, FileWriteMode.APPEND).openBufferedStream()
-                .let { PrintWriter(it) }
-                .use {
-                    it.println("$severityName $tag ${Date()}")
-                    it.println(m)
-                    throwable.printStackTrace(it)
-                    it.println()
-                }
     }
-
-    fun messages() = Files.readLines(logfile, CHARSET)
 
     fun initialize(context: Context) {
 

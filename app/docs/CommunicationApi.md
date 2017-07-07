@@ -37,7 +37,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **messageId** | [**UUID**](.md)| &#x60;Id&#x60; of the message to mark as read |
+ **messageId** | **UUID**| &#x60;Id&#x60; of the message to mark as read |
 
 ### Return type
 

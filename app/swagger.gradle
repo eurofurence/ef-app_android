@@ -25,7 +25,7 @@ task generateSwagger(type: JavaExec) {
     main = "io.swagger.codegen.SwaggerCodegen"
 
     // Skip the build-related files
-    jvmArgs = ["-Dmodels", "-Dapis", "-DsupportingFiles=$supporting_files"]// Configure for the API specification
+    jvmArgs = ["-Dmodels", "-Dapis", "-DsupportingFiles=$supporting_files"] // Configure for the API specification
     args = ["generate", "-i", "$schema_location", "-l", "android", "-o", ".", "-Dlibrary=volley"]
 }
 

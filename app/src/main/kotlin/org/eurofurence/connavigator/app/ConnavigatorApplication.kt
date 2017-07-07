@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.app
 
+import android.content.Intent
 import android.support.multidex.MultiDexApplication
 import com.chibatching.kotpref.Kotpref
 import com.google.firebase.perf.metrics.AddTrace
@@ -14,14 +15,27 @@ import org.eurofurence.connavigator.gcm.PushListenerService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.util.extensions.logv
+import org.eurofurence.connavigator.util.v2.BundleInput
+import org.eurofurence.connavigator.util.v2.BundleOutput
+import org.eurofurence.connavigator.util.v2.IntentInput
+import org.eurofurence.connavigator.util.v2.IntentOutput
 import org.eurofurence.connavigator.webapi.apiService
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.error
+import org.jetbrains.anko.info
+import kotlin.serialization.*
+
+@Serializable
+data class Address(val street: String, val town: String)
+
+@Serializable
+data class User(val name: String, val id: Int, val address: Address)
+
 
 /**
  * The application initialization point.
  */
-class ConnavigatorApplication : MultiDexApplication() {
+class ConnavigatorApplication : MultiDexApplication(), AnkoLogger {
     @AddTrace(name = "ConnavigatorApplication:onCreate", enabled = true)
     override fun onCreate() {
         super.onCreate()
@@ -53,5 +67,25 @@ class ConnavigatorApplication : MultiDexApplication() {
 
         // Update every 5 minutes
         UpdateIntentService.dispatchUpdate(this)
+        val u = User("Hello world", 12345, Address("Kakaln.", "Kakatown"))
+        val i = Intent("hello.serialization")
+
+        val s = User::class.serializer()
+        val a = IntentOutput(i)
+        a.write(s, u)
+
+        info {
+            i.extras.keySet().joinToString(separator = "\r\n") { "$it = ${i.extras.get(it)}" }
+        }
+
+        try {
+            val v = IntentInput(i).read(s)
+
+            info {
+                v
+            }
+        } catch(t: Throwable) {
+            error("Error reading value", t)
+        }
     }
 }
