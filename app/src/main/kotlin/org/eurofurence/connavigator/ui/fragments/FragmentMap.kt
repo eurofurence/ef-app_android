@@ -1,5 +1,7 @@
 package org.eurofurence.connavigator.ui.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
+import com.google.gson.Gson
 import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
 import org.eurofurence.connavigator.R
@@ -80,7 +83,19 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     fun fillLinkLayout(entry: MapEntryRecord) = when (entry.links.first().fragmentType.name) {
         "DealerDetail" -> fillLinkAsDealer(entry)
+        "MapExternal" -> fillLinkAsExternalMap(entry)
         else -> Unit
+    }
+
+    private fun fillLinkAsExternalMap(entry: MapEntryRecord) {
+        val mapData = Gson().fromJson(entry.links.first().target, MapExternal::class.java)
+
+        ui.linkTitle.text = "Navigate to ${mapData.name}"
+        ui.linkLayout.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("geo:${mapData.lat},${mapData.lon}")
+            startActivity(intent)
+        }
     }
 
     private fun fillLinkAsDealer(entry: MapEntryRecord) {
@@ -107,7 +122,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
                 title = textView()
 
-                linkLayout = verticalLayout{
+                linkLayout = verticalLayout {
                     visibility = View.GONE
                     padding = dip(15)
                     backgroundResource = R.color.cardview_light_background
@@ -119,3 +134,9 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         }
     }
 }
+
+data class MapExternal(
+        val lat: String,
+        val lon: String,
+        val name: String
+)
