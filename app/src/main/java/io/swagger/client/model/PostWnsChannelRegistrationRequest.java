@@ -13,7 +13,6 @@
 package io.swagger.client.model;
 
 import java.util.*;
-import java.util.UUID;
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
 
@@ -21,7 +20,7 @@ import com.google.gson.annotations.SerializedName;
 public class PostWnsChannelRegistrationRequest {
   
   @SerializedName("DeviceId")
-  private UUID deviceId = null;
+  private String deviceId = null;
   @SerializedName("ChannelUri")
   private String channelUri = null;
   @SerializedName("Topics")
@@ -30,10 +29,10 @@ public class PostWnsChannelRegistrationRequest {
   /**
    **/
   @ApiModelProperty(value = "")
-  public UUID getDeviceId() {
+  public String getDeviceId() {
     return deviceId;
   }
-  public void setDeviceId(UUID deviceId) {
+  public void setDeviceId(String deviceId) {
     this.deviceId = deviceId;
   }
 

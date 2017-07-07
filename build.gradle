@@ -14,8 +14,6 @@ buildscript {
     }
 
     dependencies {
-        classpath files("app/tools/kotlin-serialization-gradle.jar")
-
         classpath "com.android.tools.build:gradle:$android_build_version"
         classpath 'com.google.gms:google-services:3.1.0'
         classpath 'com.google.firebase:firebase-plugins:1.1.0'

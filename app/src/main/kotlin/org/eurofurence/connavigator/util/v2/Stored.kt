@@ -4,10 +4,7 @@ import android.content.Context
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import io.swagger.client.JsonUtil.*
-import org.eurofurence.connavigator.util.extensions.safeInStream
-import org.eurofurence.connavigator.util.extensions.safeOutStream
-import org.eurofurence.connavigator.util.extensions.safeReader
-import org.eurofurence.connavigator.util.extensions.safeWriter
+import org.eurofurence.connavigator.util.extensions.*
 import java.io.File
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -46,12 +43,16 @@ abstract class Stored(val context: Context) {
             if (t == null)
                 file.delete()
             else if (swaggerStored)
-                JsonWriter(file.safeWriter()).use {
-                    getGson().toJson(t, elementClass.java, it)
+                file.substitute { file ->
+                    JsonWriter(file.safeWriter()).use {
+                        getGson().toJson(t, elementClass.java, it)
+                    }
                 }
             else
-                ObjectOutputStream(file.safeOutStream()).use {
-                    it.writeObject(t)
+                file.substitute { file ->
+                    ObjectOutputStream(file.safeOutStream()).use {
+                        it.writeObject(t)
+                    }
                 }
         }
     }
@@ -84,12 +85,16 @@ abstract class Stored(val context: Context) {
             if (t.isEmpty())
                 file.delete()
             else if (swaggerStored)
-                JsonWriter(file.safeWriter()).use {
-                    getGson().toJson(t, getListTypeForDeserialization(elementClass.java), it)
+                file.substitute { file ->
+                    JsonWriter(file.safeWriter()).use {
+                        getGson().toJson(t, getListTypeForDeserialization(elementClass.java), it)
+                    }
                 }
             else
-                ObjectOutputStream(file.safeOutStream()).use {
-                    it.writeObject(t)
+                file.substitute { file ->
+                    ObjectOutputStream(file.safeOutStream()).use {
+                        it.writeObject(t)
+                    }
                 }
         }
     }
@@ -138,8 +143,10 @@ abstract class Stored(val context: Context) {
             }
             set(values) {
                 // Write values
-                JsonWriter(file.safeWriter()).use {
-                    getGson().toJson(values.values, getListTypeForDeserialization(elementClass.java), it)
+                file.substitute { file ->
+                    JsonWriter(file.safeWriter()).use {
+                        getGson().toJson(values.values, getListTypeForDeserialization(elementClass.java), it)
+                    }
                 }
 
                 // Cache values and store the write time

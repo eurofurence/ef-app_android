@@ -40,7 +40,7 @@ class FragmentViewEvent() : Fragment(), HasDb {
 
     override val db by lazyLocateDb()
     val dataChanged by lazy {
-        context.localReceiver(DataChanged.DATACHANGED){
+        context.localReceiver(DataChanged.DATACHANGED) {
             changeFabIcon()
         }
     }
@@ -93,7 +93,7 @@ class FragmentViewEvent() : Fragment(), HasDb {
 
             // temporary fix until we get the actual images
             imageService.load(db.images[event.posterImageId], image)
-            
+
             changeFabIcon()
 
             buttonSave.setOnClickListener {

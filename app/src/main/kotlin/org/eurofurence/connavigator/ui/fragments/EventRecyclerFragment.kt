@@ -17,6 +17,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.then
+import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
@@ -47,7 +48,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     val ui by lazy { EventListView() }
     val updateReceiver by lazy {
-        context.localReceiver(DataChanged.DATACHANGED){
+        context.localReceiver(DataChanged.DATACHANGED) {
             dataUpdated()
         }
     }
@@ -92,9 +93,9 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             val titleBuilder = StringBuilder()
 
-            if(RemotePreferences.showEventGlyphs) {
+            if (RemotePreferences.showEventGlyphs) {
                 if (isFavorite) titleBuilder.append("{fa-heart} ")
-                if(event.isDeviatingFromConBook) titleBuilder.append("{fa-pencil} ")
+                if (event.isDeviatingFromConBook) titleBuilder.append("{fa-pencil} ")
             }
 
             titleBuilder.append(event.fullTitle())
@@ -211,7 +212,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.eventList.visibility = View.VISIBLE
 
             configureTitle()
-        } fail {
+        } failUi {
             ui.loading.visibility = View.GONE
             ui.eventList.visibility = View.VISIBLE
 
@@ -255,7 +256,7 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         fontAwesomeView {
                             id = R.id.eventTitle
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
+                            setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
                         }
                         textView {
                             id = R.id.eventRoom

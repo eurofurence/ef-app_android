@@ -24,8 +24,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import io.swagger.client.model.AuthenticationResponse;
-import io.swagger.client.model.RegSysAlternativePinRequest;
-import io.swagger.client.model.RegSysAlternativePinResponse;
 import io.swagger.client.model.RegSysAuthenticationRequest;
 
 import org.apache.http.HttpEntity;
@@ -58,127 +56,6 @@ public class TokensApi {
     return basePath;
   }
 
-  /**
-  * 
-  *   * Requires authorization     * Requires any of the following roles: **&#x60;ConOps&#x60;**, **&#x60;Developer&#x60;**, **&#x60;Registration&#x60;**, **&#x60;Security&#x60;**, **&#x60;System&#x60;**
-   * @param request 
-   * @return RegSysAlternativePinResponse
-  */
-  public RegSysAlternativePinResponse apiV2TokensRegSysAlternativePinPost (RegSysAlternativePinRequest request) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
-    Object postBody = request;
-
-    // create path and map variables
-    String path = "/Api/v2/Tokens/RegSys/AlternativePin".replaceAll("\\{format\\}","json");
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-    String[] contentTypes = {
-      "application/json",
-      "text/json",
-      "application/json-patch+json"
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-    }
-
-    String[] authNames = new String[] { "Bearer" };
-
-    try {
-      String localVarResponse = apiInvoker.invokeAPI (basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, authNames);
-      if (localVarResponse != null) {
-         return (RegSysAlternativePinResponse) ApiInvoker.deserialize(localVarResponse, "", RegSysAlternativePinResponse.class);
-      } else {
-         return null;
-      }
-    } catch (ApiException ex) {
-       throw ex;
-    } catch (InterruptedException ex) {
-       throw ex;
-    } catch (ExecutionException ex) {
-       if (ex.getCause() instanceof VolleyError) {
-         VolleyError volleyError = (VolleyError)ex.getCause();
-         if (volleyError.networkResponse != null) {
-           throw new ApiException(volleyError.networkResponse.statusCode, volleyError.getMessage());
-         }
-       }
-       throw ex;
-    } catch (TimeoutException ex) {
-       throw ex;
-    }
-  }
-
-      /**
-   * 
-   *   * Requires authorization     * Requires any of the following roles: **&#x60;ConOps&#x60;**, **&#x60;Developer&#x60;**, **&#x60;Registration&#x60;**, **&#x60;Security&#x60;**, **&#x60;System&#x60;**
-   * @param request 
-  */
-  public void apiV2TokensRegSysAlternativePinPost (RegSysAlternativePinRequest request, final Response.Listener<RegSysAlternativePinResponse> responseListener, final Response.ErrorListener errorListener) {
-    Object postBody = request;
-
-  
-
-    // create path and map variables
-    String path = "/Api/v2/Tokens/RegSys/AlternativePin".replaceAll("\\{format\\}","json");
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-
-
-    String[] contentTypes = {
-      "application/json","text/json","application/json-patch+json"
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
-
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-          }
-
-      String[] authNames = new String[] { "Bearer" };
-
-    try {
-      apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((RegSysAlternativePinResponse) ApiInvoker.deserialize(localVarResponse,  "", RegSysAlternativePinResponse.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
-    } catch (ApiException ex) {
-      errorListener.onErrorResponse(new VolleyError(ex));
-    }
-  }
   /**
   * 
   * 

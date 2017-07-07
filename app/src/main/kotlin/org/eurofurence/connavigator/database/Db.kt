@@ -113,6 +113,16 @@ interface Db {
     val toRoom: JoinerBinding<EventRecord, EventConferenceRoomRecord, UUID>
 
     /**
+     * Event &rarr; Image join.
+     */
+    val toBanner: JoinerBinding<EventRecord, ImageRecord, UUID>
+
+    /**
+     * Event &rarr; Image join.
+     */
+    val toPoster: JoinerBinding<EventRecord, ImageRecord, UUID>
+
+    /**
      * Knowledge entry &rarr; Group join.
      */
     val toGroup: JoinerBinding<KnowledgeEntryRecord, KnowledgeGroupRecord, UUID>
@@ -224,6 +234,12 @@ interface HasDb : Db {
     override val toRoom: JoinerBinding<EventRecord, EventConferenceRoomRecord, UUID>
         get() = db.toRoom
 
+    override val toBanner: JoinerBinding<EventRecord, ImageRecord, UUID>
+        get() = db.toBanner
+
+    override val toPoster: JoinerBinding<EventRecord, ImageRecord, UUID>
+        get() = db.toPoster
+
     override val toGroup: JoinerBinding<KnowledgeEntryRecord, KnowledgeGroupRecord, UUID>
         get() = db.toGroup
 
@@ -293,6 +309,14 @@ class RootDb(context: Context) : Stored(context), Db {
     override val toRoom = JoinerBinding(
             EventRecord::getConferenceRoomId join EventConferenceRoomRecord::getId,
             events, rooms)
+
+    override val toBanner = JoinerBinding(
+            EventRecord::getBannerImageId join ImageRecord::getId,
+            events, images)
+
+    override val toPoster = JoinerBinding(
+            EventRecord::getPosterImageId join ImageRecord::getId,
+            events, images)
 
     override val toGroup = JoinerBinding(
             KnowledgeEntryRecord::getKnowledgeGroupId join KnowledgeGroupRecord::getId,

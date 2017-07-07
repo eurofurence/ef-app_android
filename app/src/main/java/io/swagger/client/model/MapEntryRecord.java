@@ -13,6 +13,7 @@
 package io.swagger.client.model;
 
 import io.swagger.client.model.LinkFragment;
+import java.util.*;
 import java.util.UUID;
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
@@ -22,14 +23,14 @@ public class MapEntryRecord {
   
   @SerializedName("Id")
   private UUID id = null;
-  @SerializedName("RelativeX")
-  private Double relativeX = null;
-  @SerializedName("RelativeY")
-  private Double relativeY = null;
-  @SerializedName("RelativeTapRadius")
-  private Double relativeTapRadius = null;
-  @SerializedName("Link")
-  private LinkFragment link = null;
+  @SerializedName("X")
+  private Integer X = null;
+  @SerializedName("Y")
+  private Integer Y = null;
+  @SerializedName("TapRadius")
+  private Integer tapRadius = null;
+  @SerializedName("Links")
+  private List<LinkFragment> links = null;
 
   /**
    **/
@@ -42,43 +43,46 @@ public class MapEntryRecord {
   }
 
   /**
+   * \"X\" coordinate of the *center* of a *circular area*, expressed in pixels.
    **/
-  @ApiModelProperty(value = "")
-  public Double getRelativeX() {
-    return relativeX;
+  @ApiModelProperty(value = "\"X\" coordinate of the *center* of a *circular area*, expressed in pixels.")
+  public Integer getX() {
+    return X;
   }
-  public void setRelativeX(Double relativeX) {
-    this.relativeX = relativeX;
+  public void setX(Integer X) {
+    this.X = X;
+  }
+
+  /**
+   * \"Y\" coordinate of the *center* of a *circular area*, expressed in pixels.
+   **/
+  @ApiModelProperty(value = "\"Y\" coordinate of the *center* of a *circular area*, expressed in pixels.")
+  public Integer getY() {
+    return Y;
+  }
+  public void setY(Integer Y) {
+    this.Y = Y;
+  }
+
+  /**
+   * \"Radius\" of a *circular area* (the center of which described with X and Y), expressed in pixels.
+   **/
+  @ApiModelProperty(value = "\"Radius\" of a *circular area* (the center of which described with X and Y), expressed in pixels.")
+  public Integer getTapRadius() {
+    return tapRadius;
+  }
+  public void setTapRadius(Integer tapRadius) {
+    this.tapRadius = tapRadius;
   }
 
   /**
    **/
   @ApiModelProperty(value = "")
-  public Double getRelativeY() {
-    return relativeY;
+  public List<LinkFragment> getLinks() {
+    return links;
   }
-  public void setRelativeY(Double relativeY) {
-    this.relativeY = relativeY;
-  }
-
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  public Double getRelativeTapRadius() {
-    return relativeTapRadius;
-  }
-  public void setRelativeTapRadius(Double relativeTapRadius) {
-    this.relativeTapRadius = relativeTapRadius;
-  }
-
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  public LinkFragment getLink() {
-    return link;
-  }
-  public void setLink(LinkFragment link) {
-    this.link = link;
+  public void setLinks(List<LinkFragment> links) {
+    this.links = links;
   }
 
 
@@ -92,20 +96,20 @@ public class MapEntryRecord {
     }
     MapEntryRecord mapEntryRecord = (MapEntryRecord) o;
     return (this.id == null ? mapEntryRecord.id == null : this.id.equals(mapEntryRecord.id)) &&
-        (this.relativeX == null ? mapEntryRecord.relativeX == null : this.relativeX.equals(mapEntryRecord.relativeX)) &&
-        (this.relativeY == null ? mapEntryRecord.relativeY == null : this.relativeY.equals(mapEntryRecord.relativeY)) &&
-        (this.relativeTapRadius == null ? mapEntryRecord.relativeTapRadius == null : this.relativeTapRadius.equals(mapEntryRecord.relativeTapRadius)) &&
-        (this.link == null ? mapEntryRecord.link == null : this.link.equals(mapEntryRecord.link));
+        (this.X == null ? mapEntryRecord.X == null : this.X.equals(mapEntryRecord.X)) &&
+        (this.Y == null ? mapEntryRecord.Y == null : this.Y.equals(mapEntryRecord.Y)) &&
+        (this.tapRadius == null ? mapEntryRecord.tapRadius == null : this.tapRadius.equals(mapEntryRecord.tapRadius)) &&
+        (this.links == null ? mapEntryRecord.links == null : this.links.equals(mapEntryRecord.links));
   }
 
   @Override
   public int hashCode() {
     int result = 17;
     result = 31 * result + (this.id == null ? 0: this.id.hashCode());
-    result = 31 * result + (this.relativeX == null ? 0: this.relativeX.hashCode());
-    result = 31 * result + (this.relativeY == null ? 0: this.relativeY.hashCode());
-    result = 31 * result + (this.relativeTapRadius == null ? 0: this.relativeTapRadius.hashCode());
-    result = 31 * result + (this.link == null ? 0: this.link.hashCode());
+    result = 31 * result + (this.X == null ? 0: this.X.hashCode());
+    result = 31 * result + (this.Y == null ? 0: this.Y.hashCode());
+    result = 31 * result + (this.tapRadius == null ? 0: this.tapRadius.hashCode());
+    result = 31 * result + (this.links == null ? 0: this.links.hashCode());
     return result;
   }
 
@@ -115,10 +119,10 @@ public class MapEntryRecord {
     sb.append("class MapEntryRecord {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  relativeX: ").append(relativeX).append("\n");
-    sb.append("  relativeY: ").append(relativeY).append("\n");
-    sb.append("  relativeTapRadius: ").append(relativeTapRadius).append("\n");
-    sb.append("  link: ").append(link).append("\n");
+    sb.append("  X: ").append(X).append("\n");
+    sb.append("  Y: ").append(Y).append("\n");
+    sb.append("  tapRadius: ").append(tapRadius).append("\n");
+    sb.append("  links: ").append(links).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

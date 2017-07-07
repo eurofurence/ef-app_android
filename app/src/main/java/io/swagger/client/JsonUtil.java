@@ -164,14 +164,6 @@ public class JsonUtil {
       return new TypeToken<List<PrivateMessageRecord>>(){}.getType();
     }
     
-    if ("RegSysAlternativePinRequest".equalsIgnoreCase(className)) {
-      return new TypeToken<List<RegSysAlternativePinRequest>>(){}.getType();
-    }
-    
-    if ("RegSysAlternativePinResponse".equalsIgnoreCase(className)) {
-      return new TypeToken<List<RegSysAlternativePinResponse>>(){}.getType();
-    }
-    
     if ("RegSysAuthenticationRequest".equalsIgnoreCase(className)) {
       return new TypeToken<List<RegSysAuthenticationRequest>>(){}.getType();
     }
@@ -300,14 +292,6 @@ public class JsonUtil {
     
     if ("PrivateMessageRecord".equalsIgnoreCase(className)) {
       return new TypeToken<PrivateMessageRecord>(){}.getType();
-    }
-    
-    if ("RegSysAlternativePinRequest".equalsIgnoreCase(className)) {
-      return new TypeToken<RegSysAlternativePinRequest>(){}.getType();
-    }
-    
-    if ("RegSysAlternativePinResponse".equalsIgnoreCase(className)) {
-      return new TypeToken<RegSysAlternativePinResponse>(){}.getType();
     }
     
     if ("RegSysAuthenticationRequest".equalsIgnoreCase(className)) {

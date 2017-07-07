@@ -2,7 +2,6 @@ apply plugin: "idea"
 apply plugin: "com.android.application"
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: "kotlin-android"
-apply plugin: "kotlin-serialization"
 
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -182,3 +181,7 @@ dependencies {
 }
 
 apply plugin: "com.google.gms.google-services"
+apply plugin: 'com.google.firebase.firebase-perf'
+repositories {
+    mavenCentral()
+}
