@@ -95,6 +95,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         }
     }
 
+    /**
+     * Use a bound value instead of the specification.
+     */
+    val updateCompleteMsg by updateComplete
+
+
     override fun makeSnackbar(text: String) {
         Snackbar.make(findViewById(R.id.content)!!, text, Snackbar.LENGTH_LONG).show()
     }
@@ -179,9 +185,13 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     override fun onResume() {
         super.onResume()
         updateReceiver.register()
+        updateCompleteMsg.listen {
+            println(it)
+        }
     }
 
     override fun onPause() {
+        updateCompleteMsg.unlistenAll()
         updateReceiver.unregister()
         super.onPause()
     }
@@ -279,7 +289,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     AlertDialog.Builder(ContextThemeWrapper(this, R.style.appcompatDialog))
                             .setTitle("Clearing Database")
                             .setMessage("This will get rid of all cached items you have stored locally. You will need an internet connection to restart!")
-                            .setPositiveButton("Clear", { dialogInterface, i -> db.clear(); imageService.clear();  System.exit(0) })
+                            .setPositiveButton("Clear", { dialogInterface, i -> db.clear(); imageService.clear(); System.exit(0) })
                             .setNegativeButton("Cancel", { dialogInterface, i -> })
                             .show()
                 }

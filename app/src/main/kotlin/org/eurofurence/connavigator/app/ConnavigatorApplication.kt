@@ -4,6 +4,7 @@ import android.content.Intent
 import android.support.multidex.MultiDexApplication
 import com.chibatching.kotpref.Kotpref
 import com.google.firebase.perf.metrics.AddTrace
+import io.swagger.client.model.DealerRecord
 import com.joanzapata.iconify.Iconify
 import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import com.joanzapata.iconify.fonts.FontAwesomeModule
@@ -23,13 +24,14 @@ import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
 import org.jetbrains.anko.info
+import java.util.*
 import kotlin.serialization.*
 
 @Serializable
 data class Address(val street: String, val town: String)
 
 @Serializable
-data class User(val name: String, val id: Int, val address: Address)
+data class User(val name: String, val id: Int, val address: Address, val dealerRecord: DealerRecord)
 
 
 /**
@@ -67,25 +69,5 @@ class ConnavigatorApplication : MultiDexApplication(), AnkoLogger {
 
         // Update every 5 minutes
         UpdateIntentService.dispatchUpdate(this)
-        val u = User("Hello world", 12345, Address("Kakaln.", "Kakatown"))
-        val i = Intent("hello.serialization")
-
-        val s = User::class.serializer()
-        val a = IntentOutput(i)
-        a.write(s, u)
-
-        info {
-            i.extras.keySet().joinToString(separator = "\r\n") { "$it = ${i.extras.get(it)}" }
-        }
-
-        try {
-            val v = IntentInput(i).read(s)
-
-            info {
-                v
-            }
-        } catch(t: Throwable) {
-            error("Error reading value", t)
-        }
     }
 }

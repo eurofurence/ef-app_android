@@ -1,21 +1,93 @@
 package org.eurofurence.connavigator.util.v2
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.support.annotation.RequiresApi
+import io.swagger.client.JsonUtil
 import kotlin.reflect.KClass
 import kotlin.serialization.*
 
+/**
+ * This file contains very versatile serializers for Android Bundles and Intents.
+ */
+
+/**
+ * Special value type for Unit fields.
+ */
 val VALUE_TYPE_UNIT: Byte = 1
 
+/**
+ * Special value type for parcellable values.
+ */
 val VALUE_TYPE_PARCELABLE: Byte = 2
 
+/**
+ * Special value type for serializable values.
+ */
 val VALUE_TYPE_SERIALIZABLE: Byte = 3
+
+/**
+ * Special value type for single value JSON fields.
+ */
+val VALUE_TYPE_JSON: Byte = 4
+
+/**
+ * Special value type for JSON lists with elements.
+ */
+val VALUE_TYPE_JSON_LIST: Byte = 5
+
+/**
+ * Special value type for JSON lists without detectable element type.
+ */
+val VALUE_TYPE_JSON_LIST_EMPTY: Byte = 6
+
+/**
+ * Writes the value to the intent.
+ */
+inline fun <reified T : Any> Intent.write(t: T) =
+        IntentOutput(this).write(T::class.serializer(), t)
+
+/**
+ * Reads the value from the intent.
+ */
+inline fun <reified T : Any> Intent.read() =
+        IntentInput(this).read(T::class.serializer())
+
+/**
+ * Writes the value to the bundle with the given root.
+ */
+inline fun <reified T : Any> Bundle.write(root: String, t: T) =
+        BundleOutput(this, root).write(T::class.serializer(), t)
+
+/**
+ * Reads the value from the bundle with the given root.
+ */
+inline fun <reified T : Any> Bundle.read(root: String) =
+        BundleInput(this, root).read(T::class.serializer())
+
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+fun Bundle.toMap() =
+        keySet().associate { it to get(it) }
+
+fun Bundle.toMapString() =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            toMap().toString()
+        else
+            toString()
+
+fun Intent.toMapString() =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            "Intent {act=$action (${extras.toMap()}) }"
+        else
+            toString()
 
 /**
  * Serializes to a bundle.
  */
-class BundleOutput(val target: Bundle, val root: String) : NamedValueOutput(root) {
+
+class BundleOutput(val target: Bundle, val root: String, val defaultJson: Boolean = true) : NamedValueOutput(root) {
 
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())
@@ -36,8 +108,19 @@ class BundleOutput(val target: Bundle, val root: String) : NamedValueOutput(root
         } else if (value is java.io.Serializable) {
             target.putByte("$name._TYPE", VALUE_TYPE_SERIALIZABLE)
             target.putSerializable(name, value)
+        } else if (defaultJson && value is List<*> && value.isEmpty()) {
+            target.putByte("$name._TYPE", VALUE_TYPE_JSON_LIST_EMPTY)
+            target.putString(name, JsonUtil.serialize(value))
+        } else if (defaultJson && value is List<*>) {
+            target.putByte("$name._TYPE", VALUE_TYPE_JSON_LIST)
+            target.putString("$name._CLASS", value.first()!!.javaClass.name)
+            target.putString(name, JsonUtil.serialize(value))
+        } else if (defaultJson) {
+            target.putByte("$name._TYPE", VALUE_TYPE_JSON)
+            target.putString("$name._CLASS", value.javaClass.name)
+            target.putString(name, JsonUtil.serialize(value))
         } else
-            super.writeNamed(name, value)
+            throw SerializationException("Not supported $name=$value in ${target.toMapString()}")
     }
 
     override fun writeNamedBoolean(name: String, value: Boolean) {
@@ -73,11 +156,11 @@ class BundleOutput(val target: Bundle, val root: String) : NamedValueOutput(root
     }
 
     override fun writeNamedNotNullMark(name: String) {
-        target.putBoolean("$name._NULLABLE", false)
+        target.putBoolean("$name._NULL", false)
     }
 
     override fun writeNamedNull(name: String) {
-        target.putBoolean("$name._NULLABLE", true)
+        target.putBoolean("$name._NULL", true)
     }
 
     override fun writeNamedShort(name: String, value: Short) {
@@ -107,12 +190,22 @@ class BundleInput(val target: Bundle, val root: String) : NamedValueInput(root) 
     override fun elementName(desc: KSerialClassDesc, index: Int) =
             desc.getElementName(index)
 
-    override fun readNamed(name: String) =
+    override fun readNamed(name: String): Any =
             when (target.getByte("$name._TYPE")) {
+            // Base cases
                 VALUE_TYPE_UNIT -> Unit
                 VALUE_TYPE_PARCELABLE -> target.getParcelable(name)
                 VALUE_TYPE_SERIALIZABLE -> target.getSerializable(name)
-                else -> super.readNamed(name)
+
+            // Special JSON Deserialization
+                VALUE_TYPE_JSON_LIST_EMPTY -> ArrayList<Any>()
+                VALUE_TYPE_JSON_LIST -> JsonUtil.deserializeToList(
+                        target.getString(name), Class.forName(target.getString("$name._CLASS")))
+                VALUE_TYPE_JSON -> JsonUtil.deserializeToObject(
+                        target.getString(name), Class.forName(target.getString("$name._CLASS")))
+
+            // Default to exception
+                else -> throw SerializationException("Not supported $name in ${target.toMapString()}")
             }
 
     override fun readNamedBoolean(name: String) =
@@ -141,7 +234,7 @@ class BundleInput(val target: Bundle, val root: String) : NamedValueInput(root) 
             target.getLong(name)
 
     override fun readNamedNotNullMark(name: String) =
-            target.getBoolean("$name._NULLABLE")
+            !target.getBoolean("$name._NULL")
 
     override fun readNamedShort(name: String) =
             target.getShort(name)
@@ -158,7 +251,7 @@ class BundleInput(val target: Bundle, val root: String) : NamedValueInput(root) 
 /**
  * Serializes to an intent.
  */
-class IntentOutput(val target: Intent) : NamedValueOutput(target.action) {
+class IntentOutput(val target: Intent, val defaultJson: Boolean = true) : NamedValueOutput(target.action) {
 
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())
@@ -179,8 +272,19 @@ class IntentOutput(val target: Intent) : NamedValueOutput(target.action) {
         } else if (value is java.io.Serializable) {
             target.putExtra("$name._TYPE", VALUE_TYPE_SERIALIZABLE)
             target.putExtra(name, value)
+        } else if (defaultJson && value is List<*> && value.isEmpty()) {
+            target.putExtra("$name._TYPE", VALUE_TYPE_JSON_LIST_EMPTY)
+            target.putExtra(name, JsonUtil.serialize(value))
+        } else if (defaultJson && value is List<*>) {
+            target.putExtra("$name._TYPE", VALUE_TYPE_JSON_LIST)
+            target.putExtra("$name._CLASS", value.first()!!.javaClass.name)
+            target.putExtra(name, JsonUtil.serialize(value))
+        } else if (defaultJson) {
+            target.putExtra("$name._TYPE", VALUE_TYPE_JSON)
+            target.putExtra("$name._CLASS", value.javaClass.name)
+            target.putExtra(name, JsonUtil.serialize(value))
         } else
-            super.writeNamed(name, value)
+            throw SerializationException("Not supported $name=$value in ${target.toMapString()}")
     }
 
     override fun writeNamedBoolean(name: String, value: Boolean) {
@@ -216,11 +320,11 @@ class IntentOutput(val target: Intent) : NamedValueOutput(target.action) {
     }
 
     override fun writeNamedNotNullMark(name: String) {
-        target.putExtra("$name._NULLABLE", false)
+        target.putExtra("$name._NULL", false)
     }
 
     override fun writeNamedNull(name: String) {
-        target.putExtra("$name._NULLABLE", true)
+        target.putExtra("$name._NULL", true)
     }
 
     override fun writeNamedShort(name: String, value: Short) {
@@ -250,12 +354,23 @@ class IntentInput(val target: Intent) : NamedValueInput(target.action) {
     override fun elementName(desc: KSerialClassDesc, index: Int) =
             desc.getElementName(index)
 
-    override fun readNamed(name: String) =
+    override fun readNamed(name: String): Any =
             when (target.getByteExtra("$name._TYPE", (-1).toByte())) {
+            // Base cases
                 VALUE_TYPE_UNIT -> Unit
                 VALUE_TYPE_PARCELABLE -> target.getParcelableExtra(name)
                 VALUE_TYPE_SERIALIZABLE -> target.getSerializableExtra(name)
-                else -> super.readNamed(name)
+
+            // Special JSON Deserialization
+                VALUE_TYPE_JSON_LIST_EMPTY ->
+                    ArrayList<Any>()
+                VALUE_TYPE_JSON_LIST -> JsonUtil.deserializeToList(
+                        target.getStringExtra(name), Class.forName(target.getStringExtra("$name._CLASS")))
+                VALUE_TYPE_JSON -> JsonUtil.deserializeToObject(
+                        target.getStringExtra(name), Class.forName(target.getStringExtra("$name._CLASS")))
+
+            // Default to exception
+                else -> throw SerializationException("Not supported $name in ${target.toMapString()}")
             }
 
     override fun readNamedBoolean(name: String) =
@@ -284,7 +399,7 @@ class IntentInput(val target: Intent) : NamedValueInput(target.action) {
             target.getLongExtra(name, 0L)
 
     override fun readNamedNotNullMark(name: String) =
-            target.getBooleanExtra("$name._NULLABLE", false)
+            !target.getBooleanExtra("$name._NULL", false)
 
     override fun readNamedShort(name: String) =
             target.getShortExtra(name, 0.toShort())
