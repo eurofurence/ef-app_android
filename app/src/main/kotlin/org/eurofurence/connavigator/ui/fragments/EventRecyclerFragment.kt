@@ -241,13 +241,13 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
 
                         textView {
                             id = R.id.eventStartTime
-                            maxLines = 1
+                            singleLine = true
                             TextViewCompat.setTextAppearance(this, android.R.style.TextAppearance_Medium)
                         }
 
                         textView {
                             id = R.id.eventEndTime
-                            maxLines = 1
+                            singleLine = true
                             TextViewCompat.setTextAppearance(this, android.R.style.TextAppearance_Small)
                         }
                     }
@@ -256,12 +256,12 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         lparams(displayMetrics.widthPixels / 10 * 8, wrapContent)
                         fontAwesomeView {
                             id = R.id.eventTitle
-                            maxLines = 1
+                            singleLine = true
                             setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
                         }
                         textView {
                             id = R.id.eventRoom
-                            maxLines = 1
+                            singleLine = true
                             TextViewCompat.setTextAppearance(this, android.R.style.TextAppearance_Small)
                         }
                     }
