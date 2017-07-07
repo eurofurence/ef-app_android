@@ -5,19 +5,19 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
+import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.contains
-import org.eurofurence.connavigator.util.extensions.jsonObjects
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
+import org.eurofurence.connavigator.util.extensions.*
+import org.jetbrains.anko.*
+import java.util.*
 import kotlin.properties.Delegates.notNull
 
 /**
@@ -32,14 +32,12 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         arguments.jsonObjects["mapRecord"] = mapRecord
     }
 
-    val mapTitle: TextView by view()
-    val mapImage: PhotoView by view()
-
+    val ui = MapUi()
     var mapRecord by notNull<MapRecord>()
     val image by lazy { db.images[mapRecord.imageId]!! }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_map, container, false)
+            ui.createView(AnkoContext.Companion.create(context, container!!))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,20 +47,75 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             info { "Browsing to map ${mapRecord.description}" }
 
-            mapTitle.text = mapRecord.description
-            mapTitle.visibility = View.GONE
+            ui.title.text = mapRecord.description
+            ui.title.visibility = View.GONE
 
-            imageService.load(db.images[mapRecord.imageId]!!, mapImage, false)
+            imageService.load(db.images[mapRecord.imageId]!!, ui.map, false)
 
-            val mapScale = Math.abs(image.width.toFloat() / image.height.toFloat())
+            ui.map.attacher.minimumScale = 1F
+            ui.map.attacher.mediumScale = 2.5F
+            ui.map.attacher.maximumScale = 5F
 
-            mapImage.minimumScale = 1F
-            mapImage.mediumScale = mapScale / 2
-            mapImage.maximumScale = mapScale
+            ui.map.attacher.setOnPhotoTapListener { view, percX, percY ->
+                val x = image.width * percX
+                val y = image.height * percY
+                info { "Tap registered at x: $x, y: $y" }
 
-            mapImage.setScale(mapScale / 2, true)
+                val entries = mapRecord.findMatchingEntries(x, y)
+
+                info { "Found ${entries.size} entries" }
+
+                if (entries.isNotEmpty()) {
+                    info { "Dealer ID:  ${entries.first()}" }
+                    fillLinkLayout(entries.first())
+                    ui.linkLayout.visibility = View.VISIBLE
+                } else {
+                    ui.linkLayout.visibility = View.GONE
+                }
+            }
         } else {
-            mapImage.setImageResource(R.drawable.placeholder_event)
+            ui.map.setImageResource(R.drawable.placeholder_event)
+        }
+    }
+
+    fun fillLinkLayout(entry: MapEntryRecord) = when (entry.links.first().fragmentType.name) {
+        "DealerDetail" -> fillLinkAsDealer(entry)
+        else -> Unit
+    }
+
+    private fun fillLinkAsDealer(entry: MapEntryRecord) {
+        val dealer = db.dealers[UUID.fromString(entry.links.first().target)]
+
+        ui.linkTitle.text = "Read more about ${dealer!!.getName()}"
+        ui.linkLayout.setOnClickListener {
+            applyOnRoot { navigateToDealer(dealer) }
+        }
+    }
+
+    class MapUi : AnkoComponent<ViewGroup> {
+        lateinit var map: PhotoView
+        lateinit var title: TextView
+        lateinit var linkLayout: LinearLayout
+
+        lateinit var linkTitle: TextView
+
+        override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+            relativeLayout {
+                map = photoView {
+                    lparams(matchParent, matchParent)
+                }
+
+                title = textView()
+
+                linkLayout = verticalLayout{
+                    visibility = View.GONE
+                    padding = dip(15)
+                    backgroundResource = R.color.cardview_light_background
+                    linkTitle = textView {
+                        setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
+                    }
+                }.lparams(matchParent, wrapContent) { alignParentBottom() }
+            }
         }
     }
 }
