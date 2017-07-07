@@ -5,18 +5,23 @@ import android.app.IntentService
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
-import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.convert
+import org.eurofurence.connavigator.util.v2.internalSpec
 import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
+import java.util.*
+import kotlin.serialization.Serializable
 
+@Serializable
+data class UpdateComplete(val success: Boolean, val time: Date?, val exception: Throwable?)
+
+val updateComplete = internalSpec<UpdateComplete>()
 
 /**
  * Updates the database on request.
@@ -39,12 +44,14 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
 
     override val db by lazyLocateDb()
 
+    val updateCompleteMsg by updateComplete
+
     // TODO: Sticky intent since there should only be one pending update
     override fun onHandleIntent(intent: Intent?) {
         logv("UIS") { "Handling update intent service intent" }
 
         // Initialize the response, the following code is net and IO oriented, it could fail
-        val response = {
+        val (response, responseObject) = {
             logv("UIS") { "Retrieving sync since $date" }
 
             // Get sync from server
@@ -101,7 +108,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
             UPDATE_COMPLETE.toIntent {
                 booleans["success"] = true
                 objects["time"] = date
-            }
+            } to UpdateComplete(true, date, null)
         } catchAlternative { ex: Throwable ->
             // Make the fail response message, transfer exception
             loge("UIS", ex) { "Completed update with error" }
@@ -109,7 +116,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
                 booleans["success"] = false
                 objects["time"] = date
                 objects["reason"] = ex
-            }
+            } to UpdateComplete(false, date, ex)
         }
 
         // Reschedule the update
@@ -117,6 +124,8 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
 
         // Send a broadcast notifying completion of this action
         LocalBroadcastManager.getInstance(this).sendBroadcast(response)
+
+        updateCompleteMsg.send(responseObject)
     }
 
     private fun schedule(context: Context) {
