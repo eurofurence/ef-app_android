@@ -1,30 +1,15 @@
 package org.eurofurence.connavigator.util.extensions
 
-import android.graphics.Point
-import android.graphics.Rect
 import android.util.Log
-import io.swagger.client.model.EventRecord
-import io.swagger.client.model.ImageRecord
-import io.swagger.client.model.MapEntryRecord
-import io.swagger.client.model.PrivateMessageRecord
+import io.swagger.client.model.*
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.webapi.apiService
 import java.util.*
 
-/**
- * Gets the fixed coordinates of a map entity, fitted to a map
- */
-fun MapEntryRecord.asRelatedCoordinates(image: ImageRecord) =
-        Point(((this.x.toFloat() / 100) * image.width).toInt(), ((this.y.toFloat() / 100) * image.height).toInt())
+fun MapRecord.findMatchingEntries(x: Float, y: Float) = this.entries.filter { (x - it.x power 2F) + (y - it.y power 2F) < it.tapRadius power 2 }
 
-fun MapEntryRecord.asRectangle(image: ImageRecord): Rect {
-    val point = this.asRelatedCoordinates(image)
-    val jitter = ((this.tapRadius.toFloat() / 100) * image.width).toInt()
-
-    return Rect(point.x - jitter, point.y - jitter, point.x + jitter, point.y + jitter)
-}
 
 val ImageRecord.url: String get() = "${apiService.apiPath}/Api/v2/Images/$id/Content"
 
@@ -35,7 +20,7 @@ fun PrivateMessageRecord.markAsRead(): Promise<Date, java.lang.Exception> {
 
             apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
             apiService.communications.apiV2CommunicationPrivateMessagesByMessageIdReadPost(this.id)
-        } else{
+        } else {
             throw Exception("User is not logged in!")
         }
     }
@@ -44,10 +29,12 @@ fun PrivateMessageRecord.markAsRead(): Promise<Date, java.lang.Exception> {
 fun EventRecord.fullTitle(): String {
     val builder = StringBuilder(this.title.trim().removeSuffix("\n"))
 
-    if(this.subTitle.isNotEmpty()) {
+    if (this.subTitle.isNotEmpty()) {
         builder.append(": ")
         builder.append(this.subTitle.trim().removeSuffix("\n"))
     }
 
     return builder.toString()
 }
+
+fun DealerRecord.getName() = if(this.displayName.isNotEmpty()) this.displayName else this.attendeeNickname
