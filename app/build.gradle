@@ -170,6 +170,9 @@ dependencies {
     // Font awesome
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.1'
 
+    // Serialization
+    compile files("tools/kotlin-serialization-runtime.jar")
+
     testCompile "junit:junit:$junit_version"
 }
 

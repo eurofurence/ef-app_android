@@ -39,9 +39,9 @@ public class LinkFragment  {
   }
 
   /**
-   * * For FragmentType `DealerDetail`: The `Id` of the dealer record the link is referencing to.
+   * * For FragmentType `DealerDetail`: The `Id` of the dealer record the link is referencing to.  * For FragmentType `MapExternal`: An stringified json object.    * Acceptable properties and their expected value (type):      * `name` - name of target POI (*string*)      * `street` - street name (*string*)      * `house` - house humber (*string*)      * `zip` - zip code of city (*string*)      * `city` - city (*string*)      * `country` - country (*string*)      * `country-a3` - ISO 3166-1 alpha-3 code for country [http://unstats.un.org/unsd/methods/m49/m49alpha.htm] (*string*)      * `lat` - latitude (*decimal*)      * `lon` - longitude (*decimal*)    * Example:      * `{ name: \"Estrel Hotel Berlin\", house: \"225\", street: \"Sonnenallee\", zip: \"12057\", city: \"Berlin\", country: \"Germany\", lat: 52.473336, lon: 13.458729 }`
    **/
-  @ApiModelProperty(required = true, value = "* For FragmentType `DealerDetail`: The `Id` of the dealer record the link is referencing to.")
+  @ApiModelProperty(required = true, value = "* For FragmentType `DealerDetail`: The `Id` of the dealer record the link is referencing to.  * For FragmentType `MapExternal`: An stringified json object.    * Acceptable properties and their expected value (type):      * `name` - name of target POI (*string*)      * `street` - street name (*string*)      * `house` - house humber (*string*)      * `zip` - zip code of city (*string*)      * `city` - city (*string*)      * `country` - country (*string*)      * `country-a3` - ISO 3166-1 alpha-3 code for country [http://unstats.un.org/unsd/methods/m49/m49alpha.htm] (*string*)      * `lat` - latitude (*decimal*)      * `lon` - longitude (*decimal*)    * Example:      * `{ name: \"Estrel Hotel Berlin\", house: \"225\", street: \"Sonnenallee\", zip: \"12057\", city: \"Berlin\", country: \"Germany\", lat: 52.473336, lon: 13.458729 }`")
   public String getTarget() {
     return target;
   }
