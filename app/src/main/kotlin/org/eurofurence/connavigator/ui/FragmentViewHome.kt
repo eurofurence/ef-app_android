@@ -60,7 +60,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         info { "Initializing home view" }
         ui = HomeUi()
 
-        return ui.createView(AnkoContext.Companion.create(container.context, container))
+        return ui.createView(AnkoContext.create(container.context.applicationContext, container))
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

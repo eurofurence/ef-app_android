@@ -40,7 +40,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.Companion.create(container!!.context, container))
+            ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         // Send analytics pings

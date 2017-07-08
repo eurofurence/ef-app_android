@@ -61,7 +61,8 @@ class AnnoucementRecyclerDataAdapter(val announcements: List<AnnouncementRecord>
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnnouncementDataholder =
-            AnnouncementDataholder(AnnouncementUi().createView(AnkoContext.Companion.create(parent.context, parent)))
+            AnnouncementDataholder(AnnouncementUi().createView(
+                    AnkoContext.create(parent.context.applicationContext, parent)))
 
     override fun getItemCount(): Int {
         return announcements.count()

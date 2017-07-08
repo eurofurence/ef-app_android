@@ -56,7 +56,7 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MessageViewholder(
-                SingleItemUi().createView(AnkoContext.Companion.create(context, parent))
+                SingleItemUi().createView(AnkoContext.create(context.applicationContext, parent))
         )
 
         override fun getItemCount() = messages.size
@@ -64,7 +64,7 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.Companion.create(container!!.context, container))
+            ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

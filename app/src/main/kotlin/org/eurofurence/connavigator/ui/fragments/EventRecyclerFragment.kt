@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui.fragments
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat.getColor
+import android.support.v7.view.ContextThemeWrapper
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -34,6 +35,7 @@ import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
@@ -80,7 +82,8 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, pos: Int): EventViewHolder =
-                EventViewHolder(SingleEventUi().createView(AnkoContext.Companion.create(activity.baseContext, parent)))
+                EventViewHolder(SingleEventUi()
+                        .createView(AnkoContext.create(activity.applicationContext, parent)))
 
         override fun getItemCount() =
                 effectiveEvents.size
@@ -147,7 +150,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            ui.createView(AnkoContext.Companion.create(container!!.context, container))
+            ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -241,13 +244,13 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         textView {
                             id = R.id.eventStartTime
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
+                            compatAppearance = android.R.style.TextAppearance_Medium
                         }
 
                         textView {
                             id = R.id.eventEndTime
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                            compatAppearance = android.R.style.TextAppearance_Small
                         }
                     }
                     verticalLayout {
@@ -256,12 +259,12 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         fontAwesomeView {
                             id = R.id.eventTitle
                             maxLines = 1
-                            setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
+                            compatAppearance = R.style.TextAppearance_AppCompat_Medium
                         }
                         textView {
                             id = R.id.eventRoom
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                            compatAppearance = android.R.style.TextAppearance_Small
                         }
                     }
                 }
