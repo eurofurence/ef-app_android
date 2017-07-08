@@ -132,16 +132,16 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
             layoutMain = verticalLayout {
 
-                // If not logged in
-                verticalLayout {
-                    visibility = if (AuthPreferences.isLoggedIn()) View.GONE else View.VISIBLE
-
                 toolbar {
                     title = "Login"
                     lparams(matchParent, wrapContent)
                     backgroundResource = R.color.primary
                     setTitleTextAppearance(ctx, android.R.style.TextAppearance_Medium_Inverse)
                 }
+
+                // If not logged in
+                verticalLayout {
+                    visibility = if (AuthPreferences.isLoggedIn()) View.GONE else View.VISIBLE
 
                     lparams(matchParent, matchParent)
 
@@ -195,14 +195,26 @@ class LoginUi : AnkoComponent<LoginActivity> {
                 verticalLayout {
                     visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
 
-                    textView("Username: ${AuthPreferences.username}")
-                    textView("Login is valid until: ${DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime()}")
+                    textView("Username: ${AuthPreferences.username}") {
+                        lparams(matchParent, wrapContent) {
+                            margin = dip(16)
+                        }
+                    }
+                    textView("Login is valid until: ${DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime()}") {
+                        lparams(matchParent, wrapContent) {
+                            margin = dip(16)
+                        }
+                    }
 
-                    logout = button("Logout")
+                    logout = button("Logout") {
+                        lparams(matchParent, wrapContent) {
+                            margin = dip(16)
+                        }
+                    }
                 }
+
                 lparams(matchParent, matchParent)
             }
-
         }
     }
 
