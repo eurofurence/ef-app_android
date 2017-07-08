@@ -57,8 +57,10 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
 
         override fun onCreateViewHolder(parent: ViewGroup, type: Int): RecyclerView.ViewHolder =
                 when (type) {
-                    0 -> InfoGroupItemViewHolder(GroupItemUi().createView(AnkoContext.Companion.create(context, parent)))
-                    1 -> InfoGroupViewHolder(GroupUi().createView(AnkoContext.Companion.create(context, parent)))
+                    0 -> InfoGroupItemViewHolder(
+                            GroupItemUi().createView(AnkoContext.create(context.applicationContext, parent)))
+                    1 -> InfoGroupViewHolder(
+                            GroupUi().createView(AnkoContext.create(context.applicationContext, parent)))
                     else -> throw IllegalStateException()
 
                 }
@@ -172,7 +174,7 @@ class GroupUi : AnkoComponent<ViewGroup> {
 }
 
 class GroupItemUi : AnkoComponent<ViewGroup> {
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui){
+    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
             padding = dip(16)
             id = R.id.layout

@@ -8,6 +8,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import com.joanzapata.iconify.fonts.FontAwesomeModule
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
+import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.gcm.InstanceIdService
 import org.eurofurence.connavigator.gcm.PushListenerService
@@ -25,6 +26,9 @@ class ConnavigatorApplication : MultiDexApplication() {
     @AddTrace(name = "ConnavigatorApplication:onCreate", enabled = true)
     override fun onCreate() {
         super.onCreate()
+
+        // Apply root theme for inheritance
+        setTheme(R.style.AppTheme)
 
         // This configures the timezone database for JODA time, that way timezone info can be used without having the
         // impractical database of JODAgst

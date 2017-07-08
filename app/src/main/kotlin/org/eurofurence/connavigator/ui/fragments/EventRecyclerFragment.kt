@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui.fragments
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat.getColor
+import android.support.v7.view.ContextThemeWrapper
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,6 +18,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.then
+import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
@@ -33,6 +35,7 @@ import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
@@ -47,7 +50,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     val ui by lazy { EventListView() }
     val updateReceiver by lazy {
-        context.localReceiver(DataChanged.DATACHANGED){
+        context.localReceiver(DataChanged.DATACHANGED) {
             dataUpdated()
         }
     }
@@ -79,7 +82,8 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, pos: Int): EventViewHolder =
-                EventViewHolder(SingleEventUi().createView(AnkoContext.Companion.create(activity.baseContext, parent)))
+                EventViewHolder(SingleEventUi()
+                        .createView(AnkoContext.create(activity.applicationContext, parent)))
 
         override fun getItemCount() =
                 effectiveEvents.size
@@ -92,9 +96,9 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             val titleBuilder = StringBuilder()
 
-            if(RemotePreferences.showEventGlyphs) {
+            if (RemotePreferences.showEventGlyphs) {
                 if (isFavorite) titleBuilder.append("{fa-heart} ")
-                if(event.isDeviatingFromConBook) titleBuilder.append("{fa-pencil} ")
+                if (event.isDeviatingFromConBook) titleBuilder.append("{fa-pencil} ")
             }
 
             titleBuilder.append(event.fullTitle())
@@ -146,7 +150,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            ui.createView(AnkoContext.Companion.create(container!!.context, container))
+            ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -211,7 +215,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.eventList.visibility = View.VISIBLE
 
             configureTitle()
-        } fail {
+        } failUi {
             ui.loading.visibility = View.GONE
             ui.eventList.visibility = View.VISIBLE
 
@@ -240,13 +244,13 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         textView {
                             id = R.id.eventStartTime
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
+                            compatAppearance = android.R.style.TextAppearance_Medium
                         }
 
                         textView {
                             id = R.id.eventEndTime
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                            compatAppearance = android.R.style.TextAppearance_Small
                         }
                     }
                     verticalLayout {
@@ -255,12 +259,12 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                         fontAwesomeView {
                             id = R.id.eventTitle
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
+                            compatAppearance = R.style.TextAppearance_AppCompat_Medium
                         }
                         textView {
                             id = R.id.eventRoom
                             maxLines = 1
-                            setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                            compatAppearance = android.R.style.TextAppearance_Small
                         }
                     }
                 }

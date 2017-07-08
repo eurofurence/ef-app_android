@@ -40,7 +40,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     val image by lazy { db.images[mapRecord.imageId]!! }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.Companion.create(context, container!!))
+            ui.createView(AnkoContext.create(context.applicationContext, container!!))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

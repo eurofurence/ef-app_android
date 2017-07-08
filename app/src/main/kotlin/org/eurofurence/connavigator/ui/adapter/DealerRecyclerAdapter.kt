@@ -65,7 +65,8 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DealerDataHolder =
-            DealerDataHolder(DealerListItemUI().createView(AnkoContext.Companion.create(parent.context, parent)))
+            DealerDataHolder(DealerListItemUI().createView(
+                    AnkoContext.create(parent.context.applicationContext, parent)))
 }
 
 class DealerListItemUI : AnkoComponent<ViewGroup> {

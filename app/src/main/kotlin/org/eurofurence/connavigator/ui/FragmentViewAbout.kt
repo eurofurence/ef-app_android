@@ -32,7 +32,7 @@ class FragmentViewAbout : Fragment(), ContentAPI {
     val aboutPazuzu: LinearLayout by view()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.Companion.create(context, container!!))
+            ui.createView(AnkoContext.create(context.applicationContext, container!!))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.screen(activity, "View About")
