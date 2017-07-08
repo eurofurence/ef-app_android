@@ -2,6 +2,13 @@ apply plugin: "idea"
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        verbose = true
+        freeCompilerArgs += ["-Xplugin", "$projectDir/tools/kotlin-serialization-gradle.jar"]
+    }
+}
+
 android {
 
     compileSdkVersion 25
