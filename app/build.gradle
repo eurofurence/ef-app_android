@@ -90,8 +90,9 @@ ext {
     swagger_annotations_version = "1.5.0"
     gson_version = "2.6.1"
     anko_version = "0.10.1"
-    httpclient_version = "4.3.3"
-    volley_version = "1.0.1"
+    httpcore_version = "4.4.4"
+    httpmime_version = "4.5.2"
+    volley_version = "1.0.0"
     junit_version = "4.8.1"
     android_support_version = "25.3.1"
     google_play_version = "11.0.1"
@@ -102,7 +103,6 @@ ext {
 apply from: "swagger.gradle"
 
 dependencies {
-    compile fileTree(include: ["*.jar"], dir: "libs")
     testCompile "junit:junit:4.12"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 
@@ -111,7 +111,6 @@ dependencies {
     compile "com.android.support:appcompat-v7:$android_support_version"
     compile "com.android.support:design:$android_support_version"
     compile "com.android.support:support-v4:$android_support_version"
-    compile "com.google.guava:guava:19.0"
     compile "com.android.support:cardview-v7:$android_support_version"
     compile "com.android.support:recyclerview-v7:$android_support_version"
     compile "com.android.support:cardview-v7:$android_support_version"
@@ -121,16 +120,14 @@ dependencies {
     compile "joda-time:joda-time:2.9.2:no-tzdb"
     compile "io.swagger:swagger-annotations:$swagger_annotations_version"
     compile "com.google.code.gson:gson:$gson_version"
-    compile "org.apache.httpcomponents:httpcore:$httpclient_version"
-    compile "org.apache.httpcomponents:httpclient:$httpclient_version"
-    compile "org.apache.httpcomponents:httpmime:$httpclient_version"
-    compile "com.mcxiaoke.volley:library-aar:$volley_version"
+
+    compile "com.android.volley:volley:${volley_version}"
     compile "com.nostra13.universalimageloader:universal-image-loader:1.9.5"
 
-    // Coroutines
-    //compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    //compile "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutines_version"
-    //compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    compile "org.apache.httpcomponents:httpcore:$httpcore_version"
+    compile ("org.apache.httpcomponents:httpmime:$httpmime_version") {
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+    }
 
     // Firebase
     compile "com.google.firebase:firebase-messaging:$google_play_version"
