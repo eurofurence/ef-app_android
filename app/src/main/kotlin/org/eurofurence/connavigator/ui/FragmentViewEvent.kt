@@ -18,6 +18,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AppPreferences
@@ -87,9 +88,9 @@ class FragmentViewEvent() : Fragment(), HasDb {
 
             description.loadMarkdown(event.description)
 
-            time.text = Formatter.eventToTimes(event, db, AppPreferences.shortenDates)
-            organizers.text = Formatter.eventOwner(event)
-            room.text = Formatter.roomFull(conferenceRoom!!)
+            time.text = "${db.eventStart(event).dayOfWeek().asText} from ${event.startTimeString()} to ${event.endTimeString()}"
+            organizers.text = event.ownerString()
+            room.text = conferenceRoom!!.name
 
             // temporary fix until we get the actual images
             imageService.load(db.images[event.posterImageId], image)

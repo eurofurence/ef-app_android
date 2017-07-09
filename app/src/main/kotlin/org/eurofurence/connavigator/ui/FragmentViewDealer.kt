@@ -64,7 +64,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             ui.artPreviewCaption.text = dealer.artPreviewCaption
 
-            ui.name.text = Formatter.dealerName(dealer)
+            ui.name.text = dealer.getName()
             ui.shortDescription.text = dealer.shortDescription
 
             ui.aboutArtist.loadMarkdown(

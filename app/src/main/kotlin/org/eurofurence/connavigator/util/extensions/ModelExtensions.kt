@@ -37,4 +37,8 @@ fun EventRecord.fullTitle(): String {
     return builder.toString()
 }
 
-fun DealerRecord.getName() = if(this.displayName.isNotEmpty()) this.displayName else this.attendeeNickname
+fun EventRecord.startTimeString(): String = startDateTimeUtc.jodatime().toString("HH:mm")
+fun EventRecord.endTimeString(): String = endDateTimeUtc.jodatime().toString("HH:mm")
+fun EventRecord.ownerString(): String = "Hosted by $panelHosts"
+
+fun DealerRecord.getName() = if (this.displayName.isNotEmpty()) this.displayName else this.attendeeNickname
