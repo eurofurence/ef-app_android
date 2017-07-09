@@ -146,7 +146,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
 
                 linearLayout {
                     countdownArc = arcProgress {
-                        lparams(matchParent, dip(400))
+                        lparams(matchParent, displayMetrics.widthPixels - dip(2 * 20))
                         strokeWidth = 25F
                         suffixText = "Days"
                         bottomText = "Until next EF"
