@@ -116,6 +116,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
         override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
             relativeLayout {
+                backgroundResource = R.color.cardview_dark_background
                 map = photoView {
                     lparams(matchParent, matchParent)
                 }
@@ -125,9 +126,9 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 linkLayout = verticalLayout {
                     visibility = View.GONE
                     padding = dip(15)
-                    backgroundResource = R.color.cardview_light_background
+                    backgroundResource = R.color.accent
                     linkTitle = textView {
-                        setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
+                        setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
                     }
                 }.lparams(matchParent, wrapContent) { alignParentBottom() }
             }
