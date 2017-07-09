@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewManager
 import com.github.chrisbanes.photoview.PhotoView
 import com.github.lzyzsd.circleprogress.ArcProgress
+import com.joanzapata.iconify.widget.IconButton
 import com.joanzapata.iconify.widget.IconTextView
 import org.jetbrains.anko.custom.ankoView
 import us.feras.mdv.MarkdownView
@@ -17,3 +18,4 @@ inline fun ViewManager.recycler(init: RecyclerView.() -> Unit) = ankoView({ Recy
 inline fun ViewManager.photoView(init: PhotoView.() -> Unit) = ankoView({ PhotoView(it) }, 0, init)
 inline fun ViewManager.markdownView(init: MarkdownView.() -> Unit) = ankoView({ MarkdownView(it) }, 0, init)
 inline fun ViewManager.fontAwesomeView(init: IconTextView.() -> Unit) = ankoView({IconTextView(it)}, 0, init)
+inline fun ViewManager.fontAwesomeButton(init: IconButton.() -> Unit) = ankoView({IconButton(it)}, 0, init)
