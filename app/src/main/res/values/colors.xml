@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="blackFaded">#20000000</color>
+    <color name="primaryFaded">#20006459</color>
     <color name="primaryLighter">#228B80</color>
     <color name="primaryLight">#0b786c</color>
     <color name="primary">#006459</color>

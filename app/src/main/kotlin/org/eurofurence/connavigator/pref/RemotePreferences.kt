@@ -29,7 +29,7 @@ object RemotePreferences : AnkoLogger {
             remoteConfig.activateFetched()
         }.addOnCompleteListener {
             info { "Update complete. Last activated config is now ${remoteConfig.info.fetchTimeMillis}" }
-            info {  }
+            info { }
         }
     }
 

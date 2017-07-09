@@ -46,6 +46,9 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb {
 
         mapViewPager.adapter = MapFragmentPagerAdapter(childFragmentManager)
 
-        applyOnRoot { tabs.setupWithViewPager(mapViewPager) }
+        applyOnRoot {
+            tabs.setupWithViewPager(mapViewPager)
+            changeTitle("Dealers Den")
+        }
     }
 }

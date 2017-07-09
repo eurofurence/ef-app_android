@@ -3,12 +3,10 @@ package org.eurofurence.connavigator.ui.fragments
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat.getColor
-import android.support.v7.view.ContextThemeWrapper
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.SpannableStringBuilder
-import android.text.style.ImageSpan
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,20 +24,35 @@ import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.ui.FragmentViewEvent
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
-import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
-import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.*
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.Minutes
+import kotlin.coroutines.experimental.buildSequence
+
+fun HasDb.glyphFor(event: EventRecord): List<String> {
+    // Show icon for the cockroach
+    if (event.panelHosts?.contains("onkel kage", true) ?: false)
+        return listOf("{fa-bug}", "{fa-glass}")
+
+    // Decide for glyph based on name
+    val name = event[toRoom]?.name ?: return emptyList()
+    return when {
+        "Art Show" in name -> listOf("{fa-photo}")
+        "Dealer" in name -> listOf("{fa-shopping-cart}")
+        "Main Stage" in name -> listOf("{fa-asterisk}")
+        "Photoshoot" in name -> listOf("{fa-camera}")
+        else -> emptyList()
+    }
+}
 
 /**
  * Event view recycler to hold the viewpager items
@@ -71,8 +84,11 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val eventSeparator: View by view()
         val eventImage: ImageView by view()
         val eventTitle: TextView by view()
+        val eventGlyph: TextView by view()
+        val eventGlyphOverflow: TextView by view()
         val eventStartTime: TextView by view()
         val eventEndTime: TextView by view()
         val eventRoom: TextView by view()
@@ -83,45 +99,89 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, pos: Int): EventViewHolder =
                 EventViewHolder(SingleEventUi()
-                        .createView(AnkoContext.create(activity.applicationContext, parent)))
+                        .createView(AnkoContext.createReusable(activity.applicationContext, parent)))
 
         override fun getItemCount() =
                 effectiveEvents.size
 
+        private fun EventViewHolder.setGlyphs(glyphs: Sequence<String>) {
+            if (!RemotePreferences.showEventGlyphs) {
+                eventGlyph.text = null
+                eventGlyphOverflow.text = null
+                return
+            }
+
+            val glyphList = glyphs.toList()
+
+            when (glyphList.size) {
+                0 -> {
+                    eventGlyph.text = null
+                    eventGlyphOverflow.text = null
+                }
+                1 -> {
+                    eventGlyph.text = glyphList[0]
+                    eventGlyphOverflow.text = null
+                }
+                2 -> {
+                    eventGlyph.text = "${glyphList[0]} ${glyphList[1]}"
+                    eventGlyphOverflow.text = null
+                }
+                3 -> {
+                    eventGlyph.text = "${glyphList[0]} ${glyphList[1]}"
+                    eventGlyphOverflow.text = glyphList[2]
+                }
+                else -> {
+                    eventGlyph.text = "${glyphList[0]} ${glyphList[1]}"
+                    eventGlyphOverflow.text = "${glyphList[2]} ${glyphList[3]}"
+                }
+            }
+        }
+
         override fun onBindViewHolder(holder: EventViewHolder, pos: Int) {
+
             // Get the event for the position
             val event = effectiveEvents[pos]
 
-            val isFavorite = event.id in faves
-
-            val titleBuilder = StringBuilder()
-
-            if (RemotePreferences.showEventGlyphs) {
-                if (isFavorite) titleBuilder.append("{fa-heart} ")
-                if (event.isDeviatingFromConBook) titleBuilder.append("{fa-pencil} ")
+            if (pos > 0) {
+                val eventBefore = effectiveEvents[pos - 1]
+                if (eventBefore.startTime != event.startTime)
+                    holder.eventSeparator.visibility = View.VISIBLE
+                else
+                    holder.eventSeparator.visibility = View.GONE
+            } else {
+                holder.eventSeparator.visibility = View.GONE
             }
 
-            titleBuilder.append(event.fullTitle())
+            val isFavorite = event.id in faves
+            val isDeviatingFromConBook = event.isDeviatingFromConBook
 
-            holder.eventTitle.text = titleBuilder.toString()
+            holder.setGlyphs(buildSequence {
+                yieldAll(glyphFor(event))
+                if (isFavorite) yield("{fa-heart}")
+                if (isDeviatingFromConBook) yield("{fa-pencil}")
+            })
+
+            holder.eventTitle.text = event.fullTitle()
+
+            val glyphEnd = "{fa-caret-right}"
 
             when {
                 eventIsHappening(event, DateTime.now()) -> { // It's happening now
-                    holder.eventStartTime.text = "NOW"
+                    holder.eventStartTime.text = "now"
                     holder.eventCard.setBackgroundColor(getColor(context, R.color.accentLighter))
                 }
                 eventStart(event).isBeforeNow -> // It's already happened
-                    holder.eventStartTime.text = "DONE"
+                    holder.eventStartTime.text = "done"
                 eventIsUpcoming(event, DateTime.now(), 30) -> { //it's happening in 30 minutes
                     // It's upcoming, so we give a timer
                     val countdown = Minutes.minutesBetween(DateTime.now(), eventStart(event)).minutes
-                    holder.eventStartTime.text = "IN $countdown MIN"
+                    holder.eventStartTime.text = "${countdown}min"
                 }
                 eventEnd(event).isBeforeNow -> {// Event end is before the current time, so it has already occurred thus it is gray
                     holder.eventCard.setBackgroundColor(getColor(context, R.color.backgroundGrey))
                 }
                 isFavorite -> {// Event is in favourites, thus it is coloured in primary
-                    holder.eventStartTime.text = DateTime(event.startDateTimeUtc.time).toString("EE HH:mm")
+                    holder.eventStartTime.text = Formatter.shortTime(event.startTime)
                     holder.eventCard.setBackgroundColor(getColor(context, R.color.primaryLighter))
                 }
                 else -> {
@@ -130,12 +190,11 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 }
             }
 
-            holder.eventEndTime.text = "until ${Formatter.shortTime(event.endTime)}"
+            holder.eventEndTime.text = "$glyphEnd ${Formatter.shortTime(event.endTime)}"
             holder.eventRoom.text = Formatter.roomFull(event[toRoom]!!)
 
             // Load image
             imageService.load(db.images[event.bannerImageId], holder.eventImage)
-
 
             // Assign the on-click action
             holder.itemView.setOnClickListener {
@@ -150,7 +209,10 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
+            if (container == null)
+                null
+            else
+                ui.createView(AnkoContext.create(container.context.applicationContext, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -226,55 +288,95 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
 class SingleEventUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
-        linearLayout {
-            id = R.id.layout
-            lparams(matchParent, wrapContent)
+        verticalLayout {
             isClickable = true
             isLongClickable = true
-            verticalPadding = dip(5)
+
+            lparams(matchParent, wrapContent)
             backgroundResource = R.color.cardview_light_background
-            verticalLayout {
+
+            linearLayout {
+                id = R.id.eventSeparator
                 lparams(matchParent, wrapContent)
+                verticalPadding = dip(10)
+
                 linearLayout {
                     lparams(matchParent, matchParent)
-                    verticalLayout {
-                        padding = dip(10)
-                        lparams(displayMetrics.widthPixels / 10 * 2, wrapContent)
-
-                        textView {
-                            id = R.id.eventStartTime
-                            maxLines = 1
-                            compatAppearance = android.R.style.TextAppearance_Medium
-                        }
-
-                        textView {
-                            id = R.id.eventEndTime
-                            maxLines = 1
-                            compatAppearance = android.R.style.TextAppearance_Small
-                        }
-                    }
-                    verticalLayout {
-                        padding = dip(10)
-                        lparams(displayMetrics.widthPixels / 10 * 8, wrapContent)
-                        fontAwesomeView {
-                            id = R.id.eventTitle
-                            maxLines = 1
-                            compatAppearance = R.style.TextAppearance_AppCompat_Medium
-                        }
-                        textView {
-                            id = R.id.eventRoom
-                            maxLines = 1
-                            compatAppearance = android.R.style.TextAppearance_Small
-                        }
-                    }
+                    setBackgroundResource(R.drawable.wave_separator)
                 }
             }
 
-            imageView {
-                maxWidth = matchParent
-                maxHeight = displayMetrics.widthPixels / 3
-                scaleType = ImageView.ScaleType.CENTER_CROP
-                id = R.id.eventImage
+            verticalLayout {
+                id = R.id.layout
+
+                verticalPadding = dip(3)
+
+                tableLayout {
+                    setColumnStretchable(2, true)
+                    horizontalPadding = dip(3)
+
+                    lparams(matchParent, wrapContent)
+
+
+                    tableRow {
+                        gravity = Gravity.CENTER_VERTICAL
+                        textView {
+                            id = R.id.eventStartTime
+                            minMaxWidth = fw(15.percent())
+                            compatAppearance = android.R.style.TextAppearance_Medium
+                            singleLine = true
+                        }
+
+                        fontAwesomeView {
+
+                            id = R.id.eventGlyph
+                            minMaxWidth = fw(15.percent())
+                            horizontalPadding = dip(5)
+                            gravity = Gravity.END
+                            compatAppearance = android.R.style.TextAppearance_Small
+                            singleLine = true
+                        }
+
+                        textView {
+                            id = R.id.eventTitle
+                            compatAppearance = android.R.style.TextAppearance_Medium
+                            singleLine = true
+                        }
+                    }
+
+                    tableRow {
+                        gravity = Gravity.CENTER_VERTICAL
+                        fontAwesomeView {
+                            id = R.id.eventEndTime
+                            minMaxWidth = fw(15.percent())
+                            gravity = Gravity.END
+                            compatAppearance = android.R.style.TextAppearance_Small
+                            singleLine = true
+                        }
+
+                        fontAwesomeView {
+                            id = R.id.eventGlyphOverflow
+                            minMaxWidth = fw(15 .percent())
+                            horizontalPadding = dip(5)
+                            gravity = Gravity.END
+                            compatAppearance = android.R.style.TextAppearance_Small
+                            singleLine = true
+                        }
+
+                        textView {
+                            id = R.id.eventRoom
+                            compatAppearance = android.R.style.TextAppearance_Small
+                            singleLine = true
+                        }
+                    }
+                }
+
+                imageView {
+                    maxWidth = matchParent
+                    maxHeight = displayMetrics.widthPixels / 3
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                    id = R.id.eventImage
+                }
             }
         }
     }
