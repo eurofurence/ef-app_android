@@ -406,3 +406,32 @@ fun Db.eventDayNumber(): Int {
     Log.d("DB", "Today is day $days")
     return days
 }
+
+/**
+ * Finds a link fragment that matches the target string.
+ * Thank you luchs for absolutely killing me with this shitty data model
+ * I mean, what the fuck even is this? this is basically a triple nested for loop that could have been handled by 2 refs
+ * Well I guess you enjoy us searching for a needle in this gaystack
+ * t. retarduinard
+ */
+fun Db.findLinkFragment(target: String): Map<String, Any?> {
+    maps.items.forEach{
+        val map = it
+        it.entries.forEach {
+            val entry = it
+            it.links.forEach {
+                if(it.target.equals(target)){
+                    return mapOf(
+                            "map" to map,
+                            "entry" to entry
+                    )
+                }
+            }
+        }
+    }
+
+    return mapOf(
+            "map" to null,
+            "entry" to null
+    )
+}

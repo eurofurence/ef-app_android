@@ -19,24 +19,6 @@ object Formatter {
     val splitter_1 = "–"
     val splitter_2 = "—"
 
-    /*
-    Formats an event starting and ending times to conform to our standards
-     */
-    fun eventToTimes(event: EventRecord, db: Db, short: Boolean): Spanned {
-        val date: String = if (short) {
-            DateTime(event[db.toDay]!!.date).dayOfWeek().asText
-        } else {
-            DateTime(event[db.toDay]!!.date).toString(DateTimeFormat.forPattern("MMM d"))
-        }
-        val string = "<b>%s</b> from <b>%s</b> to <b>%s</b>".format(
-                date,
-                event.startTime.subSequence(0, 5),
-                event.endTime.subSequence(0, 5)
-        )
-
-        return Html.fromHtml(string)
-    }
-
     fun shortTime(string: String, date: DateTime? = null) =
             if (date == null) {
                 string.subSequence(0, 5).toString()
@@ -45,46 +27,12 @@ object Formatter {
             }
 
     /*
-    Formats an event title accoding to our rules
-     */
-    fun eventTitle(event: EventRecord): Spanned {
-        if (event.subTitle.isNullOrEmpty()) {
-            return formatHTML(event.title)
-        } else {
-            val format = if (event.isDeviatingFromConBook) {
-                (event.title).toString().trim() + ":<br /> <i>${event.subTitle}</i>"
-            } else {
-                (event.title).toString().trim() + ":<br /> <i>${event.subTitle}</i><br />This item differs from " +
-                        "the conbook!"
-            }
-            return Html.fromHtml(format)
-        }
-    }
-
-    fun dealerName(dealer: DealerRecord): String {
-        if (dealer.displayName != "")
-            return dealer.displayName
-        else
-            return dealer.attendeeNickname
-    }
-
-    /*
         Formats the full room using an html element
      */
     fun roomFull(room: EventConferenceRoomRecord): Spanned {
         return formatHTML(room.name)
     }
 
-    /*
-    Get's the room name that we assign
-     */
-    fun roomName(room: EventConferenceRoomRecord): String {
-        return split(room.name)[0]
-    }
-
-    fun eventOwner(event: EventRecord): Spanned {
-        return Html.fromHtml("Hosted by <i>%s</i>".format(event.panelHosts))
-    }
 
     /*
     Takes an input and formats it as html

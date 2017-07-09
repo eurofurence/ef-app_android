@@ -19,6 +19,7 @@ import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.TouchVibrator
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.getName
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 
@@ -42,7 +43,7 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
         val dealer = effective_events[position]
         val vibrator = TouchVibrator(fragment.context)
 
-        holder.dealerName.text = Formatter.dealerName(dealer)
+        holder.dealerName.text = dealer.getName()
         holder.dealerSubText.text = dealer.shortDescription ?: "This dealer did not provide a short description"
 
         // If no dealer preview was provided, load the YCH icon
