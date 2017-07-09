@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.support.v4.app.NotificationCompat
-import com.google.common.base.Preconditions
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.ui.ActivityRoot
 import org.jetbrains.anko.intentFor
@@ -20,7 +19,8 @@ import org.jetbrains.anko.intentFor
 class NotificationFactory(var context: Context) {
     @Deprecated("This function should no longer be used")
     fun buildNotification(title: String, message: String, pendingActivity: Class<*> = ActivityRoot::class.java): Notification {
-        Preconditions.checkArgument(Activity::class.java.isAssignableFrom(pendingActivity), "Pending activity is not actually an activity")
+        if (!Activity::class.java.isAssignableFrom(pendingActivity))
+            error("Pending activity is not actually an activity")
 
         val builder = NotificationCompat.Builder(context)
 

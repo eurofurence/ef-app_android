@@ -155,26 +155,4 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
 
         Log.d("UIS", "Next update scheduled at ${nextUpdate.toString()}")
     }
-
-
-    /*
-    suspend fun initialize(db: Db) {
-        // Initialize job spawner
-        val jobs = Jobs()
-
-        // Launch jobs for all retrievals
-        jobs.launch { db.announcements.items = async(apiService.announcements::apiV2AnnouncementsGet) }
-        jobs.launch { db.dealers.items = async(apiService.dealers::apiV2DealersGet) }
-        jobs.launch { db.days.items = async(apiService.days::apiV2EventConferenceDaysGet) }
-        jobs.launch { db.rooms.items = async(apiService.rooms::apiV2EventConferenceRoomsGet) }
-        jobs.launch { db.tracks.items = async(apiService.tracks::apiV2EventConferenceTracksGet) }
-        jobs.launch { db.events.items = async(apiService.events::apiV2EventsGet) }
-        jobs.launch { db.images.items = async(apiService.images::apiV2ImagesGet) }
-        jobs.launch { db.knowledgeEntries.items = async(apiService.knowledgeEntries::apiV2KnowledgeEntriesGet) }
-        jobs.launch { db.knowledgeGroups.items = async(apiService.knowledgeGroups::apiV2KnowledgeGroupsGet) }
-        jobs.launch { db.maps.items = async(apiService.maps::apiV2MapsGet) }
-
-        // Wait until all are finished
-        jobs.joinAll()
-    }*/
 }
