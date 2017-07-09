@@ -12,8 +12,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import io.swagger.client.model.DealerRecord
+import io.swagger.client.model.MapEntryRecord
+import io.swagger.client.model.MapRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.findLinkFragment
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
@@ -82,45 +85,70 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 }
             }
 
-            if (dealer.aboutTheArtText.isNotEmpty())
+            if (dealer.aboutTheArtText.isNotEmpty()) {
                 ui.aboutArt.loadMarkdown(dealer.aboutTheArtText)
-            else
+            } else {
                 ui.aboutArtContainer.visibility = View.GONE
-
-            ui.map.setScale(2.5F, true)
-
-            info { "Setting up external links" }
-
-            if (dealer.links != null || !dealer.telegramHandle.isNullOrEmpty() || !dealer.twitterHandle.isNullOrEmpty()) {
-                ui.linkLayout.visibility = View.VISIBLE
             }
 
-            if (dealer.links != null) {
-                dealer.links.forEach {
-                    ui.websites.addView(Button(context.applicationContext).apply {
-                        info { "Adding button for ${it.name}" }
-                        text = it.name
-                        setOnTouchListener { _, _ -> context.browse(it.target) }
-                    })
-                }
-            }
+            configureLinks(dealer)
+            configureMap(dealer)
+        }
+    }
 
-            if (!dealer.telegramHandle.isNullOrEmpty()) {
-                info { "Setting up telegram button for ${dealer.telegramHandle}" }
-                ui.telegram.apply {
-                    text = "${dealer.telegramHandle} on Telegram"
-                    visibility = View.VISIBLE
-                    setOnClickListener { context.browse("https://telegram.me/${dealer.telegramHandle}") }
-                }
-            }
+    private fun configureMap(dealer: DealerRecord) {
+        info { "Finding dealer in mapEntries" }
 
-            if (!dealer.twitterHandle.isNullOrEmpty()) {
-                info { "Setting up twitter handle" }
-                ui.twitter.apply {
-                    text = "${dealer.twitterHandle} on {fa-twitter}"
-                    visibility = View.VISIBLE
-                    setOnClickListener { context.browse("https://twitter.com/${dealer.twitterHandle}") }
-                }
+        val entryMap = db.findLinkFragment(dealer.id.toString())
+
+        val map = entryMap["map"] as MapRecord?
+        val entry = entryMap["entry"] as MapEntryRecord?
+
+        if (map != null && entry != null) {
+            info { "Found maps and entries!" }
+            info { "Map name is ${map.description}" }
+            info { "Entry is at (${entry.x}, ${entry.y})" }
+            imageService.load(db.toImage(map), ui.map)
+
+            ui.map.attacher.setScale(4F, entry.x.toFloat(), entry.y.toFloat(), false)
+        } else {
+            warn { "No map or entry found!" }
+            ui.map.visibility = View.GONE
+        }
+    }
+
+    private fun configureLinks(dealer: DealerRecord) {
+        info { "Setting up external links" }
+
+        if (dealer.links != null || !dealer.telegramHandle.isNullOrEmpty() || !dealer.twitterHandle.isNullOrEmpty()) {
+            ui.linkLayout.visibility = View.VISIBLE
+        }
+
+        if (dealer.links != null) {
+            dealer.links.forEach {
+                ui.websites.addView(Button(context.applicationContext).apply {
+                    info { "Adding button for ${it.name}" }
+                    text = it.name
+                    setOnTouchListener { _, _ -> context.browse(it.target) }
+                })
+            }
+        }
+
+        if (!dealer.telegramHandle.isNullOrEmpty()) {
+            info { "Setting up telegram button for ${dealer.telegramHandle}" }
+            ui.telegram.apply {
+                text = "${dealer.telegramHandle} on Telegram"
+                visibility = View.VISIBLE
+                setOnClickListener { context.browse("https://telegram.me/${dealer.telegramHandle}") }
+            }
+        }
+
+        if (!dealer.twitterHandle.isNullOrEmpty()) {
+            info { "Setting up twitter handle" }
+            ui.twitter.apply {
+                text = "${dealer.twitterHandle} on {fa-twitter}"
+                visibility = View.VISIBLE
+                setOnClickListener { context.browse("https://twitter.com/${dealer.twitterHandle}") }
             }
         }
     }
@@ -238,13 +266,15 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                         }.lparams(matchParent, wrapContent) { margin = dip(15) }
 
                         map = photoView {
+                            backgroundResource = R.color.cardview_dark_background
+                            minimumScale = 1F
+                            mediumScale = 2.5F
+                            maximumScale = 5F
                             lparams(matchParent, dip(400))
                             scaleType = ImageView.ScaleType.FIT_CENTER
                             imageResource = R.drawable.placeholder_event
                         }
                     }.lparams(matchParent, wrapContent)
-
-
                 }
             }
         }
