@@ -48,7 +48,7 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb {
 
         applyOnRoot {
             tabs.setupWithViewPager(mapViewPager)
-            changeTitle("Dealers Den")
+            changeTitle("Maps")
         }
     }
 }

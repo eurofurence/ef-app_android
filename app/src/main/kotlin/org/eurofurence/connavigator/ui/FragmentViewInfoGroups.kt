@@ -114,6 +114,8 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
         // Initialize the info groups
         dataInit()
 
+        applyOnRoot { changeTitle("Info Listings") }
+
         Analytics.screen(activity, "Info Listings")
 
         // Default setup for recycler layout and animation
