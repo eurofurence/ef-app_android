@@ -119,40 +119,9 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
             } to UpdateComplete(false, date, ex)
         }
 
-        // Reschedule the update
-        schedule(this)
-
         // Send a broadcast notifying completion of this action
         LocalBroadcastManager.getInstance(this).sendBroadcast(response)
 
         updateCompleteMsg.send(responseObject)
-    }
-
-    private fun schedule(context: Context) {
-        // TODO, this could use some anko refactoring I guess
-        // D: Actually, this is somewhat obsolete. On a change in the backend it will automatically push a message
-        // to the user, automatically updating (Push vs pull)
-
-        Log.d("UIS", "Scheduling the next data update")
-
-        var nextUpdate = DateTime.now()
-
-        if (days.items
-                .map { DateTime(it.date) }
-                .filter { it.toDate() == DateTime.now().toDate() }
-                .isNotEmpty()) {
-            nextUpdate = nextUpdate.plusMinutes(1)
-        } else {
-            nextUpdate = nextUpdate.plusDays(1)
-        }
-
-        val intent = Intent(context, UpdateIntentService::class.java)
-        val pendingIntent = PendingIntent.getService(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, nextUpdate.millis, pendingIntent)
-
-        Log.d("UIS", "Next update scheduled at ${nextUpdate.toString()}")
     }
 }
