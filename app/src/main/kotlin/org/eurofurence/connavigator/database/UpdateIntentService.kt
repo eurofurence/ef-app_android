@@ -10,6 +10,7 @@ import android.util.Log
 import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.DebugPreferences
+import org.eurofurence.connavigator.ui.ActivityRoot
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.util.v2.internalSpec
@@ -80,7 +81,15 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
 
             sync.announcements.changedEntities.filter { DateTime.now().isAfter(it.validFromDateTimeUtc.time) }
                     .filter { DateTime.now().isBefore(it.validUntilDateTimeUtc.time) }
-                    .forEach { NotificationFactory(this).showNotification(it.title, it.content) }
+                    .forEach {
+                        val factory =  NotificationFactory(applicationContext)
+                        val notification = factory.createBasicNotification()
+                        factory.addRegularText(notification, it.title, it.content)
+                        factory.addBigText(notification, it.content)
+                        factory.setActivity(notification, ActivityRoot::class.java)
+
+                        factory.broadcastNotification(notification)
+                    }
 
             for (image in sync.images.changedEntities)
                 imageService.recache(image)

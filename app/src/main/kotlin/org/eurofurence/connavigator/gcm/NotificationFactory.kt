@@ -104,4 +104,9 @@ class NotificationFactory(var context: Context) {
             NotificationCompat.BigTextStyle()
                     .bigText(bigText)
     )
+
+    fun addRegularText(builder: NotificationCompat.Builder, title: String, text:String) = builder.apply {
+        this.mContentTitle = title
+        this.mContentText = text
+    }
 }

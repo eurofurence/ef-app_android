@@ -7,6 +7,7 @@ import com.google.firebase.messaging.RemoteMessage
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.ui.ActivityRoot
 import org.jetbrains.anko.*
 
 /**
@@ -53,28 +54,36 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         info { "Received request to create announcement notification" }
 
         val notification = factory.createBasicNotification()
-                .setContentTitle("A new announcement from Eurofurence")
-                .setContentText(message.data["Title"])
 
-        factory.broadcastNotification(factory.addBigText(notification, message.data["Text"]))
+        factory.addRegularText(notification, "A new announcement from Eurofurence", message.data["Title"] ?: "")
+        factory.addBigText(notification, message.data["Text"] ?: "")
+        factory.setActivity(notification, ActivityRoot::class.java)
+
+        factory.broadcastNotification(notification)
     }
 
     private fun createNotification(message: RemoteMessage) {
         info { "Received request to create generic notification" }
 
-        factory.broadcastNotification(factory.createBasicNotification()
-                .setContentTitle(message.data["Title"])
-                .setContentText(message.data["Message"])
-        )
+        val notification = factory.createBasicNotification()
+
+        factory.addRegularText(notification, message.data["Title"]?: "", message.data["Message"]?: "")
+        factory.setActivity(notification, ActivityRoot::class.java)
+
+        factory.broadcastNotification(notification)
     }
 
     private fun createHighPriorityAnnouncement(message: RemoteMessage) {
         info { "Received request to make high priority announcement" }
 
         val notification = factory.createBasicNotification()
-                .setContentTitle(message.data["Title"])
-                .setContentText(message.data["Text"])
 
-        factory.broadcastNotification(factory.makeHighPriority(notification))
+
+        factory.addRegularText(notification, message.data["Title"]?: "", message.data["Message"]?: "")
+        factory.addBigText(notification, message.data["Message"]?: "")
+        factory.makeHighPriority(notification)
+        factory.setActivity(notification, ActivityRoot::class.java)
+
+        factory.broadcastNotification(notification)
     }
 }
