@@ -168,7 +168,6 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             when {
                 eventIsHappening(event, DateTime.now()) -> { // It's happening now
                     holder.eventStartTime.text = "now"
-                    holder.eventCard.setBackgroundColor(getColor(context, R.color.accentLighter))
                 }
                 eventStart(event).isBeforeNow -> // It's already happened
                     holder.eventStartTime.text = "done"
@@ -177,20 +176,12 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     val countdown = Minutes.minutesBetween(DateTime.now(), eventStart(event)).minutes
                     holder.eventStartTime.text = "${countdown}min"
                 }
-                eventEnd(event).isBeforeNow -> {// Event end is before the current time, so it has already occurred thus it is gray
-                    holder.eventCard.setBackgroundColor(getColor(context, R.color.backgroundGrey))
-                }
-                isFavorite -> {// Event is in favourites, thus it is coloured in primary
-                    holder.eventStartTime.text = Formatter.shortTime(event.startTime)
-                    holder.eventCard.setBackgroundColor(getColor(context, R.color.primaryLighter))
-                }
                 else -> {
-                    holder.eventStartTime.text = Formatter.shortTime(event.startTime)
-                    holder.eventCard.setBackgroundColor(getColor(context, R.color.cardview_light_background))
+                    holder.eventStartTime.text = event.startTimeString()
                 }
             }
 
-            holder.eventEndTime.text = "$glyphEnd ${Formatter.shortTime(event.endTime)}"
+            holder.eventEndTime.text = "$glyphEnd ${event.endTimeString()}"
             holder.eventRoom.text = Formatter.roomFull(event[toRoom]!!)
 
             // Load image
@@ -400,7 +391,9 @@ class EventListView : AnkoComponent<ViewGroup> {
 
             loading = progressBar().lparams(matchParent, wrapContent)
 
-            eventList = recycler {}.lparams(matchParent, matchParent)
+            eventList = recycler {
+                backgroundResource = R.color.cardview_light_background
+            }.lparams(matchParent, matchParent)
         }
     }
 }
