@@ -185,7 +185,9 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             holder.eventRoom.text = Formatter.roomFull(event[toRoom]!!)
 
             // Load image
-            imageService.load(db.images[event.bannerImageId], holder.eventImage)
+
+            val image = db.images[event.bannerImageId]
+            imageService.load(image, holder.eventImage)
 
             // Assign the on-click action
             holder.itemView.setOnClickListener {
@@ -365,9 +367,8 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
                 }
 
                 imageView {
-                    maxWidth = matchParent
-                    maxHeight = displayMetrics.widthPixels / 3
-                    scaleType = ImageView.ScaleType.CENTER_CROP
+                    lparams(matchParent, wrapContent)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
                     id = R.id.eventImage
                 }
             }
