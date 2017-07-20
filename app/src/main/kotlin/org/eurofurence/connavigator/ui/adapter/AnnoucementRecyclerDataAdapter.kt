@@ -72,7 +72,6 @@ class AnnoucementRecyclerDataAdapter(val announcements: List<AnnouncementRecord>
 class AnnouncementUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
-            lparams(matchParent, wrapContent)
             id = R.id.layout
             backgroundResource = R.color.cardview_light_background
             padding = dip(15)
@@ -103,6 +102,13 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
                 visibility = View.GONE
                 padding = dip(10)
             }.lparams(matchParent, wrapContent)
+
+            view {
+                lparams(matchParent, dip(1)){
+                    verticalMargin = dip(5)
+                }
+                backgroundResource = R.color.primary
+            }
         }
     }
 }

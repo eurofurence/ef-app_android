@@ -105,6 +105,7 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
 class SingleItemUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
+            backgroundResource = R.color.cardview_light_background
             padding = dip(15)
             textView {
                 id = R.id.title
@@ -120,6 +121,12 @@ class SingleItemUi : AnkoComponent<ViewGroup> {
             textView {
                 padding = dip(10)
                 id = R.id.text
+            }
+            view {
+                lparams(matchParent, dip(1)){
+                    verticalMargin = dip(5)
+                }
+                backgroundResource = R.color.primary
             }
         }
     }
