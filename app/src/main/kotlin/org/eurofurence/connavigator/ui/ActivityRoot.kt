@@ -27,7 +27,9 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences
+import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -35,8 +37,7 @@ import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.Days
 import java.util.*
@@ -286,12 +287,16 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this)
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
-                    AlertDialog.Builder(ContextThemeWrapper(this, R.style.appcompatDialog))
-                            .setTitle("Clearing Database")
-                            .setMessage("This will get rid of all cached items you have stored locally. You will need an internet connection to restart!")
-                            .setPositiveButton("Clear", { dialogInterface, i -> db.clear(); imageService.clear(); System.exit(0) })
-                            .setNegativeButton("Cancel", { dialogInterface, i -> })
-                            .show()
+                    alert("Empty app cache. You WILL need an internet connection to restart", "Clear database") {
+                        yesButton {
+                            db.clear()
+                            imageService.clear()
+                            AuthPreferences.clear()
+                            AppPreferences.clear()
+                            DebugPreferences.clear()
+                        }
+                        noButton { longToast("Not clearing DB") }
+                    }.show()
                 }
             }
 
