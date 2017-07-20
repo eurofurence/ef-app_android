@@ -107,7 +107,9 @@ class StartUi : AnkoComponent<ActivityStart> {
         verticalLayout {
             backgroundResource = R.color.primary
 
-            imageView { imageResource = R.drawable.logo }
+            imageView { imageResource = R.drawable.logo }.lparams(
+                    matchParent, (displayMetrics.heightPixels * 0.5).toInt()
+            )
 
             nextButton = button("We're just loading some data for you. Hang tight!") {
                 isEnabled = false
