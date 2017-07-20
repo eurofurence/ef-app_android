@@ -75,6 +75,7 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
             id = R.id.layout
             backgroundResource = R.color.cardview_light_background
             padding = dip(15)
+            lparams(matchParent, wrapContent)
 
             linearLayout {
                 weightSum = 10F
