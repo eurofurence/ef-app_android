@@ -42,6 +42,10 @@
                 android:id="@+id/navMessages"
                 android:icon="@drawable/icon_message"
                 android:title="Private Messages" />
+            <item
+                android:id="@+id/navFursuitGames"
+                android:icon="@drawable/icon_message"
+                android:title="Fursuit Games" />
         </menu>
     </item>
     <item android:title="External">
