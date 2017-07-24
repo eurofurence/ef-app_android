@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import io.swagger.client.ApiException
+import io.swagger.client.model.ApiSafeResultCollectTokenResponse
 import io.swagger.client.model.CollectTokenResponse
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.failUi
@@ -58,11 +59,17 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 invoker.addDefaultHeader("Authorization", AuthPreferences.asBearer())
             }
 
-            api.apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost(tag)
+            api.apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost(tag)
         } successUi {
             info { "Succesfully executed network request! Showing fursuit" }
-            ui.setFursuit(it)
-            ui.setMode(FursuitUiMode.SHOW_SUIT)
+
+            if(it.isSuccessful){
+                ui.setFursuit(it.result)
+                ui.setMode(FursuitUiMode.SHOW_SUIT)
+            } else {
+                ui.error.text = it.error.message
+                ui.setMode(FursuitUiMode.ERROR)
+            }
         } failUi {
             warn { "Network request failed!" }
             val throwable = it as ApiException
@@ -95,6 +102,7 @@ class FursuitGameUi : AnkoComponent<ViewGroup> {
             FursuitUiMode.START -> {
                 loading.visibility = View.GONE
                 startLayout.visibility = View.VISIBLE
+                fursuitLayout.visibility = View.GONE
             }
             FursuitUiMode.LOADING -> {
                 loading.visibility = View.VISIBLE
@@ -113,7 +121,7 @@ class FursuitGameUi : AnkoComponent<ViewGroup> {
     }
 
     fun setFursuit(token: CollectTokenResponse) {
-        fursuitName.text = "${token.name} the ${token.species   }"
+        fursuitName.text = "${token.name} the ${token.species}"
     }
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {

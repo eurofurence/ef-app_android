@@ -47,6 +47,14 @@ public class JsonUtil {
       return new TypeToken<List<ApiErrorResult>>(){}.getType();
     }
     
+    if ("ApiSafeResult".equalsIgnoreCase(className)) {
+      return new TypeToken<List<ApiSafeResult>>(){}.getType();
+    }
+    
+    if ("ApiSafeResultCollectTokenResponse".equalsIgnoreCase(className)) {
+      return new TypeToken<List<ApiSafeResultCollectTokenResponse>>(){}.getType();
+    }
+    
     if ("AuthenticationResponse".equalsIgnoreCase(className)) {
       return new TypeToken<List<AuthenticationResponse>>(){}.getType();
     }
@@ -215,6 +223,14 @@ public class JsonUtil {
     
     if ("ApiErrorResult".equalsIgnoreCase(className)) {
       return new TypeToken<ApiErrorResult>(){}.getType();
+    }
+    
+    if ("ApiSafeResult".equalsIgnoreCase(className)) {
+      return new TypeToken<ApiSafeResult>(){}.getType();
+    }
+    
+    if ("ApiSafeResultCollectTokenResponse".equalsIgnoreCase(className)) {
+      return new TypeToken<ApiSafeResultCollectTokenResponse>(){}.getType();
     }
     
     if ("AuthenticationResponse".equalsIgnoreCase(className)) {
