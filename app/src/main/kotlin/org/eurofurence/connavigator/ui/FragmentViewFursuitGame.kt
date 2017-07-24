@@ -6,16 +6,20 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.ProgressBar
+import android.widget.*
+import io.swagger.client.ApiException
+import io.swagger.client.model.CollectTokenResponse
 import nl.komponents.kovenant.task
+import nl.komponents.kovenant.ui.failUi
+import nl.komponents.kovenant.ui.successUi
+import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 
 /**
@@ -49,7 +53,26 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
         info { "Looking for tag $tag" }
 
         task {
+            info { "Making  network request" }
+            val api = apiService.fursuits.apply {
+                invoker.addDefaultHeader("Authorization", AuthPreferences.asBearer())
+            }
 
+            api.apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost(tag)
+        } successUi {
+            info { "Succesfully executed network request! Showing fursuit" }
+            ui.setFursuit(it)
+            ui.setMode(FursuitUiMode.SHOW_SUIT)
+        } failUi {
+            warn { "Network request failed!" }
+            val throwable = it as ApiException
+
+            ui.error.text =  when(throwable.code){
+                400 -> it.message ?: "You've already caught this suiter"
+                401 -> "You're not logged in!"
+                else -> "An error occured!"
+            }
+            ui.setMode(FursuitUiMode.ERROR)
         }
     }
 
@@ -57,9 +80,12 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
 class FursuitGameUi : AnkoComponent<ViewGroup> {
     lateinit var loading: ProgressBar
+    lateinit var error: TextView
 
     lateinit var submit: Button
     lateinit var fursuitLabel: EditText
+
+    lateinit var fursuitName: TextView
 
     lateinit var startLayout: LinearLayout
     lateinit var fursuitLayout: LinearLayout
@@ -79,7 +105,15 @@ class FursuitGameUi : AnkoComponent<ViewGroup> {
                 loading.visibility = View.GONE
                 fursuitLayout.visibility = View.VISIBLE
             }
+            FursuitUiMode.ERROR -> {
+                loading.visibility = View.GONE
+                startLayout.visibility = View.VISIBLE
+            }
         }
+    }
+
+    fun setFursuit(token: CollectTokenResponse) {
+        fursuitName.text = "${token.name} the ${token.species   }"
     }
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
@@ -100,6 +134,10 @@ class FursuitGameUi : AnkoComponent<ViewGroup> {
                     text = "Fill in a fursuiter ID!"
                 }
 
+                error = textView {
+                    text = ""
+                }
+
                 fursuitLabel = editText {
                     hint = "They should have a tag somewhere!"
                 }.lparams(matchParent, wrapContent)
@@ -111,8 +149,24 @@ class FursuitGameUi : AnkoComponent<ViewGroup> {
 
             fursuitLayout = verticalLayout {
                 visibility = View.GONE
-                textView("This shows a fursuiter!")
-            }
+
+                imageView{
+                    imageResource = R.drawable.placeholder_event
+                }
+
+                textView("You have collected"){
+                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+                }
+
+                fursuitName = textView{
+                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+                    setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
+                }
+
+                button("Return to the tagging menu"){
+                    setOnClickListener { setMode(FursuitUiMode.START) }
+                }
+            }.lparams(matchParent, matchParent)
         }
     }
 }
@@ -120,5 +174,6 @@ class FursuitGameUi : AnkoComponent<ViewGroup> {
 enum class FursuitUiMode {
     START,
     LOADING,
-    SHOW_SUIT
+    SHOW_SUIT,
+    ERROR
 }

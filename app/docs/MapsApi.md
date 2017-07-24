@@ -115,8 +115,8 @@ Create or Update an existing map entry in a specific map
 //import io.swagger.client.api.MapsApi;
 
 MapsApi apiInstance = new MapsApi();
-UUID id = new UUID(); // UUID | 
-UUID entryId = new UUID(); // UUID | 
+UUID id = new UUID(); // UUID | \"Id\" of the map.
+UUID entryId = new UUID(); // UUID | \"Id\" of the entry that gets inserted.
 MapEntryRecord record = new MapEntryRecord(); // MapEntryRecord | \"Id\" property must match the {EntryId} part of the uri
 try {
     UUID result = apiInstance.apiV2MapsByIdEntriesByEntryIdPut(id, entryId, record);
@@ -131,8 +131,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**UUID**](.md)|  |
- **entryId** | [**UUID**](.md)|  |
+ **id** | [**UUID**](.md)| \&quot;Id\&quot; of the map. |
+ **entryId** | [**UUID**](.md)| \&quot;Id\&quot; of the entry that gets inserted. |
  **record** | [**MapEntryRecord**](MapEntryRecord.md)| \&quot;Id\&quot; property must match the {EntryId} part of the uri | [optional]
 
 ### Return type
@@ -245,7 +245,7 @@ Create a new map entry in a specific map
 //import io.swagger.client.api.MapsApi;
 
 MapsApi apiInstance = new MapsApi();
-UUID id = new UUID(); // UUID | 
+UUID id = new UUID(); // UUID | \"Id\" of the map
 MapEntryRecord record = new MapEntryRecord(); // MapEntryRecord | Do not specify the \"Id\" property. It will be auto-assigned and returned in the response.
 try {
     UUID result = apiInstance.apiV2MapsByIdEntriesPost(id, record);
@@ -260,7 +260,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**UUID**](.md)|  |
+ **id** | [**UUID**](.md)| \&quot;Id\&quot; of the map |
  **record** | [**MapEntryRecord**](MapEntryRecord.md)| Do not specify the \&quot;Id\&quot; property. It will be auto-assigned and returned in the response. | [optional]
 
 ### Return type

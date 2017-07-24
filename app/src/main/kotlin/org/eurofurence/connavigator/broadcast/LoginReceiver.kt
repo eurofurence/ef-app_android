@@ -38,7 +38,7 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
         val username = intent.getStringExtra(USERNAME)
         val password = intent.getStringExtra(PASSWORD)
 
-        info { "Attempting login for ${username} with reg number ${regNumber}" }
+        info { "Attempting login for ${username} with reg number ${regNumber}, $username, $password" }
 
         task {
             apiService.tokens.apiV2TokensRegSysPost(RegSysAuthenticationRequest().apply {
@@ -72,7 +72,7 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
             DataChanged.fire(context, "Login successful")
         } fail {
             warn { "Failed to retrieve tokens" }
-            error { it.message }
+            error { it.printStackTrace() }
             Analytics.exception(it)
 
             val intent = LOGIN_RESULT.toIntent {

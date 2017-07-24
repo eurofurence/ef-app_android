@@ -84,7 +84,7 @@ android {
 
 ext {
     // Location of the schema file
-    schema_location = "https://app.eurofurence.org/swagger/v2/swagger.json"
+    schema_location = "https://app.eurofurence.org/meep2-swagger.json"
 
     // Dependency versions
     swagger_annotations_version = "1.5.0"

@@ -43,8 +43,20 @@ public class JsonUtil {
       return new TypeToken<List<AnnouncementRecord>>(){}.getType();
     }
     
+    if ("ApiErrorResult".equalsIgnoreCase(className)) {
+      return new TypeToken<List<ApiErrorResult>>(){}.getType();
+    }
+    
     if ("AuthenticationResponse".equalsIgnoreCase(className)) {
       return new TypeToken<List<AuthenticationResponse>>(){}.getType();
+    }
+    
+    if ("BadgeInfo".equalsIgnoreCase(className)) {
+      return new TypeToken<List<BadgeInfo>>(){}.getType();
+    }
+    
+    if ("CollectTokenResponse".equalsIgnoreCase(className)) {
+      return new TypeToken<List<CollectTokenResponse>>(){}.getType();
     }
     
     if ("DealerRecord".equalsIgnoreCase(className)) {
@@ -111,6 +123,26 @@ public class JsonUtil {
       return new TypeToken<List<EventRecord>>(){}.getType();
     }
     
+    if ("FursuitBadgeRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<FursuitBadgeRecord>>(){}.getType();
+    }
+    
+    if ("FursuitBadgeRegistration".equalsIgnoreCase(className)) {
+      return new TypeToken<List<FursuitBadgeRegistration>>(){}.getType();
+    }
+    
+    if ("FursuitParticipationInfo".equalsIgnoreCase(className)) {
+      return new TypeToken<List<FursuitParticipationInfo>>(){}.getType();
+    }
+    
+    if ("FursuitParticipationRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<FursuitParticipationRecord>>(){}.getType();
+    }
+    
+    if ("FursuitScoreboardEntry".equalsIgnoreCase(className)) {
+      return new TypeToken<List<FursuitScoreboardEntry>>(){}.getType();
+    }
+    
     if ("ImageRecord".equalsIgnoreCase(className)) {
       return new TypeToken<List<ImageRecord>>(){}.getType();
     }
@@ -133,6 +165,14 @@ public class JsonUtil {
     
     if ("MapRecord".equalsIgnoreCase(className)) {
       return new TypeToken<List<MapRecord>>(){}.getType();
+    }
+    
+    if ("PlayerParticipationInfo".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PlayerParticipationInfo>>(){}.getType();
+    }
+    
+    if ("PlayerScoreboardEntry".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PlayerScoreboardEntry>>(){}.getType();
     }
     
     if ("PostFcmDeviceRegistrationRequest".equalsIgnoreCase(className)) {
@@ -173,8 +213,20 @@ public class JsonUtil {
       return new TypeToken<AnnouncementRecord>(){}.getType();
     }
     
+    if ("ApiErrorResult".equalsIgnoreCase(className)) {
+      return new TypeToken<ApiErrorResult>(){}.getType();
+    }
+    
     if ("AuthenticationResponse".equalsIgnoreCase(className)) {
       return new TypeToken<AuthenticationResponse>(){}.getType();
+    }
+    
+    if ("BadgeInfo".equalsIgnoreCase(className)) {
+      return new TypeToken<BadgeInfo>(){}.getType();
+    }
+    
+    if ("CollectTokenResponse".equalsIgnoreCase(className)) {
+      return new TypeToken<CollectTokenResponse>(){}.getType();
     }
     
     if ("DealerRecord".equalsIgnoreCase(className)) {
@@ -241,6 +293,26 @@ public class JsonUtil {
       return new TypeToken<EventRecord>(){}.getType();
     }
     
+    if ("FursuitBadgeRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<FursuitBadgeRecord>(){}.getType();
+    }
+    
+    if ("FursuitBadgeRegistration".equalsIgnoreCase(className)) {
+      return new TypeToken<FursuitBadgeRegistration>(){}.getType();
+    }
+    
+    if ("FursuitParticipationInfo".equalsIgnoreCase(className)) {
+      return new TypeToken<FursuitParticipationInfo>(){}.getType();
+    }
+    
+    if ("FursuitParticipationRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<FursuitParticipationRecord>(){}.getType();
+    }
+    
+    if ("FursuitScoreboardEntry".equalsIgnoreCase(className)) {
+      return new TypeToken<FursuitScoreboardEntry>(){}.getType();
+    }
+    
     if ("ImageRecord".equalsIgnoreCase(className)) {
       return new TypeToken<ImageRecord>(){}.getType();
     }
@@ -263,6 +335,14 @@ public class JsonUtil {
     
     if ("MapRecord".equalsIgnoreCase(className)) {
       return new TypeToken<MapRecord>(){}.getType();
+    }
+    
+    if ("PlayerParticipationInfo".equalsIgnoreCase(className)) {
+      return new TypeToken<PlayerParticipationInfo>(){}.getType();
+    }
+    
+    if ("PlayerScoreboardEntry".equalsIgnoreCase(className)) {
+      return new TypeToken<PlayerScoreboardEntry>(){}.getType();
     }
     
     if ("PostFcmDeviceRegistrationRequest".equalsIgnoreCase(className)) {

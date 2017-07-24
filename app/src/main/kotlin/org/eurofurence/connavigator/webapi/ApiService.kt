@@ -10,7 +10,6 @@ import io.swagger.client.api.*
 import org.eurofurence.connavigator.util.extensions.catchHandle
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.loge
-import org.eurofurence.connavigator.util.tryFor
 import java.io.File
 
 /**
@@ -49,6 +48,7 @@ object apiService {
 
     val tokens by lazy { TokensApi().apply { basePath = apiPath } }
 
+    val fursuits by lazy { FursuitsApi().apply { basePath = apiPath } }
 
     /**
      * Initializes the API services
