@@ -79,18 +79,6 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
                 sync.eventConferenceDays.deletedEntities = emptyList()
             }
 
-            sync.announcements.changedEntities.filter { DateTime.now().isAfter(it.validFromDateTimeUtc.time) }
-                    .filter { DateTime.now().isBefore(it.validUntilDateTimeUtc.time) }
-                    .forEach {
-                        val factory =  NotificationFactory(applicationContext)
-                        val notification = factory.createBasicNotification()
-                        factory.addRegularText(notification, it.title, it.content)
-                        factory.addBigText(notification, it.content)
-                        factory.setActivity(notification, ActivityRoot::class.java)
-
-                        factory.broadcastNotification(notification)
-                    }
-
             for (image in sync.images.changedEntities)
                 imageService.recache(image)
 
