@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.util.extensions
 
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.RecyclerView
 import android.view.ViewManager
 import com.github.chrisbanes.photoview.PhotoView
@@ -19,3 +20,4 @@ inline fun ViewManager.photoView(init: PhotoView.() -> Unit) = ankoView({ PhotoV
 inline fun ViewManager.markdownView(init: MarkdownView.() -> Unit) = ankoView({ MarkdownView(it) }, 0, init)
 inline fun ViewManager.fontAwesomeView(init: IconTextView.() -> Unit) = ankoView({IconTextView(it)}, 0, init)
 inline fun ViewManager.fontAwesomeButton(init: IconButton.() -> Unit) = ankoView({IconButton(it)}, 0, init)
+inline fun ViewManager.floatingActionButton(init: FloatingActionButton.() -> Unit) = ankoView({FloatingActionButton(it)}, 0, init)

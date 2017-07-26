@@ -1,15 +1,14 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.github.chrisbanes.photoview.PhotoView
 import com.joanzapata.iconify.IconDrawable
 import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import com.pawegio.kandroid.IntentFor
@@ -21,13 +20,12 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.dialogs.EventDialog
-import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
+import org.jetbrains.anko.*
 import us.feras.mdv.MarkdownView
 import java.util.*
 
@@ -41,7 +39,7 @@ class FragmentViewEvent() : Fragment(), HasDb {
 
     override val db by lazyLocateDb()
     val dataChanged by lazy {
-        context.localReceiver(DataChanged.DATACHANGED){
+        context.localReceiver(DataChanged.DATACHANGED) {
             changeFabIcon()
         }
     }
@@ -92,9 +90,14 @@ class FragmentViewEvent() : Fragment(), HasDb {
             organizers.text = event.ownerString()
             room.text = conferenceRoom!!.name
 
-            // temporary fix until we get the actual images
-            imageService.load(db.images[event.posterImageId], image)
-            
+            if (event.posterImageId !== null) {
+                imageService.load(db.images[event.posterImageId], image)
+            } else if (event.bannerImageId !== null) {
+                imageService.load(db.images[event.bannerImageId], image)
+            } else {
+                image.visibility = View.GONE
+            }
+
             changeFabIcon()
 
             buttonSave.setOnClickListener {
@@ -117,4 +120,40 @@ class FragmentViewEvent() : Fragment(), HasDb {
         else
             buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart_o))
     }
+}
+
+class EventUi : AnkoComponent<ViewGroup> {
+    lateinit var poster: PhotoView
+    lateinit var title: TextView
+    lateinit var room: TextView
+    lateinit var host: TextView
+
+    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+        relativeLayout {
+            lparams(matchParent, matchParent)
+            backgroundResource = R.color.cardview_light_background
+
+            scrollView {
+                verticalLayout {
+                    poster = photoView {
+                        backgroundResource = R.drawable.image_fade
+                        imageResource = R.drawable.placeholder_event
+                    }.lparams(matchParent, wrapContent)
+
+                    verticalLayout {
+                        padding = dip(15)
+                        id = R.id.splitter
+                    }
+                }.lparams(matchParent, wrapContent)
+            }
+
+            floatingActionButton {
+
+            }.lparams(wrapContent, wrapContent) {
+                margin = dip(16)
+                alignEnd(R.id.splitter)
+            }
+        }
+    }
+
 }
