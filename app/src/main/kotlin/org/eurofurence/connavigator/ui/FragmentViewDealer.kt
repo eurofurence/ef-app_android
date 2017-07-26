@@ -110,7 +110,8 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             info { "Entry is at (${entry.x}, ${entry.y})" }
             imageService.load(db.toImage(map), ui.map)
 
-            ui.map.attacher.setScale(4F, entry.x.toFloat(), entry.y.toFloat(), false)
+            ui.map.attacher.setScale(4F, entry.x.toFloat(), entry.y.toFloat(), true)
+            ui.map.attacher.update()
         } else {
             warn { "No map or entry found!" }
             ui.map.visibility = View.GONE
