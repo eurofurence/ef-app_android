@@ -90,9 +90,9 @@ class InfoUi : AnkoComponent<ViewGroup> {
 
             layout = verticalLayout {
                 image = photoView {
-                    backgroundResource = R.drawable.placeholder_event
-                    scaleType = ImageView.ScaleType.CENTER_CROP
-                }.lparams(matchParent, dip(300))
+                    backgroundResource = R.drawable.image_fade
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+                }.lparams(matchParent, wrapContent)
 
                 title = themedTextView(R.style.AppTheme_Header) {
                     lparams(matchParent, wrapContent)
