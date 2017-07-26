@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.ui
 
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.view.Gravity
@@ -171,7 +172,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
                     errorText = textView("Your login was unsuccessful, are you sure you entered the correct data?") {
                         visibility = View.GONE
-                        textColor = ctx.getColor(R.color.primary)
+                        textColor = ContextCompat.getColor(ctx, R.color.primary)
                         lparams(matchParent, wrapContent) {
                             margin = dip(16)
                         }
