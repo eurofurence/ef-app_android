@@ -82,9 +82,9 @@ class NotificationFactory(var context: Context) {
     /**
      * Sets an activity to launch on notication taps
      */
-    fun setActivity(builder: NotificationCompat.Builder, targetClass: Any): NotificationCompat.Builder {
+    fun setActivity(builder: NotificationCompat.Builder): NotificationCompat.Builder {
         // On a click event we want to start an activity
-        val intentToExecute = Intent(context, targetClass::class.java)
+        val intentToExecute = Intent(context, ActivityRoot::class.java)
 
         // Attach the intent to a pending intent that our app can consume
         val pendingIntent = PendingIntent.getActivity(context, 0, intentToExecute, 0)

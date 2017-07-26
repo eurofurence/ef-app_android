@@ -57,7 +57,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
 
         factory.addRegularText(notification, "A new announcement from Eurofurence", message.data["Title"] ?: "")
         factory.addBigText(notification, message.data["Text"] ?: "")
-        factory.setActivity(notification, ActivityRoot::class.java)
+        factory.setActivity(notification)
 
         factory.broadcastNotification(notification)
     }
@@ -68,7 +68,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         val notification = factory.createBasicNotification()
 
         factory.addRegularText(notification, message.data["Title"]?: "", message.data["Message"]?: "")
-        factory.setActivity(notification, ActivityRoot::class.java)
+        factory.setActivity(notification)
 
         factory.broadcastNotification(notification)
     }
@@ -82,7 +82,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         factory.addRegularText(notification, message.data["Title"]?: "", message.data["Message"]?: "")
         factory.addBigText(notification, message.data["Message"]?: "")
         factory.makeHighPriority(notification)
-        factory.setActivity(notification, ActivityRoot::class.java)
+        factory.setActivity(notification)
 
         factory.broadcastNotification(notification)
     }
