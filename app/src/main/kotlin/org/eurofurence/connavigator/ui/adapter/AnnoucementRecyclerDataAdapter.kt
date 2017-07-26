@@ -98,18 +98,19 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
                 setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Small)
             }.lparams(wrapContent, wrapContent)
 
-            textView {
-                id = R.id.announcementContent
-                visibility = View.GONE
-                padding = dip(10)
-            }.lparams(matchParent, wrapContent)
-
             view {
                 lparams(matchParent, dip(1)){
                     verticalMargin = dip(5)
                 }
                 backgroundResource = R.color.primary
             }
+
+
+            textView {
+                id = R.id.announcementContent
+                visibility = View.GONE
+                padding = dip(10)
+            }.lparams(matchParent, wrapContent)
         }
     }
 }
