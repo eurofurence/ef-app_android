@@ -168,6 +168,7 @@ class GroupUi : AnkoComponent<ViewGroup> {
 
             description = textView {
                 setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                backgroundResource = R.color.backgroundGrey
                 padding = dip(10)
                 id = R.id.description
             }
@@ -178,8 +179,10 @@ class GroupUi : AnkoComponent<ViewGroup> {
 class GroupItemUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
+            lparams(matchParent, wrapContent)
             padding = dip(16)
             id = R.id.layout
+            backgroundResource = R.color.cardview_light_background
 
             textView {
                 setTextAppearance(ctx, android.R.style.TextAppearance_Large)
