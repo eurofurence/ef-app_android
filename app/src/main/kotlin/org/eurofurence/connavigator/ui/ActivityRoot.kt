@@ -121,9 +121,11 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         setupNav()
         setupFab()
 
-        if (!handleBrowsingIntent()) {
-            setupContent()
-        }
+        // Show the home screen
+        setupContent()
+
+        // Show our browsing intent
+        handleBrowsingIntent()
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
     }
