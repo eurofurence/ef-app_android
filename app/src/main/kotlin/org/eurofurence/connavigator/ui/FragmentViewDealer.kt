@@ -98,7 +98,6 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     private fun configureMap(dealer: DealerRecord) {
         info { "Finding dealer in mapEntries" }
-
         val entryMap = db.findLinkFragment(dealer.id.toString())
 
         val map = entryMap["map"] as MapRecord?

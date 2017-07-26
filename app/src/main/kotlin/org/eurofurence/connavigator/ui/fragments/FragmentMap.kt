@@ -11,7 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.gson.Gson
-import io.swagger.client.model.MapEntryRecord
+import io.swagger.client.model.LinkFragment
 import io.swagger.client.model.MapRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -20,6 +20,9 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.browse
+import org.jetbrains.anko.support.v4.longToast
+import org.jetbrains.anko.support.v4.selector
 import java.util.*
 import kotlin.properties.Delegates.notNull
 
@@ -69,11 +72,19 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 info { "Found ${entries.size} entries" }
 
                 if (entries.isNotEmpty()) {
-                    info { "Dealer ID:  ${entries.first()}" }
-                    fillLinkLayout(entries.first())
-                    ui.linkLayout.visibility = View.VISIBLE
-                } else {
-                    ui.linkLayout.visibility = View.GONE
+                    val links = entries.first().links
+
+                    info { "Showing location selector" }
+                    selector("Find out more", links.map { it.name }, { _, position ->
+                        val link = links[position]
+
+                        when (link.fragmentType) {
+                            LinkFragment.FragmentTypeEnum.DealerDetail -> launchDealer(link)
+                            LinkFragment.FragmentTypeEnum.MapExternal -> launchMap(link)
+                            LinkFragment.FragmentTypeEnum.WebExternal -> browse(link.target)
+                            else -> warn { "No items selected" }
+                        }
+                    })
                 }
             }
         } else {
@@ -81,38 +92,31 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         }
     }
 
-    fun fillLinkLayout(entry: MapEntryRecord) = when (entry.links.first().fragmentType.name) {
-        "DealerDetail" -> fillLinkAsDealer(entry)
-        "MapExternal" -> fillLinkAsExternalMap(entry)
-        else -> Unit
+    private fun launchMap(link: LinkFragment) {
+        info { "Launching map" }
+        val mapData = Gson().fromJson(link.target, MapExternal::class.java)
+        info { "Launching to ${mapData.name}" }
+
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse("geo:${mapData.lat},${mapData.lon}")
+        startActivity(intent)
     }
 
-    private fun fillLinkAsExternalMap(entry: MapEntryRecord) {
-        val mapData = Gson().fromJson(entry.links.first().target, MapExternal::class.java)
+    private fun launchDealer(link: LinkFragment) {
+        info { "Launching dealer" }
+        val dealer = db.dealers[UUID.fromString(link.target)]
 
-        ui.linkTitle.text = "Navigate to ${mapData.name}"
-        ui.linkLayout.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("geo:${mapData.lat},${mapData.lon}")
-            startActivity(intent)
-        }
-    }
-
-    private fun fillLinkAsDealer(entry: MapEntryRecord) {
-        val dealer = db.dealers[UUID.fromString(entry.links.first().target)]
-
-        ui.linkTitle.text = "Read more about ${dealer!!.getName()}"
-        ui.linkLayout.setOnClickListener {
+        info { "Dealer is ${dealer?.getName()}" }
+        if (dealer !== null) {
             applyOnRoot { navigateToDealer(dealer) }
+        } else {
+            longToast("Could not navigate to dealer")
         }
     }
 
     class MapUi : AnkoComponent<ViewGroup> {
         lateinit var map: PhotoView
         lateinit var title: TextView
-        lateinit var linkLayout: LinearLayout
-
-        lateinit var linkTitle: TextView
 
         override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
             relativeLayout {
@@ -122,15 +126,6 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 }
 
                 title = textView()
-
-                linkLayout = verticalLayout {
-                    visibility = View.GONE
-                    padding = dip(15)
-                    backgroundResource = R.color.accent
-                    linkTitle = textView {
-                        setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
-                    }
-                }.lparams(matchParent, wrapContent) { alignParentBottom() }
             }
         }
     }
