@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.database
 import android.content.Context
 import android.support.v4.app.Fragment
 import android.util.Log
+import com.google.firebase.perf.metrics.AddTrace
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.util.v2.*
@@ -414,6 +415,7 @@ fun Db.eventDayNumber(): Int {
  * Well I guess you enjoy us searching for a needle in this gaystack
  * t. retarduinard
  */
+@AddTrace(name = "Db.findLinkFragment", enabled = true)
 fun Db.findLinkFragment(target: String): Map<String, Any?> {
     maps.items.forEach{
         val map = it
