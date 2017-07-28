@@ -24,6 +24,7 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.browse
 import us.feras.mdv.MarkdownView
 
 /**
@@ -129,7 +130,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 ui.websites.addView(Button(context.applicationContext).apply {
                     info { "Adding button for ${it.name}" }
                     text = it.name
-                    setOnTouchListener { _, _ -> context.browse(it.target) }
+                    setOnTouchListener { _, _ -> browse(it.target) }
                 })
             }
         }
@@ -139,7 +140,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.telegram.apply {
                 text = "${dealer.telegramHandle} on Telegram"
                 visibility = View.VISIBLE
-                setOnClickListener { context.browse("https://telegram.me/${dealer.telegramHandle}") }
+                setOnClickListener { browse("https://telegram.me/${dealer.telegramHandle}") }
             }
         }
 
@@ -148,7 +149,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.twitter.apply {
                 text = "${dealer.twitterHandle} on {fa-twitter}"
                 visibility = View.VISIBLE
-                setOnClickListener { context.browse("https://twitter.com/${dealer.twitterHandle}") }
+                setOnClickListener { browse("https://twitter.com/${dealer.twitterHandle}") }
             }
         }
     }
