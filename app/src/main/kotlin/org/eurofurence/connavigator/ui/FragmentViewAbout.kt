@@ -54,7 +54,7 @@ class AboutUi : AnkoComponent<ViewGroup> {
 
                 linearLayout {
                     backgroundResource = R.color.cardview_light_background
-                    setOnTouchListener { _, _ -> ctx.browse("https://furry.requinard.nl") }
+                    setOnTouchListener { _, _ -> browse("https://furry.requinard.nl") }
 
                     imageView {
                         imageService.imageLoader.displayImage("https://en.gravatar.com/avatar/42d336e4b6f13d687c32eaaf9c8fb0ea?s=$avatarSize", this)
@@ -69,7 +69,7 @@ class AboutUi : AnkoComponent<ViewGroup> {
 
                 linearLayout {
                     backgroundResource = R.color.cardview_light_background
-                    setOnTouchListener { _, _ -> ctx.browse("https://twitter.com/Pazuzupizza") }
+                    setOnTouchListener { _, _ -> browse("https://twitter.com/Pazuzupizza") }
 
                     imageView {
                         imageService.imageLoader.displayImage("https://en.gravatar.com/avatar/a5db6ad5350a2ee91408120b94d9fa24?s=$avatarSize", this)
