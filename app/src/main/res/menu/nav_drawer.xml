@@ -59,6 +59,7 @@
         <menu>
             <item android:id="@+id/navFeedback"
                   android:title="App Feedback"
+                  android:visible="false"
                   android:icon="@drawable/icon_like_filled"/>
             <item android:id="@+id/navDevReload"
                   android:title="Update"
