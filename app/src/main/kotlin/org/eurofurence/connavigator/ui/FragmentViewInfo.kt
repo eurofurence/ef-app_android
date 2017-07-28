@@ -19,6 +19,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.browse
 import us.feras.mdv.MarkdownView
 
 
@@ -69,7 +70,7 @@ class FragmentViewInfo() : Fragment(), HasDb {
                 button.text = url.name
                 button.setOnClickListener {
                     Analytics.event(Analytics.Category.INFO, Analytics.Action.LINK_CLICKED, url.target)
-                    context.browse(url.target)
+                    browse(url.target)
                 }
 
                 ui.layout.addView(button)
