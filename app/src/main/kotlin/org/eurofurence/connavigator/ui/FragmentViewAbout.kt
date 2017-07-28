@@ -1,7 +1,11 @@
 package org.eurofurence.connavigator.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -54,7 +58,12 @@ class AboutUi : AnkoComponent<ViewGroup> {
 
                 linearLayout {
                     backgroundResource = R.color.cardview_light_background
-                    setOnTouchListener { _, _ -> browse("https://furry.requinard.nl") }
+                    setOnTouchListener { _, _ ->
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.setData(Uri.parse("https://furry.requinard.nl"))
+                        //ContextCompat.startActivity(ctx, intent, null)
+                        true
+                    }
 
                     imageView {
                         imageService.imageLoader.displayImage("https://en.gravatar.com/avatar/42d336e4b6f13d687c32eaaf9c8fb0ea?s=$avatarSize", this)
@@ -69,7 +78,7 @@ class AboutUi : AnkoComponent<ViewGroup> {
 
                 linearLayout {
                     backgroundResource = R.color.cardview_light_background
-                    setOnTouchListener { _, _ -> browse("https://twitter.com/Pazuzupizza") }
+                    //setOnTouchListener { _, _ -> browse("https://twitter.com/Pazuzupizza") }
 
                     imageView {
                         imageService.imageLoader.displayImage("https://en.gravatar.com/avatar/a5db6ad5350a2ee91408120b94d9fa24?s=$avatarSize", this)
