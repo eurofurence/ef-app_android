@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.LoginReceiver
+import org.eurofurence.connavigator.broadcast.LogoutReceiver
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
@@ -59,7 +60,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
         ui.logout.setOnClickListener {
             info { "Logging user out" }
             longToast("Logging you out, goodbye!")
-            AuthPreferences.logout()
+            LogoutReceiver.fire(this)
             finish()
         }
 
