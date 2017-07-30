@@ -45,7 +45,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
 
     val dataChanged by lazy {
         context.localReceiver(DataChanged.DATACHANGED) {
-            ui.greeting.invalidate()
+            ui.updateLogin()
         }
     }
 
@@ -131,6 +131,14 @@ class HomeUi : AnkoComponent<ViewGroup> {
     lateinit var upcomingFragment: ViewGroup
     lateinit var currentFragment: ViewGroup
     lateinit var favoritesFragment: ViewGroup
+
+    /**
+     * Update the login part of the ui
+     */
+    fun updateLogin(){
+        greeting.text = "{fa-user} Hello ${AuthPreferences.username}"
+        greeting.visibility = if(AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
+    }
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         scrollView {
