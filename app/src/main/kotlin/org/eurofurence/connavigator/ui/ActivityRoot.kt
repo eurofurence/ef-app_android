@@ -76,6 +76,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     // Content API aggregator
     var content: Set<ContentAPI> = setOf()
 
+    // See if we're on the home screen. Used to check the back button
+    var onHome = true
+
     /**
      * Listens to update responses, since the event recycler holds database related data
      */
@@ -184,7 +187,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     private fun setupContent() =
-            navigateRoot(FragmentViewHome::class.java)
+            navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
 
     override fun onResume() {
         super.onResume()
@@ -204,7 +207,14 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            if(onHome) {
+                alert("Are you sure you want to close the app? You'll still receive messages", "Close the app") {
+                    yesButton { super.onBackPressed() }
+                    noButton { /* pass */ }
+                }.show()
+            } else {
+                navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
+            }
         }
     }
 
@@ -214,6 +224,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         this.menu = menu
         return true
     }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Propagate the ID based selection to functions
@@ -260,6 +272,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             tabs.visibility = View.GONE
         }
 
+        onHome = mode == ActionBarMode.HOME
+
         // Show the search button
         menu?.findItem(R.id.action_search)?.isVisible = listOf(ActionBarMode.SEARCH, ActionBarMode.SEARCHTABS, ActionBarMode.SEARCHMAP).contains(mode)
 
@@ -272,7 +286,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         navView.setNavigationItemSelectedListener {
             //Handle the ID
             when (it.itemId) {
-                R.id.navHome -> navigateRoot(FragmentViewHome::class.java)
+                R.id.navHome -> navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
                 R.id.navEvents -> navigateRoot(FragmentViewEvents::class.java, ActionBarMode.SEARCHTABS)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navMaps -> navigateRoot(FragmentViewMaps::class.java, ActionBarMode.TABS)
