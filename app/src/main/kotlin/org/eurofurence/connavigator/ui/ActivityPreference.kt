@@ -1,13 +1,11 @@
 package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
 import android.text.InputType
-import android.view.View
 import android.widget.TextView
 import com.pawegio.kandroid.textWatcher
-import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AppPreferences
@@ -30,10 +28,14 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
             verticalLayout {
                 toolbar {
                     title = "Settings"
+                    setTitleTextColor(ContextCompat.getColor(ctx, R.color.textWhite))
                     backgroundResource = R.color.primary
                 }
                 verticalLayout {
-                    textView("UI settings")
+                    padding = dip(10)
+                    textView("UI settings") {
+                        padding = dip(15)
+                    }
 
                     checkBox {
                         text = "Show old announcements"
@@ -47,39 +49,61 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                         setOnClickListener { AppPreferences.shortenDates = !AppPreferences.shortenDates }
                     }
 
-                    editText {
-                        hint = "The count of minutes before an event that we'll send a notification"
-                        setText(AppPreferences.notificationMinutesBefore.toString(), TextView.BufferType.EDITABLE)
-                        textWatcher {
-                            afterTextChanged { text ->
-                                if(text!!.isNotEmpty())AppPreferences.notificationMinutesBefore = text.toString().toInt()
+                    linearLayout {
+                        weightSum = 10F
+
+                        editText {
+                            hint = "The count of minutes before an event that we'll send a notification"
+                            setText(AppPreferences.notificationMinutesBefore.toString(), TextView.BufferType.EDITABLE)
+                            textWatcher {
+                                afterTextChanged { text ->
+                                    if (text!!.isNotEmpty()) AppPreferences.notificationMinutesBefore = text.toString().toInt()
+                                }
                             }
+                            inputType = InputType.TYPE_CLASS_NUMBER
+                        }.lparams(dip(0), wrapContent) {
+                            weight = 2F
                         }
-                        inputType = InputType.TYPE_CLASS_NUMBER
+
+                        textView("The amount of minutes before an event you want to get notified") {
+                            textColor = ContextCompat.getColor(ctx, R.color.textBlack)
+                        }.lparams(dip(0), wrapContent) {
+                            weight = 8F
+                        }
                     }
-                }
-                verticalLayout {
+
+
+
                     textView("Analytics settings") {
-                        padding = dip(25)
+                        padding = dip(15)
                     }
 
                     checkBox {
                         text = "Track usage with analytics"
                         isChecked = AnalyticsPreferences.enabled
                         setOnCheckedChangeListener { _, value -> AnalyticsPreferences.enabled = value }
-                        padding = dip(25)
                     }
 
                     checkBox {
                         text = "Track performance statistics"
                         isChecked = AnalyticsPreferences.performanceTracking
                         setOnCheckedChangeListener { _, value -> AnalyticsPreferences.performanceTracking = value }
-                        padding = dip(25)
                     }
                 }
 
                 verticalLayout {
-                    textView("Debug settings")
+                    padding = dip(10)
+
+                    view {
+                        lparams(matchParent, dip(1)) {
+                            verticalMargin = dip(5)
+                        }
+                        backgroundResource = R.color.primary
+                    }
+
+                    textView("Debug settings") {
+                        padding = dip(15)
+                    }
 
                     checkBox {
                         text = "Tweak event days so it seems like it's the current date"
@@ -87,15 +111,27 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                         setOnClickListener { DebugPreferences.debugDates = !DebugPreferences.debugDates }
                     }
 
-                    editText {
-                        hint = "The amount of days to offset by. Must be integer"
-                        setText(DebugPreferences.eventDateOffset.toString(), TextView.BufferType.EDITABLE)
-                        textWatcher {
-                            afterTextChanged { text ->
-                                if(text!!.isNotEmpty())DebugPreferences.eventDateOffset = text.toString().toInt()
+                    linearLayout {
+                        weightSum = 10F
+
+                        editText {
+                            hint = "The amount of days to offset by. Must be integer"
+                            setText(DebugPreferences.eventDateOffset.toString(), TextView.BufferType.EDITABLE)
+                            textWatcher {
+                                afterTextChanged { text ->
+                                    if (text!!.isNotEmpty()) DebugPreferences.eventDateOffset = text.toString().toInt()
+                                }
                             }
+                            inputType = InputType.TYPE_CLASS_NUMBER
+                        }.lparams(dip(0), wrapContent) {
+                            weight = 2F
                         }
-                        inputType = InputType.TYPE_CLASS_NUMBER
+
+                        textView("Amount of days to offset the event schedule by") {
+                            textColor = ContextCompat.getColor(ctx, R.color.textBlack)
+                        }.lparams(dip(0), wrapContent) {
+                            weight = 8F
+                        }
                     }
 
                     checkBox {
@@ -103,8 +139,6 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                         isChecked = DebugPreferences.scheduleNotificationsForTest
                         setOnClickListener { DebugPreferences.scheduleNotificationsForTest = !DebugPreferences.scheduleNotificationsForTest }
                     }
-
-                    visibility = if (BuildConfig.DEBUG) View.VISIBLE else View.GONE
                 }
 
                 lparams(matchParent, matchParent)
