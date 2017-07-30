@@ -38,4 +38,8 @@
         <key>lastConEnd</key>
         <value>1471471200000</value>
     </entry>
+    <entry>
+        <key>native_fursuit_games</key>
+        <value>false</value>
+    </entry>
 </defaultsMap>
