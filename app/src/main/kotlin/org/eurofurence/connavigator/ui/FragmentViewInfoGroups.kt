@@ -86,11 +86,11 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
                 holder.title.text = entry.title
 
                 // Handle clicks
-                holder.itemView.setOnClickListener {
+                holder.layout.setOnClickListener {
                     applyOnRoot { navigateToKnowledgeEntry(entry) }
                     vibrator.short()
                 }
-                holder.itemView.setOnLongClickListener {
+                holder.layout.setOnLongClickListener {
                     startActivity(SharingUtility.share(Formatter.shareInfo(entry))).let { true }
                     vibrator.long().let { true }
                 }
