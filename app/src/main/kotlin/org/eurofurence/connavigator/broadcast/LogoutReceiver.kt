@@ -26,6 +26,6 @@ class LogoutReceiver: BroadcastReceiver(), AnkoLogger {
     }
 
     companion object {
-        fun fire(context: Context) =  LocalBroadcastManager.getInstance(context).sendBroadcast(Intent(context, LogoutReceiver::class.java))
+        fun fire(context: Context) = context.sendBroadcast(Intent(context, LogoutReceiver::class.java))
     }
 }
