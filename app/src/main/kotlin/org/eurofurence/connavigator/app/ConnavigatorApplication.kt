@@ -52,6 +52,9 @@ class ConnavigatorApplication : MultiDexApplication() {
         // Listen to cloud updates
         PushListenerService().subscribe()
 
+        // Report token
+        InstanceIdService().reportToken()
+
         // Icons
         Iconify.with(FontAwesomeModule())
 

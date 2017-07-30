@@ -7,7 +7,6 @@ import com.google.firebase.messaging.RemoteMessage
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.ui.ActivityRoot
 import org.jetbrains.anko.*
 
 /**
@@ -18,14 +17,17 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
 
     fun subscribe() {
         val messaging = FirebaseMessaging.getInstance()
+
+        var topics = listOf(
+                "live-all",
+                "live-android"
+        )
+
         if (BuildConfig.DEBUG) {
-            messaging.unsubscribeFromTopic("live")
-            messaging.subscribeToTopic("test")
-        } else {
-            messaging.unsubscribeFromTopic("test")
-            messaging.subscribeToTopic("live")
+            topics += listOf("test-all", "test-android")
         }
-        messaging.subscribeToTopic("announcements")
+
+        topics.forEach { messaging.subscribeToTopic(it) }
 
         info { "Push token: " + FirebaseInstanceId.getInstance().token }
     }
@@ -67,7 +69,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
 
         val notification = factory.createBasicNotification()
 
-        factory.addRegularText(notification, message.data["Title"]?: "", message.data["Message"]?: "")
+        factory.addRegularText(notification, message.data["Title"] ?: "", message.data["Message"] ?: "")
         factory.setActivity(notification)
 
         factory.broadcastNotification(notification)
@@ -79,8 +81,8 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         val notification = factory.createBasicNotification()
 
 
-        factory.addRegularText(notification, message.data["Title"]?: "", message.data["Message"]?: "")
-        factory.addBigText(notification, message.data["Message"]?: "")
+        factory.addRegularText(notification, message.data["Title"] ?: "", message.data["Message"] ?: "")
+        factory.addBigText(notification, message.data["Message"] ?: "")
         factory.makeHighPriority(notification)
         factory.setActivity(notification)
 
