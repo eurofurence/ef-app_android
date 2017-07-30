@@ -21,7 +21,7 @@ import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.ui.dialogs.EventDialog
+import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
@@ -101,7 +101,7 @@ class FragmentViewEvent() : Fragment(), HasDb {
             changeFabIcon()
 
             buttonSave.setOnClickListener {
-                EventDialog(event).show(activity.supportFragmentManager, "Event Dialog").let { true }
+                eventDialog(context, event, db)
             }
 
             buttonSave.setOnLongClickListener {
