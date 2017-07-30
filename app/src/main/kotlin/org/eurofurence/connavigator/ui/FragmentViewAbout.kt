@@ -1,15 +1,12 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.startActivity
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import org.eurofurence.connavigator.BuildConfig
@@ -21,6 +18,7 @@ import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.browse
 import us.feras.mdv.MarkdownView
 
 /**
@@ -42,11 +40,24 @@ class FragmentViewAbout : Fragment(), ContentAPI {
         Analytics.screen(activity, "View About")
 
         applyOnRoot { changeTitle("About") }
+
+        ui.requinardLayout.setOnClickListener { browse("https://furry.requinard.nl") }
+        ui.pazuzuLayout.setOnClickListener { browse("https://twitter.com/Pazuzupizza") }
+
+        ui.helpButton.setOnClickListener { browse("https://t.me/joinchat/AHbDIgZX0NYGill2_ikXXA") }
+        ui.bugButton.setOnClickListener { browse("https://github.com/eurofurence/ef-app_android/issues") }
     }
 }
 
 class AboutUi : AnkoComponent<ViewGroup> {
     val avatarSize = 128
+
+    lateinit var requinardLayout: LinearLayout
+    lateinit var pazuzuLayout: LinearLayout
+
+    lateinit var helpButton: Button
+    lateinit var bugButton: Button
+
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         scrollView {
             lparams(matchParent, matchParent)
@@ -56,14 +67,8 @@ class AboutUi : AnkoComponent<ViewGroup> {
                     setTextAppearance(ctx, android.R.style.TextAppearance_Large_Inverse)
                 }
 
-                linearLayout {
+                requinardLayout = linearLayout {
                     backgroundResource = R.color.cardview_light_background
-                    setOnTouchListener { _, _ ->
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.setData(Uri.parse("https://furry.requinard.nl"))
-                        //ContextCompat.startActivity(ctx, intent, null)
-                        true
-                    }
 
                     imageView {
                         imageService.imageLoader.displayImage("https://en.gravatar.com/avatar/42d336e4b6f13d687c32eaaf9c8fb0ea?s=$avatarSize", this)
@@ -76,7 +81,7 @@ class AboutUi : AnkoComponent<ViewGroup> {
                     }.lparams(matchParent, dip(avatarSize))
                 }
 
-                linearLayout {
+                pazuzuLayout = linearLayout {
                     backgroundResource = R.color.cardview_light_background
                     //setOnTouchListener { _, _ -> browse("https://twitter.com/Pazuzupizza") }
 
@@ -109,6 +114,10 @@ class AboutUi : AnkoComponent<ViewGroup> {
                         - FontAwesome
                     """)
                 }
+
+
+                helpButton = button("Get help in the support telegram") { lparams(matchParent, wrapContent) }
+                bugButton = button("Report bugs on github") { lparams(matchParent, wrapContent) }
             }
         }
     }
