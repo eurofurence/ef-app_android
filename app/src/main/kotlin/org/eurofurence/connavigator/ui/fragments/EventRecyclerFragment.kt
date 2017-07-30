@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat.getColor
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -25,14 +24,13 @@ import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.ui.dialogs.EventDialog
+import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.*
-import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.Minutes
@@ -195,7 +193,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 applyOnRoot { navigateToEvent(event) }
             }
             holder.itemView.setOnLongClickListener {
-                EventDialog(event).show(activity.supportFragmentManager, "Kek")
+                eventDialog(context, event, db)
                 true
             }
         }
