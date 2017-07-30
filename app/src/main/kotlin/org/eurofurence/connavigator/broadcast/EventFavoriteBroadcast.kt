@@ -13,12 +13,14 @@ import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.gcm.NotificationPublisher
 import org.eurofurence.connavigator.pref.AppPreferences
+import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.alarmManager
 import org.jetbrains.anko.info
 import org.jetbrains.anko.longToast
+import org.joda.time.DateTime
 import org.joda.time.DurationFieldType
 
 /**
@@ -32,7 +34,12 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
 
         info("Changing status of event ${event.title}")
 
-        val notificationTime = db.eventStart(event).withFieldAdded(DurationFieldType.minutes(), -(AppPreferences.notificationMinutesBefore))
+        val notificationTime: DateTime = if(DebugPreferences.scheduleNotificationsForTest) {
+            context.longToast("Notification should show up in 30 seconds")
+            DateTime.now().withFieldAdded(DurationFieldType.seconds(), 30)
+        } else {
+            db.eventStart(event).withFieldAdded(DurationFieldType.minutes(), -(AppPreferences.notificationMinutesBefore))
+        }
 
         info("Notification time is $notificationTime")
 
