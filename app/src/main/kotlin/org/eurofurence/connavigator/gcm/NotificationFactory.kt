@@ -39,7 +39,7 @@ class NotificationFactory(var context: Context) {
                 .setLights(Color.argb(255, 0, 100, 89), 1000, 1000)
                 .setVibrate(longArrayOf(250, 100, 250, 100))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setPriority(Notification.PRIORITY_HIGH)
+                .setPriority(Notification.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
 
         return builder.build()
