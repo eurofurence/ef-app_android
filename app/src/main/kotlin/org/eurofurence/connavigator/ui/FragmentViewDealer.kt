@@ -116,6 +116,8 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             warn { "No map or entry found!" }
             ui.map.visibility = View.GONE
         }
+
+        ui.map.visibility = View.GONE
     }
 
     private fun configureLinks(dealer: DealerRecord) {
