@@ -20,6 +20,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import com.pawegio.kandroid.d
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventRecord
 import io.swagger.client.model.KnowledgeEntryRecord
@@ -43,7 +44,7 @@ import org.joda.time.DateTime
 import org.joda.time.Days
 import java.util.*
 
-class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPreferenceChangeListener, HasDb {
+class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPreferenceChangeListener, HasDb, AnkoLogger {
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         logd { "Updating content data after preference change" }
 
@@ -204,17 +205,18 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     override fun onBackPressed() {
+        info { "Items on the backstack${fragmentManager.backStackEntryCount}" }
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
+        } else if (supportFragmentManager.backStackEntryCount > 0){
+            super.onBackPressed()
+        } else if (onHome == false) {
+            navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
         } else {
-            if(onHome) {
-                alert("Are you sure you want to close the app? You'll still receive messages", "Close the app") {
-                    yesButton { super.onBackPressed() }
-                    noButton { /* pass */ }
-                }.show()
-            } else {
-                navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
-            }
+            alert("Are you sure you want to close the app? You'll still receive messages", "Close the app") {
+                yesButton { super.onBackPressed() }
+                noButton { /* pass */ }
+            }.show()
         }
     }
 
@@ -224,7 +226,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         this.menu = menu
         return true
     }
-
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
