@@ -33,19 +33,19 @@ class InstanceIdService : FirebaseInstanceIdService(), AnkoLogger {
         setHeaders()
 
         task {
-            var topics = listOf(
+            var sendTopics= listOf(
                     "live",
                     "android",
                     "version-${BuildConfig.VERSION_NAME}"
             )
 
-            if(BuildConfig.DEBUG) topics += "test"
+            if(BuildConfig.DEBUG) sendTopics += "test"
 
             info { "Making network request" }
             apiService.pushNotifications.apiV2PushNotificationsFcmDeviceRegistrationPost(
                     PostFcmDeviceRegistrationRequest().apply {
                         deviceId = token
-                        topics = topics
+                        topics = sendTopics
                     }
             )
         } success {
@@ -53,7 +53,7 @@ class InstanceIdService : FirebaseInstanceIdService(), AnkoLogger {
             AuthPreferences.lastReportedFirebaseToken = token
         } fail {
             warn { "Token registration failed!" }
-            warn { it.message }
+            warn { it.toString() }
             Analytics.exception(it)
         }
     }

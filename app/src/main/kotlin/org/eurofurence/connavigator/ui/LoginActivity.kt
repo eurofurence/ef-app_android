@@ -60,7 +60,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
         ui.logout.setOnClickListener {
             info { "Logging user out" }
             longToast("Logging you out, goodbye!")
-            LogoutReceiver.fire(this)
+            sendBroadcast(intentFor<LogoutReceiver>())
             finish()
         }
 
