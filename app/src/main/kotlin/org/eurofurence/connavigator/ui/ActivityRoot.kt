@@ -295,7 +295,19 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navAbout -> navigateRoot(FragmentViewAbout::class.java)
                 R.id.navLogin -> startActivity<LoginActivity>()
                 R.id.navMessages -> navigateIfLoggedIn(FragmentViewMessages::class.java)
-                    R.id.navFursuitGames -> navigateIfLoggedIn(FragmentViewFursuits::class.java, ActionBarMode.TABS)
+                R.id.navFursuitGames -> {
+                    if(RemotePreferences.nativeFursuitGames) {
+                        navigateIfLoggedIn(FragmentViewFursuits::class.java, ActionBarMode.TABS)
+                    } else {
+                        val url = if(AuthPreferences.isLoggedIn()){
+                            "https://app.eurofurence.org/collectemall/#token-${AuthPreferences.token}"
+                        } else {
+                            "https://app.eurofurence.org/collectemall/#main"
+                        }
+
+                        browse(url)
+                    }
+                }
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
                 R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this)
