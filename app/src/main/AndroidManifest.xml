@@ -71,13 +71,12 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+
         <!-- Pending intents -->
         <receiver android:name=".gcm.NotificationPublisher"/>
-
         <receiver android:name=".broadcast.EventFavoriteBroadcast" />
-
         <receiver android:name=".broadcast.LoginReceiver" />
-
         <receiver android:name=".broadcast.LogoutReceiver"/>
+        <receiver android:name=".broadcast.ResetReceiver" />
     </application>
 </manifest>

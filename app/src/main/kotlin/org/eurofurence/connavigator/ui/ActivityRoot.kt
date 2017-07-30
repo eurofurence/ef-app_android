@@ -14,22 +14,23 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.ContextThemeWrapper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import io.swagger.client.model.*
+import io.swagger.client.model.DealerRecord
+import io.swagger.client.model.EventRecord
+import io.swagger.client.model.KnowledgeEntryRecord
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.*
-import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.pref.AppPreferences
+import org.eurofurence.connavigator.broadcast.ResetReceiver
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.database.updateComplete
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -279,7 +280,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navAbout -> navigateRoot(FragmentViewAbout::class.java)
                 R.id.navLogin -> startActivity<LoginActivity>()
                 R.id.navMessages -> {
-                    if(AuthPreferences.isLoggedIn())
+                    if (AuthPreferences.isLoggedIn())
                         navigateRoot(FragmentViewMessages::class.java)
                     else
                         longToast("You need to login before you can see private messages!")
@@ -290,13 +291,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
                     alert("Empty app cache. You WILL need an internet connection to restart", "Clear database") {
-                        yesButton {
-                            db.clear()
-                            imageService.clear()
-                            AuthPreferences.clear()
-                            AppPreferences.clear()
-                            DebugPreferences.clear()
-                        }
+                        yesButton { ResetReceiver.fire(this@ActivityRoot) }
                         noButton { longToast("Not clearing DB") }
                     }.show()
                 }

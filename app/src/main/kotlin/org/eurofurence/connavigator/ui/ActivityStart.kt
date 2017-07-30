@@ -9,6 +9,7 @@ import com.chibatching.kotpref.bulk
 import com.google.firebase.perf.metrics.AddTrace
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.broadcast.ResetReceiver
 import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.UpdateIntentService
@@ -43,7 +44,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             allowProceed()
         } else {
             ui.nextButton.text = "It seems like something went wrong during caching. We'll clear the database and let you try again"
-            db.clear()
+            ResetReceiver.fire(this)
         }
 
     }
