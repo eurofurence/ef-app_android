@@ -127,13 +127,17 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.linkLayout.visibility = View.VISIBLE
         }
 
-        if (dealer.links != null) {
+        if (dealer.links != null && !dealer.links.isEmpty()) {
+            ui.websites.visibility = View.VISIBLE
             dealer.links.forEach {
-                ui.websites.addView(Button(context.applicationContext).apply {
-                    info { "Adding button for ${it.name}" }
-                    text = it.name
+                val button = Button(context).apply {
+                    info { "Adding button for $it" }
+                    text = it.target
+                    visibility = View.VISIBLE
                     setOnTouchListener { _, _ -> browse(it.target) }
-                })
+                }
+
+                ui.websites.addView(button)
             }
         }
 
