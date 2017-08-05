@@ -45,7 +45,7 @@
             <item
                 android:id="@+id/navFursuitGames"
                 android:icon="@drawable/icon_paw"
-                android:title="Fursuit Games" />
+                android:title="Collect'Em All" />
         </menu>
     </item>
     <item android:title="External">
