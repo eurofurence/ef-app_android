@@ -57,7 +57,7 @@ class FragmentViewInfo() : Fragment(), HasDb {
 
             // Set the properties of the view
             ui.title.text = knowledgeEntry.title
-            ui.text.loadMarkdown(knowledgeEntry.text)
+            ui.text.loadMarkdown(knowledgeEntry.text.replace("\\\\", "\n"))
 
             if (knowledgeEntry.imageIds.isNotEmpty()) {
                 imageService.load(db.images[knowledgeEntry.imageIds.first()], ui.image, showHide = false)
