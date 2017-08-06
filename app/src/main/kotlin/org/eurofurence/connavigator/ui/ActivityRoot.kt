@@ -20,7 +20,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import com.pawegio.kandroid.d
+import com.joanzapata.iconify.IconDrawable
+import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventRecord
 import io.swagger.client.model.KnowledgeEntryRecord
@@ -124,7 +125,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         setupBar()
         setupBarNavLink()
         setupNav()
-        setupFab()
 
         // Show the home screen
         setupContent()
@@ -208,7 +208,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         info { "Items on the backstack${fragmentManager.backStackEntryCount}" }
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
-        } else if (supportFragmentManager.backStackEntryCount > 0){
+        } else if (supportFragmentManager.backStackEntryCount > 0) {
             super.onBackPressed()
         } else if (onHome == false) {
             navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
@@ -223,6 +223,17 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu options
         menuInflater.inflate(R.menu.action_bar, menu)
+
+        // Set up icons
+        menu.apply {
+            fun icon(icon: FontAwesomeIcons) = IconDrawable(this@ActivityRoot, icon)
+                    .colorRes(R.color.textWhite)
+                    .actionBarSize()
+
+            findItem(R.id.action_filter).icon = icon(FontAwesomeIcons.fa_filter)
+            findItem(R.id.action_search).icon = icon(FontAwesomeIcons.fa_search)
+            findItem(R.id.action_settings).icon = icon(FontAwesomeIcons.fa_cogs)
+        }
         this.menu = menu
         return true
     }
@@ -235,6 +246,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             R.id.action_bug_report -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://goo.gl/forms/9qI2iFBwAa"))).let { true }
             R.id.action_feedback_report -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://goo.gl/forms/66Q61KsU0G"))).let { true }
             R.id.action_search -> applyOnContent { onSearchButtonClick() }.let { true }
+            R.id.action_filter -> applyOnContent { onFilterButtonClick() }.let { true }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -267,7 +279,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     private fun setActionBarMode(mode: ActionBarMode) {
-        if (listOf(ActionBarMode.TABS, ActionBarMode.SEARCHTABS).contains(mode)) {
+        if (listOf(ActionBarMode.TABS, ActionBarMode.SEARCHTABS, ActionBarMode.SEARCHTABSFILTER).contains(mode)) {
             tabs.visibility = View.VISIBLE
         } else {
             tabs.visibility = View.GONE
@@ -276,10 +288,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         onHome = mode == ActionBarMode.HOME
 
         // Show the search button
-        menu?.findItem(R.id.action_search)?.isVisible = listOf(ActionBarMode.SEARCH, ActionBarMode.SEARCHTABS, ActionBarMode.SEARCHMAP).contains(mode)
+        menu?.findItem(R.id.action_search)?.isVisible = listOf(ActionBarMode.SEARCH, ActionBarMode.SEARCHTABS, ActionBarMode.SEARCHMAP, ActionBarMode.SEARCHTABSFILTER).contains(mode)
 
         // Show map button
         menu?.findItem(R.id.action_map)?.isVisible = (mode == ActionBarMode.MAP || mode == ActionBarMode.SEARCHMAP)
+
+        menu?.findItem(R.id.action_filter)?.isVisible = mode == ActionBarMode.SEARCHTABSFILTER
     }
 
     private fun setupNav() {
@@ -288,7 +302,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             //Handle the ID
             when (it.itemId) {
                 R.id.navHome -> navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
-                R.id.navEvents -> navigateRoot(FragmentViewEvents::class.java, ActionBarMode.SEARCHTABS)
+                R.id.navEvents -> navigateRoot(FragmentViewEvents::class.java, ActionBarMode.SEARCHTABSFILTER)
                 R.id.navInfo -> navigateRoot(FragmentViewInfoGroups::class.java)
                 R.id.navMaps -> navigateRoot(FragmentViewMaps::class.java, ActionBarMode.TABS)
                 R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCH)
@@ -296,10 +310,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navLogin -> startActivity<LoginActivity>()
                 R.id.navMessages -> navigateIfLoggedIn(FragmentViewMessages::class.java)
                 R.id.navFursuitGames -> {
-                    if(RemotePreferences.nativeFursuitGames) {
+                    if (RemotePreferences.nativeFursuitGames) {
                         navigateIfLoggedIn(FragmentViewFursuits::class.java, ActionBarMode.TABS)
                     } else {
-                        val url = if(AuthPreferences.isLoggedIn()){
+                        val url = if (AuthPreferences.isLoggedIn()) {
                             "https://app.eurofurence.org/collectemall/#token-${AuthPreferences.token}"
                         } else {
                             "https://app.eurofurence.org/collectemall/#main"
@@ -343,8 +357,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             navDays.text = "Only $days days left!"
     }
 
-    private fun <T: Fragment> navigateIfLoggedIn(fragment: Class<T>, mode:ActionBarMode = ActionBarMode.NONE): Boolean {
-        if(AuthPreferences.isLoggedIn()){
+    private fun <T : Fragment> navigateIfLoggedIn(fragment: Class<T>, mode: ActionBarMode = ActionBarMode.NONE): Boolean {
+        if (AuthPreferences.isLoggedIn()) {
             navigateRoot(fragment, mode)
             return true
         } else {
@@ -376,19 +390,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     .commit()
 
     override val db by lazyLocateDb()
-
-    private fun setupFab() {
-        fab.setOnClickListener { view ->
-            // Notify the update to the user
-            Snackbar.make(findViewById(R.id.content)!!, "Updating the database", Snackbar.LENGTH_LONG).show()
-
-            // Start the update service
-            UpdateIntentService.dispatchUpdate(this@ActivityRoot)
-        }
-
-        //if (!BuildConfig.DEBUG)
-        fab.visibility = View.INVISIBLE
-    }
 
     private fun handleSettings() {
         logv { "Starting settings activity" }

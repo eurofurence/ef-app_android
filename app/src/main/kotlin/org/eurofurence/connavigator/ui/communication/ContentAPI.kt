@@ -7,14 +7,15 @@ interface ContentAPI {
     /**
      * Called when the data has been updated.
      */
-    fun dataUpdated() {
-        // No operation
-    }
+    fun dataUpdated(){}
 
     /**
      * Called when the search button is clicked in the toolbar
      */
-    fun onSearchButtonClick(){
+    fun onSearchButtonClick(){}
 
-    }
+    /**
+     * Called when the filter button is clicked
+     */
+    fun onFilterButtonClick(){}
 }

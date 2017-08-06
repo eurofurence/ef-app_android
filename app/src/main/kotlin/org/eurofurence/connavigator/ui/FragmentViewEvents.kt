@@ -1,9 +1,9 @@
 package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +11,20 @@ import android.view.ViewGroup
 import android.widget.EditText
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.pref.AppPreferences
-import org.eurofurence.connavigator.database.*
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.eventDayNumber
+import org.eurofurence.connavigator.database.filterEvents
+import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.pref.BackgroundPreferences
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
+import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter
+import org.eurofurence.connavigator.ui.adapter.TrackEventPagerAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
+import org.jetbrains.anko.support.v4.selector
 
 /**
  * Created by David on 5/3/2016.
@@ -27,32 +32,12 @@ import org.joda.time.format.DateTimeFormat
 class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
     override val db by lazyLocateDb()
 
-    inner class EventFragmentPagerAdapter(val fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
-        override fun getPageTitle(position: Int): CharSequence? {
-            if (AppPreferences.shortenDates) {
-                return DateTime(days.asc { it.date }[position].date).dayOfWeek().asShortText
-            } else {
-                return DateTime(days.asc { it.date }[position].date).toString(DateTimeFormat.forPattern("MMM d"))
-            }
-        }
-
-        override fun getItem(position: Int): Fragment? {
-            return EventRecyclerFragment(filterEvents()
-                    .onDay(days.asc { it.date }[position].id)
-                    .sortByStartTime())
-        }
-
-        override fun getCount(): Int {
-            return days.size
-        }
-    }
-
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()
-
     val searchEventFilter by lazy { filterEvents() }
-
     val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
+
+    var currentMode: EventPagerMode = EventPagerMode.DAYS
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -74,16 +59,27 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
             }
         }
 
-        applyOnRoot { tabs.setupWithViewPager(eventPager) }
+        applyOnRoot {
+            tabs.setupWithViewPager(eventPager)
+            tabs.tabMode = TabLayout.MODE_SCROLLABLE
+        }
         applyOnRoot { changeTitle("Event Schedule") }
     }
 
     private fun configureViewpager() {
-        eventPager.adapter = EventFragmentPagerAdapter(childFragmentManager)
-        eventPager.offscreenPageLimit = 1
-
-        eventPager.currentItem = db.eventDayNumber()
+        changePagerAdapter(BackgroundPreferences.eventPagerMode)
     }
+
+    private fun changePagerAdapter(adapter: PagerAdapter) {
+        eventPager.adapter = adapter
+        eventPager.adapter.notifyDataSetChanged()
+    }
+
+    private fun changePagerAdapter(mode: EventPagerMode) = when (mode) {
+        EventPagerMode.ROOMS -> changePagerAdapter(RoomEventPagerAdapter(db, childFragmentManager))
+        EventPagerMode.TRACKS -> changePagerAdapter(TrackEventPagerAdapter(db, childFragmentManager))
+        else -> changePagerAdapter(DayEventPagerAdapter(db, childFragmentManager))
+    }.apply { BackgroundPreferences.eventPagerMode = mode }
 
     override fun dataUpdated() {
         eventPager.adapter.notifyDataSetChanged()
@@ -106,4 +102,19 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
             }
         }
     }
+
+    override fun onFilterButtonClick() = selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks"), {
+        _, position ->
+        when (position) {
+            1 -> changePagerAdapter(EventPagerMode.ROOMS)
+            2 -> changePagerAdapter(EventPagerMode.TRACKS)
+            else -> changePagerAdapter(EventPagerMode.DAYS)
+        }
+    })
+}
+
+enum class EventPagerMode {
+    DAYS,
+    ROOMS,
+    TRACKS
 }

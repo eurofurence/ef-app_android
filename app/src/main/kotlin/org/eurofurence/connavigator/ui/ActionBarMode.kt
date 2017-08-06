@@ -10,5 +10,6 @@ enum class ActionBarMode {
     MAP,
     SEARCHMAP,
     SEARCHTABS,
+    SEARCHTABSFILTER,
     HOME,
 }
