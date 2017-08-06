@@ -48,6 +48,7 @@ fun HasDb.glyphFor(event: EventRecord): List<String> {
         "Dealer" in name -> listOf("{fa-shopping-cart}")
         "Main Stage" in name -> listOf("{fa-asterisk}")
         "Photoshoot" in name -> listOf("{fa-camera}")
+        "Supersponsor Event" in name -> listOf("{fa-diamond}")
         else -> emptyList()
     }
 }
