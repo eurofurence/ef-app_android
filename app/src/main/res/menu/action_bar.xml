@@ -13,11 +13,6 @@
               android:title="Feedback"
               android:orderInCategory="300"/>
     </group>
-    <item android:id="@+id/action_search"
-          android:title="Search"
-          app:showAsAction="ifRoom"
-          android:visible="false"
-          android:icon="@drawable/icon_search_white"/>
     <item android:id="@+id/action_map"
           android:title="Map"
           android:visible="false"
@@ -28,4 +23,9 @@
           app:showAsAction="ifRoom"
           android:icon="@drawable/icon_filter"
           android:visible="false"/>
+    <item android:id="@+id/action_search"
+          android:title="Search"
+          app:showAsAction="ifRoom"
+          android:visible="false"
+          android:icon="@drawable/icon_search_white"/>
 </menu>

@@ -37,8 +37,6 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
     val searchEventFilter by lazy { filterEvents() }
     val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
 
-    var currentMode: EventPagerMode = EventPagerMode.DAYS
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_events_viewpager, container, false)
