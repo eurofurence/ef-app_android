@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.gson.Gson
@@ -72,19 +71,24 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 info { "Found ${entries.size} entries" }
 
                 if (entries.isNotEmpty()) {
-                    val links = entries.first().links
+                    val links = entries.first()
+                            .links
+                            .filter { it.name !== null }
+                            .filter { it.fragmentType !== LinkFragment.FragmentTypeEnum.MapEntry }
 
-                    info { "Showing location selector" }
-                    selector("Find out more", links.map { it.name }, { _, position ->
-                        val link = links[position]
+                    if(!links.isEmpty()) {
+                        info { "Showing location selector" }
+                        selector("Find out more", links.map { it.name }, { _, position ->
+                            val link = links[position]
 
-                        when (link.fragmentType) {
-                            LinkFragment.FragmentTypeEnum.DealerDetail -> launchDealer(link)
-                            LinkFragment.FragmentTypeEnum.MapExternal -> launchMap(link)
-                            LinkFragment.FragmentTypeEnum.WebExternal -> browse(link.target)
-                            else -> warn { "No items selected" }
-                        }
-                    })
+                            when (link.fragmentType) {
+                                LinkFragment.FragmentTypeEnum.DealerDetail -> launchDealer(link)
+                                LinkFragment.FragmentTypeEnum.MapExternal -> launchMap(link)
+                                LinkFragment.FragmentTypeEnum.WebExternal -> browse(link.target)
+                                else -> warn { "No items selected" }
+                            }
+                        })
+                    }
                 }
             }
         } else {

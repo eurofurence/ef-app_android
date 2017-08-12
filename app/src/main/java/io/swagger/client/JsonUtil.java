@@ -175,6 +175,10 @@ public class JsonUtil {
       return new TypeToken<List<MapRecord>>(){}.getType();
     }
     
+    if ("PlayerCollectionEntry".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PlayerCollectionEntry>>(){}.getType();
+    }
+    
     if ("PlayerParticipationInfo".equalsIgnoreCase(className)) {
       return new TypeToken<List<PlayerParticipationInfo>>(){}.getType();
     }
@@ -351,6 +355,10 @@ public class JsonUtil {
     
     if ("MapRecord".equalsIgnoreCase(className)) {
       return new TypeToken<MapRecord>(){}.getType();
+    }
+    
+    if ("PlayerCollectionEntry".equalsIgnoreCase(className)) {
+      return new TypeToken<PlayerCollectionEntry>(){}.getType();
     }
     
     if ("PlayerParticipationInfo".equalsIgnoreCase(className)) {

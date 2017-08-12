@@ -5,6 +5,7 @@ All URIs are relative to *https://localhost/*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**apiV2FursuitsBadgesByIdImageGet**](FursuitsApi.md#apiV2FursuitsBadgesByIdImageGet) | **GET** /Api/v2/Fursuits/Badges/{Id}/Image | Retrieve the badge image content for a given fursuit badge id
+[**apiV2FursuitsBadgesGet**](FursuitsApi.md#apiV2FursuitsBadgesGet) | **GET** /Api/v2/Fursuits/Badges | Return all Fursuit Badge Registrations
 [**apiV2FursuitsBadgesRegistrationPost**](FursuitsApi.md#apiV2FursuitsBadgesRegistrationPost) | **POST** /Api/v2/Fursuits/Badges/Registration | Upsert Fursuit Badge information
 [**apiV2FursuitsCollectingGameFursuitParticipationGet**](FursuitsApi.md#apiV2FursuitsCollectingGameFursuitParticipationGet) | **GET** /Api/v2/Fursuits/CollectingGame/FursuitParticipation | 
 [**apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet**](FursuitsApi.md#apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet) | **GET** /Api/v2/Fursuits/CollectingGame/FursuitParticipation/Scoreboard | 
@@ -12,8 +13,11 @@ Method | HTTP request | Description
 [**apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost**](FursuitsApi.md#apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost) | **POST** /Api/v2/Fursuits/CollectingGame/FursuitParticpation/Badges/{FursuitBadgeId}/Token:safe | 
 [**apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost**](FursuitsApi.md#apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost) | **POST** /Api/v2/Fursuits/CollectingGame/PlayerParticipation/CollectToken | 
 [**apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost**](FursuitsApi.md#apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost) | **POST** /Api/v2/Fursuits/CollectingGame/PlayerParticipation/CollectToken:safe | 
+[**apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet**](FursuitsApi.md#apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet) | **GET** /Api/v2/Fursuits/CollectingGame/PlayerParticipation/CollectionEntries | 
 [**apiV2FursuitsCollectingGamePlayerParticipationGet**](FursuitsApi.md#apiV2FursuitsCollectingGamePlayerParticipationGet) | **GET** /Api/v2/Fursuits/CollectingGame/PlayerParticipation | 
 [**apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet**](FursuitsApi.md#apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet) | **GET** /Api/v2/Fursuits/CollectingGame/PlayerParticipation/Scoreboard | 
+[**apiV2FursuitsCollectingGameTokensBatchPost**](FursuitsApi.md#apiV2FursuitsCollectingGameTokensBatchPost) | **POST** /Api/v2/Fursuits/CollectingGame/Tokens/Batch | 
+[**apiV2FursuitsCollectingGameTokensPost**](FursuitsApi.md#apiV2FursuitsCollectingGameTokensPost) | **POST** /Api/v2/Fursuits/CollectingGame/Tokens | 
 
 
 <a name="apiV2FursuitsBadgesByIdImageGet"></a>
@@ -51,6 +55,45 @@ Name | Type | Description  | Notes
 ### Authorization
 
 No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+<a name="apiV2FursuitsBadgesGet"></a>
+# **apiV2FursuitsBadgesGet**
+> List&lt;FursuitBadgeRecord&gt; apiV2FursuitsBadgesGet()
+
+Return all Fursuit Badge Registrations
+
+  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;FursuitBadgeSystem&#x60;**, **&#x60;System&#x60;**  **Not meant to be consumed by the mobile apps**
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.FursuitsApi;
+
+FursuitsApi apiInstance = new FursuitsApi();
+try {
+    List<FursuitBadgeRecord> result = apiInstance.apiV2FursuitsBadgesGet();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsBadgesGet");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;FursuitBadgeRecord&gt;**](FursuitBadgeRecord.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
 
 ### HTTP request headers
 
@@ -140,7 +183,7 @@ This endpoint does not need any parameter.
 
 <a name="apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet"></a>
 # **apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet**
-> List&lt;FursuitScoreboardEntry&gt; apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet()
+> List&lt;FursuitScoreboardEntry&gt; apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet(top)
 
 
 
@@ -150,8 +193,9 @@ This endpoint does not need any parameter.
 //import io.swagger.client.api.FursuitsApi;
 
 FursuitsApi apiInstance = new FursuitsApi();
+Integer top = 56; // Integer | 
 try {
-    List<FursuitScoreboardEntry> result = apiInstance.apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet();
+    List<FursuitScoreboardEntry> result = apiInstance.apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet(top);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet");
@@ -160,7 +204,10 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **top** | **Integer**|  | [optional]
 
 ### Return type
 
@@ -350,6 +397,45 @@ Name | Type | Description  | Notes
  - **Content-Type**: application/json, text/json, application/json-patch+json
  - **Accept**: text/plain, application/json, text/json
 
+<a name="apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet"></a>
+# **apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet**
+> List&lt;PlayerCollectionEntry&gt; apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet()
+
+
+
+  * Requires authorization     * Requires any of the following roles: **&#x60;Attendee&#x60;**
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.FursuitsApi;
+
+FursuitsApi apiInstance = new FursuitsApi();
+try {
+    List<PlayerCollectionEntry> result = apiInstance.apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;PlayerCollectionEntry&gt;**](PlayerCollectionEntry.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
 <a name="apiV2FursuitsCollectingGamePlayerParticipationGet"></a>
 # **apiV2FursuitsCollectingGamePlayerParticipationGet**
 > PlayerParticipationInfo apiV2FursuitsCollectingGamePlayerParticipationGet()
@@ -391,7 +477,7 @@ This endpoint does not need any parameter.
 
 <a name="apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet"></a>
 # **apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet**
-> List&lt;PlayerScoreboardEntry&gt; apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet()
+> List&lt;PlayerScoreboardEntry&gt; apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet(top)
 
 
 
@@ -401,8 +487,9 @@ This endpoint does not need any parameter.
 //import io.swagger.client.api.FursuitsApi;
 
 FursuitsApi apiInstance = new FursuitsApi();
+Integer top = 56; // Integer | 
 try {
-    List<PlayerScoreboardEntry> result = apiInstance.apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet();
+    List<PlayerScoreboardEntry> result = apiInstance.apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet(top);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet");
@@ -411,7 +498,10 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **top** | **Integer**|  | [optional]
 
 ### Return type
 
@@ -424,5 +514,89 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+<a name="apiV2FursuitsCollectingGameTokensBatchPost"></a>
+# **apiV2FursuitsCollectingGameTokensBatchPost**
+> apiV2FursuitsCollectingGameTokensBatchPost(tokenValues)
+
+
+
+  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.FursuitsApi;
+
+FursuitsApi apiInstance = new FursuitsApi();
+List<String> tokenValues = Arrays.asList(new List<String>()); // List<String> | 
+try {
+    apiInstance.apiV2FursuitsCollectingGameTokensBatchPost(tokenValues);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGameTokensBatchPost");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **tokenValues** | **List&lt;String&gt;**|  | [optional]
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, text/json, application/json-patch+json
+ - **Accept**: text/plain, application/json, text/json
+
+<a name="apiV2FursuitsCollectingGameTokensPost"></a>
+# **apiV2FursuitsCollectingGameTokensPost**
+> apiV2FursuitsCollectingGameTokensPost(tokenValue)
+
+
+
+  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.FursuitsApi;
+
+FursuitsApi apiInstance = new FursuitsApi();
+String tokenValue = "tokenValue_example"; // String | 
+try {
+    apiInstance.apiV2FursuitsCollectingGameTokensPost(tokenValue);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGameTokensPost");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **tokenValue** | **String**|  | [optional]
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, text/json, application/json-patch+json
  - **Accept**: text/plain, application/json, text/json
 

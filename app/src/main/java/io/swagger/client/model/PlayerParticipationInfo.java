@@ -12,6 +12,8 @@ public class PlayerParticipationInfo  {
   
   @SerializedName("Name")
   private String name = null;
+  @SerializedName("IsBanned")
+  private Boolean isBanned = null;
   @SerializedName("CollectionCount")
   private Integer collectionCount = null;
   @SerializedName("ScoreboardRank")
@@ -27,6 +29,16 @@ public class PlayerParticipationInfo  {
   }
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public Boolean getIsBanned() {
+    return isBanned;
+  }
+  public void setIsBanned(Boolean isBanned) {
+    this.isBanned = isBanned;
   }
 
   /**
@@ -70,6 +82,7 @@ public class PlayerParticipationInfo  {
     }
     PlayerParticipationInfo playerParticipationInfo = (PlayerParticipationInfo) o;
     return (name == null ? playerParticipationInfo.name == null : name.equals(playerParticipationInfo.name)) &&
+        (isBanned == null ? playerParticipationInfo.isBanned == null : isBanned.equals(playerParticipationInfo.isBanned)) &&
         (collectionCount == null ? playerParticipationInfo.collectionCount == null : collectionCount.equals(playerParticipationInfo.collectionCount)) &&
         (scoreboardRank == null ? playerParticipationInfo.scoreboardRank == null : scoreboardRank.equals(playerParticipationInfo.scoreboardRank)) &&
         (recentlyCollected == null ? playerParticipationInfo.recentlyCollected == null : recentlyCollected.equals(playerParticipationInfo.recentlyCollected));
@@ -79,6 +92,7 @@ public class PlayerParticipationInfo  {
   public int hashCode() {
     int result = 17;
     result = 31 * result + (name == null ? 0: name.hashCode());
+    result = 31 * result + (isBanned == null ? 0: isBanned.hashCode());
     result = 31 * result + (collectionCount == null ? 0: collectionCount.hashCode());
     result = 31 * result + (scoreboardRank == null ? 0: scoreboardRank.hashCode());
     result = 31 * result + (recentlyCollected == null ? 0: recentlyCollected.hashCode());
@@ -91,6 +105,7 @@ public class PlayerParticipationInfo  {
     sb.append("class PlayerParticipationInfo {\n");
     
     sb.append("  name: ").append(name).append("\n");
+    sb.append("  isBanned: ").append(isBanned).append("\n");
     sb.append("  collectionCount: ").append(collectionCount).append("\n");
     sb.append("  scoreboardRank: ").append(scoreboardRank).append("\n");
     sb.append("  recentlyCollected: ").append(recentlyCollected).append("\n");
