@@ -103,18 +103,22 @@ class AboutUi : AnkoComponent<ViewGroup> {
                     lparams(matchParent, wrapContent)
 
                     loadMarkdown("""## Also thanks to
-                        **iOS:**
+**iOS:**
+
 - Fenrikur
 - Shez
 
 **Windows Mobile:**
+
 - Luchs
 
 **Program Management:**
+
 - Luchs
 - Zefiro
 
 **Special Thanks:**
+
 - Akulatraxas
 - Aragon Tigerseye
 - Atkelar
@@ -128,7 +132,9 @@ class AboutUi : AnkoComponent<ViewGroup> {
 - Xil
 
 **Made with**
+
 - Icons8
+- FontAwesome
 - Kotlin
 - Anko
                     """)
