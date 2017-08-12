@@ -57,7 +57,7 @@ class FragmentViewInfo() : Fragment(), HasDb {
 
             // Set the properties of the view
             ui.title.text = knowledgeEntry.title
-            ui.text.loadMarkdown(knowledgeEntry.text.replace("\\\\", "\n"))
+            ui.text.loadMarkdown(Formatter.wikiToMarkdown(knowledgeEntry.text).toString())
 
             if (knowledgeEntry.imageIds.isNotEmpty()) {
                 imageService.load(db.images[knowledgeEntry.imageIds.first()], ui.image, showHide = false)
@@ -102,6 +102,8 @@ class InfoUi : AnkoComponent<ViewGroup> {
 
                 text = markdownView {
                     lparams(matchParent, wrapContent)
+                }.lparams{
+                    margin = dip(10)
                 }
             }
         }
