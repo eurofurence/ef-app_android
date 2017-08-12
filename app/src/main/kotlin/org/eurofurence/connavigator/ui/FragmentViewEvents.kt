@@ -34,7 +34,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
 
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()
-    val searchEventFilter by lazy { filterEvents() }
+    val searchEventFilter by lazy { filterEvents().sortByName()}
     val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
 
 
@@ -53,6 +53,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         eventSearchBar.textWatcher {
             afterTextChanged { text ->
                 searchEventFilter.byTitle(text.toString())
+                        .sortByName()
                 searchFragment.dataUpdated()
             }
         }

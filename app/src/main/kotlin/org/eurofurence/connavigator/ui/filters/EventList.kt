@@ -6,6 +6,7 @@ import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.eventIsHappening
 import org.eurofurence.connavigator.database.eventIsUpcoming
+import org.eurofurence.connavigator.util.extensions.fullTitle
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.collections.List
@@ -42,6 +43,7 @@ class EventList(override val db: Db) : HasDb {
                 }
                 FilterType.ORDER_START_TIME -> events = events.sortedBy { it.startTime }
                 FilterType.ORDER_DAY -> events = events.sortedBy { db.toDay(it)!!.date }
+                FilterType.ORDER_NAME -> events = events.sortedBy { it.fullTitle() }
             }
         }
 
@@ -98,6 +100,9 @@ class EventList(override val db: Db) : HasDb {
 
     fun sortByDate() =
             this.apply{ filters[org.eurofurence.connavigator.ui.filters.FilterType.ORDER_DAY] = ""}
+
+    fun sortByName() =
+            this.apply { filters[org.eurofurence.connavigator.ui.filters.FilterType.ORDER_NAME] = "" }
 }
 
 enum class FilterType {
@@ -106,6 +111,7 @@ enum class FilterType {
     ON_TRACK,
     ORDER_START_TIME,
     ORDER_DAY,
+    ORDER_NAME,
     IN_ROOM,
     IS_UPCOMING,
     IS_FAVORITED,
