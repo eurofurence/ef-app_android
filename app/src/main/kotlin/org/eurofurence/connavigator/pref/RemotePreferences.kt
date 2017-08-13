@@ -50,13 +50,8 @@ object RemotePreferences : AnkoLogger {
     // Booleans
     val mapsEnabled: Boolean = remoteConfig.getBoolean("maps_enabled")
     val rotationEnabled: Boolean = remoteConfig.getBoolean("rotation_enabled")
-    val showEventGlyphs: Boolean = remoteConfig.getBoolean("show_event_glyphs")
-    val showConflictingEvents: Boolean = remoteConfig.getBoolean("show_conflicting_events")
     val nativeFursuitGames = remoteConfig.getBoolean("native_fursuit_games")
 
-    // Longs
-    val dealerMapWidth = remoteConfig.getLong("dealer_map_width")
-    val dealerMapHeight = remoteConfig.getLong("dealer_map_height")
     val nextConStart = remoteConfig.getLong("nextConStart")
     val lastConEnd = remoteConfig.getLong("lastConEnd")
 }

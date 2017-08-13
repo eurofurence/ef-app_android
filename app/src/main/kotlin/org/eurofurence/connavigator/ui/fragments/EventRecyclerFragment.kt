@@ -104,12 +104,6 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 effectiveEvents.size
 
         private fun EventViewHolder.setGlyphs(glyphs: Sequence<String>) {
-            if (!RemotePreferences.showEventGlyphs) {
-                eventGlyph.text = null
-                eventGlyphOverflow.text = null
-                return
-            }
-
             val glyphList = glyphs.toList()
 
             when (glyphList.size) {

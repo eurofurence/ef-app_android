@@ -13,24 +13,6 @@
         <value>false</value>
     </entry>
     <entry>
-        <key>show_conflicting_events</key>
-        <value>false</value>
-    </entry>
-    <entry>
-        <key>show_event_glyphs</key>
-        <value>
-            <false>false</false>
-        </value>
-    </entry>
-    <entry>
-        <key>dealer_map_width</key>
-        <value>750</value>
-    </entry>
-    <entry>
-        <key>dealer_map_height</key>
-        <value>400</value>
-    </entry>
-    <entry>
         <key>nextConStart</key>
         <value>1502834400000</value>
     </entry>
