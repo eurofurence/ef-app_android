@@ -10,19 +10,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.github.lzyzsd.circleprogress.ArcProgress
+import nl.komponents.kovenant.task
+import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.Days
@@ -133,9 +135,9 @@ class HomeUi : AnkoComponent<ViewGroup> {
     /**
      * Update the login part of the ui
      */
-    fun updateLogin(){
+    fun updateLogin() {
         greeting.text = "{fa-user} Hello ${AuthPreferences.username}"
-        greeting.visibility = if(AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
+        greeting.visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
     }
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
@@ -143,11 +145,35 @@ class HomeUi : AnkoComponent<ViewGroup> {
             lparams(matchParent, matchParent)
             verticalLayout {
                 lparams(matchParent, matchParent)
+
                 greeting = fontAwesomeView {
                     visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
                     text = "{fa-user} Hello ${AuthPreferences.username}"
                     setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
                     padding = dip(15)
+
+                    if (AuthPreferences.isLoggedIn()) {
+
+                    }
+                }
+
+                if (AuthPreferences.isLoggedIn()) {
+                    fontAwesomeView {
+                        horizontalPadding = dip(15)
+
+                        task {
+                            val api = apiService.communications
+
+                            api.addHeader("Authorization", AuthPreferences.asBearer())
+
+                            api.apiV2CommunicationPrivateMessagesGet()
+                        } successUi { messages ->
+                            val unreadMessages = messages.filter { it.readDateTimeUtc == null }
+                            if (unreadMessages.isNotEmpty()) {
+                                this.text = "{fa-envelope} You have ${unreadMessages.size} messages"
+                            }
+                        }
+                    }
                 }
 
                 linearLayout {

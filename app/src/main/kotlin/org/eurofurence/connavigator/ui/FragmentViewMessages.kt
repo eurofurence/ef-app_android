@@ -79,14 +79,19 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
         } then {
             info { "Fetching messages" }
             apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
-            messages = apiService.communications.apiV2CommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
+            apiService.communications.apiV2CommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
+        } success {
+            info("Succesfully retrieved ${it.size} messages")
+            this.messages = it
+            this.messages.filter { it.readDateTimeUtc == null }
+                    .forEach {
+                        apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
+                        apiService.communications.apiV2CommunicationPrivateMessagesByMessageIdReadPost(it.id)
+                    }
         } successUi {
-            info("Succesfully retrieved ${messages.size} messages")
             configureRecycler()
             ui.loading.visibility = View.GONE
             ui.messageList.visibility = View.VISIBLE
-        } then {
-            messages.forEach { if (it.readDateTimeUtc == null) it.markAsRead() }
         } fail {
             warn { "Failed to retrieve messages" }
             longToast("Failed to retrieve messages!")
