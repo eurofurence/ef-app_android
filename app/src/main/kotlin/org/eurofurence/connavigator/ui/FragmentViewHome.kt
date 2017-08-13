@@ -1,13 +1,14 @@
 package org.eurofurence.connavigator.ui
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.lzyzsd.circleprogress.ArcProgress
 import nl.komponents.kovenant.task
@@ -24,6 +25,7 @@ import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
@@ -117,7 +119,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
 
         if (totalDaysToNextCon.days <= 0) {
             info { "Hiding countdown to next con" }
-            ui.countdownArc.visibility = View.GONE
+            ui.countdownLayout.visibility = View.GONE
         }
     }
 }
@@ -127,6 +129,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
     lateinit var announcementsTitle: TextView
     lateinit var announcementsRecycler: RecyclerView
     lateinit var greeting: TextView
+    lateinit var countdownLayout: LinearLayout
 
     lateinit var upcomingFragment: ViewGroup
     lateinit var currentFragment: ViewGroup
@@ -149,12 +152,8 @@ class HomeUi : AnkoComponent<ViewGroup> {
                 greeting = fontAwesomeView {
                     visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
                     text = "{fa-user} Hello ${AuthPreferences.username}"
-                    setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
+                    compatAppearance = R.style.TextAppearance_AppCompat_Medium
                     padding = dip(15)
-
-                    if (AuthPreferences.isLoggedIn()) {
-
-                    }
                 }
 
                 if (AuthPreferences.isLoggedIn()) {
@@ -176,7 +175,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
                     }
                 }
 
-                linearLayout {
+                countdownLayout = linearLayout {
                     countdownArc = arcProgress {
                         lparams(matchParent, displayMetrics.widthPixels - dip(2 * 20))
                         strokeWidth = 25F
@@ -185,15 +184,13 @@ class HomeUi : AnkoComponent<ViewGroup> {
                         bottomTextSize = dip(20F).toFloat()
                         suffixTextSize = dip(20F).toFloat()
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            finishedStrokeColor = ctx.getColor(R.color.accentLight)
-                            unfinishedStrokeColor = ctx.getColor(R.color.primary)
-                            textColor = ctx.getColor(R.color.textBlack)
-                        }
+                        finishedStrokeColor = ContextCompat.getColor(ctx, R.color.accentLight)
+                        unfinishedStrokeColor = ContextCompat.getColor(ctx, R.color.primary)
+                        textColor = ContextCompat.getColor(ctx, R.color.textBlack)
                     }
-
                     padding = dip(20)
                 }
+
 
                 announcementsTitle = textView("Latest announcements") {
                     setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
