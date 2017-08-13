@@ -40,8 +40,6 @@ class AnnoucementRecyclerDataAdapter(val announcements: List<AnnouncementRecord>
         holder.announcementDate.text = announcement.lastChangeDateTimeUtc.toString()
 
         holder.layout.setOnClickListener { showItem(holder) }
-
-
     }
 
     fun showItem(holder: AnnouncementDataholder) {
@@ -108,6 +106,7 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
 
             textView {
                 id = R.id.announcementContent
+                linksClickable = true
                 visibility = View.GONE
                 padding = dip(10)
             }.lparams(matchParent, wrapContent)

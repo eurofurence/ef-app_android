@@ -84,7 +84,7 @@ class FragmentViewEvent() : Fragment(), HasDb {
 
             title.text = event.fullTitle()
 
-            description.loadMarkdown(event.description)
+            description.loadMarkdown(event.description.markdownLinks())
 
             time.text = "${db.eventStart(event).dayOfWeek().asText} from ${event.startTimeString()} to ${event.endTimeString()}"
             organizers.text = event.ownerString()
