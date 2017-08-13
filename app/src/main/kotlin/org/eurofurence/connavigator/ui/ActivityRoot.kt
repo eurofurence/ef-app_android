@@ -57,7 +57,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     override fun changeTitle(text: String) {
-        supportActionBar!!.title = text
+        supportActionBar?.title = text
+        Analytics.screen(this, text)
     }
 
     // Menu

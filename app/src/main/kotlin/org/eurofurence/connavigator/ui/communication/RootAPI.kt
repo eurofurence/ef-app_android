@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui.communication
 
 import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventRecord
 import io.swagger.client.model.KnowledgeEntryRecord

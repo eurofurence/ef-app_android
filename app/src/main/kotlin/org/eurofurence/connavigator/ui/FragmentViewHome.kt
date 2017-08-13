@@ -64,8 +64,6 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.screen(activity, "Home")
-
         applyOnRoot { changeTitle("Home") }
 
         configureProgressBar()

@@ -37,8 +37,6 @@ class FragmentViewAbout : Fragment(), ContentAPI {
             ui.createView(AnkoContext.create(context.applicationContext, container!!))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.screen(activity, "View About")
-
         applyOnRoot { changeTitle("About") }
 
         ui.requinardLayout.setOnClickListener { browse("https://furry.requinard.nl") }

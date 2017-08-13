@@ -37,9 +37,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.screen(activity, "Dealers Listing")
-
-        applyOnRoot { changeTitle("Dealers Den") }
+        applyOnRoot { changeTitle("Dealers") }
 
         effectiveDealers = sortDealers(dealers.items)
 

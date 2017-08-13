@@ -42,8 +42,6 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
             inflater.inflate(R.layout.fview_events_viewpager, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.screen(activity, "Events Listing")
-
         configureViewpager()
 
         childFragmentManager.beginTransaction()

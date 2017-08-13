@@ -45,9 +45,6 @@ class FragmentViewInfo() : Fragment(), HasDb {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.screen(activity, "Info Specific")
-
-
         applyOnRoot { changeTitle("Information") }
         // Get info if it exists
         if ("knowledgeEntry" in arguments) {

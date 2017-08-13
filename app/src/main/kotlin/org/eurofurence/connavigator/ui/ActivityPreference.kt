@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
+import android.view.View
 import android.widget.TextView
 import com.pawegio.kandroid.textWatcher
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AppPreferences
@@ -93,6 +95,7 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
 
                 verticalLayout {
                     padding = dip(10)
+                    visibility = if (BuildConfig.DEBUG) View.VISIBLE else View.GONE
 
                     view {
                         lparams(matchParent, dip(1)) {
