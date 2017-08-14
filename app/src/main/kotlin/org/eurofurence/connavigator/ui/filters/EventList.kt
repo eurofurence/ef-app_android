@@ -9,12 +9,7 @@ import org.eurofurence.connavigator.database.eventIsUpcoming
 import org.eurofurence.connavigator.util.extensions.fullTitle
 import java.util.*
 import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.filter
-import kotlin.collections.forEach
 import kotlin.collections.set
-import kotlin.collections.sortedBy
-import kotlin.collections.toList
 
 /**
  * Wraps event entries and provides sorting for these. Filters are async
@@ -41,7 +36,10 @@ class EventList(override val db: Db) : HasDb {
                 FilterType.IS_CURRENT -> events = events.filter {
                     eventIsHappening(it, org.joda.time.DateTime.now())
                 }
-                FilterType.ORDER_START_TIME -> events = events.sortedBy { it.startTime }
+                FilterType.ORDER_START_TIME -> events = events.sortedBy { db.toDay(it)?.date }
+                        .groupBy { it.id }
+                        .map { it.value.sortedBy { it.startDateTimeUtc } }
+                        .flatten()
                 FilterType.ORDER_DAY -> events = events.sortedBy { db.toDay(it)!!.date }
                 FilterType.ORDER_NAME -> events = events.sortedBy { it.fullTitle() }
             }
@@ -96,10 +94,10 @@ class EventList(override val db: Db) : HasDb {
      * Sort events by date
      */
     fun sortByStartTime() =
-            this.apply{ filters[FilterType.ORDER_START_TIME] = ""}
+            this.apply { filters[FilterType.ORDER_START_TIME] = "" }
 
     fun sortByDate() =
-            this.apply{ filters[org.eurofurence.connavigator.ui.filters.FilterType.ORDER_DAY] = ""}
+            this.apply { filters[org.eurofurence.connavigator.ui.filters.FilterType.ORDER_DAY] = "" }
 
     fun sortByName() =
             this.apply { filters[org.eurofurence.connavigator.ui.filters.FilterType.ORDER_NAME] = "" }

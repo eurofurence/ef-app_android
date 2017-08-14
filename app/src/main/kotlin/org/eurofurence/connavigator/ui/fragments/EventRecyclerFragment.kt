@@ -22,7 +22,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
@@ -70,14 +69,15 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     lateinit var eventList: EventList
     var title = ""
     var scrolling = true
-
+    var daysInsteadOfGlyphs = false
     var effectiveEvents = emptyList<EventRecord>()
 
-    constructor(eventList: EventList, title: String = "", scrolling: Boolean = true) : this() {
+    constructor(eventList: EventList, title: String = "", scrolling: Boolean = true, daysInsteadOfGlyphs: Boolean = false) : this() {
         info { "Constructing event recycler $title" }
         this.eventList = eventList
         this.title = title
         this.scrolling = scrolling
+        this.daysInsteadOfGlyphs = daysInsteadOfGlyphs
     }
 
 
@@ -153,6 +153,8 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 if (isFavorite) yield("{fa-heart}")
                 if (isDeviatingFromConBook) yield("{fa-pencil}")
             })
+
+            if(daysInsteadOfGlyphs) holder.eventGlyphOverflow.text = db.eventStart(event).dayOfWeek().asShortText
 
             holder.eventTitle.text = event.fullTitle()
 
