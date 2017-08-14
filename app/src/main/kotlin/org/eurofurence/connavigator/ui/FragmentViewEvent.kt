@@ -20,6 +20,7 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.util.delegators.view
@@ -101,14 +102,30 @@ class FragmentViewEvent() : Fragment(), HasDb {
             changeFabIcon()
 
             buttonSave.setOnClickListener {
-                eventDialog(context, event, db)
+                if(AppPreferences.dialogOnEventPress) {
+                    showDialog(event)
+                } else {
+                    favoriteEvent(event)
+                }
             }
 
             buttonSave.setOnLongClickListener {
-                context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
+                if(AppPreferences.dialogOnEventPress){
+                    favoriteEvent(event)
+                } else {
+                    showDialog(event)
+                }
                 true
             }
         }
+    }
+
+    private fun showDialog(event: EventRecord) {
+        eventDialog(context, event, db)
+    }
+
+    private fun favoriteEvent(event: EventRecord) {
+        context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
     }
 
     /**

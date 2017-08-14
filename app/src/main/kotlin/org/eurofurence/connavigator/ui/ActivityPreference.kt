@@ -51,6 +51,12 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                         setOnClickListener { AppPreferences.shortenDates = !AppPreferences.shortenDates }
                     }
 
+                    checkBox {
+                        text = "Show a dialog instead of favoriting an event"
+                        isChecked = AppPreferences.dialogOnEventPress
+                        setOnClickListener { AppPreferences.dialogOnEventPress= !AppPreferences.dialogOnEventPress }
+                    }
+
                     linearLayout {
                         weightSum = 10F
 
