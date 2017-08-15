@@ -36,7 +36,8 @@ class EventList(override val db: Db) : HasDb {
                 FilterType.IS_CURRENT -> events = events.filter {
                     eventIsHappening(it, org.joda.time.DateTime.now())
                 }
-                FilterType.ORDER_START_TIME -> events = events.sortedBy { db.toDay(it)?.date }
+                FilterType.ORDER_START_TIME -> events = events.sortedBy { it.startDateTimeUtc }
+                FilterType.ORDER_DAY_AND_TIME -> events = events.sortedBy { db.toDay(it)?.date }
                         .groupBy { it.id }
                         .map { it.value.sortedBy { it.startDateTimeUtc } }
                         .flatten()
@@ -96,6 +97,8 @@ class EventList(override val db: Db) : HasDb {
     fun sortByStartTime() =
             this.apply { filters[FilterType.ORDER_START_TIME] = "" }
 
+    fun sortByDateAndTime() = this.apply { filters[FilterType.ORDER_DAY_AND_TIME] = "" }
+
     fun sortByDate() =
             this.apply { filters[org.eurofurence.connavigator.ui.filters.FilterType.ORDER_DAY] = "" }
 
@@ -110,6 +113,7 @@ enum class FilterType {
     ORDER_START_TIME,
     ORDER_DAY,
     ORDER_NAME,
+    ORDER_DAY_AND_TIME,
     IN_ROOM,
     IS_UPCOMING,
     IS_FAVORITED,

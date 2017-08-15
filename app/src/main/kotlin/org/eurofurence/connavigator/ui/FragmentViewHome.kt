@@ -56,7 +56,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
 
     val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
     val current by lazy { EventRecyclerFragment(EventList(database).isCurrent().sortByStartTime(), "Current events", false) }
-    val favorited by lazy { EventRecyclerFragment(EventList(database).isFavorited().sortByStartTime(), "Your favorited events", false, true) }
+    val favorited by lazy { EventRecyclerFragment(EventList(database).isFavorited().sortByDateAndTime(), "Your favorited events", false, true) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         container!!
