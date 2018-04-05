@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -180,9 +181,11 @@ class HomeUi : AnkoComponent<ViewGroup> {
             verticalLayout {
                 lparams(matchParent, matchParent)
 
-                imageView(R.drawable.placeholder_event) {
-                    scaleType = CENTER_CROP
-                }.lparams(matchParent, dip(250))
+                imageView(R.drawable.banner_2018) {
+                    adjustViewBounds = true
+                    setBackgroundColor(Color.WHITE)
+                    elevation = 15f
+                }.lparams(matchParent, wrapContent)
 
                 greeting = fontAwesomeView {
                     visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
