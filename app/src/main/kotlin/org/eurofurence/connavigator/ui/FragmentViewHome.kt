@@ -77,8 +77,8 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
 
 
     val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
-    val current by lazy { EventRecyclerFragment(EventList(database).isCurrent().sortByStartTime(), "Current events", false) }
-    val favorited by lazy { EventRecyclerFragment(EventList(database).isFavorited().sortByDateAndTime(), "Your favorited events", false, true) }
+    val current by lazy { EventRecyclerFragment(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
+    val favorited by lazy { EventRecyclerFragment(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         container!!
@@ -96,7 +96,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         configureAnnouncements()
         configureEventRecyclers()
 
-        runDelayed(2000, {
+        runDelayed(100, {
             configureEventRecyclers()
             configureAnnouncements()
         })
@@ -108,8 +108,8 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         info { "Configuring event recyclers" }
 
         fragmentManager.beginTransaction()
-                .replace(5000, upcoming)
-                .replace(5001, current)
+                .replace(5000, current)
+                .replace(5001, upcoming)
                 .replace(5002, favorited)
                 .commitAllowingStateLoss()
     }
@@ -240,7 +240,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
                         lparams(matchParent, wrapContent)
                     }
                 }.lparams(matchParent, wrapContent){
-                    setMargins(0, dip(10), 0, dip(10))
+                    setMargins(0, dip(10), 0, 0)
                 }
 
                 upcomingFragment = linearLayout {

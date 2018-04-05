@@ -20,7 +20,11 @@ import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.DataChanged
-import org.eurofurence.connavigator.database.*
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.eventIsHappening
+import org.eurofurence.connavigator.database.eventIsUpcoming
+import org.eurofurence.connavigator.database.eventStart
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
@@ -28,9 +32,38 @@ import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.*
-import org.eurofurence.connavigator.util.v2.*
-import org.jetbrains.anko.*
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.endTimeString
+import org.eurofurence.connavigator.util.extensions.fontAwesomeView
+import org.eurofurence.connavigator.util.extensions.fullTitle
+import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.logd
+import org.eurofurence.connavigator.util.extensions.recycler
+import org.eurofurence.connavigator.util.extensions.startTimeString
+import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.fw
+import org.eurofurence.connavigator.util.v2.get
+import org.eurofurence.connavigator.util.v2.minMaxWidth
+import org.eurofurence.connavigator.util.v2.percent
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.horizontalPadding
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.info
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.padding
+import org.jetbrains.anko.progressBar
+import org.jetbrains.anko.singleLine
+import org.jetbrains.anko.tableLayout
+import org.jetbrains.anko.tableRow
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.verticalPadding
+import org.jetbrains.anko.wrapContent
 import org.joda.time.DateTime
 import org.joda.time.Minutes
 import kotlin.coroutines.experimental.buildSequence
@@ -154,7 +187,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 if (isDeviatingFromConBook) yield("{fa-pencil}")
             })
 
-            if(daysInsteadOfGlyphs) holder.eventGlyphOverflow.text = db.eventStart(event).dayOfWeek().asShortText
+            if (daysInsteadOfGlyphs) holder.eventGlyphOverflow.text = db.eventStart(event).dayOfWeek().asShortText
 
             holder.eventTitle.text = event.fullTitle()
 
@@ -220,14 +253,11 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     private fun configureTitle() {
         info { "Configuring title" }
-        if (this.title.isNotEmpty()) {
-            info { "Showing title $title" }
-            ui.title.text = this.title
-            ui.title.visibility = View.VISIBLE
-        } else {
-            info { "No title presents" }
-            ui.title.visibility = View.GONE
-        }
+
+        ui.title.text = this.title
+
+        ui.title.visibility = if (effectiveEvents.any() && this.title.isNotEmpty()) View.VISIBLE else View.GONE
+        ui.bigLayout.visibility = if(effectiveEvents.any()) View.VISIBLE else View.GONE
     }
 
     private fun configureList() {
@@ -375,21 +405,25 @@ class EventListView : AnkoComponent<ViewGroup> {
     lateinit var title: TextView
     lateinit var loading: ProgressBar
     lateinit var eventList: RecyclerView
+    lateinit var bigLayout: LinearLayout
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
-        verticalLayout {
-            lparams(matchParent, matchParent)
-            backgroundResource = R.color.backgroundGrey
-
-            title = textView("") {
+        bigLayout = verticalLayout {
+            lparams(matchParent, matchParent) {
                 padding = dip(15)
-            }.lparams(matchParent, wrapContent)
+                setMargins(0, dip(15), 0, 0)
+            }
+            backgroundResource = R.color.cardview_light_background
+
+            title = textView("").lparams(matchParent, wrapContent){
+                setMargins(0, 0, 0, dip(10))
+            }
 
             loading = progressBar().lparams(matchParent, wrapContent)
 
             eventList = recycler {
-                backgroundResource = R.color.cardview_light_background
             }.lparams(matchParent, matchParent)
         }
+        bigLayout
     }
 }
