@@ -34,7 +34,7 @@ class AnnoucementRecyclerDataAdapter(val announcements: List<AnnouncementRecord>
         val announcement = announcements[position]
 
         holder.announcementTitle.text = announcement.title
-        holder.announcementContent.text = announcement.content
+        holder.announcementContent.text = announcement.area
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnnouncementDataholder =
@@ -49,28 +49,31 @@ class AnnoucementRecyclerDataAdapter(val announcements: List<AnnouncementRecord>
 class AnnouncementUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         linearLayout {
+            lparams(matchParent, wrapContent)
             weightSum = 10F
 
             fontAwesomeView {
                 setPadding(0, dip(10), 0, 0)
-                text = "{fa-comment 30sp}"
-                textAlignment = View.TEXT_ALIGNMENT_CENTER
-            }.lparams(dip(0), wrapContent, 2F)
+                text = "{fa-file-text 24sp}"
+                textAlignment = View.TEXT_ALIGNMENT_TEXT_START
+            }.lparams(dip(0), wrapContent, 1F)
 
             verticalLayout {
                 textView("Announcement Title") {
                     id = R.id.announcementTitle
-                    compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large
+                    compatAppearance = android.R.style.TextAppearance_Medium
                 }.lparams(matchParent, wrapContent) {
-                    setMargins(0, 0, 0, dip(10))
+                    setMargins(0, dip(5), 0, 0)
                 }
 
                 textView("Announcement Content") {
                     id = R.id.announcementContent
                     compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
-                    linksClickable = true
+                }.lparams(matchParent, wrapContent) {
+                    setMargins(0, 0, 0, dip(10))
                 }
-            }.lparams(dip(0), wrapContent, 8F)
+
+            }.lparams(dip(0), wrapContent, 9F)
         }
     }
 }
