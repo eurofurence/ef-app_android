@@ -40,9 +40,6 @@ class ConnavigatorApplication : MultiDexApplication() {
         // Initialize some services
         imageService.initialize(this)
         logService.initialize(this)
-
-        RemotePreferences.init()
-
         apiService.initialize(this)
         Analytics.init(this)
 
@@ -57,8 +54,5 @@ class ConnavigatorApplication : MultiDexApplication() {
 
         // Icons
         Iconify.with(FontAwesomeModule())
-
-        // Update every 5 minutes
-        UpdateIntentService.dispatchUpdate(this)
     }
 }
