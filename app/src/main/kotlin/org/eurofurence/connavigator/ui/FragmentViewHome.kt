@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -184,7 +185,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
                 imageView(R.drawable.banner_2018) {
                     adjustViewBounds = true
                     setBackgroundColor(Color.WHITE)
-                    elevation = 15f
+                    ViewCompat.setElevation(this, 15f)
                 }.lparams(matchParent, wrapContent)
 
                 greeting = fontAwesomeView {
