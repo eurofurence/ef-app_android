@@ -8,9 +8,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView.ScaleType.CENTER_CROP
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.lzyzsd.circleprogress.ArcProgress
+import com.pawegio.kandroid.runDelayed
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
@@ -24,10 +26,30 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.arcProgress
+import org.eurofurence.connavigator.util.extensions.filterIf
+import org.eurofurence.connavigator.util.extensions.fontAwesomeView
+import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.webapi.apiService
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.displayMetrics
+import org.jetbrains.anko.horizontalPadding
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.info
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.padding
+import org.jetbrains.anko.scrollView
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.wrapContent
 import org.joda.time.DateTime
 import org.joda.time.Days
 
@@ -74,6 +96,11 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         configureAnnouncements()
         configureEventRecyclers()
 
+        runDelayed(2000, {
+            configureEventRecyclers()
+            configureAnnouncements()
+        })
+
         dataChanged.register()
     }
 
@@ -90,16 +117,20 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     private fun configureAnnouncements() {
         info { "Configuring announcement recycler" }
         info { "There are ${announcements.count()} announcements" }
-        ui.announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(
-                announcements.sortedByDescending { it.lastChangeDateTimeUtc }
-                        .toList()
-        )
-        ui.announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
-        ui.announcementsRecycler.itemAnimator = DefaultItemAnimator()
 
         if (announcements.count() == 0) {
-            ui.announcementsTitle.text = "There's no announcements right now :)"
+            ui.announcementsTitle.visibility = View.GONE
             ui.announcementsRecycler.visibility = View.GONE
+        } else {
+            ui.announcementsRecycler.visibility = View.VISIBLE
+            ui.announcementsTitle.visibility = View.VISIBLE
+
+            ui.announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(
+                    announcements.sortedByDescending { it.lastChangeDateTimeUtc }
+                            .toList()
+            )
+            ui.announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
+            ui.announcementsRecycler.itemAnimator = DefaultItemAnimator()
         }
     }
 
@@ -149,6 +180,10 @@ class HomeUi : AnkoComponent<ViewGroup> {
             verticalLayout {
                 lparams(matchParent, matchParent)
 
+                imageView(R.drawable.placeholder_event) {
+                    scaleType = CENTER_CROP
+                }.lparams(matchParent, dip(250))
+
                 greeting = fontAwesomeView {
                     visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
                     text = "{fa-user} Hello ${AuthPreferences.username}"
@@ -191,14 +226,21 @@ class HomeUi : AnkoComponent<ViewGroup> {
                     padding = dip(20)
                 }
 
-
-                announcementsTitle = textView("Latest announcements") {
-                    setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
+                verticalLayout {
                     padding = dip(15)
-                }.lparams(matchParent, wrapContent)
+                    backgroundResource = R.color.cardview_light_background
 
-                announcementsRecycler = recycler {
-                    lparams(matchParent, wrapContent)
+                    announcementsTitle = textView("Announcements") {
+                        compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
+                    }.lparams(matchParent, wrapContent) {
+                        setMargins(0, 0, 0, dip(10))
+                    }
+
+                    announcementsRecycler = recycler {
+                        lparams(matchParent, wrapContent)
+                    }
+                }.lparams(matchParent, wrapContent){
+                    setMargins(0, dip(10), 0, dip(10))
                 }
 
                 upcomingFragment = linearLayout {
