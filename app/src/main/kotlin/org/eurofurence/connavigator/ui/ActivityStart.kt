@@ -58,7 +58,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
 
             longToast("Done with fetching!")
 
-            startActivity(intentFor<ActivityRoot>())
+            this@ActivityStart.startActivity(intentFor<ActivityRoot>())
         }
     }
 
