@@ -1,7 +1,9 @@
 package org.eurofurence.connavigator.ui
 
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.View
@@ -24,33 +26,7 @@ import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.above
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.button
-import org.jetbrains.anko.centerHorizontally
-import org.jetbrains.anko.centerInParent
-import org.jetbrains.anko.checkBox
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageResource
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.progressBar
-import org.jetbrains.anko.relativeLayout
-import org.jetbrains.anko.setContentView
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.wrapContent
-import org.jetbrains.anko.yesButton
+import org.jetbrains.anko.*
 
 /**
  * Created by David on 28-4-2016.
@@ -153,57 +129,62 @@ class StartUi : AnkoComponent<ActivityStart> {
 
             linearLayout {
                 backgroundResource = R.color.primaryDark
+                ViewCompat.setElevation(this, 15f)
+
                 imageView {
                     imageResource = R.mipmap.ic_launcher
                     padding = dip(30)
                 }.lparams(dip(150), matchParent)
 
-                textView("Welcome to the official \nEurofurence App for Android!") {
+                textView("Welcome to the official Eurofurence App for Android!") {
                     gravity = Gravity.CENTER
                     textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
-                    compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large_Inverse
+                    compatAppearance = android.R.style.TextAppearance_Medium_Inverse
+                    setPadding(0, 0, dip(30), 0)
                 }.lparams(matchParent, matchParent)
             }.lparams(matchParent, dip(150))
 
-            startLayout = verticalLayout {
-                padding = dip(50)
+            scrollView {
+                startLayout = verticalLayout {
+                    padding = dip(50)
 
-                textView("""Before you can use this application we need to download some data from the Eurofurence servers to your phone.
+                    textView("""Before you can use this application we need to download some data from the Eurofurence servers to your phone.
 
 This will consume a few megabytes of traffic and can take anywhere from a few seconds up to a few minutes, depending on the speed of your connection.
 
 Is it okay to download the data now?
                     """) {
-                    compatAppearance = android.R.style.TextAppearance_DeviceDefault
-                    textSize = 16F
-                }
-
-                textView("Choosing 'No' will close the application at this point.")
-
-                linearLayout {
-                    setPadding(0, 30, 0, 30)
-
-                    yesButton = button("Yes!") {
-                        setBackgroundColor(ContextCompat.getColor(context, R.color.primaryDark))
-                        textColor = ContextCompat.getColor(context, R.color.textWhite)
+                        compatAppearance = android.R.style.TextAppearance_DeviceDefault
+                        textSize = 16F
                     }
 
-                    noButton = button("No, Not right now").lparams(matchParent, wrapContent)
+                    textView("Choosing 'No' will close the application at this point.")
+
+                    linearLayout {
+                        setPadding(0, 30, 0, 30)
+
+                        yesButton = button("Yes!") {
+                            background.setColorFilter(ContextCompat.getColor(context, R.color.primaryDark), PorterDuff.Mode.SRC)
+                            textColor = ContextCompat.getColor(context, R.color.textWhite)
+                        }
+
+                        noButton = button("No, Not right now").lparams(matchParent, wrapContent)
+                    }.lparams(matchParent, wrapContent)
+
+                    checkBox("Allow Eurofurence to collect anonymous analytical data.") {
+                        hint = "This can be changed in your settings at any time."
+                        setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
+                    }.lparams(matchParent, wrapContent) {
+                        padding = dip(30)
+                    }
+
+                    checkBox("Allow Eurofurence to collect performance data.") {
+                        hint = "This can be changed in your settings at any time."
+                        setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
+                    }.lparams(matchParent, wrapContent) {
+                        padding = dip(30)
+                    }
                 }.lparams(matchParent, wrapContent)
-
-                checkBox("Allow Eurofurence to collect anonymous analytical data.") {
-                    hint = "This can be changed in your settings at any time."
-                    setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
-                }.lparams(matchParent, wrapContent) {
-                    padding = dip(30)
-                }
-
-                checkBox("Allow Eurofurence to collect performance data.") {
-                    hint = "This can be changed in your settings at any time."
-                    setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
-                }.lparams(matchParent, wrapContent) {
-                    padding = dip(30)
-                }
             }.lparams(matchParent, wrapContent)
 
             loadingLayout = relativeLayout {
