@@ -1,22 +1,24 @@
 package org.eurofurence.connavigator.database
 
-import android.app.AlarmManager
 import android.app.IntentService
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
-import android.util.Log
-import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.DebugPreferences
-import org.eurofurence.connavigator.ui.ActivityRoot
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.util.extensions.booleans
+import org.eurofurence.connavigator.util.extensions.catchAlternative
+import org.eurofurence.connavigator.util.extensions.logd
+import org.eurofurence.connavigator.util.extensions.loge
+import org.eurofurence.connavigator.util.extensions.logv
+import org.eurofurence.connavigator.util.extensions.objects
+import org.eurofurence.connavigator.util.extensions.toIntent
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.util.v2.internalSpec
 import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
-import java.util.*
+import java.util.Date
 import kotlin.serialization.Serializable
 
 @Serializable
@@ -53,6 +55,8 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
 
         // Initialize the response, the following code is net and IO oriented, it could fail
         val (response, responseObject) = {
+            logv("UIS") { "Updating remote preferences" }
+            RemotePreferences.update()
             logv("UIS") { "Retrieving sync since $date" }
 
             // Get sync from server

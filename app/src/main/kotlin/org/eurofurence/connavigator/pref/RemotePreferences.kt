@@ -24,7 +24,6 @@ object RemotePreferences : AnkoLogger {
         remoteConfig.fetch(cacheExpiration).addOnFailureListener {
             warn { "Failed to update remote configs" }
             warn { it.message ?: "No message given" }
-            Analytics.exception(it)
         }.addOnSuccessListener {
             info { "Successfully updated remote configs" }
             remoteConfig.activateFetched()

@@ -7,6 +7,7 @@ import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
 import io.swagger.client.ApiInvoker
 import io.swagger.client.api.*
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.util.extensions.catchHandle
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.loge
@@ -16,7 +17,7 @@ import java.io.File
  * The API services manage extended API functionality
  */
 object apiService {
-    val apiPath = "https://app.eurofurence.org"
+    val apiPath = RemotePreferences.apiBaseUrl
 
     val announcements by lazy { AnnouncementsApi().apply { basePath = apiPath } }
 

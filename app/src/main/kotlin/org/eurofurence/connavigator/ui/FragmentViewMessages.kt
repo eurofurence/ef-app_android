@@ -95,7 +95,6 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
         } fail {
             warn { "Failed to retrieve messages" }
             longToast("Failed to retrieve messages!")
-            Analytics.exception(it)
         }
     }
 

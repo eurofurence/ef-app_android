@@ -54,7 +54,6 @@ class InstanceIdService : FirebaseInstanceIdService(), AnkoLogger {
         } fail {
             warn { "Token registration failed!" }
             warn { it.toString() }
-            Analytics.exception(it)
         }
     }
 

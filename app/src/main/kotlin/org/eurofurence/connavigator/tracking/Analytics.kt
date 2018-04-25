@@ -3,7 +3,6 @@ package org.eurofurence.connavigator.tracking
 import android.app.Activity
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.crash.FirebaseCrash
 import com.google.firebase.perf.FirebasePerformance
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.jetbrains.anko.bundleOf
@@ -65,10 +64,5 @@ class Analytics {
                         FirebaseAnalytics.Param.ITEM_NAME to label
                 )
         )
-
-        /**
-         * Track caught exceptions
-         */
-        fun exception(ex: Throwable) = FirebaseCrash.report(ex)
     }
 }

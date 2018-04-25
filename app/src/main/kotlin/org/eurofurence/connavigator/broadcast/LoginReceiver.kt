@@ -73,7 +73,6 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
         } fail {
             warn { "Failed to retrieve tokens" }
             error { it.printStackTrace() }
-            Analytics.exception(it)
 
             val intent = LOGIN_RESULT.toIntent {
                 booleans["success"] = false
