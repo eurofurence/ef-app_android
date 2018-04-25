@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui
 
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
@@ -105,6 +106,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         if (current != previous) {
             alert("Your data is outdated. You will need to re-download all data") {
                 yesButton {
+                    AppPreferences.lastKnownVersion = BuildConfig.VERSION_NAME
                     ResetReceiver.fire(this@ActivityStart)
                 }
             }.show()
