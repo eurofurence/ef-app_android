@@ -23,10 +23,12 @@ import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AppPreferences
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
+import org.joda.time.DateTime
 
 /**
  * Created by David on 28-4-2016.
@@ -184,6 +186,8 @@ Is it okay to download the data now?
                     }.lparams(matchParent, wrapContent) {
                         padding = dip(30)
                     }
+
+                    textView("Remote configs was updated ${RemotePreferences.timeSinceLastUpdate.millis / 1000} seconds ago.")
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, wrapContent)
 

@@ -39,10 +39,10 @@ class ResetReceiver : BroadcastReceiver(), AnkoLogger {
         DebugPreferences.clear()
         AnalyticsPreferences.clear()
 
-        context.longToast("App reset has been completed. Application will be closed with superior force! 10 seconds until Extermination.")
+        context.longToast("App reset has been completed. Closing.")
 
         task {
-            Thread.sleep(10000)
+            Thread.sleep(100)
         } success{
             info { "Committing ritualistic suicide" }
             System.exit(621)

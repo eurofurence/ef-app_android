@@ -12,7 +12,7 @@ import android.widget.TextView
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
@@ -94,7 +94,7 @@ class AboutUi : AnkoComponent<ViewGroup> {
                     }.lparams(matchParent, dip(avatarSize))
                 }
 
-                themedTextView("Version: ${BuildConfig.VERSION_NAME} - Build: ${BuildConfig.VERSION_CODE}", R.style.AppTheme_Header_Sub)
+                themedTextView("Version: ${BuildConfig.VERSION_NAME} - Remote: ${RemotePreferences.timeSinceLastUpdate.millis / 1000} seconds old", R.style.AppTheme_Header_Sub)
 
 
                 markdownView {

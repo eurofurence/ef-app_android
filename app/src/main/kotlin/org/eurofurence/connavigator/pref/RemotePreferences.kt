@@ -8,6 +8,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
+import org.joda.time.DateTime
 
 /**
  * Created by David on 30-7-2016.
@@ -47,11 +48,19 @@ object RemotePreferences : AnkoLogger {
         update()
     }
 
+    val lastUpdatedMillis get() = remoteConfig.info.fetchTimeMillis
+    val lastUpdatedDatetime get() = DateTime(lastUpdatedMillis)
+    val timeSinceLastUpdate get() = DateTime.now().minus(lastUpdatedMillis)
+
     // Booleans
     val mapsEnabled: Boolean = remoteConfig.getBoolean("maps_enabled")
     val rotationEnabled: Boolean = remoteConfig.getBoolean("rotation_enabled")
     val nativeFursuitGames = remoteConfig.getBoolean("native_fursuit_games")
 
+    // Longs
     val nextConStart = remoteConfig.getLong("nextConStart")
     val lastConEnd = remoteConfig.getLong("lastConEnd")
+
+    // Strings
+    val apiBaseUrl = remoteConfig.getString("api_base_url")
 }

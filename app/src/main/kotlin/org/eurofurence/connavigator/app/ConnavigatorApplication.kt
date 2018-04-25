@@ -36,6 +36,7 @@ class ConnavigatorApplication : MultiDexApplication() {
 
         // Preferences
         Kotpref.init(this)
+        RemotePreferences.init()
 
         // Initialize some services
         imageService.initialize(this)
