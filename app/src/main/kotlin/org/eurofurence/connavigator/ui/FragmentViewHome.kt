@@ -83,10 +83,6 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         configureProgressBar()
         configureEventRecyclers()
 
-        runDelayed(100, {
-            configureEventRecyclers()
-        })
-
         dataChanged.register()
     }
 

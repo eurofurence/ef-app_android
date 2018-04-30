@@ -13,6 +13,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.failUi
@@ -246,7 +248,9 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         configureTitle()
 
         // Filter the data
-        dataUpdated()
+        Observable.just(db.events.items)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe { dataUpdated() }
 
         updateReceiver.register()
     }
@@ -257,7 +261,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         ui.title.text = this.title
 
         ui.title.visibility = if (effectiveEvents.any() && this.title.isNotEmpty()) View.VISIBLE else View.GONE
-        ui.bigLayout.visibility = if(effectiveEvents.any()) View.VISIBLE else View.GONE
+        ui.bigLayout.visibility = if (effectiveEvents.any()) View.VISIBLE else View.GONE
     }
 
     private fun configureList() {
@@ -415,7 +419,7 @@ class EventListView : AnkoComponent<ViewGroup> {
             }
             backgroundResource = R.color.cardview_light_background
 
-            title = textView("").lparams(matchParent, wrapContent){
+            title = textView("").lparams(matchParent, wrapContent) {
                 setMargins(0, 0, 0, dip(10))
             }
 
