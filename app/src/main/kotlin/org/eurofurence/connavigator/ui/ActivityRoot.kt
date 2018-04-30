@@ -22,6 +22,7 @@ import android.view.View
 import android.widget.TextView
 import com.joanzapata.iconify.IconDrawable
 import com.joanzapata.iconify.fonts.FontAwesomeIcons
+import io.swagger.client.model.AnnouncementRecord
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventRecord
 import io.swagger.client.model.KnowledgeEntryRecord
@@ -39,11 +40,25 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.*
-import org.jetbrains.anko.*
+import org.eurofurence.connavigator.util.extensions.applyOnContent
+import org.eurofurence.connavigator.util.extensions.booleans
+import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.logd
+import org.eurofurence.connavigator.util.extensions.logv
+import org.eurofurence.connavigator.util.extensions.objects
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.browse
+import org.jetbrains.anko.info
+import org.jetbrains.anko.longToast
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.support.v4.withArguments
+import org.jetbrains.anko.yesButton
 import org.joda.time.DateTime
 import org.joda.time.Days
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPreferenceChangeListener, HasDb, AnkoLogger {
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
@@ -380,6 +395,14 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
     override fun navigateToDealer(dealer: DealerRecord) {
         navigateToSubFragment(FragmentViewDealer(dealer))
+    }
+
+    override fun navigateToAnnouncement(announcementRecord: AnnouncementRecord) {
+        val fragment = FragmentViewAnnouncement().withArguments(
+                "id" to announcementRecord.id.toString()
+        )
+
+        navigateToSubFragment(fragment)
     }
 
     private fun navigateToSubFragment(fragment: Fragment) =

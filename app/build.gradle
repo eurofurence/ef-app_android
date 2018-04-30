@@ -171,6 +171,9 @@ dependencies {
     // Font awesome
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.1'
 
+    // Observables
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.2'
+
     // Serialization
     compile files("tools/kotlin-serialization-runtime.jar")
 

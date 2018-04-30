@@ -9,3 +9,5 @@ import java.util.*
  * Created by requinard on 7/9/17.
  */
 fun Date.jodatime() = DateTime(this.time)
+
+fun now() = DateTime.now()

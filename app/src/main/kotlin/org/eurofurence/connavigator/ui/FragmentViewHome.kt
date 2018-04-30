@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView.ScaleType.CENTER_CROP
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.lzyzsd.circleprogress.ArcProgress
@@ -23,23 +21,19 @@ import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.ui.adapter.AnnoucementRecyclerDataAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
-import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.arcProgress
 import org.eurofurence.connavigator.util.extensions.filterIf
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.localReceiver
-import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.horizontalPadding
@@ -49,7 +43,6 @@ import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.padding
 import org.jetbrains.anko.scrollView
-import org.jetbrains.anko.textView
 import org.jetbrains.anko.verticalLayout
 import org.jetbrains.anko.wrapContent
 import org.joda.time.DateTime
@@ -64,13 +57,6 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     val database by lazy { locateDb() }
     val now by lazy { DateTime.now() }
 
-    val announcements by lazy {
-        database.announcements.items.filterIf(
-                !AppPreferences.showOldAnnouncements,
-                { it.validFromDateTimeUtc.time <= now.millis && it.validUntilDateTimeUtc.time > now.millis }
-        )
-    }
-
     val dataChanged by lazy {
         context.localReceiver(DataChanged.DATACHANGED) {
             ui.updateLogin()
@@ -81,7 +67,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
     val current by lazy { EventRecyclerFragment(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
     val favorited by lazy { EventRecyclerFragment(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
-
+    val announcements by lazy { FragmentViewAnnouncements() }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         container!!
 
@@ -95,12 +81,10 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         applyOnRoot { changeTitle("Home") }
 
         configureProgressBar()
-        configureAnnouncements()
         configureEventRecyclers()
 
         runDelayed(100, {
             configureEventRecyclers()
-            configureAnnouncements()
         })
 
         dataChanged.register()
@@ -113,27 +97,8 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
                 .replace(5000, current)
                 .replace(5001, upcoming)
                 .replace(5002, favorited)
+                .replace(5003, announcements)
                 .commitAllowingStateLoss()
-    }
-
-    private fun configureAnnouncements() {
-        info { "Configuring announcement recycler" }
-        info { "There are ${announcements.count()} announcements" }
-
-        if (announcements.count() == 0) {
-            ui.announcementsTitle.visibility = View.GONE
-            ui.announcementsRecycler.visibility = View.GONE
-        } else {
-            ui.announcementsRecycler.visibility = View.VISIBLE
-            ui.announcementsTitle.visibility = View.VISIBLE
-
-            ui.announcementsRecycler.adapter = AnnoucementRecyclerDataAdapter(
-                    announcements.sortedByDescending { it.lastChangeDateTimeUtc }
-                            .toList()
-            )
-            ui.announcementsRecycler.layoutManager = NonScrollingLinearLayout(activity)
-            ui.announcementsRecycler.itemAnimator = DefaultItemAnimator()
-        }
     }
 
     private fun configureProgressBar() {
@@ -167,6 +132,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
     lateinit var upcomingFragment: ViewGroup
     lateinit var currentFragment: ViewGroup
     lateinit var favoritesFragment: ViewGroup
+    lateinit var announcementFragment: ViewGroup
 
     /**
      * Update the login part of the ui
@@ -230,21 +196,9 @@ class HomeUi : AnkoComponent<ViewGroup> {
                     padding = dip(20)
                 }
 
-                verticalLayout {
-                    padding = dip(15)
-                    backgroundResource = R.color.cardview_light_background
-
-                    announcementsTitle = textView("Announcements") {
-                        compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
-                    }.lparams(matchParent, wrapContent) {
-                        setMargins(0, 0, 0, dip(10))
-                    }
-
-                    announcementsRecycler = recycler {
-                        lparams(matchParent, wrapContent)
-                    }
-                }.lparams(matchParent, wrapContent){
-                    setMargins(0, dip(10), 0, 0)
+                announcementFragment = linearLayout {
+                    id = 5003
+                    lparams(matchParent, wrapContent)
                 }
 
                 upcomingFragment = linearLayout {
