@@ -48,7 +48,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
     private fun syncData(message: RemoteMessage) {
         info { "Received request to sync data" }
 
-        applicationContext.sendBroadcast(intentFor<UpdateIntentService>())
+        UpdateIntentService.dispatchUpdate(applicationContext)
         RemotePreferences.update()
     }
 
