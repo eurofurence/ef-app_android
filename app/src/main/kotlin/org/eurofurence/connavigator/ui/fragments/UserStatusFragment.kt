@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -23,8 +24,10 @@ import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoContext.Companion
+import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.dip
+import org.jetbrains.anko.info
 import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.support.v4.intentFor
@@ -32,11 +35,54 @@ import org.jetbrains.anko.textColor
 import org.jetbrains.anko.textView
 import org.jetbrains.anko.verticalLayout
 import org.jetbrains.anko.wrapContent
+import java.util.Timer
+import kotlin.concurrent.fixedRateTimer
 
-class UserStatusFragment : Fragment() {
+class UserStatusFragment : Fragment(), AnkoLogger {
     val ui = UserStatusUi()
     val loginObservable = Observable.just(AuthPreferences.token)
             .subscribeOn(AndroidSchedulers.mainThread())
+
+    private lateinit var timer: Timer
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        info { "Check timer initializing" }
+        timer = fixedRateTimer(period = 5000L) {
+            checkMessages()
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        timer.cancel()
+        info { "Check timer canceled" }
+    }
+
+    fun checkMessages() = task {
+        info { "Checking message counts" }
+        val api = apiService.communications
+
+        api.addHeader("Authorization", AuthPreferences.asBearer())
+
+        api.apiV2CommunicationPrivateMessagesGet()
+    } successUi { messages ->
+        info { "Fetched messages, ${messages.count()} messages found" }
+
+        val unreadMessages = messages.filter { it.readDateTimeUtc == null }
+
+        if (unreadMessages.isNotEmpty()) {
+            info { "Unread messages are present! Giving attention." }
+            ui.subtitle.text = "You have ${unreadMessages.size} new, unread personal message(s)!"
+            ui.subtitle.textColor = ContextCompat.getColor(context, R.color.primaryDark)
+            ui.userIcon.textColor = ContextCompat.getColor(context, R.color.primaryDark)
+        } else {
+            info { "No unread messages found, displaying total message counts" }
+            ui.subtitle.text = "You have ${messages.count()} personal message(s)."
+            ui.subtitle.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
+            ui.userIcon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             ui.createView(Companion.create(context, container!!))
@@ -54,25 +100,6 @@ class UserStatusFragment : Fragment() {
                 ui.layout.setOnClickListener {
                     applyOnRoot {
                         navigateRoot(FragmentViewMessages::class.java)
-                    }
-                }
-
-                task {
-                    val api = apiService.communications
-
-                    api.addHeader("Authorization", AuthPreferences.asBearer())
-
-                    api.apiV2CommunicationPrivateMessagesGet()
-                } successUi { messages ->
-                    val unreadMessages = messages.filter { it.readDateTimeUtc == null }
-                    if (unreadMessages.isNotEmpty()) {
-                        ui.subtitle.text = "You have ${unreadMessages.size} new, unread personal message(s)!"
-                        ui.subtitle.textColor = ContextCompat.getColor(context, R.color.primaryDark)
-                        ui.userIcon.textColor = ContextCompat.getColor(context, R.color.primaryDark)
-                    } else {
-                        ui.subtitle.text = "You have ${messages.count()} personal message(s)."
-                        ui.subtitle.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
-                        ui.userIcon.textColor =  ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
                     }
                 }
             }
