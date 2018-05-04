@@ -41,7 +41,7 @@
             <item
                 android:id="@+id/navMessages"
                 android:icon="@drawable/icon_message"
-                android:title="Private Messages" />
+                android:title="Personal Messages" />
             <item
                 android:id="@+id/navFursuitGames"
                 android:icon="@drawable/icon_paw"

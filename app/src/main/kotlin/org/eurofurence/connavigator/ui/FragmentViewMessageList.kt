@@ -97,7 +97,7 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        applyOnRoot { changeTitle("Private Messages") }
+        applyOnRoot { changeTitle("Personal Messages") }
 
         info { "Filling in messages" }
 
