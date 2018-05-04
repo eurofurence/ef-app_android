@@ -59,6 +59,7 @@ class AnnouncementItemUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
             backgroundResource = R.color.cardview_light_background
+            isClickable = true
             lparams(matchParent, matchParent)
 
             linearLayout {
