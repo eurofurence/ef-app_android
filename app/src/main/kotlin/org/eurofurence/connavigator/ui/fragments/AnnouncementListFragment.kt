@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
