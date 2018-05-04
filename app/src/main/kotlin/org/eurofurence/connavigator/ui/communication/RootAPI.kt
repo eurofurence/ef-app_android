@@ -6,6 +6,7 @@ import io.swagger.client.model.AnnouncementRecord
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventRecord
 import io.swagger.client.model.KnowledgeEntryRecord
+import io.swagger.client.model.PrivateMessageRecord
 import org.eurofurence.connavigator.ui.ActionBarMode
 
 /**
@@ -21,6 +22,8 @@ interface RootAPI {
     fun navigateToKnowledgeEntry(knowledgeEntry: KnowledgeEntryRecord)
 
     fun navigateToDealer(dealer: DealerRecord)
+
+    fun navigateToMessage(message: PrivateMessageRecord)
 
     fun navigateToAnnouncement(announcementRecord: AnnouncementRecord)
 

@@ -15,7 +15,7 @@ import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.ui.FragmentViewMessages
+import org.eurofurence.connavigator.ui.FragmentViewMessageList
 import org.eurofurence.connavigator.ui.LoginActivity
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
@@ -99,7 +99,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
                 ui.title.text = "Welcome, ${AuthPreferences.username.capitalize()}"
                 ui.layout.setOnClickListener {
                     applyOnRoot {
-                        navigateRoot(FragmentViewMessages::class.java)
+                        navigateRoot(FragmentViewMessageList::class.java)
                     }
                 }
             }

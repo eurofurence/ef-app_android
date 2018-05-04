@@ -2,14 +2,17 @@ package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
 import io.swagger.client.model.PrivateMessageRecord
 import nl.komponents.kovenant.then
@@ -19,22 +22,33 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.markAsRead
+import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.recycler
+import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.webapi.apiService
-import org.jetbrains.anko.*
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormatter
-import org.joda.time.format.DateTimeFormatterBuilder
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.info
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.padding
+import org.jetbrains.anko.progressBar
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.warn
+import org.jetbrains.anko.wrapContent
 
 /**
  * Created by requinard on 6/28/17.
  */
-class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
+class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb {
     override val db by lazy { locateDb() }
     val ui by lazy { MessagesUi() }
 
@@ -42,8 +56,9 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
 
     inner class MessageViewholder(itemview: View) : RecyclerView.ViewHolder(itemview) {
         val title: TextView by view()
-        val text: TextView by view()
+        val icon: IconTextView by view()
         val date: TextView by view()
+        val layout: ViewGroup by view()
     }
 
     inner class MessageAdapter : RecyclerView.Adapter<MessageViewholder>() {
@@ -51,8 +66,21 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
             val message = messages[position]
 
             holder.title.text = message.subject
-            holder.date.text = "Sent on ${DateTime(message.createdDateTimeUtc.time).toString("dd-MM HH:mm")} by ${message.authorName}"
-            holder.text.text = message.message
+            holder.date.text = "From ${message.authorName}\nSent: ${message.createdDateTimeUtc.toRelative()}"
+
+            if(message.readDateTimeUtc != null){
+                holder.icon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
+                holder.icon.text = "{fa-envelope-o 30sp}"
+            } else {
+                holder.icon.textColor = ContextCompat.getColor(context, R.color.primaryDark)
+                holder.icon.text = "{fa-envelope 30sp}"
+            }
+
+            holder.layout.setOnClickListener {
+                applyOnRoot {
+                    navigateToMessage(message)
+                }
+            }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MessageViewholder(
@@ -83,11 +111,6 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
         } success {
             info("Succesfully retrieved ${it.size} messages")
             this.messages = it
-            this.messages.filter { it.readDateTimeUtc == null }
-                    .forEach {
-                        apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
-                        apiService.communications.apiV2CommunicationPrivateMessagesByMessageIdReadPost(it.id)
-                    }
         } successUi {
             configureRecycler()
             ui.loading.visibility = View.GONE
@@ -108,30 +131,37 @@ class FragmentViewMessages : Fragment(), ContentAPI, AnkoLogger, HasDb {
 
 class SingleItemUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
-        verticalLayout {
+        linearLayout {
             backgroundResource = R.color.cardview_light_background
-            padding = dip(15)
-            textView {
-                id = R.id.title
+            setPadding(0, dip(10), 0, dip(10))
+            weightSum = 100F
+            id = R.id.layout
+            isClickable = true
+            lparams(matchParent, wrapContent)
 
-                setTextAppearance(ctx, android.R.style.TextAppearance_Medium)
-            }
+            fontAwesomeView {
+                id = R.id.icon
+                text = "{fa-envelope 30sp}"
+                gravity = Gravity.CENTER
+            }.lparams(dip(0), matchParent, 15F)
 
-            textView {
-                id = R.id.date
-                setTextAppearance(ctx, android.R.style.TextAppearance_Small)
-            }
+            verticalLayout {
+                textView {
+                    id = R.id.title
 
-            textView {
-                padding = dip(10)
-                id = R.id.text
-            }
-            view {
-                lparams(matchParent, dip(1)){
-                    verticalMargin = dip(5)
+                    setTextAppearance(ctx, android.R.style.TextAppearance_DeviceDefault_Large)
                 }
-                backgroundResource = R.color.primary
-            }
+
+                textView {
+                    id = R.id.date
+                    setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                }
+            }.lparams(dip(0), wrapContent, 75F)
+
+            fontAwesomeView {
+                text = "{fa-chevron-right 30sp}"
+                gravity = Gravity.CENTER
+            }.lparams(dip(0), matchParent, 10F)
         }
     }
 
@@ -145,7 +175,9 @@ class MessagesUi : AnkoComponent<ViewGroup> {
             lparams(matchParent, matchParent)
 
             loading = progressBar().lparams(matchParent, wrapContent)
-            messageList = recycler { }.lparams(matchParent, matchParent)
+            messageList = recycler { }.lparams(matchParent, matchParent) {
+                topMargin = dip(10)
+            }
         }
     }
 }

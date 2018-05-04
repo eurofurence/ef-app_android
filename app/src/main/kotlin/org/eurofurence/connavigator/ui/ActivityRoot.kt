@@ -20,12 +20,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import com.google.gson.Gson
 import com.joanzapata.iconify.IconDrawable
 import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import io.swagger.client.model.AnnouncementRecord
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventRecord
 import io.swagger.client.model.KnowledgeEntryRecord
+import io.swagger.client.model.PrivateMessageRecord
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
@@ -324,7 +326,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navDealersDen -> navigateRoot(FragmentViewDealers::class.java, ActionBarMode.SEARCH)
                 R.id.navAbout -> navigateRoot(FragmentViewAbout::class.java)
                 R.id.navLogin -> startActivity<LoginActivity>()
-                R.id.navMessages -> navigateIfLoggedIn(FragmentViewMessages::class.java)
+                R.id.navMessages -> navigateIfLoggedIn(FragmentViewMessageList::class.java)
                 R.id.navFursuitGames -> {
                     if (RemotePreferences.nativeFursuitGames) {
                         navigateIfLoggedIn(FragmentViewFursuits::class.java, ActionBarMode.TABS)
@@ -395,6 +397,14 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
     override fun navigateToDealer(dealer: DealerRecord) {
         navigateToSubFragment(FragmentViewDealer(dealer))
+    }
+
+    override fun navigateToMessage(message: PrivateMessageRecord) {
+        val fragment = FragmentViewMessageItem().withArguments(
+                "message" to Gson().toJson(message)
+        )
+
+        navigateToSubFragment(fragment)
     }
 
     override fun navigateToAnnouncement(announcementRecord: AnnouncementRecord) {
