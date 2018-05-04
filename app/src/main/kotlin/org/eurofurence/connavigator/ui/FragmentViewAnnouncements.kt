@@ -58,7 +58,7 @@ class FragmentViewAnnouncements : Fragment(), HasDb, AnkoLogger {
 
             holder.announcementTitle.text = announcement.title
             holder.announcementContent.text = announcement.area
-            holder.announcementContent.setOnClickListener {
+            holder.layout.setOnClickListener {
                 applyOnRoot {
                     navigateToAnnouncement(announcement)
                 }
@@ -138,6 +138,7 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         linearLayout {
             lparams(matchParent, wrapContent)
+            id = R.id.layout
             weightSum = 10F
 
             fontAwesomeView {
