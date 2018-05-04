@@ -39,7 +39,7 @@ import org.jetbrains.anko.textView
 import org.jetbrains.anko.verticalLayout
 import org.jetbrains.anko.wrapContent
 
-class FragmentViewAnnouncements : Fragment(), HasDb, AnkoLogger {
+class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
     inner class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView), ContentAPI {
         val layout: LinearLayout by view()
         val announcementTitle: TextView by view()

@@ -6,6 +6,8 @@ import io.swagger.client.model.AnnouncementRecord
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventRecord
 import io.swagger.client.model.KnowledgeEntryRecord
+import org.eurofurence.connavigator.ui.ActionBarMode
+
 /**
  * Created by Pazuzu on 12.04.2016.
  */
@@ -21,6 +23,8 @@ interface RootAPI {
     fun navigateToDealer(dealer: DealerRecord)
 
     fun navigateToAnnouncement(announcementRecord: AnnouncementRecord)
+
+    fun <T : Fragment> navigateRoot(type: Class<T>, mode: ActionBarMode = ActionBarMode.NONE)
 
     fun changeTitle(text: String)
 

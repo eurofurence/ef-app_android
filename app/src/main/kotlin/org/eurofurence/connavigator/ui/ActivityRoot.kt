@@ -280,7 +280,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         toggle.syncState()
     }
 
-    private fun <T : Fragment> navigateRoot(type: Class<T>, mode: ActionBarMode = ActionBarMode.NONE) {
+    override fun <T : Fragment> navigateRoot(type: Class<T>, mode: ActionBarMode) {
         setActionBarMode(mode)
 
         // If not already there, navigate with fragment transaction

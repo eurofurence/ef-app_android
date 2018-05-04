@@ -12,8 +12,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.lzyzsd.circleprogress.ArcProgress
-import nl.komponents.kovenant.task
-import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.database.locateDb
@@ -21,20 +19,17 @@ import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.EventList
+import org.eurofurence.connavigator.ui.fragments.AnnouncementListFragment
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
-import org.eurofurence.connavigator.ui.fragments.FragmentViewAnnouncements
+import org.eurofurence.connavigator.ui.fragments.UserStatusFragment
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.arcProgress
-import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.localReceiver
-import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.displayMetrics
-import org.jetbrains.anko.horizontalPadding
 import org.jetbrains.anko.imageView
 import org.jetbrains.anko.info
 import org.jetbrains.anko.linearLayout
@@ -55,17 +50,9 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     val database by lazy { locateDb() }
     val now by lazy { DateTime.now() }
 
-    val dataChanged by lazy {
-        context.localReceiver(DataChanged.DATACHANGED) {
-            ui.updateLogin()
-        }
-    }
-
-
     val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
     val current by lazy { EventRecyclerFragment(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
     val favorited by lazy { EventRecyclerFragment(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
-    val announcements by lazy { FragmentViewAnnouncements() }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         container!!
 
@@ -80,8 +67,6 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
 
         configureProgressBar()
         configureEventRecyclers()
-
-        dataChanged.register()
     }
 
     private fun configureEventRecyclers() {
@@ -91,7 +76,8 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
                 .replace(5000, current)
                 .replace(5001, upcoming)
                 .replace(5002, favorited)
-                .replace(5003, announcements)
+                .replace(5003, AnnouncementListFragment())
+                .replace(5004, UserStatusFragment())
                 .commitAllowingStateLoss()
     }
 
@@ -118,23 +104,13 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
 
 class HomeUi : AnkoComponent<ViewGroup> {
     lateinit var countdownArc: ArcProgress
-    lateinit var announcementsTitle: TextView
-    lateinit var announcementsRecycler: RecyclerView
-    lateinit var greeting: TextView
     lateinit var countdownLayout: LinearLayout
 
     lateinit var upcomingFragment: ViewGroup
     lateinit var currentFragment: ViewGroup
     lateinit var favoritesFragment: ViewGroup
     lateinit var announcementFragment: ViewGroup
-
-    /**
-     * Update the login part of the ui
-     */
-    fun updateLogin() {
-        greeting.text = "{fa-user} Hello ${AuthPreferences.username}"
-        greeting.visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
-    }
+    lateinit var loginWidget: ViewGroup
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         scrollView {
@@ -148,30 +124,9 @@ class HomeUi : AnkoComponent<ViewGroup> {
                     ViewCompat.setElevation(this, 15f)
                 }.lparams(matchParent, wrapContent)
 
-                greeting = fontAwesomeView {
-                    visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
-                    text = "{fa-user} Hello ${AuthPreferences.username}"
-                    compatAppearance = R.style.TextAppearance_AppCompat_Medium
-                    padding = dip(15)
-                }
-
-                if (AuthPreferences.isLoggedIn()) {
-                    fontAwesomeView {
-                        horizontalPadding = dip(15)
-
-                        task {
-                            val api = apiService.communications
-
-                            api.addHeader("Authorization", AuthPreferences.asBearer())
-
-                            api.apiV2CommunicationPrivateMessagesGet()
-                        } successUi { messages ->
-                            val unreadMessages = messages.filter { it.readDateTimeUtc == null }
-                            if (unreadMessages.isNotEmpty()) {
-                                this.text = "{fa-envelope} You have ${unreadMessages.size} messages"
-                            }
-                        }
-                    }
+                loginWidget = linearLayout {
+                    id = 5004
+                    lparams(matchParent, wrapContent)
                 }
 
                 countdownLayout = linearLayout {
