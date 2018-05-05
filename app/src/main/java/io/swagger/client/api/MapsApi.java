@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 public class MapsApi {
-  String basePath = "https://localhost/";
+  String basePath = "https://localhost";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -378,7 +378,7 @@ public class MapsApi {
 
 
       String[] contentTypes = {
-  "application/json","text/json","application/json-patch+json"
+  "application/json-patch+json","application/json","text/json","application/*+json"
       };
       String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
@@ -454,7 +454,7 @@ public class MapsApi {
 
 
     String[] contentTypes = {
-      "application/json","text/json","application/json-patch+json"
+      "application/json-patch+json","application/json","text/json","application/*+json"
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
@@ -792,7 +792,7 @@ public class MapsApi {
 
 
       String[] contentTypes = {
-  "application/json","text/json","application/json-patch+json"
+  "application/json-patch+json","application/json","text/json","application/*+json"
       };
       String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
@@ -862,7 +862,7 @@ public class MapsApi {
 
 
     String[] contentTypes = {
-      "application/json","text/json","application/json-patch+json"
+      "application/json-patch+json","application/json","text/json","application/*+json"
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 

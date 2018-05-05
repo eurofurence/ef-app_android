@@ -31,7 +31,7 @@ public class KnowledgeEntryRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
@@ -41,7 +41,7 @@ public class KnowledgeEntryRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public UUID getId() {
     return id;
   }
@@ -51,7 +51,7 @@ public class KnowledgeEntryRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public UUID getKnowledgeGroupId() {
     return knowledgeGroupId;
   }
@@ -81,7 +81,7 @@ public class KnowledgeEntryRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Integer getOrder() {
     return order;
   }

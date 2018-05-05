@@ -11,8 +11,7 @@ import java.util.*;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import io.swagger.client.model.AggregatedDeltaResponse;
-import java.util.Date;
+import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -24,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-public class SyncApi {
+public class RichPreviewApi {
   String basePath = "https://localhost";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
@@ -45,17 +44,23 @@ public class SyncApi {
   }
 
   /**
-  * Returns everything you could ever wish for.
   * 
-   * @param since 
-   * @return AggregatedDeltaResponse
+  * 
+   * @param id 
+   * @return void
   */
-  public AggregatedDeltaResponse apiV2SyncGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void linkEventsByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
+  
+      // verify the required parameter 'id' is set
+      if (id == null) {
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling linkEventsByIdGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling linkEventsByIdGet"));
+      }
   
 
   // create path and map variables
-  String path = "/Api/v2/Sync".replaceAll("\\{format\\}","json");
+  String path = "/Link/Events/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -64,7 +69,6 @@ public class SyncApi {
       // form params
       Map<String, String> formParams = new HashMap<String, String>();
 
-          queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
 
 
       String[] contentTypes = {
@@ -88,9 +92,9 @@ public class SyncApi {
       try {
         String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
         if(localVarResponse != null){
-           return (AggregatedDeltaResponse) ApiInvoker.deserialize(localVarResponse, "", AggregatedDeltaResponse.class);
+           return ;
         } else {
-           return null;
+           return ;
         }
       } catch (ApiException ex) {
          throw ex;
@@ -110,17 +114,23 @@ public class SyncApi {
   }
 
       /**
-   * Returns everything you could ever wish for.
    * 
-   * @param since 
+   * 
+   * @param id 
   */
-  public void apiV2SyncGet (Date since, final Response.Listener<AggregatedDeltaResponse> responseListener, final Response.ErrorListener errorListener) {
+  public void linkEventsByIdGet (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
+    // verify the required parameter 'id' is set
+    if (id == null) {
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling linkEventsByIdGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling linkEventsByIdGet"));
+    }
+    
 
     // create path and map variables
-    String path = "/Api/v2/Sync".replaceAll("\\{format\\}","json");
+    String path = "/Link/Events/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -129,7 +139,6 @@ public class SyncApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "since", since));
 
 
     String[] contentTypes = {
@@ -155,11 +164,7 @@ public class SyncApi {
         new Response.Listener<String>() {
           @Override
           public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((AggregatedDeltaResponse) ApiInvoker.deserialize(localVarResponse,  "", AggregatedDeltaResponse.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
+              responseListener.onResponse(localVarResponse);
           }
       }, new Response.ErrorListener() {
           @Override

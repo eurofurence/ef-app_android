@@ -53,7 +53,7 @@ public class DealerRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
@@ -63,7 +63,7 @@ public class DealerRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public UUID getId() {
     return id;
   }
@@ -73,7 +73,7 @@ public class DealerRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Integer getRegistrationNumber() {
     return registrationNumber;
   }

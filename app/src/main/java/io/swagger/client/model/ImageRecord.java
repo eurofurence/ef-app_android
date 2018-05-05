@@ -29,7 +29,7 @@ public class ImageRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
@@ -39,7 +39,7 @@ public class ImageRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public UUID getId() {
     return id;
   }
@@ -59,7 +59,7 @@ public class ImageRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Integer getWidth() {
     return width;
   }
@@ -69,7 +69,7 @@ public class ImageRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Integer getHeight() {
     return height;
   }
@@ -79,7 +79,7 @@ public class ImageRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Long getSizeInBytes() {
     return sizeInBytes;
   }

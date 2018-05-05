@@ -31,7 +31,7 @@ public class PrivateMessageRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
@@ -41,7 +41,7 @@ public class PrivateMessageRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public UUID getId() {
     return id;
   }
@@ -61,7 +61,7 @@ public class PrivateMessageRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Date getCreatedDateTimeUtc() {
     return createdDateTimeUtc;
   }

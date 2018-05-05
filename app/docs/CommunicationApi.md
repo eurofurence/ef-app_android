@@ -1,17 +1,18 @@
 # CommunicationApi
 
-All URIs are relative to *https://localhost/*
+All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**apiV2CommunicationPrivateMessagesByMessageIdReadPost**](CommunicationApi.md#apiV2CommunicationPrivateMessagesByMessageIdReadPost) | **POST** /Api/v2/Communication/PrivateMessages/{MessageId}/Read | Marks a given private message as read (reading receipt).
+[**apiV2CommunicationPrivateMessagesByMessageIdStatusGet**](CommunicationApi.md#apiV2CommunicationPrivateMessagesByMessageIdStatusGet) | **GET** /Api/v2/Communication/PrivateMessages/{MessageId}/Status | 
 [**apiV2CommunicationPrivateMessagesGet**](CommunicationApi.md#apiV2CommunicationPrivateMessagesGet) | **GET** /Api/v2/Communication/PrivateMessages | Retrieves all private messages of an authenticated attendee.
 [**apiV2CommunicationPrivateMessagesPost**](CommunicationApi.md#apiV2CommunicationPrivateMessagesPost) | **POST** /Api/v2/Communication/PrivateMessages | Sends a private message to a specific recipient/attendee.
 
 
 <a name="apiV2CommunicationPrivateMessagesByMessageIdReadPost"></a>
 # **apiV2CommunicationPrivateMessagesByMessageIdReadPost**
-> Date apiV2CommunicationPrivateMessagesByMessageIdReadPost(messageId)
+> Date apiV2CommunicationPrivateMessagesByMessageIdReadPost(messageId, isRead)
 
 Marks a given private message as read (reading receipt).
 
@@ -24,8 +25,9 @@ Marks a given private message as read (reading receipt).
 
 CommunicationApi apiInstance = new CommunicationApi();
 UUID messageId = new UUID(); // UUID | `Id` of the message to mark as read
+Boolean isRead = true; // Boolean | 
 try {
-    Date result = apiInstance.apiV2CommunicationPrivateMessagesByMessageIdReadPost(messageId);
+    Date result = apiInstance.apiV2CommunicationPrivateMessagesByMessageIdReadPost(messageId, isRead);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling CommunicationApi#apiV2CommunicationPrivateMessagesByMessageIdReadPost");
@@ -38,10 +40,54 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **messageId** | [**UUID**](.md)| &#x60;Id&#x60; of the message to mark as read |
+ **isRead** | **Boolean**|  | [optional]
 
 ### Return type
 
 [**Date**](Date.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+<a name="apiV2CommunicationPrivateMessagesByMessageIdStatusGet"></a>
+# **apiV2CommunicationPrivateMessagesByMessageIdStatusGet**
+> PrivateMessageStatus apiV2CommunicationPrivateMessagesByMessageIdStatusGet(messageId)
+
+
+
+  * Requires authorization     * Requires any of the following roles: **&#x60;Action-PrivateMessages-Query&#x60;**, **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.CommunicationApi;
+
+CommunicationApi apiInstance = new CommunicationApi();
+UUID messageId = new UUID(); // UUID | 
+try {
+    PrivateMessageStatus result = apiInstance.apiV2CommunicationPrivateMessagesByMessageIdStatusGet(messageId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling CommunicationApi#apiV2CommunicationPrivateMessagesByMessageIdStatusGet");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **messageId** | [**UUID**](.md)|  |
+
+### Return type
+
+[**PrivateMessageStatus**](PrivateMessageStatus.md)
 
 ### Authorization
 
@@ -131,6 +177,6 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json, text/json, application/json-patch+json
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 

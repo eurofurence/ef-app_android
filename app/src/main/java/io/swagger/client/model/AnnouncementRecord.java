@@ -29,7 +29,7 @@ public class AnnouncementRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
@@ -39,7 +39,7 @@ public class AnnouncementRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public UUID getId() {
     return id;
   }
@@ -49,7 +49,7 @@ public class AnnouncementRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Date getValidFromDateTimeUtc() {
     return validFromDateTimeUtc;
   }
@@ -59,7 +59,7 @@ public class AnnouncementRecord  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public Date getValidUntilDateTimeUtc() {
     return validUntilDateTimeUtc;
   }

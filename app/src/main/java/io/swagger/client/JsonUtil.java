@@ -175,6 +175,10 @@ public class JsonUtil {
       return new TypeToken<List<MapRecord>>(){}.getType();
     }
     
+    if ("PlatformTagInfo".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PlatformTagInfo>>(){}.getType();
+    }
+    
     if ("PlayerCollectionEntry".equalsIgnoreCase(className)) {
       return new TypeToken<List<PlayerCollectionEntry>>(){}.getType();
     }
@@ -197,6 +201,14 @@ public class JsonUtil {
     
     if ("PrivateMessageRecord".equalsIgnoreCase(className)) {
       return new TypeToken<List<PrivateMessageRecord>>(){}.getType();
+    }
+    
+    if ("PrivateMessageStatus".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PrivateMessageStatus>>(){}.getType();
+    }
+    
+    if ("PushNotificationChannelStatistics".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PushNotificationChannelStatistics>>(){}.getType();
     }
     
     if ("RegSysAuthenticationRequest".equalsIgnoreCase(className)) {
@@ -357,6 +369,10 @@ public class JsonUtil {
       return new TypeToken<MapRecord>(){}.getType();
     }
     
+    if ("PlatformTagInfo".equalsIgnoreCase(className)) {
+      return new TypeToken<PlatformTagInfo>(){}.getType();
+    }
+    
     if ("PlayerCollectionEntry".equalsIgnoreCase(className)) {
       return new TypeToken<PlayerCollectionEntry>(){}.getType();
     }
@@ -379,6 +395,14 @@ public class JsonUtil {
     
     if ("PrivateMessageRecord".equalsIgnoreCase(className)) {
       return new TypeToken<PrivateMessageRecord>(){}.getType();
+    }
+    
+    if ("PrivateMessageStatus".equalsIgnoreCase(className)) {
+      return new TypeToken<PrivateMessageStatus>(){}.getType();
+    }
+    
+    if ("PushNotificationChannelStatistics".equalsIgnoreCase(className)) {
+      return new TypeToken<PushNotificationChannelStatistics>(){}.getType();
     }
     
     if ("RegSysAuthenticationRequest".equalsIgnoreCase(className)) {

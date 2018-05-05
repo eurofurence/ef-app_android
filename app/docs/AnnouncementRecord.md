@@ -4,10 +4,10 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**lastChangeDateTimeUtc** | [**Date**](Date.md) |  | 
-**id** | [**UUID**](UUID.md) |  | 
-**validFromDateTimeUtc** | [**Date**](Date.md) |  | 
-**validUntilDateTimeUtc** | [**Date**](Date.md) |  | 
+**lastChangeDateTimeUtc** | [**Date**](Date.md) |  |  [optional]
+**id** | [**UUID**](UUID.md) |  |  [optional]
+**validFromDateTimeUtc** | [**Date**](Date.md) |  |  [optional]
+**validUntilDateTimeUtc** | [**Date**](Date.md) |  |  [optional]
 **area** | **String** |  | 
 **author** | **String** |  | 
 **title** | **String** |  | 

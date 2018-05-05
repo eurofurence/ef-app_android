@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 
 import java.util.UUID;
 import java.util.Date;
+import io.swagger.client.model.PrivateMessageStatus;
 import io.swagger.client.model.PrivateMessageRecord;
 import io.swagger.client.model.SendPrivateMessageRequest;
 
@@ -27,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 public class CommunicationApi {
-  String basePath = "https://localhost/";
+  String basePath = "https://localhost";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -50,10 +51,11 @@ public class CommunicationApi {
   * Marks a given private message as read (reading receipt).
   *   * Requires authorization     * Requires any of the following roles: **&#x60;Attendee&#x60;**  Calling this on a message that has already been marked as read  will not update the &#x60;ReadDateTimeUtc&#x60; property, but return the  &#x60;ReadDateTimeUtc&#x60; value of the first call.
    * @param messageId &#x60;Id&#x60; of the message to mark as read
+   * @param isRead 
    * @return Date
   */
-  public Date apiV2CommunicationPrivateMessagesByMessageIdReadPost (UUID messageId) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
-     Object postBody = null;
+  public Date apiV2CommunicationPrivateMessagesByMessageIdReadPost (UUID messageId, Boolean isRead) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+     Object postBody = isRead;
   
       // verify the required parameter 'messageId' is set
       if (messageId == null) {
@@ -75,7 +77,7 @@ public class CommunicationApi {
 
 
       String[] contentTypes = {
-  
+  "application/json-patch+json","application/json","text/json","application/*+json"
       };
       String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
@@ -119,10 +121,10 @@ public class CommunicationApi {
       /**
    * Marks a given private message as read (reading receipt).
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Attendee&#x60;**  Calling this on a message that has already been marked as read  will not update the &#x60;ReadDateTimeUtc&#x60; property, but return the  &#x60;ReadDateTimeUtc&#x60; value of the first call.
-   * @param messageId &#x60;Id&#x60; of the message to mark as read
+   * @param messageId &#x60;Id&#x60; of the message to mark as read   * @param isRead 
   */
-  public void apiV2CommunicationPrivateMessagesByMessageIdReadPost (UUID messageId, final Response.Listener<Date> responseListener, final Response.ErrorListener errorListener) {
-    Object postBody = null;
+  public void apiV2CommunicationPrivateMessagesByMessageIdReadPost (UUID messageId, Boolean isRead, final Response.Listener<Date> responseListener, final Response.ErrorListener errorListener) {
+    Object postBody = isRead;
 
   
     // verify the required parameter 'messageId' is set
@@ -134,6 +136,143 @@ public class CommunicationApi {
 
     // create path and map variables
     String path = "/Api/v2/Communication/PrivateMessages/{MessageId}/Read".replaceAll("\\{format\\}","json").replaceAll("\\{" + "MessageId" + "\\}", apiInvoker.escapeString(messageId.toString()));
+
+    // query params
+    List<Pair> queryParams = new ArrayList<Pair>();
+    // header params
+    Map<String, String> headerParams = new HashMap<String, String>();
+    // form params
+    Map<String, String> formParams = new HashMap<String, String>();
+
+
+
+    String[] contentTypes = {
+      "application/json-patch+json","application/json","text/json","application/*+json"
+    };
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
+      
+
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
+    } else {
+      // normal form params
+          }
+
+      String[] authNames = new String[] { "Bearer" };
+
+    try {
+      apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, authNames,
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String localVarResponse) {
+            try {
+              responseListener.onResponse((Date) ApiInvoker.deserialize(localVarResponse,  "", Date.class));
+            } catch (ApiException exception) {
+               errorListener.onErrorResponse(new VolleyError(exception));
+            }
+          }
+      }, new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            errorListener.onErrorResponse(error);
+          }
+      });
+    } catch (ApiException ex) {
+      errorListener.onErrorResponse(new VolleyError(ex));
+    }
+  }
+  /**
+  * 
+  *   * Requires authorization     * Requires any of the following roles: **&#x60;Action-PrivateMessages-Query&#x60;**, **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+   * @param messageId 
+   * @return PrivateMessageStatus
+  */
+  public PrivateMessageStatus apiV2CommunicationPrivateMessagesByMessageIdStatusGet (UUID messageId) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+     Object postBody = null;
+  
+      // verify the required parameter 'messageId' is set
+      if (messageId == null) {
+      VolleyError error = new VolleyError("Missing the required parameter 'messageId' when calling apiV2CommunicationPrivateMessagesByMessageIdStatusGet",
+      new ApiException(400, "Missing the required parameter 'messageId' when calling apiV2CommunicationPrivateMessagesByMessageIdStatusGet"));
+      }
+  
+
+  // create path and map variables
+  String path = "/Api/v2/Communication/PrivateMessages/{MessageId}/Status".replaceAll("\\{format\\}","json").replaceAll("\\{" + "MessageId" + "\\}", apiInvoker.escapeString(messageId.toString()));
+
+  // query params
+  List<Pair> queryParams = new ArrayList<Pair>();
+      // header params
+      Map<String, String> headerParams = new HashMap<String, String>();
+      // form params
+      Map<String, String> formParams = new HashMap<String, String>();
+
+
+
+      String[] contentTypes = {
+  
+      };
+      String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+      if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
+  
+
+      HttpEntity httpEntity = localVarBuilder.build();
+      postBody = httpEntity;
+      } else {
+      // normal form params
+        }
+
+      String[] authNames = new String[] { "Bearer" };
+
+      try {
+        String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
+        if(localVarResponse != null){
+           return (PrivateMessageStatus) ApiInvoker.deserialize(localVarResponse, "", PrivateMessageStatus.class);
+        } else {
+           return null;
+        }
+      } catch (ApiException ex) {
+         throw ex;
+      } catch (InterruptedException ex) {
+         throw ex;
+      } catch (ExecutionException ex) {
+         if(ex.getCause() instanceof VolleyError) {
+	    VolleyError volleyError = (VolleyError)ex.getCause();
+	    if (volleyError.networkResponse != null) {
+	       throw new ApiException(volleyError.networkResponse.statusCode, volleyError.getMessage());
+	    }
+         }
+         throw ex;
+      } catch (TimeoutException ex) {
+         throw ex;
+      }
+  }
+
+      /**
+   * 
+   *   * Requires authorization     * Requires any of the following roles: **&#x60;Action-PrivateMessages-Query&#x60;**, **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+   * @param messageId 
+  */
+  public void apiV2CommunicationPrivateMessagesByMessageIdStatusGet (UUID messageId, final Response.Listener<PrivateMessageStatus> responseListener, final Response.ErrorListener errorListener) {
+    Object postBody = null;
+
+  
+    // verify the required parameter 'messageId' is set
+    if (messageId == null) {
+       VolleyError error = new VolleyError("Missing the required parameter 'messageId' when calling apiV2CommunicationPrivateMessagesByMessageIdStatusGet",
+         new ApiException(400, "Missing the required parameter 'messageId' when calling apiV2CommunicationPrivateMessagesByMessageIdStatusGet"));
+    }
+    
+
+    // create path and map variables
+    String path = "/Api/v2/Communication/PrivateMessages/{MessageId}/Status".replaceAll("\\{format\\}","json").replaceAll("\\{" + "MessageId" + "\\}", apiInvoker.escapeString(messageId.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -163,12 +302,12 @@ public class CommunicationApi {
       String[] authNames = new String[] { "Bearer" };
 
     try {
-      apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, authNames,
+      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
         new Response.Listener<String>() {
           @Override
           public void onResponse(String localVarResponse) {
             try {
-              responseListener.onResponse((Date) ApiInvoker.deserialize(localVarResponse,  "", Date.class));
+              responseListener.onResponse((PrivateMessageStatus) ApiInvoker.deserialize(localVarResponse,  "", PrivateMessageStatus.class));
             } catch (ApiException exception) {
                errorListener.onErrorResponse(new VolleyError(exception));
             }
@@ -330,7 +469,7 @@ public class CommunicationApi {
 
 
       String[] contentTypes = {
-  "application/json","text/json","application/json-patch+json"
+  "application/json-patch+json","application/json","text/json","application/*+json"
       };
       String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
@@ -394,7 +533,7 @@ public class CommunicationApi {
 
 
     String[] contentTypes = {
-      "application/json","text/json","application/json-patch+json"
+      "application/json-patch+json","application/json","text/json","application/*+json"
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 

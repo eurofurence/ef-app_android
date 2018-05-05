@@ -20,7 +20,7 @@ public class LinkFragment  {
 
   /**
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public FragmentTypeEnum getFragmentType() {
     return fragmentType;
   }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.github.kittinunf.fuel.Fuel
 import com.google.gson.Gson
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
@@ -17,6 +18,7 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
+import org.eurofurence.connavigator.util.extensions.markAsRead
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
@@ -65,8 +67,7 @@ class FragmentViewMessageItem : Fragment(), AnkoLogger {
 
         task {
             info { "Marking message ${message.id} as read" }
-            apiService.communications.addHeader("Authorization", "Bearer ${AuthPreferences.token}")
-            apiService.communications.apiV2CommunicationPrivateMessagesByMessageIdReadPost(message.id)
+            message.markAsRead()
         } successUi {
             info { "Message marked as read" }
             longToast("Message has been marked as read!")

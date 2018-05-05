@@ -4,9 +4,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**lastChangeDateTimeUtc** | [**Date**](Date.md) |  | 
-**id** | [**UUID**](UUID.md) |  | 
-**registrationNumber** | **Integer** |  | 
+**lastChangeDateTimeUtc** | [**Date**](Date.md) |  |  [optional]
+**id** | [**UUID**](UUID.md) |  |  [optional]
+**registrationNumber** | **Integer** |  |  [optional]
 **attendeeNickname** | **String** |  | 
 **displayName** | **String** |  | 
 **merchandise** | **String** |  | 
