@@ -88,6 +88,7 @@ class MessageItemUi : AnkoComponent<ViewGroup> {
         verticalLayout {
             lparams(matchParent, matchParent)
             backgroundResource = R.color.backgroundGrey
+            isClickable = true
 
             linearLayout {
                 weightSum = 100F
