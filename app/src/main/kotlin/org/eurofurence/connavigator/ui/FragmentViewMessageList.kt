@@ -28,22 +28,9 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.extensions.toRelative
+import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.webapi.apiService
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.info
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.progressBar
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.warn
-import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.*
 
 /**
  * Created by requinard on 6/28/17.
@@ -142,19 +129,19 @@ class SingleItemUi : AnkoComponent<ViewGroup> {
             fontAwesomeView {
                 id = R.id.icon
                 text = "{fa-envelope 30sp}"
-                gravity = Gravity.CENTER
+                gravity = Gravity.CENTER_VERTICAL
+                setPadding(dip(20), 0, 0, 0)
             }.lparams(dip(0), matchParent, 15F)
 
             verticalLayout {
                 textView {
                     id = R.id.title
-
-                    setTextAppearance(ctx, android.R.style.TextAppearance_DeviceDefault_Large)
+                    compatAppearance = android.R.style.TextAppearance_Medium
                 }
 
                 textView {
                     id = R.id.date
-                    setTextAppearance(ctx, android.R.style.TextAppearance_Small)
+                    compatAppearance = android.R.style.TextAppearance_Small
                 }
             }.lparams(dip(0), wrapContent, 75F)
 

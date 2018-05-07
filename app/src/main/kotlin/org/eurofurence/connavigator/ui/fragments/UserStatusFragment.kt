@@ -47,9 +47,9 @@ class UserStatusFragment : Fragment(), AnkoLogger {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+        checkMessages()
         info { "Check timer initializing" }
-        timer = fixedRateTimer(period = 5000L) {
-            checkMessages()
+            timer = fixedRateTimer(period = 60000L) {
         }
     }
 
@@ -91,7 +91,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
         loginObservable.subscribe {
             if (!AuthPreferences.isLoggedIn()) {
                 ui.title.text = "You are currently not logged in."
-                ui.subtitle.text = "Tap here to login using your registration details and\nreceive personalized information from Eurofurence!"
+                ui.subtitle.text = "Tap here to login using your registration details and receive personalized information from Eurofurence!"
                 ui.layout.setOnClickListener {
                     startActivity(intentFor<LoginActivity>())
                 }
@@ -128,17 +128,16 @@ class UserStatusUi : AnkoComponent<ViewGroup> {
             userIcon = fontAwesomeView {
                 text = "{fa-user 30sp}"
                 lparams(dip(0), matchParent, 15F)
-                gravity = Gravity.CENTER
+                gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
             }
 
             verticalLayout {
                 title = textView("Title") {
-                    compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
-                    textColor = ContextCompat.getColor(context, android.R.color.primary_text_light)
+                    compatAppearance = android.R.style.TextAppearance_Medium
                 }
 
                 subtitle = textView("Fetching . . .") {
-                    compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
+                    compatAppearance = android.R.style.TextAppearance_Small
                 }
                 lparams(dip(0), matchParent, 75F)
             }

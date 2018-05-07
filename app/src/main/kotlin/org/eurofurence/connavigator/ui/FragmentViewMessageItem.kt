@@ -95,14 +95,15 @@ class MessageItemUi : AnkoComponent<ViewGroup> {
 
                 icon = fontAwesomeView {
                     text = "{fa-envelope 30sp}"
-                    gravity = Gravity.CENTER
+                    gravity = Gravity.LEFT or Gravity.TOP
+                    setPadding(dip(20),  dip(20), 0, 0)
                 }.lparams(dip(0), matchParent, 15F)
 
                 verticalLayout {
                     padding = dip(20)
 
                     title = textView("Title") {
-                        compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large
+                        compatAppearance = android.R.style.TextAppearance_Medium
                     }.lparams(matchParent, wrapContent)
 
                     author = textView("Subtitle") {
@@ -125,8 +126,8 @@ class MessageItemUi : AnkoComponent<ViewGroup> {
                 content = markdownView {
                     loadMarkdown("Content")
                 }
-                backgroundResource = R.color.cardview_light_background
                 padding = dip(20)
+                backgroundResource = R.color.cardview_light_background
             }
         }
     }
