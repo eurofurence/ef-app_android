@@ -1,6 +1,6 @@
 package org.eurofurence.connavigator.ui
 
-import android.os.Build
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -64,6 +64,10 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
             finish()
         }
 
+        ui.moreInformation.setOnClickListener {
+            browse("https://app.eurofurence.org/redir/why-login")
+        }
+
         loginReceiver.register()
     }
 
@@ -106,6 +110,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
     lateinit var errorText: TextView
     lateinit var submit: Button
     lateinit var logout: Button
+    lateinit var moreInformation: Button
     lateinit var layoutMain: LinearLayout
     lateinit var layoutBusy: LinearLayout
 
@@ -187,8 +192,17 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
                     submit = button {
                         text = "Login"
+                        background.setColorFilter(ContextCompat.getColor(context, R.color.primaryDark), PorterDuff.Mode.SRC)
+                        textColor = ContextCompat.getColor(context, R.color.textWhite)
+
                         lparams(matchParent, wrapContent) {
                             margin = dip(16)
+                        }
+                    }
+
+                    moreInformation = button("More Information") {
+                        lparams(matchParent, wrapContent) {
+                            setMargins(dip(16), 0, dip(16), dip(16))
                         }
                     }
                 }
