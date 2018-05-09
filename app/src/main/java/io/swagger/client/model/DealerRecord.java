@@ -50,6 +50,10 @@ public class DealerRecord  {
   private UUID artistImageId = null;
   @SerializedName("ArtPreviewImageId")
   private UUID artPreviewImageId = null;
+  @SerializedName("IsAfterDark")
+  private Boolean isAfterDark = null;
+  @SerializedName("Categories")
+  private List<String> categories = null;
 
   /**
    **/
@@ -241,6 +245,26 @@ public class DealerRecord  {
     this.artPreviewImageId = artPreviewImageId;
   }
 
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public Boolean getIsAfterDark() {
+    return isAfterDark;
+  }
+  public void setIsAfterDark(Boolean isAfterDark) {
+    this.isAfterDark = isAfterDark;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public List<String> getCategories() {
+    return categories;
+  }
+  public void setCategories(List<String> categories) {
+    this.categories = categories;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -269,7 +293,9 @@ public class DealerRecord  {
         (artPreviewCaption == null ? dealerRecord.artPreviewCaption == null : artPreviewCaption.equals(dealerRecord.artPreviewCaption)) &&
         (artistThumbnailImageId == null ? dealerRecord.artistThumbnailImageId == null : artistThumbnailImageId.equals(dealerRecord.artistThumbnailImageId)) &&
         (artistImageId == null ? dealerRecord.artistImageId == null : artistImageId.equals(dealerRecord.artistImageId)) &&
-        (artPreviewImageId == null ? dealerRecord.artPreviewImageId == null : artPreviewImageId.equals(dealerRecord.artPreviewImageId));
+        (artPreviewImageId == null ? dealerRecord.artPreviewImageId == null : artPreviewImageId.equals(dealerRecord.artPreviewImageId)) &&
+        (isAfterDark == null ? dealerRecord.isAfterDark == null : isAfterDark.equals(dealerRecord.isAfterDark)) &&
+        (categories == null ? dealerRecord.categories == null : categories.equals(dealerRecord.categories));
   }
 
   @Override 
@@ -294,6 +320,8 @@ public class DealerRecord  {
     result = 31 * result + (artistThumbnailImageId == null ? 0: artistThumbnailImageId.hashCode());
     result = 31 * result + (artistImageId == null ? 0: artistImageId.hashCode());
     result = 31 * result + (artPreviewImageId == null ? 0: artPreviewImageId.hashCode());
+    result = 31 * result + (isAfterDark == null ? 0: isAfterDark.hashCode());
+    result = 31 * result + (categories == null ? 0: categories.hashCode());
     return result;
   }
 
@@ -321,6 +349,8 @@ public class DealerRecord  {
     sb.append("  artistThumbnailImageId: ").append(artistThumbnailImageId).append("\n");
     sb.append("  artistImageId: ").append(artistImageId).append("\n");
     sb.append("  artPreviewImageId: ").append(artPreviewImageId).append("\n");
+    sb.append("  isAfterDark: ").append(isAfterDark).append("\n");
+    sb.append("  categories: ").append(categories).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

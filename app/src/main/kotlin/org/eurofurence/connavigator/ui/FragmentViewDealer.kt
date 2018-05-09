@@ -71,6 +71,8 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.name.text = dealer.getName()
             ui.shortDescription.text = dealer.shortDescription
 
+            ui.categories.text = dealer.categories.joinToString(", ")
+
             ui.aboutArtist.loadMarkdown(
                     if (dealer.aboutTheArtistText.isNotEmpty())
                         dealer.aboutTheArtistText
@@ -164,6 +166,7 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         lateinit var primaryImage: PhotoView
         lateinit var name: TextView
         lateinit var shortDescription: TextView
+        lateinit var categories: TextView
         lateinit var aboutArtist: MarkdownView
         lateinit var aboutArt: MarkdownView
         lateinit var aboutArtContainer: LinearLayout
@@ -203,9 +206,18 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
                             shortDescription = textView {
                                 text = "Short description"
+                                textAlignment = View.TEXT_ALIGNMENT_CENTER
                                 padding = dip(10)
 
                                 setTextAppearance(ctx, android.R.style.TextAppearance_Medium_Inverse)
+                            }
+
+                            categories = textView {
+                                text = "Categories"
+                                textAlignment = View.TEXT_ALIGNMENT_CENTER
+                                padding = dip(10)
+
+                                setTextAppearance(ctx, android.R.style.TextAppearance_Small_Inverse)
                             }
                         }
 

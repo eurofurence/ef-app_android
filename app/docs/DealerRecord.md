@@ -23,6 +23,8 @@ Name | Type | Description | Notes
 **artistThumbnailImageId** | [**UUID**](UUID.md) |  |  [optional]
 **artistImageId** | [**UUID**](UUID.md) |  |  [optional]
 **artPreviewImageId** | [**UUID**](UUID.md) |  |  [optional]
+**isAfterDark** | **Boolean** |  |  [optional]
+**categories** | **List&lt;String&gt;** |  |  [optional]
 
 
 
