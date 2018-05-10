@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
 import com.google.firebase.perf.metrics.AddTrace
@@ -27,9 +28,12 @@ import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.editText
 import org.jetbrains.anko.info
+import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.padding
 import org.jetbrains.anko.singleLine
+import org.jetbrains.anko.spinner
+import org.jetbrains.anko.textView
 import org.jetbrains.anko.verticalLayout
 import org.jetbrains.anko.wrapContent
 
@@ -99,15 +103,34 @@ class DealersUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
             lparams(matchParent, matchParent)
-            backgroundResource = R.color.cardview_light_background
+            backgroundResource = R.color.backgroundGrey
 
-            searchLayout = verticalLayout {
-                lparams(matchParent, wrapContent)
-                visibility = View.GONE
-                search = editText {
-                    lparams(matchParent, wrapContent)
-                    singleLine = true
-                    padding = dip(15)
+            verticalLayout {
+                // Search widgets
+                padding = dip(10)
+                linearLayout {
+                    // Filter types
+                    weightSum = 100F
+
+                    textView("Show:") {}.lparams(dip(0), wrapContent, 20F)
+
+                    spinner {
+                        prompt = "Filter"
+                        val items = listOf(
+                                "All Categories",
+                                "Haha there should be more here soon :3"
+                        )
+
+                        adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, items)
+                    }.lparams(dip(0), wrapContent, 80F)
+                }
+
+                searchLayout = linearLayout {
+                    weightSum = 100F
+                    visibility = View.GONE
+                    textView("Search").lparams(dip(0), wrapContent, 20F)
+
+                    search = editText { singleLine = true }.lparams(dip(0), wrapContent, 80F)
                 }
             }
 

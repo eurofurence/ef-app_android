@@ -5,4 +5,6 @@
     <item name="test_title" type="id" />
     <item name="dealerSubText" type="id"/>
     <item name="dealerPreviewImage" type="id"/>
+    <item name="danger" type="id">danger</item>
+    <item name="moon" type="id">moon</item>
 </resources>

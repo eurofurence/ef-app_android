@@ -1,7 +1,11 @@
 package org.eurofurence.connavigator.util.extensions
 
 import android.util.Log
-import io.swagger.client.model.*
+import io.swagger.client.model.DealerRecord
+import io.swagger.client.model.EventRecord
+import io.swagger.client.model.ImageRecord
+import io.swagger.client.model.MapRecord
+import io.swagger.client.model.PrivateMessageRecord
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.webapi.apiService
 
@@ -37,3 +41,4 @@ fun EventRecord.endTimeString(): String = endDateTimeUtc.jodatime().toString("HH
 fun EventRecord.ownerString(): String = "Hosted by $panelHosts"
 
 fun DealerRecord.getName() = if (this.displayName.isNotEmpty()) this.displayName else this.attendeeNickname
+fun DealerRecord.allDaysAvailable() = listOf(this.attendsOnThursday, this.attendsOnFriday, this.attendsOnSaturday).all { true }
