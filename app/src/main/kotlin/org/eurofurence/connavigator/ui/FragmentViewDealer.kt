@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +23,9 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.fontAwesomeButton
 import org.eurofurence.connavigator.util.extensions.getName
-import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.photoView
+import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
@@ -36,13 +35,13 @@ import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.info
-import org.jetbrains.anko.margin
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.padding
 import org.jetbrains.anko.relativeLayout
 import org.jetbrains.anko.scrollView
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.textView
+import org.jetbrains.anko.topPadding
 import org.jetbrains.anko.verticalLayout
 import org.jetbrains.anko.warn
 import org.jetbrains.anko.wrapContent
@@ -75,7 +74,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             if (image != null) {
                 imageService.load(image, ui.primaryImage, false)
             } else {
-                ui.primaryImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.dealer_white_full))
+                ui.primaryImage.visibility = View.GONE
             }
 
             // Load art preview image
@@ -84,7 +83,16 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.artPreviewCaption.text = dealer.artPreviewCaption
 
             ui.name.text = dealer.getName()
-            ui.shortDescription.text = dealer.shortDescription
+            ui.nameSecond.apply {
+                text = dealer.attendeeNickname
+                visibility = if (dealer.displayName.isNullOrEmpty()) View.GONE else View.VISIBLE
+            }
+
+            ui.categories.text = dealer.categories.joinToString(", ")
+            ui.shortDescription.apply {
+                text = dealer.shortDescription
+                visibility = if (dealer.shortDescription.isNullOrEmpty()) View.GONE else View.VISIBLE
+            }
 
             ui.categories.text = dealer.categories.joinToString(", ")
 
@@ -140,10 +148,6 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     private fun configureLinks(dealer: DealerRecord) {
         info { "Setting up external links" }
 
-        if (dealer.links != null || !dealer.telegramHandle.isNullOrEmpty() || !dealer.twitterHandle.isNullOrEmpty()) {
-            ui.linkLayout.visibility = View.VISIBLE
-        }
-
         if (dealer.links != null && !dealer.links.isEmpty()) {
             ui.websites.visibility = View.VISIBLE
             dealer.links.forEach {
@@ -176,128 +180,89 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             }
         }
     }
+}
 
-    class DealerUi : AnkoComponent<ViewGroup> {
-        lateinit var primaryImage: PhotoView
-        lateinit var name: TextView
-        lateinit var shortDescription: TextView
-        lateinit var categories: TextView
-        lateinit var aboutArtist: MarkdownView
-        lateinit var aboutArt: MarkdownView
-        lateinit var aboutArtContainer: LinearLayout
-        lateinit var artPreview: PhotoView
-        lateinit var artPreviewCaption: TextView
-        lateinit var artPreviewContainer: LinearLayout
-        lateinit var linkLayout: LinearLayout
-        lateinit var websites: LinearLayout
-        lateinit var twitter: Button
-        lateinit var telegram: Button
-        lateinit var map: PhotoView
+class DealerUi : AnkoComponent<ViewGroup> {
+    lateinit var primaryImage: PhotoView
+    lateinit var name: TextView
+    lateinit var nameSecond: TextView
+    lateinit var shortDescription: TextView
+    lateinit var categories: TextView
+    lateinit var aboutArtist: MarkdownView
+    lateinit var aboutArt: MarkdownView
+    lateinit var aboutArtContainer: LinearLayout
+    lateinit var artPreview: PhotoView
+    lateinit var artPreviewCaption: TextView
+    lateinit var artPreviewContainer: LinearLayout
+    lateinit var websites: LinearLayout
+    lateinit var twitter: Button
+    lateinit var telegram: Button
+    lateinit var map: PhotoView
 
-        override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
-            relativeLayout {
-                backgroundResource = R.color.cardview_light_background
-                scrollView {
+    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+        relativeLayout {
+            backgroundResource = R.color.backgroundGrey
+            scrollView {
+                verticalLayout {
+                    lparams(matchParent, matchParent)
+
                     verticalLayout {
-                        lparams(matchParent, matchParent)
+                        lparams(matchParent, wrapContent)
+                        backgroundResource = R.drawable.image_fade
 
+                        padding = dip(15)
                         primaryImage = photoView {
                             lparams(matchParent, dip(300))
-                            backgroundResource = R.drawable.image_fade
+
+                        }
+                        name = textView {
+                            text = "Dealer Name"
+                            textAlignment = View.TEXT_ALIGNMENT_CENTER
+                            compatAppearance = android.R.style.TextAppearance_Large_Inverse
+
+                            topPadding = dip(10)
                         }
 
-                        verticalLayout {
-                            lparams(matchParent, wrapContent)
-                            backgroundResource = R.color.primaryDarker
-                            padding = dip(15)
+                        nameSecond = textView {
+                            text = "Subname"
+                            compatAppearance = android.R.style.TextAppearance_Medium_Inverse
+                            textAlignment = View.TEXT_ALIGNMENT_CENTER
 
-                            name = textView {
-                                text = "Dealer Name"
-                                textAlignment = View.TEXT_ALIGNMENT_CENTER
-                                setTextAppearance(ctx, android.R.style.TextAppearance_Large_Inverse)
-
-                                padding = dip(10)
-                            }
-
-                            shortDescription = textView {
-                                text = "Short description"
-                                textAlignment = View.TEXT_ALIGNMENT_CENTER
-                                padding = dip(10)
-
-                                setTextAppearance(ctx, android.R.style.TextAppearance_Medium_Inverse)
-                            }
-
-                            categories = textView {
-                                text = "Categories"
-                                textAlignment = View.TEXT_ALIGNMENT_CENTER
-                                padding = dip(10)
-
-                                setTextAppearance(ctx, android.R.style.TextAppearance_Small_Inverse)
-                            }
                         }
 
-                        textView {
-                            text = "About the Artist"
-                            setPadding(dip(25), dip(20), dip(25), dip(0))
-                            setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
+                        categories = textView {
+                            text = "Categories"
+                            compatAppearance = android.R.style.TextAppearance_Medium_Inverse
+                            textAlignment = View.TEXT_ALIGNMENT_CENTER
+                            topPadding = dip(10)
                         }
 
-                        aboutArtist = markdownView {
-                            lparams {
-                                margin = dip(15)
-                            }
+                        shortDescription = textView {
+                            text = "Short description"
+                            textAlignment = View.TEXT_ALIGNMENT_CENTER
+                            topPadding = dip(10)
+                            compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                         }
 
-                        artPreviewContainer = verticalLayout {
-                            padding = dip(15)
-                            backgroundResource = R.color.primary
-
-                            artPreview = photoView {
-                                lparams(matchParent, dip(400))
-                                scaleType = ImageView.ScaleType.FIT_CENTER
-                            }
-
-                            artPreviewCaption = textView {
-                                textAlignment = View.TEXT_ALIGNMENT_CENTER
-                                padding = dip(15)
-                                setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium_Inverse)
-                            }
-                        }
-
-                        aboutArtContainer = verticalLayout {
-                            lparams(matchParent, wrapContent)
-
-                            textView("About the Art") {
-                                setPadding(dip(25), dip(20), dip(25), dip(0))
-                                setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
-                            }
-                            aboutArt = markdownView {
-                                lparams {
-                                    margin = dip(15)
-                                }
-                            }
-                        }
-
-                        linkLayout = verticalLayout {
+                        websites = verticalLayout {
                             visibility = View.GONE
-                            textView("Find out more") {
-                                setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
-                            }
+                        }.lparams(matchParent, wrapContent)
 
-                            websites = verticalLayout {
-                                visibility = View.GONE
-                            }.lparams(matchParent, wrapContent)
+                        twitter = fontAwesomeButton {
+                            lparams(matchParent, wrapContent)
+                            visibility = View.GONE
+                        }.applyRecursively { R.style.Widget_AppCompat_Button_Colored }
 
-                            twitter = fontAwesomeButton {
-                                lparams(matchParent, wrapContent)
-                                visibility = View.GONE
-                            }.applyRecursively { R.style.Widget_AppCompat_Button_Colored }
+                        telegram = fontAwesomeButton {
+                            lparams(matchParent, wrapContent)
+                            visibility = View.GONE
+                        }.applyRecursively { R.style.Widget_AppCompat_Button_Colored }
+                    }
 
-                            telegram = fontAwesomeButton {
-                                lparams(matchParent, wrapContent)
-                                visibility = View.GONE
-                            }.applyRecursively { R.style.Widget_AppCompat_Button_Colored }
-                        }.lparams(matchParent, wrapContent) { margin = dip(15) }
+                    verticalLayout {
+                        backgroundResource = R.color.cardview_light_background
+                        textView("Location & Availability")
+                        padding = dip(20)
 
                         map = photoView {
                             backgroundResource = R.color.cardview_dark_background
@@ -308,8 +273,52 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
                             scaleType = ImageView.ScaleType.FIT_CENTER
                             imageResource = R.drawable.placeholder_event
                         }
-                    }.lparams(matchParent, wrapContent)
-                }
+                    }.lparams(matchParent, wrapContent) {
+                        topMargin = dip(10)
+                    }
+
+
+                    verticalLayout {
+                        // artist
+                        padding = dip(20)
+                        backgroundResource = R.color.cardview_light_background
+                        textView {
+                            text = "About the Artist"
+                            compatAppearance = R.style.TextAppearance_AppCompat_Small
+                        }
+
+                        aboutArtist = markdownView {}
+                    }.lparams(matchParent, wrapContent) {
+                        topMargin = dip(10)
+                    }
+
+                    aboutArtContainer = verticalLayout {
+                        backgroundResource = R.color.cardview_light_background
+
+                        textView("About the Art") {
+                            compatAppearance = R.style.TextAppearance_AppCompat_Large
+                        }
+                        aboutArt = markdownView {}
+
+                        artPreviewContainer = verticalLayout {
+                            topPadding = dip(20)
+
+                            artPreview = photoView {
+                                lparams(matchParent, dip(400))
+                                scaleType = ImageView.ScaleType.FIT_CENTER
+                            }
+
+                            artPreviewCaption = textView {
+                                textAlignment = View.TEXT_ALIGNMENT_CENTER
+                                padding = dip(15)
+                                compatAppearance = R.style.TextAppearance_AppCompat_Small
+                            }
+                        }
+                    }.lparams(matchParent, wrapContent) {
+                        topMargin = dip(10)
+                    }
+
+                }.lparams(matchParent, wrapContent)
             }
         }
     }
