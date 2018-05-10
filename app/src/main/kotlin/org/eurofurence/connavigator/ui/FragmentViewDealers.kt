@@ -16,12 +16,22 @@ import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.recycler
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.editText
+import org.jetbrains.anko.info
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.padding
+import org.jetbrains.anko.singleLine
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.wrapContent
 
 /**
  * Created by David on 15-5-2016.
@@ -40,6 +50,8 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
         applyOnRoot { changeTitle("Dealers") }
 
         effectiveDealers = sortDealers(dealers.items)
+
+        info { "Rendering ${effectiveDealers.size} dealers out of ${db.dealers.items.size}" }
 
         ui.dealerList.adapter = DealerRecyclerAdapter(effectiveDealers, db, this)
         ui.dealerList.layoutManager = LinearLayoutManager(activity)

@@ -396,7 +396,11 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
 
     override fun navigateToDealer(dealer: DealerRecord) {
-        navigateToSubFragment(FragmentViewDealer(dealer))
+        val fragment = FragmentViewDealer().withArguments(
+                "id" to dealer.id.toString()
+        )
+
+        navigateToSubFragment(fragment)
     }
 
     override fun navigateToMessage(message: PrivateMessageRecord) {

@@ -21,22 +21,36 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.contains
+import org.eurofurence.connavigator.util.extensions.fontAwesomeButton
+import org.eurofurence.connavigator.util.extensions.getName
+import org.eurofurence.connavigator.util.extensions.jsonObjects
+import org.eurofurence.connavigator.util.extensions.markdownView
+import org.eurofurence.connavigator.util.extensions.photoView
 import org.eurofurence.connavigator.util.v2.get
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.applyRecursively
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.info
+import org.jetbrains.anko.margin
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.padding
+import org.jetbrains.anko.relativeLayout
+import org.jetbrains.anko.scrollView
 import org.jetbrains.anko.support.v4.browse
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.warn
+import org.jetbrains.anko.wrapContent
 import us.feras.mdv.MarkdownView
+import java.util.UUID
 
-/**
- * Created by David on 16-5-2016.
- */
-class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
-    constructor(dealer: DealerRecord) : this() {
-        arguments = Bundle()
-
-        arguments.jsonObjects["dealer"] = dealer
-    }
-
+class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
+    val dealerId by lazy { UUID.fromString(arguments.getString("id")) }
     val ui by lazy { DealerUi() }
 
     override val db by lazyLocateDb()
@@ -48,10 +62,11 @@ class FragmentViewDealer() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         // Send analytics pings
         Analytics.screen(activity, "View Dealer Details")
 
-        if ("dealer" in arguments) {
-            val dealer: DealerRecord = arguments.jsonObjects["dealer"]
+        if ("id" in arguments) {
+            val dealer: DealerRecord = db.dealers[dealerId] ?: return
 
-            Analytics.event(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName ?: dealer.attendeeNickname)
+            Analytics.event(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName
+                    ?: dealer.attendeeNickname)
 
             // Retrieve top image
             val image = dealer[toArtistImage]
