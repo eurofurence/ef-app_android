@@ -17,10 +17,7 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.dialogs.DealerDialog
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.allDaysAvailable
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.fontAwesomeView
-import org.eurofurence.connavigator.util.extensions.getName
+import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
@@ -49,10 +46,10 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
         holder.dealerName.text = dealer.getName()
         holder.dealerSubText.text = dealer.attendeeNickname
 
-        holder.dealerSubText.visibility = if (dealer.displayName.isNullOrEmpty()) {
-            View.GONE
-        } else {
+        holder.dealerSubText.visibility = if (dealer.hasUniqueDisplayName()) {
             View.VISIBLE
+        } else {
+            View.GONE
         }
 
         // If no dealer preview was provided, load the YCH icon

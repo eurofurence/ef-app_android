@@ -1,7 +1,10 @@
 package org.eurofurence.connavigator.ui
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,31 +23,12 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.util.extensions.contains
-import org.eurofurence.connavigator.util.extensions.fontAwesomeButton
-import org.eurofurence.connavigator.util.extensions.getName
-import org.eurofurence.connavigator.util.extensions.markdownView
-import org.eurofurence.connavigator.util.extensions.photoView
+import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.applyRecursively
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageResource
-import org.jetbrains.anko.info
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.relativeLayout
-import org.jetbrains.anko.scrollView
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.browse
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.topPadding
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.warn
-import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.support.v4.dip
 import us.feras.mdv.MarkdownView
 import java.util.UUID
 
@@ -85,7 +69,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.name.text = dealer.getName()
             ui.nameSecond.apply {
                 text = dealer.attendeeNickname
-                visibility = if (dealer.displayName.isNullOrEmpty()) View.GONE else View.VISIBLE
+                visibility = if (dealer.hasUniqueDisplayName()) View.VISIBLE else View.GONE
             }
 
             ui.categories.text = dealer.categories.joinToString(", ")
@@ -96,12 +80,11 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             ui.categories.text = dealer.categories.joinToString(", ")
 
-            ui.aboutArtist.loadMarkdown(
-                    if (dealer.aboutTheArtistText.isNotEmpty())
-                        dealer.aboutTheArtistText
-                    else
-                        "This artist did not supply any artist description to show to you :("
-            )
+            ui.aboutArtist.text =
+                if (dealer.aboutTheArtistText.isNotEmpty())
+                    dealer.aboutTheArtistText
+                else
+                    "This artist did not supply any artist description to show to you :("
 
             if (dealer.artPreviewImageId == null) {
                 ui.artPreview.visibility = View.GONE
@@ -112,7 +95,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             }
 
             if (dealer.aboutTheArtText.isNotEmpty()) {
-                ui.aboutArt.loadMarkdown(dealer.aboutTheArtText)
+                ui.aboutArt.text = dealer.aboutTheArtText
             } else {
                 ui.aboutArtContainer.visibility = View.GONE
             }
@@ -149,12 +132,13 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         info { "Setting up external links" }
 
         if (dealer.links != null && !dealer.links.isEmpty()) {
-            ui.websites.visibility = View.VISIBLE
+            ui.websitesContainer.visibility = View.VISIBLE
             dealer.links.forEach {
                 val button = Button(context).apply {
                     info { "Adding button for $it" }
                     text = it.target
                     visibility = View.VISIBLE
+                    //layoutParams = LinearLayout.LayoutParams(matchParent, wrapContent)
                     setOnTouchListener { _, _ -> browse(it.target) }
                 }
 
@@ -164,19 +148,23 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
         if (!dealer.telegramHandle.isNullOrEmpty()) {
             info { "Setting up telegram button for ${dealer.telegramHandle}" }
-            ui.telegram.apply {
-                text = "${dealer.telegramHandle} on Telegram"
-                visibility = View.VISIBLE
+            ui.telegramButton.apply {
+                text = "${dealer.telegramHandle} @ Telegram"
                 setOnClickListener { browse("https://telegram.me/${dealer.telegramHandle}") }
+            }
+            ui.telegramContainer.apply {
+                visibility = View.VISIBLE
             }
         }
 
         if (!dealer.twitterHandle.isNullOrEmpty()) {
             info { "Setting up twitter handle" }
-            ui.twitter.apply {
-                text = "${dealer.twitterHandle} on {fa-twitter}"
-                visibility = View.VISIBLE
+            ui.twitterButton.apply {
+                text = "${dealer.twitterHandle} @ Twitter"
                 setOnClickListener { browse("https://twitter.com/${dealer.twitterHandle}") }
+            }
+            ui.twitterContainer.apply {
+                visibility = View.VISIBLE
             }
         }
     }
@@ -188,15 +176,18 @@ class DealerUi : AnkoComponent<ViewGroup> {
     lateinit var nameSecond: TextView
     lateinit var shortDescription: TextView
     lateinit var categories: TextView
-    lateinit var aboutArtist: MarkdownView
-    lateinit var aboutArt: MarkdownView
+    lateinit var aboutArtist: TextView
+    lateinit var aboutArt: TextView
     lateinit var aboutArtContainer: LinearLayout
     lateinit var artPreview: PhotoView
     lateinit var artPreviewCaption: TextView
     lateinit var artPreviewContainer: LinearLayout
     lateinit var websites: LinearLayout
-    lateinit var twitter: Button
-    lateinit var telegram: Button
+    lateinit var websitesContainer: LinearLayout
+    lateinit var twitterButton: Button
+    lateinit var twitterContainer: LinearLayout
+    lateinit var telegramButton: Button
+    lateinit var telegramContainer: LinearLayout
     lateinit var map: PhotoView
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
@@ -210,7 +201,7 @@ class DealerUi : AnkoComponent<ViewGroup> {
                         lparams(matchParent, wrapContent)
                         backgroundResource = R.drawable.image_fade
 
-                        padding = dip(15)
+                        padding = dip(20)
                         primaryImage = photoView {
                             lparams(matchParent, dip(300))
 
@@ -234,34 +225,63 @@ class DealerUi : AnkoComponent<ViewGroup> {
                             text = "Categories"
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
-                            topPadding = dip(10)
+                            setTypeface(null, Typeface.BOLD)
+                            setPadding(dip(10), dip(15), dip(10), dip(0))
+                            topPadding = dip(15)
                         }
 
                         shortDescription = textView {
                             text = "Short description"
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
-                            topPadding = dip(10)
+                            setPadding(dip(10), dip(15), dip(10), dip(15))
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                         }
 
-                        websites = verticalLayout {
-                            visibility = View.GONE
-                        }.lparams(matchParent, wrapContent)
 
-                        twitter = fontAwesomeButton {
-                            lparams(matchParent, wrapContent)
+                        websitesContainer = linearLayout {
+                            weightSum = 100F
                             visibility = View.GONE
-                        }.applyRecursively { R.style.Widget_AppCompat_Button_Colored }
 
-                        telegram = fontAwesomeButton {
-                            lparams(matchParent, wrapContent)
+                            fontAwesomeView {
+                                compatAppearance = android.R.style.TextAppearance_Medium_Inverse
+                                text = "{fa-globe 24sp}"
+                            }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
+
+                            websites = verticalLayout {}.lparams(dip(0), wrapContent, 90F)
+                        }
+
+                        twitterContainer = linearLayout {
+                            weightSum = 100F
                             visibility = View.GONE
-                        }.applyRecursively { R.style.Widget_AppCompat_Button_Colored }
+
+                            fontAwesomeView {
+                                compatAppearance = android.R.style.TextAppearance_Medium_Inverse
+                                text = "{fa-twitter 24sp}"
+                            }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
+
+                            twitterButton = button {}.lparams(dip(0), wrapContent, 90F)
+                        }
+
+                        telegramContainer = linearLayout {
+                            weightSum = 100F
+                            visibility = View.GONE
+
+                            fontAwesomeView {
+                                compatAppearance = android.R.style.TextAppearance_Medium_Inverse
+                                text = "{fa-comments 24sp}"
+                            }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
+
+                            telegramButton = button {}.lparams(dip(0), wrapContent, 90F)
+                        }
                     }
 
                     verticalLayout {
                         backgroundResource = R.color.cardview_light_background
-                        textView("Location & Availability")
+                        textView {
+                            text = "Location & Availability"
+                            compatAppearance = R.style.TextAppearance_AppCompat_Medium
+                            bottomPadding = dip(5)
+                        }
                         padding = dip(20)
 
                         map = photoView {
@@ -284,24 +304,35 @@ class DealerUi : AnkoComponent<ViewGroup> {
                         backgroundResource = R.color.cardview_light_background
                         textView {
                             text = "About the Artist"
-                            compatAppearance = R.style.TextAppearance_AppCompat_Small
+                            compatAppearance = R.style.TextAppearance_AppCompat_Medium
+                            bottomPadding = dip(5)
                         }
 
-                        aboutArtist = markdownView {}
+                        aboutArtist = textView {
+                            compatAppearance = R.style.TextAppearance_AppCompat_Medium
+                            textColor = Color.BLACK
+                        }
                     }.lparams(matchParent, wrapContent) {
                         topMargin = dip(10)
                     }
 
                     aboutArtContainer = verticalLayout {
+                        padding = dip(20)
                         backgroundResource = R.color.cardview_light_background
 
-                        textView("About the Art") {
-                            compatAppearance = R.style.TextAppearance_AppCompat_Large
+                        textView {
+                            text = "About the Art"
+                            compatAppearance = R.style.TextAppearance_AppCompat_Medium
+                            bottomPadding = dip(5)
                         }
-                        aboutArt = markdownView {}
+
+                        aboutArt = textView {
+                            compatAppearance = R.style.TextAppearance_AppCompat_Medium
+                            textColor = Color.BLACK
+                        }
 
                         artPreviewContainer = verticalLayout {
-                            topPadding = dip(20)
+                            topPadding = dip(10)
 
                             artPreview = photoView {
                                 lparams(matchParent, dip(400))
@@ -311,6 +342,7 @@ class DealerUi : AnkoComponent<ViewGroup> {
                             artPreviewCaption = textView {
                                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                                 padding = dip(15)
+                                topPadding = dip(5)
                                 compatAppearance = R.style.TextAppearance_AppCompat_Small
                             }
                         }
