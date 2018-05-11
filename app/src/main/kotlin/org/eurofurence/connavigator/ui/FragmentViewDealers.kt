@@ -8,9 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.LinearLayout
+import android.widget.*
 import com.google.firebase.perf.metrics.AddTrace
 import com.pawegio.kandroid.textWatcher
 import io.swagger.client.model.DealerRecord
@@ -21,21 +19,7 @@ import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.recycler
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.editText
-import org.jetbrains.anko.info
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.singleLine
-import org.jetbrains.anko.spinner
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.*
 
 /**
  * Created by David on 15-5-2016.
@@ -60,6 +44,15 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
         ui.dealerList.adapter = DealerRecyclerAdapter(effectiveDealers, db, this)
         ui.dealerList.layoutManager = LinearLayoutManager(activity)
         ui.dealerList.itemAnimator = DefaultItemAnimator()
+
+        var distinctCategories = dealers.items
+                .map{ it.categories }
+                .fold( emptyList<String>(), { a, b -> a.plus(b).distinct() } )
+                .sorted()
+
+        ui.categorySpinner.adapter =
+             ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item,
+                     listOf("All Categories").plus(distinctCategories))
 
         ui.search.textWatcher {
             afterTextChanged { text -> search(text.toString()) }
@@ -97,8 +90,8 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
 class DealersUi : AnkoComponent<ViewGroup> {
     lateinit var dealerList: RecyclerView
     lateinit var search: EditText
-
     lateinit var searchLayout: LinearLayout
+    lateinit var categorySpinner: Spinner
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
@@ -114,14 +107,8 @@ class DealersUi : AnkoComponent<ViewGroup> {
 
                     textView("Show:") {}.lparams(dip(0), wrapContent, 20F)
 
-                    spinner {
+                    categorySpinner = spinner {
                         prompt = "Filter"
-                        val items = listOf(
-                                "All Categories",
-                                "Haha there should be more here soon :3"
-                        )
-
-                        adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, items)
                     }.lparams(dip(0), wrapContent, 80F)
                 }
 

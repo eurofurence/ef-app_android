@@ -23,17 +23,7 @@ import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.getName
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.*
 
 /**
  * Created by David on 15-5-2016.
@@ -57,7 +47,7 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
         val dealer = effective_events[position]
 
         holder.dealerName.text = dealer.getName()
-        holder.dealerSubText.text = dealer.displayName
+        holder.dealerSubText.text = dealer.attendeeNickname
 
         holder.dealerSubText.visibility = if (dealer.displayName.isNullOrEmpty()) {
             View.GONE
@@ -102,6 +92,7 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
 
 class DealerListItemUI : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+
         linearLayout {
             lparams(matchParent, wrapContent)
             backgroundResource = R.color.cardview_light_background
@@ -109,11 +100,13 @@ class DealerListItemUI : AnkoComponent<ViewGroup> {
             weightSum = 100F
             padding = dip(10)
 
-            imageView {
-                padding = dip(5)
-                scaleType = ImageView.ScaleType.FIT_CENTER
-                id = R.id.dealerPreviewImage
-            }.lparams(dip(0), wrapContent, 20F)
+            verticalLayout {
+                imageView {
+                    padding = dip(5)
+                    scaleType = ImageView.ScaleType.FIT_XY
+                    id = R.id.dealerPreviewImage
+                }.lparams(dip(75), dip(75))  { gravity = Gravity.LEFT }
+            }.lparams(dip(0), wrapContent, 20F)  { gravity = Gravity.CENTER_VERTICAL }
 
             verticalLayout {
                 textView {
@@ -124,20 +117,22 @@ class DealerListItemUI : AnkoComponent<ViewGroup> {
                     compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                     id = R.id.dealerSubText
                 }
-                gravity = Gravity.CENTER_VERTICAL
-            }.lparams(dip(0), matchParent, 70F)
+            }.lparams(dip(0), wrapContent, 70F) { gravity = Gravity.CENTER_VERTICAL }
 
             verticalLayout {
                 fontAwesomeView {
-                    text = "{fa-exclamation-triangle 25sp}"
+                    text = "{fa-exclamation-triangle 24sp}"
                     id = R.id.danger
+                    gravity = Gravity.CENTER
+                    setPadding(0, 0, 0, dip(5))
                 }
                 fontAwesomeView {
-                    text = "{fa-moon-o 20sp}"
+                    text = "{fa-moon-o 24sp}"
                     id = R.id.moon
+                    gravity = Gravity.CENTER
                 }
-                gravity = Gravity.CENTER
-            }.lparams(dip(0), matchParent, 10F)
+
+            }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
         }
     }
 }
