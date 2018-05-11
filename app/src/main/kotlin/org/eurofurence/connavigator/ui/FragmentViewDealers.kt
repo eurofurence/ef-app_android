@@ -28,8 +28,10 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     val ui by lazy { DealersUi() }
-
     var effectiveDealers = emptyList<DealerRecord>()
+
+    var searchText = ""
+    var searchCategory = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
@@ -54,18 +56,38 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
              ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item,
                      listOf("All Categories").plus(distinctCategories))
 
+        ui.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                searchCategory = if (position == 0) {
+                    ""
+                } else {
+                    parent.getItemAtPosition(position) as String
+                }
+                updateFilter()
+            }
+        }
+
         ui.search.textWatcher {
-            afterTextChanged { text -> search(text.toString()) }
+            afterTextChanged { text -> searchText = text.toString(); updateFilter() }
         }
     }
 
     @AddTrace(name = "FragmentViewDealers:search", enabled = true)
-    fun search(query: String) {
-        info { "Searching dealers for $query" }
+    fun updateFilter() {
+        info { "Filtering dealers for text=$searchText, category=$searchCategory" }
 
-        effectiveDealers = db.dealers.items.filter { it.displayName.contains(query, true) or it.attendeeNickname.contains(query, true) }
+        effectiveDealers = db.dealers.items.toList()
+
+        if (!searchText.isNullOrEmpty())
+            effectiveDealers = effectiveDealers.filter { it.displayName.contains(searchText, true) or it.attendeeNickname.contains(searchText, true) }
+
+        if (!searchCategory.isNullOrEmpty())
+            effectiveDealers = effectiveDealers.filter { it.categories.contains(searchCategory) }
+
         ui.dealerList.adapter = DealerRecyclerAdapter(sortDealers(effectiveDealers), db, this)
-
         ui.dealerList.adapter.notifyDataSetChanged()
     }
 
@@ -79,6 +101,8 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
         } else {
             info { "Hiding search bar" }
             ui.searchLayout.visibility = View.GONE
+            searchText = ""
+            updateFilter()
         }
     }
 
@@ -105,7 +129,9 @@ class DealersUi : AnkoComponent<ViewGroup> {
                     // Filter types
                     weightSum = 100F
 
-                    textView("Show:") {}.lparams(dip(0), wrapContent, 20F)
+                    textView("Show:") {
+                        leftPadding = dip(5)
+                    }.lparams(dip(0), wrapContent, 20F)
 
                     categorySpinner = spinner {
                         prompt = "Filter"
@@ -115,7 +141,9 @@ class DealersUi : AnkoComponent<ViewGroup> {
                 searchLayout = linearLayout {
                     weightSum = 100F
                     visibility = View.GONE
-                    textView("Search").lparams(dip(0), wrapContent, 20F)
+                    textView("Find: ")  {
+                        leftPadding = dip(5)
+                    }.lparams(dip(0), wrapContent, 20F)
 
                     search = editText { singleLine = true }.lparams(dip(0), wrapContent, 80F)
                 }
