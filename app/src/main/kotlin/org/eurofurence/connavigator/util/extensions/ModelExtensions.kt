@@ -41,4 +41,4 @@ fun EventRecord.endTimeString(): String = endDateTimeUtc.jodatime().toString("HH
 fun EventRecord.ownerString(): String = "Hosted by $panelHosts"
 
 fun DealerRecord.getName() = if (this.displayName.isNotEmpty()) this.displayName else this.attendeeNickname
-fun DealerRecord.allDaysAvailable() = listOf(this.attendsOnThursday, this.attendsOnFriday, this.attendsOnSaturday).all { true }
+fun DealerRecord.allDaysAvailable() = listOf(this.attendsOnThursday, this.attendsOnFriday, this.attendsOnSaturday).all { it == true }
