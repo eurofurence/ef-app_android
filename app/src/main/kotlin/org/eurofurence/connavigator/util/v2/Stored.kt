@@ -3,12 +3,20 @@ package org.eurofurence.connavigator.util.v2
 import android.content.Context
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import io.swagger.client.JsonUtil.*
-import org.eurofurence.connavigator.util.extensions.*
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import io.swagger.client.JsonUtil.getGson
+import io.swagger.client.JsonUtil.getListTypeForDeserialization
+import org.eurofurence.connavigator.util.extensions.safeInStream
+import org.eurofurence.connavigator.util.extensions.safeOutStream
+import org.eurofurence.connavigator.util.extensions.safeReader
+import org.eurofurence.connavigator.util.extensions.safeWriter
+import org.eurofurence.connavigator.util.extensions.substitute
 import java.io.File
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
-import java.util.*
+import java.util.UUID
+import kotlin.collections.set
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
@@ -178,6 +186,9 @@ abstract class Stored(val context: Context) {
 
             // Transfer value
             entries = newEntries
+
+            // Fire observable
+            observable.onNext(items     )
         }
 
         /**
@@ -196,6 +207,8 @@ abstract class Stored(val context: Context) {
         val size get() = items.size
 
         val isPresent get() = file.exists()
+
+        val observable = PublishSubject.create<Collection<T>>()
     }
 
 
