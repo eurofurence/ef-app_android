@@ -334,7 +334,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                         val url = if (AuthPreferences.isLoggedIn()) {
                             "https://app.eurofurence.org/collectemall/#token-${AuthPreferences.token}"
                         } else {
-                            "https://app.eurofurence.org/collectemall/#main"
+                            "https://app.eurofurence.org/collectemall/#token-empty"
                         }
 
                         browse(url)
