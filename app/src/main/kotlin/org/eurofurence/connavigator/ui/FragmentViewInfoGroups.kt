@@ -17,7 +17,6 @@ import io.swagger.client.model.KnowledgeGroupRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.*
@@ -58,9 +57,9 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
         override fun onCreateViewHolder(parent: ViewGroup, type: Int): RecyclerView.ViewHolder =
                 when (type) {
                     0 -> InfoGroupItemViewHolder(
-                            GroupItemUi().createView(AnkoContext.create(context.applicationContext, parent)))
+                            GroupItemUi().createView(AnkoContext.create(requireContext().applicationContext, parent)))
                     1 -> InfoGroupViewHolder(
-                            GroupUi().createView(AnkoContext.create(context.applicationContext, parent)))
+                            GroupUi().createView(AnkoContext.create(requireContext().applicationContext, parent)))
                     else -> throw IllegalStateException()
 
                 }
@@ -102,7 +101,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
     // View
     val infoGroups: RecyclerView by view()
 
-    val vibrator by lazy { TouchVibrator(context) }
+    val vibrator by lazy { TouchVibrator(requireActivity()) }
 
     // Store of currently displayed info groups and items
     var effectiveInterleaved = emptyList<Choice<KnowledgeGroupRecord, KnowledgeEntryRecord>>()
@@ -110,13 +109,13 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_info_groups, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Initialize the info groups
         dataInit()
 
         applyOnRoot { changeTitle("Info Listings") }
 
-        Analytics.screen(activity, "Info Listings")
+        Analytics.screen(requireActivity(), "Info Listings")
 
         // Default setup for recycler layout and animation
         infoGroups.layoutManager = LinearLayoutManager(context)

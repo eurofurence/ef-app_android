@@ -7,8 +7,8 @@ import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
-import kotlin.serialization.KSerializer
-import kotlin.serialization.serializer
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.serializer
 
 /**
  * Result of a broadcast action.

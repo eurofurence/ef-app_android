@@ -105,8 +105,8 @@ class NotificationFactory(var context: Context) {
                     .bigText(bigText)
     )
 
-    fun addRegularText(builder: NotificationCompat.Builder, title: String, text:String) = builder.apply {
-        this.mContentTitle = title
-        this.mContentText = text
+    fun addRegularText(builder: NotificationCompat.Builder, title: String, text: String) = builder.apply {
+        setContentTitle(title)
+        setContentText(text)
     }
 }

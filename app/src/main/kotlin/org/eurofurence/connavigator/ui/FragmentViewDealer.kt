@@ -28,12 +28,15 @@ import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.browse
-import org.jetbrains.anko.support.v4.dip
-import us.feras.mdv.MarkdownView
-import java.util.UUID
+import java.util.*
 
 class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
-    val dealerId by lazy { UUID.fromString(arguments.getString("id")) }
+    val dealerId by lazy {
+        arguments?.let { arguments ->
+            UUID.fromString(arguments.getString("id"))
+        } ?: throw IllegalStateException("Arguments are not initialized.")
+    }
+
     val ui by lazy { DealerUi() }
 
     override val db by lazyLocateDb()
@@ -41,67 +44,69 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Send analytics pings
-        Analytics.screen(activity, "View Dealer Details")
+        Analytics.screen(requireActivity(), "View Dealer Details")
 
-        if ("id" in arguments) {
-            val dealer: DealerRecord = db.dealers[dealerId] ?: return
+        arguments?.let { arguments ->
+            if ("id" in arguments) {
+                val dealer: DealerRecord = db.dealers[dealerId] ?: return
 
-            Analytics.event(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName
-                    ?: dealer.attendeeNickname)
+                Analytics.event(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName
+                        ?: dealer.attendeeNickname)
 
-            // Retrieve top image
-            val image = dealer[toArtistImage]
+                // Retrieve top image
+                val image = dealer[toArtistImage]
 
-            // Set image on top
-            if (image != null) {
-                imageService.load(image, ui.primaryImage, false)
-            } else {
-                ui.primaryImage.visibility = View.GONE
-            }
-
-            // Load art preview image
-            imageService.load(dealer[toPreview], ui.artPreview)
-
-            ui.artPreviewCaption.text = dealer.artPreviewCaption
-
-            ui.name.text = dealer.getName()
-            ui.nameSecond.apply {
-                text = dealer.attendeeNickname
-                visibility = if (dealer.hasUniqueDisplayName()) View.VISIBLE else View.GONE
-            }
-
-            ui.categories.text = dealer.categories.joinToString(", ")
-            ui.shortDescription.apply {
-                text = dealer.shortDescription
-                visibility = if (dealer.shortDescription.isNullOrEmpty()) View.GONE else View.VISIBLE
-            }
-
-            ui.categories.text = dealer.categories.joinToString(", ")
-
-            ui.aboutArtist.text =
-                if (dealer.aboutTheArtistText.isNotEmpty())
-                    dealer.aboutTheArtistText
-                else
-                    "This artist did not supply any artist description to show to you :("
-
-            if (dealer.artPreviewImageId == null) {
-                ui.artPreview.visibility = View.GONE
-
-                if (dealer.artPreviewCaption.isEmpty()) {
-                    ui.artPreviewContainer.visibility = View.GONE
+                // Set image on top
+                if (image != null) {
+                    imageService.load(image, ui.primaryImage, false)
+                } else {
+                    ui.primaryImage.visibility = View.GONE
                 }
-            }
 
-            if (dealer.aboutTheArtText.isNotEmpty()) {
-                ui.aboutArt.text = dealer.aboutTheArtText
-            } else {
-                ui.aboutArtContainer.visibility = View.GONE
-            }
+                // Load art preview image
+                imageService.load(dealer[toPreview], ui.artPreview)
 
-            configureLinks(dealer)
-            configureMap(dealer)
+                ui.artPreviewCaption.text = dealer.artPreviewCaption
+
+                ui.name.text = dealer.getName()
+                ui.nameSecond.apply {
+                    text = dealer.attendeeNickname
+                    visibility = if (dealer.hasUniqueDisplayName()) View.VISIBLE else View.GONE
+                }
+
+                ui.categories.text = dealer.categories.joinToString(", ")
+                ui.shortDescription.apply {
+                    text = dealer.shortDescription
+                    visibility = if (dealer.shortDescription.isNullOrEmpty()) View.GONE else View.VISIBLE
+                }
+
+                ui.categories.text = dealer.categories.joinToString(", ")
+
+                ui.aboutArtist.text =
+                        if (dealer.aboutTheArtistText.isNotEmpty())
+                            dealer.aboutTheArtistText
+                        else
+                            "This artist did not supply any artist description to show to you :("
+
+                if (dealer.artPreviewImageId == null) {
+                    ui.artPreview.visibility = View.GONE
+
+                    if (dealer.artPreviewCaption.isEmpty()) {
+                        ui.artPreviewContainer.visibility = View.GONE
+                    }
+                }
+
+                if (dealer.aboutTheArtText.isNotEmpty()) {
+                    ui.aboutArt.text = dealer.aboutTheArtText
+                } else {
+                    ui.aboutArtContainer.visibility = View.GONE
+                }
+
+                configureLinks(dealer)
+                configureMap(dealer)
+            }
         }
     }
 

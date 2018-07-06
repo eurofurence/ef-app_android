@@ -22,10 +22,10 @@ import org.jetbrains.anko.*
 class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
     val ui = FursuitCollectedUi()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            if (container == null) null else ui.createView(AnkoContext.Companion.create(context, container))
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            if (container == null) null else ui.createView(AnkoContext.Companion.create(requireContext(), container))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         task {

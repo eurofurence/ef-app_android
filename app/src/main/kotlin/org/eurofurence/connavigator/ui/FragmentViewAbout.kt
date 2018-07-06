@@ -34,9 +34,9 @@ class FragmentViewAbout : Fragment(), ContentAPI {
     val aboutPazuzu: LinearLayout by view()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.create(context.applicationContext, container!!))
+            ui.createView(AnkoContext.create(requireContext().applicationContext, container!!))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         applyOnRoot { changeTitle("About") }
 
         ui.requinardLayout.setOnClickListener { browse("https://furry.requinard.nl") }

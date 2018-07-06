@@ -36,7 +36,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         applyOnRoot { changeTitle("Dealers") }
 
         effectiveDealers = sortDealers(dealers.items)
@@ -47,7 +47,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
         ui.dealerList.layoutManager = LinearLayoutManager(activity)
         ui.dealerList.itemAnimator = DefaultItemAnimator()
 
-        var distinctCategories = dealers.items
+        val distinctCategories = dealers.items
                 .map{ it.categories }
                 .fold( emptyList<String>(), { a, b -> a.plus(b).distinct() } )
                 .sorted()

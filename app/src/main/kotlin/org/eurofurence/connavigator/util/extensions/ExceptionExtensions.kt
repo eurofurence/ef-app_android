@@ -15,7 +15,7 @@ import org.eurofurence.connavigator.util.right
  * Handler proxy, this callback is invoked on exceptions in [catchAlternative], [catchToNull] and [catchToFalse].
  */
 val proxyException = Dispatcher<Throwable>().apply {
-    this += { ex: Throwable -> /* pass */ }
+    this += { _: Throwable -> /* pass */ }
 }
 
 /**

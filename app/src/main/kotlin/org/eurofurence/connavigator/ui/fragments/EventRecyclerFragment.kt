@@ -22,11 +22,7 @@ import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.DataChanged
-import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.eventIsHappening
-import org.eurofurence.connavigator.database.eventIsUpcoming
-import org.eurofurence.connavigator.database.eventStart
-import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
@@ -34,41 +30,11 @@ import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.endTimeString
-import org.eurofurence.connavigator.util.extensions.fontAwesomeView
-import org.eurofurence.connavigator.util.extensions.fullTitle
-import org.eurofurence.connavigator.util.extensions.localReceiver
-import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.util.extensions.recycler
-import org.eurofurence.connavigator.util.extensions.startTimeString
-import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.util.v2.fw
-import org.eurofurence.connavigator.util.v2.get
-import org.eurofurence.connavigator.util.v2.minMaxWidth
-import org.eurofurence.connavigator.util.v2.percent
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.horizontalPadding
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.info
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.progressBar
-import org.jetbrains.anko.singleLine
-import org.jetbrains.anko.tableLayout
-import org.jetbrains.anko.tableRow
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.verticalPadding
-import org.jetbrains.anko.wrapContent
+import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.v2.*
+import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.Minutes
-import kotlin.coroutines.experimental.buildSequence
 
 fun HasDb.glyphFor(event: EventRecord): List<String> {
     // Show icon for the cockroach
@@ -96,7 +62,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     val ui by lazy { EventListView() }
     val updateReceiver by lazy {
-        context.localReceiver(DataChanged.DATACHANGED) {
+        requireContext().localReceiver(DataChanged.DATACHANGED) {
             dataUpdated()
         }
     }
@@ -133,12 +99,12 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, pos: Int): EventViewHolder =
                 EventViewHolder(SingleEventUi()
-                        .createView(AnkoContext.createReusable(activity.applicationContext, parent)))
+                        .createView(AnkoContext.createReusable(requireActivity().applicationContext, parent)))
 
         override fun getItemCount() =
                 effectiveEvents.size
 
-        private fun EventViewHolder.setGlyphs(glyphs: Sequence<String>) {
+        private fun EventViewHolder.setGlyphs(glyphs: List<String>) {
             val glyphList = glyphs.toList()
 
             when (glyphList.size) {
@@ -183,11 +149,10 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             val isFavorite = event.id in faves
             val isDeviatingFromConBook = event.isDeviatingFromConBook
 
-            holder.setGlyphs(buildSequence {
-                yieldAll(glyphFor(event))
-                if (isFavorite) yield("{fa-heart}")
-                if (isDeviatingFromConBook) yield("{fa-pencil}")
-            })
+            holder.setGlyphs(
+                    glyphFor(event)
+                            + if (isFavorite) listOf("{fa-heart}") else emptyList<String>()
+                            + if (isDeviatingFromConBook) listOf("{fa-pencil}") else emptyList<String>())
 
             if (daysInsteadOfGlyphs) holder.eventGlyphOverflow.text = db.eventStart(event).dayOfWeek().asShortText
 
@@ -225,7 +190,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 applyOnRoot { navigateToEvent(event) }
             }
             holder.itemView.setOnLongClickListener {
-                eventDialog(context, event, db)
+                eventDialog(requireContext(), event, db)
                 true
             }
         }
@@ -237,7 +202,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             else
                 ui.createView(AnkoContext.create(container.context.applicationContext, container))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         info { "Filling in view" }
@@ -268,7 +233,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         info { "Configuring recycler" }
         ui.eventList.setHasFixedSize(true)
         ui.eventList.adapter = DataAdapter()
-        ui.eventList.layoutManager = if (scrolling) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
+        ui.eventList.layoutManager = if (scrolling) LinearLayoutManager(activity) else NonScrollingLinearLayout(requireActivity())
         ui.eventList.itemAnimator = DefaultItemAnimator()
     }
 

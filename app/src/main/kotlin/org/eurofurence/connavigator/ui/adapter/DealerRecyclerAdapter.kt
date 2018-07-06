@@ -57,7 +57,7 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
             imageService.load(dealer[toThumbnail], holder.dealerPreviewImage, false)
         } else {
             holder.dealerPreviewImage.setImageDrawable(
-                    ContextCompat.getDrawable(fragment.context, R.drawable.dealer_black))
+                    ContextCompat.getDrawable(fragment.requireContext(), R.drawable.dealer_black))
         }
 
         holder.moon.visibility = if (dealer.isAfterDark) {

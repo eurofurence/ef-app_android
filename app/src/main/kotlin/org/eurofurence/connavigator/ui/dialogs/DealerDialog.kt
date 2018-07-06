@@ -22,12 +22,12 @@ class DealerDialog(val dealer: DealerRecord) : DialogFragment() {
 
         builder.setTitle("Dealer options for ${dealer.displayName}")
 
-        builder.setItems(R.array.dealer_options, DialogInterface.OnClickListener { dialogInterface, i -> update(dialogInterface, i) })
+        builder.setItems(R.array.dealer_options, DialogInterface.OnClickListener { dialogInterface, i -> update(i) })
 
         return builder.create()
     }
 
-    private fun update(dialogInterface: DialogInterface?, i: Int) =
+    private fun update(i: Int) =
             when (i) {
                 0 -> logd { "send to notes" }
                 else -> {

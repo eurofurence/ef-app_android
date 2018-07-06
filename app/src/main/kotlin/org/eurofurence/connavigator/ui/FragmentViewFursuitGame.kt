@@ -30,11 +30,11 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
     val ui = FursuitGameUi()
     override val db by lazyLocateDb()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            if (container == null) null else ui.createView(AnkoContext.Companion.create(context, container))
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            if (container == null) null else ui.createView(AnkoContext.Companion.create(requireContext(), container))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Analytics.screen(activity, "Fursuit Games")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Analytics.screen(requireActivity(), "Fursuit Games")
 
         applyOnRoot { changeTitle("Fursuit Games") }
 

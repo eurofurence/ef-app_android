@@ -36,24 +36,26 @@ import java.util.*
 class FragmentViewEvent() : Fragment(), HasDb {
     companion object {
         val EVENT_STATUS_CHANGED = "org.eurofurence.connavigator.ui.EVENT_STATUS_CHANGED"
+
+        /**
+         * Constructs the info view with an assigned bundle
+         */
+        fun onEvent(event: EventRecord) = FragmentViewEvent().apply {
+            arguments = Bundle().apply {
+                jsonObjects["event"] = event
+            }
+        }
     }
 
     override val db by lazyLocateDb()
     val dataChanged by lazy {
-        context.localReceiver(DataChanged.DATACHANGED) {
+        requireContext().localReceiver(DataChanged.DATACHANGED) {
             changeFabIcon()
         }
     }
 
     lateinit var eventId: UUID
 
-    /**
-     * Constructs the info view with an assigned bundle
-     */
-    constructor(event: EventRecord) : this() {
-        arguments = Bundle()
-        arguments.jsonObjects["event"] = event
-    }
 
     val title: TextView by view()
     val description: MarkdownView by view()
@@ -66,66 +68,71 @@ class FragmentViewEvent() : Fragment(), HasDb {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_event, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.screen(activity, "Event Specific")
+        Analytics.screen(requireActivity(), "Event Specific")
 
-        if ("event" in arguments) {
-            val event: EventRecord = arguments.jsonObjects["event"]
+        arguments?.let {
+            if ("event" in it) {
+                val event: EventRecord = it.jsonObjects["event"]
 
-            eventId = event.id
+                eventId = event.id
 
-            dataChanged.register()
+                dataChanged.register()
 
-            Analytics.event(Analytics.Category.EVENT, Analytics.Action.OPENED, event.title)
+                Analytics.event(Analytics.Category.EVENT, Analytics.Action.OPENED, event.title)
 
-            val conferenceRoom = event[toRoom]
-            val conferenceDay = event[toDay]
+                val conferenceRoom = event[toRoom]
 
-            title.text = event.fullTitle()
+                title.text = event.fullTitle()
 
-            description.loadMarkdown(event.description.markdownLinks())
+                description.loadMarkdown(event.description.markdownLinks())
 
-            time.text = "${db.eventStart(event).dayOfWeek().asText} from ${event.startTimeString()} to ${event.endTimeString()}"
-            organizers.text = event.ownerString()
-            room.text = conferenceRoom!!.name
+                time.text = "${db.eventStart(event).dayOfWeek().asText} from ${event.startTimeString()} to ${event.endTimeString()}"
+                organizers.text = event.ownerString()
+                room.text = conferenceRoom!!.name
 
-            if (event.posterImageId !== null) {
-                imageService.load(db.images[event.posterImageId], image)
-            } else if (event.bannerImageId !== null) {
-                imageService.load(db.images[event.bannerImageId], image)
-            } else {
-                image.visibility = View.GONE
-            }
-
-            changeFabIcon()
-
-            buttonSave.setOnClickListener {
-                if(AppPreferences.dialogOnEventPress) {
-                    showDialog(event)
+                if (event.posterImageId !== null) {
+                    imageService.load(db.images[event.posterImageId], image)
+                } else if (event.bannerImageId !== null) {
+                    imageService.load(db.images[event.bannerImageId], image)
                 } else {
-                    favoriteEvent(event)
+                    image.visibility = View.GONE
                 }
-            }
 
-            buttonSave.setOnLongClickListener {
-                if(AppPreferences.dialogOnEventPress){
-                    favoriteEvent(event)
-                } else {
-                    showDialog(event)
+                changeFabIcon()
+
+                buttonSave.setOnClickListener {
+                    if (AppPreferences.dialogOnEventPress) {
+                        showDialog(event)
+                    } else {
+                        favoriteEvent(event)
+                    }
                 }
-                true
+
+                buttonSave.setOnLongClickListener {
+                    if (AppPreferences.dialogOnEventPress) {
+                        favoriteEvent(event)
+                    } else {
+                        showDialog(event)
+                    }
+                    true
+                }
             }
         }
     }
 
     private fun showDialog(event: EventRecord) {
-        eventDialog(context, event, db)
+        context?.let { context ->
+            eventDialog(context, event, db)
+        } ?: error("Fragment not initialized")
     }
 
     private fun favoriteEvent(event: EventRecord) {
-        context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
+        context?.let { context ->
+            context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
+        } ?: error("Fragment not initialized")
     }
 
     /**

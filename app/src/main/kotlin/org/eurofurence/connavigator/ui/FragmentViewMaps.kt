@@ -27,7 +27,7 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb {
                 browseableMaps[position].description
 
         override fun getItem(position: Int) =
-                FragmentMap(browseableMaps[position])
+                FragmentMap.onMap(browseableMaps[position])
 
 
         override fun getCount() =
@@ -41,7 +41,7 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_maps, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mapViewPager.adapter = MapFragmentPagerAdapter(childFragmentManager)

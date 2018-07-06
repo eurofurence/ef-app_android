@@ -38,7 +38,7 @@ object logService {
 
         // Log appropriately and get the severity name
         val m = message()
-        val severityName = when (severity) {
+        when (severity) {
             Log.VERBOSE -> {
                 Log.v(tag, m)
                 //println("VER $tag: $m")
@@ -79,7 +79,7 @@ object logService {
 
         // Log appropriately and get the severity name
         val m = message()
-        val severityName = when (severity) {
+        when (severity) {
             Log.VERBOSE -> {
                 Log.v(tag, m)
                 //println("VER $tag: $m")

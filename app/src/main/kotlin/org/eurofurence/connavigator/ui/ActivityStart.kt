@@ -177,14 +177,14 @@ Is it okay to download the data now?
 
                     checkBox("Allow Eurofurence to collect anonymous analytical data.") {
                         hint = "This can be changed in your settings at any time."
-                        setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
+                        setOnCheckedChangeListener { _, b -> AnalyticsPreferences.enabled = b }
                     }.lparams(matchParent, wrapContent) {
                         padding = dip(30)
                     }
 
                     checkBox("Allow Eurofurence to collect performance data.") {
                         hint = "This can be changed in your settings at any time."
-                        setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
+                        setOnCheckedChangeListener { _, b -> AnalyticsPreferences.enabled = b }
                     }.lparams(matchParent, wrapContent) {
                         padding = dip(30)
                     }
