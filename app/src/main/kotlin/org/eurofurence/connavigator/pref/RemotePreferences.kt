@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.pref
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import io.reactivex.subjects.AsyncSubject
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.tracking.Analytics
@@ -27,6 +28,7 @@ object RemotePreferences : AnkoLogger {
         }.addOnSuccessListener {
             info { "Successfully updated remote configs" }
             remoteConfig.activateFetched()
+            observer.onNext(this)
         }.addOnCompleteListener {
             info { "Update complete. Last activated config is now ${remoteConfig.info.fetchTimeMillis}" }
             info { }
@@ -46,6 +48,8 @@ object RemotePreferences : AnkoLogger {
 
         update()
     }
+
+    val observer= AsyncSubject.create<RemotePreferences>()
 
     val lastUpdatedMillis get() = remoteConfig.info.fetchTimeMillis
     val lastUpdatedDatetime get() = DateTime(lastUpdatedMillis)

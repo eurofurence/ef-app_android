@@ -26,6 +26,6 @@
     </entry>
     <entry>
         <key>api_base_url</key>
-        <value>https://app.eurofurence.org/api/v2/</value>
+        <value>https://app.eurofurence.org</value>
     </entry>
 </defaultsMap>

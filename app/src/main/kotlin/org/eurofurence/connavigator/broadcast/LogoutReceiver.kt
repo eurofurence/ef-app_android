@@ -19,7 +19,8 @@ class LogoutReceiver: BroadcastReceiver(), AnkoLogger {
      */
     override fun onReceive(context: Context, intent: Intent) {
         info {"Logging user out"}
-
+        
+        AuthPreferences.token = ""
         AuthPreferences.clear()
         InstanceIdService().reportToken()
         DataChanged.fire(context, "User logged out")

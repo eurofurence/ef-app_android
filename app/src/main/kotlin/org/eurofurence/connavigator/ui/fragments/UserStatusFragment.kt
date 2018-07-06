@@ -1,6 +1,5 @@
 package org.eurofurence.connavigator.ui.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -9,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.successUi
@@ -40,18 +38,8 @@ import kotlin.concurrent.fixedRateTimer
 
 class UserStatusFragment : Fragment(), AnkoLogger {
     val ui = UserStatusUi()
-    val loginObservable = Observable.just(AuthPreferences.token)
-            .subscribeOn(AndroidSchedulers.mainThread())
 
     private lateinit var timer: Timer
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        checkMessages()
-        info { "Check timer initializing" }
-            timer = fixedRateTimer(period = 60000L) {
-        }
-    }
 
     override fun onDetach() {
         super.onDetach()
@@ -88,16 +76,39 @@ class UserStatusFragment : Fragment(), AnkoLogger {
             ui.createView(Companion.create(context, container!!))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        loginObservable.subscribe {
-            if (!AuthPreferences.isLoggedIn()) {
-                ui.title.text = "You are currently not logged in."
-                ui.subtitle.text = "Tap here to login using your registration details and receive personalized information from Eurofurence!"
-                ui.layout.setOnClickListener {
+        AuthPreferences
+                .observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    info { "Received from observable" }
+                    updateState()
+                }
+
+        updateState()
+    }
+
+    private fun updateState() {
+        info { "Updating status fragment" }
+        if (!AuthPreferences.isLoggedIn()) {
+            info { "User is not logged in" }
+            timer.cancel()
+
+            ui.apply {
+                title.text = "You are currently not logged in."
+                subtitle.text = "Tap here to login using your registration details and receive personalized information from Eurofurence!"
+                layout.setOnClickListener {
                     startActivity(intentFor<LoginActivity>())
                 }
-            } else {
-                ui.title.text = "Welcome, ${AuthPreferences.username.capitalize()}"
-                ui.layout.setOnClickListener {
+            }
+
+        } else {
+            info { "User is logged in" }
+            timer = fixedRateTimer(period = 60000L) {
+                checkMessages()
+            }
+            ui.apply {
+                title.text = "Welcome, ${AuthPreferences.username.capitalize()}"
+                layout.setOnClickListener {
                     applyOnRoot {
                         navigateRoot(FragmentViewMessageList::class.java)
                     }
