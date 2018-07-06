@@ -13,31 +13,25 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.*
 import org.jetbrains.anko.AnkoContext.Companion
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.info
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
 import us.feras.mdv.MarkdownView
-import java.util.UUID
+import java.util.*
 
 class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
     val ui = AnnouncementItemUi()
-    val announcementId by lazy { UUID.fromString(arguments.getString("id")) }
+    val announcementId by lazy {
+        arguments?.let { arguments ->
+            UUID.fromString(arguments.getString("id"))
+        } ?: throw IllegalStateException("Arguments are not initialized")
+    }
 
     override val db by lazyLocateDb()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(Companion.create(context, container!!))
+            ui.createView(Companion.create(requireContext(), container!!))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         info { "Created announcement view for $announcementId" }
 

@@ -136,13 +136,15 @@ interface Db {
  */
 fun Any.locateDb(): Db =
         when (this) {
-        // If context, make new root DB
+
+        // On fragment initialize on context, keep if the fragment is a DB.
+            is Fragment -> requireContext().let {
+                if (it is Db) it else RootDb(it)
+            }
+
+        // On context initialize on this
             is Context -> RootDb(this)
 
-        // If fragment, check if context is DB, otherwise make new root DB
-            is Fragment -> context.let {
-                if (it is Db) it else RootDb(context)
-            }
 
         // Otherwise fail
             else -> throw IllegalStateException(
@@ -247,7 +249,7 @@ class RootDb(context: Context) : Stored(context), Db {
 
     override var date by storedValue<Date>()
 
-    override var version by storedValue <String>()
+    override var version by storedValue<String>()
 
     override val announcements = storedSource(AnnouncementRecord::getId)
 
@@ -417,12 +419,12 @@ fun Db.eventDayNumber(): Int {
  */
 @AddTrace(name = "Db.findLinkFragment", enabled = true)
 fun Db.findLinkFragment(target: String): Map<String, Any?> {
-    maps.items.forEach{
+    maps.items.forEach {
         val map = it
         it.entries.forEach {
             val entry = it
             it.links.forEach {
-                if(it.target.equals(target)){
+                if (it.target.equals(target)) {
                     return mapOf(
                             "map" to map,
                             "entry" to entry

@@ -16,7 +16,6 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.browse
@@ -31,46 +30,50 @@ class FragmentViewInfo() : Fragment(), HasDb {
 
     val ui by lazy { InfoUi() }
 
-    /**
-     * Constructs the info view with an assigned bundle
-     */
-    constructor(knowledgeEntry: KnowledgeEntryRecord) : this() {
-        arguments = Bundle()
-        arguments.jsonObjects["knowledgeEntry"] = knowledgeEntry
+    companion object {
+        fun onKnowledgeEntry(knowledgeEntry: KnowledgeEntryRecord) = FragmentViewInfo().apply {
+            arguments = Bundle().apply {
+                jsonObjects["knowledgeEntry"] = knowledgeEntry
+            }
+        }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        ui.createView(AnkoContext.create(context.applicationContext, container!!))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            ui.createView(AnkoContext.create(requireContext().applicationContext, container!!))
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         applyOnRoot { changeTitle("Information") }
         // Get info if it exists
-        if ("knowledgeEntry" in arguments) {
-            val knowledgeEntry: KnowledgeEntryRecord = arguments.jsonObjects["knowledgeEntry"]
 
-            Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
+        arguments?.let { arguments ->
+            if ("knowledgeEntry" in arguments) {
+                val knowledgeEntry: KnowledgeEntryRecord = arguments.jsonObjects["knowledgeEntry"]
 
-            // Set the properties of the view
-            ui.title.text = knowledgeEntry.title
-            ui.text.loadMarkdown(knowledgeEntry.text)
+                Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
 
-            if (knowledgeEntry.imageIds != null && knowledgeEntry.imageIds.isNotEmpty()) {
-                imageService.load(db.images[knowledgeEntry.imageIds.first()], ui.image, showHide = false)
-            } else {
-                ui.image.visibility = View.GONE
-            }
+                // Set the properties of the view
+                ui.title.text = knowledgeEntry.title
+                ui.text.loadMarkdown(knowledgeEntry.text)
 
-            for (url in knowledgeEntry.links) {
-                val button = Button(context)
-                button.text = url.name
-                button.setOnClickListener {
-                    Analytics.event(Analytics.Category.INFO, Analytics.Action.LINK_CLICKED, url.target)
-                    browse(url.target)
+                if (knowledgeEntry.imageIds != null && knowledgeEntry.imageIds.isNotEmpty()) {
+                    imageService.load(db.images[knowledgeEntry.imageIds.first()], ui.image, showHide = false)
+                } else {
+                    ui.image.visibility = View.GONE
                 }
 
-                ui.layout.addView(button)
+                for (url in knowledgeEntry.links) {
+                    val button = Button(context)
+                    button.text = url.name
+                    button.setOnClickListener {
+                        Analytics.event(Analytics.Category.INFO, Analytics.Action.LINK_CLICKED, url.target)
+                        browse(url.target)
+                    }
+
+                    ui.layout.addView(button)
+                }
             }
         }
     }
@@ -99,7 +102,7 @@ class InfoUi : AnkoComponent<ViewGroup> {
 
                 text = markdownView {
                     lparams(matchParent, wrapContent)
-                }.lparams{
+                }.lparams {
                     margin = dip(10)
                 }
             }

@@ -83,10 +83,10 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(Companion.create(context, container!!))
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            ui.createView(Companion.create(requireContext(), container!!))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         info { "Creating announcements list" }
 
         ui.announcements.adapter = announcementAdapter

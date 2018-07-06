@@ -31,10 +31,13 @@ import kotlin.properties.Delegates.notNull
 class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
-    constructor(mapRecord: MapRecord) : this() {
-        arguments = Bundle()
 
-        arguments.jsonObjects["mapRecord"] = mapRecord
+    companion object {
+        fun onMap(mapRecord: MapRecord) = FragmentMap().apply {
+            arguments = Bundle().apply {
+                jsonObjects["mapRecord"] = mapRecord
+            }
+        }
     }
 
     val ui = MapUi()
@@ -42,57 +45,59 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     val image by lazy { db.images[mapRecord.imageId]!! }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.create(context.applicationContext, container!!))
+            ui.createView(AnkoContext.create(requireContext().applicationContext, container!!))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if ("mapRecord" in arguments) {
-            mapRecord = arguments.jsonObjects["mapRecord"]
+        arguments?.let { arguments ->
+            if ("mapRecord" in arguments) {
+                mapRecord = arguments.jsonObjects["mapRecord"]
 
-            info { "Browsing to map ${mapRecord.description}" }
+                info { "Browsing to map ${mapRecord.description}" }
 
-            ui.title.text = mapRecord.description
-            ui.title.visibility = View.GONE
+                ui.title.text = mapRecord.description
+                ui.title.visibility = View.GONE
 
-            imageService.load(db.images[mapRecord.imageId]!!, ui.map, false)
+                imageService.load(db.images[mapRecord.imageId]!!, ui.map, false)
 
-            ui.map.attacher.minimumScale = 1F
-            ui.map.attacher.mediumScale = 2.5F
-            ui.map.attacher.maximumScale = 5F
+                ui.map.attacher.minimumScale = 1F
+                ui.map.attacher.mediumScale = 2.5F
+                ui.map.attacher.maximumScale = 5F
 
-            ui.map.attacher.setOnPhotoTapListener { view, percX, percY ->
-                val x = image.width * percX
-                val y = image.height * percY
-                info { "Tap registered at x: $x, y: $y" }
+                ui.map.attacher.setOnPhotoTapListener { _, percX, percY ->
+                    val x = image.width * percX
+                    val y = image.height * percY
+                    info { "Tap registered at x: $x, y: $y" }
 
-                val entries = mapRecord.findMatchingEntries(x, y)
+                    val entries = mapRecord.findMatchingEntries(x, y)
 
-                info { "Found ${entries.size} entries" }
+                    info { "Found ${entries.size} entries" }
 
-                if (entries.isNotEmpty()) {
-                    val links = entries.first()
-                            .links
-                            .filter { it.name !== null }
-                            .filter { it.fragmentType !== LinkFragment.FragmentTypeEnum.MapEntry }
+                    if (entries.isNotEmpty()) {
+                        val links = entries.first()
+                                .links
+                                .filter { it.name !== null }
+                                .filter { it.fragmentType !== LinkFragment.FragmentTypeEnum.MapEntry }
 
-                    if(!links.isEmpty()) {
-                        info { "Showing location selector" }
-                        selector("Find out more", links.map { it.name }, { _, position ->
-                            val link = links[position]
+                        if (!links.isEmpty()) {
+                            info { "Showing location selector" }
+                            selector("Find out more", links.map { it.name }, { _, position ->
+                                val link = links[position]
 
-                            when (link.fragmentType) {
-                                LinkFragment.FragmentTypeEnum.DealerDetail -> launchDealer(link)
-                                LinkFragment.FragmentTypeEnum.MapExternal -> launchMap(link)
-                                LinkFragment.FragmentTypeEnum.WebExternal -> browse(link.target)
-                                else -> warn { "No items selected" }
-                            }
-                        })
+                                when (link.fragmentType) {
+                                    LinkFragment.FragmentTypeEnum.DealerDetail -> launchDealer(link)
+                                    LinkFragment.FragmentTypeEnum.MapExternal -> launchMap(link)
+                                    LinkFragment.FragmentTypeEnum.WebExternal -> browse(link.target)
+                                    else -> warn { "No items selected" }
+                                }
+                            })
+                        }
                     }
                 }
+            } else {
+                ui.map.setImageResource(R.drawable.placeholder_event)
             }
-        } else {
-            ui.map.setImageResource(R.drawable.placeholder_event)
         }
     }
 

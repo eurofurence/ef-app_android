@@ -19,7 +19,7 @@ import org.eurofurence.connavigator.util.v2.internalSpec
 import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
 import java.util.Date
-import kotlin.serialization.Serializable
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class UpdateComplete(val success: Boolean, val time: Date?, val exception: Throwable?)

@@ -9,14 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.eventDayNumber
 import org.eurofurence.connavigator.database.filterEvents
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.BackgroundPreferences
-import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.TrackEventPagerAdapter
@@ -34,14 +33,14 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
 
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()
-    val searchEventFilter by lazy { filterEvents().sortByName()}
+    val searchEventFilter by lazy { filterEvents().sortByName() }
     val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_events_viewpager, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         configureViewpager()
 
         childFragmentManager.beginTransaction()
@@ -68,8 +67,9 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
     }
 
     private fun changePagerAdapter(adapter: PagerAdapter) {
-        eventPager.adapter = adapter
-        eventPager.adapter.notifyDataSetChanged()
+        eventPager.adapter = adapter.apply {
+            notifyDataSetChanged()
+        }
     }
 
     private fun changePagerAdapter(mode: EventPagerMode) = when (mode) {
@@ -79,7 +79,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
     }.apply { BackgroundPreferences.eventPagerMode = mode }
 
     override fun dataUpdated() {
-        eventPager.adapter.notifyDataSetChanged()
+        eventPager.adapter?.notifyDataSetChanged()
     }
 
     override fun onDestroyView() {
@@ -91,17 +91,16 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         when (eventPager.visibility) {
             View.VISIBLE -> {
                 eventPager.visibility = View.GONE
-                activity.findViewById(R.id.searchLayout).visibility = View.VISIBLE
+                requireActivity().findViewById<LinearLayout>(R.id.searchLayout).visibility = View.VISIBLE
             }
             else -> {
                 eventPager.visibility = View.VISIBLE
-                activity.findViewById(R.id.searchLayout).visibility = View.GONE
+                requireActivity().findViewById<LinearLayout>(R.id.searchLayout).visibility = View.GONE
             }
         }
     }
 
-    override fun onFilterButtonClick() = selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks"), {
-        _, position ->
+    override fun onFilterButtonClick() = selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks"), { _, position ->
         when (position) {
             1 -> changePagerAdapter(EventPagerMode.ROOMS)
             2 -> changePagerAdapter(EventPagerMode.TRACKS)

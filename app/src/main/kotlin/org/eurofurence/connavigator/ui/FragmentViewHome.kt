@@ -62,7 +62,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
         return ui.createView(AnkoContext.create(container.context.applicationContext, container))
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         applyOnRoot { changeTitle("Home") }
 
         configureProgressBar()
@@ -72,13 +72,13 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     private fun configureEventRecyclers() {
         info { "Configuring event recyclers" }
 
-        fragmentManager.beginTransaction()
-                .replace(5000, current)
-                .replace(5001, upcoming)
-                .replace(5002, favorited)
-                .replace(5003, AnnouncementListFragment())
-                .replace(5004, UserStatusFragment())
-                .commitAllowingStateLoss()
+        fragmentManager?.beginTransaction()
+                ?.replace(5000, current)
+                ?.replace(5001, upcoming)
+                ?.replace(5002, favorited)
+                ?.replace(5003, AnnouncementListFragment())
+                ?.replace(5004, UserStatusFragment())
+                ?.commitAllowingStateLoss()
     }
 
     private fun configureProgressBar() {

@@ -74,20 +74,20 @@ class UserStatusFragment : Fragment(), AnkoLogger {
         if (unreadMessages.isNotEmpty()) {
             info { "Unread messages are present! Giving attention." }
             ui.subtitle.text = "You have ${unreadMessages.size} new, unread personal message(s)!"
-            ui.subtitle.textColor = ContextCompat.getColor(context, R.color.primaryDark)
-            ui.userIcon.textColor = ContextCompat.getColor(context, R.color.primaryDark)
+            ui.subtitle.textColor = ContextCompat.getColor(requireContext(), R.color.primaryDark)
+            ui.userIcon.textColor = ContextCompat.getColor(requireContext(), R.color.primaryDark)
         } else {
             info { "No unread messages found, displaying total message counts" }
             ui.subtitle.text = "You have ${messages.count()} personal message(s)."
-            ui.subtitle.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
-            ui.userIcon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
+            ui.subtitle.textColor = ContextCompat.getColor(requireContext(), android.R.color.tertiary_text_dark)
+            ui.userIcon.textColor = ContextCompat.getColor(requireContext(), android.R.color.tertiary_text_dark)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(Companion.create(context, container!!))
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            ui.createView(Companion.create(requireContext(), container!!))
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         loginObservable.subscribe {
             if (!AuthPreferences.isLoggedIn()) {
                 ui.title.text = "You are currently not logged in."
