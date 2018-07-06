@@ -39,11 +39,11 @@ import kotlin.concurrent.fixedRateTimer
 class UserStatusFragment : Fragment(), AnkoLogger {
     val ui = UserStatusUi()
 
-    private lateinit var timer: Timer
+    private var timer: Timer? = null
 
     override fun onDetach() {
         super.onDetach()
-        timer.cancel()
+        timer?.cancel()
         info { "Check timer canceled" }
     }
 
@@ -91,7 +91,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
         info { "Updating status fragment" }
         if (!AuthPreferences.isLoggedIn()) {
             info { "User is not logged in" }
-            timer.cancel()
+            timer?.cancel()
 
             ui.apply {
                 title.text = "You are currently not logged in."

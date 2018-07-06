@@ -5,17 +5,14 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.github.lzyzsd.circleprogress.ArcProgress
+import io.reactivex.android.schedulers.AndroidSchedulers
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.database.locateDb
-import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.EventList
@@ -24,7 +21,6 @@ import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.fragments.UserStatusFragment
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.arcProgress
-import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
@@ -65,8 +61,11 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         applyOnRoot { changeTitle("Home") }
 
-        configureProgressBar()
         configureEventRecyclers()
+
+        RemotePreferences.observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { configureProgressBar() }
     }
 
     private fun configureEventRecyclers() {

@@ -1,7 +1,6 @@
 package org.eurofurence.connavigator.ui
 
 import android.graphics.PorterDuff
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
@@ -14,6 +13,7 @@ import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.google.firebase.perf.metrics.AddTrace
+import io.reactivex.android.schedulers.AndroidSchedulers
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
@@ -28,8 +28,34 @@ import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.jetbrains.anko.*
-import org.joda.time.DateTime
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.above
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.button
+import org.jetbrains.anko.centerHorizontally
+import org.jetbrains.anko.centerInParent
+import org.jetbrains.anko.checkBox
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.info
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.longToast
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.padding
+import org.jetbrains.anko.progressBar
+import org.jetbrains.anko.relativeLayout
+import org.jetbrains.anko.scrollView
+import org.jetbrains.anko.setContentView
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.yesButton
 
 /**
  * Created by David on 28-4-2016.
@@ -90,6 +116,12 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             longToast("Closing application.")
             System.exit(0)
         }
+
+        RemotePreferences.observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    ui.remoteLastUpdatedText.text = "Remote configs was updated ${it.timeSinceLastUpdate.millis / 1000} seconds ago."
+                }
     }
 
     /**
@@ -126,6 +158,7 @@ class StartUi : AnkoComponent<ActivityStart> {
     lateinit var loadingSpinner: ProgressBar
     lateinit var startLayout: LinearLayout
     lateinit var loadingLayout: RelativeLayout
+    lateinit var remoteLastUpdatedText: TextView
 
     override fun createView(ui: AnkoContext<ActivityStart>) = with(ui) {
         verticalLayout {
@@ -189,7 +222,7 @@ Is it okay to download the data now?
                         padding = dip(30)
                     }
 
-                    textView("Remote configs was updated ${RemotePreferences.timeSinceLastUpdate.millis / 1000} seconds ago.")
+                    remoteLastUpdatedText = textView("Remote configs was updated ${RemotePreferences.timeSinceLastUpdate.millis / 1000} seconds ago.")
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, wrapContent)
 

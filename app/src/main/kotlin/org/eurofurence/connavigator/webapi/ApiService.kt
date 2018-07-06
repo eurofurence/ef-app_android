@@ -5,8 +5,24 @@ import com.android.volley.Network
 import com.android.volley.toolbox.BasicNetwork
 import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.ApiInvoker
-import io.swagger.client.api.*
+import io.swagger.client.api.AnnouncementsApi
+import io.swagger.client.api.CommunicationApi
+import io.swagger.client.api.DealersApi
+import io.swagger.client.api.EventConferenceDaysApi
+import io.swagger.client.api.EventConferenceRoomsApi
+import io.swagger.client.api.EventConferenceTracksApi
+import io.swagger.client.api.EventFeedbackApi
+import io.swagger.client.api.EventsApi
+import io.swagger.client.api.FursuitsApi
+import io.swagger.client.api.ImagesApi
+import io.swagger.client.api.KnowledgeEntriesApi
+import io.swagger.client.api.KnowledgeGroupsApi
+import io.swagger.client.api.MapsApi
+import io.swagger.client.api.PushNotificationsApi
+import io.swagger.client.api.SyncApi
+import io.swagger.client.api.TokensApi
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.util.extensions.catchHandle
 import org.eurofurence.connavigator.util.extensions.logd
@@ -17,7 +33,7 @@ import java.io.File
  * The API services manage extended API functionality
  */
 object apiService {
-    val apiPath = RemotePreferences.apiBaseUrl
+    var apiPath = RemotePreferences.apiBaseUrl
 
     val announcements by lazy { AnnouncementsApi().apply { basePath = apiPath } }
 
@@ -56,6 +72,11 @@ object apiService {
      */
     fun initialize(context: Context) {
         {
+            apiPath = RemotePreferences.apiBaseUrl
+
+            RemotePreferences.observer.observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { apiPath = it.apiBaseUrl }
+
             logd("API") { "Initializing" }
 
             // Create the cache

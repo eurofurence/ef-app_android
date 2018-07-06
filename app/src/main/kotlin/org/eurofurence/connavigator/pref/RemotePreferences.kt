@@ -2,10 +2,9 @@ package org.eurofurence.connavigator.pref
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import io.reactivex.subjects.AsyncSubject
+import io.reactivex.subjects.ReplaySubject
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.tracking.Analytics
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
@@ -49,21 +48,21 @@ object RemotePreferences : AnkoLogger {
         update()
     }
 
-    val observer= AsyncSubject.create<RemotePreferences>()
+    val observer = ReplaySubject.create<RemotePreferences>()
 
     val lastUpdatedMillis get() = remoteConfig.info.fetchTimeMillis
     val lastUpdatedDatetime get() = DateTime(lastUpdatedMillis)
     val timeSinceLastUpdate get() = DateTime.now().minus(lastUpdatedMillis)
 
     // Booleans
-    val mapsEnabled: Boolean = remoteConfig.getBoolean("maps_enabled")
-    val rotationEnabled: Boolean = remoteConfig.getBoolean("rotation_enabled")
-    val nativeFursuitGames = remoteConfig.getBoolean("native_fursuit_games")
+    val mapsEnabled: Boolean get() = remoteConfig.getBoolean("maps_enabled")
+    val rotationEnabled: Boolean get() = remoteConfig.getBoolean("rotation_enabled")
+    val nativeFursuitGames get() = remoteConfig.getBoolean("native_fursuit_games")
 
     // Longs
-    val nextConStart = remoteConfig.getLong("nextConStart")
-    val lastConEnd = remoteConfig.getLong("lastConEnd")
+    val nextConStart get() = remoteConfig.getLong("nextConStart")
+    val lastConEnd get() = remoteConfig.getLong("lastConEnd")
 
     // Strings
-    val apiBaseUrl = remoteConfig.getString("api_base_url")
+    val apiBaseUrl get() =   remoteConfig.getString("api_base_url")
 }

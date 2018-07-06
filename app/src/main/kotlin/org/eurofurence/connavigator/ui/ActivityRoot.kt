@@ -23,6 +23,7 @@ import android.widget.TextView
 import com.google.gson.Gson
 import com.joanzapata.iconify.IconDrawable
 import com.joanzapata.iconify.fonts.FontAwesomeIcons
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.model.AnnouncementRecord
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventRecord
@@ -30,6 +31,7 @@ import io.swagger.client.model.KnowledgeEntryRecord
 import io.swagger.client.model.PrivateMessageRecord
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.R.id
 import org.eurofurence.connavigator.broadcast.ResetReceiver
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.UpdateIntentService
@@ -143,6 +145,13 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         setupBar()
         setupBarNavLink()
         setupNav()
+
+        RemotePreferences
+                .observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    updateNavCountdown()
+                }
 
         // Show the home screen
         setupContent()
@@ -356,7 +365,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             drawer.closeDrawer(GravityCompat.START)
             true
         }
+    }
 
+    private fun updateNavCountdown() {
         // Set up dates to EF
         // Manually set the first date, since the database is not updated with EF 22
         val firstDay = DateTime(RemotePreferences.nextConStart)
@@ -365,7 +376,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
 
         if (!RemotePreferences.mapsEnabled) {
-            navView.menu.findItem(R.id.navMap).isVisible = false
+            navView.menu.findItem(id.navMap).isVisible = false
         }
 
         // On con vs. before con. This should be updated on day changes
