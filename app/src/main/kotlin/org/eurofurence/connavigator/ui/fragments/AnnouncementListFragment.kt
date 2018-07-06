@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.model.AnnouncementRecord
 import org.eurofurence.connavigator.R
@@ -91,12 +90,13 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
 
         ui.announcements.adapter = announcementAdapter
 
-        Observable.just(db.announcements.items)
-                .subscribeOn(AndroidSchedulers.mainThread())
+        db.observer
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     info { "Updating items in announcement recycler" }
                     ui.layout.visibility = if (getAnnouncements().count() == 0) View.GONE else View.VISIBLE
                     announcementAdapter.announcements = getAnnouncements()
+                    announcementAdapter.notifyDataSetChanged()
                 }
     }
 

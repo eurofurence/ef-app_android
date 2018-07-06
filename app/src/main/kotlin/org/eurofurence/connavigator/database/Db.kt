@@ -4,20 +4,37 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.util.Log
 import com.google.firebase.perf.metrics.AddTrace
-import io.swagger.client.model.*
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.ReplaySubject
+import io.swagger.client.model.AnnouncementRecord
+import io.swagger.client.model.DealerRecord
+import io.swagger.client.model.EventConferenceDayRecord
+import io.swagger.client.model.EventConferenceRoomRecord
+import io.swagger.client.model.EventConferenceTrackRecord
+import io.swagger.client.model.EventRecord
+import io.swagger.client.model.ImageRecord
+import io.swagger.client.model.KnowledgeEntryRecord
+import io.swagger.client.model.KnowledgeGroupRecord
+import io.swagger.client.model.MapRecord
 import org.eurofurence.connavigator.ui.filters.EventList
-import org.eurofurence.connavigator.util.v2.*
+import org.eurofurence.connavigator.util.v2.IdSource
+import org.eurofurence.connavigator.util.v2.JoinerBinding
+import org.eurofurence.connavigator.util.v2.Stored
 import org.eurofurence.connavigator.util.v2.Stored.StoredSource
+import org.eurofurence.connavigator.util.v2.get
+import org.eurofurence.connavigator.util.v2.join
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.Interval
 import org.joda.time.LocalTime
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 /**
  * Abstract database interface.
  */
 interface Db {
+    val observer: ReplaySubject<Db>
     /**
      * Last update time.
      */
@@ -160,6 +177,9 @@ interface HasDb : Db {
      */
     val db: Db
 
+    override val observer: ReplaySubject<Db>
+        get() = db.observer
+
     override var date: Date?
         get() = db.date
         set(value) {
@@ -244,10 +264,11 @@ interface HasDb : Db {
  * Direct database implementation.
  */
 class RootDb(context: Context) : Stored(context), Db {
+    override val observer = ReplaySubject.create<Db>()
 
     override var date by storedValue<Date>()
 
-    override var version by storedValue <String>()
+    override var version by storedValue<String>()
 
     override val announcements = storedSource(AnnouncementRecord::getId)
 
@@ -417,12 +438,12 @@ fun Db.eventDayNumber(): Int {
  */
 @AddTrace(name = "Db.findLinkFragment", enabled = true)
 fun Db.findLinkFragment(target: String): Map<String, Any?> {
-    maps.items.forEach{
+    maps.items.forEach {
         val map = it
         it.entries.forEach {
             val entry = it
             it.links.forEach {
-                if(it.target.equals(target)){
+                if (it.target.equals(target)) {
                     return mapOf(
                             "map" to map,
                             "entry" to entry

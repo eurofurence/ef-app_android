@@ -109,16 +109,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         val success = it.booleans["success"]
         val time = it.objects["time", Date::class.java]
 
+        info { "Received UPDATE_COMPLETE notification. Success: $success; Time: $time" }
 
-        if (!success) {
-            // Make a snackbar for the result
-            makeSnackbar("Database reload ${if (success) "successful" else "failed"}, version $time")
-
-            // Update content data if fragments implement content API
-            applyOnContent {
-                logv { "Updated the data and dispatching to $this" }
-                dataUpdated()
-            }
+        if (success) {
+            db.observer.onNext(db)
         }
     }
 
