@@ -71,14 +71,12 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 info { "Found ${entries.size} entries" }
 
                 if (entries.isNotEmpty()) {
-                    val links = entries.first()
-                            .links
-                            .filter { it.name !== null }
+                    val links = entries.flatMap { it.links }
                             .filter { it.fragmentType !== LinkFragment.FragmentTypeEnum.MapEntry }
 
                     if(!links.isEmpty()) {
                         info { "Showing location selector" }
-                        selector("Find out more", links.map { it.name }, { _, position ->
+                        selector("Find out more", links.map { it.name ?: "No name provided for link" }, { _, position ->
                             val link = links[position]
 
                             when (link.fragmentType) {
