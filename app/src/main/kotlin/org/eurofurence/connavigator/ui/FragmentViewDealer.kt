@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
@@ -22,6 +23,8 @@ import org.eurofurence.connavigator.database.findLinkFragment
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.tracking.Analytics.Action
+import org.eurofurence.connavigator.tracking.Analytics.Category
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.allDaysAvailable
 import org.eurofurence.connavigator.util.extensions.contains
@@ -66,11 +69,18 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         // Send analytics pings
         Analytics.screen(activity, "View Dealer Details")
+        db.observer.observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    fillUi()
+                }
+        fillUi()
+    }
 
+    private fun fillUi() {
         if ("id" in arguments) {
             val dealer: DealerRecord = db.dealers[dealerId] ?: return
 
-            Analytics.event(Analytics.Category.DEALER, Analytics.Action.OPENED, dealer.displayName
+            Analytics.event(Category.DEALER, Action.OPENED, dealer.displayName
                     ?: dealer.attendeeNickname)
 
             // Retrieve top image
