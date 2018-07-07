@@ -23,13 +23,35 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.allDaysAvailable
+import org.eurofurence.connavigator.util.extensions.contains
+import org.eurofurence.connavigator.util.extensions.fontAwesomeView
+import org.eurofurence.connavigator.util.extensions.getName
+import org.eurofurence.connavigator.util.extensions.hasUniqueDisplayName
+import org.eurofurence.connavigator.util.extensions.photoView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.bottomPadding
+import org.jetbrains.anko.button
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.info
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.padding
+import org.jetbrains.anko.relativeLayout
+import org.jetbrains.anko.scrollView
 import org.jetbrains.anko.support.v4.browse
-import org.jetbrains.anko.support.v4.dip
-import us.feras.mdv.MarkdownView
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.topPadding
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.warn
+import org.jetbrains.anko.wrapContent
 import java.util.UUID
 
 class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
@@ -81,10 +103,10 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.categories.text = dealer.categories.joinToString(", ")
 
             ui.aboutArtist.text =
-                if (dealer.aboutTheArtistText.isNotEmpty())
-                    dealer.aboutTheArtistText
-                else
-                    "This artist did not supply any artist description to show to you :("
+                    if (dealer.aboutTheArtistText.isNotEmpty())
+                        dealer.aboutTheArtistText
+                    else
+                        "This artist did not supply any artist description to show to you :("
 
             if (dealer.artPreviewImageId == null) {
                 ui.artPreview.visibility = View.GONE
@@ -101,17 +123,24 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             }
 
             configureLinks(dealer)
-            configureMap(dealer)
+            configureLocationAndAvailability(dealer)
         }
     }
 
-    private fun configureMap(dealer: DealerRecord) {
+    private fun configureLocationAndAvailability(dealer: DealerRecord) {
         info { "Finding dealer in mapEntries" }
         val entryMap = db.findLinkFragment(dealer.id.toString())
 
         val map = entryMap["map"] as MapRecord?
         val entry = entryMap["entry"] as MapEntryRecord?
 
+        if (map == null && dealer.allDaysAvailable() && !dealer.isAfterDark) {
+            info { "No maps or deviations. Hiding location and availability" }
+            ui.locationContainer.visibility = View.GONE
+            return
+        }
+
+        // Setup map
         if (map != null && entry != null) {
             info { "Found maps and entries!" }
             info { "Map name is ${map.description}" }
@@ -120,12 +149,25 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             ui.map.attacher.setScale(4F, entry.x.toFloat(), entry.y.toFloat(), true)
             ui.map.attacher.update()
+            ui.map.visibility = View.VISIBLE
         } else {
             warn { "No map or entry found!" }
             ui.map.visibility = View.GONE
         }
 
-        ui.map.visibility = View.GONE
+        // Availability
+        ui.availableDaysText.visibility = if(dealer.allDaysAvailable()) View.GONE else View.VISIBLE
+
+        val availableDayList = mutableSetOf<String>()
+
+        if(dealer.attendsOnThursday) availableDayList.add("Thu")
+        if(dealer.attendsOnFriday) availableDayList.add("Fri")
+        if(dealer.attendsOnSaturday) availableDayList.add("Sat")
+
+        ui.availableDaysText.text = ui.availableDaysText.text.toString() + availableDayList.joinToString(", ")
+
+        // After dark
+        ui.afterDarkText.visibility = if (dealer.isAfterDark) View.VISIBLE else View.GONE
     }
 
     private fun configureLinks(dealer: DealerRecord) {
@@ -189,6 +231,9 @@ class DealerUi : AnkoComponent<ViewGroup> {
     lateinit var telegramButton: Button
     lateinit var telegramContainer: LinearLayout
     lateinit var map: PhotoView
+    lateinit var locationContainer: LinearLayout
+    lateinit var availableDaysText: TextView
+    lateinit var afterDarkText: TextView
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         relativeLayout {
@@ -275,7 +320,7 @@ class DealerUi : AnkoComponent<ViewGroup> {
                         }
                     }
 
-                    verticalLayout {
+                    locationContainer = verticalLayout {
                         backgroundResource = R.color.cardview_light_background
                         textView {
                             text = "Location & Availability"
@@ -293,6 +338,19 @@ class DealerUi : AnkoComponent<ViewGroup> {
                             scaleType = ImageView.ScaleType.FIT_CENTER
                             imageResource = R.drawable.placeholder_event
                         }
+
+                        verticalLayout {
+                            padding = dip(10)
+                            availableDaysText = fontAwesomeView {
+                                text = "{fa-warning 24sp} Only present on: "
+                                compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
+                            }
+
+                            afterDarkText = fontAwesomeView {
+                                text = "{fa-moon-o 24sp}  Located in the After Dark Dealers Den"
+                                compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
+                            }
+                        }
                     }.lparams(matchParent, wrapContent) {
                         topMargin = dip(10)
                     }
@@ -300,7 +358,7 @@ class DealerUi : AnkoComponent<ViewGroup> {
 
                     verticalLayout {
                         // artist
-                        padding = dip(20)
+                        padding = dip(10)
                         backgroundResource = R.color.cardview_light_background
                         textView {
                             text = "About the Artist"
