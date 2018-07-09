@@ -4,8 +4,10 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.util.Log
 import com.google.firebase.perf.metrics.AddTrace
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.ReplaySubject
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.Subject
 import io.swagger.client.model.AnnouncementRecord
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventConferenceDayRecord
@@ -34,7 +36,7 @@ import java.util.UUID
  * Abstract database interface.
  */
 interface Db {
-    val observer: ReplaySubject<Db>
+    val observer: Subject<Db>
     /**
      * Last update time.
      */
@@ -146,6 +148,11 @@ interface Db {
     val toEvent: JoinerBinding<UUID, EventRecord, UUID>
 
     fun clear()
+
+    /**
+     * Subscribe on main thread
+     */
+    fun subscribe(function: (db: Db) -> Any): Disposable
 }
 
 /**
@@ -177,7 +184,7 @@ interface HasDb : Db {
      */
     val db: Db
 
-    override val observer: ReplaySubject<Db>
+    override val observer: Subject<Db>
         get() = db.observer
 
     override var date: Date?
@@ -257,6 +264,9 @@ interface HasDb : Db {
     override fun clear() {
         db.clear()
     }
+
+    override fun subscribe(function: (db: Db) -> Any) = db.subscribe(function)
+
 }
 
 
@@ -264,7 +274,10 @@ interface HasDb : Db {
  * Direct database implementation.
  */
 class RootDb(context: Context) : Stored(context), Db {
-    override val observer = ReplaySubject.create<Db>()
+    override val observer = BehaviorSubject.create<Db>().apply {
+        // Autopush a single event to render
+        onNext(this@RootDb)
+    }
 
     override var date by storedValue<Date>()
 
@@ -343,6 +356,9 @@ class RootDb(context: Context) : Stored(context), Db {
         knowledgeGroups.delete()
         maps.delete()
     }
+
+    override fun subscribe(function: (db: Db) -> Any) = observer.observeOn(AndroidSchedulers.mainThread())
+            .subscribe { function(it) }
 }
 
 

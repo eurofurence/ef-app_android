@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.model.AnnouncementRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -76,11 +75,7 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
 
     override val db by lazyLocateDb()
     val ui = AnnouncementsUi()
-    val announcementAdapter by lazy {
-        AnnoucementRecyclerDataAdapter().apply {
-            announcements = db.announcements.items.toList()
-        }
-    }
+    val announcementAdapter by lazy { AnnoucementRecyclerDataAdapter() }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             ui.createView(Companion.create(context, container!!))
@@ -90,19 +85,17 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
 
         ui.announcements.adapter = announcementAdapter
 
-        db.observer
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    info { "Updating items in announcement recycler" }
-                    ui.layout.visibility = if (getAnnouncements().count() == 0) View.GONE else View.VISIBLE
-                    announcementAdapter.announcements = getAnnouncements()
-                    announcementAdapter.notifyDataSetChanged()
-                }
+        db.subscribe {
+            info { "Updating items in announcement recycler" }
+            ui.layout.visibility = if (getAnnouncements().count() == 0) View.GONE else View.VISIBLE
+            announcementAdapter.announcements = getAnnouncements()
+            announcementAdapter.notifyDataSetChanged()
+        }
     }
 
     fun getAnnouncements() = db.announcements.items
             .filterIf(AppPreferences.showOldAnnouncements) { it.validFromDateTimeUtc.time <= now().millis && it.validUntilDateTimeUtc.time > now().millis }
-            .sortedBy{ it.validFromDateTimeUtc }
+            .sortedBy { it.validFromDateTimeUtc }
             .toList()
 }
 

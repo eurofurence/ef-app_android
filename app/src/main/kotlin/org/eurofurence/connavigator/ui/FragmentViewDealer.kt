@@ -13,7 +13,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
@@ -69,11 +68,9 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         // Send analytics pings
         Analytics.screen(activity, "View Dealer Details")
-        db.observer.observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    fillUi()
-                }
-        fillUi()
+        db.subscribe {
+            fillUi()
+        }
     }
 
     private fun fillUi() {
@@ -166,13 +163,13 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         }
 
         // Availability
-        ui.availableDaysText.visibility = if(dealer.allDaysAvailable()) View.GONE else View.VISIBLE
+        ui.availableDaysText.visibility = if (dealer.allDaysAvailable()) View.GONE else View.VISIBLE
 
         val availableDayList = mutableSetOf<String>()
 
-        if(dealer.attendsOnThursday) availableDayList.add("Thu")
-        if(dealer.attendsOnFriday) availableDayList.add("Fri")
-        if(dealer.attendsOnSaturday) availableDayList.add("Sat")
+        if (dealer.attendsOnThursday) availableDayList.add("Thu")
+        if (dealer.attendsOnFriday) availableDayList.add("Fri")
+        if (dealer.attendsOnSaturday) availableDayList.add("Sat")
 
         ui.availableDaysText.text = ui.availableDaysText.text.toString() + availableDayList.joinToString(", ")
 
