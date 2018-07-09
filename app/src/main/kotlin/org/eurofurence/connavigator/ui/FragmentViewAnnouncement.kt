@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.swagger.client.model.AnnouncementRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
@@ -41,15 +40,12 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
         info { "Created announcement view for $announcementId" }
 
-        Observable.just(db.announcements.items)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .flatMapIterable { it }
-                .filter { it.id == this.announcementId }
-                .subscribe {
-                    info { "Updating announcement item" }
-                    ui.title.text = it.title
-                    ui.text.loadMarkdown(it.content)
-                }
+        db.subscribe {
+            val announcement = it.announcements[announcementId]!!
+            info { "Updating announcement item" }
+            ui.title.text = announcement.title
+            ui.text.loadMarkdown(announcement.content)
+        }
     }
 }
 
