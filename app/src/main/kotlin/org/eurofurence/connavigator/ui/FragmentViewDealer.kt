@@ -152,9 +152,10 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             info { "Found maps and entries!" }
             info { "Map name is ${map.description}" }
             info { "Entry is at (${entry.x}, ${entry.y})" }
+
             imageService.load(db.toImage(map), ui.map)
 
-            ui.map.attacher.setScale(4F, entry.x.toFloat(), entry.y.toFloat(), true)
+            ui.map.attacher.setScale(4F, entry.x.toFloat(), entry.y.toFloat(), false)
             ui.map.attacher.setAllowParentInterceptOnEdge(false)
             ui.map.attacher.update()
             ui.map.visibility = View.VISIBLE
@@ -339,13 +340,10 @@ class DealerUi : AnkoComponent<ViewGroup> {
 
                         map = photoView {
                             backgroundResource = R.color.cardview_dark_background
-                            minimumScale = 1F
-                            mediumScale = 2.5F
                             maximumScale = 5F
-                            lparams(matchParent, dip(400))
                             scaleType = ImageView.ScaleType.FIT_CENTER
                             imageResource = R.drawable.placeholder_event
-                        }
+                        }.lparams(matchParent, dip(400))
 
                         verticalLayout {
                             padding = dip(10)
@@ -401,7 +399,8 @@ class DealerUi : AnkoComponent<ViewGroup> {
                             topPadding = dip(10)
 
                             artPreview = photoView {
-                                lparams(matchParent, dip(400))
+                                backgroundResource = R.color.cardview_dark_background
+                                lparams(matchParent, wrapContent)
                                 scaleType = ImageView.ScaleType.FIT_CENTER
                             }
 
