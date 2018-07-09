@@ -9,6 +9,7 @@ import com.google.firebase.perf.metrics.AddTrace
 import com.pawegio.kandroid.d
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.database.RootDb
+import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.gcm.NotificationPublisher
@@ -67,6 +68,6 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
             db.faves += event.id
         }
 
-        DataChanged.fire(context, "Favorites")
+        UpdateIntentService.dispatchUpdate(context)
     }
 }

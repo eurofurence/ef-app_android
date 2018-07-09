@@ -22,6 +22,8 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.tracking.Analytics.Action
+import org.eurofurence.connavigator.tracking.Analytics.Category
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -33,27 +35,10 @@ import java.util.*
 /**
  * Created by David on 4/9/2016.
  */
-class FragmentViewEvent() : Fragment(), HasDb {
-    companion object {
-        val EVENT_STATUS_CHANGED = "org.eurofurence.connavigator.ui.EVENT_STATUS_CHANGED"
-    }
-
+class FragmentViewEvent: Fragment(), HasDb {
     override val db by lazyLocateDb()
-    val dataChanged by lazy {
-        context.localReceiver(DataChanged.DATACHANGED) {
-            changeFabIcon()
-        }
-    }
 
-    lateinit var eventId: UUID
-
-    /**
-     * Constructs the info view with an assigned bundle
-     */
-    constructor(event: EventRecord) : this() {
-        arguments = Bundle()
-        arguments.jsonObjects["event"] = event
-    }
+    val eventId: UUID? get() = UUID.fromString(arguments.getString("id"))
 
     val title: TextView by view()
     val description: MarkdownView by view()
@@ -70,15 +55,16 @@ class FragmentViewEvent() : Fragment(), HasDb {
         super.onViewCreated(view, savedInstanceState)
 
         Analytics.screen(activity, "Event Specific")
+        db.subscribe {
+            fillUi()
+        }
+    }
 
-        if ("event" in arguments) {
-            val event: EventRecord = arguments.jsonObjects["event"]
+    private fun fillUi() {
+        if ("id" in arguments) {
+            val event: EventRecord = db.events[eventId] ?: return
 
-            eventId = event.id
-
-            dataChanged.register()
-
-            Analytics.event(Analytics.Category.EVENT, Analytics.Action.OPENED, event.title)
+            Analytics.event(Category.EVENT, Action.OPENED, event.title)
 
             val conferenceRoom = event[toRoom]
             val conferenceDay = event[toDay]
@@ -102,7 +88,7 @@ class FragmentViewEvent() : Fragment(), HasDb {
             changeFabIcon()
 
             buttonSave.setOnClickListener {
-                if(AppPreferences.dialogOnEventPress) {
+                if (AppPreferences.dialogOnEventPress) {
                     showDialog(event)
                 } else {
                     favoriteEvent(event)
@@ -110,7 +96,7 @@ class FragmentViewEvent() : Fragment(), HasDb {
             }
 
             buttonSave.setOnLongClickListener {
-                if(AppPreferences.dialogOnEventPress){
+                if (AppPreferences.dialogOnEventPress) {
                     favoriteEvent(event)
                 } else {
                     showDialog(event)

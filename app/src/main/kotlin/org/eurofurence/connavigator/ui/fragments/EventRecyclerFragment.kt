@@ -13,8 +13,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.failUi
@@ -95,11 +93,6 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     val ui by lazy { EventListView() }
-    val updateReceiver by lazy {
-        context.localReceiver(DataChanged.DATACHANGED) {
-            dataUpdated()
-        }
-    }
 
     lateinit var eventList: EventList
     var title = ""
@@ -248,11 +241,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         configureTitle()
 
         // Filter the data
-        Observable.just(db.events.items)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe { dataUpdated() }
-
-        updateReceiver.register()
+        db.subscribe { dataUpdated() }
     }
 
     private fun configureTitle() {
@@ -270,16 +259,6 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         ui.eventList.adapter = DataAdapter()
         ui.eventList.layoutManager = if (scrolling) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
         ui.eventList.itemAnimator = DefaultItemAnimator()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        updateReceiver.unregister()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        updateReceiver.register()
     }
 
     override fun dataUpdated() {

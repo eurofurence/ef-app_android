@@ -392,7 +392,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
 
     override fun navigateToEvent(event: EventRecord) {
-        navigateToSubFragment(FragmentViewEvent(event))
+        navigateToSubFragment(FragmentViewEvent().withArguments(
+                "id" to event.id.toString()
+        ))
     }
 
     override fun navigateToKnowledgeEntry(knowledgeEntry: KnowledgeEntryRecord) {

@@ -78,10 +78,6 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         else -> changePagerAdapter(DayEventPagerAdapter(db, childFragmentManager))
     }.apply { BackgroundPreferences.eventPagerMode = mode }
 
-    override fun dataUpdated() {
-        eventPager.adapter.notifyDataSetChanged()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         applyOnRoot { tabs.setupWithViewPager(null) }
