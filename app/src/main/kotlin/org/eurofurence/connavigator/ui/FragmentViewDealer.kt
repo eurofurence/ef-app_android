@@ -155,6 +155,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             imageService.load(db.toImage(map), ui.map)
 
             ui.map.attacher.setScale(4F, entry.x.toFloat(), entry.y.toFloat(), true)
+            ui.map.attacher.setAllowParentInterceptOnEdge(false)
             ui.map.attacher.update()
             ui.map.visibility = View.VISIBLE
         } else {
@@ -365,7 +366,7 @@ class DealerUi : AnkoComponent<ViewGroup> {
 
                     verticalLayout {
                         // artist
-                        padding = dip(10)
+                        padding = dip(20)
                         backgroundResource = R.color.cardview_light_background
                         textView {
                             text = "About the Artist"
