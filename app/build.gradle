@@ -137,7 +137,7 @@ dependencies {
     compile 'com.crashlytics.sdk.android:crashlytics:2.9.1'
 
     // Photoview
-    compile 'com.github.chrisbanes:PhotoView:2.0.0'
+    compile 'com.github.chrisbanes:PhotoView:2.1.3'
     compile 'us.feras.mdv:markdownview:1.1.0'
 
     // Promises

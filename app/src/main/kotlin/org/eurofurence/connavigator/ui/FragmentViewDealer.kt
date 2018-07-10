@@ -13,9 +13,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
+import com.joanzapata.iconify.widget.IconTextView
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
+import kotlinx.coroutines.experimental.delay
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.findLinkFragment
@@ -153,11 +155,18 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             info { "Map name is ${map.description}" }
             info { "Entry is at (${entry.x}, ${entry.y})" }
 
-            imageService.load(db.toImage(map), ui.map)
+            val mapImage = db.toImage(map)!!
+            val x = 1 - ((mapImage.width - entry.x) / mapImage.width.toFloat())
+            val y = 1 - ((mapImage.height - entry.y) / mapImage.height.toFloat())
 
-            ui.map.attacher.setScale(4F, entry.x.toFloat(), entry.y.toFloat(), false)
+            imageService.load(mapImage, ui.map)
+
+            ui.map.attacher.update()
+
+            ui.map.attacher.setScale(4F, x, y, true)
             ui.map.attacher.setAllowParentInterceptOnEdge(false)
             ui.map.attacher.update()
+
             ui.map.visibility = View.VISIBLE
         } else {
             warn { "No map or entry found!" }
@@ -173,7 +182,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         if (dealer.attendsOnFriday) availableDayList.add("Fri")
         if (dealer.attendsOnSaturday) availableDayList.add("Sat")
 
-        ui.availableDaysText.text = ui.availableDaysText.text.toString() + availableDayList.joinToString(", ")
+        ui.availableDaysText.text = "{fa-exclamation-triangle 24sp} Only present on: " + availableDayList.joinToString(", ")
 
         // After dark
         ui.afterDarkText.visibility = if (dealer.isAfterDark) View.VISIBLE else View.GONE
@@ -241,7 +250,7 @@ class DealerUi : AnkoComponent<ViewGroup> {
     lateinit var telegramContainer: LinearLayout
     lateinit var map: PhotoView
     lateinit var locationContainer: LinearLayout
-    lateinit var availableDaysText: TextView
+    lateinit var availableDaysText: IconTextView
     lateinit var afterDarkText: TextView
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
@@ -348,7 +357,7 @@ class DealerUi : AnkoComponent<ViewGroup> {
                         verticalLayout {
                             padding = dip(10)
                             availableDaysText = fontAwesomeView {
-                                text = "{fa-warning 24sp} Only present on: "
+                                text = "{fa-exclamation-triangle 24sp} Only present on: "
                                 compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
                             }
 
