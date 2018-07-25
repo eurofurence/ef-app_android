@@ -34,7 +34,7 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb {
                 browseableMaps.size
     }
 
-    val browseableMaps by lazy { maps.items.filter { it.isBrowseable } }
+    val browseableMaps by lazy { maps.items.filter { it.isBrowseable }.sortedBy { it.description } }
 
     val mapViewPager: ViewPager by view()
 
