@@ -17,15 +17,11 @@
         <item
                 android:id="@+id/navDealersDen"
                 android:icon="@drawable/icon_dealer"
-                android:title="Dealers den"/>
+                android:title="Dealers"/>
         <item
                 android:id="@+id/navMaps"
                 android:icon="@drawable/icon_map_world"
                 android:title="Maps"/>
-        <item
-                android:id="@+id/navAbout"
-                android:icon="@drawable/icon_about"
-                android:title="About"/>
         <item
                 android:id="@+id/navMap"
                 android:icon="@drawable/icon_map_world"
@@ -74,6 +70,9 @@
             <item android:id="@+id/navDevSettings"
                   android:title="Settings"
                   android:icon="@drawable/icon_settings"/>
+            <item android:id="@+id/navAbout"
+                  android:icon="@drawable/icon_about"
+                  android:title="About"/>
         </menu>
     </item>
 

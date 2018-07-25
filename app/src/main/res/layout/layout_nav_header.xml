@@ -38,14 +38,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text="Eurofurence 23"
+            android:text="Eurofurence 24"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/navTitle"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ancient Egypt"
+            android:text="Aviators - Conquer the Sky!"
             android:id="@+id/navSubtitle"/>
 
 </LinearLayout>
