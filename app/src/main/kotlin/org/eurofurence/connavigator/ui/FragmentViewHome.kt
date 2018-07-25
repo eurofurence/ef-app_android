@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -130,11 +131,12 @@ class HomeUi : AnkoComponent<ViewGroup> {
 
                 countdownLayout = linearLayout {
                     countdownArc = arcProgress {
-                        lparams(matchParent, displayMetrics.widthPixels - dip(2 * 20))
+                        lparams(displayMetrics.widthPixels / 2, displayMetrics.widthPixels / 2)
+                        gravity = Gravity.CENTER
                         strokeWidth = 25F
                         suffixText = "Days"
                         bottomText = "Until next EF"
-                        bottomTextSize = dip(20F).toFloat()
+                        bottomTextSize = dip(16F).toFloat()
                         suffixTextSize = dip(20F).toFloat()
 
                         finishedStrokeColor = ContextCompat.getColor(ctx, R.color.accentLight)
