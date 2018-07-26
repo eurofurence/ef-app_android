@@ -103,8 +103,6 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
 
         ui.setContentView(this)
 
-        updateReceiver.register()
-
         ui.yesButton.setOnClickListener {
             ui.startLayout.visibility = View.GONE
             ui.loadingLayout.visibility = View.VISIBLE
@@ -122,6 +120,16 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
                 .subscribe {
                     ui.remoteLastUpdatedText.text = "Remote configs was updated ${it.timeSinceLastUpdate.millis / 1000} seconds ago."
                 }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateReceiver.register()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        updateReceiver.unregister()
     }
 
     /**

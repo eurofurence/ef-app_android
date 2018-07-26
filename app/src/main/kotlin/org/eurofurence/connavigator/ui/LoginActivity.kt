@@ -67,8 +67,16 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
         ui.moreInformation.setOnClickListener {
             browse("https://app.eurofurence.org/redir/why-login")
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
         loginReceiver.register()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        loginReceiver.unregister()
     }
 
     /**
