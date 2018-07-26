@@ -12,9 +12,9 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.joanzapata.iconify.IconDrawable
 import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import com.pawegio.kandroid.IntentFor
+import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.broadcast.DataChanged
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.eventStart
@@ -28,6 +28,7 @@ import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
+import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import us.feras.mdv.MarkdownView
 import java.util.*
@@ -35,8 +36,10 @@ import java.util.*
 /**
  * Created by David on 4/9/2016.
  */
-class FragmentViewEvent: Fragment(), HasDb {
+class FragmentViewEvent : Fragment(), HasDb {
     override val db by lazyLocateDb()
+
+    var subscriptions = Disposables.empty()
 
     val eventId: UUID? get() = UUID.fromString(arguments.getString("id"))
 
@@ -55,9 +58,15 @@ class FragmentViewEvent: Fragment(), HasDb {
         super.onViewCreated(view, savedInstanceState)
 
         Analytics.screen(activity, "Event Specific")
-        db.subscribe {
+        subscriptions += db.subscribe {
             fillUi()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     private fun fillUi() {

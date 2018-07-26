@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.failUi
@@ -40,11 +41,7 @@ import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.extensions.startTimeString
-import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.util.v2.fw
-import org.eurofurence.connavigator.util.v2.get
-import org.eurofurence.connavigator.util.v2.minMaxWidth
-import org.eurofurence.connavigator.util.v2.percent
+import org.eurofurence.connavigator.util.v2.*
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
@@ -91,6 +88,8 @@ fun HasDb.glyphFor(event: EventRecord): List<String> {
  */
 class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
+
+    var subscriptions = Disposables.empty()
 
     val ui by lazy { EventListView() }
 
@@ -241,7 +240,13 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         configureTitle()
 
         // Filter the data
-        db.subscribe { dataUpdated() }
+        subscriptions += db.subscribe { dataUpdated() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     private fun configureTitle() {

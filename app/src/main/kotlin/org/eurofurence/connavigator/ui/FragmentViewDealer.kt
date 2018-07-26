@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import com.joanzapata.iconify.widget.IconTextView
+import io.reactivex.disposables.Disposables
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
@@ -35,6 +36,7 @@ import org.eurofurence.connavigator.util.extensions.hasUniqueDisplayName
 import org.eurofurence.connavigator.util.extensions.photoView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
+import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
@@ -64,15 +66,23 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     override val db by lazyLocateDb()
 
+    var subscriptions = Disposables.empty()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         // Send analytics pings
         Analytics.screen(activity, "View Dealer Details")
-        db.subscribe {
+        subscriptions += db.subscribe {
             fillUi()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     private fun fillUi() {

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import io.reactivex.disposables.Disposables
 import io.swagger.client.model.AnnouncementRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -23,6 +24,7 @@ import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.now
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoContext.Companion
@@ -74,6 +76,9 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
     }
 
     override val db by lazyLocateDb()
+
+    var subscriptions = Disposables.empty()
+
     val ui = AnnouncementsUi()
     val announcementAdapter by lazy { AnnoucementRecyclerDataAdapter() }
 
@@ -85,12 +90,18 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
 
         ui.announcements.adapter = announcementAdapter
 
-        db.subscribe {
+        subscriptions += db.subscribe {
             info { "Updating items in announcement recycler" }
             ui.layout.visibility = if (getAnnouncements().count() == 0) View.GONE else View.VISIBLE
             announcementAdapter.announcements = getAnnouncements()
             announcementAdapter.notifyDataSetChanged()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     fun getAnnouncements() = db.announcements.items

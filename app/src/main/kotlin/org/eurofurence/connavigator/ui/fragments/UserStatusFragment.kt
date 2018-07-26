@@ -41,8 +41,8 @@ class UserStatusFragment : Fragment(), AnkoLogger {
 
     private var timer: Timer? = null
 
-    override fun onDetach() {
-        super.onDetach()
+    override fun onDestroyView() {
+        super.onDestroyView()
         timer?.cancel()
         info { "Check timer canceled" }
     }
