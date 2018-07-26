@@ -18,7 +18,6 @@ import io.reactivex.disposables.Disposables
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
-import kotlinx.coroutines.experimental.delay
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.findLinkFragment
@@ -28,37 +27,13 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.util.extensions.allDaysAvailable
-import org.eurofurence.connavigator.util.extensions.contains
-import org.eurofurence.connavigator.util.extensions.fontAwesomeView
-import org.eurofurence.connavigator.util.extensions.getName
-import org.eurofurence.connavigator.util.extensions.hasUniqueDisplayName
-import org.eurofurence.connavigator.util.extensions.photoView
+import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
 import org.eurofurence.connavigator.util.v2.plus
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.bottomPadding
-import org.jetbrains.anko.button
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageResource
-import org.jetbrains.anko.info
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.relativeLayout
-import org.jetbrains.anko.scrollView
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.browse
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.topPadding
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.warn
-import org.jetbrains.anko.wrapContent
-import java.util.UUID
+import java.util.*
 
 class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     val dealerId by lazy { UUID.fromString(arguments.getString("id")) }
@@ -200,6 +175,9 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     private fun configureLinks(dealer: DealerRecord) {
         info { "Setting up external links" }
+
+        // Reset all views that have been present before
+        ui.websites.removeAllViews()
 
         if (dealer.links != null && !dealer.links.isEmpty()) {
             ui.websitesContainer.visibility = View.VISIBLE
