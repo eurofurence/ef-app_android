@@ -6,32 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import io.swagger.client.model.AnnouncementRecord
+import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
+import org.eurofurence.connavigator.util.v2.plus
+import org.jetbrains.anko.*
 import org.jetbrains.anko.AnkoContext.Companion
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.info
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
 import us.feras.mdv.MarkdownView
-import java.util.UUID
+import java.util.*
 
 class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
     val ui = AnnouncementItemUi()
     val announcementId by lazy { UUID.fromString(arguments.getString("id")) }
 
     override val db by lazyLocateDb()
+
+    var subscriptions = Disposables.empty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             ui.createView(Companion.create(context, container!!))
@@ -40,12 +33,18 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
         info { "Created announcement view for $announcementId" }
 
-        db.subscribe {
+        subscriptions += db.subscribe {
             val announcement = it.announcements[announcementId]!!
             info { "Updating announcement item" }
             ui.title.text = announcement.title
             ui.text.loadMarkdown(announcement.content)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 }
 
