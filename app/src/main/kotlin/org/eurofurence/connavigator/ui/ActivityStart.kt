@@ -7,13 +7,10 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import com.google.firebase.perf.metrics.AddTrace
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
@@ -28,34 +25,8 @@ import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.above
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.button
-import org.jetbrains.anko.centerHorizontally
-import org.jetbrains.anko.centerInParent
-import org.jetbrains.anko.checkBox
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageResource
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.progressBar
-import org.jetbrains.anko.relativeLayout
-import org.jetbrains.anko.scrollView
-import org.jetbrains.anko.setContentView
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.wrapContent
-import org.jetbrains.anko.yesButton
+import org.eurofurence.connavigator.util.v2.plus
+import org.jetbrains.anko.*
 
 /**
  * Created by David on 28-4-2016.
@@ -65,6 +36,8 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         get() = locateDb()
 
     val ui = StartUi()
+
+    var subscriptions = Disposables.empty()
 
     @AddTrace(name = "ActivityStart:UpdateIntentService", enabled = true)
     private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
@@ -115,11 +88,17 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             System.exit(0)
         }
 
-        RemotePreferences.observer
+        subscriptions += RemotePreferences.observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     ui.remoteLastUpdatedText.text = "Remote configs was updated ${it.timeSinceLastUpdate.millis / 1000} seconds ago."
                 }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     override fun onResume() {

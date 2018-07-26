@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.github.lzyzsd.circleprogress.ArcProgress
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.pref.RemotePreferences
@@ -22,19 +23,8 @@ import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.ui.fragments.UserStatusFragment
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.arcProgress
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.displayMetrics
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.info
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.scrollView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.wrapContent
+import org.eurofurence.connavigator.util.v2.plus
+import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.Days
 
@@ -45,6 +35,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     lateinit var ui: HomeUi
 
     val database by lazy { locateDb() }
+    var subscriptions = Disposables.empty()
     val now by lazy { DateTime.now() }
 
     val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
@@ -64,9 +55,15 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
 
         configureEventRecyclers()
 
-        RemotePreferences.observer
+        subscriptions += RemotePreferences.observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { configureProgressBar() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     private fun configureEventRecyclers() {

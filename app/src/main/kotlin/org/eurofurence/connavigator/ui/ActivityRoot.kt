@@ -24,11 +24,8 @@ import com.google.gson.Gson
 import com.joanzapata.iconify.IconDrawable
 import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.swagger.client.model.AnnouncementRecord
-import io.swagger.client.model.DealerRecord
-import io.swagger.client.model.EventRecord
-import io.swagger.client.model.KnowledgeEntryRecord
-import io.swagger.client.model.PrivateMessageRecord
+import io.reactivex.disposables.Disposables
+import io.swagger.client.model.*
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.R.id
@@ -44,25 +41,13 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnContent
-import org.eurofurence.connavigator.util.extensions.booleans
-import org.eurofurence.connavigator.util.extensions.localReceiver
-import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.util.extensions.logv
-import org.eurofurence.connavigator.util.extensions.objects
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.browse
-import org.jetbrains.anko.info
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.noButton
-import org.jetbrains.anko.startActivity
+import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.v2.plus
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.withArguments
-import org.jetbrains.anko.yesButton
 import org.joda.time.DateTime
 import org.joda.time.Days
-import java.util.Date
-import java.util.UUID
+import java.util.*
 
 class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPreferenceChangeListener, HasDb, AnkoLogger {
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
@@ -100,6 +85,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
     // See if we're on the home screen. Used to check the back button
     var onHome = true
+
+    var subscriptions = Disposables.empty()
 
     /**
      * Listens to update responses, since the event recycler holds database related data
@@ -140,7 +127,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         setupBarNavLink()
         setupNav()
 
-        RemotePreferences
+        subscriptions += RemotePreferences
                 .observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -154,6 +141,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         handleBrowsingIntent()
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     /**

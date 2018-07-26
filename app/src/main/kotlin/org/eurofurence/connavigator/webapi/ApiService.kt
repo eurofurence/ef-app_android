@@ -74,7 +74,8 @@ object apiService {
         {
             apiPath = RemotePreferences.apiBaseUrl
 
-            RemotePreferences.observer.observeOn(AndroidSchedulers.mainThread())
+            RemotePreferences.observer
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { apiPath = it.apiBaseUrl }
 
             logd("API") { "Initializing" }

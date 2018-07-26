@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposables
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
@@ -18,22 +19,12 @@ import org.eurofurence.connavigator.ui.LoginActivity
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.plus
 import org.eurofurence.connavigator.webapi.apiService
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.*
 import org.jetbrains.anko.AnkoContext.Companion
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.info
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.support.v4.intentFor
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.wrapContent
-import java.util.Timer
+import java.util.*
 import kotlin.concurrent.fixedRateTimer
 
 class UserStatusFragment : Fragment(), AnkoLogger {
@@ -41,11 +32,8 @@ class UserStatusFragment : Fragment(), AnkoLogger {
 
     private var timer: Timer? = null
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        timer?.cancel()
-        info { "Check timer canceled" }
-    }
+
+    var subscriptions = Disposables.empty()
 
     fun checkMessages() = task {
         info { "Checking message counts" }
@@ -76,7 +64,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
             ui.createView(Companion.create(context, container!!))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        AuthPreferences
+        subscriptions += AuthPreferences
                 .observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -85,6 +73,15 @@ class UserStatusFragment : Fragment(), AnkoLogger {
                 }
 
         updateState()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
+
+        timer?.cancel()
+        info { "Check timer canceled" }
     }
 
     private fun updateState() {
