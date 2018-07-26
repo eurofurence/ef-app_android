@@ -9,9 +9,21 @@ import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
+import java.util.*
+
+infix fun Date.sameDayAs(other: Date) =
+        time / (24 * 60 * 60 * 1000) == other.time / (24 * 60 * 60 * 1000)
 
 class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
     val days by lazy { db.days }
+
+    companion object {
+        fun indexOfToday(db: Db) =
+                Date().let { now ->
+                    db.days.asc { it.date }.indexOfFirst { it.date sameDayAs now }
+                }
+    }
+
     override fun getPageTitle(position: Int): CharSequence? {
         if (AppPreferences.shortenDates) {
             return DateTime(days.asc { it.date }[position].date).dayOfWeek().asShortText
@@ -19,6 +31,7 @@ class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fragm
             return DateTime(days.asc { it.date }[position].date).toString(DateTimeFormat.forPattern("MMM d"))
         }
     }
+
 
     override fun getItem(position: Int): Fragment? {
         return EventRecyclerFragment(db.filterEvents()

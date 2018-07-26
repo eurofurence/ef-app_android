@@ -8,29 +8,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import io.swagger.client.model.AnnouncementRecord
-import io.swagger.client.model.DealerRecord
-import io.swagger.client.model.EventConferenceDayRecord
-import io.swagger.client.model.EventConferenceRoomRecord
-import io.swagger.client.model.EventConferenceTrackRecord
-import io.swagger.client.model.EventRecord
-import io.swagger.client.model.ImageRecord
-import io.swagger.client.model.KnowledgeEntryRecord
-import io.swagger.client.model.KnowledgeGroupRecord
-import io.swagger.client.model.MapRecord
+import io.swagger.client.model.*
 import org.eurofurence.connavigator.ui.filters.EventList
-import org.eurofurence.connavigator.util.v2.IdSource
-import org.eurofurence.connavigator.util.v2.JoinerBinding
-import org.eurofurence.connavigator.util.v2.Stored
+import org.eurofurence.connavigator.util.v2.*
 import org.eurofurence.connavigator.util.v2.Stored.StoredSource
-import org.eurofurence.connavigator.util.v2.get
-import org.eurofurence.connavigator.util.v2.join
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.Interval
 import org.joda.time.LocalTime
-import java.util.Date
-import java.util.UUID
+import java.util.*
 
 /**
  * Abstract database interface.

@@ -12,11 +12,9 @@ import android.widget.EditText
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.eventDayNumber
 import org.eurofurence.connavigator.database.filterEvents
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.BackgroundPreferences
-import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.TrackEventPagerAdapter
@@ -34,7 +32,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
 
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()
-    val searchEventFilter by lazy { filterEvents().sortByName()}
+    val searchEventFilter by lazy { filterEvents().sortByName() }
     val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
 
 
@@ -67,15 +65,19 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         changePagerAdapter(BackgroundPreferences.eventPagerMode)
     }
 
-    private fun changePagerAdapter(adapter: PagerAdapter) {
+    private fun changePagerAdapter(adapter: PagerAdapter, preferedPosition: Int? = null) {
         eventPager.adapter = adapter
         eventPager.adapter.notifyDataSetChanged()
+
+        preferedPosition?.let {
+            eventPager.setCurrentItem(it, false)
+        }
     }
 
     private fun changePagerAdapter(mode: EventPagerMode) = when (mode) {
         EventPagerMode.ROOMS -> changePagerAdapter(RoomEventPagerAdapter(db, childFragmentManager))
         EventPagerMode.TRACKS -> changePagerAdapter(TrackEventPagerAdapter(db, childFragmentManager))
-        else -> changePagerAdapter(DayEventPagerAdapter(db, childFragmentManager))
+        else -> changePagerAdapter(DayEventPagerAdapter(db, childFragmentManager), DayEventPagerAdapter.indexOfToday(db))
     }.apply { BackgroundPreferences.eventPagerMode = mode }
 
     override fun onDestroyView() {
@@ -96,8 +98,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         }
     }
 
-    override fun onFilterButtonClick() = selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks"), {
-        _, position ->
+    override fun onFilterButtonClick() = selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks"), { _, position ->
         when (position) {
             1 -> changePagerAdapter(EventPagerMode.ROOMS)
             2 -> changePagerAdapter(EventPagerMode.TRACKS)
