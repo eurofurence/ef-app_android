@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import com.joanzapata.iconify.IconDrawable
@@ -80,18 +81,26 @@ class FragmentViewEvent : Fragment(), HasDb {
 
             title.text = event.fullTitle()
 
-            description.loadMarkdown(event.description.markdownLinks())
+            event.description.markdownLinks().let {
+                if (it != description.tag) {
+                    description.tag = it
+                    description.loadMarkdown(it)
+                }
+            }
 
             time.text = "${db.eventStart(event).dayOfWeek().asText} from ${event.startTimeString()} to ${event.endTimeString()}"
             organizers.text = event.ownerString()
             room.text = conferenceRoom!!.name
 
-            if (event.posterImageId !== null) {
-                imageService.load(db.images[event.posterImageId], image)
-            } else if (event.bannerImageId !== null) {
-                imageService.load(db.images[event.bannerImageId], image)
-            } else {
-                image.visibility = View.GONE
+            (event.posterImageId ?: event.bannerImageId).let {
+                if (it != image.tag) {
+                    image.tag = it
+                    if (it != null) {
+                        image.visibility = View.VISIBLE
+                        imageService.load(db.images[it], image)
+                    } else
+                        image.visibility = View.GONE
+                }
             }
 
             changeFabIcon()
@@ -127,14 +136,20 @@ class FragmentViewEvent : Fragment(), HasDb {
      * Changes the FAB based on if the current event is liked or not
      */
     private fun changeFabIcon() {
-        if (eventId in db.faves)
-            buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart))
-        else
-            buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart_o))
+        (eventId in db.faves).let {
+            if (it != buttonSave.tag) {
+                buttonSave.tag = it
+                if (it)
+                    buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart))
+                else
+                    buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart_o))
+            }
+        }
     }
 }
 
 class EventUi : AnkoComponent<ViewGroup> {
+    lateinit var scrollView: ScrollView
     lateinit var poster: PhotoView
     lateinit var title: TextView
     lateinit var room: TextView
@@ -145,7 +160,7 @@ class EventUi : AnkoComponent<ViewGroup> {
             lparams(matchParent, matchParent)
             backgroundResource = R.color.cardview_light_background
 
-            scrollView {
+            scrollView = scrollView {
                 verticalLayout {
                     poster = photoView {
                         backgroundResource = R.drawable.image_fade
