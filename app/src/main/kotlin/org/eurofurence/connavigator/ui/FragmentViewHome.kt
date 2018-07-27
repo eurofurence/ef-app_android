@@ -25,6 +25,7 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.arcProgress
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.nestedScrollView
 import org.joda.time.DateTime
 import org.joda.time.Days
 
@@ -110,7 +111,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
     lateinit var loginWidget: ViewGroup
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
-        scrollView {
+        nestedScrollView {
             lparams(matchParent, matchParent)
             verticalLayout {
                 lparams(matchParent, matchParent)
