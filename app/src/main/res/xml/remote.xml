@@ -28,4 +28,8 @@
         <key>api_base_url</key>
         <value>https://app.eurofurence.org</value>
     </entry>
+    <entry>
+        <key>support_chat_url</key>
+        <value>https://app.eurofurence.org</value>
+    </entry>
 </defaultsMap>

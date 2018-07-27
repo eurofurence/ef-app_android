@@ -65,4 +65,5 @@ object RemotePreferences : AnkoLogger {
 
     // Strings
     val apiBaseUrl get() =   remoteConfig.getString("api_base_url")
+    val supportChatUrl get() = remoteConfig.getString("support_chat_url")
 }
