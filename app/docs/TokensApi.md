@@ -51,7 +51,7 @@ No authorization required
 
 <a name="apiV2TokensWhoAmIGet"></a>
 # **apiV2TokensWhoAmIGet**
-> String apiV2TokensWhoAmIGet()
+> AuthenticationResponse apiV2TokensWhoAmIGet()
 
 
 
@@ -64,7 +64,7 @@ No authorization required
 
 TokensApi apiInstance = new TokensApi();
 try {
-    String result = apiInstance.apiV2TokensWhoAmIGet();
+    AuthenticationResponse result = apiInstance.apiV2TokensWhoAmIGet();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling TokensApi#apiV2TokensWhoAmIGet");
@@ -77,7 +77,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**String**
+[**AuthenticationResponse**](AuthenticationResponse.md)
 
 ### Authorization
 

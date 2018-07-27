@@ -36,18 +36,16 @@ import org.joda.time.Minutes
 import kotlin.coroutines.experimental.buildSequence
 
 fun HasDb.glyphFor(event: EventRecord): List<String> {
-    // Show icon for the cockroach
-    if (event.panelHosts?.contains("onkel kage", true) ?: false)
-        return listOf("{fa-bug}", "{fa-glass}")
+    if (event.tags == null) return emptyList()
 
-    // Decide for glyph based on name
-    val name = event[toRoom]?.name ?: return emptyList()
     return when {
-        "Art Show" in name -> listOf("{fa-photo}")
-        "Dealer" in name -> listOf("{fa-shopping-cart}")
-        "Main Stage" in name -> listOf("{fa-asterisk}")
-        "Photoshoot" in name -> listOf("{fa-camera}")
-        "Supersponsor Event" in name -> listOf("{fa-diamond}")
+        "kage" in event.tags -> listOf("{fa-bug}", "{fa-glass}")
+        "art_show" in event.tags -> listOf("{fa-photo}")
+        "dealers_den" in event.tags -> listOf("{fa-shopping-cart}")
+        "main_stage" in event.tags -> listOf("{fa-asterisk}")
+        "photoshoot" in event.tags -> listOf("{fa-camera}")
+        "sponsors_only" in event.tags -> listOf("{fa-star-half-o}")
+        "supersponsors_only" in event.tags -> listOf("{fa-star}")
         else -> emptyList()
     }
 }
