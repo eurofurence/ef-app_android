@@ -39,13 +39,13 @@ fun HasDb.glyphFor(event: EventRecord): List<String> {
     if (event.tags == null) return emptyList()
 
     return when {
+        "sponsors_only" in event.tags -> listOf("{fa-star-half-o}")
+        "supersponsors_only" in event.tags -> listOf("{fa-star}")
         "kage" in event.tags -> listOf("{fa-bug}", "{fa-glass}")
         "art_show" in event.tags -> listOf("{fa-photo}")
         "dealers_den" in event.tags -> listOf("{fa-shopping-cart}")
         "main_stage" in event.tags -> listOf("{fa-asterisk}")
         "photoshoot" in event.tags -> listOf("{fa-camera}")
-        "sponsors_only" in event.tags -> listOf("{fa-star-half-o}")
-        "supersponsors_only" in event.tags -> listOf("{fa-star}")
         else -> emptyList()
     }
 }
