@@ -67,7 +67,7 @@ public class ApiSafeResultCollectTokenResponse  {
     int result = 17;
     result = 31 * result + (isSuccessful == null ? 0: isSuccessful.hashCode());
     result = 31 * result + (error == null ? 0: error.hashCode());
-    result = 31 * result+ result;
+    result = 31 * result + (result == null ? 0: result.hashCode());
     return result;
   }
 

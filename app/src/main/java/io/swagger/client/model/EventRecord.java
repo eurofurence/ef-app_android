@@ -1,5 +1,6 @@
 package io.swagger.client.model;
 
+import java.util.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -48,6 +49,8 @@ public class EventRecord  {
   private UUID bannerImageId = null;
   @SerializedName("PosterImageId")
   private UUID posterImageId = null;
+  @SerializedName("Tags")
+  private List<String> tags = null;
 
   /**
    **/
@@ -241,6 +244,16 @@ public class EventRecord  {
     this.posterImageId = posterImageId;
   }
 
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public List<String> getTags() {
+    return tags;
+  }
+  public void setTags(List<String> tags) {
+    this.tags = tags;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -269,7 +282,8 @@ public class EventRecord  {
         (panelHosts == null ? eventRecord.panelHosts == null : panelHosts.equals(eventRecord.panelHosts)) &&
         (isDeviatingFromConBook == null ? eventRecord.isDeviatingFromConBook == null : isDeviatingFromConBook.equals(eventRecord.isDeviatingFromConBook)) &&
         (bannerImageId == null ? eventRecord.bannerImageId == null : bannerImageId.equals(eventRecord.bannerImageId)) &&
-        (posterImageId == null ? eventRecord.posterImageId == null : posterImageId.equals(eventRecord.posterImageId));
+        (posterImageId == null ? eventRecord.posterImageId == null : posterImageId.equals(eventRecord.posterImageId)) &&
+        (tags == null ? eventRecord.tags == null : tags.equals(eventRecord.tags));
   }
 
   @Override 
@@ -294,6 +308,7 @@ public class EventRecord  {
     result = 31 * result + (isDeviatingFromConBook == null ? 0: isDeviatingFromConBook.hashCode());
     result = 31 * result + (bannerImageId == null ? 0: bannerImageId.hashCode());
     result = 31 * result + (posterImageId == null ? 0: posterImageId.hashCode());
+    result = 31 * result + (tags == null ? 0: tags.hashCode());
     return result;
   }
 
@@ -321,6 +336,7 @@ public class EventRecord  {
     sb.append("  isDeviatingFromConBook: ").append(isDeviatingFromConBook).append("\n");
     sb.append("  bannerImageId: ").append(bannerImageId).append("\n");
     sb.append("  posterImageId: ").append(posterImageId).append("\n");
+    sb.append("  tags: ").append(tags).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

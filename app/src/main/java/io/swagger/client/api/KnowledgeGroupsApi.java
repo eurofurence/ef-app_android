@@ -46,7 +46,7 @@ public class KnowledgeGroupsApi {
 
   /**
   * Delete a knowledge group.
-  *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+  *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param id 
    * @return void
   */
@@ -116,7 +116,7 @@ public class KnowledgeGroupsApi {
 
       /**
    * Delete a knowledge group.
-   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param id 
   */
   public void apiV2KnowledgeGroupsByIdDelete (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
@@ -316,7 +316,7 @@ public class KnowledgeGroupsApi {
   }
   /**
   * Update an existing knowledge group.
-  *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+  *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param id 
    * @param record 
    * @return void
@@ -387,7 +387,7 @@ public class KnowledgeGroupsApi {
 
       /**
    * Update an existing knowledge group.
-   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param id    * @param record 
   */
   public void apiV2KnowledgeGroupsByIdPut (UUID id, KnowledgeGroupRecord record, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
@@ -574,7 +574,7 @@ public class KnowledgeGroupsApi {
   }
   /**
   * Create a new knowledge group.
-  *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+  *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param record 
    * @return UUID
   */
@@ -638,7 +638,7 @@ public class KnowledgeGroupsApi {
 
       /**
    * Create a new knowledge group.
-   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param record 
   */
   public void apiV2KnowledgeGroupsPost (KnowledgeGroupRecord record, final Response.Listener<UUID> responseListener, final Response.ErrorListener errorListener) {
