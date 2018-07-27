@@ -161,6 +161,8 @@ abstract class Stored(val context: Context) {
                 entries = values.associateBy(id)
             }
 
+        val fileTime get() = if (file.exists()) file.lastModified() else null
+
         override fun get(i: UUID?) = if (i != null) entries[i] else null
 
         /**
@@ -181,8 +183,9 @@ abstract class Stored(val context: Context) {
             for (c in abstractDelta.changed)
                 newEntries[id(c)] = c
 
-            // Transfer value
-            entries = newEntries
+            // Transfer value if new.
+            if (entries != newEntries)
+                entries = newEntries
         }
 
         /**

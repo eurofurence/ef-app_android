@@ -234,7 +234,15 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         ui.eventList.itemAnimator = DefaultItemAnimator()
     }
 
+    var lastTime: Long? = null
+
     override fun dataUpdated() {
+        if (lastTime == db.events.fileTime) {
+            info { "Data unchanged, keeping." }
+            return
+        }
+        lastTime = db.events.fileTime
+
         info { "Data was updated, redoing UI" }
         promiseOnUi {
             info { "Hiding critical UI elements" }
