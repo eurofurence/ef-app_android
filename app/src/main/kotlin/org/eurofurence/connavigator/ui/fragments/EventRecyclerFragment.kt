@@ -41,7 +41,7 @@ fun HasDb.glyphFor(event: EventRecord): List<String> {
     return when {
         "kage" in event.tags -> listOf("{fa-bug}", "{fa-glass}")
         "art_show" in event.tags -> listOf("{fa-photo}")
-        "dealer" in event.tags -> listOf("{fa-shopping-cart}")
+        "dealers_den" in event.tags -> listOf("{fa-shopping-cart}")
         "main_stage" in event.tags -> listOf("{fa-asterisk}")
         "photoshoot" in event.tags -> listOf("{fa-camera}")
         "sponsors_only" in event.tags -> listOf("{fa-star-half-o}")
