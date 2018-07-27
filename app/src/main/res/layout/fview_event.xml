@@ -26,7 +26,8 @@
                     android:contentDescription="Event"
                     android:src="@drawable/placeholder_event"
                     android:background="@drawable/image_fade"
-                    android:scaleType="fitCenter"/>
+                    android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:background="@color/primaryDarker"
