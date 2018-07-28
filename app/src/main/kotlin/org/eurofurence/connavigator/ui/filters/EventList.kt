@@ -28,7 +28,7 @@ class EventList(override val db: Db) : HasDb {
         val now = DateTime.now()
         for ((k, v) in filters)
             when (k) {
-                BY_TITLE -> events.removeAll { !it.title.contains(v as String) }
+                BY_TITLE -> events.removeAll { !it.title.contains(v as String, true) }
 
                 ON_DAY -> events.removeAll { it.conferenceDayId != v }
                 ON_TRACK -> events.removeAll { it.conferenceTrackId != v }
