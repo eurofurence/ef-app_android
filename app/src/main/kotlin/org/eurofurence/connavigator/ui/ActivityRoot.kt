@@ -210,6 +210,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         updateCompleteMsg.listen {
             println(it)
         }
+
+        if (!RemotePreferences.autoUpdateDisabled)
+            UpdateIntentService.dispatchUpdate(this)
     }
 
     override fun onPause() {
@@ -227,7 +230,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         } else if (onHome == false) {
             navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
         } else {
-            alert("Are you sure you want to close the app? You'll still receive messages", "Close the app") {
+            alert("Are you sure you want to close the app?\n\n(You'll still receive notifications for announcements and personal messages when the app is closed.)", "Close Application?") {
                 yesButton { super.onBackPressed() }
                 noButton { /* pass */ }
             }.show()

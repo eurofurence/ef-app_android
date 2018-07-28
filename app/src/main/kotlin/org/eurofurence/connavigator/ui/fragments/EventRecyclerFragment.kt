@@ -11,13 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
-import nl.komponents.kovenant.then
+import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.failUi
-import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.*
@@ -36,18 +34,16 @@ import org.joda.time.Minutes
 import kotlin.coroutines.experimental.buildSequence
 
 fun HasDb.glyphFor(event: EventRecord): List<String> {
-    // Show icon for the cockroach
-    if (event.panelHosts?.contains("onkel kage", true) ?: false)
-        return listOf("{fa-bug}", "{fa-glass}")
+    if (event.tags == null) return emptyList()
 
-    // Decide for glyph based on name
-    val name = event[toRoom]?.name ?: return emptyList()
     return when {
-        "Art Show" in name -> listOf("{fa-photo}")
-        "Dealer" in name -> listOf("{fa-shopping-cart}")
-        "Main Stage" in name -> listOf("{fa-asterisk}")
-        "Photoshoot" in name -> listOf("{fa-camera}")
-        "Supersponsor Event" in name -> listOf("{fa-diamond}")
+        "sponsors_only" in event.tags -> listOf("{fa-star-half-o}")
+        "supersponsors_only" in event.tags -> listOf("{fa-star}")
+        "kage" in event.tags -> listOf("{fa-bug}", "{fa-glass}")
+        "art_show" in event.tags -> listOf("{fa-photo}")
+        "dealers_den" in event.tags -> listOf("{fa-shopping-cart}")
+        "main_stage" in event.tags -> listOf("{fa-asterisk}")
+        "photoshoot" in event.tags -> listOf("{fa-camera}")
         else -> emptyList()
     }
 }
@@ -236,27 +232,19 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         ui.eventList.itemAnimator = DefaultItemAnimator()
     }
 
+
     override fun dataUpdated() {
         info { "Data was updated, redoing UI" }
-        promiseOnUi {
-            info { "Hiding critical UI elements" }
-            ui.eventList.visibility = View.GONE
-            ui.title.visibility = View.GONE
-            ui.loading.visibility = View.VISIBLE
-        } then {
+        task {
             info { "Refiltering data" }
             effectiveEvents = eventList.applyFilters()
         } successUi {
             info { "Revealing new data" }
             ui.eventList.adapter.notifyDataSetChanged()
-            ui.loading.visibility = View.GONE
-            ui.eventList.visibility = View.VISIBLE
 
             configureTitle()
         } failUi {
-            ui.loading.visibility = View.GONE
-            ui.eventList.visibility = View.VISIBLE
-
+            info { "Failed to get data" }
             configureTitle()
         }
     }
@@ -364,7 +352,7 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
 
 class EventListView : AnkoComponent<ViewGroup> {
     lateinit var title: TextView
-    lateinit var loading: ProgressBar
+    //lateinit var loading: ProgressBar
     lateinit var eventList: RecyclerView
     lateinit var bigLayout: LinearLayout
 
@@ -379,8 +367,6 @@ class EventListView : AnkoComponent<ViewGroup> {
             title = textView("").lparams(matchParent, wrapContent) {
                 setMargins(0, 0, 0, dip(10))
             }
-
-            loading = progressBar().lparams(matchParent, wrapContent)
 
             eventList = recycler {
             }.lparams(matchParent, matchParent)

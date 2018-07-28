@@ -23,6 +23,7 @@ Name | Type | Description | Notes
 **isDeviatingFromConBook** | **Boolean** |  |  [optional]
 **bannerImageId** | [**UUID**](UUID.md) | If set, refers to a banner ([3-4]:1 aspect ratio) that can be used when little  vertical space is available (e.G. event schedule, or a header section). |  [optional]
 **posterImageId** | [**UUID**](UUID.md) | If set, refers to an image of any aspect ratio that should be used where enough  vertical space is available (e.G. event detail). |  [optional]
+**tags** | **List&lt;String&gt;** |  |  [optional]
 
 
 

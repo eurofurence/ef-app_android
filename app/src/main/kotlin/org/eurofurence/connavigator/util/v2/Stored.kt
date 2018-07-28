@@ -3,7 +3,8 @@ package org.eurofurence.connavigator.util.v2
 import android.content.Context
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import io.swagger.client.JsonUtil.*
+import io.swagger.client.JsonUtil.getGson
+import io.swagger.client.JsonUtil.getListTypeForDeserialization
 import org.eurofurence.connavigator.util.extensions.*
 import java.io.File
 import java.io.ObjectInputStream
@@ -114,40 +115,44 @@ abstract class Stored(val context: Context) {
         /**
          * Last value of read or write-through.
          */
-        private var readValue: Map<UUID, T>? = null
+        private var readValue: Map<UUID, T> = emptyMap()
 
         /**
          * The entries of the database, writing serializes with GSON.
          */
         var entries: Map<UUID, T>
             get() {
-                // File does not exist, therefore not content
-                if (!file.exists())
-                    return emptyMap()
+                synchronized(file) {
+                    // File does not exist, therefore not content
+                    if (!file.exists())
+                        return emptyMap()
 
-                // File modified since last read, load changes
-                if (file.lastModified() != readTime)
-                    JsonReader(file.safeReader()).use {
-                        readTime = file.lastModified()
-                        readValue = getGson()
-                                .fromJson<List<T>>(it, getListTypeForDeserialization(elementClass.java))
-                                .associateBy(id)
-                    }
+                    // File modified since last read, load changes
+                    if (file.lastModified() != readTime)
+                        JsonReader(file.safeReader()).use {
+                            readTime = file.lastModified()
+                            readValue = getGson()
+                                    .fromJson<List<T>>(it, getListTypeForDeserialization(elementClass.java))
+                                    .associateBy(id)
+                        }
 
-                // Return the cached value
-                return readValue!!
+                    // Return the cached value
+                    return readValue
+                }
             }
             set(values) {
-                // Write values
-                file.substitute { sub ->
-                    JsonWriter(sub.safeWriter()).use {
-                        getGson().toJson(values.values, getListTypeForDeserialization(elementClass.java), it)
+                synchronized(file) {
+                    // Write values
+                    file.substitute { sub ->
+                        JsonWriter(sub.safeWriter()).use {
+                            getGson().toJson(values.values, getListTypeForDeserialization(elementClass.java), it)
+                        }
                     }
-                }
 
-                // Cache values and store the write time
-                readTime = file.lastModified()
-                readValue = values
+                    // Cache values and store the write time
+                    readTime = file.lastModified()
+                    readValue = values
+                }
             }
 
         var items: Collection<T>
@@ -155,6 +160,8 @@ abstract class Stored(val context: Context) {
             set(values) {
                 entries = values.associateBy(id)
             }
+
+        val fileTime get() = if (file.exists()) file.lastModified() else null
 
         override fun get(i: UUID?) = if (i != null) entries[i] else null
 
@@ -176,17 +183,20 @@ abstract class Stored(val context: Context) {
             for (c in abstractDelta.changed)
                 newEntries[id(c)] = c
 
-            // Transfer value
-            entries = newEntries
+            // Transfer value if new.
+            if (entries != newEntries)
+                entries = newEntries
         }
 
         /**
          * Deletes the content and resets the values.
          */
         fun delete() {
-            file.delete()
-            readTime = null
-            readValue = null
+            synchronized(file) {
+                file.delete()
+                readTime = null
+                readValue = emptyMap()
+            }
         }
 
         fun <U : Comparable<U>> asc(by: (T) -> U) = items.sortedBy(by)

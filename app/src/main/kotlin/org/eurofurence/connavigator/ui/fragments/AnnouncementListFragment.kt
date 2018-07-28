@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -118,22 +119,25 @@ class AnnouncementsUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
             layout = this
-            padding = dip(15)
+
             backgroundResource = R.color.cardview_light_background
             lparams(matchParent, wrapContent) {
-                setMargins(0, dip(10), 0, 0)
+                setMargins(0, dip(15), 0, 0)
             }
 
             title = textView("Announcements") {
                 compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
+                padding = dip(15)
             }.lparams(matchParent, wrapContent) {
-                setMargins(0, 0, 0, dip(10))
+                setMargins(0, 0, 0, 0)
             }
 
             announcements = recycler {
                 layoutManager = NonScrollingLinearLayout(context)
                 itemAnimator = DefaultItemAnimator()
-                lparams(matchParent, wrapContent)
+                lparams(matchParent, wrapContent) {
+                    setMargins(0, 0, 0, dip(10))
+                }
             }
         }
     }
@@ -144,20 +148,22 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
         linearLayout {
             lparams(matchParent, wrapContent)
             id = R.id.layout
-            weightSum = 10F
+            weightSum = 100F
 
             fontAwesomeView {
-                setPadding(0, dip(10), 0, 0)
                 text = "{fa-file-text 24sp}"
-                textAlignment = View.TEXT_ALIGNMENT_TEXT_START
-            }.lparams(dip(0), wrapContent, 1F)
+                lparams(dip(0), matchParent, 15F) {
+                    setMargins(0, dip(5), 0, 0)
+                }
+                gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+            }
 
             verticalLayout {
                 textView("Announcement Title") {
                     id = R.id.announcementTitle
                     compatAppearance = android.R.style.TextAppearance_Medium
                 }.lparams(matchParent, wrapContent) {
-                    setMargins(0, dip(5), 0, 0)
+                    setMargins(0, 0, 0, 0)
                 }
 
                 textView("Announcement Content") {
@@ -167,7 +173,7 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
                     setMargins(0, 0, 0, dip(10))
                 }
 
-            }.lparams(dip(0), wrapContent, 9F)
+            }.lparams(dip(0), wrapContent, 80F)
         }
     }
 }

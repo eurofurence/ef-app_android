@@ -172,9 +172,9 @@ public class TokensApi {
   /**
   * 
   *   * Requires authorization   
-   * @return String
+   * @return AuthenticationResponse
   */
-  public String apiV2TokensWhoAmIGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public AuthenticationResponse apiV2TokensWhoAmIGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
@@ -211,7 +211,7 @@ public class TokensApi {
       try {
         String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
         if(localVarResponse != null){
-           return (String) ApiInvoker.deserialize(localVarResponse, "", String.class);
+           return (AuthenticationResponse) ApiInvoker.deserialize(localVarResponse, "", AuthenticationResponse.class);
         } else {
            return null;
         }
@@ -237,7 +237,7 @@ public class TokensApi {
    *   * Requires authorization   
 
   */
-  public void apiV2TokensWhoAmIGet (final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiV2TokensWhoAmIGet (final Response.Listener<AuthenticationResponse> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
@@ -278,7 +278,7 @@ public class TokensApi {
           @Override
           public void onResponse(String localVarResponse) {
             try {
-              responseListener.onResponse((String) ApiInvoker.deserialize(localVarResponse,  "", String.class));
+              responseListener.onResponse((AuthenticationResponse) ApiInvoker.deserialize(localVarResponse,  "", AuthenticationResponse.class));
             } catch (ApiException exception) {
                errorListener.onErrorResponse(new VolleyError(exception));
             }

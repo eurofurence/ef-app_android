@@ -399,6 +399,7 @@ class DealerUi : AnkoComponent<ViewGroup> {
                                 backgroundResource = R.color.cardview_dark_background
                                 lparams(matchParent, wrapContent)
                                 scaleType = ImageView.ScaleType.FIT_CENTER
+                                adjustViewBounds = true
                             }
 
                             artPreviewCaption = textView {

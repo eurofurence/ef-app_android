@@ -165,6 +165,8 @@ class EventUi : AnkoComponent<ViewGroup> {
                     poster = photoView {
                         backgroundResource = R.drawable.image_fade
                         imageResource = R.drawable.placeholder_event
+                        scaleType = ImageView.ScaleType.FIT_CENTER
+                        adjustViewBounds = true
                     }.lparams(matchParent, wrapContent)
 
                     verticalLayout {

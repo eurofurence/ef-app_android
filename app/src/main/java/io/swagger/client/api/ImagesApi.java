@@ -183,7 +183,7 @@ public class ImagesApi {
   }
   /**
   * 
-  *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+  *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param id 
    * @param imageContent 
    * @return void
@@ -254,7 +254,7 @@ public class ImagesApi {
 
       /**
    * 
-   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param id    * @param imageContent 
   */
   public void apiV2ImagesByIdContentPut (UUID id, String imageContent, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {

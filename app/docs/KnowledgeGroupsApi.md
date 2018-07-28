@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 Delete a knowledge group.
 
-  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
 
 ### Example
 ```java
@@ -100,7 +100,7 @@ No authorization required
 
 Update an existing knowledge group.
 
-  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
 
 ### Example
 ```java
@@ -181,7 +181,7 @@ No authorization required
 
 Create a new knowledge group.
 
-  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
 
 ### Example
 ```java

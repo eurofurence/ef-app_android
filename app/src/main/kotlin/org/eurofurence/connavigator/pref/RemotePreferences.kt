@@ -58,6 +58,7 @@ object RemotePreferences : AnkoLogger {
     val mapsEnabled: Boolean get() = remoteConfig.getBoolean("maps_enabled")
     val rotationEnabled: Boolean get() = remoteConfig.getBoolean("rotation_enabled")
     val nativeFursuitGames get() = remoteConfig.getBoolean("native_fursuit_games")
+    val autoUpdateDisabled get() = remoteConfig.getBoolean("auto_update_disabled")
 
     // Longs
     val nextConStart get() = remoteConfig.getLong("nextConStart")
@@ -65,4 +66,5 @@ object RemotePreferences : AnkoLogger {
 
     // Strings
     val apiBaseUrl get() =   remoteConfig.getString("api_base_url")
+    val supportChatUrl get() = remoteConfig.getString("support_chat_url")
 }
