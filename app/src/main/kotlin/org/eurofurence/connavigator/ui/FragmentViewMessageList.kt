@@ -16,6 +16,7 @@ import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
 import io.swagger.client.model.PrivateMessageRecord
 import nl.komponents.kovenant.then
+import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
@@ -55,7 +56,7 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb {
             holder.title.text = message.subject
             holder.date.text = "From ${message.authorName}\nSent: ${message.createdDateTimeUtc.toRelative()}"
 
-            if(message.readDateTimeUtc != null){
+            if (message.readDateTimeUtc != null) {
                 holder.icon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
                 holder.icon.text = "{fa-envelope-o 30sp}"
             } else {
@@ -102,7 +103,7 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb {
             configureRecycler()
             ui.loading.visibility = View.GONE
             ui.messageList.visibility = View.VISIBLE
-        } fail {
+        } failUi {
             warn { "Failed to retrieve messages" }
             longToast("Failed to retrieve messages!")
         }
