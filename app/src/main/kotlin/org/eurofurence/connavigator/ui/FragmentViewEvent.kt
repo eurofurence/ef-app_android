@@ -169,6 +169,7 @@ class EventUi : AnkoComponent<ViewGroup> {
                         imageResource = R.drawable.placeholder_event
                         scaleType = ImageView.ScaleType.FIT_CENTER
                         adjustViewBounds = true
+                        visibility = View.GONE
                     }.lparams(matchParent, wrapContent)
 
                     verticalLayout {
