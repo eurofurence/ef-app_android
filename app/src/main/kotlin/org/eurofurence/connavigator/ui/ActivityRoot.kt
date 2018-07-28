@@ -210,6 +210,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         updateCompleteMsg.listen {
             println(it)
         }
+
+        if (!RemotePreferences.autoUpdateDisabled)
+            UpdateIntentService.dispatchUpdate(this)
     }
 
     override fun onPause() {
