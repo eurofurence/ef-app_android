@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
+import android.support.v4.widget.NestedScrollView
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -114,6 +115,8 @@ class HomeUi : AnkoComponent<ViewGroup> {
         nestedScrollView {
             lparams(matchParent, matchParent)
             verticalLayout {
+                descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
+
                 lparams(matchParent, matchParent)
 
                 imageView(R.drawable.banner_2018) {

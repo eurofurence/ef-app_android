@@ -1,10 +1,12 @@
 package org.eurofurence.connavigator.ui.fragments
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +34,7 @@ import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.Minutes
 import kotlin.coroutines.experimental.buildSequence
+
 
 fun HasDb.glyphFor(event: EventRecord): List<String> {
     if (event.tags == null) return emptyList()
@@ -230,6 +233,28 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         ui.eventList.adapter = DataAdapter()
         ui.eventList.layoutManager = if (scrolling) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
         ui.eventList.itemAnimator = DefaultItemAnimator()
+        ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            val padding by lazy {
+                val metrics = context.resources.displayMetrics
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
+            }
+
+            override fun getItemOffsets(outRect: Rect, view: View?, parent: RecyclerView, state: RecyclerView.State?) {
+                val itemPosition = parent.getChildAdapterPosition(view)
+                if (itemPosition == RecyclerView.NO_POSITION) {
+                    return
+                }
+
+                if (itemPosition == 0) {
+                    outRect.top = padding
+                }
+
+                val adapter = parent.getAdapter()
+                if (adapter != null && itemPosition == adapter.itemCount - 1) {
+                    outRect.bottom = padding
+                }
+            }
+        })
     }
 
 
@@ -271,9 +296,9 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
             }
 
             verticalLayout {
+                setPadding(dip(15), dip(3), dip(15), dip(3))
                 id = R.id.layout
 
-                verticalPadding = dip(3)
 
                 tableLayout {
                     setColumnStretchable(2, true)
@@ -358,10 +383,6 @@ class EventListView : AnkoComponent<ViewGroup> {
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         bigLayout = verticalLayout {
-            lparams(matchParent, matchParent) {
-                padding = dip(15)
-                setMargins(0, dip(15), 0, 0)
-            }
             backgroundResource = R.color.cardview_light_background
 
             title = textView("").lparams(matchParent, wrapContent) {
