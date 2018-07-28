@@ -32,4 +32,6 @@ interface RootAPI {
     fun changeTitle(text: String)
 
     fun changeTheme(newTheme: Int)
+
+    fun popDetails()
 }

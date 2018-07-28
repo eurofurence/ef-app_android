@@ -11,6 +11,7 @@ import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -422,13 +423,20 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         navigateToSubFragment(fragment)
     }
 
-    private fun navigateToSubFragment(fragment: Fragment) =
-            supportFragmentManager
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.in_slide_and_fade, R.anim.out_slide_and_fade, R.anim.in_slide_and_fade, R.anim.out_slide_and_fade)
-                    .add(R.id.content, fragment, "content")
-                    .addToBackStack(null)
-                    .commit()
+    private fun navigateToSubFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack("contentSubAdded", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.in_slide_and_fade, R.anim.out_slide_and_fade, R.anim.in_slide_and_fade, R.anim.out_slide_and_fade)
+                .addToBackStack("contentSubAdded")
+                .add(R.id.content, fragment, "contentSub")
+                .commit()
+    }
+
+    override fun popDetails() {
+        supportFragmentManager.popBackStack("contentSubAdded", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
 
     override val db by lazyLocateDb()
 

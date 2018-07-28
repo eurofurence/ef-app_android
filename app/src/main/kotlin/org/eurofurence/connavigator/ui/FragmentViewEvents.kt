@@ -35,6 +35,18 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
     val searchEventFilter by lazy { filterEvents().sortByName() }
     val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
 
+    private val detailsPopAdapter = object : ViewPager.OnPageChangeListener {
+        override fun onPageScrollStateChanged(state: Int) {
+        }
+
+        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            applyOnRoot { popDetails() }
+        }
+
+        override fun onPageSelected(position: Int) {
+            applyOnRoot { popDetails() }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fview_events_viewpager, container, false)
@@ -58,8 +70,11 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
             tabs.setupWithViewPager(eventPager)
             tabs.tabMode = TabLayout.MODE_SCROLLABLE
         }
+        eventPager.addOnPageChangeListener(detailsPopAdapter)
+
         applyOnRoot { changeTitle("Event Schedule") }
     }
+
 
     private fun configureViewpager() {
         changePagerAdapter(BackgroundPreferences.eventPagerMode)
@@ -82,6 +97,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        eventPager.removeOnPageChangeListener(detailsPopAdapter)
         applyOnRoot { tabs.setupWithViewPager(null) }
     }
 
