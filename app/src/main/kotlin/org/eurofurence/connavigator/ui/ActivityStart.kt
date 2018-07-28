@@ -11,6 +11,11 @@ import android.widget.*
 import com.google.firebase.perf.metrics.AddTrace
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
+import nl.komponents.kovenant.Promise
+import nl.komponents.kovenant.all
+import nl.komponents.kovenant.then
+import nl.komponents.kovenant.ui.failUi
+import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
@@ -51,16 +56,27 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
                 progress = 1
             }
 
-            db.images.items.forEach {
-                imageService.preload(it)
-                ui.loadingSpinner.incrementProgressBy(1)
+
+            val promises = db.images.items.map {
+                imageService.preload(it).also {
+                    ui.loadingSpinner.incrementProgressBy(1)
+                }
             }
 
-            AppPreferences.isFirstRun = false
+            // Await all images loaded, if one fails, mark but continue to UI.
+            all(promises) successUi  {
+                AppPreferences.isFirstRun = false
 
-            longToast("Done with fetching!")
+                longToast("Done with fetching!")
 
-            this@ActivityStart.startActivity(intentFor<ActivityRoot>())
+                this@ActivityStart.startActivity(intentFor<ActivityRoot>())
+            } failUi  {
+                AppPreferences.isFirstRun = false
+
+                longToast("Something went wrong while fetching!")
+
+                this@ActivityStart.startActivity(intentFor<ActivityRoot>())
+            }
         }
     }
 

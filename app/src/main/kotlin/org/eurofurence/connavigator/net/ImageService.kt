@@ -7,15 +7,16 @@ import android.widget.ImageView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
+import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.assist.ImageSize
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils
 import io.swagger.client.model.ImageRecord
+import nl.komponents.kovenant.deferred
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.url
-import org.eurofurence.connavigator.webapi.apiService
 
 /**
  * Provides methods for obtaining images from web and caching them.
@@ -68,16 +69,18 @@ object imageService {
     /**
      * Preloads an image too memory
      */
-    fun preload(image: ImageRecord) =
-            imageLoader.loadImage(image.url, ImageSize(image.width, image.height), object : SimpleImageLoadingListener() {
-                override fun onLoadingComplete(imageUri: String, view: View?, loadedImage: Bitmap) {
+    fun preload(image: ImageRecord) = deferred<String, Exception>().also { promise ->
+        imageLoader.loadImage(image.url, ImageSize(image.width, image.height), object : SimpleImageLoadingListener() {
+            override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason) {
+                promise.reject(RuntimeException(failReason.type.toString(), failReason.cause))
+            }
 
-                    if (imageUri.contains("1f70fd04-39e5-11e6-bae0-066e23d209cf")) {
-                        println("${image.width} x ${image.height}")
-                        println("${loadedImage.width} x ${loadedImage.height}")
-                    }
-                }
-            })
+            override fun onLoadingComplete(imageUri: String, view: View?, loadedImage: Bitmap) {
+                promise.resolve(imageUri)
+            }
+        })
+    }.promise
+
 
     fun getBitmap(image: ImageRecord): Bitmap =
             imageLoader.loadImageSync(image.url, ImageSize(image.width, image.height))
