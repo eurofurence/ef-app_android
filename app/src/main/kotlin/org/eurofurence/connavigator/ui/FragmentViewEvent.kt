@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v4.widget.NestedScrollView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.nestedScrollView
 import us.feras.mdv.MarkdownView
 import java.util.*
 
@@ -149,7 +151,7 @@ class FragmentViewEvent : Fragment(), HasDb {
 }
 
 class EventUi : AnkoComponent<ViewGroup> {
-    lateinit var scrollView: ScrollView
+    lateinit var scrollView: NestedScrollView
     lateinit var poster: PhotoView
     lateinit var title: TextView
     lateinit var room: TextView
@@ -160,7 +162,7 @@ class EventUi : AnkoComponent<ViewGroup> {
             lparams(matchParent, matchParent)
             backgroundResource = R.color.cardview_light_background
 
-            scrollView = scrollView {
+            scrollView = nestedScrollView {
                 verticalLayout {
                     poster = photoView {
                         backgroundResource = R.drawable.image_fade
