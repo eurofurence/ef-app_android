@@ -195,10 +195,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            if (container == null)
-                null
-            else
-                ui.createView(AnkoContext.create(container.context.applicationContext, container))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -377,13 +374,13 @@ class SingleEventUi : AnkoComponent<Fragment> {
     }
 }
 
-class EventListView : AnkoComponent<ViewGroup> {
+class EventListView : AnkoComponent<Fragment> {
     lateinit var title: TextView
     //lateinit var loading: ProgressBar
     lateinit var eventList: RecyclerView
     lateinit var bigLayout: LinearLayout
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         bigLayout = verticalLayout {
             backgroundResource = R.color.cardview_light_background
 
