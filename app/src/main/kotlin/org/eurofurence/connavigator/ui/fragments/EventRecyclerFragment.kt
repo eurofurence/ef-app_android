@@ -31,6 +31,7 @@ import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
 import org.joda.time.DateTime
 import org.joda.time.Minutes
 import kotlin.coroutines.experimental.buildSequence
@@ -93,8 +94,9 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, pos: Int): EventViewHolder =
-                EventViewHolder(SingleEventUi()
-                        .createView(AnkoContext.createReusable(activity.applicationContext, parent)))
+                EventViewHolder(UI { SingleEventUi().createView(this) }.view)
+//                        SingleEventUi()
+//                        .createView(AnkoContext.createReusable(activity.applicationContext, parent)))
 
         override fun getItemCount() =
                 effectiveEvents.size
@@ -275,8 +277,8 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 }
 
-class SingleEventUi : AnkoComponent<ViewGroup> {
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+class SingleEventUi : AnkoComponent<Fragment> {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout {
             isClickable = true
             isLongClickable = true

@@ -15,6 +15,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
 
 /**
  * Created by requinard on 7/24/17.
@@ -23,7 +24,7 @@ class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
     val ui = FursuitCollectedUi()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            if (container == null) null else ui.createView(AnkoContext.Companion.create(context, container))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,12 +57,12 @@ class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
     }
 }
 
-class FursuitCollectedUi : AnkoComponent<ViewGroup> {
+class FursuitCollectedUi : AnkoComponent<Fragment> {
     lateinit var name: TextView
     lateinit var score: TextView
 
     lateinit var collectedLayout: LinearLayout
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout{
             padding =  dip(25)
 

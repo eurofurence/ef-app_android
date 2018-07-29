@@ -32,6 +32,7 @@ import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
 import java.util.*
 
@@ -44,7 +45,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     var subscriptions = Disposables.empty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         // Send analytics pings
@@ -218,7 +219,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 }
 
-class DealerUi : AnkoComponent<ViewGroup> {
+class DealerUi : AnkoComponent<Fragment> {
     lateinit var primaryImage: PhotoView
     lateinit var name: TextView
     lateinit var nameSecond: TextView
@@ -241,7 +242,7 @@ class DealerUi : AnkoComponent<ViewGroup> {
     lateinit var availableDaysText: IconTextView
     lateinit var afterDarkText: TextView
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
             backgroundResource = R.color.backgroundGrey
             scrollView {

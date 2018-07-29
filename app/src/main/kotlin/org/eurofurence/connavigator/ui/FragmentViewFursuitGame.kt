@@ -22,6 +22,7 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
 
 /**
  * Created by requinard on 7/24/17.
@@ -31,7 +32,7 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            if (container == null) null else ui.createView(AnkoContext.Companion.create(context, container))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Analytics.screen(activity, "Fursuit Games")
@@ -85,7 +86,7 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
 }
 
-class FursuitGameUi : AnkoComponent<ViewGroup> {
+class FursuitGameUi : AnkoComponent<Fragment> {
     lateinit var loading: ProgressBar
     lateinit var error: TextView
 
@@ -124,7 +125,7 @@ class FursuitGameUi : AnkoComponent<ViewGroup> {
         fursuitName.text = "${token.name} the ${token.species}"
     }
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
             lparams(matchParent, matchParent)
 

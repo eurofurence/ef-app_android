@@ -23,6 +23,7 @@ import org.eurofurence.connavigator.util.v2.plus
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.AnkoContext.Companion
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.intentFor
 import java.util.*
 import kotlin.concurrent.fixedRateTimer
@@ -61,7 +62,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(Companion.create(context, container!!))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         subscriptions += AuthPreferences
@@ -115,13 +116,13 @@ class UserStatusFragment : Fragment(), AnkoLogger {
     }
 }
 
-class UserStatusUi : AnkoComponent<ViewGroup> {
+class UserStatusUi : AnkoComponent<Fragment> {
     lateinit var title: TextView
     lateinit var subtitle: TextView
     lateinit var userIcon: TextView
     lateinit var layout: ViewGroup
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         linearLayout {
             this@UserStatusUi.layout = this
             isClickable = true

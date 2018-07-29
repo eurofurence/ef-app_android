@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
-import android.support.v4.widget.NestedScrollView
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +25,7 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.arcProgress
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.nestedScrollView
 import org.joda.time.DateTime
 import org.joda.time.Days
@@ -34,7 +34,7 @@ import org.joda.time.Days
  * Created by David on 5/14/2016.
  */
 class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
-    lateinit var ui: HomeUi
+    val ui by lazy { HomeUi() }
 
     val database by lazy { locateDb() }
     var subscriptions = Disposables.empty()
@@ -43,14 +43,9 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
     val current by lazy { EventRecyclerFragment(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
     val favorited by lazy { EventRecyclerFragment(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        container!!
 
-        info { "Initializing home view" }
-        ui = HomeUi()
-
-        return ui.createView(AnkoContext.create(container.context.applicationContext, container))
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         applyOnRoot { changeTitle("Home") }
@@ -101,7 +96,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     }
 }
 
-class HomeUi : AnkoComponent<ViewGroup> {
+class HomeUi : AnkoComponent<Fragment> {
     lateinit var countdownArc: ArcProgress
     lateinit var countdownLayout: LinearLayout
 
@@ -111,7 +106,7 @@ class HomeUi : AnkoComponent<ViewGroup> {
     lateinit var announcementFragment: ViewGroup
     lateinit var loginWidget: ViewGroup
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         nestedScrollView {
             lparams(matchParent, matchParent)
             verticalLayout {
