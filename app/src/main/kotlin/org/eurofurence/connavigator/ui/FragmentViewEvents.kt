@@ -12,7 +12,6 @@ import android.widget.EditText
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.filterEvents
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.BackgroundPreferences
 import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
@@ -32,8 +31,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
 
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()
-    val searchEventFilter by lazy { filterEvents().sortByName() }
-    val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
+    val searchFragment by lazy { EventRecyclerFragment().withArguments() }
 
     private val detailsPopAdapter = object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
@@ -60,7 +58,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
 
         eventSearchBar.textWatcher {
             afterTextChanged { text ->
-                searchEventFilter.byTitle(text.toString())
+                searchFragment.eventList.byTitle(text.toString())
                         .sortByName()
                 searchFragment.dataUpdated()
             }
@@ -114,13 +112,13 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         }
     }
 
-    override fun onFilterButtonClick() = selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks"), { _, position ->
+    override fun onFilterButtonClick() = selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks")) { _, position ->
         when (position) {
             1 -> changePagerAdapter(EventPagerMode.ROOMS)
             2 -> changePagerAdapter(EventPagerMode.TRACKS)
             else -> changePagerAdapter(EventPagerMode.DAYS)
         }
-    })
+    }
 }
 
 enum class EventPagerMode {

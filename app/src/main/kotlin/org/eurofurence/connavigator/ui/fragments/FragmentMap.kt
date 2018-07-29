@@ -32,10 +32,10 @@ import kotlin.properties.Delegates.notNull
 class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
-    constructor(mapRecord: MapRecord) : this() {
-        arguments = Bundle()
-
-        arguments.jsonObjects["mapRecord"] = mapRecord
+    fun withArguments(mapRecord: MapRecord) = apply {
+        arguments = Bundle().apply {
+            jsonObjects["mapRecord"] = mapRecord
+        }
     }
 
     val ui = MapUi()
@@ -75,7 +75,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     val links = entries.flatMap { it.links }
                             .filter { it.fragmentType !== LinkFragment.FragmentTypeEnum.MapEntry }
 
-                    if(!links.isEmpty()) {
+                    if (!links.isEmpty()) {
                         info { "Showing location selector" }
                         selector("Find out more", links.map { it.name ?: "No name provided for link" }, { _, position ->
                             val link = links[position]

@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui.adapter
 
+import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -15,6 +16,9 @@ infix fun Date.sameDayAs(other: Date) =
         time / (24 * 60 * 60 * 1000) == other.time / (24 * 60 * 60 * 1000)
 
 class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+    override fun saveState(): Parcelable? {
+        return null
+    }
     val days by lazy { db.days }
 
     companion object {
@@ -34,7 +38,7 @@ class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fragm
 
 
     override fun getItem(position: Int): Fragment? {
-        return EventRecyclerFragment(db.filterEvents()
+        return EventRecyclerFragment().withArguments(db.filterEvents()
                 .onDay(days.asc { it.date }[position].id)
                 .sortByStartTime())
     }
@@ -45,8 +49,11 @@ class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fragm
 }
 
 class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+    override fun saveState(): Parcelable? {
+        return null
+    }
     override fun getItem(position: Int): Fragment {
-        return EventRecyclerFragment(db.filterEvents()
+        return EventRecyclerFragment().withArguments(db.filterEvents()
                 .inRoom(rooms.asc { it.name }[position].id)
                 .sortByStartTime()
         )
@@ -60,8 +67,11 @@ class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Frag
 }
 
 class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+    override fun saveState(): Parcelable? {
+        return null
+    }
     override fun getItem(position: Int): Fragment {
-        return EventRecyclerFragment(db.filterEvents()
+        return EventRecyclerFragment().withArguments(db.filterEvents()
                 .onTrack(tracks[position].id)
                 .sortByStartTime()
         )

@@ -40,10 +40,11 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     var subscriptions = Disposables.empty()
     val now by lazy { DateTime.now() }
 
-    val upcoming by lazy { EventRecyclerFragment(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
-    val current by lazy { EventRecyclerFragment(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
-    val favorited by lazy { EventRecyclerFragment(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
-
+    val upcoming by lazy { EventRecyclerFragment().withArguments(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
+    val current by lazy { EventRecyclerFragment().withArguments(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
+    val favorited by lazy { EventRecyclerFragment().withArguments(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
+    val announcement by lazy { AnnouncementListFragment() }
+    val userStatus by lazy { UserStatusFragment() }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
@@ -66,12 +67,12 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
     private fun configureEventRecyclers() {
         info { "Configuring event recyclers" }
 
-        fragmentManager.beginTransaction()
+        childFragmentManager.beginTransaction()
                 .replace(5000, current)
                 .replace(5001, upcoming)
                 .replace(5002, favorited)
-                .replace(5003, AnnouncementListFragment())
-                .replace(5004, UserStatusFragment())
+                .replace(5003, announcement)
+                .replace(5004, userStatus)
                 .commitAllowingStateLoss()
     }
 

@@ -25,6 +25,7 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
+import org.eurofurence.connavigator.ui.filters.FilterType
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
@@ -69,14 +70,22 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     var daysInsteadOfGlyphs = false
     var effectiveEvents = emptyList<EventRecord>()
 
-    constructor(eventList: EventList, title: String = "", scrolling: Boolean = true, daysInsteadOfGlyphs: Boolean = false) : this() {
+    fun withArguments(eventList: EventList? = null, title: String = "", scrolling: Boolean = true, daysInsteadOfGlyphs: Boolean = false) = apply {
         info { "Constructing event recycler $title" }
-        this.eventList = eventList
-        this.title = title
-        this.scrolling = scrolling
-        this.daysInsteadOfGlyphs = daysInsteadOfGlyphs
-    }
 
+        arguments = Bundle().apply {
+            if (eventList != null) {
+                val map = eventList.filters.keys.map { it.toString() } + eventList.filters.values
+                putStringArray("eventList", map.toTypedArray())
+            } else {
+                putStringArray("eventList", arrayOf())
+            }
+
+            putString("title", title)
+            putBoolean("scrolling", scrolling)
+            putBoolean("daysInsteadOfGlyphs", daysInsteadOfGlyphs)
+        }
+    }
 
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -199,6 +208,23 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Initialize events list.
+        eventList = EventList(db)
+
+        // Reading arguments
+        arguments?.let {
+            // Put all filters.
+            val filters = it.getStringArray("eventList")
+            for (i in 0 until filters.size / 2) {
+                eventList.filters.put(FilterType.valueOf(filters[i]), filters[i + filters.size / 2])
+            }
+
+            title = it.getString("title")
+            scrolling = it.getBoolean("scrolling")
+            daysInsteadOfGlyphs = it.getBoolean("daysInsteadOfGlyphs")
+        }
+
 
         info { "Filling in view" }
 

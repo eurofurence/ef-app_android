@@ -18,7 +18,7 @@ import kotlin.collections.set
  * Wraps event entries and provides sorting for these. Filters are async
  */
 class EventList(override val db: Db) : HasDb {
-    val filters = HashMap<FilterType, Any>()
+    val filters = HashMap<FilterType, String>()
     val UPCOMING_TIME_IN_MINUTES = 30
 
     @AddTrace(name = "EventList:applyEventFilters", enabled = true)
@@ -30,9 +30,9 @@ class EventList(override val db: Db) : HasDb {
             when (k) {
                 BY_TITLE -> events.removeAll { !it.title.contains(v as String, true) }
 
-                ON_DAY -> events.removeAll { it.conferenceDayId != v }
-                ON_TRACK -> events.removeAll { it.conferenceTrackId != v }
-                IN_ROOM -> events.removeAll { it.conferenceRoomId != v }
+                ON_DAY -> events.removeAll { it.conferenceDayId.toString() != v }
+                ON_TRACK -> events.removeAll { it.conferenceTrackId.toString() != v }
+                IN_ROOM -> events.removeAll { it.conferenceRoomId.toString() != v }
 
                 ORDER_START_TIME -> events.sortWith(Comparator { a, b ->
                     a.startDateTimeUtc.compareTo(b.startDateTimeUtc).takeIf { it != 0 }
@@ -69,19 +69,19 @@ class EventList(override val db: Db) : HasDb {
      * Filter by a date
      */
     fun onDay(dayID: UUID) =
-            this.apply { filters[FilterType.ON_DAY] = dayID }
+            this.apply { filters[FilterType.ON_DAY] = dayID.toString() }
 
     /**
      * Filter by room
      */
     fun inRoom(roomID: UUID) =
-            this.apply { filters[FilterType.IN_ROOM] = roomID }
+            this.apply { filters[FilterType.IN_ROOM] = roomID.toString() }
 
     /**
      * Filter by track
      */
     fun onTrack(trackId: UUID) =
-            this.apply { filters[FilterType.ON_TRACK] = trackId }
+            this.apply { filters[FilterType.ON_TRACK] = trackId.toString() }
 
     /**
      * Search by title
