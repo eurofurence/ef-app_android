@@ -67,6 +67,20 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
         ui.moreInformation.setOnClickListener {
             browse("https://app.eurofurence.org/redir/why-login")
         }
+
+        savedInstanceState?.let {
+            ui.regNumber.setText(it.getString("regNumber"))
+            ui.username.setText(it.getString("username"))
+            ui.password.setText(it.getString("password"))
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putString("regNumber", ui.regNumber.text.toString())
+        outState.putString("username", ui.username.text.toString())
+        outState.putString("password", ui.password.text.toString())
     }
 
     override fun onResume() {

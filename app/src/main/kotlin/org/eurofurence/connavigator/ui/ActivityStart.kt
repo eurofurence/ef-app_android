@@ -11,9 +11,7 @@ import android.widget.*
 import com.google.firebase.perf.metrics.AddTrace
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
-import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.all
-import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.BuildConfig
@@ -64,13 +62,13 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             }
 
             // Await all images loaded, if one fails, mark but continue to UI.
-            all(promises) successUi  {
+            all(promises) successUi {
                 AppPreferences.isFirstRun = false
 
                 longToast("Done with fetching!")
 
                 this@ActivityStart.startActivity(intentFor<ActivityRoot>())
-            } failUi  {
+            } failUi {
                 AppPreferences.isFirstRun = false
 
                 longToast("Something went wrong while fetching!")
@@ -109,6 +107,18 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
                 .subscribe {
                     ui.remoteLastUpdatedText.text = "Remote configs was updated ${it.timeSinceLastUpdate.millis / 1000} seconds ago."
                 }
+
+        savedInstanceState?.let {
+            ui.analyticalData.isChecked = it.getBoolean("analyticalData")
+            ui.performanceData.isChecked = it.getBoolean("performanceData")
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putBoolean("analyticalData", ui.analyticalData.isChecked)
+        outState.putBoolean("performanceData", ui.performanceData.isChecked)
     }
 
     override fun onDestroy() {
@@ -163,6 +173,9 @@ class StartUi : AnkoComponent<ActivityStart> {
     lateinit var loadingLayout: RelativeLayout
     lateinit var remoteLastUpdatedText: TextView
 
+    lateinit var analyticalData: CheckBox
+    lateinit var performanceData: CheckBox
+
     override fun createView(ui: AnkoContext<ActivityStart>) = with(ui) {
         verticalLayout {
             backgroundResource = R.color.backgroundGrey
@@ -211,14 +224,14 @@ Is it okay to download the data now?
                         noButton = button("No, Not right now").lparams(matchParent, wrapContent)
                     }.lparams(matchParent, wrapContent)
 
-                    checkBox("Allow Eurofurence to collect anonymous analytical data.") {
+                    analyticalData = checkBox("Allow Eurofurence to collect anonymous analytical data.") {
                         hint = "This can be changed in your settings at any time."
                         setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
                     }.lparams(matchParent, wrapContent) {
                         padding = dip(30)
                     }
 
-                    checkBox("Allow Eurofurence to collect performance data.") {
+                    performanceData = checkBox("Allow Eurofurence to collect performance data.") {
                         hint = "This can be changed in your settings at any time."
                         setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
                     }.lparams(matchParent, wrapContent) {
