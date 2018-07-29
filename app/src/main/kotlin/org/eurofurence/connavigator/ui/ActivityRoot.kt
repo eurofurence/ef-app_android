@@ -309,10 +309,15 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     override fun <T : Fragment> navigateRoot(type: Class<T>, mode: ActionBarMode) {
         setActionBarMode(mode)
 
+        // Find existing content fragment.
         val content = supportFragmentManager.findFragmentByTag("content")
 
         // If not already there, navigate with fragment transaction
         if (!type.isInstance(content)) {
+            // Pop existing details.
+            popDetails()
+
+            // Add content to content view.
             supportFragmentManager
                     .beginTransaction()
                     .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
@@ -469,7 +474,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     private fun navigateToSubFragment(fragment: Fragment) {
-        supportFragmentManager.popBackStack("contentSubAdded", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        // Pop existing details.
+        popDetails()
+
+        // Add content to content view.
         supportFragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.in_slide_and_fade, R.anim.out_slide_and_fade, R.anim.in_slide_and_fade, R.anim.out_slide_and_fade)
