@@ -135,7 +135,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 }
 
         // Show the home screen
-        setupContent()
+        if (savedInstanceState == null)
+            setupContent()
 
         // Show our browsing intent
         handleBrowsingIntent()
@@ -146,21 +147,20 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         savedInstanceState?.let {
             setActionBarMode(ActionBarMode.valueOf(it.getString("currentMode")))
 
-            supportFragmentManager
-                    .beginTransaction()
-                    .apply {
-                        // If has content, replace content with content fragment.
-                        if (it.getBoolean("hasContent"))
-                            replace(R.id.content, supportFragmentManager.getFragment(it, "content"), "content")
-                    }
-                    .apply {
-                        // If has details, add details to content.
-                        if (it.getBoolean("hasContentSub")) {
-                            addToBackStack("contentSubAdded")
-                            add(R.id.content, supportFragmentManager.getFragment(it, "contentSub"), "contentSub")
-                        }
-                    }
-                    .commitAllowingStateLoss()
+            if (it.getBoolean("hasContent"))
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.content, supportFragmentManager.getFragment(it, "content"), "content")
+                        .commitAllowingStateLoss()
+
+            // If has details, add details to content.
+            if (it.getBoolean("hasContentSub")) {
+                supportFragmentManager
+                        .beginTransaction()
+                        .addToBackStack("contentSubAdded")
+                        .add(R.id.content, supportFragmentManager.getFragment(it, "contentSub"), "contentSub")
+                        .commitAllowingStateLoss()
+            }
         }
     }
 
