@@ -102,6 +102,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
     }
 
     override fun onSearchButtonClick() {
+        applyOnRoot { popDetails() }
         when (eventPager.visibility) {
             View.VISIBLE -> {
                 eventPager.visibility = View.GONE
@@ -114,13 +115,17 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         }
     }
 
-    override fun onFilterButtonClick() = selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks"), { _, position ->
-        when (position) {
-            1 -> changePagerAdapter(EventPagerMode.ROOMS)
-            2 -> changePagerAdapter(EventPagerMode.TRACKS)
-            else -> changePagerAdapter(EventPagerMode.DAYS)
+    override fun onFilterButtonClick() {
+        applyOnRoot { popDetails() }
+
+        selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks")) { _, position ->
+            when (position) {
+                1 -> changePagerAdapter(EventPagerMode.ROOMS)
+                2 -> changePagerAdapter(EventPagerMode.TRACKS)
+                else -> changePagerAdapter(EventPagerMode.DAYS)
+            }
         }
-    })
+    }
 }
 
 enum class EventPagerMode {
