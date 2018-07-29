@@ -123,123 +123,125 @@ class LoginUi : AnkoComponent<LoginActivity> {
     lateinit var layoutBusy: LinearLayout
 
     override fun createView(ui: AnkoContext<LoginActivity>) = with(ui) {
-        linearLayout {
+        scrollView {
             lparams(matchParent, matchParent)
+            verticalLayout {
+                lparams(matchParent, wrapContent)
 
-            layoutBusy = verticalLayout {
-                visibility = View.GONE
-                gravity = Gravity.CENTER
-                orientation = LinearLayout.VERTICAL
-
-                progressBar {
-                    lparams(wrapContent, wrapContent)
-                }
-
-                textView("Authenticating...") {
-                    padding = 20
+                layoutBusy = verticalLayout {
+                    visibility = View.GONE
                     gravity = Gravity.CENTER
+                    orientation = LinearLayout.VERTICAL
 
-                    lparams(matchParent, wrapContent)
-                }
+                    progressBar {
+                        lparams(wrapContent, wrapContent)
+                    }
 
-                lparams(matchParent, matchParent)
-            }
+                    textView("Authenticating...") {
+                        padding = 20
+                        gravity = Gravity.CENTER
 
-            layoutMain = verticalLayout {
-
-                toolbar {
-                    title = "Login"
-                    lparams(matchParent, wrapContent)
-                    backgroundResource = R.color.primary
-                    setTitleTextAppearance(ctx, android.R.style.TextAppearance_Medium_Inverse)
-                }
-
-                // If not logged in
-                verticalLayout {
-                    visibility = if (AuthPreferences.isLoggedIn()) View.GONE else View.VISIBLE
+                        lparams(matchParent, wrapContent)
+                    }
 
                     lparams(matchParent, matchParent)
-
-                    regNumber = editText {
-                        hint = "Registration number"
-                        inputType = InputType.TYPE_CLASS_NUMBER
-
-                        lparams(matchParent, wrapContent) {
-                            margin = dip(16)
-                        }
-                    }
-
-                    username = editText {
-                        hint = "Username"
-                        lparams(matchParent, wrapContent) {
-                            margin = dip(16)
-                        }
-                    }
-
-                    password = editText {
-                        hint = "Password"
-                        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                        lparams(matchParent, wrapContent) {
-                            margin = dip(16)
-                        }
-                    }
-
-                    errorText = textView("Your login was unsuccessful, are you sure you entered the correct data?") {
-                        visibility = View.GONE
-                        textColor = ContextCompat.getColor(ctx, R.color.primary)
-                        lparams(matchParent, wrapContent) {
-                            margin = dip(16)
-                        }
-                    }
-
-                    textView("Your login credentials for the app are the same as for the Eurofurence Registration System.\n\nIf you do not remember or have access to them, you can ask for a PIN code to sign in at the ConOps or Security office.") {
-                        lparams(matchParent, wrapContent) {
-                            margin = dip(16)
-                        }
-                    }
-
-                    submit = button {
-                        text = "Login"
-                        background.setColorFilter(ContextCompat.getColor(context, R.color.primaryDark), PorterDuff.Mode.SRC)
-                        textColor = ContextCompat.getColor(context, R.color.textWhite)
-
-                        lparams(matchParent, wrapContent) {
-                            margin = dip(16)
-                        }
-                    }
-
-                    moreInformation = button("More Information") {
-                        lparams(matchParent, wrapContent) {
-                            setMargins(dip(16), 0, dip(16), dip(16))
-                        }
-                    }
                 }
 
-                // If logged in
-                verticalLayout {
-                    visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
+                layoutMain = verticalLayout {
 
-                    textView("Username: ${AuthPreferences.username}") {
-                        lparams(matchParent, wrapContent) {
-                            margin = dip(16)
-                        }
-                    }
-                    textView("Login is valid until: ${DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime()}") {
-                        lparams(matchParent, wrapContent) {
-                            margin = dip(16)
-                        }
+                    toolbar {
+                        title = "Login"
+                        lparams(matchParent, wrapContent)
+                        backgroundResource = R.color.primary
+                        setTitleTextAppearance(ctx, android.R.style.TextAppearance_Medium_Inverse)
                     }
 
-                    logout = button("Logout") {
-                        lparams(matchParent, wrapContent) {
-                            margin = dip(16)
+                    // If not logged in
+                    verticalLayout {
+                        visibility = if (AuthPreferences.isLoggedIn()) View.GONE else View.VISIBLE
+
+                        lparams(matchParent, matchParent)
+
+                        regNumber = editText {
+                            hint = "Registration number"
+                            inputType = InputType.TYPE_CLASS_NUMBER
+
+                            lparams(matchParent, wrapContent) {
+                                margin = dip(16)
+                            }
+                        }
+
+                        username = editText {
+                            hint = "Username"
+                            lparams(matchParent, wrapContent) {
+                                margin = dip(16)
+                            }
+                        }
+
+                        password = editText {
+                            hint = "Password"
+                            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                            lparams(matchParent, wrapContent) {
+                                margin = dip(16)
+                            }
+                        }
+
+                        errorText = textView("Your login was unsuccessful, are you sure you entered the correct data?") {
+                            visibility = View.GONE
+                            textColor = ContextCompat.getColor(ctx, R.color.primary)
+                            lparams(matchParent, wrapContent) {
+                                margin = dip(16)
+                            }
+                        }
+
+                        textView("Your login credentials for the app are the same as for the Eurofurence Registration System.\n\nIf you do not remember or have access to them, you can ask for a PIN code to sign in at the ConOps or Security office.") {
+                            lparams(matchParent, wrapContent) {
+                                margin = dip(16)
+                            }
+                        }
+
+                        submit = button {
+                            text = "Login"
+                            background.setColorFilter(ContextCompat.getColor(context, R.color.primaryDark), PorterDuff.Mode.SRC)
+                            textColor = ContextCompat.getColor(context, R.color.textWhite)
+
+                            lparams(matchParent, wrapContent) {
+                                margin = dip(16)
+                            }
+                        }
+
+                        moreInformation = button("More Information") {
+                            lparams(matchParent, wrapContent) {
+                                setMargins(dip(16), 0, dip(16), dip(16))
+                            }
                         }
                     }
+
+                    // If logged in
+                    verticalLayout {
+                        visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
+
+                        textView("Username: ${AuthPreferences.username}") {
+                            lparams(matchParent, wrapContent) {
+                                margin = dip(16)
+                            }
+                        }
+                        textView("Login is valid until: ${DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime()}") {
+                            lparams(matchParent, wrapContent) {
+                                margin = dip(16)
+                            }
+                        }
+
+                        logout = button("Logout") {
+                            lparams(matchParent, wrapContent) {
+                                margin = dip(16)
+                            }
+                        }
+                    }
+
+                    lparams(matchParent, matchParent)
                 }
-
-                lparams(matchParent, matchParent)
             }
         }
     }
-
 }
