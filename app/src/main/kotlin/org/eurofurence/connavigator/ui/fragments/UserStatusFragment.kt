@@ -22,7 +22,6 @@ import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
-import org.jetbrains.anko.AnkoContext.Companion
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.intentFor
 import java.util.*
@@ -44,20 +43,22 @@ class UserStatusFragment : Fragment(), AnkoLogger {
 
         api.apiV2CommunicationPrivateMessagesGet()
     } successUi { messages ->
-        info { "Fetched messages, ${messages.count()} messages found" }
+        context?.let {
+            info { "Fetched messages, ${messages.count()} messages found" }
 
-        val unreadMessages = messages.filter { it.readDateTimeUtc == null }
+            val unreadMessages = messages.filter { it.readDateTimeUtc == null }
 
-        if (unreadMessages.isNotEmpty()) {
-            info { "Unread messages are present! Giving attention." }
-            ui.subtitle.text = "You have ${unreadMessages.size} new, unread personal message(s)!"
-            ui.subtitle.textColor = ContextCompat.getColor(context, R.color.primaryDark)
-            ui.userIcon.textColor = ContextCompat.getColor(context, R.color.primaryDark)
-        } else {
-            info { "No unread messages found, displaying total message counts" }
-            ui.subtitle.text = "You have ${messages.count()} personal message(s)."
-            ui.subtitle.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
-            ui.userIcon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
+            if (unreadMessages.isNotEmpty()) {
+                info { "Unread messages are present! Giving attention." }
+                ui.subtitle.text = "You have ${unreadMessages.size} new, unread personal message(s)!"
+                ui.subtitle.textColor = ContextCompat.getColor(it, R.color.primaryDark)
+                ui.userIcon.textColor = ContextCompat.getColor(it, R.color.primaryDark)
+            } else {
+                info { "No unread messages found, displaying total message counts" }
+                ui.subtitle.text = "You have ${messages.count()} personal message(s)."
+                ui.subtitle.textColor = ContextCompat.getColor(it, android.R.color.tertiary_text_dark)
+                ui.userIcon.textColor = ContextCompat.getColor(it, android.R.color.tertiary_text_dark)
+            }
         }
     }
 
