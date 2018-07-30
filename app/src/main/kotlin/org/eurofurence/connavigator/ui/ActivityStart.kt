@@ -45,19 +45,16 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
     @AddTrace(name = "ActivityStart:UpdateIntentService", enabled = true)
     private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
         if (it.booleans["success"]) {
-            val imgCount = db.images.items.count()
+            val imgCountTotal = db.images.items.count()
+            var imgCountLoaded = 0
 
-            info { "Data update success. Downloading $imgCount images" }
-
-            ui.loadingSpinner.apply {
-                max = imgCount
-                progress = 1
-            }
+            info { "Data update success. Downloading $imgCountTotal images" }
 
 
-            val promises = db.images.items.map {
-                imageService.preload(it).also {
-                    ui.loadingSpinner.incrementProgressBy(1)
+            val promises = db.images.items.map{
+                imageService.preload(it).successUi {
+                    imgCountLoaded++
+                    ui.progressText.text = "Loading assets ($imgCountLoaded / $imgCountTotal)"
                 }
             }
 
@@ -111,6 +108,10 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         savedInstanceState?.let {
             ui.analyticalData.isChecked = it.getBoolean("analyticalData")
             ui.performanceData.isChecked = it.getBoolean("performanceData")
+            if (it.getBoolean("loading")) {
+                ui.startLayout.visibility = View.GONE
+                ui.loadingLayout.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -119,6 +120,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
 
         outState.putBoolean("analyticalData", ui.analyticalData.isChecked)
         outState.putBoolean("performanceData", ui.performanceData.isChecked)
+        outState.putBoolean("loading", ui.startLayout.visibility == View.GONE)
     }
 
     override fun onDestroy() {
@@ -172,6 +174,7 @@ class StartUi : AnkoComponent<ActivityStart> {
     lateinit var startLayout: LinearLayout
     lateinit var loadingLayout: RelativeLayout
     lateinit var remoteLastUpdatedText: TextView
+    lateinit var progressText: TextView
 
     lateinit var analyticalData: CheckBox
     lateinit var performanceData: CheckBox
@@ -251,7 +254,7 @@ Is it okay to download the data now?
                     padding = dip(50)
                 }
 
-                textView("Working... Please wait!") {
+                progressText = textView("Working... Please wait!") {
                     id = 1
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
                     compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
