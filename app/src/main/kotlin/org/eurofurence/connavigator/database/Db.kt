@@ -460,3 +460,30 @@ fun Db.findLinkFragment(target: String): Map<String, Any?> {
             "entry" to null
     )
 }
+
+
+fun HasDb.glyphFor(event: EventRecord) =
+        when {
+            event.tags == null -> emptyList()
+            "sponsors_only" in event.tags -> listOf("{fa-star-half-o}")
+            "supersponsors_only" in event.tags -> listOf("{fa-star}")
+            "kage" in event.tags -> listOf("{fa-bug}", "{fa-glass}")
+            "art_show" in event.tags -> listOf("{fa-photo}")
+            "dealers_den" in event.tags -> listOf("{fa-shopping-cart}")
+            "main_stage" in event.tags -> listOf("{fa-asterisk}")
+            "photoshoot" in event.tags -> listOf("{fa-camera}")
+            else -> emptyList()
+        }
+
+fun HasDb.descriptionFor(event: EventRecord) =
+        when {
+            event.tags == null -> null
+            "sponsors_only" in event.tags -> "This event is restricted to sponsors and super-sponsors"
+            "supersponsors_only" in event.tags -> "This event is restricted to super-sponsors only"
+            "kage" in event.tags -> "Hosted by the bug himself"
+            "art_show" in event.tags -> "This is an art show event"
+            "dealers_den" in event.tags -> "This event is related to the dealers den"
+            "main_stage" in event.tags -> "This is a main stage event"
+            "photoshoot" in event.tags -> "This is a photoshoot"
+            else -> null
+        }

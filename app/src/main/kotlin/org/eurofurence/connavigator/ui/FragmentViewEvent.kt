@@ -18,9 +18,7 @@ import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
-import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.eventStart
-import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
@@ -101,6 +99,16 @@ class FragmentViewEvent : Fragment(), HasDb {
                 }
             }
 
+            val glyphs = glyphFor(event)
+            val description = descriptionFor(event)
+            (glyphs.joinToString("") { "$it " } + (description ?: "")).let {
+                if (it != ui.extrasContent.tag) {
+                    ui.extrasContent.tag = it
+                    ui.extrasContent.setText(it)
+                    ui.extras.visibility = if (it == "") View.GONE else View.VISIBLE
+                }
+            }
+
             changeFabIcon()
 
             ui.buttonSave.setOnClickListener {
@@ -149,6 +157,10 @@ class FragmentViewEvent : Fragment(), HasDb {
 class EventUi : AnkoComponent<Fragment> {
     lateinit var splitter: LinearLayout
 
+    lateinit var extras: LinearLayout
+
+    lateinit var extrasContent: TextView
+
     lateinit var image: PhotoView
 
     lateinit var title: TextView
@@ -165,7 +177,7 @@ class EventUi : AnkoComponent<Fragment> {
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         coordinatorLayout {
-            backgroundResource = android.R.color.background_light
+            backgroundResource = R.color.backgroundGrey
             isClickable = true
 
             scrollView {
@@ -204,12 +216,30 @@ class EventUi : AnkoComponent<Fragment> {
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                             setPadding(0, 0, 0, dip(10))
                         }.lparams(matchParent, wrapContent, weight = 5F)
-                    }.lparams(matchParent, wrapContent)
 
-                    description = ankoView(::MarkdownView, 0) {
                     }.lparams(matchParent, wrapContent) {
-                        margin = dip(25)
+                        setMargins(0, 0, 0, dip(10))
                     }
+
+                    extras = verticalLayout {
+                        backgroundResource = R.color.cardview_light_background
+                        padding = dip(15)
+
+                        extrasContent = fontAwesomeView {
+                            text = "{fa-home} Glyphs"
+                            singleLine = false
+                            maxLines = 3
+                        }.lparams(matchParent, wrapContent, weight = 5F)
+                    }.lparams(matchParent, wrapContent) {
+                        setMargins(0, 0, 0, dip(10))
+                    }
+
+                    verticalLayout {
+                        backgroundResource = R.color.cardview_light_background
+                        padding = dip(25)
+                        description = ankoView(::MarkdownView, 0) {
+                        }.lparams(matchParent, wrapContent)
+                    }.lparams(matchParent, wrapContent)
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, matchParent)
 
