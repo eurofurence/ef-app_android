@@ -145,6 +145,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
         // Restore fragments from saved instance state.
         savedInstanceState?.let {
+            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             setActionBarMode(ActionBarMode.valueOf(it.getString("currentMode")))
 
             if (it.getBoolean("hasContent"))
