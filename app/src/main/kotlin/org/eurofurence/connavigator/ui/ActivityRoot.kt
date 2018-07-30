@@ -38,7 +38,6 @@ import org.eurofurence.connavigator.database.updateComplete
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
@@ -75,14 +74,14 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     val drawer: DrawerLayout by view()
     val fab: FloatingActionButton by view()
 
+    var currentMode: ActionBarMode = ActionBarMode.HOME
+
     // Views in navigation view
     val navView: NavigationView by view()
     val navDays: TextView by header({ navView })
     val navTitle: TextView by header({ navView })
     val navSubtitle: TextView by header({ navView })
 
-    // Content API aggregator
-    var content: Set<ContentAPI> = setOf()
 
     // See if we're on the home screen. Used to check the back button
     var onHome = true
@@ -136,13 +135,35 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 }
 
         // Show the home screen
-        setupContent()
+        if (savedInstanceState == null || !savedInstanceState.getBoolean("hasContent"))
+            setupContent()
 
         // Show our browsing intent
         handleBrowsingIntent()
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
+
+        // Restore fragments from saved instance state.
+        savedInstanceState?.let {
+            setActionBarMode(ActionBarMode.valueOf(it.getString("currentMode")))
+
+            if (it.getBoolean("hasContent"))
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.content, supportFragmentManager.getFragment(it, "content"), "content")
+                        .commitAllowingStateLoss()
+
+            // If has details, add details to content.
+            if (it.getBoolean("hasContentSub")) {
+                supportFragmentManager
+                        .beginTransaction()
+                        .addToBackStack("contentSubAdded")
+                        .add(R.id.content, supportFragmentManager.getFragment(it, "contentSub"), "contentSub")
+                        .commitAllowingStateLoss()
+            }
+        }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -253,6 +274,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             findItem(R.id.action_settings).icon = icon(FontAwesomeIcons.fa_cogs)
         }
         this.menu = menu
+
+        // Restore mode
+        setActionBarMode(currentMode)
         return true
     }
 
@@ -285,8 +309,15 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     override fun <T : Fragment> navigateRoot(type: Class<T>, mode: ActionBarMode) {
         setActionBarMode(mode)
 
+        // Find existing content fragment.
+        val content = supportFragmentManager.findFragmentByTag("content")
+
         // If not already there, navigate with fragment transaction
         if (!type.isInstance(content)) {
+            // Pop existing details.
+            popDetails()
+
+            // Add content to content view.
             supportFragmentManager
                     .beginTransaction()
                     .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
@@ -312,6 +343,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         menu?.findItem(R.id.action_map)?.isVisible = (mode == ActionBarMode.MAP || mode == ActionBarMode.SEARCHMAP)
 
         menu?.findItem(R.id.action_filter)?.isVisible = mode == ActionBarMode.SEARCHTABSFILTER
+
+        currentMode = mode
+
+        info { "Action bar mode is now $mode" }
     }
 
     private fun setupNav() {
@@ -387,6 +422,21 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putString("currentMode", currentMode.toString())
+
+        supportFragmentManager.findFragmentByTag("content")?.let { content ->
+            outState.putBoolean("hasContent", true)
+            supportFragmentManager.putFragment(outState, "content", content)
+        }
+
+        supportFragmentManager.findFragmentByTag("contentSub")?.let { contentSub ->
+            outState.putBoolean("hasContentSub", true)
+            supportFragmentManager.putFragment(outState, "contentSub", contentSub)
+        }
+    }
 
     override fun navigateToEvent(event: EventRecord) {
         navigateToSubFragment(FragmentViewEvent().withArguments(
@@ -424,7 +474,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     private fun navigateToSubFragment(fragment: Fragment) {
-        supportFragmentManager.popBackStack("contentSubAdded", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        // Pop existing details.
+        popDetails()
+
+        // Add content to content view.
         supportFragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.in_slide_and_fade, R.anim.out_slide_and_fade, R.anim.in_slide_and_fade, R.anim.out_slide_and_fade)

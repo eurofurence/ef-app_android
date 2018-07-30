@@ -19,6 +19,7 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.longToast
 import org.jetbrains.anko.support.v4.selector
@@ -31,10 +32,10 @@ import kotlin.properties.Delegates.notNull
 class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
-    constructor(mapRecord: MapRecord) : this() {
-        arguments = Bundle()
-
-        arguments.jsonObjects["mapRecord"] = mapRecord
+    fun withArguments(mapRecord: MapRecord) = apply {
+        arguments = Bundle().apply {
+            jsonObjects["mapRecord"] = mapRecord
+        }
     }
 
     val ui = MapUi()
@@ -42,7 +43,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     val image by lazy { db.images[mapRecord.imageId]!! }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.create(context.applicationContext, container!!))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,7 +75,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     val links = entries.flatMap { it.links }
                             .filter { it.fragmentType !== LinkFragment.FragmentTypeEnum.MapEntry }
 
-                    if(!links.isEmpty()) {
+                    if (!links.isEmpty()) {
                         info { "Showing location selector" }
                         selector("Find out more", links.map { it.name ?: "No name provided for link" }, { _, position ->
                             val link = links[position]
@@ -116,11 +117,11 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         }
     }
 
-    class MapUi : AnkoComponent<ViewGroup> {
+    class MapUi : AnkoComponent<Fragment> {
         lateinit var map: PhotoView
         lateinit var title: TextView
 
-        override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+        override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
             relativeLayout {
                 backgroundResource = R.color.cardview_dark_background
                 map = photoView {

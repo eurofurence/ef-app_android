@@ -32,6 +32,7 @@ import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
 
 /**
  * Created by requinard on 6/28/17.
@@ -80,7 +81,7 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -155,10 +156,10 @@ class SingleItemUi : AnkoComponent<ViewGroup> {
 
 }
 
-class MessagesUi : AnkoComponent<ViewGroup> {
+class MessagesUi : AnkoComponent<Fragment> {
     lateinit var loading: ProgressBar
     lateinit var messageList: RecyclerView
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout {
             lparams(matchParent, matchParent)
 

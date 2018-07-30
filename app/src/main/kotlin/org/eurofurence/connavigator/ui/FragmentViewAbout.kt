@@ -29,6 +29,7 @@ import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.padding
 import org.jetbrains.anko.scrollView
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.textView
 import org.jetbrains.anko.verticalLayout
@@ -48,7 +49,7 @@ class FragmentViewAbout : Fragment(), ContentAPI {
     val aboutPazuzu: LinearLayout by view()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.create(context.applicationContext, container!!))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         applyOnRoot { changeTitle("About") }
@@ -61,7 +62,7 @@ class FragmentViewAbout : Fragment(), ContentAPI {
     }
 }
 
-class AboutUi : AnkoComponent<ViewGroup> {
+class AboutUi : AnkoComponent<Fragment> {
     val avatarSize = 128
 
     lateinit var requinardLayout: LinearLayout
@@ -70,7 +71,7 @@ class AboutUi : AnkoComponent<ViewGroup> {
     lateinit var helpButton: Button
     lateinit var bugButton: Button
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         scrollView {
             lparams(matchParent, matchParent)
             backgroundResource = R.color.backgroundGrey

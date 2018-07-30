@@ -8,18 +8,23 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.FragmentMap
-import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.frameLayout
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.viewPager
 
 /**
  * Created by david on 8/3/16.
  */
 class FragmentViewMaps : Fragment(), ContentAPI, HasDb {
+    val ui by lazy { MapsUi() }
     override val db by lazyLocateDb()
 
     inner class MapFragmentPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
@@ -27,7 +32,7 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb {
                 browseableMaps[position].description
 
         override fun getItem(position: Int) =
-                FragmentMap(browseableMaps[position])
+                FragmentMap().withArguments(browseableMaps[position])
 
 
         override fun getCount() =
@@ -36,19 +41,29 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb {
 
     val browseableMaps by lazy { maps.items.filter { it.isBrowseable }.sortedBy { it.description } }
 
-    val mapViewPager: ViewPager by view()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fview_maps, container, false)
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mapViewPager.adapter = MapFragmentPagerAdapter(childFragmentManager)
+        ui.mapViewPager.adapter = MapFragmentPagerAdapter(childFragmentManager)
 
         applyOnRoot {
-            tabs.setupWithViewPager(mapViewPager)
+            tabs.setupWithViewPager(ui.mapViewPager)
             changeTitle("Maps")
+        }
+    }
+}
+
+
+class MapsUi : AnkoComponent<Fragment> {
+    lateinit var mapViewPager: ViewPager
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
+        frameLayout() {
+            mapViewPager = viewPager {
+                id = View.generateViewId()
+            }.lparams(matchParent, matchParent)
         }
     }
 }

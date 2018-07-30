@@ -14,7 +14,7 @@ import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 class FavoriteFragmentStateAdapter(val fragmentManager: FragmentManager, override val db: Db)
     : FragmentStatePagerAdapter(fragmentManager), HasDb {
     override fun getItem(position: Int): Fragment? {
-        return EventRecyclerFragment(filterEvents().isFavorited())
+        return EventRecyclerFragment().withArguments(filterEvents().isFavorited())
     }
 
     override fun getCount(): Int {

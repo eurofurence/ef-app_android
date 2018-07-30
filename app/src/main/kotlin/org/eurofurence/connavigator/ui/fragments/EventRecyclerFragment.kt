@@ -25,12 +25,14 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
+import org.eurofurence.connavigator.ui.filters.FilterType
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
 import org.joda.time.DateTime
 import org.joda.time.Minutes
 import kotlin.coroutines.experimental.buildSequence
@@ -68,14 +70,22 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     var daysInsteadOfGlyphs = false
     var effectiveEvents = emptyList<EventRecord>()
 
-    constructor(eventList: EventList, title: String = "", scrolling: Boolean = true, daysInsteadOfGlyphs: Boolean = false) : this() {
+    fun withArguments(eventList: EventList? = null, title: String = "", scrolling: Boolean = true, daysInsteadOfGlyphs: Boolean = false) = apply {
         info { "Constructing event recycler $title" }
-        this.eventList = eventList
-        this.title = title
-        this.scrolling = scrolling
-        this.daysInsteadOfGlyphs = daysInsteadOfGlyphs
-    }
 
+        arguments = Bundle().apply {
+            if (eventList != null) {
+                val map = eventList.filters.keys.map { it.toString() } + eventList.filters.values
+                putStringArray("eventList", map.toTypedArray())
+            } else {
+                putStringArray("eventList", arrayOf())
+            }
+
+            putString("title", title)
+            putBoolean("scrolling", scrolling)
+            putBoolean("daysInsteadOfGlyphs", daysInsteadOfGlyphs)
+        }
+    }
 
     // Event view holder finds and memorizes the views in an event card
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -93,8 +103,9 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, pos: Int): EventViewHolder =
-                EventViewHolder(SingleEventUi()
-                        .createView(AnkoContext.createReusable(activity.applicationContext, parent)))
+                EventViewHolder(UI { SingleEventUi().createView(this) }.view)
+//                        SingleEventUi()
+//                        .createView(AnkoContext.createReusable(activity.applicationContext, parent)))
 
         override fun getItemCount() =
                 effectiveEvents.size
@@ -193,13 +204,27 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            if (container == null)
-                null
-            else
-                ui.createView(AnkoContext.create(container.context.applicationContext, container))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Initialize events list.
+        eventList = EventList(db)
+
+        // Reading arguments
+        arguments?.let {
+            // Put all filters.
+            val filters = it.getStringArray("eventList")
+            for (i in 0 until filters.size / 2) {
+                eventList.filters.put(FilterType.valueOf(filters[i]), filters[i + filters.size / 2])
+            }
+
+            title = it.getString("title")
+            scrolling = it.getBoolean("scrolling")
+            daysInsteadOfGlyphs = it.getBoolean("daysInsteadOfGlyphs")
+        }
+
 
         info { "Filling in view" }
 
@@ -275,8 +300,8 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 }
 
-class SingleEventUi : AnkoComponent<ViewGroup> {
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+class SingleEventUi : AnkoComponent<Fragment> {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout {
             isClickable = true
             isLongClickable = true
@@ -375,13 +400,13 @@ class SingleEventUi : AnkoComponent<ViewGroup> {
     }
 }
 
-class EventListView : AnkoComponent<ViewGroup> {
+class EventListView : AnkoComponent<Fragment> {
     lateinit var title: TextView
     //lateinit var loading: ProgressBar
     lateinit var eventList: RecyclerView
     lateinit var bigLayout: LinearLayout
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         bigLayout = verticalLayout {
             backgroundResource = R.color.cardview_light_background
 

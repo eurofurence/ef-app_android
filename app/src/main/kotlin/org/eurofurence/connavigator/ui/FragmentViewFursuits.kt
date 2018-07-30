@@ -12,6 +12,7 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.relativeLayout
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.viewPager
 
 /**
@@ -37,7 +38,7 @@ class FragmentViewFursuits : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            if (container == null) null else ui.createView(AnkoContext.Companion.create(context, container))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,9 +49,9 @@ class FragmentViewFursuits : Fragment() {
     }
 }
 
-class FursuitsUi : AnkoComponent<ViewGroup> {
+class FursuitsUi : AnkoComponent<Fragment> {
     lateinit var pager: ViewPager
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
             pager = viewPager {
                 id = R.id.eventPager

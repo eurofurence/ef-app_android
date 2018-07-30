@@ -150,14 +150,14 @@ class FragmentViewEvent : Fragment(), HasDb {
     }
 }
 
-class EventUi : AnkoComponent<ViewGroup> {
+class EventUi : AnkoComponent<Fragment> {
     lateinit var scrollView: NestedScrollView
     lateinit var poster: PhotoView
     lateinit var title: TextView
     lateinit var room: TextView
     lateinit var host: TextView
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
             lparams(matchParent, matchParent)
             backgroundResource = R.color.cardview_light_background

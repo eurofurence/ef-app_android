@@ -19,6 +19,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
 import us.feras.mdv.MarkdownView
 
@@ -40,7 +41,7 @@ class FragmentViewInfo() : Fragment(), HasDb {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        ui.createView(AnkoContext.create(context.applicationContext, container!!))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -76,12 +77,12 @@ class FragmentViewInfo() : Fragment(), HasDb {
     }
 }
 
-class InfoUi : AnkoComponent<ViewGroup> {
+class InfoUi : AnkoComponent<Fragment> {
     lateinit var layout: LinearLayout
     lateinit var image: PhotoView
     lateinit var title: TextView
     lateinit var text: MarkdownView
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         scrollView {
             lparams(matchParent, matchParent)
             backgroundResource = R.color.cardview_light_background

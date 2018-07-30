@@ -33,6 +33,7 @@ import org.jetbrains.anko.info
 import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.padding
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.textView
 import org.jetbrains.anko.topPadding
@@ -44,7 +45,7 @@ class FragmentViewMessageItem : Fragment(), AnkoLogger {
     val ui = MessageItemUi()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(Companion.create(context, container!!))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         val message = Gson().fromJson(arguments.getString("message"), PrivateMessageRecord::class.java)
@@ -75,7 +76,7 @@ class FragmentViewMessageItem : Fragment(), AnkoLogger {
     }
 }
 
-class MessageItemUi : AnkoComponent<ViewGroup> {
+class MessageItemUi : AnkoComponent<Fragment> {
     lateinit var icon: IconTextView
     lateinit var title: TextView
     lateinit var author: TextView
@@ -84,7 +85,7 @@ class MessageItemUi : AnkoComponent<ViewGroup> {
     lateinit var read: TextView
     lateinit var content: MarkdownView
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout {
             lparams(matchParent, matchParent)
             backgroundResource = R.color.backgroundGrey

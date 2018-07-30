@@ -15,6 +15,7 @@ import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.AnkoContext.Companion
+import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView
 import java.util.*
 
@@ -27,7 +28,7 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
     var subscriptions = Disposables.empty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(Companion.create(context, container!!))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,10 +49,10 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
     }
 }
 
-class AnnouncementItemUi : AnkoComponent<ViewGroup> {
+class AnnouncementItemUi : AnkoComponent<Fragment> {
     lateinit var title: TextView
     lateinit var text: MarkdownView
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout {
             backgroundResource = R.color.cardview_light_background
             isClickable = true

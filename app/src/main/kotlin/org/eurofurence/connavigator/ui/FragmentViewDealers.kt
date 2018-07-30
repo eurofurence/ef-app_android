@@ -20,6 +20,7 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
 
 /**
  * Created by David on 15-5-2016.
@@ -34,7 +35,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
     var searchCategory = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(AnkoContext.create(container!!.context.applicationContext, container))
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         applyOnRoot { changeTitle("Dealers") }
@@ -113,13 +114,13 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 }
 
-class DealersUi : AnkoComponent<ViewGroup> {
+class DealersUi : AnkoComponent<Fragment> {
     lateinit var dealerList: RecyclerView
     lateinit var search: EditText
     lateinit var searchLayout: LinearLayout
     lateinit var categorySpinner: Spinner
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout {
             lparams(matchParent, matchParent)
             backgroundResource = R.color.backgroundGrey

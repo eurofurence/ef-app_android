@@ -36,6 +36,7 @@ import org.jetbrains.anko.info
 import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.padding
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.textView
 import org.jetbrains.anko.verticalLayout
 import org.jetbrains.anko.wrapContent
@@ -84,7 +85,7 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
     val announcementAdapter by lazy { AnnoucementRecyclerDataAdapter() }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            ui.createView(Companion.create(context, container!!))
+            UI { ui.createView(this)}.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         info { "Creating announcements list" }
@@ -111,12 +112,12 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
             .toList()
 }
 
-class AnnouncementsUi : AnkoComponent<ViewGroup> {
+class AnnouncementsUi : AnkoComponent<Fragment> {
     lateinit var announcements: RecyclerView
     lateinit var title: TextView
     lateinit var layout: ViewGroup
 
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout {
             layout = this
 

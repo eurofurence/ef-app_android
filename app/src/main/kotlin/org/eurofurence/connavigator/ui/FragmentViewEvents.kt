@@ -32,8 +32,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
 
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()
-    val searchEventFilter by lazy { filterEvents().sortByName() }
-    val searchFragment by lazy { EventRecyclerFragment(searchEventFilter) }
+    val searchFragment by lazy { EventRecyclerFragment().withArguments() }
 
     private val detailsPopAdapter = object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
@@ -60,7 +59,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
 
         eventSearchBar.textWatcher {
             afterTextChanged { text ->
-                searchEventFilter.byTitle(text.toString())
+                searchFragment.eventList.byTitle(text.toString())
                         .sortByName()
                 searchFragment.dataUpdated()
             }
