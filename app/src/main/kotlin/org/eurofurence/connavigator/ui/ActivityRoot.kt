@@ -135,7 +135,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 }
 
         // Show the home screen
-        if (savedInstanceState == null)
+        if (savedInstanceState == null || !savedInstanceState.getBoolean("hasContent"))
             setupContent()
 
         // Show our browsing intent
