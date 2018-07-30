@@ -95,6 +95,8 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
             dealers.sortedBy { (if (it.displayName != "") it.displayName else it.attendeeNickname).toLowerCase() }
 
     override fun onSearchButtonClick() {
+        applyOnRoot { popDetails() }
+
         if (ui.searchLayout.visibility == View.GONE) {
             info { "Showing search bar" }
             ui.searchLayout.visibility = View.VISIBLE
