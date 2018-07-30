@@ -39,11 +39,11 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         }
 
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            applyOnRoot { popDetails() }
         }
 
         override fun onPageSelected(position: Int) {
-            applyOnRoot { popDetails() }
+            if (isResumed)
+                applyOnRoot { popDetails() }
         }
     }
 
@@ -82,6 +82,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
     private fun changePagerAdapter(adapter: PagerAdapter, preferedPosition: Int? = null) {
         eventPager.adapter = adapter
         eventPager.adapter.notifyDataSetChanged()
+
 
         preferedPosition?.let {
             eventPager.setCurrentItem(it, false)

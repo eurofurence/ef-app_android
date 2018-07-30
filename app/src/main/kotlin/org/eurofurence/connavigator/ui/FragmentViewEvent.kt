@@ -3,12 +3,12 @@ package org.eurofurence.connavigator.ui
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.support.v4.widget.NestedScrollView
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ScrollView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import com.joanzapata.iconify.IconDrawable
@@ -19,6 +19,7 @@ import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.descriptionFor
 import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
@@ -27,12 +28,14 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
-import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.nestedScrollView
+import org.jetbrains.anko.custom.ankoView
+import org.jetbrains.anko.design.coordinatorLayout
+import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView
 import java.util.*
 
@@ -46,16 +49,10 @@ class FragmentViewEvent : Fragment(), HasDb {
 
     val eventId: UUID? get() = UUID.fromString(arguments.getString("id"))
 
-    val title: TextView by view()
-    val description: MarkdownView by view()
-    val image: ImageView by view()
-    val organizers: TextView by view()
-    val room: TextView by view()
-    val time: TextView by view()
-    val buttonSave: FloatingActionButton by view()
+    val ui by lazy { EventUi() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fview_event, container, false)
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,33 +78,42 @@ class FragmentViewEvent : Fragment(), HasDb {
             val conferenceRoom = event[toRoom]
             val conferenceDay = event[toDay]
 
-            title.text = event.fullTitle()
+            ui.title.text = event.fullTitle()
 
             event.description.markdownLinks().let {
-                if (it != description.tag) {
-                    description.tag = it
-                    description.loadMarkdown(it)
+                if (it != ui.description.tag) {
+                    ui.description.tag = it
+                    ui.description.loadMarkdown(it)
                 }
             }
 
-            time.text = "${db.eventStart(event).dayOfWeek().asText} from ${event.startTimeString()} to ${event.endTimeString()}"
-            organizers.text = event.ownerString()
-            room.text = conferenceRoom!!.name
+            ui.time.text = "${db.eventStart(event).dayOfWeek().asText} from ${event.startTimeString()} to ${event.endTimeString()}"
+            ui.organizers.text = event.ownerString()
+            ui.room.text = conferenceRoom!!.name
 
             (event.posterImageId ?: event.bannerImageId).let {
-                if (it != image.tag) {
-                    image.tag = it
+                if (it != ui.image.tag) {
+                    ui.image.tag = it
                     if (it != null) {
-                        image.visibility = View.VISIBLE
-                        imageService.load(db.images[it], image)
+                        ui.image.visibility = View.VISIBLE
+                        imageService.load(db.images[it], ui.image)
                     } else
-                        image.visibility = View.GONE
+                        ui.image.visibility = View.GONE
+                }
+            }
+
+            val description = descriptionFor(event).joinToString("\r\n\r\n")
+            description.let {
+                if (it != ui.extrasContent.tag) {
+                    ui.extrasContent.tag = it
+                    ui.extrasContent.setText(it)
+                    ui.extras.visibility = if (it == "") View.GONE else View.VISIBLE
                 }
             }
 
             changeFabIcon()
 
-            buttonSave.setOnClickListener {
+            ui.buttonSave.setOnClickListener {
                 if (AppPreferences.dialogOnEventPress) {
                     showDialog(event)
                 } else {
@@ -115,7 +121,7 @@ class FragmentViewEvent : Fragment(), HasDb {
                 }
             }
 
-            buttonSave.setOnLongClickListener {
+            ui.buttonSave.setOnLongClickListener {
                 if (AppPreferences.dialogOnEventPress) {
                     favoriteEvent(event)
                 } else {
@@ -139,51 +145,112 @@ class FragmentViewEvent : Fragment(), HasDb {
      */
     private fun changeFabIcon() {
         (eventId in db.faves).let {
-            if (it != buttonSave.tag) {
-                buttonSave.tag = it
+            if (it != ui.buttonSave.tag) {
+                ui.buttonSave.tag = it
                 if (it)
-                    buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart))
+                    ui.buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart))
                 else
-                    buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart_o))
+                    ui.buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart_o))
             }
         }
     }
 }
 
 class EventUi : AnkoComponent<Fragment> {
-    lateinit var scrollView: NestedScrollView
-    lateinit var poster: PhotoView
+    lateinit var splitter: LinearLayout
+
+    lateinit var extras: LinearLayout
+
+    lateinit var extrasContent: TextView
+
+    lateinit var image: PhotoView
+
     lateinit var title: TextView
+
+    lateinit var time: TextView
+
     lateinit var room: TextView
-    lateinit var host: TextView
+
+    lateinit var organizers: TextView
+
+    lateinit var description: MarkdownView
+
+    lateinit var buttonSave: FloatingActionButton
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        relativeLayout {
-            lparams(matchParent, matchParent)
-            backgroundResource = R.color.cardview_light_background
+        coordinatorLayout {
+            backgroundResource = R.color.backgroundGrey
+            isClickable = true
 
-            scrollView = nestedScrollView {
+            scrollView {
                 verticalLayout {
-                    poster = photoView {
-                        backgroundResource = R.drawable.image_fade
+                    image = ankoView(::PhotoView, 0) {
+                        contentDescription = "Event"
                         imageResource = R.drawable.placeholder_event
+                        backgroundResource = R.drawable.image_fade
                         scaleType = ImageView.ScaleType.FIT_CENTER
-                        adjustViewBounds = true
                         visibility = View.GONE
+                        adjustViewBounds = true
                     }.lparams(matchParent, wrapContent)
 
-                    verticalLayout {
+                    splitter = verticalLayout {
+                        id = View.generateViewId()
+                        backgroundResource = R.color.primaryDarker
                         padding = dip(15)
-                        id = R.id.splitter
+                        title = textView("LargeText") {
+
+                            compatAppearance = android.R.style.TextAppearance_Large_Inverse
+                            setPadding(0, dip(15), 0, dip(15))
+                            gravity = Gravity.CENTER_HORIZONTAL
+                        }.lparams(matchParent, wrapContent)
+
+                        time = textView("Con Day: %s") {
+                            compatAppearance = android.R.style.TextAppearance_Medium_Inverse
+                            setPadding(0, 0, 0, dip(10))
+                        }.lparams(matchParent, wrapContent, weight = 5F)
+
+                        room = textView("Room: %s") {
+                            compatAppearance = android.R.style.TextAppearance_Medium_Inverse
+                            setPadding(0, 0, 0, dip(10))
+                        }.lparams(matchParent, wrapContent, weight = 5F)
+
+                        organizers = textView("Run by %s") {
+                            compatAppearance = android.R.style.TextAppearance_Medium_Inverse
+                            setPadding(0, 0, 0, dip(10))
+                        }.lparams(matchParent, wrapContent, weight = 5F)
+
+                    }.lparams(matchParent, wrapContent) {
+                        setMargins(0, 0, 0, dip(10))
                     }
+
+                    extras = verticalLayout {
+                        backgroundResource = R.color.cardview_light_background
+                        padding = dip(15)
+
+                        extrasContent = fontAwesomeView {
+                            text = "{fa-home} Glyphs"
+                            singleLine = false
+                            maxLines = 6
+                        }.lparams(matchParent, wrapContent, weight = 5F)
+                    }.lparams(matchParent, wrapContent) {
+                        setMargins(0, 0, 0, dip(10))
+                    }
+
+                    verticalLayout {
+                        backgroundResource = R.color.cardview_light_background
+                        padding = dip(25)
+                        description = ankoView(::MarkdownView, 0) {
+                        }.lparams(matchParent, wrapContent)
+                    }.lparams(matchParent, wrapContent)
                 }.lparams(matchParent, wrapContent)
-            }
+            }.lparams(matchParent, matchParent)
 
-            floatingActionButton {
-
-            }.lparams(wrapContent, wrapContent) {
+            buttonSave = floatingActionButton {
+                imageResource = R.drawable.icon_menu
+            }.lparams {
+                anchorGravity = Gravity.BOTTOM or Gravity.END
+                anchorId = splitter.id
                 margin = dip(16)
-                alignEnd(R.id.splitter)
             }
         }
     }

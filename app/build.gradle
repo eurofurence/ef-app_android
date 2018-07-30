@@ -153,6 +153,7 @@ dependencies {
     compile "org.jetbrains.anko:anko-support-v4:$anko_version" // In case you need support-v4 bindings
     compile "org.jetbrains.anko:anko-appcompat-v7:$anko_version" // For appcompat-v7 bindings
     compile "org.jetbrains.anko:anko-coroutines:$anko_version"
+    compile "org.jetbrains.anko:anko-design:$anko_version"
 
     // Kandroid for easier components
     compile 'com.pawegio.kandroid:kandroid:0.7.0@aar'
