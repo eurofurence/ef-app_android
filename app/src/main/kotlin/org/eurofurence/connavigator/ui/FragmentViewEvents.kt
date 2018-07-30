@@ -12,6 +12,7 @@ import android.widget.EditText
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.filterEvents
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.BackgroundPreferences
 import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
@@ -100,6 +101,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
     }
 
     override fun onSearchButtonClick() {
+        applyOnRoot { popDetails() }
         when (eventPager.visibility) {
             View.VISIBLE -> {
                 eventPager.visibility = View.GONE
@@ -112,11 +114,15 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         }
     }
 
-    override fun onFilterButtonClick() = selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks")) { _, position ->
-        when (position) {
-            1 -> changePagerAdapter(EventPagerMode.ROOMS)
-            2 -> changePagerAdapter(EventPagerMode.TRACKS)
-            else -> changePagerAdapter(EventPagerMode.DAYS)
+    override fun onFilterButtonClick() {
+        applyOnRoot { popDetails() }
+
+        selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks")) { _, position ->
+            when (position) {
+                1 -> changePagerAdapter(EventPagerMode.ROOMS)
+                2 -> changePagerAdapter(EventPagerMode.TRACKS)
+                else -> changePagerAdapter(EventPagerMode.DAYS)
+            }
         }
     }
 }
