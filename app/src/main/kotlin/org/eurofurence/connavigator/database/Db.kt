@@ -494,7 +494,7 @@ fun HasDb.descriptionFor(eventEntry: EventRecord) =
                 if ("supersponsors_only" in eventEntry.tags)
                     add("{fa-star} This event is restricted to super-sponsors only")
                 if ("kage" in eventEntry.tags)
-                    add("{fa-star} {fa-glass} Hosted by the bug himself")
+                    add("{fa-bug} {fa-glass} Hosted by the bug himself")
                 if ("art_show" in eventEntry.tags)
                     add("{fa-photo} This is an art show event")
                 if ("dealers_den" in eventEntry.tags)
