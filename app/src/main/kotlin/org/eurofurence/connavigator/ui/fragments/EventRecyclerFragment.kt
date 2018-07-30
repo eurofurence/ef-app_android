@@ -142,7 +142,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             val isDeviatingFromConBook = event.isDeviatingFromConBook
 
             holder.setGlyphs(buildSequence {
-                yieldAll(glyphFor(event))
+                yieldAll(glyphsFor(event))
                 if (isFavorite) yield("{fa-heart}")
                 if (isDeviatingFromConBook) yield("{fa-pencil}")
             })

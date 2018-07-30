@@ -18,7 +18,10 @@ import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
-import org.eurofurence.connavigator.database.*
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.descriptionFor
+import org.eurofurence.connavigator.database.eventStart
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
@@ -99,9 +102,8 @@ class FragmentViewEvent : Fragment(), HasDb {
                 }
             }
 
-            val glyphs = glyphFor(event)
-            val description = descriptionFor(event)
-            (glyphs.joinToString("") { "$it " } + (description ?: "")).let {
+            val description = descriptionFor(event).joinToString("\r\n\r\n")
+            description.let {
                 if (it != ui.extrasContent.tag) {
                     ui.extrasContent.tag = it
                     ui.extrasContent.setText(it)
@@ -228,7 +230,7 @@ class EventUi : AnkoComponent<Fragment> {
                         extrasContent = fontAwesomeView {
                             text = "{fa-home} Glyphs"
                             singleLine = false
-                            maxLines = 3
+                            maxLines = 6
                         }.lparams(matchParent, wrapContent, weight = 5F)
                     }.lparams(matchParent, wrapContent) {
                         setMargins(0, 0, 0, dip(10))
