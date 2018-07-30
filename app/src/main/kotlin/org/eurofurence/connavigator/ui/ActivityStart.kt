@@ -111,6 +111,10 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         savedInstanceState?.let {
             ui.analyticalData.isChecked = it.getBoolean("analyticalData")
             ui.performanceData.isChecked = it.getBoolean("performanceData")
+            if (it.getBoolean("loading")) {
+                ui.startLayout.visibility = View.GONE
+                ui.loadingLayout.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -119,6 +123,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
 
         outState.putBoolean("analyticalData", ui.analyticalData.isChecked)
         outState.putBoolean("performanceData", ui.performanceData.isChecked)
+        outState.putBoolean("loading", ui.startLayout.visibility == View.GONE)
     }
 
     override fun onDestroy() {
