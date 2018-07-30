@@ -18,6 +18,8 @@ import io.reactivex.disposables.Disposables
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
+import nl.komponents.kovenant.ui.failUi
+import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.findLinkFragment
@@ -137,23 +139,18 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
         // Setup map
         if (map != null && entry != null) {
-            info { "Found maps and entries!" }
-            info { "Map name is ${map.description}" }
-            info { "Entry is at (${entry.x}, ${entry.y})" }
+            info { "Found maps and entries, ${map.description} at (${entry.x}, ${entry.y})" }
 
             val mapImage = db.toImage(map)!!
-            val x = 1 - ((mapImage.width - entry.x) / mapImage.width.toFloat())
-            val y = 1 - ((mapImage.height - entry.y) / mapImage.height.toFloat())
+            val x = entry.x.toFloat()
+            val y = entry.y.toFloat()
 
-            imageService.load(mapImage, ui.map)
-
-            ui.map.attacher.update()
-
-            ui.map.attacher.setScale(4F, x, y, true)
-            ui.map.attacher.setAllowParentInterceptOnEdge(false)
-            ui.map.attacher.update()
-
-            ui.map.visibility = View.VISIBLE
+            imageService.load(mapImage, ui.map) successUi {
+                ui.map.visibility = View.VISIBLE
+                ui.map.setScale(4F, x, y, true)
+            } failUi {
+                ui.map.visibility = View.GONE
+            }
         } else {
             warn { "No map or entry found!" }
             ui.map.visibility = View.GONE
@@ -337,6 +334,7 @@ class DealerUi : AnkoComponent<Fragment> {
                         padding = dip(20)
 
                         map = photoView {
+                            setAllowParentInterceptOnEdge(true)
                             backgroundResource = R.color.cardview_dark_background
                             maximumScale = 5F
                             scaleType = ImageView.ScaleType.FIT_CENTER
