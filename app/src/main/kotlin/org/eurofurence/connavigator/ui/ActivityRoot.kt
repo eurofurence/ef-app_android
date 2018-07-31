@@ -84,7 +84,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
 
     // See if we're on the home screen. Used to check the back button
-    var onHome = true
+    val onHome get() = supportFragmentManager.findFragmentByTag("content") is FragmentViewHome
 
     var subscriptions = Disposables.empty()
 
@@ -145,17 +145,16 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
         // Restore fragments from saved instance state.
         savedInstanceState?.let {
-            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             setActionBarMode(ActionBarMode.valueOf(it.getString("currentMode")))
 
-            if (it.getBoolean("hasContent"))
+            if (it.getBoolean("hasContent") && supportFragmentManager.findFragmentByTag("content") == null)
                 supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.content, supportFragmentManager.getFragment(it, "content"), "content")
                         .commitAllowingStateLoss()
 
             // If has details, add details to content.
-            if (it.getBoolean("hasContentSub")) {
+            if (it.getBoolean("hasContentSub") && supportFragmentManager.findFragmentByTag("contentSub") == null) {
                 supportFragmentManager
                         .beginTransaction()
                         .addToBackStack("contentSubAdded")
@@ -250,7 +249,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             drawer.closeDrawer(GravityCompat.START)
         } else if (supportFragmentManager.backStackEntryCount > 0) {
             super.onBackPressed()
-        } else if (onHome == false) {
+        } else if (!onHome) {
             navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
         } else {
             alert("Are you sure you want to close the app?\n\n(You'll still receive notifications for announcements and personal messages when the app is closed.)", "Close Application?") {
@@ -334,8 +333,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         } else {
             tabs.visibility = View.GONE
         }
-
-        onHome = mode == ActionBarMode.HOME
 
         // Show the search button
         menu?.findItem(R.id.action_search)?.isVisible = listOf(ActionBarMode.SEARCH, ActionBarMode.SEARCHTABS, ActionBarMode.SEARCHMAP, ActionBarMode.SEARCHTABSFILTER).contains(mode)
