@@ -51,7 +51,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             info { "Data update success. Downloading $imgCountTotal images" }
 
 
-            val promises = db.images.items.map{
+            val promises = db.images.items.map {
                 imageService.preload(it).successUi {
                     imgCountLoaded++
                     ui.progressText.text = "Loading assets ($imgCountLoaded / $imgCountTotal)"
@@ -106,9 +106,9 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
                 }
 
         savedInstanceState?.let {
-            ui.analyticalData.isChecked = it.getBoolean("analyticalData")
-            ui.performanceData.isChecked = it.getBoolean("performanceData")
-            if (it.getBoolean("loading")) {
+            ui.analyticalData.isChecked = it.getBoolean("analyticalData", false)
+            ui.performanceData.isChecked = it.getBoolean("performanceData", false)
+            if (it.getBoolean("loading", false)) {
                 ui.startLayout.visibility = View.GONE
                 ui.loadingLayout.visibility = View.VISIBLE
             }
@@ -118,9 +118,11 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putBoolean("analyticalData", ui.analyticalData.isChecked)
-        outState.putBoolean("performanceData", ui.performanceData.isChecked)
-        outState.putBoolean("loading", ui.startLayout.visibility == View.GONE)
+        if (ui.initialized) {
+            outState.putBoolean("analyticalData", ui.analyticalData.isChecked)
+            outState.putBoolean("performanceData", ui.performanceData.isChecked)
+            outState.putBoolean("loading", ui.startLayout.visibility == View.GONE)
+        }
     }
 
     override fun onDestroy() {
@@ -178,6 +180,7 @@ class StartUi : AnkoComponent<ActivityStart> {
 
     lateinit var analyticalData: CheckBox
     lateinit var performanceData: CheckBox
+    var initialized = false
 
     override fun createView(ui: AnkoContext<ActivityStart>) = with(ui) {
         verticalLayout {
@@ -263,6 +266,7 @@ Is it okay to download the data now?
                 }
             }.lparams(matchParent, matchParent)
         }
+    }.also {
+        initialized = true
     }
-
 }
