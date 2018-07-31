@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.pref
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.ReplaySubject
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
@@ -44,11 +45,12 @@ object RemotePreferences : AnkoLogger {
 
         remoteConfig.setConfigSettings(config)
         remoteConfig.setDefaults(R.xml.remote)
+        observer.onNext(this)
 
         update()
     }
 
-    val observer = ReplaySubject.create<RemotePreferences>()
+    val observer = BehaviorSubject.create<RemotePreferences>()
 
     val lastUpdatedMillis get() = remoteConfig.info.fetchTimeMillis
     val lastUpdatedDatetime get() = DateTime(lastUpdatedMillis)
