@@ -69,18 +69,20 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
         }
 
         savedInstanceState?.let {
-            ui.regNumber.setText(it.getString("regNumber"))
-            ui.username.setText(it.getString("username"))
-            ui.password.setText(it.getString("password"))
+            ui.regNumber.setText(it.getString("regNumber", ""))
+            ui.username.setText(it.getString("username", ""))
+            ui.password.setText(it.getString("password", ""))
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString("regNumber", ui.regNumber.text.toString())
-        outState.putString("username", ui.username.text.toString())
-        outState.putString("password", ui.password.text.toString())
+        if (ui.initialized) {
+            outState.putString("regNumber", ui.regNumber.text.toString())
+            outState.putString("username", ui.username.text.toString())
+            outState.putString("password", ui.password.text.toString())
+        }
     }
 
     override fun onResume() {
@@ -135,6 +137,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
     lateinit var moreInformation: Button
     lateinit var layoutMain: LinearLayout
     lateinit var layoutBusy: LinearLayout
+    var initialized = false
 
     override fun createView(ui: AnkoContext<LoginActivity>) = with(ui) {
         scrollView {
@@ -256,6 +259,8 @@ class LoginUi : AnkoComponent<LoginActivity> {
                     lparams(matchParent, matchParent)
                 }
             }
+        }.also {
+            initialized = true
         }
     }
 }
