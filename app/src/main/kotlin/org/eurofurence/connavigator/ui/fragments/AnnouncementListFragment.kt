@@ -19,27 +19,11 @@ import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.filterIf
-import org.eurofurence.connavigator.util.extensions.fontAwesomeView
-import org.eurofurence.connavigator.util.extensions.now
-import org.eurofurence.connavigator.util.extensions.recycler
+import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoContext.Companion
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.info
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.wrapContent
 
 class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
     inner class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView), ContentAPI {
@@ -85,7 +69,7 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
     val announcementAdapter by lazy { AnnoucementRecyclerDataAdapter() }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            UI { ui.createView(this)}.view
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         info { "Creating announcements list" }
@@ -122,9 +106,7 @@ class AnnouncementsUi : AnkoComponent<Fragment> {
             layout = this
 
             backgroundResource = R.color.cardview_light_background
-            lparams(matchParent, wrapContent) {
-                setMargins(0, dip(15), 0, 0)
-            }
+            lparams(matchParent, wrapContent)
 
             title = textView("Announcements") {
                 compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
@@ -136,10 +118,7 @@ class AnnouncementsUi : AnkoComponent<Fragment> {
             announcements = recycler {
                 layoutManager = NonScrollingLinearLayout(context)
                 itemAnimator = DefaultItemAnimator()
-                lparams(matchParent, wrapContent) {
-                    setMargins(0, 0, 0, dip(10))
-                }
-            }
+            }.lparams(matchParent, wrapContent)
         }
     }
 }
@@ -174,7 +153,9 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
                     setMargins(0, 0, 0, dip(10))
                 }
 
-            }.lparams(dip(0), wrapContent, 80F)
+            }.lparams(dip(0), wrapContent, 80F) {
+                setMargins(0, 0, 0, dip(5))
+            }
         }
     }
 }

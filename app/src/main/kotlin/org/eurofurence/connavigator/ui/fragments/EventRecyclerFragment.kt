@@ -33,10 +33,10 @@ import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.dip
 import org.joda.time.DateTime
 import org.joda.time.Minutes
 import kotlin.coroutines.experimental.buildSequence
-
 
 
 /**
@@ -52,11 +52,11 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     lateinit var eventList: EventList
     var title = ""
-    var scrolling = true
+    var mainList = true
     var daysInsteadOfGlyphs = false
     var effectiveEvents = emptyList<EventRecord>()
 
-    fun withArguments(eventList: EventList? = null, title: String = "", scrolling: Boolean = true, daysInsteadOfGlyphs: Boolean = false) = apply {
+    fun withArguments(eventList: EventList? = null, title: String = "", mainList: Boolean = true, daysInsteadOfGlyphs: Boolean = false) = apply {
         info { "Constructing event recycler $title" }
 
         arguments = Bundle().apply {
@@ -68,7 +68,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             }
 
             putString("title", title)
-            putBoolean("scrolling", scrolling)
+            putBoolean("mainList", mainList)
             putBoolean("daysInsteadOfGlyphs", daysInsteadOfGlyphs)
         }
     }
@@ -207,7 +207,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             }
 
             title = it.getString("title")
-            scrolling = it.getBoolean("scrolling")
+            mainList = it.getBoolean("mainList")
             daysInsteadOfGlyphs = it.getBoolean("daysInsteadOfGlyphs")
         }
 
@@ -232,9 +232,9 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     private fun configureTitle() {
         info { "Configuring title" }
 
-        ui.title.text = this.title
+        ui.title.text = title
 
-        ui.title.visibility = if (effectiveEvents.any() && this.title.isNotEmpty()) View.VISIBLE else View.GONE
+        ui.title.visibility = if (title.isNotEmpty()) View.VISIBLE else View.GONE
         ui.bigLayout.visibility = if (effectiveEvents.any()) View.VISIBLE else View.GONE
     }
 
@@ -242,8 +242,15 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         info { "Configuring recycler" }
         ui.eventList.setHasFixedSize(true)
         ui.eventList.adapter = DataAdapter()
-        ui.eventList.layoutManager = if (scrolling) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
+        ui.eventList.layoutManager = if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
         ui.eventList.itemAnimator = DefaultItemAnimator()
+
+        // Change top margins for nested lists.
+        (ui.bigLayout.layoutParams as? LinearLayout.LayoutParams)
+                ?.setMargins(0, if (mainList) 0 else dip(10), 0, 0)
+
+
+        // Add top padding only if in main list.
         ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             val padding by lazy {
                 val metrics = context.resources.displayMetrics
@@ -256,7 +263,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     return
                 }
 
-                if (itemPosition == 0) {
+                if (itemPosition == 0 && mainList) {
                     outRect.top = padding
                 }
 
@@ -395,9 +402,13 @@ class EventListView : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         bigLayout = verticalLayout {
             backgroundResource = R.color.cardview_light_background
+            lparams(matchParent, wrapContent)
 
-            title = textView("").lparams(matchParent, wrapContent) {
-                setMargins(0, 0, 0, dip(10))
+            title = textView("") {
+                compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
+                padding = dip(15)
+            }.lparams(matchParent, wrapContent) {
+                setMargins(0, 0, 0, 0)
             }
 
             eventList = recycler {

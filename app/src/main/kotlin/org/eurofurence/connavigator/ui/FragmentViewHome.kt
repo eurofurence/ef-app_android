@@ -119,11 +119,15 @@ class HomeUi : AnkoComponent<Fragment> {
                     adjustViewBounds = true
                     setBackgroundColor(Color.WHITE)
                     ViewCompat.setElevation(this, 15f)
-                }.lparams(matchParent, wrapContent)
+                }.lparams(matchParent, wrapContent) {
+                    setMargins(0, 0, 0, 0)
+                }
 
                 loginWidget = linearLayout {
                     id = 5004
                     lparams(matchParent, wrapContent)
+                }.lparams(matchParent, wrapContent) {
+                    setMargins(0, dip(10), 0, 0)
                 }
 
                 countdownLayout = linearLayout {
@@ -145,23 +149,21 @@ class HomeUi : AnkoComponent<Fragment> {
 
                 announcementFragment = linearLayout {
                     id = 5003
-                    lparams(matchParent, wrapContent)
+                }.lparams(matchParent, wrapContent) {
+                    setMargins(0, dip(10), 0, 0)
                 }
 
                 upcomingFragment = linearLayout {
                     id = 5000
-                    lparams(matchParent, wrapContent)
-                }
+                }.lparams(matchParent, wrapContent)
 
                 currentFragment = linearLayout {
                     id = 5001
-                    lparams(matchParent, wrapContent)
-                }
+                }.lparams(matchParent, wrapContent)
 
                 favoritesFragment = linearLayout {
                     id = 5002
-                    lparams(matchParent, wrapContent)
-                }
+                }.lparams(matchParent, wrapContent)
             }
         }
     }
