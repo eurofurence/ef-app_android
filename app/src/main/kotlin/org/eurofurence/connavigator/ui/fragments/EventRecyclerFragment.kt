@@ -33,6 +33,7 @@ import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.dip
 import org.joda.time.DateTime
 import org.joda.time.Minutes
 import kotlin.coroutines.experimental.buildSequence
@@ -244,6 +245,11 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         ui.eventList.layoutManager = if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
         ui.eventList.itemAnimator = DefaultItemAnimator()
 
+        // Change top margins for nested lists.
+        (ui.bigLayout.layoutParams as? LinearLayout.LayoutParams)
+                ?.setMargins(0, if (mainList) 0 else dip(10), 0, 0)
+
+
         // Add top padding only if in main list.
         ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             val padding by lazy {
@@ -396,9 +402,7 @@ class EventListView : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         bigLayout = verticalLayout {
             backgroundResource = R.color.cardview_light_background
-            lparams(matchParent, wrapContent) {
-                setMargins(0, dip(10), 0, 0)
-            }
+            lparams(matchParent, wrapContent)
 
             title = textView("") {
                 compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
