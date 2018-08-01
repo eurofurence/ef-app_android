@@ -407,9 +407,7 @@ class EventListView : AnkoComponent<Fragment> {
             }
 
             eventList = recycler {
-            }.lparams(matchParent, matchParent) {
-                setMargins(0, 0, 0, dip(15))
-            }
+            }.lparams(matchParent, matchParent)
         }
         bigLayout
     }
