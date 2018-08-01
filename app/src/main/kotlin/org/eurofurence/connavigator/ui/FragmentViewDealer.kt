@@ -1,6 +1,8 @@
 package org.eurofurence.connavigator.ui
 
 import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.RectF
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -145,9 +147,15 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             val x = entry.x.toFloat()
             val y = entry.y.toFloat()
 
+            val size = 200F;
+
             imageService.load(mapImage, ui.map) successUi {
                 ui.map.visibility = View.VISIBLE
-                ui.map.setScale(4F, x, y, true)
+                ui.map.setSuppMatrix(Matrix().apply {
+                    val area = RectF(0F, 0F, mapImage.width.toFloat(), mapImage.height.toFloat())
+                    val table = RectF((x - size / 2F), (y - size / 2F), (x + size / 2F), (y + size / 2F))
+                    setRectToRect(table, area, Matrix.ScaleToFit.CENTER)
+                })
             } failUi {
                 ui.map.visibility = View.GONE
             }
