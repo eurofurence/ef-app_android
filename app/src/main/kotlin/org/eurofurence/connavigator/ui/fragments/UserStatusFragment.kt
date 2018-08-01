@@ -129,7 +129,6 @@ class UserStatusUi : AnkoComponent<Fragment> {
             isClickable = true
 
             lparams(matchParent, wrapContent) {
-                topMargin = dip(20)
                 setPadding(0, dip(20), 0, dip(20))
             }
             weightSum = 100F

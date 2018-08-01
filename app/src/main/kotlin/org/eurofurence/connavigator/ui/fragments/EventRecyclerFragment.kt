@@ -38,7 +38,6 @@ import org.joda.time.Minutes
 import kotlin.coroutines.experimental.buildSequence
 
 
-
 /**
  * Event view recycler to hold the viewpager items
  * TODO: Refactor the everliving fuck out of this shitty software
@@ -52,11 +51,11 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
     lateinit var eventList: EventList
     var title = ""
-    var scrolling = true
+    var mainList = true
     var daysInsteadOfGlyphs = false
     var effectiveEvents = emptyList<EventRecord>()
 
-    fun withArguments(eventList: EventList? = null, title: String = "", scrolling: Boolean = true, daysInsteadOfGlyphs: Boolean = false) = apply {
+    fun withArguments(eventList: EventList? = null, title: String = "", mainList: Boolean = true, daysInsteadOfGlyphs: Boolean = false) = apply {
         info { "Constructing event recycler $title" }
 
         arguments = Bundle().apply {
@@ -68,7 +67,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             }
 
             putString("title", title)
-            putBoolean("scrolling", scrolling)
+            putBoolean("mainList", mainList)
             putBoolean("daysInsteadOfGlyphs", daysInsteadOfGlyphs)
         }
     }
@@ -207,7 +206,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             }
 
             title = it.getString("title")
-            scrolling = it.getBoolean("scrolling")
+            mainList = it.getBoolean("mainList")
             daysInsteadOfGlyphs = it.getBoolean("daysInsteadOfGlyphs")
         }
 
@@ -242,30 +241,33 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         info { "Configuring recycler" }
         ui.eventList.setHasFixedSize(true)
         ui.eventList.adapter = DataAdapter()
-        ui.eventList.layoutManager = if (scrolling) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
+        ui.eventList.layoutManager = if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
         ui.eventList.itemAnimator = DefaultItemAnimator()
-        ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            val padding by lazy {
-                val metrics = context.resources.displayMetrics
-                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
-            }
 
-            override fun getItemOffsets(outRect: Rect, view: View?, parent: RecyclerView, state: RecyclerView.State?) {
-                val itemPosition = parent.getChildAdapterPosition(view)
-                if (itemPosition == RecyclerView.NO_POSITION) {
-                    return
+        // Add padding only if in main list.
+        if (mainList)
+            ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+                val padding by lazy {
+                    val metrics = context.resources.displayMetrics
+                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
                 }
 
-                if (itemPosition == 0) {
-                    outRect.top = padding
-                }
+                override fun getItemOffsets(outRect: Rect, view: View?, parent: RecyclerView, state: RecyclerView.State?) {
+                    val itemPosition = parent.getChildAdapterPosition(view)
+                    if (itemPosition == RecyclerView.NO_POSITION) {
+                        return
+                    }
 
-                val adapter = parent.getAdapter()
-                if (adapter != null && itemPosition == adapter.itemCount - 1) {
-                    outRect.bottom = padding
+                    if (itemPosition == 0) {
+                        outRect.top = padding
+                    }
+
+                    val adapter = parent.getAdapter()
+                    if (adapter != null && itemPosition == adapter.itemCount - 1) {
+                        outRect.bottom = padding
+                    }
                 }
-            }
-        })
+            })
     }
 
 
@@ -395,13 +397,19 @@ class EventListView : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         bigLayout = verticalLayout {
             backgroundResource = R.color.cardview_light_background
+            lparams(matchParent, wrapContent)
 
-            title = textView("").lparams(matchParent, wrapContent) {
-                setMargins(0, 0, 0, dip(10))
+            title = textView("") {
+                compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
+                padding = dip(15)
+            }.lparams(matchParent, wrapContent) {
+                setMargins(0, 0, 0, 0)
             }
 
             eventList = recycler {
-            }.lparams(matchParent, matchParent)
+            }.lparams(matchParent, matchParent) {
+                setMargins(0, 0, 0, dip(15))
+            }
         }
         bigLayout
     }
