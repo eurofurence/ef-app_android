@@ -1,8 +1,6 @@
 package org.eurofurence.connavigator.ui
 
 import android.graphics.Color
-import android.graphics.Matrix
-import android.graphics.RectF
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -143,19 +141,16 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         if (map != null && entry != null) {
             info { "Found maps and entries, ${map.description} at (${entry.x}, ${entry.y})" }
 
-            val mapImage = db.toImage(map)!!
-            val x = entry.x.toFloat()
-            val y = entry.y.toFloat()
 
-            val size = 200F;
+            val mapImage = db.toImage(map)!!
 
             imageService.load(mapImage, ui.map) successUi {
                 ui.map.visibility = View.VISIBLE
-                ui.map.setSuppMatrix(Matrix().apply {
-                    val area = RectF(0F, 0F, mapImage.width.toFloat(), mapImage.height.toFloat())
-                    val table = RectF((x - size / 2F), (y - size / 2F), (x + size / 2F), (y + size / 2F))
-                    setRectToRect(table, area, Matrix.ScaleToFit.CENTER)
-                })
+                val x = entry.x.toFloat()
+                val y = entry.y.toFloat()
+                ui.mapRelayout = { ->
+                    ui.map.attacher.setScale(4.0F, x, y, true)
+                }.also { it() }
             } failUi {
                 ui.map.visibility = View.GONE
             }
@@ -246,6 +241,9 @@ class DealerUi : AnkoComponent<Fragment> {
     lateinit var locationContainer: LinearLayout
     lateinit var availableDaysText: IconTextView
     lateinit var afterDarkText: TextView
+
+
+    var mapRelayout = { -> }
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
@@ -345,8 +343,11 @@ class DealerUi : AnkoComponent<Fragment> {
                             setAllowParentInterceptOnEdge(true)
                             backgroundResource = R.color.cardview_dark_background
                             maximumScale = 5F
-                            scaleType = ImageView.ScaleType.FIT_CENTER
+                            scaleType = ImageView.ScaleType.MATRIX
                             imageResource = R.drawable.placeholder_event
+                            viewTreeObserver.addOnGlobalLayoutListener {
+                                mapRelayout
+                            }
                         }.lparams(matchParent, dip(400))
 
                         verticalLayout {
