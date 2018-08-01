@@ -231,9 +231,9 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     private fun configureTitle() {
         info { "Configuring title" }
 
-        ui.title.text = this.title
+        ui.title.text = title
 
-        ui.title.visibility = if (effectiveEvents.any() && this.title.isNotEmpty()) View.VISIBLE else View.GONE
+        ui.title.visibility = if (title.isNotEmpty()) View.VISIBLE else View.GONE
         ui.bigLayout.visibility = if (effectiveEvents.any()) View.VISIBLE else View.GONE
     }
 
@@ -396,7 +396,9 @@ class EventListView : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         bigLayout = verticalLayout {
             backgroundResource = R.color.cardview_light_background
-            lparams(matchParent, wrapContent)
+            lparams(matchParent, wrapContent) {
+                setMargins(0, dip(10), 0, 0)
+            }
 
             title = textView("") {
                 compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small

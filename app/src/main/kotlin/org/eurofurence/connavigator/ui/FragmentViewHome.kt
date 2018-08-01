@@ -155,21 +155,15 @@ class HomeUi : AnkoComponent<Fragment> {
 
                 upcomingFragment = linearLayout {
                     id = 5000
-                }.lparams(matchParent, wrapContent) {
-                    setMargins(0, dip(10), 0, 0)
-                }
+                }.lparams(matchParent, wrapContent)
 
                 currentFragment = linearLayout {
                     id = 5001
-                }.lparams(matchParent, wrapContent) {
-                    setMargins(0, dip(10), 0, 0)
-                }
+                }.lparams(matchParent, wrapContent)
 
                 favoritesFragment = linearLayout {
                     id = 5002
-                }.lparams(matchParent, wrapContent) {
-                    setMargins(0, dip(10), 0, 0)
-                }
+                }.lparams(matchParent, wrapContent)
             }
         }
     }
