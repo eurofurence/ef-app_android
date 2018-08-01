@@ -11,7 +11,7 @@ import android.widget.*
 import com.google.firebase.perf.metrics.AddTrace
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
-import nl.komponents.kovenant.all
+import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.BuildConfig
@@ -29,6 +29,7 @@ import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
+import org.eurofurence.connavigator.util.v2.thenNested
 import org.jetbrains.anko.*
 
 /**
@@ -51,15 +52,20 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             info { "Data update success. Downloading $imgCountTotal images" }
 
 
-            val promises = db.images.items.map {
-                imageService.preload(it).successUi {
+            val promises = db.images.items.fold(Promise.of<Any?>(Unit)) { p, img ->
+                p thenNested {
+                    // After the previous image, load the next one.
+                    imageService.preload(img)
+                } successUi {
+                    // Increment the counter and display on UI.
                     imgCountLoaded++
                     ui.progressText.text = "Loading assets ($imgCountLoaded / $imgCountTotal)"
+                    Unit
                 }
             }
 
             // Await all images loaded, if one fails, mark but continue to UI.
-            all(promises) successUi {
+            promises successUi {
                 AppPreferences.isFirstRun = false
 
                 longToast("Done with fetching!")

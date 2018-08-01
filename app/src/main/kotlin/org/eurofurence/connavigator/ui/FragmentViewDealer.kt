@@ -1,8 +1,14 @@
 package org.eurofurence.connavigator.ui
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
+import android.support.constraint.ConstraintSet
+import android.support.constraint.ConstraintSet.END
+import android.support.constraint.ConstraintSet.START
 import android.support.v4.app.Fragment
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -34,6 +40,7 @@ import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
+import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
 import java.util.*
@@ -120,11 +127,12 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             }
 
             configureLinks(dealer)
-            configureLocationAndAvailability(dealer)
+            configureAvailability(dealer)
+            configureLocation(dealer)
         }
     }
 
-    private fun configureLocationAndAvailability(dealer: DealerRecord) {
+    private fun configureLocation(dealer: DealerRecord) {
         info { "Finding dealer in mapEntries" }
         val entryMap = db.findLinkFragment(dealer.id.toString())
 
@@ -141,16 +149,20 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         if (map != null && entry != null) {
             info { "Found maps and entries, ${map.description} at (${entry.x}, ${entry.y})" }
 
-
             val mapImage = db.toImage(map)!!
+            val radius = 300
+            val x = maxOf(0, entry.x - radius)
+            val y = maxOf(0, entry.y - radius)
+            val w = minOf(mapImage.width - x - 1, radius + radius)
+            val h = minOf(mapImage.height - y - 1, radius + radius)
 
-            imageService.load(mapImage, ui.map) successUi {
-                ui.map.visibility = View.VISIBLE
-                val x = entry.x.toFloat()
-                val y = entry.y.toFloat()
-                ui.mapRelayout = { ->
-                    ui.map.attacher.setScale(4.0F, x, y, true)
-                }.also { it() }
+            imageService.preload(mapImage) successUi {
+                if (it == null)
+                    ui.map.visibility = View.GONE
+                else {
+                    ui.map.image = BitmapDrawable(resources, Bitmap.createBitmap(it, x, y, w, h))
+                    ui.map.visibility = View.VISIBLE
+                }
             } failUi {
                 ui.map.visibility = View.GONE
             }
@@ -159,6 +171,9 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.map.visibility = View.GONE
         }
 
+    }
+
+    private fun configureAvailability(dealer: DealerRecord) {
         // Availability
         ui.availableDaysText.visibility = if (dealer.allDaysAvailable()) View.GONE else View.VISIBLE
 
@@ -241,9 +256,6 @@ class DealerUi : AnkoComponent<Fragment> {
     lateinit var locationContainer: LinearLayout
     lateinit var availableDaysText: IconTextView
     lateinit var afterDarkText: TextView
-
-
-    var mapRelayout = { -> }
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
@@ -339,16 +351,26 @@ class DealerUi : AnkoComponent<Fragment> {
                         }
                         padding = dip(20)
 
-                        map = photoView {
-                            setAllowParentInterceptOnEdge(true)
-                            backgroundResource = R.color.cardview_dark_background
-                            maximumScale = 5F
-                            scaleType = ImageView.ScaleType.MATRIX
-                            imageResource = R.drawable.placeholder_event
-                            viewTreeObserver.addOnGlobalLayoutListener {
-                                mapRelayout
+                        ankoView(::ConstraintLayout, 0) {
+                            id = 5530
+
+                            map = photoView {
+                                id = 5531
+
+                                backgroundResource = R.color.cardview_dark_background
+                                minimumScale = 1F
+                                mediumScale = 2.5F
+                                maximumScale = 5F
+                                scaleType = ImageView.ScaleType.FIT_CENTER
+                                imageResource = R.drawable.placeholder_event
                             }
-                        }.lparams(matchParent, dip(400))
+
+                            ConstraintSet().apply {
+                                connect(5531, START, 5530, START)
+                                connect(5531, END, 5530, END)
+                                setDimensionRatio(5531, "1:1")
+                            }.applyTo(this)
+                        }.lparams(matchParent, wrapContent)
 
                         verticalLayout {
                             padding = dip(10)
