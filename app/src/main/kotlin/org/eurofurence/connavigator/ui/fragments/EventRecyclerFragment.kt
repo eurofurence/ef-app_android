@@ -244,30 +244,29 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         ui.eventList.layoutManager = if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
         ui.eventList.itemAnimator = DefaultItemAnimator()
 
-        // Add padding only if in main list.
-        if (mainList)
-            ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
-                val padding by lazy {
-                    val metrics = context.resources.displayMetrics
-                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
+        // Add top padding only if in main list.
+        ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            val padding by lazy {
+                val metrics = context.resources.displayMetrics
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
+            }
+
+            override fun getItemOffsets(outRect: Rect, view: View?, parent: RecyclerView, state: RecyclerView.State?) {
+                val itemPosition = parent.getChildAdapterPosition(view)
+                if (itemPosition == RecyclerView.NO_POSITION) {
+                    return
                 }
 
-                override fun getItemOffsets(outRect: Rect, view: View?, parent: RecyclerView, state: RecyclerView.State?) {
-                    val itemPosition = parent.getChildAdapterPosition(view)
-                    if (itemPosition == RecyclerView.NO_POSITION) {
-                        return
-                    }
-
-                    if (itemPosition == 0) {
-                        outRect.top = padding
-                    }
-
-                    val adapter = parent.getAdapter()
-                    if (adapter != null && itemPosition == adapter.itemCount - 1) {
-                        outRect.bottom = padding
-                    }
+                if (itemPosition == 0 && mainList) {
+                    outRect.top = padding
                 }
-            })
+
+                val adapter = parent.getAdapter()
+                if (adapter != null && itemPosition == adapter.itemCount - 1) {
+                    outRect.bottom = padding
+                }
+            }
+        })
     }
 
 
