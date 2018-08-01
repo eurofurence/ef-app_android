@@ -116,6 +116,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$android_support_version"
     compile "com.android.support:cardview-v7:$android_support_version"
     compile "com.android.support:recyclerview-v7:$android_support_version"
+    compile "com.android.support.constraint:constraint-layout:1.1.2"
     compile "com.android.support:multidex:1.0.1"
     compile "net.danlew:android.joda:2.9.4.2"
     compile "joda-time:joda-time:2.9.2:no-tzdb"

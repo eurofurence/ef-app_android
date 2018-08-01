@@ -439,27 +439,21 @@ fun Db.eventDayNumber(): Int {
  * t. retarduinard
  */
 @AddTrace(name = "Db.findLinkFragment", enabled = true)
-fun Db.findLinkFragment(target: String): Map<String, Any?> {
-    maps.items.forEach {
-        val map = it
-        it.entries.forEach {
-            val entry = it
-            it.links.forEach {
-                if (it.target.equals(target)) {
-                    return mapOf(
-                            "map" to map,
-                            "entry" to entry
-                    )
-                }
-            }
-        }
+fun Db.findLinkFragment(target: String): Map<String?, Any?> {
+    for (map in maps.items) {
+        for (entry in map.entries)
+            if (entry.links != null)
+                for (link in entry.links)
+                    if (link.target == target)
+                        return mapOf(
+                                "map" to map,
+                                "entry" to entry
+                        )
     }
 
-    return mapOf(
-            "map" to null,
-            "entry" to null
-    )
+    return mapOf("map" to null, "entry" to null)
 }
+
 
 fun HasDb.glyphsFor(eventEntry: EventRecord) =
         if (eventEntry.tags == null)
