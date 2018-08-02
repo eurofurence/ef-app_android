@@ -168,7 +168,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
                         drawCircle(ox.toFloat(), oy.toFloat(), circle.toFloat(), Paint(Paint.ANTI_ALIAS_FLAG).apply {
                             color = Color.RED
                             style = Paint.Style.STROKE
-                            strokeWidth = px2dip(2)
+                            strokeWidth = px2dip(5)
                         })
                     }
 
