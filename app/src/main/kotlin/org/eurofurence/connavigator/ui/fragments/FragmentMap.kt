@@ -62,7 +62,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.map.attacher.mediumScale = 2.5F
             ui.map.attacher.maximumScale = 5F
 
-            ui.map.attacher.setOnPhotoTapListener { view, percX, percY ->
+            ui.map.attacher.setOnPhotoTapListener { _, percX, percY ->
                 val x = image.width * percX
                 val y = image.height * percY
                 info { "Tap registered at x: $x, y: $y" }
@@ -72,26 +72,30 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 info { "Found ${entries.size} entries" }
 
                 if (entries.isNotEmpty()) {
-                    val links = entries.flatMap { it.links }
+                    val links = entries
+                            .flatMap { it.links }
                             .filter { it.fragmentType !== LinkFragment.FragmentTypeEnum.MapEntry }
 
-                    if (!links.isEmpty()) {
-                        info { "Showing location selector" }
-                        selector("Find out more", links.map { it.name ?: "No name provided for link" }, { _, position ->
-                            val link = links[position]
-
-                            when (link.fragmentType) {
-                                LinkFragment.FragmentTypeEnum.DealerDetail -> launchDealer(link)
-                                LinkFragment.FragmentTypeEnum.MapExternal -> launchMap(link)
-                                LinkFragment.FragmentTypeEnum.WebExternal -> browse(link.target)
-                                else -> warn { "No items selected" }
-                            }
-                        })
+                    when(links.size){
+                        0 -> Unit
+                        1 -> linkAction(links[0])
+                        else -> selector("Find out more", links.map { it.name ?: "No name provided for link" }) { _, position ->
+                            linkAction(links[position])
+                        }
                     }
                 }
             }
         } else {
             ui.map.setImageResource(R.drawable.placeholder_event)
+        }
+    }
+
+    private fun linkAction(link: LinkFragment) {
+        when (link.fragmentType) {
+            LinkFragment.FragmentTypeEnum.DealerDetail -> launchDealer(link)
+            LinkFragment.FragmentTypeEnum.MapExternal -> launchMap(link)
+            LinkFragment.FragmentTypeEnum.WebExternal -> browse(link.target)
+            else -> warn { "No items selected" }
         }
     }
 
