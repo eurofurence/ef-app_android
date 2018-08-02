@@ -144,22 +144,45 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
 
         // Restore fragments from saved instance state.
-        savedInstanceState?.let {
+        savedInstanceState?.also {
             setActionBarMode(ActionBarMode.valueOf(it.getString("currentMode")))
 
-            if (it.getBoolean("hasContent") && supportFragmentManager.findFragmentByTag("content") == null)
+            // Get flags of fragment presence in bundle and existing fragments.
+            val contentRestorable = it.getBoolean("hasContent")
+            val contentPresent = supportFragmentManager.findFragmentByTag("content")
+            val contentSubRestorable = it.getBoolean("hasContentSub")
+            val contentSubPresent = supportFragmentManager.findFragmentByTag("contentSub")
+
+            // Content item is the existing fragment or the one that is restorable from saved state.
+            val content = contentPresent ?: if (contentRestorable)
+                supportFragmentManager.getFragment(savedInstanceState, "content")
+            else
+                null
+
+            // Details item is the existing fragment or the one that is restorable from saved state.
+            val contentSub = contentSubPresent ?: if (contentSubRestorable)
+                supportFragmentManager.getFragment(savedInstanceState, "contentSub")
+            else
+                null
+
+            // If content is to be restored, replace the content view with the one given.
+            if (content != null) {
+                // Assert a clean back stack, we are re-adding anyways.
+                supportFragmentManager.popBackStackImmediate("contentSubAdded", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+                // Insert the main content view (can already be the one present.
                 supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.content, supportFragmentManager.getFragment(it, "content"), "content")
+                        .replace(R.id.content, content, "content")
                         .commitAllowingStateLoss()
 
-            // If has details, add details to content.
-            if (it.getBoolean("hasContentSub") && supportFragmentManager.findFragmentByTag("contentSub") == null) {
-                supportFragmentManager
-                        .beginTransaction()
-                        .addToBackStack("contentSubAdded")
-                        .add(R.id.content, supportFragmentManager.getFragment(it, "contentSub"), "contentSub")
-                        .commitAllowingStateLoss()
+                // If details present, add those.
+                if (contentSub != null)
+                    supportFragmentManager
+                            .beginTransaction()
+                            .addToBackStack("contentSubAdded")
+                            .add(R.id.content, contentSub, "contentSub")
+                            .commitAllowingStateLoss()
             }
         }
     }
