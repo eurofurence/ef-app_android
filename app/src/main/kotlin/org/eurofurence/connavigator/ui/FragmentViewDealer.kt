@@ -1,8 +1,6 @@
 package org.eurofurence.connavigator.ui
 
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.Typeface
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
@@ -43,6 +41,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
+import org.jetbrains.anko.support.v4.px2dip
 import java.util.*
 
 class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
@@ -151,16 +150,29 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             val mapImage = db.toImage(map)!!
             val radius = 300
+            val circle = entry.tapRadius
             val x = maxOf(0, entry.x - radius)
             val y = maxOf(0, entry.y - radius)
             val w = minOf(mapImage.width - x - 1, radius + radius)
             val h = minOf(mapImage.height - y - 1, radius + radius)
+            val ox = entry.x - x
+            val oy = entry.y - y
 
             imageService.preload(mapImage) successUi {
                 if (it == null)
                     ui.map.visibility = View.GONE
                 else {
-                    ui.map.image = BitmapDrawable(resources, Bitmap.createBitmap(it, x, y, w, h))
+                    val bitmap = Bitmap.createBitmap(it, x, y, w, h)
+
+                    Canvas(bitmap).apply {
+                        drawCircle(ox.toFloat(), oy.toFloat(), circle.toFloat(), Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                            color = Color.RED
+                            style = Paint.Style.STROKE
+                            strokeWidth = px2dip(2)
+                        })
+                    }
+
+                    ui.map.image = BitmapDrawable(resources, bitmap)
                     ui.map.visibility = View.VISIBLE
                 }
             } failUi {
