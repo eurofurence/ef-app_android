@@ -33,8 +33,11 @@ import org.joda.time.Days
 /**
  * Created by David on 5/14/2016.
  */
-class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger {
+class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, NavRepresented {
     val ui by lazy { HomeUi() }
+
+    override val drawerItemId: Int
+        get() = R.id.navHome
 
     val database by lazy { locateDb() }
     var subscriptions = Disposables.empty()

@@ -27,8 +27,11 @@ import org.jetbrains.anko.support.v4.selector
 /**
  * Created by David on 5/3/2016.
  */
-class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
+class FragmentViewEvents : Fragment(), ContentAPI, HasDb, NavRepresented {
     override val db by lazyLocateDb()
+    override val drawerItemId: Int
+        get() = R.id.navEvents
+
 
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()

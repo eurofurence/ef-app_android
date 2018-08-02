@@ -26,8 +26,11 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.*
 
-class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
+class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb,NavRepresented {
     override val db by lazyLocateDb()
+    override val drawerItemId: Int
+        get() = R.id.navInfo
+
 
     companion object {
         fun <T : Any, U : Any> weave(parents: List<T>, children: Map<T, List<U>>): List<Choice<T, U>> =

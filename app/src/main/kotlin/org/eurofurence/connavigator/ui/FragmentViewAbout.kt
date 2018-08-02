@@ -39,7 +39,11 @@ import us.feras.mdv.MarkdownView
 /**
  * Created by David on 28-4-2016.
  */
-class FragmentViewAbout : Fragment(), ContentAPI {
+class FragmentViewAbout : Fragment(), ContentAPI, NavRepresented {
+    override val drawerItemId: Int
+        get() = R.id.navAbout
+
+
     val ui = AboutUi()
     private val attributations = "Google Map\n\nIcons8"
 
