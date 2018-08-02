@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
@@ -20,6 +21,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.markdownView
+import org.eurofurence.connavigator.util.extensions.photoView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
@@ -49,11 +51,20 @@ class FragmentViewInfo() : Fragment(), HasDb {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get info if it exists
+        db.subscribe { fillUi() }
+    }
+
+    private fun fillUi() {
         if ("knowledgeEntry" in arguments) {
             val knowledgeEntry: KnowledgeEntryRecord = arguments.jsonObjects["knowledgeEntry"]
 
             Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
+
+            if (knowledgeEntry.imageIds != null && knowledgeEntry.imageIds.isNotEmpty()) {
+                imageService.load(db.images[knowledgeEntry.imageIds.first()], ui.image, showHide = false)
+            } else {
+                ui.image.visibility = View.GONE
+            }
 
             // Set the properties of the view
             ui.title.text = knowledgeEntry.title
@@ -99,6 +110,11 @@ class InfoUi : AnkoComponent<Fragment> {
                         weight = 8F
                     }
                 }
+
+                image = photoView {
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+                    adjustViewBounds = true
+                }.lparams(matchParent, wrapContent)
 
                 linearLayout {
                     padding = dip(15)
