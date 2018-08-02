@@ -2,11 +2,12 @@ package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v4.text.TextUtilsCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
@@ -16,8 +17,10 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.Formatter
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.contains
+import org.eurofurence.connavigator.util.extensions.jsonObjects
+import org.eurofurence.connavigator.util.extensions.markdownView
+import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
@@ -46,7 +49,6 @@ class FragmentViewInfo() : Fragment(), HasDb {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        applyOnRoot { changeTitle("Information") }
         // Get info if it exists
         if ("knowledgeEntry" in arguments) {
             val knowledgeEntry: KnowledgeEntryRecord = arguments.jsonObjects["knowledgeEntry"]
@@ -56,12 +58,6 @@ class FragmentViewInfo() : Fragment(), HasDb {
             // Set the properties of the view
             ui.title.text = knowledgeEntry.title
             ui.text.loadMarkdown(knowledgeEntry.text)
-
-            if (knowledgeEntry.imageIds != null && knowledgeEntry.imageIds.isNotEmpty()) {
-                imageService.load(db.images[knowledgeEntry.imageIds.first()], ui.image, showHide = false)
-            } else {
-                ui.image.visibility = View.GONE
-            }
 
             for (url in knowledgeEntry.links) {
                 val button = Button(context)
@@ -85,24 +81,36 @@ class InfoUi : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         scrollView {
             lparams(matchParent, matchParent)
-            backgroundResource = R.color.cardview_light_background
+            backgroundResource = R.color.backgroundGrey
 
-            layout = verticalLayout {
-                image = photoView {
-                    backgroundResource = R.drawable.image_fade
-                    scaleType = ImageView.ScaleType.FIT_CENTER
-                    adjustViewBounds = true
-                }.lparams(matchParent, wrapContent)
+            verticalLayout {
 
-                title = themedTextView(R.style.AppTheme_Header) {
-                    lparams(matchParent, wrapContent)
-                    setTextAppearance(ctx, android.R.style.TextAppearance_Large_Inverse)
+                linearLayout {
+                    weightSum = 10F
+                    padding = dip(15)
+
+                    view {}.lparams(dip(0), matchParent) {
+                        weight = 2F
+                    }
+
+                    title = textView("Title") {
+                        compatAppearance = android.R.style.TextAppearance_Large
+                    }.lparams(dip(0), wrapContent) {
+                        weight = 8F
+                    }
                 }
 
-                text = markdownView {
-                    lparams(matchParent, wrapContent)
-                }.lparams{
-                    margin = dip(10)
+                linearLayout {
+                    padding = dip(15)
+                    backgroundResource = R.color.cardview_light_background
+
+                    text = markdownView {
+                        lparams(matchParent, wrapContent)
+                    }
+                }
+
+                layout = verticalLayout {
+                    padding = dip(15)
                 }
             }
         }
