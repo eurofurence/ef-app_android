@@ -11,7 +11,7 @@ import org.eurofurence.connavigator.util.extensions.fullTitle
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.Comparator
-import kotlin.collections.HashMap
+import kotlin.collections.LinkedHashMap
 import kotlin.collections.set
 
 /**
@@ -47,7 +47,8 @@ class EventList(override val db: Db) : HasDb {
 
                     dayA.compareTo(dayB).takeIf { it != 0 }
                             ?: a.startDateTimeUtc.compareTo(b.startDateTimeUtc).takeIf { it != 0 }
-                            ?: a.endDateTimeUtc.compareTo(b.endDateTimeUtc)
+                            ?: a.endDateTimeUtc.compareTo(b.endDateTimeUtc).takeIf { it != 0 }
+                            ?: a.fullTitle().compareTo(b.fullTitle())
                 })
 
 

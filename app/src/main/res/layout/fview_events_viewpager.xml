@@ -21,6 +21,7 @@
             <EditText android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:id="@+id/eventSearchBar"
+                      android:hint="Search by title"
                       android:padding="@dimen/outer_padding"
                       android:background="@color/cardview_light_background"/>
             <AbsoluteLayout android:layout_width="match_parent"

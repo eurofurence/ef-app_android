@@ -37,7 +37,10 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by requinard on 6/28/17.
  */
-class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb {
+class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb,NavRepresented {
+    override val drawerItemId: Int
+        get() = R.id.navMessages
+
     override val db by lazy { locateDb() }
     val ui by lazy { MessagesUi() }
 

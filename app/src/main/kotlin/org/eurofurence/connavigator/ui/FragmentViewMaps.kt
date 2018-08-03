@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -23,9 +24,12 @@ import org.jetbrains.anko.support.v4.viewPager
 /**
  * Created by david on 8/3/16.
  */
-class FragmentViewMaps : Fragment(), ContentAPI, HasDb {
+class FragmentViewMaps : Fragment(), ContentAPI, HasDb,NavRepresented {
+
     val ui by lazy { MapsUi() }
     override val db by lazyLocateDb()
+    override val drawerItemId: Int
+        get() = R.id.navMaps
 
     inner class MapFragmentPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int) =
