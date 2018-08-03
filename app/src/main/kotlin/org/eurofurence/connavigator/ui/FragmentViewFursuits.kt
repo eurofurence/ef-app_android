@@ -18,7 +18,10 @@ import org.jetbrains.anko.support.v4.viewPager
 /**
  * Created by requinard on 7/24/17.
  */
-class FragmentViewFursuits : Fragment() {
+class FragmentViewFursuits : Fragment(), NavRepresented {
+    override val drawerItemId: Int
+        get() = R.id.navFursuitGames
+
     val ui = FursuitsUi()
 
     inner class FursuitPagerAdapter : FragmentPagerAdapter(childFragmentManager) {

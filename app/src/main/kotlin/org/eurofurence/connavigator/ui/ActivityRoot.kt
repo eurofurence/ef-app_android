@@ -176,6 +176,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                         .replace(R.id.content, content, "content")
                         .commitAllowingStateLoss()
 
+                // Set nav drawer item if nav represented content fragment.
+                (content as? NavRepresented)?.let {
+                    navView.setCheckedItem(it.drawerItemId)
+                }
+
+
                 // If details present, add those.
                 if (contentSub != null)
                     supportFragmentManager
@@ -340,11 +346,18 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             // Pop existing details.
             popDetails()
 
+            val inst = type.newInstance()
+
+            // Set nav drawer item if nav represented content fragment.
+            (inst as? NavRepresented)?.let {
+                navView.setCheckedItem(it.drawerItemId)
+            }
+
             // Add content to content view.
             supportFragmentManager
                     .beginTransaction()
                     .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
-                    .replace(R.id.content, type.newInstance(), "content")
+                    .replace(R.id.content, inst, "content")
                     .commitAllowingStateLoss()
         }
 

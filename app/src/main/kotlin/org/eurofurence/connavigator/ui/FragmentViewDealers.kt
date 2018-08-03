@@ -25,8 +25,10 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by David on 15-5-2016.
  */
-class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger {
+class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger,NavRepresented {
     override val db by lazyLocateDb()
+    override val drawerItemId: Int
+        get() = R.id.navDealersDen
 
     val ui by lazy { DealersUi() }
     var effectiveDealers = emptyList<DealerRecord>()

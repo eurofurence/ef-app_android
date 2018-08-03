@@ -8,11 +8,11 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.filterEvents
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.BackgroundPreferences
 import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
@@ -22,17 +22,21 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.support.v4.selector
 
 /**
  * Created by David on 5/3/2016.
  */
-class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
+class FragmentViewEvents : Fragment(), ContentAPI, HasDb, NavRepresented {
     override val db by lazyLocateDb()
+    override val drawerItemId: Int
+        get() = R.id.navEvents
+
 
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()
-    val searchFragment by lazy { EventRecyclerFragment().withArguments() }
+    val searchFragment by lazy { EventRecyclerFragment().withArguments(daysInsteadOfGlyphs = true) }
 
     private val detailsPopAdapter = object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
@@ -60,7 +64,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         eventSearchBar.textWatcher {
             afterTextChanged { text ->
                 searchFragment.eventList.byTitle(text.toString())
-                        .sortByName()
+                        .sortByDateAndTime()
                 searchFragment.dataUpdated()
             }
         }
@@ -106,7 +110,13 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb {
         when (eventPager.visibility) {
             View.VISIBLE -> {
                 eventPager.visibility = View.GONE
-                activity.findViewById(R.id.searchLayout).visibility = View.VISIBLE
+                val searchLayout = activity.findViewById(R.id.searchLayout)
+
+                searchLayout.visibility = View.VISIBLE
+                searchLayout.requestFocus()
+
+                activity.inputMethodManager
+                        .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY)
             }
             else -> {
                 eventPager.visibility = View.VISIBLE
