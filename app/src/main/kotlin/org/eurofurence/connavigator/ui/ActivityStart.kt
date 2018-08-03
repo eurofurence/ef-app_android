@@ -161,8 +161,10 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         if (current != previous) {
             alert("Your data is outdated. You will need to re-download all data") {
                 yesButton {
-                    AppPreferences.lastKnownVersion = BuildConfig.VERSION_NAME
-                    ResetReceiver.fire(this@ActivityStart)
+                    clearData()
+                }
+                onCancelled {
+                    clearData()
                 }
             }.show()
 
@@ -172,6 +174,11 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         AppPreferences.lastKnownVersion = BuildConfig.VERSION_NAME
 
         return current == previous
+    }
+
+    private fun clearData() {
+        AppPreferences.lastKnownVersion = BuildConfig.VERSION_NAME
+        ResetReceiver.fire(this@ActivityStart)
     }
 }
 
