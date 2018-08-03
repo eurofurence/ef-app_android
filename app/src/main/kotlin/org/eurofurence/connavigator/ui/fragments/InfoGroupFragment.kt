@@ -56,7 +56,12 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
 
     val infoGroupId get() = UUID.fromString(arguments.getString("id"))
     val infoGroup by lazy { db.knowledgeGroups[infoGroupId]!! }
-    val infoItems by lazy { db.knowledgeEntries.items.filter { it.knowledgeGroupId == infoGroupId } }
+
+    val infoItems by lazy {
+        db.knowledgeEntries.items
+                .filter { it.knowledgeGroupId == infoGroupId }
+                .sortedBy { it.order }
+    }
 
     val ui = InfoGroupUi()
 
@@ -73,19 +78,24 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
             this.onDestroy()
         }
 
+        fillUi()
         subscriptions += db.subscribe {
-            ui.apply {
-                title.text = infoGroup.name
-                mainIcon.text = infoGroup.fontAwesomeIconCharacterUnicodeAddress.toUnicode()
-                description.text = infoGroup.description
-                groupLayout.setOnClickListener {
-                    setDropdown()
-                }
-                recycler.apply {
-                    adapter = DataAdapter()
-                    layoutManager = NonScrollingLinearLayout(context)
-                    itemAnimator = DefaultItemAnimator()
-                }
+            fillUi()
+        }
+    }
+
+    private fun fillUi() {
+        ui.apply {
+            title.text = infoGroup.name
+            mainIcon.text = infoGroup.fontAwesomeIconCharacterUnicodeAddress.toUnicode()
+            description.text = infoGroup.description
+            groupLayout.setOnClickListener {
+                setDropdown()
+            }
+            recycler.apply {
+                adapter = DataAdapter()
+                layoutManager = NonScrollingLinearLayout(context)
+                itemAnimator = DefaultItemAnimator()
             }
         }
     }

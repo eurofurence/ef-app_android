@@ -55,6 +55,7 @@ class FragmentViewInfo() : Fragment(), HasDb {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fillUi()
         subscriptions += db.subscribe { fillUi() }
     }
 

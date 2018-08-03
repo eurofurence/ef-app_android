@@ -31,23 +31,29 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
 
         applyOnRoot { changeTitle("Convention Information") }
 
+        fillUi()
         subscriptions += db.subscribe {
-            val transaction = childFragmentManager.beginTransaction()
-
-            // Remove existing instances
-            db.knowledgeGroups.items
-                    .map { it.id.toString() }
-                    .map { childFragmentManager.findFragmentByTag(it) }
-                    .filter { it != null }
-                    .forEach { transaction.remove(it) }
-
-            // create new instances
-            db.knowledgeGroups.items
-                    .map { Pair(InfoGroupFragment().withArguments("id" to it.id.toString()), it.id.toString()) }
-                    .forEach { transaction.add(1, it.first, it.second) }
-
-            transaction.commit()
+            fillUi()
         }
+    }
+
+    private fun fillUi() {
+        val transaction = childFragmentManager.beginTransaction()
+
+        // Remove existing instances
+        db.knowledgeGroups.items
+                .map { it.id.toString() }
+                .map { childFragmentManager.findFragmentByTag(it) }
+                .filter { it != null }
+                .forEach { transaction.remove(it) }
+
+        // create new instances
+        db.knowledgeGroups.items
+                .sortedBy { it.order }
+                .map { Pair(InfoGroupFragment().withArguments("id" to it.id.toString()), it.id.toString()) }
+                .forEach { transaction.add(1, it.first, it.second) }
+
+        transaction.commit()
     }
 
     override fun onDestroyView() {
