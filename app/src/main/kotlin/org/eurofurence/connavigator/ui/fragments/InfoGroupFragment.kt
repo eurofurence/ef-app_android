@@ -19,10 +19,7 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.util.extensions.contains
-import org.eurofurence.connavigator.util.extensions.fontAwesomeView
-import org.eurofurence.connavigator.util.extensions.recycler
+import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
@@ -76,6 +73,7 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
         db.subscribe {
             ui.apply {
                 title.text = infoGroup.name
+                mainIcon.text = infoGroup.fontAwesomeIconCharacterUnicodeAddress.toLong(radix = 16).toChar().toString()
                 description.text = infoGroup.description
                 groupLayout.setOnClickListener {
                     setDropdown()
@@ -106,7 +104,8 @@ class InfoGroupUi : AnkoComponent<Fragment> {
     lateinit var recycler: RecyclerView
     lateinit var groupLayout: LinearLayout
     lateinit var dropdownCaret: IconTextView
-    lateinit var mainIcon: IconTextView
+    lateinit var mainIcon: TextView
+
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout {
@@ -117,10 +116,10 @@ class InfoGroupUi : AnkoComponent<Fragment> {
                 padding = dip(20)
 
                 verticalLayout {
-                    mainIcon = fontAwesomeView {
+                    mainIcon = fontAwesomeTextView {
                         gravity = Gravity.CENTER
-                        text = "{fa-rocket 24sp}"
                         textColor = ContextCompat.getColor(context, R.color.primary)
+                        textSize = 24f
                     }.lparams(matchParent, matchParent)
                 }.lparams(dip(0), matchParent) {
                     weight = 2F

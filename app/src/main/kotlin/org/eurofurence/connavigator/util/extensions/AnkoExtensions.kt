@@ -7,6 +7,7 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.github.lzyzsd.circleprogress.ArcProgress
 import com.joanzapata.iconify.widget.IconButton
 import com.joanzapata.iconify.widget.IconTextView
+import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
 import org.jetbrains.anko.custom.ankoView
 import us.feras.mdv.MarkdownView
 
@@ -21,3 +22,4 @@ inline fun ViewManager.markdownView(init: MarkdownView.() -> Unit) = ankoView({ 
 inline fun ViewManager.fontAwesomeView(init: IconTextView.() -> Unit) = ankoView({IconTextView(it)}, 0, init)
 inline fun ViewManager.fontAwesomeButton(init: IconButton.() -> Unit) = ankoView({IconButton(it)}, 0, init)
 inline fun ViewManager.floatingActionButton(init: FloatingActionButton.() -> Unit) = ankoView({FloatingActionButton(it)}, 0, init)
+inline fun ViewManager.fontAwesomeTextView(init: FontAwesomeTextView.() -> Unit) = ankoView({FontAwesomeTextView(it)}, 0, init)
