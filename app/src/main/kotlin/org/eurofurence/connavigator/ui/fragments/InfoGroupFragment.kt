@@ -73,7 +73,7 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
         db.subscribe {
             ui.apply {
                 title.text = infoGroup.name
-                mainIcon.text = infoGroup.fontAwesomeIconCharacterUnicodeAddress.toLong(radix = 16).toChar().toString()
+                mainIcon.text = infoGroup.fontAwesomeIconCharacterUnicodeAddress.toUnicode()
                 description.text = infoGroup.description
                 groupLayout.setOnClickListener {
                     setDropdown()
@@ -113,7 +113,6 @@ class InfoGroupUi : AnkoComponent<Fragment> {
                 isClickable = true
                 weightSum = 10F
                 backgroundResource = R.color.cardview_light_background
-                padding = dip(20)
 
                 verticalLayout {
                     mainIcon = fontAwesomeTextView {
@@ -126,6 +125,7 @@ class InfoGroupUi : AnkoComponent<Fragment> {
                 }
 
                 verticalLayout {
+                    padding = dip(20)
                     title = textView("Title") {
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large
                     }

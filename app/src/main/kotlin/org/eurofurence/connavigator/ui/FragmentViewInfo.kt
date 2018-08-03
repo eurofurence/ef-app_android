@@ -3,7 +3,7 @@ package org.eurofurence.connavigator.ui
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.text.TextUtilsCompat
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +18,8 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.extensions.contains
-import org.eurofurence.connavigator.util.extensions.jsonObjects
-import org.eurofurence.connavigator.util.extensions.markdownView
-import org.eurofurence.connavigator.util.extensions.photoView
+import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
+import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
@@ -57,6 +55,7 @@ class FragmentViewInfo() : Fragment(), HasDb {
     private fun fillUi() {
         if ("knowledgeEntry" in arguments) {
             val knowledgeEntry: KnowledgeEntryRecord = arguments.jsonObjects["knowledgeEntry"]
+            val knowledgeGroup = db.knowledgeGroups[knowledgeEntry.knowledgeGroupId!!] !!
 
             Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
 
@@ -69,6 +68,7 @@ class FragmentViewInfo() : Fragment(), HasDb {
             // Set the properties of the view
             ui.title.text = knowledgeEntry.title
             ui.text.loadMarkdown(knowledgeEntry.text)
+            ui.icon.text = knowledgeGroup.fontAwesomeIconCharacterUnicodeAddress.toUnicode()
 
             for (url in knowledgeEntry.links) {
                 val button = Button(context)
@@ -89,6 +89,8 @@ class InfoUi : AnkoComponent<Fragment> {
     lateinit var image: PhotoView
     lateinit var title: TextView
     lateinit var text: MarkdownView
+    lateinit var icon: FontAwesomeTextView
+
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         scrollView {
             lparams(matchParent, matchParent)
@@ -98,13 +100,17 @@ class InfoUi : AnkoComponent<Fragment> {
 
                 linearLayout {
                     weightSum = 10F
-                    padding = dip(15)
 
-                    view {}.lparams(dip(0), matchParent) {
+                    icon = fontAwesomeTextView {
+                        textColor = ContextCompat.getColor(context, R.color.primary)
+                        textSize = 24f
+                        gravity = Gravity.CENTER
+                    }.lparams(dip(0), matchParent) {
                         weight = 2F
                     }
 
                     title = textView("Title") {
+                        padding = dip(15)
                         compatAppearance = android.R.style.TextAppearance_Large
                     }.lparams(dip(0), wrapContent) {
                         weight = 8F
