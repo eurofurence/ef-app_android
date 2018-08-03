@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
-import android.text.Html
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.joanzapata.iconify.widget.IconTextView
+import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
@@ -21,6 +21,7 @@ import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.longToast
@@ -59,6 +60,8 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
 
     val ui = InfoGroupUi()
 
+    var subscriptions = Disposables.empty()
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
@@ -70,7 +73,7 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
             this.onDestroy()
         }
 
-        db.subscribe {
+        subscriptions += db.subscribe {
             ui.apply {
                 title.text = infoGroup.name
                 mainIcon.text = infoGroup.fontAwesomeIconCharacterUnicodeAddress.toUnicode()
@@ -87,8 +90,14 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
+    }
+
     private fun setDropdown() {
-        if(ui.recycler.visibility == View.GONE) {
+        if (ui.recycler.visibility == View.GONE) {
             ui.recycler.visibility = View.VISIBLE
             ui.dropdownCaret.text = "{fa-caret-up 24sp}"
         } else {
@@ -176,7 +185,7 @@ class SingleInfoUi : AnkoComponent<Fragment> {
 
             fontAwesomeView {
                 text = "{fa-caret-right 24sp}"
-            }.lparams(dip(0), wrapContent){
+            }.lparams(dip(0), wrapContent) {
                 weight = 1F
             }
         }
