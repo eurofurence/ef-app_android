@@ -6,6 +6,7 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.ReplaySubject
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
@@ -69,4 +70,6 @@ object RemotePreferences : AnkoLogger {
     // Strings
     val apiBaseUrl get() =   remoteConfig.getString("api_base_url")
     val supportChatUrl get() = remoteConfig.getString("support_chat_url")
+    val eventTitle get() = remoteConfig.getString("event_title")
+    val eventSubTitle get() = remoteConfig.getString("event_subtitle")
 }
