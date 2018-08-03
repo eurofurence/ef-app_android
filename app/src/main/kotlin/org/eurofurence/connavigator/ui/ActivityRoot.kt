@@ -479,7 +479,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     override fun navigateToKnowledgeEntry(knowledgeEntry: KnowledgeEntryRecord) {
-        navigateToSubFragment(FragmentViewInfo(knowledgeEntry))
+        navigateToSubFragment(FragmentViewInfo().withArguments(knowledgeEntry))
     }
 
 
