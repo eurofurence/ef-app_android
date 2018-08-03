@@ -32,4 +32,12 @@
         <key>support_chat_url</key>
         <value>https://app.eurofurence.org</value>
     </entry>
+    <entry>
+        <key>event_title</key>
+        <value>Eurofurence 24</value>
+    </entry>
+    <entry>
+        <key>event_subtitle</key>
+        <value>Aviators - Conquer the Sky!</value>
+    </entry>
 </defaultsMap>

@@ -440,6 +440,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             navView.menu.findItem(id.navMap).isVisible = false
         }
 
+        navTitle.text = RemotePreferences.eventTitle
+        navSubtitle.text =RemotePreferences.eventSubTitle
         // On con vs. before con. This should be updated on day changes
         if (days <= 0)
             navDays.text = "Day ${1 - days}"
