@@ -7,18 +7,12 @@ import android.support.v4.content.LocalBroadcastManager
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.util.extensions.booleans
-import org.eurofurence.connavigator.util.extensions.catchAlternative
-import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.util.extensions.loge
-import org.eurofurence.connavigator.util.extensions.logv
-import org.eurofurence.connavigator.util.extensions.objects
-import org.eurofurence.connavigator.util.extensions.toIntent
+import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.util.v2.internalSpec
 import org.eurofurence.connavigator.webapi.apiService
 import org.joda.time.DateTime
-import java.util.Date
+import java.util.*
 import kotlin.serialization.Serializable
 
 @Serializable
@@ -74,7 +68,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
 
                 // Shift by offset
                 val currentDate = DateTime.now()
-                for ((i, day) in base.withIndex())
+                for ((i, day) in base.sortedBy { it.date }.withIndex())
                     day.date = currentDate.plusDays(i - shiftOffset).toDate()
 
                 // Make a new sync package entry
