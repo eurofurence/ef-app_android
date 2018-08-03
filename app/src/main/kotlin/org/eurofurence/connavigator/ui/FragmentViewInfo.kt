@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
+import io.reactivex.disposables.Disposables
 import io.swagger.client.model.KnowledgeEntryRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -21,6 +22,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
@@ -35,13 +37,17 @@ class FragmentViewInfo() : Fragment(), HasDb {
 
     val ui by lazy { InfoUi() }
 
+    var subscriptions = Disposables.empty()
+
     /**
      * Constructs the info view with an assigned bundle
      */
-    constructor(knowledgeEntry: KnowledgeEntryRecord) : this() {
-        arguments = Bundle()
-        arguments.jsonObjects["knowledgeEntry"] = knowledgeEntry
+    fun withArguments(knowledgeEntry: KnowledgeEntryRecord) = apply {
+        arguments = Bundle().apply {
+            jsonObjects["knowledgeEntry"] = knowledgeEntry
+        }
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -49,13 +55,19 @@ class FragmentViewInfo() : Fragment(), HasDb {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        db.subscribe { fillUi() }
+        subscriptions += db.subscribe { fillUi() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     private fun fillUi() {
         if ("knowledgeEntry" in arguments) {
             val knowledgeEntry: KnowledgeEntryRecord = arguments.jsonObjects["knowledgeEntry"]
-            val knowledgeGroup = db.knowledgeGroups[knowledgeEntry.knowledgeGroupId!!] !!
+            val knowledgeGroup = db.knowledgeGroups[knowledgeEntry.knowledgeGroupId!!]!!
 
             Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
 

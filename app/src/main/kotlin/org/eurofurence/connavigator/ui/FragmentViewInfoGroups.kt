@@ -2,25 +2,26 @@ package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.InfoGroupFragment
+import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.v2.plus
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.withArguments
-import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.jetbrains.anko.*
 
 
 class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
     override val db by lazyLocateDb()
     val ui = ViewInfoGroupsUi()
+
+    var subscriptions = Disposables.empty()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -30,7 +31,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
 
         applyOnRoot { changeTitle("Convention Information") }
 
-        db.subscribe {
+        subscriptions += db.subscribe {
             val transaction = childFragmentManager.beginTransaction()
 
             // Remove existing instances
@@ -47,6 +48,12 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
 
             transaction.commit()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 }
 
