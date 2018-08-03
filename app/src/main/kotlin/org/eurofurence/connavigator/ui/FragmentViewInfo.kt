@@ -83,6 +83,7 @@ class FragmentViewInfo() : Fragment(), HasDb {
             ui.text.loadMarkdown(knowledgeEntry.text)
             ui.icon.text = knowledgeGroup.fontAwesomeIconCharacterUnicodeAddress.toUnicode()
 
+            ui.layout.removeAllViewsInLayout()
             for (url in knowledgeEntry.links) {
                 val button = Button(context)
                 button.text = url.name
