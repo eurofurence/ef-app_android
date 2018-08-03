@@ -66,8 +66,8 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
 class ViewInfoGroupsUi : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         scrollView {
-            topPadding = dip(10)
             verticalLayout {
+                topPadding = dip(10)
                 id = 1
             }
         }

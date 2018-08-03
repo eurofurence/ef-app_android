@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui.fragments
 
+import android.animation.LayoutTransition
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -107,12 +108,12 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
     }
 
     private fun setDropdown() {
-        if (ui.recycler.visibility == View.GONE) {
-            ui.recycler.visibility = View.VISIBLE
-            ui.dropdownCaret.text = "{fa-caret-up 24sp}"
+        if (ui.recyclerLayout.visibility == View.GONE) {
+            ui.recyclerLayout.visibility = View.VISIBLE
+            ui.dropdownCaret.text = "{fa-chevron-up 24sp}"
         } else {
-            ui.recycler.visibility = View.GONE
-            ui.dropdownCaret.text = "{fa-caret-down 24sp}"
+            ui.recyclerLayout.visibility = View.GONE
+            ui.dropdownCaret.text = "{fa-chevron-down 24sp}"
         }
     }
 }
@@ -124,14 +125,20 @@ class InfoGroupUi : AnkoComponent<Fragment> {
     lateinit var groupLayout: LinearLayout
     lateinit var dropdownCaret: IconTextView
     lateinit var mainIcon: TextView
+    lateinit var recyclerLayout: LinearLayout
 
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout {
             groupLayout = linearLayout {
                 isClickable = true
-                weightSum = 10F
+                weightSum = 20F
                 backgroundResource = R.color.cardview_light_background
+                layoutTransition = LayoutTransition().apply {
+                    enableTransitionType(LayoutTransition.APPEARING)
+                    enableTransitionType(LayoutTransition.CHANGE_APPEARING)
+                    enableTransitionType(LayoutTransition.CHANGING)
+                }
 
                 verticalLayout {
                     mainIcon = fontAwesomeTextView {
@@ -140,11 +147,12 @@ class InfoGroupUi : AnkoComponent<Fragment> {
                         textSize = 24f
                     }.lparams(matchParent, matchParent)
                 }.lparams(dip(0), matchParent) {
-                    weight = 2F
+                    weight = 4F
                 }
 
                 verticalLayout {
-                    padding = dip(20)
+                    topPadding = dip(20)
+                    bottomPadding = dip(20)
                     title = textView("Title") {
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large
                     }
@@ -152,22 +160,24 @@ class InfoGroupUi : AnkoComponent<Fragment> {
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                     }
                 }.lparams(dip(0), wrapContent) {
-                    weight = 7F
+                    weight = 13F
                 }
 
                 verticalLayout {
                     dropdownCaret = fontAwesomeView {
                         gravity = Gravity.CENTER
-                        text = "{fa-caret-down 24sp}"
+                        text = "{fa-chevron-down 24sp}"
                     }.lparams(matchParent, matchParent)
                 }.lparams(dip(0), matchParent) {
-                    weight = 1F
+                    weight = 3F
                 }
             }
 
-            recycler = recycler {
+            recyclerLayout = verticalLayout {
+                recycler = recycler {
+                }.lparams(matchParent, wrapContent)
                 visibility = View.GONE
-            }.lparams(matchParent, matchParent)
+            }
         }
     }
 }
@@ -175,14 +185,15 @@ class InfoGroupUi : AnkoComponent<Fragment> {
 class SingleInfoUi : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         linearLayout {
-            padding = dip(10)
+            topPadding = dip(10)
+            bottomPadding = dip(10)
             id = R.id.layout
-            weightSum = 10F
+            weightSum = 20F
 
             view {
                 // Sneaky view to pad stuff
             }.lparams(dip(0), wrapContent) {
-                weight = 2F
+                weight = 4F
             }
 
             textView("Name") {
@@ -190,13 +201,14 @@ class SingleInfoUi : AnkoComponent<Fragment> {
                 compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                 textColor = ContextCompat.getColor(context, R.color.textBlack)
             }.lparams(dip(0), wrapContent) {
-                weight = 7F
+                weight = 13F
             }
 
             fontAwesomeView {
-                text = "{fa-caret-right 24sp}"
-            }.lparams(dip(0), wrapContent) {
-                weight = 1F
+                text = "{fa-chevron-right 24sp}"
+                gravity = Gravity.CENTER
+            }.lparams(dip(0), matchParent) {
+                weight = 3F
             }
         }
     }
