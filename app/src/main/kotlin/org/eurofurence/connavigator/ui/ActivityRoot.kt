@@ -421,6 +421,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 }
             }
 
+
             // Close drawer and return the result
             drawer.closeDrawer(GravityCompat.START)
             true
