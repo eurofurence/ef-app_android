@@ -161,6 +161,8 @@ dependencies {
 
     //  Circular progress that don't make me consider suicide
     compile 'com.github.lzyzsd:circleprogress:1.2.1'
+    // Circle progress that actually animates!
+    compile 'com.github.jakob-grabner:Circle-Progress-View:v1.3'
 
     // Preferences
     compile "com.chibatching.kotpref:kotpref:2.1.1"

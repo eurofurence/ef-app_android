@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.View
 import android.widget.*
+import at.grabner.circleprogress.CircleProgressView
+import com.github.lzyzsd.circleprogress.CircleProgress
+import com.github.lzyzsd.circleprogress.DonutProgress
 import com.google.firebase.perf.metrics.AddTrace
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
@@ -26,6 +29,7 @@ import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.util.extensions.booleans
+import org.eurofurence.connavigator.util.extensions.circleProgress
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
@@ -48,9 +52,9 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         if (it.booleans["success"]) {
             val imgCountTotal = db.images.items.count()
             var imgCountLoaded = 0
+            ui.loadingSpinner.maxValue = imgCountTotal.toFloat()
 
             info { "Data update success. Downloading $imgCountTotal images" }
-
 
             val promises = db.images.items.fold(Promise.of<Any?>(Unit)) { p, img ->
                 p thenNested {
@@ -59,6 +63,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
                 } successUi {
                     // Increment the counter and display on UI.
                     imgCountLoaded++
+                    ui.loadingSpinner.setValue(imgCountLoaded.toFloat())
                     ui.progressText.text = "Loading assets ($imgCountLoaded / $imgCountTotal)"
                     Unit
                 }
@@ -185,7 +190,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
 class StartUi : AnkoComponent<ActivityStart> {
     lateinit var yesButton: Button
     lateinit var noButton: Button
-    lateinit var loadingSpinner: ProgressBar
+    lateinit var loadingSpinner: CircleProgressView
     lateinit var startLayout: LinearLayout
     lateinit var loadingLayout: RelativeLayout
     lateinit var remoteLastUpdatedText: TextView
@@ -264,7 +269,12 @@ Is it okay to download the data now?
             loadingLayout = relativeLayout {
                 visibility = View.GONE
 
-                loadingSpinner = progressBar().lparams(dip(100), dip(100)) {
+                loadingSpinner = circleProgress {
+                    spin()
+                    textSize = 0
+                    innerContourSize = 0f
+                    outerContourSize = 0f
+                }.lparams(dip(100), dip(100)) {
                     above(1)
                     centerHorizontally()
                     padding = dip(50)
