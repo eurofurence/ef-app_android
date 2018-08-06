@@ -53,9 +53,11 @@ class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Frag
         return null
     }
     override fun getItem(position: Int): Fragment {
-        return EventRecyclerFragment().withArguments(db.filterEvents()
-                .inRoom(rooms.asc { it.name }[position].id)
-                .sortByStartTime()
+        return EventRecyclerFragment().withArguments(
+                eventList = db.filterEvents()
+                    .inRoom(rooms.asc { it.name }[position].id)
+                    .sortByStartTime(),
+                daysInsteadOfGlyphs = true
         )
     }
 
@@ -71,9 +73,11 @@ class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fra
         return null
     }
     override fun getItem(position: Int): Fragment {
-        return EventRecyclerFragment().withArguments(db.filterEvents()
-                .onTrack(tracks[position].id)
-                .sortByStartTime()
+        return EventRecyclerFragment().withArguments(
+                eventList = db.filterEvents()
+                    .onTrack(tracks[position].id)
+                    .sortByStartTime(),
+                daysInsteadOfGlyphs = true
         )
     }
 
