@@ -8,6 +8,7 @@ import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.filterEvents
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
+import org.jetbrains.anko.bundleOf
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import java.util.*

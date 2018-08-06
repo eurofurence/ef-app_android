@@ -105,6 +105,20 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, NavRepresented {
         applyOnRoot { tabs.setupWithViewPager(null) }
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.apply {
+            putInt("page", eventPager.currentItem)
+        }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        savedInstanceState?.apply {
+            eventPager.currentItem = getInt("page")
+        }
+
+        super.onViewStateRestored(savedInstanceState)
+    }
+
     override fun onSearchButtonClick() {
         applyOnRoot { popDetails() }
         when (eventPager.visibility) {

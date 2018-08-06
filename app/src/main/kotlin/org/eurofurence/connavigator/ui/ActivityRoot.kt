@@ -49,17 +49,7 @@ import org.joda.time.DateTime
 import org.joda.time.Days
 import java.util.*
 
-class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPreferenceChangeListener, HasDb, AnkoLogger {
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        logd { "Updating content data after preference change" }
-
-        if (BuildConfig.DEBUG) {
-            Analytics.event(Analytics.Category.SETTINGS, Analytics.Action.CHANGED, key)
-        }
-
-        applyOnContent { dataUpdated() }
-    }
-
+class ActivityRoot : AppCompatActivity(), RootAPI, HasDb, AnkoLogger {
     override fun changeTitle(text: String) {
         supportActionBar?.title = text
         Analytics.screen(this, text)
@@ -140,8 +130,6 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
         // Show our browsing intent
         handleBrowsingIntent()
-
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
 
         // Restore fragments from saved instance state.
         savedInstanceState?.also {

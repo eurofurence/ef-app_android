@@ -229,6 +229,26 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         subscriptions = Disposables.empty()
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        info { "Saving recycler fragment state" }
+
+        outState?.apply {
+            val position = (ui.eventList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            info { "Current event position: ${position}}" }
+            putInt("position", position)
+        }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        info { "Restoring event recycler view state" }
+        savedInstanceState?.apply {
+            val position = getInt("position")
+            info { " Saved position: ${position}" }
+            ui.eventList.layoutManager.scrollToPosition(position)
+        }
+        super.onViewStateRestored(savedInstanceState)
+    }
+
     private fun configureTitle() {
         info { "Configuring title" }
 
