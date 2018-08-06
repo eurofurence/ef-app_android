@@ -73,7 +73,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
                 if (entries.isNotEmpty()) {
                     val links = entries
-                            .flatMap { it.links }
+                            .flatMap { it.links.orEmpty() }
                             .filter { it.fragmentType !== LinkFragment.FragmentTypeEnum.MapEntry }
 
                     when(links.size){

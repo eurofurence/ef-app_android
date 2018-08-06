@@ -97,13 +97,13 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 visibility = if (dealer.hasUniqueDisplayName()) View.VISIBLE else View.GONE
             }
 
-            ui.categories.text = dealer.categories.joinToString(", ")
+            ui.categories.text = dealer.categories?.joinToString(", ") ?: ""
             ui.shortDescription.apply {
                 text = dealer.shortDescription
                 visibility = if (dealer.shortDescription.isNullOrEmpty()) View.GONE else View.VISIBLE
             }
 
-            ui.categories.text = dealer.categories.joinToString(", ")
+            ui.categories.text = dealer.categories?.joinToString(", ") ?: ""
 
             ui.aboutArtist.text =
                     if (dealer.aboutTheArtistText.isNotEmpty())
@@ -207,9 +207,9 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         // Reset all views that have been present before
         ui.websites.removeAllViews()
 
-        if (dealer.links != null && !dealer.links.isEmpty()) {
+        if (dealer.links != null && dealer.links?.isNotEmpty() != false) {
             ui.websitesContainer.visibility = View.VISIBLE
-            dealer.links.forEach {
+            dealer.links?.forEach {
                 val button = Button(context).apply {
                     info { "Adding button for $it" }
                     text = it.target

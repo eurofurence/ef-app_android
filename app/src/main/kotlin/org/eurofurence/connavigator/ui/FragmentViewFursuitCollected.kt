@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.widget.TextViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,7 @@ class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
             ui.name.text = "Hello ${it.name}"
             ui.score.text = "You have collected ${it.collectionCount} suits, ranking you at number ${it.scoreboardRank}!"
 
-            it.recentlyCollected.map {
+            it.recentlyCollected.orEmpty().map {
                 ui.collectedLayout.addView(
                         TextView(context).apply {
                             text = "${it.name}"
@@ -63,18 +62,18 @@ class FursuitCollectedUi : AnkoComponent<Fragment> {
 
     lateinit var collectedLayout: LinearLayout
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        verticalLayout{
-            padding =  dip(25)
+        verticalLayout {
+            padding = dip(25)
 
-            name = textView{
+            name = textView {
                 setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
             }
 
-            score = textView{
+            score = textView {
                 setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Medium)
             }
 
-            collectedLayout = verticalLayout {  }
+            collectedLayout = verticalLayout { }
         }
     }
 

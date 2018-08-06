@@ -37,11 +37,10 @@ class UserStatusFragment : Fragment(), AnkoLogger {
 
     fun checkMessages() = task {
         info { "Checking message counts" }
-        val api = apiService.communications
-
-        api.addHeader("Authorization", AuthPreferences.asBearer())
-
-        api.apiV2CommunicationPrivateMessagesGet()
+        apiService.communications.let {
+            it.addHeader("Authorization", AuthPreferences.asBearer())
+            it.apiV2CommunicationPrivateMessagesGet()
+        }
     } successUi { messages ->
         context?.let {
             info { "Fetched messages, ${messages.count()} messages found" }
@@ -102,9 +101,10 @@ class UserStatusFragment : Fragment(), AnkoLogger {
 
         } else {
             info { "User is logged in" }
-            /*timer = fixedRateTimer(period = 60000L) {
+            timer?.cancel()
+            timer = fixedRateTimer(period = 60000L) {
                 checkMessages()
-            }*/
+            }
             ui.apply {
                 title.text = "Welcome, ${AuthPreferences.username.capitalize()}"
                 layout.setOnClickListener {

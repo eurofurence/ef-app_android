@@ -1,15 +1,14 @@
 package org.eurofurence.connavigator.util.extensions
 
 import android.util.Log
-import io.swagger.client.model.DealerRecord
-import io.swagger.client.model.EventRecord
-import io.swagger.client.model.ImageRecord
-import io.swagger.client.model.MapRecord
-import io.swagger.client.model.PrivateMessageRecord
+import io.swagger.client.model.*
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.webapi.apiService
 
-fun MapRecord.findMatchingEntries(x: Float, y: Float) = this.entries.filter { (x - it.x power 2F) + (y - it.y power 2F) < it.tapRadius power 2 }
+fun MapRecord.findMatchingEntries(x: Float, y: Float) =
+        entries
+                .orEmpty()
+                .filter { (x - it.x power 2F) + (y - it.y power 2F) < it.tapRadius power 2 }
 
 
 val ImageRecord.url: String get() = "${apiService.apiPath}/Api/v2/Images/$id/Content"

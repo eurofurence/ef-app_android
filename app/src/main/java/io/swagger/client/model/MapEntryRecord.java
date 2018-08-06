@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -68,6 +69,7 @@ public class MapEntryRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public List<LinkFragment> getLinks() {
     return links;
   }

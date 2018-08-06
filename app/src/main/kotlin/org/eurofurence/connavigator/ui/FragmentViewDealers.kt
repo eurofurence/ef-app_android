@@ -84,11 +84,11 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger,NavReprese
 
         effectiveDealers = db.dealers.items.toList()
 
-        if (!searchText.isNullOrEmpty())
+        if (!searchText.isEmpty())
             effectiveDealers = effectiveDealers.filter { it.displayName.contains(searchText, true) or it.attendeeNickname.contains(searchText, true) }
 
-        if (!searchCategory.isNullOrEmpty())
-            effectiveDealers = effectiveDealers.filter { it.categories.contains(searchCategory) }
+        if (!searchCategory.isEmpty())
+            effectiveDealers = effectiveDealers.filter { it.categories?.contains(searchCategory) ?: false }
 
         ui.dealerList.adapter = DealerRecyclerAdapter(sortDealers(effectiveDealers), db, this)
         ui.dealerList.adapter.notifyDataSetChanged()

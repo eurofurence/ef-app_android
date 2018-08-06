@@ -5,6 +5,7 @@ import java.util.*;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -63,6 +64,7 @@ public class PlayerParticipationInfo  {
 
   /**
    **/
+  @Nullable
   @ApiModelProperty(value = "")
   public List<BadgeInfo> getRecentlyCollected() {
     return recentlyCollected;

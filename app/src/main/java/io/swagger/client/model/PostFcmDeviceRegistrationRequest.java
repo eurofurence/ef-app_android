@@ -4,6 +4,7 @@ import java.util.*;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -27,6 +28,7 @@ public class PostFcmDeviceRegistrationRequest  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public List<String> getTopics() {
     return topics;
   }
