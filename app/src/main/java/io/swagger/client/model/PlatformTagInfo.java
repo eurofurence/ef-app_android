@@ -41,6 +41,7 @@ public class PlatformTagInfo  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Integer getDeviceCount() {
     return deviceCount;
   }

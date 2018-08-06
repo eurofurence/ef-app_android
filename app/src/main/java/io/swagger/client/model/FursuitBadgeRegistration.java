@@ -3,6 +3,7 @@ package io.swagger.client.model;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -28,6 +29,7 @@ public class FursuitBadgeRegistration  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Integer getBadgeNo() {
     return badgeNo;
   }
@@ -38,6 +40,7 @@ public class FursuitBadgeRegistration  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Integer getRegNo() {
     return regNo;
   }
@@ -98,6 +101,7 @@ public class FursuitBadgeRegistration  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Integer getDontPublish() {
     return dontPublish;
   }

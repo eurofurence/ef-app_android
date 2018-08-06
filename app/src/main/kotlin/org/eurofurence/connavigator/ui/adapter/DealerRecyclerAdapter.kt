@@ -60,7 +60,7 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
                     ContextCompat.getDrawable(fragment.context, R.drawable.dealer_black))
         }
 
-        holder.moon.visibility = if (dealer.isAfterDark) {
+        holder.moon.visibility = if (dealer.isAfterDark == true) {
             View.VISIBLE
         } else {
             View.GONE

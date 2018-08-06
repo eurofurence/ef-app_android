@@ -24,7 +24,7 @@ import org.jetbrains.anko.support.v4.viewPager
 /**
  * Created by david on 8/3/16.
  */
-class FragmentViewMaps : Fragment(), ContentAPI, HasDb,NavRepresented {
+class FragmentViewMaps : Fragment(), ContentAPI, HasDb, NavRepresented {
 
     val ui by lazy { MapsUi() }
     override val db by lazyLocateDb()
@@ -43,7 +43,7 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb,NavRepresented {
                 browseableMaps.size
     }
 
-    val browseableMaps by lazy { maps.items.filter { it.isBrowseable }.sortedBy { it.description } }
+    val browseableMaps by lazy { maps.items.filter { it.isBrowseable == true }.sortedBy { it.description } }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view

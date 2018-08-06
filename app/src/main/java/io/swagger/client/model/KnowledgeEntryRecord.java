@@ -83,6 +83,7 @@ public class KnowledgeEntryRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Integer getOrder() {
     return order;
   }

@@ -8,7 +8,7 @@ import org.eurofurence.connavigator.webapi.apiService
 fun MapRecord.findMatchingEntries(x: Float, y: Float) =
         entries
                 .orEmpty()
-                .filter { (x - it.x power 2F) + (y - it.y power 2F) < it.tapRadius power 2 }
+                .filter { (x - (it.x ?: 0) power 2F) + (y - (it.y ?: 0) power 2F) < (it.tapRadius ?: 0) power 2 }
 
 
 val ImageRecord.url: String get() = "${apiService.apiPath}/Api/v2/Images/$id/Content"

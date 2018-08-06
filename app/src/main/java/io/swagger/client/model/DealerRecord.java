@@ -82,6 +82,7 @@ public class DealerRecord  {
   /**
    * Registration number (as on badge) of the attendee that acts on behalf/represents this dealer.
    **/
+  @Nullable
   @ApiModelProperty(value = "Registration number (as on badge) of the attendee that acts on behalf/represents this dealer.")
   public Integer getRegistrationNumber() {
     return registrationNumber;
@@ -193,6 +194,7 @@ public class DealerRecord  {
   /**
    * Flag indicating whether the dealer is present at the dealers den on thursday.
    **/
+  @Nullable
   @ApiModelProperty(value = "Flag indicating whether the dealer is present at the dealers den on thursday.")
   public Boolean getAttendsOnThursday() {
     return attendsOnThursday;
@@ -204,6 +206,7 @@ public class DealerRecord  {
   /**
    * Flag indicating whether the dealer is present at the dealers den on friday.
    **/
+  @Nullable
   @ApiModelProperty(value = "Flag indicating whether the dealer is present at the dealers den on friday.")
   public Boolean getAttendsOnFriday() {
     return attendsOnFriday;
@@ -215,6 +218,7 @@ public class DealerRecord  {
   /**
    * Flag indicating whether the dealer is present at the dealers den on saturday.
    **/
+  @Nullable
   @ApiModelProperty(value = "Flag indicating whether the dealer is present at the dealers den on saturday.")
   public Boolean getAttendsOnSaturday() {
     return attendsOnSaturday;
@@ -270,6 +274,7 @@ public class DealerRecord  {
   /**
    * Flag indicating whether the dealer is located at the after dark dealers den.
    **/
+  @Nullable
   @ApiModelProperty(value = "Flag indicating whether the dealer is located at the after dark dealers den.")
   public Boolean getIsAfterDark() {
     return isAfterDark;

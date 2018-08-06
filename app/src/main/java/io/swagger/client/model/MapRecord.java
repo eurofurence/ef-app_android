@@ -69,6 +69,7 @@ public class MapRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Boolean getIsBrowseable() {
     return isBrowseable;
   }

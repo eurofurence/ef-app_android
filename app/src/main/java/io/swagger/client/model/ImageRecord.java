@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -60,6 +61,7 @@ public class ImageRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Integer getWidth() {
     return width;
   }
@@ -70,6 +72,7 @@ public class ImageRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Integer getHeight() {
     return height;
   }

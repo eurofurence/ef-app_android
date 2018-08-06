@@ -5,6 +5,7 @@ import io.swagger.client.model.CollectTokenResponse;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -19,6 +20,7 @@ public class ApiSafeResultCollectTokenResponse  {
 
   /**
    **/
+  @Nullable
   @ApiModelProperty(value = "")
   public Boolean getIsSuccessful() {
     return isSuccessful;

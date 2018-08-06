@@ -144,7 +144,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             holder.setGlyphs(buildSequence {
                 yieldAll(glyphsFor(event))
                 if (isFavorite) yield("{fa-heart}")
-                if (isDeviatingFromConBook) yield("{fa-pencil}")
+                if (isDeviatingFromConBook == true) yield("{fa-pencil}")
             })
 
             if (daysInsteadOfGlyphs) holder.eventGlyphOverflow.text = db.eventStart(event).dayOfWeek().asShortText
