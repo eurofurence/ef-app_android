@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -91,6 +92,7 @@ public class KnowledgeEntryRecord  {
 
   /**
    **/
+  @Nullable
   @ApiModelProperty(value = "")
   public List<LinkFragment> getLinks() {
     return links;
@@ -102,6 +104,7 @@ public class KnowledgeEntryRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public List<UUID> getImageIds() {
     return imageIds;
   }

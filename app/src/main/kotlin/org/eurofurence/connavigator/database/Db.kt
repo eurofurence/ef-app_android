@@ -441,9 +441,9 @@ fun Db.eventDayNumber(): Int {
 @AddTrace(name = "Db.findLinkFragment", enabled = true)
 fun Db.findLinkFragment(target: String): Map<String?, Any?> {
     for (map in maps.items) {
-        for (entry in map.entries)
+        for (entry in map.entries.orEmpty())
             if (entry.links != null)
-                for (link in entry.links)
+                for (link in entry.links.orEmpty())
                     if (link.target == target)
                         return mapOf(
                                 "map" to map,
@@ -460,22 +460,24 @@ fun HasDb.glyphsFor(eventEntry: EventRecord) =
             emptyList()
         else
             arrayListOf<String>().apply {
-                if ("sponsors_only" in eventEntry.tags)
-                    add("{fa-star-half-o}")
-                if ("supersponsors_only" in eventEntry.tags)
-                    add("{fa-star}")
-                if ("kage" in eventEntry.tags) {
-                    add("{fa-bug}")
-                    add("{fa-glass}")
+                eventEntry.tags.orEmpty().let { tags ->
+                    if ("sponsors_only" in tags)
+                        add("{fa-star-half-o}")
+                    if ("supersponsors_only" in tags)
+                        add("{fa-star}")
+                    if ("kage" in tags) {
+                        add("{fa-bug}")
+                        add("{fa-glass}")
+                    }
+                    if ("art_show" in tags)
+                        add("{fa-photo}")
+                    if ("dealers_den" in tags)
+                        add("{fa-shopping-cart}")
+                    if ("main_stage" in tags)
+                        add("{fa-asterisk}")
+                    if ("photoshoot" in tags)
+                        add("{fa-camera}")
                 }
-                if ("art_show" in eventEntry.tags)
-                    add("{fa-photo}")
-                if ("dealers_den" in eventEntry.tags)
-                    add("{fa-shopping-cart}")
-                if ("main_stage" in eventEntry.tags)
-                    add("{fa-asterisk}")
-                if ("photoshoot" in eventEntry.tags)
-                    add("{fa-camera}")
             }.toList()
 
 fun HasDb.descriptionFor(eventEntry: EventRecord) =
@@ -483,18 +485,20 @@ fun HasDb.descriptionFor(eventEntry: EventRecord) =
             emptyList()
         else
             arrayListOf<String>().apply {
-                if ("sponsors_only" in eventEntry.tags)
-                    add("{fa-star-half-o} Admittance for Sponsors and Super-Sponsors only")
-                if ("supersponsors_only" in eventEntry.tags)
-                    add("{fa-star} Admittance for Super-Sponsors only")
-                if ("kage" in eventEntry.tags)
-                    add("{fa-bug} {fa-glass} May contain traces of cockroach and wine")
-                if ("art_show" in eventEntry.tags)
-                    add("{fa-photo} Art Show")
-                if ("dealers_den" in eventEntry.tags)
-                    add("{fa-shopping-cart} Dealers Den")
-                if ("main_stage" in eventEntry.tags)
-                    add("{fa-asterisk} Main Stage Event")
-                if ("photoshoot" in eventEntry.tags)
-                    add("{fa-camera} Photoshoot")
+                eventEntry.tags.orEmpty().let { tags ->
+                    if ("sponsors_only" in tags)
+                        add("{fa-star-half-o} Admittance for Sponsors and Super-Sponsors only")
+                    if ("supersponsors_only" in tags)
+                        add("{fa-star} Admittance for Super-Sponsors only")
+                    if ("kage" in tags)
+                        add("{fa-bug} {fa-glass} May contain traces of cockroach and wine")
+                    if ("art_show" in tags)
+                        add("{fa-photo} Art Show")
+                    if ("dealers_den" in tags)
+                        add("{fa-shopping-cart} Dealers Den")
+                    if ("main_stage" in tags)
+                        add("{fa-asterisk} Main Stage Event")
+                    if ("photoshoot" in tags)
+                        add("{fa-camera} Photoshoot")
+                }
             }.toList()

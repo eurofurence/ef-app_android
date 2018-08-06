@@ -72,8 +72,8 @@ class FragmentViewInfo() : Fragment(), HasDb {
 
             Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
 
-            if (knowledgeEntry.imageIds != null && knowledgeEntry.imageIds.isNotEmpty()) {
-                imageService.load(db.images[knowledgeEntry.imageIds.first()], ui.image, showHide = false)
+            if (knowledgeEntry.imageIds != null && knowledgeEntry.imageIds?.isNotEmpty() == true) {
+                imageService.load(db.images[knowledgeEntry.imageIds?.first()], ui.image, showHide = false)
             } else {
                 ui.image.visibility = View.GONE
             }
@@ -84,7 +84,7 @@ class FragmentViewInfo() : Fragment(), HasDb {
             ui.icon.text = knowledgeGroup.fontAwesomeIconCharacterUnicodeAddress.toUnicode()
 
             ui.layout.removeAllViewsInLayout()
-            for (url in knowledgeEntry.links) {
+            for (url in knowledgeEntry.links.orEmpty()) {
                 val button = Button(context)
                 button.text = url.name
                 button.setOnClickListener {

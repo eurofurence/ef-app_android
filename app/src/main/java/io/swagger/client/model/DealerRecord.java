@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -159,6 +160,7 @@ public class DealerRecord  {
    * **(pba)** Link fragments to external website(s) of the dealer.
    **/
   @ApiModelProperty(required = true, value = "**(pba)** Link fragments to external website(s) of the dealer.")
+  @Nullable
   public List<LinkFragment> getLinks() {
     return links;
   }
@@ -280,6 +282,7 @@ public class DealerRecord  {
    * **(pba)** List of standardized categories that apply to the goods/services sold/offered by the dealer.
    **/
   @ApiModelProperty(value = "**(pba)** List of standardized categories that apply to the goods/services sold/offered by the dealer.")
+  @Nullable
   public List<String> getCategories() {
     return categories;
   }
