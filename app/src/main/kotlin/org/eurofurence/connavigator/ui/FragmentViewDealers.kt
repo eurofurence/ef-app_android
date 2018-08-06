@@ -50,8 +50,8 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger,NavReprese
         ui.dealerList.layoutManager = LinearLayoutManager(activity)
         ui.dealerList.itemAnimator = DefaultItemAnimator()
 
-        var distinctCategories = dealers.items
-                .map{ it.categories }
+        val distinctCategories = dealers.items
+                .map{ it.categories ?: emptyList() }
                 .fold( emptyList<String>(), { a, b -> a.plus(b).distinct() } )
                 .sorted()
 
