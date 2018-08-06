@@ -102,9 +102,9 @@ class UserStatusFragment : Fragment(), AnkoLogger {
 
         } else {
             info { "User is logged in" }
-            timer = fixedRateTimer(period = 60000L) {
+            /*timer = fixedRateTimer(period = 60000L) {
                 checkMessages()
-            }
+            }*/
             ui.apply {
                 title.text = "Welcome, ${AuthPreferences.username.capitalize()}"
                 layout.setOnClickListener {
