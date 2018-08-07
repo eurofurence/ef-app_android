@@ -94,6 +94,13 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
             knowledgeGroups.apply(sync.knowledgeGroups.convert())
             maps.apply(sync.maps.convert())
 
+            // Reconcile events with favorites
+            faves = events.items.map { it.id}
+                    .toSet()
+                    .let {
+                        eventsIds -> faves.filter { it in eventsIds }
+                    }
+
             // Update notifications for favorites
             EventFavoriteBroadcast().updateNotificatons(applicationContext, faves)
 
