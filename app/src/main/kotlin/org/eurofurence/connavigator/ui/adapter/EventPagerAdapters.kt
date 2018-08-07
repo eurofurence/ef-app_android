@@ -87,3 +87,18 @@ class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fra
 
     val tracks by lazy { db.tracks.asc { it.name } }
 }
+
+class FavoriteEventPagerAdapter(val db: Db, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager){
+    override fun getItem(position: Int) = EventRecyclerFragment().withArguments(
+            eventList = db.filterEvents()
+                    .isFavorited()
+                    .onDay(days[position].id)
+                    .sortByStartTime()
+    )
+
+    override fun getPageTitle(position: Int) = days[position].name
+
+    override fun getCount() = days.size
+
+    val days by lazy { db.days.asc { it.date }}
+}
