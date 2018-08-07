@@ -16,6 +16,7 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.BackgroundPreferences
 import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
+import org.eurofurence.connavigator.ui.adapter.FavoriteEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.TrackEventPagerAdapter
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -96,6 +97,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, NavRepresented {
     private fun changePagerAdapter(mode: EventPagerMode) = when (mode) {
         EventPagerMode.ROOMS -> changePagerAdapter(RoomEventPagerAdapter(db, childFragmentManager))
         EventPagerMode.TRACKS -> changePagerAdapter(TrackEventPagerAdapter(db, childFragmentManager))
+        EventPagerMode.FAVORITES -> changePagerAdapter(FavoriteEventPagerAdapter(db, childFragmentManager))
         else -> changePagerAdapter(DayEventPagerAdapter(db, childFragmentManager), DayEventPagerAdapter.indexOfToday(db))
     }.apply { BackgroundPreferences.eventPagerMode = mode }
 
@@ -128,10 +130,11 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, NavRepresented {
     override fun onFilterButtonClick() {
         applyOnRoot { popDetails() }
 
-        selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks")) { _, position ->
+        selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks", "Favorites")) { _, position ->
             when (position) {
                 1 -> changePagerAdapter(EventPagerMode.ROOMS)
                 2 -> changePagerAdapter(EventPagerMode.TRACKS)
+                3 -> changePagerAdapter(EventPagerMode.FAVORITES)
                 else -> changePagerAdapter(EventPagerMode.DAYS)
             }
         }
@@ -141,5 +144,6 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, NavRepresented {
 enum class EventPagerMode {
     DAYS,
     ROOMS,
-    TRACKS
+    TRACKS,
+    FAVORITES
 }
