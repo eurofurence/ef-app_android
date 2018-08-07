@@ -13,6 +13,7 @@ import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.gcm.InstanceIdService
 import org.eurofurence.connavigator.gcm.PushListenerService
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.logd
@@ -55,5 +56,8 @@ class ConnavigatorApplication : MultiDexApplication() {
 
         // Icons
         Iconify.with(FontAwesomeModule())
+
+        // Check logged in tokens
+        AuthPreferences.validate()
     }
 }
