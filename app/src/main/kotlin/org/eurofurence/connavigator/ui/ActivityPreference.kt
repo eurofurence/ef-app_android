@@ -11,6 +11,7 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AppPreferences
+import org.eurofurence.connavigator.pref.BackgroundPreferences
 import org.eurofurence.connavigator.pref.DebugPreferences
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
@@ -40,28 +41,33 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                     }
 
                     checkBox {
-                        text = "Show old announcements"
+                        text = "Show irrelevant announcements"
                         isChecked = AppPreferences.showOldAnnouncements
-                        setOnClickListener { AppPreferences.showOldAnnouncements = !AppPreferences.showOldAnnouncements }
+                        setOnCheckedChangeListener { _, b -> AppPreferences.showOldAnnouncements = b }
                     }
 
                     checkBox {
-                        text = "Use shortened dates (Wed, Fri) instead of complete dates (Aug 18)"
+                        text = "Use days of the week instead of actual dates."
                         isChecked = AppPreferences.shortenDates
-                        setOnClickListener { AppPreferences.shortenDates = !AppPreferences.shortenDates }
+                        setOnCheckedChangeListener { _, b -> AppPreferences.shortenDates = b }
                     }
 
                     checkBox {
-                        text = "Show a dialog instead of favoriting an event"
+                        text = "Switch the short press and long press behaviour for events."
                         isChecked = AppPreferences.dialogOnEventPress
-                        setOnClickListener { AppPreferences.dialogOnEventPress= !AppPreferences.dialogOnEventPress }
+                        setOnCheckedChangeListener { _, b -> AppPreferences.dialogOnEventPress = b }
+                    }
+
+                    checkBox("Immediately close app on back button press") {
+                        isChecked = BackgroundPreferences.closeAppImmediately
+                        setOnCheckedChangeListener { _, b -> BackgroundPreferences.closeAppImmediately = b }
                     }
 
                     linearLayout {
                         weightSum = 10F
 
                         editText {
-                            hint = "The count of minutes before an event that we'll send a notification"
+                            hint = "Get notified this many minutes before the start of a favorited event."
                             setText(AppPreferences.notificationMinutesBefore.toString(), TextView.BufferType.EDITABLE)
                             textWatcher {
                                 afterTextChanged { text ->
@@ -73,7 +79,7 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                             weight = 2F
                         }
 
-                        textView("The amount of minutes before an event you want to get notified") {
+                        textView("Amount of minutes to get an alert for a favorited event.") {
                             textColor = ContextCompat.getColor(ctx, R.color.textBlack)
                         }.lparams(dip(0), wrapContent) {
                             weight = 8F
@@ -155,4 +161,3 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
         }
     }
 }
-

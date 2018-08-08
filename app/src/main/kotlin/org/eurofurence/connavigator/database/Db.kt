@@ -336,7 +336,6 @@ class RootDb(context: Context) : Stored(context), Db {
         rooms.delete()
         tracks.delete()
         events.delete()
-        faves = listOf()
         images.delete()
         knowledgeEntries.delete()
         knowledgeGroups.delete()
