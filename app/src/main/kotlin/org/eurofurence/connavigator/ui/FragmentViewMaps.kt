@@ -14,6 +14,7 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.FragmentMap
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
+import org.eurofurence.connavigator.util.extensions.multitouchViewPager
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.frameLayout
@@ -65,7 +66,7 @@ class MapsUi : AnkoComponent<Fragment> {
     lateinit var mapViewPager: ViewPager
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         frameLayout() {
-            mapViewPager = viewPager {
+            mapViewPager = multitouchViewPager {
                 id = View.generateViewId()
             }.lparams(matchParent, matchParent)
         }
