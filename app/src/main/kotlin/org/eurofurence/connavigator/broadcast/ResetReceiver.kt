@@ -23,6 +23,10 @@ import org.jetbrains.anko.toast
  */
 class ResetReceiver : BroadcastReceiver(), AnkoLogger {
     override fun onReceive(context: Context, intent: Intent?) {
+        clearData(context)
+    }
+
+    fun clearData(context: Context) {
         info { "Clearing all data" }
 
         info { "Emptying DB" }
@@ -42,13 +46,11 @@ class ResetReceiver : BroadcastReceiver(), AnkoLogger {
         context.longToast("App reset has been completed. Closing.")
 
         task {
-            Thread.sleep(100)
-        } success{
+            Thread.sleep(1000)
+        } success {
             info { "Committing ritualistic suicide" }
             System.exit(621)
         }
-
-
     }
 
     companion object {

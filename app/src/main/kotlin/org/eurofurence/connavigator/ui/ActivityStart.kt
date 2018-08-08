@@ -183,7 +183,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
 
     private fun clearData() {
         AppPreferences.lastKnownVersion = BuildConfig.VERSION_NAME
-        ResetReceiver.fire(this@ActivityStart)
+        ResetReceiver().clearData(this)
     }
 }
 

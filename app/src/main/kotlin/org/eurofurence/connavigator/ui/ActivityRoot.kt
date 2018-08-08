@@ -433,7 +433,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
                     alert("Empty app cache. You WILL need an internet connection to restart", "Clear database") {
-                        yesButton { ResetReceiver.fire(this@ActivityRoot) }
+                        yesButton { ResetReceiver().clearData(this@ActivityRoot ) }
                         noButton { longToast("Not clearing DB") }
                     }.show()
                 }
