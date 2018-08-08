@@ -189,6 +189,7 @@ class SingleInfoUi : AnkoComponent<Fragment> {
             bottomPadding = dip(10)
             id = R.id.layout
             weightSum = 20F
+            lparams(matchParent, wrapContent)
 
             view {
                 // Sneaky view to pad stuff
