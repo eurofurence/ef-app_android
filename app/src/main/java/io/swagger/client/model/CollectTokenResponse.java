@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -32,6 +33,7 @@ public class CollectTokenResponse  {
 
   /**
    **/
+  @Nullable
   @ApiModelProperty(value = "")
   public Integer getFursuitCollectionCount() {
     return fursuitCollectionCount;

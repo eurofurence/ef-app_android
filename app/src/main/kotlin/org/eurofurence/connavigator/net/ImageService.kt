@@ -69,7 +69,7 @@ object imageService {
         // Load image if not null
         if (image != null)
             imageLoader.displayImage(image.url, ImageViewAware(imageView), null,
-                    ImageSize(image.width, image.height), resolveOnCompletion(promise), NopListener)
+                    ImageSize(image.width ?: 0, image.height ?: 0), resolveOnCompletion(promise), NopListener)
         else
             imageLoader.displayImage("", imageView, resolveOnCompletion(promise))
 
@@ -82,7 +82,7 @@ object imageService {
      * Preloads an image too memory
      */
     fun preload(image: ImageRecord) = deferred<Bitmap?, Exception>().also { promise ->
-        imageLoader.loadImage(image.url, ImageSize(image.width, image.height), resolveOnCompletion(promise))
+        imageLoader.loadImage(image.url, ImageSize(image.width ?: 0, image.height ?: 0), resolveOnCompletion(promise))
     }.promise
 
     private fun resolveOnCompletion(promise: Deferred<Bitmap?, Exception>) =
@@ -98,7 +98,7 @@ object imageService {
 
 
     fun getBitmap(image: ImageRecord): Bitmap =
-            imageLoader.loadImageSync(image.url, ImageSize(image.width, image.height))
+            imageLoader.loadImageSync(image.url, ImageSize(image.width ?: 0, image.height ?: 0))
 
     fun clear() {
         logd { "Clearing image cache" }

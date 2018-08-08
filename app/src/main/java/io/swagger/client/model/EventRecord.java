@@ -216,6 +216,7 @@ public class EventRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Boolean getIsDeviatingFromConBook() {
     return isDeviatingFromConBook;
   }

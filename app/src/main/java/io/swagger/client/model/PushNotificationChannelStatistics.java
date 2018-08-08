@@ -36,6 +36,7 @@ public class PushNotificationChannelStatistics {
 
     /**
      **/
+    @Nullable
     @ApiModelProperty(value = "")
     public Integer getNumberOfDevices() {
         return numberOfDevices;
@@ -47,6 +48,7 @@ public class PushNotificationChannelStatistics {
 
     /**
      **/
+    @Nullable
     @ApiModelProperty(value = "")
     public Integer getNumberOfAuthenticatedDevices() {
         return numberOfAuthenticatedDevices;
@@ -58,6 +60,7 @@ public class PushNotificationChannelStatistics {
 
     /**
      **/
+    @Nullable
     @ApiModelProperty(value = "")
     public Integer getNumberOfUniqueUserIds() {
         return numberOfUniqueUserIds;

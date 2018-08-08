@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import io.swagger.client.ApiException
-import io.swagger.client.model.ApiSafeResultCollectTokenResponse
 import io.swagger.client.model.CollectTokenResponse
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.failUi
@@ -64,18 +63,21 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
         } successUi {
             info { "Succesfully executed network request! Showing fursuit" }
 
-            if(it.isSuccessful){
-                ui.setFursuit(it.result)
-                ui.setMode(FursuitUiMode.SHOW_SUIT)
-            } else {
-                ui.error.text = it.error.message
-                ui.setMode(FursuitUiMode.ERROR)
+            it.result.let { result ->
+                if (it.isSuccessful == true && result != null) {
+                    ui.setFursuit(result)
+                    ui.setMode(FursuitUiMode.SHOW_SUIT)
+                } else {
+                    ui.error.text = it.error?.message ?: "Something went wrong"
+                    ui.setMode(FursuitUiMode.ERROR)
+                }
             }
+
         } failUi {
             warn { "Network request failed!" }
             val throwable = it as ApiException
 
-            ui.error.text =  when(throwable.code){
+            ui.error.text = when (throwable.code) {
                 400 -> it.message ?: "You've already caught this suiter"
                 401 -> "You're not logged in!"
                 else -> "An error occured!"
@@ -159,20 +161,20 @@ class FursuitGameUi : AnkoComponent<Fragment> {
             fursuitLayout = verticalLayout {
                 visibility = View.GONE
 
-                imageView{
+                imageView {
                     imageResource = R.drawable.placeholder_event
                 }
 
-                textView("You have collected"){
+                textView("You have collected") {
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
                 }
 
-                fursuitName = textView{
+                fursuitName = textView {
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
                     setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
                 }
 
-                button("Return to the tagging menu"){
+                button("Return to the tagging menu") {
                     setOnClickListener { setMode(FursuitUiMode.START) }
                 }
             }.lparams(matchParent, matchParent)

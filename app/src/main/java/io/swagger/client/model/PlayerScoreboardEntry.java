@@ -3,6 +3,7 @@ package io.swagger.client.model;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -17,6 +18,7 @@ public class PlayerScoreboardEntry  {
 
   /**
    **/
+  @Nullable
   @ApiModelProperty(value = "")
   public Integer getCollectionCount() {
     return collectionCount;
@@ -37,6 +39,7 @@ public class PlayerScoreboardEntry  {
 
   /**
    **/
+  @Nullable
   @ApiModelProperty(value = "")
   public Integer getRank() {
     return rank;

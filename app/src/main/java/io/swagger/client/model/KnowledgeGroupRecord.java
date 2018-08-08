@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -19,8 +20,10 @@ public class KnowledgeGroupRecord  {
   @SerializedName("Description")
   private String description = null;
   @SerializedName("Order")
+  @Nullable
   private Integer order = null;
   @SerializedName("ShowInHamburgerMenu")
+  @Nullable
   private Boolean showInHamburgerMenu = null;
   @SerializedName("FontAwesomeIconCharacterUnicodeAddress")
   private String fontAwesomeIconCharacterUnicodeAddress = null;

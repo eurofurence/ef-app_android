@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -80,6 +81,7 @@ public class FursuitParticipationRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Boolean getIsBanned() {
     return isBanned;
   }
@@ -100,6 +102,7 @@ public class FursuitParticipationRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @Nullable
   public Integer getCollectionCount() {
     return collectionCount;
   }

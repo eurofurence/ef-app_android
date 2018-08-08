@@ -106,23 +106,24 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.categories.text = dealer.categories?.joinToString(", ") ?: ""
 
             ui.aboutArtist.text =
-                    if (dealer.aboutTheArtistText.isNotEmpty())
-                        dealer.aboutTheArtistText
-                    else
+                    if (dealer.aboutTheArtistText.isNullOrEmpty())
                         "This artist did not supply any artist description to show to you :("
+                    else
+                        dealer.aboutTheArtistText
+
 
             if (dealer.artPreviewImageId == null) {
                 ui.artPreview.visibility = View.GONE
 
-                if (dealer.artPreviewCaption.isEmpty()) {
+                if (dealer.artPreviewCaption.isNullOrEmpty()) {
                     ui.artPreviewContainer.visibility = View.GONE
                 }
             }
 
-            if (dealer.aboutTheArtText.isNotEmpty()) {
-                ui.aboutArt.text = dealer.aboutTheArtText
-            } else {
+            if (dealer.aboutTheArtText.isNullOrEmpty()) {
                 ui.aboutArtContainer.visibility = View.GONE
+            } else {
+                ui.aboutArt.text = dealer.aboutTheArtText
             }
 
             configureLinks(dealer)
@@ -138,7 +139,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         val map = entryMap["map"] as MapRecord?
         val entry = entryMap["entry"] as MapEntryRecord?
 
-        if (map == null && dealer.allDaysAvailable() && !dealer.isAfterDark) {
+        if (map == null && dealer.allDaysAvailable() && dealer.isAfterDark != true) {
             info { "No maps or deviations. Hiding location and availability" }
             ui.locationContainer.visibility = View.GONE
             return
@@ -151,12 +152,12 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             val mapImage = db.toImage(map)!!
             val radius = 300
             val circle = entry.tapRadius
-            val x = maxOf(0, entry.x - radius)
-            val y = maxOf(0, entry.y - radius)
-            val w = minOf(mapImage.width - x - 1, radius + radius)
-            val h = minOf(mapImage.height - y - 1, radius + radius)
-            val ox = entry.x - x
-            val oy = entry.y - y
+            val x = maxOf(0, (entry.x ?: 0) - (radius ?: 0))
+            val y = maxOf(0, (entry.y ?: 0) - (radius ?: 0))
+            val w = minOf((mapImage.width ?: 0) - x - 1, radius + radius)
+            val h = minOf((mapImage.height ?: 0) - y - 1, radius + radius)
+            val ox = (entry.x ?: 0) - x
+            val oy = (entry.y ?: 0) - y
 
             imageService.preload(mapImage) successUi {
                 if (it == null)
@@ -165,7 +166,8 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     val bitmap = Bitmap.createBitmap(it, x, y, w, h)
 
                     Canvas(bitmap).apply {
-                        drawCircle(ox.toFloat(), oy.toFloat(), circle.toFloat(), Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                        drawCircle(ox.toFloat(), oy.toFloat(), circle?.toFloat()
+                                ?: 0f, Paint(Paint.ANTI_ALIAS_FLAG).apply {
                             color = Color.RED
                             style = Paint.Style.STROKE
                             strokeWidth = px2dip(5)
@@ -191,14 +193,14 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
         val availableDayList = mutableSetOf<String>()
 
-        if (dealer.attendsOnThursday) availableDayList.add("Thu")
-        if (dealer.attendsOnFriday) availableDayList.add("Fri")
-        if (dealer.attendsOnSaturday) availableDayList.add("Sat")
+        if (dealer.attendsOnThursday == true) availableDayList.add("Thu")
+        if (dealer.attendsOnFriday == true) availableDayList.add("Fri")
+        if (dealer.attendsOnSaturday == true) availableDayList.add("Sat")
 
         ui.availableDaysText.text = "{fa-exclamation-triangle 24sp} Only present on: " + availableDayList.joinToString(", ")
 
         // After dark
-        ui.afterDarkText.visibility = if (dealer.isAfterDark) View.VISIBLE else View.GONE
+        ui.afterDarkText.visibility = if (dealer.isAfterDark == true) View.VISIBLE else View.GONE
     }
 
     private fun configureLinks(dealer: DealerRecord) {
