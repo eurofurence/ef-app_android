@@ -81,7 +81,7 @@ class FragmentViewInfo() : Fragment(), HasDb {
             // Set the properties of the view
             ui.title.text = knowledgeEntry.title
             ui.text.loadMarkdown(knowledgeEntry.text)
-            ui.icon.text = knowledgeGroup.fontAwesomeIconCharacterUnicodeAddress.toUnicode()
+            ui.icon.text = knowledgeGroup.fontAwesomeIconCharacterUnicodeAddress?.toUnicode() ?: ""
 
             ui.layout.removeAllViewsInLayout()
             for (url in knowledgeEntry.links.orEmpty()) {

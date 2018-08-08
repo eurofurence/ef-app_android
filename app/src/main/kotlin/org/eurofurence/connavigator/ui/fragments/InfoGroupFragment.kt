@@ -88,7 +88,7 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
     private fun fillUi() {
         ui.apply {
             title.text = infoGroup.name
-            mainIcon.text = infoGroup.fontAwesomeIconCharacterUnicodeAddress.toUnicode()
+            mainIcon.text = infoGroup.fontAwesomeIconCharacterUnicodeAddress?.toUnicode() ?: ""
             description.text = infoGroup.description
             groupLayout.setOnClickListener {
                 setDropdown()

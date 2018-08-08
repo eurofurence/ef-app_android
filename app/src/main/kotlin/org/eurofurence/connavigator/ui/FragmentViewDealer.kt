@@ -106,23 +106,24 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.categories.text = dealer.categories?.joinToString(", ") ?: ""
 
             ui.aboutArtist.text =
-                    if (dealer.aboutTheArtistText.isNotEmpty())
-                        dealer.aboutTheArtistText
-                    else
+                    if (dealer.aboutTheArtistText.isNullOrEmpty())
                         "This artist did not supply any artist description to show to you :("
+                    else
+                        dealer.aboutTheArtistText
+
 
             if (dealer.artPreviewImageId == null) {
                 ui.artPreview.visibility = View.GONE
 
-                if (dealer.artPreviewCaption.isEmpty()) {
+                if (dealer.artPreviewCaption.isNullOrEmpty()) {
                     ui.artPreviewContainer.visibility = View.GONE
                 }
             }
 
-            if (dealer.aboutTheArtText.isNotEmpty()) {
-                ui.aboutArt.text = dealer.aboutTheArtText
-            } else {
+            if (dealer.aboutTheArtText.isNullOrEmpty()) {
                 ui.aboutArtContainer.visibility = View.GONE
+            } else {
+                ui.aboutArt.text = dealer.aboutTheArtText
             }
 
             configureLinks(dealer)
@@ -165,7 +166,8 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     val bitmap = Bitmap.createBitmap(it, x, y, w, h)
 
                     Canvas(bitmap).apply {
-                        drawCircle(ox.toFloat(), oy.toFloat(), circle?.toFloat() ?: 0f, Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                        drawCircle(ox.toFloat(), oy.toFloat(), circle?.toFloat()
+                                ?: 0f, Paint(Paint.ANTI_ALIAS_FLAG).apply {
                             color = Color.RED
                             style = Paint.Style.STROKE
                             strokeWidth = px2dip(5)

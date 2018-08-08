@@ -63,13 +63,16 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
         } successUi {
             info { "Succesfully executed network request! Showing fursuit" }
 
-            if (it.isSuccessful == true) {
-                ui.setFursuit(it.result)
-                ui.setMode(FursuitUiMode.SHOW_SUIT)
-            } else {
-                ui.error.text = it.error.message
-                ui.setMode(FursuitUiMode.ERROR)
+            it.result.let { result ->
+                if (it.isSuccessful == true && result != null) {
+                    ui.setFursuit(result)
+                    ui.setMode(FursuitUiMode.SHOW_SUIT)
+                } else {
+                    ui.error.text = it.error?.message ?: "Something went wrong"
+                    ui.setMode(FursuitUiMode.ERROR)
+                }
             }
+
         } failUi {
             warn { "Network request failed!" }
             val throwable = it as ApiException

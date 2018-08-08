@@ -27,11 +27,12 @@ fun PrivateMessageRecord.markAsRead() {
 fun EventRecord.fullTitle(): String {
     val builder = StringBuilder(this.title.trim().removeSuffix("\n"))
 
-    if (this.subTitle.isNotEmpty()) {
-        builder.append(": ")
-        builder.append(this.subTitle.trim().removeSuffix("\n"))
+    subTitle?.let {
+        if (it.isNotEmpty()) {
+            builder.append(": ")
+            builder.append(it.trim().removeSuffix("\n"))
+        }
     }
-
     return builder.toString()
 }
 

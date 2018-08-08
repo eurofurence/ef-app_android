@@ -1,8 +1,8 @@
 package org.eurofurence.connavigator.util.extensions
 
-fun String.markdownLinks() = this.replace(Regex("(https?:/\\/.+)"), {
+fun String?.markdownLinks() = this?.replace(Regex("(https?://.+)")) {
     result: MatchResult -> "[${result.value}](${result.value})"
-})
+}
 
 /**
  * Tries to parse the string as a unicode character

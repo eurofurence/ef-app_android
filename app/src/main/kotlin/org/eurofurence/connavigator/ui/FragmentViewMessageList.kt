@@ -58,7 +58,7 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb,NavRep
             val message = messages[position]
 
             holder.title.text = message.subject
-            holder.date.text = "From ${message.authorName}\nSent: ${message.createdDateTimeUtc.toRelative()}"
+            holder.date.text = "From ${message.authorName}\nSent: ${message.createdDateTimeUtc?.toRelative() ?: "Not yet"}"
 
             if (message.readDateTimeUtc != null) {
                 holder.icon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)

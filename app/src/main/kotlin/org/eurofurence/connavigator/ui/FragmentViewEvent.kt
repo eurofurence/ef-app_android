@@ -80,7 +80,7 @@ class FragmentViewEvent : Fragment(), HasDb {
 
             ui.title.text = event.fullTitle()
 
-            event.description.markdownLinks().let {
+            (event.description.markdownLinks() ?: "").let {
                 if (it != ui.description.tag) {
                     ui.description.tag = it
                     ui.description.loadMarkdown(it)

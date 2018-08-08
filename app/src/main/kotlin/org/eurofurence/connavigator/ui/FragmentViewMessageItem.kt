@@ -49,11 +49,11 @@ class FragmentViewMessageItem : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         val message = Gson().fromJson(arguments.getString("message"), PrivateMessageRecord::class.java)
-        ui.title.text = message.subject.capitalize()
+        ui.title.text = message.subject?.capitalize() ?: "No subject"
 
         ui.author.text = "From: ${message.authorName}"
-        ui.sent.text = "Sent: ${message.createdDateTimeUtc.toRelative()}"
-        ui.received.text = "Received: ${message.receivedDateTimeUtc.toRelative()}"
+        ui.sent.text = "Sent: ${message.createdDateTimeUtc?.toRelative() ?: "Not yet"}"
+        ui.received.text = "Received: ${message.receivedDateTimeUtc?.toRelative() ?: "Not yet"}"
         ui.read.text = "Read: ${message.readDateTimeUtc?.toRelative() ?: "Not yet"}"
 
         ui.content.loadMarkdown(message.message)

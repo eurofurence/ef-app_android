@@ -4,8 +4,8 @@ package org.eurofurence.connavigator.util.v2
  * Definition of a model join.
  */
 class Joiner<in L, in R, out I>(
-        val leftId: (L) -> I,
-        val rightId: (R) -> I) {
+        val leftId: (L) -> I?,
+        val rightId: (R) -> I?) {
 
     val inverse get() = Joiner(rightId, leftId)
 }
@@ -47,7 +47,7 @@ operator fun <L : Any, R : Any, I> Iterable<L>.get(joinerBinding: JoinerBinding<
 /**
  * Defines a model join by key extraction functions.
  */
-infix fun <L, R, I> ((L) -> I).join(right: (R) -> I) = Joiner(this, right)
+infix fun <L, R, I> ((L) -> I?).join(right: (R) -> I?) = Joiner(this, right)
 
 class IdSource<T : Any> : Source<T, T> {
     override fun get(i: T?) = i
