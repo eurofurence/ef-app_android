@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
+import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
@@ -92,6 +93,16 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
             knowledgeEntries.apply(sync.knowledgeEntries.convert())
             knowledgeGroups.apply(sync.knowledgeGroups.convert())
             maps.apply(sync.maps.convert())
+
+            // Reconcile events with favorites
+            faves = events.items.map { it.id}
+                    .toSet()
+                    .let {
+                        eventsIds -> faves.filter { it in eventsIds }
+                    }
+
+            // Update notifications for favorites
+            EventFavoriteBroadcast().updateNotificatons(applicationContext, faves)
 
             // Store new time
             date = sync.currentDateTimeUtc
