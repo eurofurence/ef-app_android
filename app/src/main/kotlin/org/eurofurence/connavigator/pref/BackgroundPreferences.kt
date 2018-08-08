@@ -9,4 +9,5 @@ import org.eurofurence.connavigator.ui.EventPagerMode
  */
 object BackgroundPreferences: KotprefModel() {
     var eventPagerMode by enumValuePref(EventPagerMode.DAYS)
+    var closeAppImmediately by booleanPref(false)
 }
