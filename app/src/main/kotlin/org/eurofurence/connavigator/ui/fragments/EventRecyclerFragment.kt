@@ -170,7 +170,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             }
 
             holder.eventEndTime.text = "$glyphEnd ${event.endTimeString()}"
-            holder.eventRoom.text = Formatter.roomFull(event[toRoom]!!)
+            holder.eventRoom.text = db.rooms[event.conferenceRoomId]?.name ?: "Unknown"
 
             // Load image
 
