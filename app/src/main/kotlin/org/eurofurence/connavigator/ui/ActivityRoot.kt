@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -36,12 +37,14 @@ import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.database.updateComplete
 import org.eurofurence.connavigator.pref.AuthPreferences
+import org.eurofurence.connavigator.pref.BackgroundPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.withArguments
@@ -282,8 +285,21 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             super.onBackPressed()
         } else if (!onHome) {
             navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
+        } else if (BackgroundPreferences.closeAppImmediately) {
+            super.onBackPressed()
         } else {
             alert("Are you sure you want to close the app?\n\n(You'll still receive notifications for announcements and personal messages when the app is closed.)", "Close Application?") {
+                customView {
+                    verticalLayout {
+                        checkBox("Remember this choice") {
+                            compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
+                            textColor = ContextCompat.getColor(context, R.color.textBlack)
+                            setOnCheckedChangeListener { _, value -> BackgroundPreferences.closeAppImmediately = value }
+                        }.lparams(matchParent, wrapContent) {
+                            margin = dip(20)
+                        }
+                    }
+                }
                 yesButton { super.onBackPressed() }
                 noButton { /* pass */ }
             }.show()
@@ -443,7 +459,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         }
 
         navTitle.text = RemotePreferences.eventTitle
-        navSubtitle.text =RemotePreferences.eventSubTitle
+        navSubtitle.text = RemotePreferences.eventSubTitle
         // On con vs. before con. This should be updated on day changes
         if (days <= 0)
             navDays.text = "Day ${1 - days}"
