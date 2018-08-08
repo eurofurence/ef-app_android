@@ -262,6 +262,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             println(it)
         }
 
+        AuthPreferences.validate()
+
         if (!RemotePreferences.autoUpdateDisabled)
             UpdateIntentService.dispatchUpdate(this)
     }
