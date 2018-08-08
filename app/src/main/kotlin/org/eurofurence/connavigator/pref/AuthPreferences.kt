@@ -38,5 +38,15 @@ object AuthPreferences : KotprefModel() {
     fun asBearer() = "Bearer $token"
     fun isValid() = DateTime.now().isBefore(tokenValidUntil)
 
+    /**
+     * Checks if a token is valid. if not, remove the token
+     */
+    fun validate() {
+        if(token.isNotEmpty() && !isValid()){
+            token = ""
+            uid = ""
+            username = ""
+        }
+    }
     fun logout() = AuthPreferences.clear()
 }
