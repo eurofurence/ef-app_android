@@ -32,7 +32,7 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb, NavRepresented {
         get() = R.id.navMaps
 
     inner class MapFragmentPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
-        override fun getPageTitle(position: Int) =
+        override fun getPageTitle(position: Int): String =
                 browseableMaps[position].description
 
         override fun getItem(position: Int) =

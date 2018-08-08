@@ -12,7 +12,7 @@ import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.webapi.ApiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
@@ -29,7 +29,7 @@ class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
 
         task {
-            val api = apiService.fursuits.apply {
+            val api = ApiService.fursuits.apply {
                 invoker.addDefaultHeader("Authorization", AuthPreferences.asBearer())
             }
 

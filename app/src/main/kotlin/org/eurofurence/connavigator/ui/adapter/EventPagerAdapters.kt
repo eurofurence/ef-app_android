@@ -61,7 +61,7 @@ class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Frag
         )
     }
 
-    override fun getPageTitle(position: Int) = rooms.asc { it.name }[position].name
+    override fun getPageTitle(position: Int): String = rooms.asc { it.name }[position].name
 
     override fun getCount() = rooms.size
 
@@ -81,7 +81,7 @@ class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fra
         )
     }
 
-    override fun getPageTitle(position: Int) = tracks[position].name
+    override fun getPageTitle(position: Int): String = tracks[position].name
 
     override fun getCount() = tracks.size
 
@@ -96,7 +96,7 @@ class FavoriteEventPagerAdapter(val db: Db, fragmentManager: FragmentManager): F
                     .sortByStartTime()
     )
 
-    override fun getPageTitle(position: Int) = days[position].name
+    override fun getPageTitle(position: Int): String = days[position].name
 
     override fun getCount() = days.size
 

@@ -21,13 +21,12 @@ import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.*
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.net.ImageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.filters.FilterType
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
-import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.*
@@ -175,7 +174,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             // Load image
 
             val image = db.images[event.bannerImageId]
-            imageService.load(image, holder.eventImage)
+            ImageService.load(image, holder.eventImage)
 
             // Assign the on-click action
             holder.itemView.setOnClickListener {

@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
@@ -22,7 +23,7 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.descriptionFor
 import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.net.ImageService
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
@@ -70,6 +71,7 @@ class FragmentViewEvent : Fragment(), HasDb {
         subscriptions = Disposables.empty()
     }
 
+    @SuppressLint("ResourceType")
     private fun fillUi() {
         if ("id" in arguments) {
             val event: EventRecord = db.events[eventId] ?: return
@@ -97,7 +99,7 @@ class FragmentViewEvent : Fragment(), HasDb {
                     ui.image.tag = it
                     if (it != null) {
                         ui.image.visibility = View.VISIBLE
-                        imageService.load(db.images[it], ui.image)
+                        ImageService.load(db.images[it], ui.image)
                     } else
                         ui.image.visibility = View.GONE
                 }
@@ -182,6 +184,7 @@ class EventUi : AnkoComponent<Fragment> {
 
     lateinit var buttonSave: FloatingActionButton
 
+    @SuppressLint("ResourceType")
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         coordinatorLayout {
             backgroundResource = R.color.backgroundGrey

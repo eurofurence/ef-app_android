@@ -6,8 +6,7 @@ import io.swagger.client.model.PostFcmDeviceRegistrationRequest
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.webapi.ApiService
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
@@ -42,7 +41,7 @@ class InstanceIdService : FirebaseInstanceIdService(), AnkoLogger {
             if(BuildConfig.DEBUG) sendTopics += "test"
 
             info { "Making network request" }
-            apiService.pushNotifications.apiV2PushNotificationsFcmDeviceRegistrationPost(
+            ApiService.pushNotifications.apiV2PushNotificationsFcmDeviceRegistrationPost(
                     PostFcmDeviceRegistrationRequest().apply {
                         deviceId = token
                         topics = sendTopics
@@ -60,7 +59,7 @@ class InstanceIdService : FirebaseInstanceIdService(), AnkoLogger {
     private fun setHeaders() {
         if (AuthPreferences.isLoggedIn()) {
             info { "User is logged in, associating token with user" }
-            apiService.pushNotifications.addHeader("Authorization", AuthPreferences.asBearer())
+            ApiService.pushNotifications.addHeader("Authorization", AuthPreferences.asBearer())
         } else {
             warn { "User is not logged in, will not send token" }
         }

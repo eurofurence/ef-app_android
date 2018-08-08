@@ -21,7 +21,7 @@ import java.util.*
 
 class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
     val ui = AnnouncementItemUi()
-    val announcementId by lazy { UUID.fromString(arguments.getString("id")) }
+    val announcementId: UUID? by lazy { UUID.fromString(arguments.getString("id")) }
 
     override val db by lazyLocateDb()
 

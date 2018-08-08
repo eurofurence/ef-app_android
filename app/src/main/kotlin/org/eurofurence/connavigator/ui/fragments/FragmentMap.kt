@@ -15,7 +15,7 @@ import io.swagger.client.model.MapRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.net.ImageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
@@ -56,7 +56,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.title.text = mapRecord.description
             ui.title.visibility = View.GONE
 
-            imageService.load(db.images[mapRecord.imageId]!!, ui.map, false)
+            ImageService.load(db.images[mapRecord.imageId]!!, ui.map, false)
 
             ui.map.attacher.minimumScale = 1F
             ui.map.attacher.mediumScale = 2.5F

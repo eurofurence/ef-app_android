@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -9,8 +10,6 @@ import android.view.Gravity
 import android.view.View
 import android.widget.*
 import at.grabner.circleprogress.CircleProgressView
-import com.github.lzyzsd.circleprogress.CircleProgress
-import com.github.lzyzsd.circleprogress.DonutProgress
 import com.google.firebase.perf.metrics.AddTrace
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
@@ -24,7 +23,7 @@ import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.database.locateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.net.ImageService
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
@@ -59,7 +58,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             val promises = db.images.items.fold(Promise.of<Any?>(Unit)) { p, img ->
                 p thenNested {
                     // After the previous image, load the next one.
-                    imageService.preload(img)
+                    ImageService.preload(img)
                 } successUi {
                     // Increment the counter and display on UI.
                     imgCountLoaded++
@@ -200,6 +199,7 @@ class StartUi : AnkoComponent<ActivityStart> {
     lateinit var performanceData: CheckBox
     var initialized = false
 
+    @SuppressLint("ResourceType")
     override fun createView(ui: AnkoContext<ActivityStart>) = with(ui) {
         verticalLayout {
             backgroundResource = R.color.backgroundGrey
@@ -282,7 +282,7 @@ Is it okay to download the data now?
 
                 progressText = textView("Working... Please wait!") {
                     id = 1
-                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+                    gravity = Gravity.CENTER
                     compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                 }.lparams(matchParent, wrapContent) {
                     centerInParent()

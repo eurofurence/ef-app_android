@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.github.kittinunf.fuel.Fuel
 import com.google.gson.Gson
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
@@ -16,16 +15,13 @@ import io.swagger.client.model.PrivateMessageRecord
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.markAsRead
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoContext.Companion
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.dip
@@ -96,7 +92,7 @@ class MessageItemUi : AnkoComponent<Fragment> {
 
                 icon = fontAwesomeView {
                     text = "{fa-envelope 30sp}"
-                    gravity = Gravity.LEFT or Gravity.TOP
+                    gravity = Gravity.START or Gravity.TOP
                     setPadding(dip(20),  dip(20), 0, 0)
                 }.lparams(dip(0), matchParent, 15F)
 

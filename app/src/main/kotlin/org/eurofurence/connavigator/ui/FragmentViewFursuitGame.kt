@@ -19,7 +19,7 @@ import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.webapi.ApiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
@@ -55,7 +55,7 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
         task {
             info { "Making  network request" }
-            val api = apiService.fursuits.apply {
+            val api = ApiService.fursuits.apply {
                 invoker.addDefaultHeader("Authorization", AuthPreferences.asBearer())
             }
 

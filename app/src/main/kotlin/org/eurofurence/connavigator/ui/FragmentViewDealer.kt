@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.annotation.SuppressLint
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -28,7 +29,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.findLinkFragment
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.net.ImageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
@@ -45,7 +46,7 @@ import org.jetbrains.anko.support.v4.px2dip
 import java.util.*
 
 class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
-    val dealerId by lazy { UUID.fromString(arguments.getString("id")) }
+    val dealerId: UUID by lazy { UUID.fromString(arguments.getString("id")) }
     val ui by lazy { DealerUi() }
 
     override val db by lazyLocateDb()
@@ -81,13 +82,13 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             // Set image on top
             if (image != null) {
-                imageService.load(image, ui.primaryImage, false)
+                ImageService.load(image, ui.primaryImage, false)
             } else {
                 ui.primaryImage.visibility = View.GONE
             }
 
             // Load art preview image
-            imageService.load(dealer[toPreview], ui.artPreview)
+            ImageService.load(dealer[toPreview], ui.artPreview)
 
             ui.artPreviewCaption.text = dealer.artPreviewCaption
 
@@ -159,7 +160,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             val ox = (entry.x ?: 0) - x
             val oy = (entry.y ?: 0) - y
 
-            imageService.preload(mapImage) successUi {
+            ImageService.preload(mapImage) successUi {
                 if (it == null)
                     ui.map.visibility = View.GONE
                 else {
@@ -271,6 +272,7 @@ class DealerUi : AnkoComponent<Fragment> {
     lateinit var availableDaysText: IconTextView
     lateinit var afterDarkText: TextView
 
+    @SuppressLint("ResourceType")
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
             backgroundResource = R.color.backgroundGrey
@@ -390,12 +392,12 @@ class DealerUi : AnkoComponent<Fragment> {
                             padding = dip(10)
                             availableDaysText = fontAwesomeView {
                                 text = "{fa-exclamation-triangle 24sp} Only present on: "
-                                compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
+                                compatAppearance = android.R.style.TextAppearance_Medium
                             }
 
                             afterDarkText = fontAwesomeView {
                                 text = "{fa-moon-o 24sp}  Located in the After Dark Dealers Den"
-                                compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
+                                compatAppearance = android.R.style.TextAppearance_Medium
                             }
                         }
                     }.lparams(matchParent, wrapContent) {

@@ -101,7 +101,7 @@ class NotificationFactory(var context: Context) {
         setOngoing(true)
     }
 
-    fun addBigText(builder: NotificationCompat.Builder, bigText: String?) = builder.setStyle(
+    fun addBigText(builder: NotificationCompat.Builder, bigText: String?): NotificationCompat.Builder? = builder.setStyle(
             NotificationCompat.BigTextStyle()
                     .bigText(bigText)
     )

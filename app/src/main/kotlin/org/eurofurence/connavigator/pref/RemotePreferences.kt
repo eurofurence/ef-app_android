@@ -51,11 +51,11 @@ object RemotePreferences : AnkoLogger {
         update()
     }
 
-    val observer = BehaviorSubject.create<RemotePreferences>()
+    val observer: BehaviorSubject<RemotePreferences> = BehaviorSubject.create<RemotePreferences>()
 
     val lastUpdatedMillis get() = remoteConfig.info.fetchTimeMillis
     val lastUpdatedDatetime get() = DateTime(lastUpdatedMillis)
-    val timeSinceLastUpdate get() = DateTime.now().minus(lastUpdatedMillis)
+    val timeSinceLastUpdate: DateTime get() = DateTime.now().minus(lastUpdatedMillis)
 
     // Booleans
     val mapsEnabled: Boolean get() = remoteConfig.getBoolean("maps_enabled")
@@ -68,8 +68,8 @@ object RemotePreferences : AnkoLogger {
     val lastConEnd get() = remoteConfig.getLong("lastConEnd")
 
     // Strings
-    val apiBaseUrl get() =   remoteConfig.getString("api_base_url")
-    val supportChatUrl get() = remoteConfig.getString("support_chat_url")
-    val eventTitle get() = remoteConfig.getString("event_title")
-    val eventSubTitle get() = remoteConfig.getString("event_subtitle")
+    val apiBaseUrl: String get() =   remoteConfig.getString("api_base_url")
+    val supportChatUrl: String get() = remoteConfig.getString("support_chat_url")
+    val eventTitle: String get() = remoteConfig.getString("event_title")
+    val eventSubTitle: String get() = remoteConfig.getString("event_subtitle")
 }

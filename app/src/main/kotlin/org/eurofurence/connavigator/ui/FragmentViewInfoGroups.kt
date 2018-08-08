@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -37,6 +38,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
         }
     }
 
+    @SuppressLint("ResourceType")
     private fun fillUi() {
         val transaction = childFragmentManager.beginTransaction()
 
@@ -64,6 +66,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
 }
 
 class ViewInfoGroupsUi : AnkoComponent<Fragment> {
+    @SuppressLint("ResourceType")
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         scrollView {
             verticalLayout {

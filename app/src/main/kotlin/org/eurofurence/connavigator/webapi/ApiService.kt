@@ -32,8 +32,8 @@ import java.io.File
 /**
  * The API services manage extended API functionality
  */
-object apiService {
-    var apiPath = RemotePreferences.apiBaseUrl
+object ApiService {
+    var apiPath: String = RemotePreferences.apiBaseUrl
 
     val announcements by lazy { AnnouncementsApi().apply { basePath = apiPath } }
 

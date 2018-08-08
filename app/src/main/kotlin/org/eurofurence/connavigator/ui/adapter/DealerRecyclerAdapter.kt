@@ -14,7 +14,7 @@ import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.net.ImageService
 import org.eurofurence.connavigator.ui.dialogs.DealerDialog
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -54,7 +54,7 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
 
         // If no dealer preview was provided, load the YCH icon
         if (dealer[toThumbnail] != null) {
-            imageService.load(dealer[toThumbnail], holder.dealerPreviewImage, false)
+            ImageService.load(dealer[toThumbnail], holder.dealerPreviewImage, false)
         } else {
             holder.dealerPreviewImage.setImageDrawable(
                     ContextCompat.getDrawable(fragment.context, R.drawable.dealer_black))
@@ -77,7 +77,7 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
         }
 
         holder.layout.setOnLongClickListener {
-            DealerDialog(dealer).show(fragment.childFragmentManager, "Dealer menu")
+            DealerDialog().withArguments(dealer).show(fragment.childFragmentManager, "Dealer menu")
             true
         }
     }
@@ -102,7 +102,7 @@ class DealerListItemUI : AnkoComponent<ViewGroup> {
                     padding = dip(5)
                     scaleType = ImageView.ScaleType.FIT_XY
                     id = R.id.dealerPreviewImage
-                }.lparams(dip(75), dip(75))  { gravity = Gravity.LEFT }
+                }.lparams(dip(75), dip(75))  { gravity = Gravity.START }
             }.lparams(dip(0), wrapContent, 20F)  { gravity = Gravity.CENTER_VERTICAL }
 
             verticalLayout {

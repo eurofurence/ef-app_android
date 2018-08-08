@@ -10,7 +10,7 @@ import java.util.*
 /**
  * Logging services.
  */
-object logService {
+object LogService {
     val DEFAULT_TAG = "LOG"
 
     /**

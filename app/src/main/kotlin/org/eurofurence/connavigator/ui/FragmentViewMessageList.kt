@@ -30,7 +30,7 @@ import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.webapi.ApiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
@@ -98,8 +98,8 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb,NavRep
             ui.messageList.visibility = View.GONE
         } then {
             info { "Fetching messages" }
-            apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
-            apiService.communications.apiV2CommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
+            ApiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
+            ApiService.communications.apiV2CommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
         } success {
             info("Succesfully retrieved ${it.size} messages")
             this.messages = it

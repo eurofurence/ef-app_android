@@ -20,7 +20,7 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.webapi.ApiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.intentFor
@@ -37,7 +37,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
 
     fun checkMessages() = task {
         info { "Checking message counts" }
-        apiService.communications.let {
+        ApiService.communications.let {
             it.addHeader("Authorization", AuthPreferences.asBearer())
             it.apiV2CommunicationPrivateMessagesGet()
         }

@@ -260,7 +260,7 @@ interface HasDb : Db {
  * Direct database implementation.
  */
 class RootDb(context: Context) : Stored(context), Db {
-    override val observer = BehaviorSubject.create<Db>().apply {
+    override val observer: BehaviorSubject<Db> = BehaviorSubject.create<Db>().apply {
         // Autopush a single event to render
         onNext(this@RootDb)
     }
@@ -342,7 +342,7 @@ class RootDb(context: Context) : Stored(context), Db {
         maps.delete()
     }
 
-    override fun subscribe(function: (db: Db) -> Any) = observer.observeOn(AndroidSchedulers.mainThread())
+    override fun subscribe(function: (db: Db) -> Any): Disposable = observer.observeOn(AndroidSchedulers.mainThread())
             .subscribe { function(it) }
 }
 

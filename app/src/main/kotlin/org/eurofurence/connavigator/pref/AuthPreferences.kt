@@ -24,15 +24,15 @@ fun <R,T> ReadWriteProperty<R,T>.notify(asyncSubject: BehaviorSubject<T>) =
         ObservedProperty(this, asyncSubject)
 
 object AuthPreferences : KotprefModel() {
-    var observer = BehaviorSubject.create<String>().apply { onNext("init") }
+    var observer: BehaviorSubject<String> = BehaviorSubject.create<String>().apply { onNext("init") }
 
     var token by stringPref("").notify(observer)
 
-    var tokenValidUntil by longPref(0)
+    var tokenValidUntil: Long by longPref(0)
     var uid by stringPref("")
-    var username by stringPref("").notify(observer)
+    var username: String by stringPref("").notify(observer)
 
-    var lastReportedFirebaseToken by stringPref("").notify(observer)
+    var lastReportedFirebaseToken: String by stringPref("").notify(observer)
 
     fun isLoggedIn() = token.isNotEmpty()
     fun asBearer() = "Bearer $token"

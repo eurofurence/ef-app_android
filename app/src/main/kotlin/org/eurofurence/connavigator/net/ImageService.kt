@@ -24,7 +24,7 @@ import org.eurofurence.connavigator.util.extensions.url
 /**
  * Provides methods for obtaining images from web and caching them.
  */
-object imageService {
+object ImageService {
     /**
      * Image loading progress listener that does nothing.
      */

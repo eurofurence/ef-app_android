@@ -10,6 +10,6 @@ import java.util.*
  * Created by requinard on 7/9/17.
  */
 fun Date.jodatime() = DateTime(this.time)
-fun Date.toRelative() = PrettyTime().format(this)
+fun Date.toRelative(): String? = PrettyTime().format(this)
 
-fun now() = DateTime.now()
+fun now(): DateTime = DateTime.now()

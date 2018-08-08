@@ -5,13 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.net.ImageService
 import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.util.v2.internalSpec
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.webapi.ApiService
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.serialization.Serializable
@@ -55,7 +55,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
             logv("UIS") { "Retrieving sync since $date" }
 
             // Get sync from server
-            val sync = apiService.sync.apiV2SyncGet(date)
+            val sync = ApiService.sync.apiV2SyncGet(date)
 
             logv("UIS") { sync }
 
@@ -65,7 +65,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
             if (shift) {
                 logd { "Changing dates instead of updating" }
                 // Get all dates explicitly
-                val base = apiService.days.apiV2EventConferenceDaysGet()
+                val base = ApiService.days.apiV2EventConferenceDaysGet()
 
                 // Shift by offset
                 val currentDate = DateTime.now()
@@ -79,7 +79,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
             }
 
             for (image in sync.images.changedEntities)
-                imageService.recache(image)
+                ImageService.recache(image)
 
 
             // Apply sync

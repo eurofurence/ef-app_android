@@ -38,7 +38,7 @@ class Analytics {
 
     companion object {
         lateinit var analytics: FirebaseAnalytics
-        val performance by lazy { FirebasePerformance.getInstance() }
+        val performance: FirebasePerformance by lazy { FirebasePerformance.getInstance() }
         fun init(context: Context) {
             analytics = FirebaseAnalytics.getInstance(context).apply {
                 setAnalyticsCollectionEnabled(AnalyticsPreferences.enabled)
