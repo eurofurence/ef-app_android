@@ -28,6 +28,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
+import org.eurofurence.connavigator.ui.fragments.MapDetailFragment
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
@@ -129,6 +130,10 @@ class FragmentViewEvent : Fragment(), HasDb {
                 }
                 true
             }
+
+            childFragmentManager.beginTransaction()
+                    .replace(27, MapDetailFragment().withArguments(conferenceRoom.id, true), "mapDetails")
+                    .commit()
         }
     }
 
@@ -242,6 +247,10 @@ class EventUi : AnkoComponent<Fragment> {
                         description = ankoView(::MarkdownView, 0) {
                         }.lparams(matchParent, wrapContent)
                     }.lparams(matchParent, wrapContent)
+
+                    verticalLayout {
+                        id = 27
+                    }
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, matchParent)
 

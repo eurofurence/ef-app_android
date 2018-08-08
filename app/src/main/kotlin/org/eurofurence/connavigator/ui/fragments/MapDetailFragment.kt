@@ -1,0 +1,158 @@
+package org.eurofurence.connavigator.ui.fragments
+
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.BitmapDrawable
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.github.chrisbanes.photoview.PhotoView
+import io.reactivex.disposables.Disposables
+import io.swagger.client.model.MapEntryRecord
+import io.swagger.client.model.MapRecord
+import nl.komponents.kovenant.ui.failUi
+import nl.komponents.kovenant.ui.successUi
+import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.findLinkFragment
+import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.util.extensions.photoView
+import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.plus
+import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.px2dip
+import java.util.*
+
+class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
+    override val db by lazyLocateDb()
+
+    val ui by lazy { MapDetailUi() }
+    val id get() = arguments.getString("id") ?: ""
+    val showTitle get() = arguments.getBoolean("showTitle")
+    var subscriptions = Disposables.empty()
+    var linkFound = false
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+            UI { ui.createView(this) }.view
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        subscriptions += db.subscribe {
+            ui.title.visibility = if(showTitle) View.VISIBLE else View.GONE
+            findLinkFragment()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
+    }
+
+    fun withArguments(id: UUID, showTitle: Boolean= false) = apply {
+        arguments = Bundle().apply {
+            putString("id", id.toString())
+            putBoolean("showTitle", showTitle)
+        }
+    }
+
+    fun findLinkFragment() {
+        info { "Finding map link in mapEntries. ID: ${id}" }
+        val entryMap = db.findLinkFragment(id)
+
+        val map = entryMap["map"] as MapRecord?
+        val entry = entryMap["entry"] as MapEntryRecord?
+
+        if (map == null) {
+            info { "No maps or deviations. Hiding location and availability" }
+            ui.layout.visibility = View.GONE
+            return
+        }
+
+        // Setup map
+        if (map != null && entry != null) {
+            info { "Found maps and entries, ${map.description} at (${entry.x}, ${entry.y})" }
+
+            linkFound = true
+
+            val mapImage = db.toImage(map)!!
+            val radius = 300
+            val circle = entry.tapRadius
+            val x = maxOf(0, entry.x - radius)
+            val y = maxOf(0, entry.y - radius)
+            val w = minOf(mapImage.width - x - 1, radius + radius)
+            val h = minOf(mapImage.height - y - 1, radius + radius)
+            val ox = entry.x - x
+            val oy = entry.y - y
+
+            imageService.preload(mapImage) successUi {
+                if (it == null)
+                    ui.layout.visibility = View.GONE
+                else {
+                    try {
+                        val bitmap = Bitmap.createBitmap(it, x, y, w, h)
+
+                        Canvas(bitmap).apply {
+                            drawCircle(ox.toFloat(), oy.toFloat(), circle.toFloat(), Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                                color = Color.RED
+                                style = Paint.Style.STROKE
+                                strokeWidth = px2dip(5)
+                            })
+                        }
+
+                        ui.map.image = BitmapDrawable(resources, bitmap)
+                        ui.layout.visibility = View.VISIBLE
+                    } catch (ex: IllegalArgumentException) {
+                        ui.layout.visibility = View.GONE
+                    }
+                }
+            } failUi {
+                ui.layout.visibility = View.GONE
+            }
+        } else {
+            warn { "No map or entry found!" }
+            ui.layout.visibility = View.GONE
+        }
+
+    }
+
+}
+
+class MapDetailUi : AnkoComponent<Fragment> {
+    lateinit var map: PhotoView
+    lateinit var layout: LinearLayout
+    lateinit var title: TextView
+
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
+        relativeLayout() {
+            lparams(matchParent, wrapContent)
+            layout = verticalLayout {
+                backgroundResource = R.color.cardview_light_background
+                title = textView("Location") {
+                    compatAppearance = android.R.style.TextAppearance_Small
+                    padding = dip(20)
+                }
+                map = photoView {
+                    backgroundResource = R.color.cardview_dark_background
+                    minimumScale = 1F
+                    mediumScale = 2.5F
+                    maximumScale = 5F
+                    scaleType = ImageView.ScaleType.CENTER_INSIDE
+                    imageResource = R.drawable.placeholder_event
+                }.lparams(matchParent, wrapContent)
+            }.lparams(matchParent, wrapContent) {
+                topMargin = dip(10)
+            }
+        }
+    }
+}
