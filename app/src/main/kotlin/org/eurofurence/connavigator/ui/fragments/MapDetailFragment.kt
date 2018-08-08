@@ -48,7 +48,7 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
 
         subscriptions += db.subscribe {
-            ui.title.visibility = if(showTitle) View.VISIBLE else View.GONE
+            ui.title.visibility = if (showTitle) View.VISIBLE else View.GONE
             findLinkFragment()
         }
     }
@@ -59,7 +59,7 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
         subscriptions = Disposables.empty()
     }
 
-    fun withArguments(id: UUID, showTitle: Boolean= false) = apply {
+    fun withArguments(id: UUID, showTitle: Boolean = false) = apply {
         arguments = Bundle().apply {
             putString("id", id.toString())
             putBoolean("showTitle", showTitle)
@@ -88,12 +88,12 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
             val mapImage = db.toImage(map)!!
             val radius = 300
             val circle = entry.tapRadius
-            val x = maxOf(0, entry.x - radius)
-            val y = maxOf(0, entry.y - radius)
-            val w = minOf(mapImage.width - x - 1, radius + radius)
-            val h = minOf(mapImage.height - y - 1, radius + radius)
-            val ox = entry.x - x
-            val oy = entry.y - y
+            val x = maxOf(0, (entry.x ?: 0) - radius)
+            val y = maxOf(0, (entry.y ?: 0) - radius)
+            val w = minOf((mapImage.width ?: 0) - x - 1, radius + radius)
+            val h = minOf((mapImage.height ?: 0) - y - 1, radius + radius)
+            val ox = (entry.x ?: 0) - x
+            val oy = (entry.y ?: 0) - y
 
             imageService.preload(mapImage) successUi {
                 if (it == null)
@@ -103,7 +103,8 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
                         val bitmap = Bitmap.createBitmap(it, x, y, w, h)
 
                         Canvas(bitmap).apply {
-                            drawCircle(ox.toFloat(), oy.toFloat(), circle.toFloat(), Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                            drawCircle(ox.toFloat(), oy.toFloat(), (circle
+                                    ?: 0).toFloat(), Paint(Paint.ANTI_ALIAS_FLAG).apply {
                                 color = Color.RED
                                 style = Paint.Style.STROKE
                                 strokeWidth = px2dip(5)
