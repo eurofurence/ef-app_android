@@ -5,6 +5,8 @@ import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.perf.FirebasePerformance
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
+import org.eurofurence.connavigator.util.extensions.logd
+import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.bundleOf
 
 /**o
@@ -64,5 +66,11 @@ class Analytics {
                         FirebaseAnalytics.Param.ITEM_NAME to label
                 )
         )
+
+        fun updateSettings() {
+            logd { "Analytics: ${AnalyticsPreferences.enabled}; Performance: ${AnalyticsPreferences.performanceTracking}" }
+            analytics.setAnalyticsCollectionEnabled(AnalyticsPreferences.enabled)
+            performance.isPerformanceCollectionEnabled = AnalyticsPreferences.performanceTracking
+        }
     }
 }
