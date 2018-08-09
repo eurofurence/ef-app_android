@@ -36,6 +36,7 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.database.updateComplete
+import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.BackgroundPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
@@ -135,6 +136,13 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     updateNavCountdown()
+                }
+
+        subscriptions += AnalyticsPreferences
+                .observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Analytics.updateSettings()
                 }
 
         // Show the home screen

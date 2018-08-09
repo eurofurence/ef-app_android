@@ -28,6 +28,7 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.circleProgress
 import org.eurofurence.connavigator.util.extensions.localReceiver
@@ -114,6 +115,12 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     ui.remoteLastUpdatedText.text = "Remote configs was updated ${it.timeSinceLastUpdate.millis / 1000} seconds ago."
+                }
+
+        subscriptions += AnalyticsPreferences.observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Analytics.updateSettings()
                 }
 
         savedInstanceState?.let {
@@ -250,6 +257,7 @@ Is it okay to download the data now?
 
                     analyticalData = checkBox("Allow Eurofurence to collect anonymous analytical data.") {
                         hint = "This can be changed in your settings at any time."
+                        isChecked = AnalyticsPreferences.enabled
                         setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
                     }.lparams(matchParent, wrapContent) {
                         padding = dip(30)
@@ -257,6 +265,7 @@ Is it okay to download the data now?
 
                     performanceData = checkBox("Allow Eurofurence to collect performance data.") {
                         hint = "This can be changed in your settings at any time."
+                        isChecked = AnalyticsPreferences.performanceTracking
                         setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
                     }.lparams(matchParent, wrapContent) {
                         padding = dip(30)
