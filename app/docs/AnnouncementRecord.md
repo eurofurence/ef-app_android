@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **author** | **String** |  | 
 **title** | **String** |  | 
 **content** | **String** |  | 
+**imageId** | [**UUID**](UUID.md) |  |  [optional]
 
 
 

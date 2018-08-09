@@ -5,16 +5,20 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import com.github.chrisbanes.photoview.PhotoView
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.util.extensions.markdownView
+import org.eurofurence.connavigator.util.extensions.photoView
 import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.get
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
-import org.jetbrains.anko.AnkoContext.Companion
 import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView
 import java.util.*
@@ -39,6 +43,16 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
             info { "Updating announcement item" }
             ui.title.text = announcement.title
             ui.text.loadMarkdown(announcement.content)
+
+            // Retrieve top image
+            val image = announcement[toAnnouncementImage]
+
+            // Set image on top
+            if (image != null) {
+                imageService.load(image, ui.image, false)
+            } else {
+                ui.image.visibility = View.GONE
+            }
         }
     }
 
@@ -52,22 +66,40 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
 class AnnouncementItemUi : AnkoComponent<Fragment> {
     lateinit var title: TextView
     lateinit var text: MarkdownView
+    lateinit var image: PhotoView
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        verticalLayout {
-            backgroundResource = R.color.cardview_light_background
-            isClickable = true
-            lparams(matchParent, matchParent)
+        relativeLayout {
+            backgroundResource = R.color.backgroundGrey
+            scrollView {
+                lparams(matchParent, matchParent)
 
-            linearLayout {
-                backgroundResource = R.drawable.image_fade
-                title = textView {
-                    compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large_Inverse
-                    padding = dip(50)
-                }
-            }
-            linearLayout {
-                padding = dip(20)
-                text = markdownView {}
+                verticalLayout {
+                    backgroundResource = R.color.cardview_light_background
+                    isClickable = true
+
+                    linearLayout {
+                        padding = dip(50)
+                        backgroundResource = R.drawable.image_fade
+                        title = textView {
+                            compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large_Inverse
+                        }
+                    }
+
+                    text = markdownView {
+
+                    }.lparams(matchParent, wrapContent) {
+                        margin = dip(20 - 8)
+                    }
+
+                    image = photoView {
+                        backgroundResource = R.color.cardview_dark_background
+                        imageResource = R.drawable.placeholder_event
+                        scaleType = ImageView.ScaleType.FIT_CENTER
+                        adjustViewBounds = true
+                    }.lparams(matchParent, wrapContent) {
+                        margin = dip(20)
+                    }
+                }.lparams(matchParent, wrapContent)
             }
         }
     }
