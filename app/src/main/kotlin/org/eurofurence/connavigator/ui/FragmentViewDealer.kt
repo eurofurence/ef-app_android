@@ -149,7 +149,9 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         if (map != null && entry != null) {
             info { "Found maps and entries, ${map.description} at (${entry.x}, ${entry.y})" }
 
-            val mapImage = db.toImage(map)!!
+            val mapImage = db.toImage(map) ?: return
+
+
             val radius = 300
             val circle = entry.tapRadius
             val x = maxOf(0, (entry.x ?: 0) - (radius ?: 0))
@@ -170,7 +172,11 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
                                 ?: 0f, Paint(Paint.ANTI_ALIAS_FLAG).apply {
                             color = Color.RED
                             style = Paint.Style.STROKE
-                            strokeWidth = px2dip(5)
+                            strokeWidth = try {
+                                px2dip(5)
+                            } catch (ex: IllegalArgumentException) {
+                                5F
+                            }
                         })
                     }
 
@@ -180,11 +186,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
             } failUi {
                 ui.map.visibility = View.GONE
             }
-        } else {
-            warn { "No map or entry found!" }
-            ui.map.visibility = View.GONE
         }
-
     }
 
     private fun configureAvailability(dealer: DealerRecord) {

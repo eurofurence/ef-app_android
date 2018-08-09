@@ -35,10 +35,10 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
         info { "Created announcement view for $announcementId" }
 
         subscriptions += db.subscribe {
-            val announcement = it.announcements[announcementId]!!
+            val announcement = it.announcements[announcementId]
             info { "Updating announcement item" }
-            ui.title.text = announcement.title
-            ui.text.loadMarkdown(announcement.content)
+            ui.title.text = announcement?.title ?: "Unable to load announcement"
+            ui.text.loadMarkdown(announcement?.content ?: "Something went wrong")
         }
     }
 
