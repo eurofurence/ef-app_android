@@ -179,17 +179,18 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
                         lparams(matchParent, matchParent)
 
-                        regNumber = editText {
-                            hint = "Registration number"
-                            inputType = InputType.TYPE_CLASS_NUMBER
-
+                        username = editText {
+                            hint = "Username"
+                            inputType = InputType.TYPE_CLASS_TEXT
                             lparams(matchParent, wrapContent) {
                                 margin = dip(16)
                             }
                         }
 
-                        username = editText {
-                            hint = "Username"
+                        regNumber = editText {
+                            hint = "Registration number"
+                            inputType = InputType.TYPE_CLASS_NUMBER
+
                             lparams(matchParent, wrapContent) {
                                 margin = dip(16)
                             }
