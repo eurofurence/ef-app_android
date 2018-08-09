@@ -17,12 +17,11 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.util.extensions.contains
-import org.eurofurence.connavigator.util.extensions.findMatchingEntries
-import org.eurofurence.connavigator.util.extensions.jsonObjects
-import org.eurofurence.connavigator.util.extensions.photoView
+import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.browse
+import org.jetbrains.anko.support.v4.longToast
 import org.jetbrains.anko.support.v4.selector
 import java.util.*
 import kotlin.properties.Delegates.notNull
@@ -90,7 +89,6 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     }
                 }
             }
-        }
     } else
     {
         ui.map.setImageResource(R.drawable.placeholder_event)
