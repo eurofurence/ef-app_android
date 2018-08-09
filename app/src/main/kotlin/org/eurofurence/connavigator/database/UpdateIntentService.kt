@@ -36,6 +36,8 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
          * @param context The host context for the service
          */
         fun dispatchUpdate(context: Context, showToastOnCompletion: Boolean = false) {
+            logv("UIS") { "Dispatching update" }
+
             val intent = Intent(context, UpdateIntentService::class.java)
             intent.putExtra("showToastOnCompletion", showToastOnCompletion)
 
