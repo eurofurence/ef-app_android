@@ -217,7 +217,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     text = it.target
                     visibility = View.VISIBLE
                     //layoutParams = LinearLayout.LayoutParams(matchParent, wrapContent)
-                    setOnTouchListener { _, _ -> browse(it.target) }
+                    setOnClickListener { _ -> browse(it.target) }
                 }
 
                 ui.websites.addView(button)
