@@ -179,6 +179,7 @@ class AboutUi : AnkoComponent<Fragment> {
 - Aragon Tigerseye
 - Atkelar
 - Cairyn
+- Carenath Stormwind
 - Jul
 - Liam
 - NordicFuzzCon (Catch'em all)

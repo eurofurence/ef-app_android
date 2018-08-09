@@ -437,7 +437,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 }
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
-                R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this)
+                R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this, showToastOnCompletion = true)
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
                     alert("Empty app cache. You WILL need an internet connection to restart", "Clear database") {

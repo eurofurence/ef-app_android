@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.tracking
 
 import android.app.Activity
 import android.content.Context
+import com.crashlytics.android.Crashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.perf.FirebasePerformance
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
@@ -72,5 +73,7 @@ class Analytics {
             analytics.setAnalyticsCollectionEnabled(AnalyticsPreferences.enabled)
             performance.isPerformanceCollectionEnabled = AnalyticsPreferences.performanceTracking
         }
+
+        fun ex(exception: Exception) = Crashlytics.logException(exception)
     }
 }
