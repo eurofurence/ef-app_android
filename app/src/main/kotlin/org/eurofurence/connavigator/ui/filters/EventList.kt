@@ -11,7 +11,6 @@ import org.eurofurence.connavigator.util.extensions.fullTitle
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.Comparator
-import kotlin.collections.LinkedHashMap
 import kotlin.collections.set
 
 /**
@@ -28,7 +27,7 @@ class EventList(override val db: Db) : HasDb {
         val now = DateTime.now()
         for ((k, v) in filters)
             when (k) {
-                BY_TITLE -> events.removeAll { !it.title.contains(v as String, true) }
+                BY_TITLE -> events.removeAll { !it.fullTitle().contains(v, true) }
 
                 ON_DAY -> events.removeAll { it.conferenceDayId.toString() != v }
                 ON_TRACK -> events.removeAll { it.conferenceTrackId.toString() != v }
