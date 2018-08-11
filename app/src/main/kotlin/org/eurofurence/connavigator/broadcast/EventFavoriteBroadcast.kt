@@ -84,8 +84,8 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
         )
         notificationFactory.setActivity(notification)
 
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, event.id.hashCode())
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification.build())
+        notificationIntent.putExtra(NotificationPublisher.TAG, event.id.toString())
+        notificationIntent.putExtra(NotificationPublisher.ITEM, notification.build())
         return notificationIntent
     }
 

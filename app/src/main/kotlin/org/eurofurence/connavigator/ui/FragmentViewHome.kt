@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -13,8 +14,14 @@ import android.widget.LinearLayout
 import com.github.lzyzsd.circleprogress.ArcProgress
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
+import nl.komponents.kovenant.task
+import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.database.locateDb
+import org.eurofurence.connavigator.gcm.cancelFromRelated
+import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.EventList
@@ -24,6 +31,7 @@ import org.eurofurence.connavigator.ui.fragments.UserStatusFragment
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.arcProgress
 import org.eurofurence.connavigator.util.v2.plus
+import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.nestedScrollView
@@ -33,7 +41,9 @@ import org.joda.time.Days
 /**
  * Created by David on 5/14/2016.
  */
-class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, NavRepresented {
+class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, NavRepresented, HasDb {
+    override val db by lazyLocateDb()
+
     val ui by lazy { HomeUi() }
 
     override val drawerItemId: Int
@@ -59,6 +69,28 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, NavRepresented {
         subscriptions += RemotePreferences.observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { configureProgressBar() }
+
+        subscriptions += db.subscribe {
+            context.notificationManager.apply {
+                // Cancel all event notifications.
+                for (e in events.items)
+                    cancelFromRelated(e.id)
+
+                // Cancel all announcement notifications.
+                for (a in announcements.items)
+                    cancelFromRelated(a.id)
+
+                // Get all PMs and cancel those as well.
+                task {
+                    apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
+                    apiService.communications.apiV2CommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
+                } successUi {
+                    for (m in it)
+                        cancelFromRelated(m.id)
+                }
+            }
+
+        }
     }
 
     override fun onDestroyView() {
@@ -67,6 +99,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, NavRepresented {
         subscriptions = Disposables.empty()
     }
 
+    @SuppressLint("ResourceType")
     private fun configureEventRecyclers() {
         info { "Configuring event recyclers" }
 
@@ -110,6 +143,7 @@ class HomeUi : AnkoComponent<Fragment> {
     lateinit var announcementFragment: ViewGroup
     lateinit var loginWidget: ViewGroup
 
+    @SuppressLint("ResourceType")
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         nestedScrollView {
             lparams(matchParent, matchParent)

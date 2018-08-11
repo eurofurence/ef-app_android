@@ -16,16 +16,16 @@ import org.jetbrains.anko.notificationManager
  */
 class NotificationPublisher : BroadcastReceiver() {
     companion object {
-        val NOTIFICATION_ID = "notification-id"
-        val NOTIFICATION = "notification"
+        val TAG = "org.eurofurence.connavigator.gcm.NotificationPublisher.TAG"
+        val ITEM = "org.eurofurence.connavigator.gcm.NotificationPublisher.ITEM"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         d { "Received intent to send a notification" }
-        val notification = intent.getParcelableExtra<Notification>(NOTIFICATION)
-        val id = intent.getIntExtra(NOTIFICATION_ID, 0)
+        val notification = intent.getParcelableExtra<Notification>(ITEM)
+        val tag = intent.getStringExtra(TAG) ?: ""
 
         d { "Sending notification to system" }
-        context.notificationManager.notify(id, notification)
+        context.notificationManager.notify(tag, 0, notification)
     }
 }
