@@ -89,6 +89,11 @@ interface Db {
     var faves: List<UUID>
 
     /**
+     * Announcement &rarr; Image join for the thumbnail.
+     */
+    val toAnnouncementImage: JoinerBinding<AnnouncementRecord, ImageRecord, UUID>
+
+    /**
      * Dealer &rarr; Image join for the thumbnail.
      */
     val toThumbnail: JoinerBinding<DealerRecord, ImageRecord, UUID>
@@ -220,6 +225,9 @@ interface HasDb : Db {
     override val maps: StoredSource<MapRecord>
         get() = db.maps
 
+    override val toAnnouncementImage: JoinerBinding<AnnouncementRecord, ImageRecord, UUID>
+        get() = db.toAnnouncementImage
+
     override val toThumbnail: JoinerBinding<DealerRecord, ImageRecord, UUID>
         get() = db.toThumbnail
 
@@ -290,6 +298,11 @@ class RootDb(context: Context) : Stored(context), Db {
     override val knowledgeGroups = storedSource(KnowledgeGroupRecord::getId)
 
     override val maps = storedSource(MapRecord::getId)
+
+    override val toAnnouncementImage: JoinerBinding<AnnouncementRecord, ImageRecord, UUID>
+        get() = JoinerBinding(
+                AnnouncementRecord::getImageId join ImageRecord::getId,
+                announcements, images)
 
     override val toThumbnail = JoinerBinding(
             DealerRecord::getArtistThumbnailImageId join ImageRecord::getId,

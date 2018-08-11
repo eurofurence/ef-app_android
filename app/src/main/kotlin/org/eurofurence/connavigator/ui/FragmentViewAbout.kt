@@ -19,21 +19,9 @@ import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.now
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.button
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.scrollView
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.wrapContent
 import us.feras.mdv.MarkdownView
 
 /**
@@ -102,7 +90,7 @@ class AboutUi : AnkoComponent<Fragment> {
                         textView("Version Code: ${BuildConfig.VERSION_CODE}") {
                             compatAppearance = android.R.style.TextAppearance_Small
                         }
-                        textView("Remote Configuration: ${(now().millis -  RemotePreferences.lastUpdatedDatetime.millis) / 1000 / 60 / 60} hours     ago") {
+                        textView("Remote Configuration: ${(now().millis - RemotePreferences.lastUpdatedDatetime.millis) / 1000 / 60 / 60} hours     ago") {
                             compatAppearance = android.R.style.TextAppearance_Small
                         }
                     }.lparams(dip(0), wrapContent) {
@@ -157,7 +145,7 @@ class AboutUi : AnkoComponent<Fragment> {
 
                     markdownView {
                         lparams(matchParent, wrapContent)
-
+                        isFocusable = false
                         loadMarkdown("""
 **iOS:**
 

@@ -26,6 +26,8 @@ public class AnnouncementRecord  {
   private String title = null;
   @SerializedName("Content")
   private String content = null;
+  @SerializedName("ImageId")
+  private UUID imageId = null;
 
   /**
    **/
@@ -107,6 +109,16 @@ public class AnnouncementRecord  {
     this.content = content;
   }
 
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public UUID getImageId() {
+    return imageId;
+  }
+  public void setImageId(UUID imageId) {
+    this.imageId = imageId;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -124,7 +136,8 @@ public class AnnouncementRecord  {
         (area == null ? announcementRecord.area == null : area.equals(announcementRecord.area)) &&
         (author == null ? announcementRecord.author == null : author.equals(announcementRecord.author)) &&
         (title == null ? announcementRecord.title == null : title.equals(announcementRecord.title)) &&
-        (content == null ? announcementRecord.content == null : content.equals(announcementRecord.content));
+        (content == null ? announcementRecord.content == null : content.equals(announcementRecord.content)) &&
+        (imageId == null ? announcementRecord.imageId == null : imageId.equals(announcementRecord.imageId));
   }
 
   @Override 
@@ -138,6 +151,7 @@ public class AnnouncementRecord  {
     result = 31 * result + (author == null ? 0: author.hashCode());
     result = 31 * result + (title == null ? 0: title.hashCode());
     result = 31 * result + (content == null ? 0: content.hashCode());
+    result = 31 * result + (imageId == null ? 0: imageId.hashCode());
     return result;
   }
 
@@ -154,6 +168,7 @@ public class AnnouncementRecord  {
     sb.append("  author: ").append(author).append("\n");
     sb.append("  title: ").append(title).append("\n");
     sb.append("  content: ").append(content).append("\n");
+    sb.append("  imageId: ").append(imageId).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
