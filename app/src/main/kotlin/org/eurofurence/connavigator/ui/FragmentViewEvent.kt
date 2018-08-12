@@ -161,8 +161,6 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
 }
 
 class EventUi : AnkoComponent<Fragment> {
-    private lateinit var splitter: LinearLayout
-
     lateinit var extras: LinearLayout
 
     lateinit var extrasContent: TextView
@@ -197,8 +195,8 @@ class EventUi : AnkoComponent<Fragment> {
                         adjustViewBounds = true
                     }.lparams(matchParent, wrapContent)
 
-                    splitter = verticalLayout {
-                        id = View.generateViewId()
+                    verticalLayout {
+                        id = R.id.event_splitter
                         backgroundResource = R.color.primaryDarker
                         padding = dip(15)
                         title = textView("LargeText") {
@@ -257,7 +255,7 @@ class EventUi : AnkoComponent<Fragment> {
                 imageResource = R.drawable.icon_menu
             }.lparams {
                 anchorGravity = Gravity.BOTTOM or Gravity.END
-                anchorId = splitter.id
+                anchorId = R.id.event_splitter
                 margin = dip(16)
             }
         }

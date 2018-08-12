@@ -89,16 +89,16 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
 }
 
 class FursuitGameUi : AnkoComponent<Fragment> {
-    private lateinit var loading: ProgressBar
+    lateinit var loading: ProgressBar
     lateinit var error: TextView
 
     lateinit var submit: Button
     lateinit var fursuitLabel: EditText
 
-    private lateinit var fursuitName: TextView
+    lateinit var fursuitName: TextView
 
-    private lateinit var startLayout: LinearLayout
-    private lateinit var fursuitLayout: LinearLayout
+    lateinit var startLayout: LinearLayout
+    lateinit var fursuitLayout: LinearLayout
 
     fun setMode(mode: FursuitUiMode) {
         when (mode) {

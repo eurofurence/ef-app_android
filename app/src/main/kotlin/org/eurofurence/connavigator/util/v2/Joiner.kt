@@ -5,7 +5,7 @@ package org.eurofurence.connavigator.util.v2
  */
 class Joiner<in L, in R, out I>(
         val leftId: (L) -> I?,
-        private val rightId: (R) -> I?) {
+        val rightId: (R) -> I?) {
 
     val inverse get() = Joiner(rightId, leftId)
 }
@@ -15,16 +15,16 @@ interface Source<out T : Any, in I> {
 }
 
 class JoinerBinding<L : Any, R : Any, I>(
-        private val joiner: Joiner<L, R, I>,
-        private val leftBinding: Source<L, I>,
-        private val rightBinding: Source<R, I>) {
+        val joiner: Joiner<L, R, I>,
+        val leftBinding: Source<L, I>,
+        val rightBinding: Source<R, I>) {
     operator fun invoke(left: L) =
             rightBinding[joiner.leftId(left)]
 
     operator fun invoke(left: Iterable<L>) =
             left.mapNotNull { invoke(it) }
 
-    private fun join(left: L) =
+    fun join(left: L) =
             rightBinding[joiner.leftId(left)]?.let {
                 left to it
             }

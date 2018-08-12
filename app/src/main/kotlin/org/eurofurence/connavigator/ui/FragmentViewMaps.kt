@@ -66,7 +66,7 @@ class MapsUi : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         frameLayout {
             mapViewPager = multitouchViewPager {
-                id = View.generateViewId()
+                id = R.id.map_view_pager
             }.lparams(matchParent, matchParent)
         }
     }

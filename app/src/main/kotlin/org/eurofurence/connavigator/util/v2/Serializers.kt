@@ -87,7 +87,7 @@ fun Intent.toMapString() =
  * Serializes to a bundle.
  */
 
-class BundleOutput(val target: Bundle, root: String, private val defaultJson: Boolean = true) : NamedValueOutput(root) {
+class BundleOutput(val target: Bundle, val root: String, val defaultJson: Boolean = true) : NamedValueOutput(root) {
 
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())
@@ -179,7 +179,7 @@ class BundleOutput(val target: Bundle, root: String, private val defaultJson: Bo
 /**
  * Deserializes from a bundle.
  */
-class BundleInput(val target: Bundle, root: String) : NamedValueInput(root) {
+class BundleInput(val target: Bundle, val root: String) : NamedValueInput(root) {
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())
                 childName
@@ -251,7 +251,7 @@ class BundleInput(val target: Bundle, root: String) : NamedValueInput(root) {
 /**
  * Serializes to an intent.
  */
-class IntentOutput(val target: Intent, private val defaultJson: Boolean = true) : NamedValueOutput(target.action) {
+class IntentOutput(val target: Intent, val defaultJson: Boolean = true) : NamedValueOutput(target.action) {
 
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())

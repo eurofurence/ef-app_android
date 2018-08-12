@@ -46,7 +46,9 @@ class FragmentViewAbout : Fragment(), ContentAPI, NavRepresented {
 }
 
 class AboutUi : AnkoComponent<Fragment> {
-    private val avatarSize = 128
+    companion object {
+        private const val avatarSize = 128
+    }
 
     lateinit var requinardLayout: LinearLayout
     lateinit var pazuzuLayout: LinearLayout

@@ -419,7 +419,8 @@ fun Db.eventIsConflicting(eventEntry: EventRecord): Boolean =
         events.items
                 .filter { it.conferenceDayId == eventEntry.conferenceDayId }
                 .filter { it.id in faves }
-                .filter { it.id != eventEntry.id }.any { eventInterval(eventEntry).overlaps(eventInterval(it)) } // If this list is bigger then 0, we have conflicting events
+                .filter { it.id != eventEntry.id }
+                .any { eventInterval(eventEntry).overlaps(eventInterval(it)) } // If this list is bigger then 0, we have conflicting events
 
 fun Db.filterEvents() =
         EventList(this)

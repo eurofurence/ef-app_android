@@ -25,7 +25,7 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by David on 15-5-2016.
  */
-class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger,NavRepresented {
+class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, NavRepresented {
     override val db by lazyLocateDb()
     override val drawerItemId: Int
         get() = R.id.navDealersDen
@@ -33,7 +33,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger,NavReprese
     val ui by lazy { DealersUi() }
     private var effectiveDealers = emptyList<DealerRecord>()
 
-    private var searchText = ""
+    var searchText = ""
     var searchCategory = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -51,13 +51,13 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger,NavReprese
         ui.dealerList.itemAnimator = DefaultItemAnimator()
 
         val distinctCategories = dealers.items
-                .map{ it.categories ?: emptyList() }
-                .fold( emptyList<String>()) { a, b -> a.plus(b).distinct() }
+                .map { it.categories ?: emptyList() }
+                .fold(emptyList<String>()) { a, b -> a.plus(b).distinct() }
                 .sorted()
 
         ui.categorySpinner.adapter =
-             ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item,
-                     listOf("All Categories").plus(distinctCategories))
+                ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item,
+                        listOf("All Categories").plus(distinctCategories))
 
         ui.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -146,7 +146,7 @@ class DealersUi : AnkoComponent<Fragment> {
                 searchLayout = linearLayout {
                     weightSum = 100F
                     visibility = View.GONE
-                    textView("Find: ")  {
+                    textView("Find: ") {
                         leftPadding = dip(5)
                     }.lparams(dip(0), wrapContent, 20F)
 

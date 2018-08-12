@@ -51,7 +51,7 @@ object RemotePreferences : AnkoLogger {
 
     val observer: BehaviorSubject<RemotePreferences> = BehaviorSubject.create<RemotePreferences>()
 
-    private val lastUpdatedMillis get() = remoteConfig.info.fetchTimeMillis
+    val lastUpdatedMillis get() = remoteConfig.info.fetchTimeMillis
     val lastUpdatedDatetime get() = DateTime(lastUpdatedMillis)
     val timeSinceLastUpdate: DateTime get() = DateTime.now().minus(lastUpdatedMillis)
 

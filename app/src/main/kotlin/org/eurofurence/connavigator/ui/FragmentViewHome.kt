@@ -41,10 +41,10 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, NavRepresented {
 
     val database by lazy { locateDb() }
     var subscriptions = Disposables.empty()
-    val now: DateTime? by lazy { DateTime.now() }
+    val now: DateTime by lazy { DateTime.now() }
 
     private val upcoming by lazy { EventRecyclerFragment().withArguments(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
-    val current by lazy { EventRecyclerFragment().withArguments(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
+    private val current by lazy { EventRecyclerFragment().withArguments(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
     private val favorited by lazy { EventRecyclerFragment().withArguments(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
     private val announcement by lazy { AnnouncementListFragment() }
     private val userStatus by lazy { UserStatusFragment() }

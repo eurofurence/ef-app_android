@@ -17,13 +17,15 @@ data class Choice<out T, out U>(val isLeft: Boolean, val it: Any?) {
      * The value if choice is left. Calling when [isRight] results in an [IllegalArgumentException].
      */
     @Suppress("UNCHECKED_CAST")
-    val left get() = if (isLeft) it as T else throw IllegalArgumentException("Choice is not left")
+    val left
+        get() = if (isLeft) it as T else throw IllegalArgumentException("Choice is not left")
 
     /**
      * The value if choice is right. Calling when [isLeft] results in an [IllegalArgumentException].
      */
     @Suppress("UNCHECKED_CAST")
-    val right get() = if (!isLeft) it as U else throw IllegalArgumentException("Choice is not right")
+    val right
+        get() = if (!isLeft) it as U else throw IllegalArgumentException("Choice is not right")
 
     override fun toString() =
             this onLeft {
@@ -43,7 +45,7 @@ data class Choice<out T, out U>(val isLeft: Boolean, val it: Any?) {
  * @param choice The original choice to handle
  * @param onLeft The transformation for the left option
  */
-class OnLeft<X, out T : X, out U, R>(private val choice: Choice<T, U>, private val onLeft: (X) -> R) {
+class OnLeft<X, out T : X, out U, R>(val choice: Choice<T, U>, val onLeft: (X) -> R) {
     /**
      * Specifies the right mapping and applies the transformation.
      * @param onRight The transformation for the right option
@@ -66,7 +68,7 @@ class OnLeft<X, out T : X, out U, R>(private val choice: Choice<T, U>, private v
  * @param choice The original choice to handle
  * @param onRight The transformation for the right option
  */
-class OnRight<X, out T, out U : X, R>(private val choice: Choice<T, U>, private val onRight: (X) -> R) {
+class OnRight<X, out T, out U : X, R>(val choice: Choice<T, U>, val onRight: (X) -> R) {
     /**
      * Specifies the left mapping and applies the transformation.
      * @param onLeft The transformation for the left option
@@ -123,9 +125,10 @@ infix fun <T, U, V> Choice<T, U>.mapRight(block: (U) -> V) =
  * @receiver The choice to deconstruct
  * @return Returns a pair of nullable left and nullable right
  */
-val <T : Any, U : Any> Choice<T, U>.deconstructed get() = Pair(
-        if (isLeft) left else null,
-        if (isRight) right else null)
+val <T : Any, U : Any> Choice<T, U>.deconstructed
+    get() = Pair(
+            if (isLeft) left else null,
+            if (isRight) right else null)
 
 /**
  * Creates a choice that is the left option.
@@ -162,7 +165,7 @@ val <T : Any> T?.orUnit get() = if (this != null) left<T, Unit>(this) else right
  */
 inline fun <T, reified U : Throwable> tryFor(block: () -> T): Choice<T, U> = try {
     left(block())
-} catch(t: Throwable) {
+} catch (t: Throwable) {
     if (t is U)
         right(t)
     else

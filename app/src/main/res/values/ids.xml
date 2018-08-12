@@ -34,4 +34,7 @@
     <item name="eventGlyphOverflow" type="id"/>
     <item name="eventRoom" type="id"/>
     <item name="eventImage" type="id"/>
+
+    <item name="event_splitter" type="id"/>
+    <item name="map_view_pager" type="id"/>
 </resources>
