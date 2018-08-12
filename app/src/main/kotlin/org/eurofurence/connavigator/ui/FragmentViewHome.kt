@@ -14,14 +14,11 @@ import android.widget.LinearLayout
 import com.github.lzyzsd.circleprogress.ArcProgress
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
-import nl.komponents.kovenant.task
-import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.gcm.cancelFromRelated
-import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.EventList
@@ -31,7 +28,6 @@ import org.eurofurence.connavigator.ui.fragments.UserStatusFragment
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.arcProgress
 import org.eurofurence.connavigator.util.v2.plus
-import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.nestedScrollView
@@ -79,15 +75,6 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, NavRepresented, Has
                 // Cancel all announcement notifications.
                 for (a in announcements.items)
                     cancelFromRelated(a.id)
-
-                // Get all PMs and cancel those as well.
-                task {
-                    apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
-                    apiService.communications.apiV2CommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
-                } successUi {
-                    for (m in it)
-                        cancelFromRelated(m.id)
-                }
             }
 
         }
