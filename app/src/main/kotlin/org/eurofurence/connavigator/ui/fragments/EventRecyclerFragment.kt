@@ -179,7 +179,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             // Assign the on-click action
             holder.itemView.setOnClickListener {
-                logd { "Short event click" }
+                debug { "Short event click" }
                 applyOnRoot { navigateToEvent(event) }
             }
             holder.itemView.setOnLongClickListener {

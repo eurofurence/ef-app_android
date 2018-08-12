@@ -77,7 +77,7 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
         }
 
         holder.layout.setOnLongClickListener {
-            DealerDialog(dealer).show(fragment.childFragmentManager, "Dealer menu")
+            DealerDialog().withArguments(dealer).show(fragment.childFragmentManager, "Dealer menu")
             true
         }
     }

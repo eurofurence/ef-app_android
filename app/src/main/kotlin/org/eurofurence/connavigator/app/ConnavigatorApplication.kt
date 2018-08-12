@@ -4,20 +4,16 @@ import android.support.multidex.MultiDexApplication
 import com.chibatching.kotpref.Kotpref
 import com.google.firebase.perf.metrics.AddTrace
 import com.joanzapata.iconify.Iconify
-import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import com.joanzapata.iconify.fonts.FontAwesomeModule
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.gcm.InstanceIdService
 import org.eurofurence.connavigator.gcm.PushListenerService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.util.extensions.logv
 import org.eurofurence.connavigator.webapi.apiService
 
 /**
@@ -41,7 +37,6 @@ class ConnavigatorApplication : MultiDexApplication() {
 
         // Initialize some services
         imageService.initialize(this)
-        logService.initialize(this)
         apiService.initialize(this)
         Analytics.init(this)
 

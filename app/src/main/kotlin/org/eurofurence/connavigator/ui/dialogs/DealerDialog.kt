@@ -11,29 +11,48 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.SharingUtility
-import org.eurofurence.connavigator.util.extensions.logd
+import org.eurofurence.connavigator.util.extensions.contains
+import org.eurofurence.connavigator.util.extensions.jsonObjects
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
+import kotlin.properties.Delegates.notNull
 
 /**
  * Created by David on 6/5/2016.
  */
-class DealerDialog(val dealer: DealerRecord) : DialogFragment() {
+class DealerDialog : DialogFragment(), AnkoLogger {
+    var dealerRecord by notNull<DealerRecord>()
+
+    fun withArguments(dealerRecord: DealerRecord) = apply {
+        arguments = Bundle().apply {
+            jsonObjects["dealerRecord"] = dealerRecord
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
 
-        builder.setTitle("Dealer options for ${dealer.displayName}")
+        if ("dealerRecord" in arguments) {
+            dealerRecord = arguments.jsonObjects["dealerRecord"]
 
-        builder.setItems(R.array.dealer_options, DialogInterface.OnClickListener { dialogInterface, i -> update(dialogInterface, i) })
+            builder.setTitle("Dealer options for ${dealerRecord.displayName}")
 
-        return builder.create()
+            builder.setItems(R.array.dealer_options, DialogInterface.OnClickListener { dialogInterface, i -> update(dialogInterface, i) })
+
+            return builder.create()
+        } else {
+            return super.onCreateDialog(savedInstanceState)
+        }
     }
 
     private fun update(dialogInterface: DialogInterface?, i: Int) =
             when (i) {
-                0 -> logd { "send to notes" }
+                0 -> debug { "send to notes" }
                 else -> {
-                    Analytics.event(Analytics.Category.DEALER, Analytics.Action.SHARED, dealer.displayName ?: dealer.attendeeNickname)
+                    Analytics.event(Analytics.Category.DEALER, Analytics.Action.SHARED, dealerRecord.displayName
+                            ?: dealerRecord.attendeeNickname)
 
-                    startActivity(Intent.createChooser(SharingUtility.share(Formatter.shareDealer(dealer)), "Share Dealer"))
+                    startActivity(Intent.createChooser(SharingUtility.share(Formatter.shareDealer(dealerRecord)), "Share Dealer"))
                 }
             }
 }

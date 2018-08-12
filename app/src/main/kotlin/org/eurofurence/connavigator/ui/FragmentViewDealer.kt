@@ -368,10 +368,10 @@ class DealerUi : AnkoComponent<Fragment> {
                         padding = dip(20)
 
                         ankoView(::ConstraintLayout, 0) {
-                            id = 5530
+                            id = R.id.dealer_container
 
                             map = photoView {
-                                id = 5531
+                                id = R.id.dealer_map
 
                                 backgroundResource = R.color.cardview_dark_background
                                 minimumScale = 1F
@@ -382,9 +382,9 @@ class DealerUi : AnkoComponent<Fragment> {
                             }
 
                             ConstraintSet().apply {
-                                connect(5531, START, 5530, START)
-                                connect(5531, END, 5530, END)
-                                setDimensionRatio(5531, "1:1")
+                                connect(R.id.dealer_map, START, R.id.dealer_container, START)
+                                connect(R.id.dealer_map, END, R.id.dealer_container, END)
+                                setDimensionRatio(R.id.dealer_map, "1:1")
                             }.applyTo(this)
                         }.lparams(matchParent, wrapContent)
 

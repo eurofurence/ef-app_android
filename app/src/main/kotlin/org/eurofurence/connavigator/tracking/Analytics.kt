@@ -6,9 +6,9 @@ import com.crashlytics.android.Crashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.perf.FirebasePerformance
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
-import org.eurofurence.connavigator.util.extensions.logd
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.debug
 
 /**o
  * Created by David on 20-4-2016.
@@ -39,7 +39,7 @@ class Analytics {
         val CHANGED = "changed"
     }
 
-    companion object {
+    companion object : AnkoLogger {
         lateinit var analytics: FirebaseAnalytics
         val performance by lazy { FirebasePerformance.getInstance() }
         fun init(context: Context) {
@@ -69,7 +69,7 @@ class Analytics {
         )
 
         fun updateSettings() {
-            logd { "Analytics: ${AnalyticsPreferences.enabled}; Performance: ${AnalyticsPreferences.performanceTracking}" }
+            debug { "Analytics: ${AnalyticsPreferences.enabled}; Performance: ${AnalyticsPreferences.performanceTracking}" }
             analytics.setAnalyticsCollectionEnabled(AnalyticsPreferences.enabled)
             performance.isPerformanceCollectionEnabled = AnalyticsPreferences.performanceTracking
         }

@@ -6,6 +6,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.database.dispatchUpdate
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.jetbrains.anko.*
 
@@ -48,7 +49,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
     private fun syncData(message: RemoteMessage) {
         info { "Received request to sync data" }
 
-        UpdateIntentService.dispatchUpdate(applicationContext)
+        dispatchUpdate(applicationContext)
         RemotePreferences.update()
     }
 

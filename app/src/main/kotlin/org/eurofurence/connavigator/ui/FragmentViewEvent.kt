@@ -43,7 +43,7 @@ import java.util.*
 /**
  * Created by David on 4/9/2016.
  */
-class FragmentViewEvent : Fragment(), HasDb {
+class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     var subscriptions = Disposables.empty()
@@ -132,7 +132,7 @@ class FragmentViewEvent : Fragment(), HasDb {
             }
 
             childFragmentManager.beginTransaction()
-                    .replace(27, MapDetailFragment().withArguments(conferenceRoom.id, true), "mapDetails")
+                    .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom.id, true), "mapDetails")
                     .commit()
         }
     }
@@ -249,7 +249,7 @@ class EventUi : AnkoComponent<Fragment> {
                     }.lparams(matchParent, wrapContent)
 
                     verticalLayout {
-                        id = 27
+                        id = R.id.event_map
                     }
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, matchParent)

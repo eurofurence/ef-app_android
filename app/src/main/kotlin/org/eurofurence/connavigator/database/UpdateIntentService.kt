@@ -4,16 +4,18 @@ import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
-import com.pawegio.kandroid.runOnUiThread
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.booleans
+import org.eurofurence.connavigator.util.extensions.catchAlternative
+import org.eurofurence.connavigator.util.extensions.objects
+import org.eurofurence.connavigator.util.extensions.toIntent
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.util.v2.internalSpec
 import org.eurofurence.connavigator.webapi.apiService
-import org.jetbrains.anko.longToast
+import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.serialization.Serializable
@@ -24,25 +26,24 @@ data class UpdateComplete(val success: Boolean, val time: Date?, val exception: 
 val updateComplete = internalSpec<UpdateComplete>()
 
 /**
+ * Dispatches an update
+ * @param context The host context for the service
+ */
+fun AnkoLogger.dispatchUpdate(context: Context, showToastOnCompletion: Boolean = false) {
+    info { "Dispatching update" }
+
+    val intent = Intent(context, UpdateIntentService::class.java)
+    intent.putExtra("showToastOnCompletion", showToastOnCompletion)
+
+    context.startService(intent)
+}
+
+/**
  * Updates the database on request.
  */
-class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
+class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLogger {
     companion object {
         val UPDATE_COMPLETE = "org.eurofurence.connavigator.driver.UPDATE_COMPLETE"
-        val REQUEST_CODE = 1337
-
-        /**
-         * Dispatches an update
-         * @param context The host context for the service
-         */
-        fun dispatchUpdate(context: Context, showToastOnCompletion: Boolean = false) {
-            logv("UIS") { "Dispatching update" }
-
-            val intent = Intent(context, UpdateIntentService::class.java)
-            intent.putExtra("showToastOnCompletion", showToastOnCompletion)
-
-            context.startService(intent)
-        }
     }
 
     override val db by lazyLocateDb()
@@ -51,25 +52,25 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
 
     // TODO: Sticky intent since there should only be one pending update
     override fun onHandleIntent(intent: Intent?) {
-        logv("UIS") { "Handling update intent service intent" }
+        info { "Handling update intent service intent" }
         val showToastOnCompletion = intent?.getBooleanExtra("showToastOnCompletion", false) ?: false
 
         // Initialize the response, the following code is net and IO oriented, it could fail
         val (response, responseObject) = {
-            logv("UIS") { "Updating remote preferences" }
+            info { "Updating remote preferences" }
             RemotePreferences.update()
-            logv("UIS") { "Retrieving sync since $date" }
+            info { "Retrieving sync since $date" }
 
             // Get sync from server
             val sync = apiService.sync.apiV2SyncGet(date)
 
-            logv("UIS") { sync }
+            info { sync }
 
             val shift = DebugPreferences.debugDates
             val shiftOffset = DebugPreferences.eventDateOffset
 
             if (shift) {
-                logd { "Changing dates instead of updating" }
+                debug { "Changing dates instead of updating" }
                 // Get all dates explicitly
                 val base = apiService.days.apiV2EventConferenceDaysGet()
 
@@ -101,10 +102,10 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
             maps.apply(sync.maps.convert())
 
             // Reconcile events with favorites
-            faves = events.items.map { it.id}
+            faves = events.items.map { it.id }
                     .toSet()
-                    .let {
-                        eventsIds -> faves.filter { it in eventsIds }
+                    .let { eventsIds ->
+                        faves.filter { it in eventsIds }
                     }
 
             // Update notifications for favorites
@@ -113,10 +114,10 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
             // Store new time
             date = sync.currentDateTimeUtc
 
-            logv("UIS") { "Synced, current sync time is $date" }
+            info { "Synced, current sync time is $date" }
 
             // Make the success response message
-            logv("UIS") { "Completed update successfully" }
+            info { "Completed update successfully" }
 
             if (showToastOnCompletion) {
                 runOnUiThread {
@@ -130,7 +131,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb {
             } to UpdateComplete(true, date, null)
         } catchAlternative { ex: Throwable ->
             // Make the fail response message, transfer exception
-            loge("UIS", ex) { "Completed update with error" }
+            error("Completed update with error", ex)
             UPDATE_COMPLETE.toIntent {
                 booleans["success"] = false
                 objects["time"] = date

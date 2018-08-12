@@ -61,7 +61,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
             db.faves += event.id
         }
 
-        UpdateIntentService.dispatchUpdate(context)
+        dispatchUpdate(context)
     }
 
     private fun getNotificationTime(context: Context, db: Db, event: EventRecord): DateTime {

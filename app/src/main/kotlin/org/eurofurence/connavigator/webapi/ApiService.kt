@@ -7,32 +7,17 @@ import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.ApiInvoker
-import io.swagger.client.api.AnnouncementsApi
-import io.swagger.client.api.CommunicationApi
-import io.swagger.client.api.DealersApi
-import io.swagger.client.api.EventConferenceDaysApi
-import io.swagger.client.api.EventConferenceRoomsApi
-import io.swagger.client.api.EventConferenceTracksApi
-import io.swagger.client.api.EventFeedbackApi
-import io.swagger.client.api.EventsApi
-import io.swagger.client.api.FursuitsApi
-import io.swagger.client.api.ImagesApi
-import io.swagger.client.api.KnowledgeEntriesApi
-import io.swagger.client.api.KnowledgeGroupsApi
-import io.swagger.client.api.MapsApi
-import io.swagger.client.api.PushNotificationsApi
-import io.swagger.client.api.SyncApi
-import io.swagger.client.api.TokensApi
+import io.swagger.client.api.*
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.util.extensions.catchHandle
-import org.eurofurence.connavigator.util.extensions.logd
-import org.eurofurence.connavigator.util.extensions.loge
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 import java.io.File
 
 /**
  * The API services manage extended API functionality
  */
-object apiService {
+object apiService : AnkoLogger {
     var apiPath = RemotePreferences.apiBaseUrl
 
     val announcements by lazy { AnnouncementsApi().apply { basePath = apiPath } }
@@ -78,7 +63,7 @@ object apiService {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { apiPath = it.apiBaseUrl }
 
-            logd("API") { "Initializing" }
+            debug { "Initializing" }
 
             // Create the cache
             val cache = DiskBasedCache(File(context.cacheDir, "volley"))
@@ -86,15 +71,15 @@ object apiService {
             //Create the network
             val originalNetwork = BasicNetwork(HurlStack())
             val network = Network {
-                logd("NET") { "Performing request: ${it.url}" }
+                debug { "Performing request: ${it.url}" }
                 originalNetwork.performRequest(it)
             }
 
             // Sets up the API invoker
             ApiInvoker.initializeInstance(cache, network, 2, null, 60)
-            logd("API") { "Done initializing, ${ApiInvoker.getInstance()}" }
+            debug { "Done initializing, ${ApiInvoker.getInstance()}" }
         } catchHandle { t: Throwable ->
-            loge("API") { "Initialization failed with ${t.message}" }
+            debug { "Initialization failed with ${t.message}" }
         }
     }
 }
