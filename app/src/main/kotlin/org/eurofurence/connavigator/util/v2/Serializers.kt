@@ -1,3 +1,5 @@
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+
 package org.eurofurence.connavigator.util.v2
 
 import android.content.Intent
@@ -19,7 +21,7 @@ import kotlin.serialization.*
 const val VALUE_TYPE_UNIT: Byte = 1
 
 /**
- * Special value type for parcellable values.
+ * Special value type for parcelable values.
  */
 const val VALUE_TYPE_PARCELABLE: Byte = 2
 

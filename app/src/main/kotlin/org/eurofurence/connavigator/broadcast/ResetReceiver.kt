@@ -3,7 +3,6 @@ package org.eurofurence.connavigator.broadcast
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.pawegio.kandroid.IntentFor
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.database.RootDb
 import org.eurofurence.connavigator.net.imageService
@@ -48,9 +47,5 @@ class ResetReceiver : BroadcastReceiver(), AnkoLogger {
             info { "Committing ritualistic suicide" }
             System.exit(621)
         }
-    }
-
-    companion object {
-        fun fire(context: Context) = context.sendBroadcast(IntentFor<ResetReceiver>(context))
     }
 }

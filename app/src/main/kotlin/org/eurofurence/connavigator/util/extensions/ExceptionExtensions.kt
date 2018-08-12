@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.extensions
 
 import org.eurofurence.connavigator.tracking.Analytics

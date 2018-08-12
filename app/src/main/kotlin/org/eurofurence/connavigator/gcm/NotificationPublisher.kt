@@ -10,7 +10,7 @@ import org.jetbrains.anko.notificationManager
 /**
  * Notification Publisher
  *
- * Manages the receiving of a broadcast for a notifiction and exporting said notification
+ * Manages the receiving of a broadcast for a notifications and exporting said notification
  *
  *
  */

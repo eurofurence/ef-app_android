@@ -46,7 +46,7 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb,NavRep
 
     var messages = emptyList<PrivateMessageRecord>()
 
-    inner class MessageViewholder(itemview: View) : RecyclerView.ViewHolder(itemview) {
+    inner class MessageViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView by view()
         val icon: IconTextView by view()
         val date: TextView by view()
@@ -101,7 +101,7 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb,NavRep
             apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
             apiService.communications.apiV2CommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
         } success {
-            info("Succesfully retrieved ${it.size} messages")
+            info("Successfully retrieved ${it.size} messages")
             this.messages = it
         } successUi {
             configureRecycler()

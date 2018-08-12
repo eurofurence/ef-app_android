@@ -45,7 +45,7 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
                 this.password = password
             })
         } success {
-            info { "Succesfully logged in" }
+            info { "Successfully logged in" }
             info {
                 "UID: ${it.uid}\n" +
                         "Username: ${it.username}\n" +

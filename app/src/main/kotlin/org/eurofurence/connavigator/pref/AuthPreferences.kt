@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate", "unused")
+
 package org.eurofurence.connavigator.pref
 
 import com.chibatching.kotpref.KotprefModel

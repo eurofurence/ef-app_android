@@ -98,9 +98,6 @@ object imageService : AnkoLogger {
             }
 
 
-    fun getBitmap(image: ImageRecord): Bitmap =
-            imageLoader.loadImageSync(image.url, ImageSize(image.width ?: 0, image.height ?: 0))
-
     fun clear() {
         debug { "Clearing image cache" }
         imageLoader.clearDiskCache()

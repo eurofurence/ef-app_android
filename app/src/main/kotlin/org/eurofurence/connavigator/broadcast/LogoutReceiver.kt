@@ -13,7 +13,7 @@ import org.jetbrains.anko.info
  */
 class LogoutReceiver: BroadcastReceiver(), AnkoLogger {
     /**
-     * Removes user registration details and sends dataupdate
+     * Removes user registration details and sends data update
      */
     override fun onReceive(context: Context, intent: Intent) {
         info {"Logging user out"}
@@ -22,9 +22,5 @@ class LogoutReceiver: BroadcastReceiver(), AnkoLogger {
         AuthPreferences.clear()
         InstanceIdService().reportToken()
         DataChanged.fire(context, "User logged out")
-    }
-
-    companion object {
-        fun fire(context: Context) = context.sendBroadcast(Intent(context, LogoutReceiver::class.java))
     }
 }

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.v2
 
 import android.content.Context
@@ -165,7 +167,7 @@ abstract class Stored(val context: Context) {
         override fun get(i: UUID?) = if (i != null) entries[i] else null
 
         /**
-         * Appliesthe delta to the store.
+         * Applies the delta to the store.
          */
         fun apply(abstractDelta: AbstractDelta<T>) {
             // Make new entries from original or new empty map

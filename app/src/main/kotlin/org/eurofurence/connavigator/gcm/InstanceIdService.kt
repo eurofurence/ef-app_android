@@ -16,7 +16,7 @@ import org.jetbrains.anko.warn
  */
 class InstanceIdService : FirebaseInstanceIdService(), AnkoLogger {
     /**
-     * Checks if a user is logged in, if it is, we send a token to the appserver
+     * Checks if a user is logged in, if it is, we send a token to the app server
      */
     fun reportToken() {
         val token = FirebaseInstanceId.getInstance().token

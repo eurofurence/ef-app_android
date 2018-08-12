@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package org.eurofurence.connavigator.pref
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig

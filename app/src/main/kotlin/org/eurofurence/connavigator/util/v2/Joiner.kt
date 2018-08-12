@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate", "unused")
+
 package org.eurofurence.connavigator.util.v2
 
 /**
@@ -28,14 +30,6 @@ class JoinerBinding<L : Any, R : Any, I>(
             rightBinding[joiner.leftId(left)]?.let {
                 left to it
             }
-
-    fun join(left: Iterable<L>) =
-            left.mapNotNull { join(it) }
-
-    /**
-     * Gets the inverse join.
-     */
-    val inverse get() = JoinerBinding(joiner.inverse, rightBinding, leftBinding)
 }
 
 operator fun <L : Any, R : Any, I> L.get(joinerBinding: JoinerBinding<L, R, I>) =

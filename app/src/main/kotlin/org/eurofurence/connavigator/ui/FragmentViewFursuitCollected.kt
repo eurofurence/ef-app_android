@@ -35,7 +35,7 @@ class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
 
             api.apiV2FursuitsCollectingGamePlayerParticipationGet()
         } successUi {
-            info { "succesfully retrieved data!" }
+            info { "successfully retrieved data!" }
             info { it }
 
             ui.name.text = "Hello ${it.name}"

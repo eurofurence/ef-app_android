@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package org.eurofurence.connavigator.ui
 
 import android.os.Bundle

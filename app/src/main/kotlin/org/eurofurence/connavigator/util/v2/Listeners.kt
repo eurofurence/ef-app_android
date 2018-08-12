@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.v2
 
 import android.content.BroadcastReceiver

@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
     private val loginReceiver = localReceiver(LoginReceiver.LOGIN_RESULT) {
         val success = it.booleans["success"]
 
-        info { "Received broadast from LoginReceiver" }
+        info { "Received broadcast from LoginReceiver" }
 
         runOnUiThread {
             if (success) {

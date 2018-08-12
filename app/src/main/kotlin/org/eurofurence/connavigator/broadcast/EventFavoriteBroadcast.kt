@@ -54,7 +54,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
                 context.alarmManager.cancel(pendingIntent)
                 db.faves = db.faves.filter { it != event.id }
             }
-            notificationTime < now() -> context.longToast("This event has already occured!")
+            notificationTime < now() -> context.longToast("This event has already occurred!")
             else -> {
                 info("Event is not yet favorited. Adding it to favorites")
                 context.longToast("Added ${event.title} to favorites")
@@ -110,5 +110,5 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
         info { "Updated pending activity" }
     }
 
-    fun updateNotificatons(context: Context, eventIds: List<UUID>) = eventIds.map { updateNotification(context, it) }
+    fun updateNotifications(context: Context, eventIds: List<UUID>) = eventIds.map { updateNotification(context, it) }
 }

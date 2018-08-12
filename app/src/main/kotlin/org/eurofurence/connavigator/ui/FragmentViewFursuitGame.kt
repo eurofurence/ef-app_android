@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package org.eurofurence.connavigator.ui
 
 
@@ -61,7 +63,7 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             api.apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost(tag)
         } successUi {
-            info { "Succesfully executed network request! Showing fursuit" }
+            info { "Successfully executed network request! Showing fursuit" }
 
             it.result.let { result ->
                 if (it.isSuccessful == true && result != null) {
@@ -80,7 +82,7 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.error.text = when (throwable.code) {
                 400 -> it.message ?: "You've already caught this suiter"
                 401 -> "You're not logged in!"
-                else -> "An error occured!"
+                else -> "An error occurred!"
             }
             ui.setMode(FursuitUiMode.ERROR)
         }

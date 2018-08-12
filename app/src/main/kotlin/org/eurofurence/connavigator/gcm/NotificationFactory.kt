@@ -13,7 +13,7 @@ import org.eurofurence.connavigator.ui.ActivityRoot
 import org.jetbrains.anko.intentFor
 
 /**
- * Creates a basic notificaiton
+ * Creates a basic notification
  */
 class NotificationFactory(var context: Context) {
     fun broadcastNotification(builder: NotificationCompat.Builder) {
@@ -39,7 +39,7 @@ class NotificationFactory(var context: Context) {
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 
     /**
-     * Sets an activity to launch on notication taps
+     * Sets an activity to launch on notification taps
      */
     fun setActivity(builder: NotificationCompat.Builder): NotificationCompat.Builder {
         // On a click event we want to start an activity

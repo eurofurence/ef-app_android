@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.extensions
 
 import android.support.design.widget.FloatingActionButton
@@ -14,7 +16,7 @@ import org.jetbrains.anko.custom.ankoView
 import us.feras.mdv.MarkdownView
 
 /**
- * Extensions to anko viewmanager
+ * Extensions to Anko view manager
  */
 
 inline fun ViewManager.arcProgress(init: ArcProgress.() -> Unit) = ankoView({ ArcProgress(it) }, 0, init)

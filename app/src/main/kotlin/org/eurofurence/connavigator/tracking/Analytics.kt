@@ -30,8 +30,6 @@ class Analytics {
     object Action {
         const val SHARED = "shared"
         const val OPENED = "opened"
-        const val FAVOURITE_ADD = "favourite added"
-        const val FAVOURITE_DEL = "favourite removed"
         const val EXPORT_CALENDAR = "Exported to calendar"
         const val LINK_CLICKED = "Clicked external link"
         const val INCOMING = "Incoming from websites"

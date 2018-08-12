@@ -25,10 +25,4 @@ class Dispatcher<T> {
     operator fun invoke(event: T): List<Throwable?> =
             dispatchers.map { catchToAnyException { it(event) } }
 
-    /**
-     * Clears the dispatchers
-     */
-    fun clear() {
-        dispatchers.clear()
-    }
 }

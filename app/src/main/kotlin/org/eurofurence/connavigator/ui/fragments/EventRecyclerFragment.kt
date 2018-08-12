@@ -393,7 +393,6 @@ class SingleEventUi : AnkoComponent<Fragment> {
 
 class EventListView : AnkoComponent<Fragment> {
     lateinit var title: TextView
-    //lateinit var loading: ProgressBar
     lateinit var eventList: RecyclerView
     lateinit var bigLayout: LinearLayout
 

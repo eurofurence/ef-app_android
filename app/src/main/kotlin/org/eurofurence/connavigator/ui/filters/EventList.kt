@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.ui.filters
 
 import com.google.firebase.perf.metrics.AddTrace

@@ -19,6 +19,7 @@ import org.eurofurence.connavigator.webapi.apiService
 /**
  * The application initialization point.
  */
+@Suppress("unused")
 class ConnavigatorApplication : MultiDexApplication() {
     @AddTrace(name = "ConnavigatorApplication:onCreate", enabled = true)
     override fun onCreate() {
@@ -28,7 +29,7 @@ class ConnavigatorApplication : MultiDexApplication() {
         setTheme(R.style.AppTheme)
 
         // This configures the timezone database for JODA time, that way timezone info can be used without having the
-        // impractical database of JODAgst
+        // impractical database of JODA
         JodaTimeAndroid.init(this)
 
         // Preferences

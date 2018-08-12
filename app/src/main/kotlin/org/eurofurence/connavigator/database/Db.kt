@@ -413,7 +413,7 @@ fun Db.eventInterval(eventEntry: EventRecord): Interval =
         Interval(eventStart(eventEntry), eventEnd(eventEntry))
 
 /**
- * You input an event and it will check it it overlaps with a favourited event
+ * You input an event and it will check it it overlaps with a favorited event
  */
 fun Db.eventIsConflicting(eventEntry: EventRecord): Boolean =
         events.items
@@ -431,7 +431,7 @@ fun Db.filterEvents() =
  * returns 0 if before or after the event
  */
 fun Db.eventDayNumber(): Int {
-    Log.d("DB", "Calulating day of the event")
+    Log.d("DB", "Calculating day of the event")
     val firstDay = DateTime(this.days.items.first().date.time)
     val lastDay = DateTime(this.days.items.last().date.time)
 

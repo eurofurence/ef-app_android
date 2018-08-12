@@ -109,7 +109,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
                     }
 
             // Update notifications for favorites
-            EventFavoriteBroadcast().updateNotificatons(applicationContext, faves)
+            EventFavoriteBroadcast().updateNotifications(applicationContext, faves)
 
             // Store new time
             date = sync.currentDateTimeUtc

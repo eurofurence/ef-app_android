@@ -64,9 +64,9 @@ class FragmentMap : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.map.attacher.mediumScale = 2.5F
             ui.map.attacher.maximumScale = 5F
 
-            ui.map.attacher.setOnPhotoTapListener { _, percX, percY ->
-                val x = (image.width ?: 0) * percX
-                val y = (image.height ?: 0) * percY
+            ui.map.attacher.setOnPhotoTapListener { _, percentX, percentY ->
+                val x = (image.width ?: 0) * percentX
+                val y = (image.height ?: 0) * percentY
                 info { "Tap registered at x: $x, y: $y" }
 
                 val entries = mapRecord.findMatchingEntries(x, y)

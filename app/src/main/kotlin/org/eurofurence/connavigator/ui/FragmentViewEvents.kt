@@ -84,12 +84,12 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, NavRepresented {
         changePagerAdapter(BackgroundPreferences.eventPagerMode)
     }
 
-    private fun changePagerAdapter(adapter: PagerAdapter, preferedPosition: Int? = null) {
+    private fun changePagerAdapter(adapter: PagerAdapter, preferredPosition: Int? = null) {
         eventPager.adapter = adapter
         eventPager.adapter.notifyDataSetChanged()
 
 
-        preferedPosition?.let {
+        preferredPosition?.let {
             eventPager.setCurrentItem(it, false)
         }
     }
