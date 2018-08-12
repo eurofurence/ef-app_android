@@ -116,10 +116,10 @@ class EventList(override val db: Db) : HasDb {
     fun sortByDateAndTime() = this.apply { filters[FilterType.ORDER_DAY_AND_TIME] = "" }
 
     fun sortByDate() =
-            this.apply { filters[org.eurofurence.connavigator.ui.filters.FilterType.ORDER_DAY] = "" }
+            this.apply { filters[FilterType.ORDER_DAY] = "" }
 
     fun sortByName() =
-            this.apply { filters[org.eurofurence.connavigator.ui.filters.FilterType.ORDER_NAME] = "" }
+            this.apply { filters[FilterType.ORDER_NAME] = "" }
 }
 
 enum class FilterType {
