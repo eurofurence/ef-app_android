@@ -29,7 +29,7 @@ import kotlin.properties.Delegates.notNull
 /**
  * Created by david on 8/3/16.
  */
-class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
+class FragmentMap : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     fun withArguments(mapRecord: MapRecord) = apply {
@@ -39,7 +39,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     val ui = MapUi()
-    var mapRecord by notNull<MapRecord>()
+    private var mapRecord by notNull<MapRecord>()
     val image by lazy { db.images[mapRecord.imageId]!! }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =

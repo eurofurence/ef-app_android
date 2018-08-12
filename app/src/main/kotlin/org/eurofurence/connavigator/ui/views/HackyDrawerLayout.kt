@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.v4.widget.DrawerLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
-import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.catchToAnyFalse
 
 /**

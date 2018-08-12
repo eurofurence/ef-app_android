@@ -55,8 +55,8 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
 
     override val db by lazyLocateDb()
 
-    val infoGroupId get() = UUID.fromString(arguments.getString("id"))
-    val infoGroup by lazy { db.knowledgeGroups[infoGroupId]!! }
+    private val infoGroupId: UUID? get() = UUID.fromString(arguments.getString("id"))
+    private val infoGroup by lazy { db.knowledgeGroups[infoGroupId]!! }
 
     val infoItems by lazy {
         db.knowledgeEntries.items

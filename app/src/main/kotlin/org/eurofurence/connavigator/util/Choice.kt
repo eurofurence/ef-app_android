@@ -43,7 +43,7 @@ data class Choice<out T, out U>(val isLeft: Boolean, val it: Any?) {
  * @param choice The original choice to handle
  * @param onLeft The transformation for the left option
  */
-class OnLeft<X, out T : X, out U, R>(val choice: Choice<T, U>, val onLeft: (X) -> R) {
+class OnLeft<X, out T : X, out U, R>(private val choice: Choice<T, U>, private val onLeft: (X) -> R) {
     /**
      * Specifies the right mapping and applies the transformation.
      * @param onRight The transformation for the right option
@@ -66,13 +66,13 @@ class OnLeft<X, out T : X, out U, R>(val choice: Choice<T, U>, val onLeft: (X) -
  * @param choice The original choice to handle
  * @param onRight The transformation for the right option
  */
-class OnRight<X, out T, out U : X, R>(val choice: Choice<T, U>, val onRight: (X) -> R) {
+class OnRight<X, out T, out U : X, R>(private val choice: Choice<T, U>, private val onRight: (X) -> R) {
     /**
      * Specifies the left mapping and applies the transformation.
      * @param onLeft The transformation for the left option
      * @return Returns the result of [onLeft] if [choice] is left, otherwise the result of [onRight].
      */
-    infix fun onLeft(onLeft: (T) -> R) =
+    private infix fun onLeft(onLeft: (T) -> R) =
             if (choice.isLeft)
                 onLeft(choice.left)
             else
@@ -96,13 +96,13 @@ infix fun <X, T, U : X, R> Choice<T, U>.onRight(onRight: (X) -> R) =
  * Maps the left value to either a value of a new left type or the old right type.
  */
 infix fun <T, U, V> Choice<T, U>.outerMapLeft(block: (T) -> Choice<V, U>) =
-        if (isLeft) block(left) else Choice<V, U>(false, right)
+        if (isLeft) block(left) else Choice(false, right)
 
 /**
  * Maps the right value to either a value of a new right type or the old right type.
  */
 infix fun <T, U, V> Choice<T, U>.outerMapRight(block: (U) -> Choice<T, V>) =
-        if (isRight) block(right) else Choice<T, V>(true, left)
+        if (isRight) block(right) else Choice(true, left)
 
 /**
  * Maps the left value to a value of a new left type.
@@ -151,7 +151,7 @@ fun <T, U> right(it: U) = Choice<T, U>(false, it)
  * @receiver The value to convert
  * @return Returns a new choice
  */
-val <T : Any> T?.orUnit get() = if (this != null) left<T, Unit>(this) else right<T, Unit>(Unit)
+val <T : Any> T?.orUnit get() = if (this != null) left<T, Unit>(this) else right(Unit)
 
 /**
  * Tries to apply the [block] returning it as [left], if it fails in an exception of type [U], returning it as [right].

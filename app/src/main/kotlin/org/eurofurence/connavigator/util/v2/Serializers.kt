@@ -16,32 +16,32 @@ import kotlin.serialization.*
 /**
  * Special value type for Unit fields.
  */
-val VALUE_TYPE_UNIT: Byte = 1
+const val VALUE_TYPE_UNIT: Byte = 1
 
 /**
  * Special value type for parcellable values.
  */
-val VALUE_TYPE_PARCELABLE: Byte = 2
+const val VALUE_TYPE_PARCELABLE: Byte = 2
 
 /**
  * Special value type for serializable values.
  */
-val VALUE_TYPE_SERIALIZABLE: Byte = 3
+const val VALUE_TYPE_SERIALIZABLE: Byte = 3
 
 /**
  * Special value type for single value JSON fields.
  */
-val VALUE_TYPE_JSON: Byte = 4
+const val VALUE_TYPE_JSON: Byte = 4
 
 /**
  * Special value type for JSON lists with elements.
  */
-val VALUE_TYPE_JSON_LIST: Byte = 5
+const val VALUE_TYPE_JSON_LIST: Byte = 5
 
 /**
  * Special value type for JSON lists without detectable element type.
  */
-val VALUE_TYPE_JSON_LIST_EMPTY: Byte = 6
+const val VALUE_TYPE_JSON_LIST_EMPTY: Byte = 6
 
 /**
  * Writes the value to the intent.
@@ -87,7 +87,7 @@ fun Intent.toMapString() =
  * Serializes to a bundle.
  */
 
-class BundleOutput(val target: Bundle, val root: String, val defaultJson: Boolean = true) : NamedValueOutput(root) {
+class BundleOutput(val target: Bundle, root: String, private val defaultJson: Boolean = true) : NamedValueOutput(root) {
 
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())
@@ -179,7 +179,7 @@ class BundleOutput(val target: Bundle, val root: String, val defaultJson: Boolea
 /**
  * Deserializes from a bundle.
  */
-class BundleInput(val target: Bundle, val root: String) : NamedValueInput(root) {
+class BundleInput(val target: Bundle, root: String) : NamedValueInput(root) {
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())
                 childName
@@ -251,7 +251,7 @@ class BundleInput(val target: Bundle, val root: String) : NamedValueInput(root) 
 /**
  * Serializes to an intent.
  */
-class IntentOutput(val target: Intent, val defaultJson: Boolean = true) : NamedValueOutput(target.action) {
+class IntentOutput(val target: Intent, private val defaultJson: Boolean = true) : NamedValueOutput(target.action) {
 
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())

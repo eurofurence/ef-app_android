@@ -32,7 +32,7 @@ import us.feras.mdv.MarkdownView
 /**
  * Views an info based on an ID passed to the intent
  */
-class FragmentViewInfo() : Fragment(), HasDb {
+class FragmentViewInfo : Fragment(), HasDb {
     override val db by lazyLocateDb()
 
     val ui by lazy { InfoUi() }

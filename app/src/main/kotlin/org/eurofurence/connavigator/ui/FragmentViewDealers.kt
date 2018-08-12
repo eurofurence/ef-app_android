@@ -31,9 +31,9 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger,NavReprese
         get() = R.id.navDealersDen
 
     val ui by lazy { DealersUi() }
-    var effectiveDealers = emptyList<DealerRecord>()
+    private var effectiveDealers = emptyList<DealerRecord>()
 
-    var searchText = ""
+    private var searchText = ""
     var searchCategory = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -52,7 +52,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger,NavReprese
 
         val distinctCategories = dealers.items
                 .map{ it.categories ?: emptyList() }
-                .fold( emptyList<String>(), { a, b -> a.plus(b).distinct() } )
+                .fold( emptyList<String>()) { a, b -> a.plus(b).distinct() }
                 .sorted()
 
         ui.categorySpinner.adapter =
@@ -94,7 +94,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger,NavReprese
         ui.dealerList.adapter.notifyDataSetChanged()
     }
 
-    fun sortDealers(dealers: Iterable<DealerRecord>): List<DealerRecord> =
+    private fun sortDealers(dealers: Iterable<DealerRecord>): List<DealerRecord> =
             dealers.sortedBy { (if (it.displayName != "") it.displayName else it.attendeeNickname).toLowerCase() }
 
     override fun onSearchButtonClick() {

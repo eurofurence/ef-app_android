@@ -17,8 +17,7 @@ fun Fragment.findRoot(): RootAPI? = context.let {
  * Invokes the code if the container is a root API.
  */
 inline fun Fragment.applyOnRoot(block: RootAPI.() -> Unit) = findRoot().let {
-    if (it is RootAPI)
-        it.block()
+    it?.block()
 }
 
 /**

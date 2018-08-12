@@ -29,10 +29,10 @@ class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fragm
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        if (AppPreferences.shortenDates) {
-            return DateTime(days.asc { it.date }[position].date).dayOfWeek().asShortText
+        return if (AppPreferences.shortenDates) {
+            DateTime(days.asc { it.date }[position].date).dayOfWeek().asShortText
         } else {
-            return DateTime(days.asc { it.date }[position].date).toString(DateTimeFormat.forPattern("MMM d"))
+            DateTime(days.asc { it.date }[position].date).toString(DateTimeFormat.forPattern("MMM d"))
         }
     }
 
@@ -61,11 +61,11 @@ class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Frag
         )
     }
 
-    override fun getPageTitle(position: Int) = rooms.asc { it.name }[position].name
+    override fun getPageTitle(position: Int): String = rooms.asc { it.name }[position].name
 
     override fun getCount() = rooms.size
 
-    val rooms by lazy { db.rooms }
+    private val rooms by lazy { db.rooms }
 }
 
 class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
@@ -81,11 +81,11 @@ class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fra
         )
     }
 
-    override fun getPageTitle(position: Int) = tracks[position].name
+    override fun getPageTitle(position: Int): String = tracks[position].name
 
     override fun getCount() = tracks.size
 
-    val tracks by lazy { db.tracks.asc { it.name } }
+    private val tracks by lazy { db.tracks.asc { it.name } }
 }
 
 class FavoriteEventPagerAdapter(val db: Db, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager){
@@ -96,7 +96,7 @@ class FavoriteEventPagerAdapter(val db: Db, fragmentManager: FragmentManager): F
                     .sortByStartTime()
     )
 
-    override fun getPageTitle(position: Int) = days[position].name
+    override fun getPageTitle(position: Int): String = days[position].name
 
     override fun getCount() = days.size
 

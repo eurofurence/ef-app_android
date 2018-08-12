@@ -2,7 +2,6 @@ package org.eurofurence.connavigator.ui.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -21,7 +20,7 @@ import kotlin.properties.Delegates.notNull
  * Created by David on 6/5/2016.
  */
 class DealerDialog : DialogFragment(), AnkoLogger {
-    var dealerRecord by notNull<DealerRecord>()
+    private var dealerRecord by notNull<DealerRecord>()
 
     fun withArguments(dealerRecord: DealerRecord) = apply {
         arguments = Bundle().apply {
@@ -32,20 +31,20 @@ class DealerDialog : DialogFragment(), AnkoLogger {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
 
-        if ("dealerRecord" in arguments) {
+        return if ("dealerRecord" in arguments) {
             dealerRecord = arguments.jsonObjects["dealerRecord"]
 
             builder.setTitle("Dealer options for ${dealerRecord.displayName}")
 
-            builder.setItems(R.array.dealer_options, DialogInterface.OnClickListener { dialogInterface, i -> update(dialogInterface, i) })
+            builder.setItems(R.array.dealer_options) { _, i -> update(i) }
 
-            return builder.create()
+            builder.create()
         } else {
-            return super.onCreateDialog(savedInstanceState)
+            super.onCreateDialog(savedInstanceState)
         }
     }
 
-    private fun update(dialogInterface: DialogInterface?, i: Int) =
+    private fun update(i: Int) =
             when (i) {
                 0 -> debug { "send to notes" }
                 else -> {

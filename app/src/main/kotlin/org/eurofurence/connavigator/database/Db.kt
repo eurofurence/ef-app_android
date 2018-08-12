@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.database
 
 import android.content.Context
@@ -171,7 +173,7 @@ fun Any.lazyLocateDb() = lazy { locateDb() }
  */
 interface HasDb : Db {
     /**
-     * Gets the actual delgate, may be implemented by [autoDb].
+     * Gets the actual delegate.
      */
     val db: Db
 
@@ -268,7 +270,7 @@ interface HasDb : Db {
  * Direct database implementation.
  */
 class RootDb(context: Context) : Stored(context), Db {
-    override val observer = BehaviorSubject.create<Db>().apply {
+    override val observer: BehaviorSubject<Db> = BehaviorSubject.create<Db>().apply {
         // Autopush a single event to render
         onNext(this@RootDb)
     }
@@ -355,7 +357,7 @@ class RootDb(context: Context) : Stored(context), Db {
         maps.delete()
     }
 
-    override fun subscribe(function: (db: Db) -> Any) = observer.observeOn(AndroidSchedulers.mainThread())
+    override fun subscribe(function: (db: Db) -> Any): Disposable = observer.observeOn(AndroidSchedulers.mainThread())
             .subscribe { function(it) }
 }
 
@@ -397,10 +399,10 @@ fun Db.eventEnd(eventEntry: EventRecord): DateTime {
     val st = LocalTime.parse(eventEntry.startTime)
     val et = LocalTime.parse(eventEntry.endTime)
 
-    if (et < st)
-        return eventDayNumber(eventEntry).plusDays(1).withTime(et)
+    return if (et < st)
+        eventDayNumber(eventEntry).plusDays(1).withTime(et)
     else
-        return eventDayNumber(eventEntry).withTime(et)
+        eventDayNumber(eventEntry).withTime(et)
 }
 
 
@@ -417,9 +419,7 @@ fun Db.eventIsConflicting(eventEntry: EventRecord): Boolean =
         events.items
                 .filter { it.conferenceDayId == eventEntry.conferenceDayId }
                 .filter { it.id in faves }
-                .filter { it.id != eventEntry.id }
-                .filter { eventInterval(eventEntry).overlaps(eventInterval(it)) }
-                .isNotEmpty() // If this list is bigger then 0, we have conflicting events
+                .filter { it.id != eventEntry.id }.any { eventInterval(eventEntry).overlaps(eventInterval(it)) } // If this list is bigger then 0, we have conflicting events
 
 fun Db.filterEvents() =
         EventList(this)

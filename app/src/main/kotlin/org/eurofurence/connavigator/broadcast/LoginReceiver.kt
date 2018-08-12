@@ -5,12 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
 import com.chibatching.kotpref.bulk
-import com.github.kittinunf.fuel.Fuel
 import io.swagger.client.model.RegSysAuthenticationRequest
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.gcm.InstanceIdService
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.toIntent
 import org.eurofurence.connavigator.webapi.apiService
@@ -24,11 +22,11 @@ import org.jetbrains.anko.warn
  */
 class LoginReceiver : BroadcastReceiver(), AnkoLogger {
     companion object {
-        val USERNAME = "USERNAME"
-        val REGNUMBER = "REGNUMBER"
-        val PASSWORD = "PASSWORD"
+        const val USERNAME = "USERNAME"
+        const val REGNUMBER = "REGNUMBER"
+        const val PASSWORD = "PASSWORD"
 
-        val LOGIN_RESULT = "LOGIN_RESULT"
+        const val LOGIN_RESULT = "LOGIN_RESULT"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -38,7 +36,7 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
         val username = intent.getStringExtra(USERNAME)
         val password = intent.getStringExtra(PASSWORD)
 
-        info { "Attempting login for ${username} with reg number ${regNumber}, $username, $password" }
+        info { "Attempting login for $username with reg number $regNumber, $username, $password" }
 
         task {
             apiService.tokens.apiV2TokensRegSysPost(RegSysAuthenticationRequest().apply {
@@ -63,22 +61,22 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
 
             info { "Saved auth to preferences" }
 
-            val intent = LOGIN_RESULT.toIntent {
+            val responseIntent = LOGIN_RESULT.toIntent {
                 booleans["success"] = true
             }
 
-            LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent)
+            LocalBroadcastManager.getInstance(context).sendBroadcastSync(responseIntent)
             InstanceIdService().reportToken()
             DataChanged.fire(context, "Login successful")
         } fail {
             warn { "Failed to retrieve tokens" }
             error { it.printStackTrace() }
 
-            val intent = LOGIN_RESULT.toIntent {
+            val responseIntent = LOGIN_RESULT.toIntent {
                 booleans["success"] = false
             }
 
-            LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent)
+            LocalBroadcastManager.getInstance(context).sendBroadcastSync(responseIntent)
             DataChanged.fire(context, "Login failed")
         }
     }

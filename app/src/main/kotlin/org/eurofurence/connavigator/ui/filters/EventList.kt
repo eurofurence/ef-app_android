@@ -18,7 +18,7 @@ import kotlin.collections.set
  */
 class EventList(override val db: Db) : HasDb {
     val filters = HashMap<FilterType, String>()
-    val UPCOMING_TIME_IN_MINUTES = 30
+    private val upcomingTimeInMinutes = 30
 
     @AddTrace(name = "EventList:applyEventFilters", enabled = true)
     fun applyFilters(): List<EventRecord> {
@@ -52,7 +52,7 @@ class EventList(override val db: Db) : HasDb {
 
 
                 IS_UPCOMING -> events.removeAll {
-                    !eventIsUpcoming(it, now, UPCOMING_TIME_IN_MINUTES)
+                    !eventIsUpcoming(it, now, upcomingTimeInMinutes)
                 }
                 IS_FAVORITED -> events.removeAll {
                     it.id !in faves

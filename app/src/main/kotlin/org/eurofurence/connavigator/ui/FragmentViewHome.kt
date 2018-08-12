@@ -41,13 +41,13 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, NavRepresented {
 
     val database by lazy { locateDb() }
     var subscriptions = Disposables.empty()
-    val now by lazy { DateTime.now() }
+    val now: DateTime? by lazy { DateTime.now() }
 
-    val upcoming by lazy { EventRecyclerFragment().withArguments(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
+    private val upcoming by lazy { EventRecyclerFragment().withArguments(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
     val current by lazy { EventRecyclerFragment().withArguments(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
-    val favorited by lazy { EventRecyclerFragment().withArguments(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
-    val announcement by lazy { AnnouncementListFragment() }
-    val userStatus by lazy { UserStatusFragment() }
+    private val favorited by lazy { EventRecyclerFragment().withArguments(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
+    private val announcement by lazy { AnnouncementListFragment() }
+    private val userStatus by lazy { UserStatusFragment() }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
@@ -104,11 +104,11 @@ class HomeUi : AnkoComponent<Fragment> {
     lateinit var countdownArc: ArcProgress
     lateinit var countdownLayout: LinearLayout
 
-    lateinit var upcomingFragment: ViewGroup
-    lateinit var currentFragment: ViewGroup
-    lateinit var favoritesFragment: ViewGroup
-    lateinit var announcementFragment: ViewGroup
-    lateinit var loginWidget: ViewGroup
+    private lateinit var upcomingFragment: ViewGroup
+    private lateinit var currentFragment: ViewGroup
+    private lateinit var favoritesFragment: ViewGroup
+    private lateinit var announcementFragment: ViewGroup
+    private lateinit var loginWidget: ViewGroup
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         nestedScrollView {

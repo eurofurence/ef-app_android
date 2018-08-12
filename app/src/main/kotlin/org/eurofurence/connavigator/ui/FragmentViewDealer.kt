@@ -45,7 +45,7 @@ import org.jetbrains.anko.support.v4.px2dip
 import java.util.*
 
 class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
-    val dealerId by lazy { UUID.fromString(arguments.getString("id")) }
+    private val dealerId: UUID? by lazy { UUID.fromString(arguments.getString("id")) }
     val ui by lazy { DealerUi() }
 
     override val db by lazyLocateDb()
@@ -154,8 +154,8 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             val radius = 300
             val circle = entry.tapRadius
-            val x = maxOf(0, (entry.x ?: 0) - (radius ?: 0))
-            val y = maxOf(0, (entry.y ?: 0) - (radius ?: 0))
+            val x = maxOf(0, (entry.x ?: 0) - radius)
+            val y = maxOf(0, (entry.y ?: 0) - radius)
             val w = minOf((mapImage.width ?: 0) - x - 1, radius + radius)
             val h = minOf((mapImage.height ?: 0) - y - 1, radius + radius)
             val ox = (entry.x ?: 0) - x

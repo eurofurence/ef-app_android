@@ -18,7 +18,7 @@ import java.io.File
  * The API services manage extended API functionality
  */
 object apiService : AnkoLogger {
-    var apiPath = RemotePreferences.apiBaseUrl
+    var apiPath: String? = RemotePreferences.apiBaseUrl
 
     val announcements by lazy { AnnouncementsApi().apply { basePath = apiPath } }
 

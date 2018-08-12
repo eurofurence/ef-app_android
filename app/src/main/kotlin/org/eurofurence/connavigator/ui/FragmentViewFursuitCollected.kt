@@ -44,7 +44,7 @@ class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
             it.recentlyCollected.orEmpty().map {
                 ui.collectedLayout.addView(
                         TextView(context).apply {
-                            text = "${it.name}"
+                            text = it.name
                             horizontalPadding = dip(10)
                         }
                 )

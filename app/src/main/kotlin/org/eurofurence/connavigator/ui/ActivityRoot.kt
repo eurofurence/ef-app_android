@@ -76,9 +76,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     val toolbar: Toolbar by view()
     override val tabs: TabLayout by view()
     val drawer: DrawerLayout by view()
-    val fab: FloatingActionButton by view()
 
-    var currentMode: ActionBarMode = ActionBarMode.HOME
+    private var currentMode: ActionBarMode = ActionBarMode.HOME
 
     // Views in navigation view
     val navView: NavigationView by view()
@@ -88,14 +87,14 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
 
     // See if we're on the home screen. Used to check the back button
-    val onHome get() = supportFragmentManager.findFragmentByTag("content") is FragmentViewHome
+    private val onHome get() = supportFragmentManager.findFragmentByTag("content") is FragmentViewHome
 
     var subscriptions = Disposables.empty()
 
     /**
      * Listens to update responses, since the event recycler holds database related data
      */
-    val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
+    private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
         // Get intent extras
         val success = it.booleans["success"]
         val time = it.objects["time", Date::class.java]
@@ -110,7 +109,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     /**
      * Use a bound value instead of the specification.
      */
-    val updateCompleteMsg by updateComplete
+    private val updateCompleteMsg by updateComplete
 
 
     override fun makeSnackbar(text: String) {
@@ -121,7 +120,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         super.onCreate(savedInstanceState)
 
         // Stop the rotation
-        if (RemotePreferences.rotationEnabled == false) {
+        if (!RemotePreferences.rotationEnabled) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         // Assign the layout
@@ -476,12 +475,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     private fun <T : Fragment> navigateIfLoggedIn(fragment: Class<T>, mode: ActionBarMode = ActionBarMode.NONE): Boolean {
-        if (AuthPreferences.isLoggedIn()) {
+        return if (AuthPreferences.isLoggedIn()) {
             navigateRoot(fragment, mode)
-            return true
+            true
         } else {
             longToast("You need to login before you can see private messages!")
-            return false
+            false
         }
     }
 

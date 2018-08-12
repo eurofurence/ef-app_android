@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.delegators
 
 import android.app.Activity
@@ -12,7 +14,7 @@ import kotlin.reflect.KProperty
  * [view].
  * @param T The method used to find a view in the container by string
  */
-class ViewProperty<in T, U : View>(val findView: (T, String) -> U) {
+class ViewProperty<in T, U : View>(private val findView: (T, String) -> U) {
 
     operator fun getValue(container: T, property: KProperty<*>): U {
         return findView(container, property.name)

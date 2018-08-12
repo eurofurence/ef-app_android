@@ -43,12 +43,12 @@ fun AnkoLogger.dispatchUpdate(context: Context, showToastOnCompletion: Boolean =
  */
 class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLogger {
     companion object {
-        val UPDATE_COMPLETE = "org.eurofurence.connavigator.driver.UPDATE_COMPLETE"
+        const val UPDATE_COMPLETE = "org.eurofurence.connavigator.driver.UPDATE_COMPLETE"
     }
 
     override val db by lazyLocateDb()
 
-    val updateCompleteMsg by updateComplete
+    private val updateCompleteMsg by updateComplete
 
     // TODO: Sticky intent since there should only be one pending update
     override fun onHandleIntent(intent: Intent?) {

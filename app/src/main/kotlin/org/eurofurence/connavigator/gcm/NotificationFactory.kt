@@ -18,7 +18,7 @@ import org.jetbrains.anko.intentFor
  */
 class NotificationFactory(var context: Context) {
     @Deprecated("This function should no longer be used")
-    fun buildNotification(title: String, message: String, pendingActivity: Class<*> = ActivityRoot::class.java): Notification {
+    private fun buildNotification(title: String, message: String, pendingActivity: Class<*> = ActivityRoot::class.java): Notification {
         if (!Activity::class.java.isAssignableFrom(pendingActivity))
             error("Pending activity is not actually an activity")
 
@@ -101,7 +101,7 @@ class NotificationFactory(var context: Context) {
         setOngoing(true)
     }
 
-    fun addBigText(builder: NotificationCompat.Builder, bigText: String?) = builder.setStyle(
+    fun addBigText(builder: NotificationCompat.Builder, bigText: String?): NotificationCompat.Builder? = builder.setStyle(
             NotificationCompat.BigTextStyle()
                     .bigText(bigText)
     )

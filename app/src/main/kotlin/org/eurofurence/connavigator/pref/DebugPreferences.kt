@@ -1,7 +1,6 @@
 package org.eurofurence.connavigator.pref
 
 import com.chibatching.kotpref.KotprefModel
-import com.chibatching.kotpref.enumpref.enumValuePref
 
 /**
  * Holds preferences for debug status
@@ -15,13 +14,4 @@ object DebugPreferences: KotprefModel() {
 
     // Schedule notifications 5 minutes into the future
     var scheduleNotificationsForTest by booleanPref()
-}
-
-enum class DateOffset {
-    ZERO,
-    ONE,
-    TWO,
-    THREE,
-    FOUR,
-    FIVE
 }

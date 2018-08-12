@@ -3,10 +3,8 @@ package org.eurofurence.connavigator.pref
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.ReplaySubject
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.util.v2.get
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
@@ -51,25 +49,25 @@ object RemotePreferences : AnkoLogger {
         update()
     }
 
-    val observer = BehaviorSubject.create<RemotePreferences>()
+    val observer: BehaviorSubject<RemotePreferences> = BehaviorSubject.create<RemotePreferences>()
 
-    val lastUpdatedMillis get() = remoteConfig.info.fetchTimeMillis
+    private val lastUpdatedMillis get() = remoteConfig.info.fetchTimeMillis
     val lastUpdatedDatetime get() = DateTime(lastUpdatedMillis)
-    val timeSinceLastUpdate get() = DateTime.now().minus(lastUpdatedMillis)
+    val timeSinceLastUpdate: DateTime get() = DateTime.now().minus(lastUpdatedMillis)
 
     // Booleans
     val mapsEnabled: Boolean get() = remoteConfig.getBoolean("maps_enabled")
     val rotationEnabled: Boolean get() = remoteConfig.getBoolean("rotation_enabled")
-    val nativeFursuitGames get() = remoteConfig.getBoolean("native_fursuit_games")
-    val autoUpdateDisabled get() = remoteConfig.getBoolean("auto_update_disabled")
+    val nativeFursuitGames: Boolean get() = remoteConfig.getBoolean("native_fursuit_games")
+    val autoUpdateDisabled: Boolean get() = remoteConfig.getBoolean("auto_update_disabled")
 
     // Longs
-    val nextConStart get() = remoteConfig.getLong("nextConStart")
-    val lastConEnd get() = remoteConfig.getLong("lastConEnd")
+    val nextConStart: Long get() = remoteConfig.getLong("nextConStart")
+    val lastConEnd: Long get() = remoteConfig.getLong("lastConEnd")
 
     // Strings
-    val apiBaseUrl get() =   remoteConfig.getString("api_base_url")
-    val supportChatUrl get() = remoteConfig.getString("support_chat_url")
-    val eventTitle get() = remoteConfig.getString("event_title")
-    val eventSubTitle get() = remoteConfig.getString("event_subtitle")
+    val apiBaseUrl: String get() = remoteConfig.getString("api_base_url")
+    val supportChatUrl: String get() = remoteConfig.getString("support_chat_url")
+    val eventTitle: String get() = remoteConfig.getString("event_title")
+    val eventSubTitle: String get() = remoteConfig.getString("event_subtitle")
 }

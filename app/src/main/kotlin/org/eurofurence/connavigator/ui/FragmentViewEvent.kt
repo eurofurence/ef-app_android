@@ -48,7 +48,7 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
 
     var subscriptions = Disposables.empty()
 
-    val eventId: UUID? get() = UUID.fromString(arguments.getString("id"))
+    private val eventId: UUID? get() = UUID.fromString(arguments.getString("id"))
 
     val ui by lazy { EventUi() }
 
@@ -77,7 +77,6 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
             Analytics.event(Category.EVENT, Action.OPENED, event.title)
 
             val conferenceRoom = event[toRoom]
-            val conferenceDay = event[toDay]
 
             ui.title.text = event.fullTitle()
 
@@ -107,7 +106,7 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
             description.let {
                 if (it != ui.extrasContent.tag) {
                     ui.extrasContent.tag = it
-                    ui.extrasContent.setText(it)
+                    ui.extrasContent.text = it
                     ui.extras.visibility = if (it == "") View.GONE else View.VISIBLE
                 }
             }
@@ -162,7 +161,7 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
 }
 
 class EventUi : AnkoComponent<Fragment> {
-    lateinit var splitter: LinearLayout
+    private lateinit var splitter: LinearLayout
 
     lateinit var extras: LinearLayout
 

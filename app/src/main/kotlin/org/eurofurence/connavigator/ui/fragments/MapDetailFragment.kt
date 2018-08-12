@@ -39,7 +39,7 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
     val id get() = arguments.getString("id") ?: ""
     val showTitle get() = arguments.getBoolean("showTitle")
     var subscriptions = Disposables.empty()
-    var linkFound = false
+    private var linkFound = false
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -66,8 +66,8 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
         }
     }
 
-    fun findLinkFragment() {
-        info { "Finding map link in mapEntries. ID: ${id}" }
+    private fun findLinkFragment() {
+        info { "Finding map link in mapEntries. ID: $id" }
         val entryMap = db.findLinkFragment(id)
 
         val map = entryMap["map"] as MapRecord?
@@ -135,7 +135,7 @@ class MapDetailUi : AnkoComponent<Fragment> {
     lateinit var title: TextView
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        relativeLayout() {
+        relativeLayout {
             lparams(matchParent, wrapContent)
             layout = verticalLayout {
                 backgroundResource = R.color.cardview_light_background

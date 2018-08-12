@@ -16,8 +16,8 @@ import org.jetbrains.anko.notificationManager
  */
 class NotificationPublisher : BroadcastReceiver() {
     companion object {
-        val NOTIFICATION_ID = "notification-id"
-        val NOTIFICATION = "notification"
+        const val NOTIFICATION_ID = "notification-id"
+        const val NOTIFICATION = "notification"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
