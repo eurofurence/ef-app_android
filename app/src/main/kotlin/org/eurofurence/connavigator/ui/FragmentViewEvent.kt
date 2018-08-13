@@ -131,7 +131,7 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
             }
 
             childFragmentManager.beginTransaction()
-                    .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom.id, true), "mapDetails")
+                    .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
                     .commit()
         }
     }
@@ -161,6 +161,8 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
 }
 
 class EventUi : AnkoComponent<Fragment> {
+    lateinit var splitter: LinearLayout
+
     lateinit var extras: LinearLayout
 
     lateinit var extrasContent: TextView
