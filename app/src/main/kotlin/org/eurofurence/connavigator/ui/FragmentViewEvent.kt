@@ -90,7 +90,7 @@ class FragmentViewEvent : Fragment(), HasDb {
 
             ui.time.text = "${db.eventStart(event).dayOfWeek().asText} from ${event.startTimeString()} to ${event.endTimeString()}"
             ui.organizers.text = event.ownerString()
-            ui.room.text = conferenceRoom!!.name
+            ui.room.text = conferenceRoom?.name ?: "Unable to locate room!"
 
             (event.posterImageId ?: event.bannerImageId).let {
                 if (it != ui.image.tag) {
