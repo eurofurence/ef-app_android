@@ -31,9 +31,6 @@ class ResetReceiver : BroadcastReceiver(), AnkoLogger {
         info { "Purging images" }
         imageService.clear()
 
-        info { "Annihilating login information" }
-        AuthPreferences.clear()
-
         info { "Bombarding user settings" }
         AppPreferences.clear()
         DebugPreferences.clear()

@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.gcm
 
 import android.app.Notification
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -11,17 +12,21 @@ import android.support.v4.app.NotificationCompat
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.ui.ActivityRoot
 import org.jetbrains.anko.intentFor
+import java.util.*
+
+fun NotificationManager.cancelFromRelated(identity: UUID) =
+        cancel(identity.toString(), 0)
 
 /**
  * Creates a basic notification
  */
 class NotificationFactory(var context: Context) {
-    fun broadcastNotification(builder: NotificationCompat.Builder) {
+    fun broadcastNotification(builder: NotificationCompat.Builder, tag: String) {
         val notification = builder.build()
 
         val intent = context.intentFor<NotificationPublisher>(
-                NotificationPublisher.NOTIFICATION_ID to notification.hashCode(),
-                NotificationPublisher.NOTIFICATION to notification
+                NotificationPublisher.TAG to tag,
+                NotificationPublisher.ITEM to notification
         )
 
         context.sendBroadcast(intent)
@@ -59,7 +64,7 @@ class NotificationFactory(var context: Context) {
         setOngoing(true)
     }
 
-    fun addBigText(builder: NotificationCompat.Builder, bigText: String?): NotificationCompat.Builder? = builder.setStyle(
+    fun addBigText(builder: NotificationCompat.Builder, bigText: String?): NotificationCompat.Builder = builder.setStyle(
             NotificationCompat.BigTextStyle()
                     .bigText(bigText)
     )

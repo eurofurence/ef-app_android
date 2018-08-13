@@ -40,10 +40,9 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         debug { "Message payload :" + message.data }
 
         when (message.data["Event"]) {
-            "Announcement" -> createAnnouncement(message)
-            "ImportantAnnouncement" -> createHighPriorityAnnouncement(message)
             "Sync" -> syncData(message)
             "Notification" -> createNotification(message)
+            "Announcement" -> createAnnouncement(message)
             else -> warn("Message did not contain a valid event. Abandoning!")
         }
     }
@@ -55,40 +54,37 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         RemotePreferences.update()
     }
 
-    private fun createAnnouncement(message: RemoteMessage) {
-        info { "Received request to create announcement notification" }
 
-        val notification = factory.createBasicNotification()
+    private val RemoteMessage.title get() = data["Title"]
 
-        factory.addRegularText(notification, "A new announcement from Eurofurence", message.data["Title"] ?: "")
-        factory.addBigText(notification, message.data["Text"] ?: "")
-        factory.setActivity(notification)
+    private val RemoteMessage.text get() = data["Text"]
 
-        factory.broadcastNotification(notification)
-    }
+    private val RemoteMessage.message get() = data["Message"]
+
+    private val RemoteMessage.relatedId get() = data["RelatedId"]
+
+    private val RemoteMessage.fallbackId get() = hashCode().toString()
 
     private fun createNotification(message: RemoteMessage) {
         info { "Received request to create generic notification" }
 
         val notification = factory.createBasicNotification()
 
-        factory.addRegularText(notification, message.data["Title"] ?: "", message.data["Message"] ?: "")
+        factory.addRegularText(notification, message.title ?: "", message.message ?: "")
         factory.setActivity(notification)
 
-        factory.broadcastNotification(notification)
+        factory.broadcastNotification(notification, message.relatedId ?: message.fallbackId)
     }
 
-    private fun createHighPriorityAnnouncement(message: RemoteMessage) {
-        info { "Received request to make high priority announcement" }
+    private fun createAnnouncement(message: RemoteMessage) {
+        info { "Received request to create announcement notification" }
 
         val notification = factory.createBasicNotification()
 
-
-        factory.addRegularText(notification, message.data["Title"] ?: "", message.data["Message"] ?: "")
-        factory.addBigText(notification, message.data["Message"] ?: "")
-        factory.makeHighPriority(notification)
+        factory.addRegularText(notification, "A new announcement from Eurofurence", message.title ?: "")
+        factory.addBigText(notification, message.text)
         factory.setActivity(notification)
 
-        factory.broadcastNotification(notification)
+        factory.broadcastNotification(notification, message.relatedId ?: message.fallbackId)
     }
 }

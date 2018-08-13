@@ -70,6 +70,7 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
             backgroundResource = R.color.backgroundGrey
+            lparams(matchParent, matchParent)
             scrollView {
                 lparams(matchParent, matchParent)
 

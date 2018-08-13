@@ -13,6 +13,7 @@ import io.reactivex.disposables.Disposables
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.gcm.cancelFromRelated
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.ui.FragmentViewMessageList
 import org.eurofurence.connavigator.ui.LoginActivity
@@ -43,6 +44,11 @@ class UserStatusFragment : Fragment(), AnkoLogger {
         }
     } successUi { messages ->
         context?.let {
+            it.notificationManager.apply {
+                for (m in messages)
+                    cancelFromRelated(m.id)
+            }
+
             info { "Fetched messages, ${messages.count()} messages found" }
 
             val unreadMessages = messages.filter { it.readDateTimeUtc == null }

@@ -344,7 +344,6 @@ class RootDb(context: Context) : Stored(context), Db {
 
     override fun clear() {
         date = null
-        version = null
         announcements.delete()
         dealers.delete()
         days.delete()
