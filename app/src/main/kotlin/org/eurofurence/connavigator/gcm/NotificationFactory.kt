@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.gcm
 
 import android.app.Activity
 import android.app.Notification
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -12,6 +13,10 @@ import android.support.v4.app.NotificationCompat
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.ui.ActivityRoot
 import org.jetbrains.anko.intentFor
+import java.util.*
+
+fun NotificationManager.cancelFromRelated(identity: UUID) =
+        cancel(identity.toString(), 0)
 
 /**
  * Creates a basic notificaiton
@@ -46,24 +51,12 @@ class NotificationFactory(var context: Context) {
     }
 
 
-    @Deprecated("Deprecated in favor of composable builders and it's broadcaster")
-    fun showNotification(title: String, content: String) {
-        val notification = buildNotification(title, content)
-
-        val intent = Intent(context, NotificationPublisher::class.java)
-
-        intent.putExtra(NotificationPublisher.NOTIFICATION_ID, notification.hashCode())
-        intent.putExtra(NotificationPublisher.NOTIFICATION, notification)
-
-        context.sendBroadcast(intent)
-    }
-
-    fun broadcastNotification(builder: NotificationCompat.Builder) {
+    fun broadcastNotification(builder: NotificationCompat.Builder, tag: String) {
         val notification = builder.build()
 
         val intent = context.intentFor<NotificationPublisher>(
-                NotificationPublisher.NOTIFICATION_ID to notification.hashCode(),
-                NotificationPublisher.NOTIFICATION to notification
+                NotificationPublisher.TAG to tag,
+                NotificationPublisher.ITEM to notification
         )
 
         context.sendBroadcast(intent)
@@ -106,7 +99,7 @@ class NotificationFactory(var context: Context) {
                     .bigText(bigText)
     )
 
-    fun addRegularText(builder: NotificationCompat.Builder, title: String, text:String) = builder.apply {
+    fun addRegularText(builder: NotificationCompat.Builder, title: String, text: String) = builder.apply {
         this.mContentTitle = title
         this.mContentText = text
     }
