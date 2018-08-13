@@ -59,9 +59,9 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
         subscriptions = Disposables.empty()
     }
 
-    fun withArguments(id: UUID, showTitle: Boolean = false) = apply {
+    fun withArguments(id: UUID?, showTitle: Boolean = false) = apply {
         arguments = Bundle().apply {
-            putString("id", id.toString())
+            id?.let { putString("id", it.toString()) }
             putBoolean("showTitle", showTitle)
         }
     }

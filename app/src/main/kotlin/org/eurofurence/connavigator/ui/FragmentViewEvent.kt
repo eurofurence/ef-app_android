@@ -132,7 +132,7 @@ class FragmentViewEvent : Fragment(), HasDb {
             }
 
             childFragmentManager.beginTransaction()
-                    .replace(27, MapDetailFragment().withArguments(conferenceRoom.id, true), "mapDetails")
+                    .replace(27, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
                     .commit()
         }
     }
