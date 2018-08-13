@@ -166,7 +166,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         val regex = Regex("\\d+.(\\d+).\\d+")
 
         val current = regex.findAll(BuildConfig.VERSION_NAME).first().value
-        val previous = regex.findAll(AppPreferences.lastKnownVersion).first().value
+        val previous = if(db.version != null) regex.findAll(db.version.toString()).first().value else ""
 
         info { "Last Known Version: $current vs $previous" }
         // if versions differ, reset
@@ -183,13 +183,13 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             return false
         }
 
-        AppPreferences.lastKnownVersion = BuildConfig.VERSION_NAME
+        db.version = BuildConfig.VERSION_NAME
 
         return current == previous
     }
 
     private fun clearData() {
-        AppPreferences.lastKnownVersion = BuildConfig.VERSION_NAME
+        db.version = BuildConfig.VERSION_NAME
         ResetReceiver().clearData(this)
     }
 }
