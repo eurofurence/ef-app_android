@@ -1,5 +1,5 @@
 package org.eurofurence.connavigator.ui
 
-interface NavRepresented {
+interface MainScreen {
     val drawerItemId: Int
 }

@@ -37,7 +37,7 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by requinard on 6/28/17.
  */
-class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb,NavRepresented {
+class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb, MainScreen {
     override val drawerItemId: Int
         get() = R.id.navMessages
 
@@ -58,7 +58,8 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb,NavRep
             val message = messages[position]
 
             holder.title.text = message.subject
-            holder.date.text = "From ${message.authorName}\nSent: ${message.createdDateTimeUtc?.toRelative() ?: "Not yet"}"
+            holder.date.text = "From ${message.authorName}\nSent: ${message.createdDateTimeUtc?.toRelative()
+                    ?: "Not yet"}"
 
             if (message.readDateTimeUtc != null) {
                 holder.icon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)

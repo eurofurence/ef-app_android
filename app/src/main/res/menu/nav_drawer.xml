@@ -28,23 +28,23 @@
                 android:title="Points of Interest"/>
     </group>
 
-    <item android:title="Personal">
+    <item android:checkableBehavior="single" android:title="Personal">
         <menu>
             <item
                     android:id="@+id/navLogin"
                     android:icon="@drawable/icon_user"
                     android:title="Login"/>
             <item
-                android:id="@+id/navMessages"
-                android:icon="@drawable/icon_message"
-                android:title="Personal Messages" />
+                    android:id="@+id/navMessages"
+                    android:icon="@drawable/icon_message"
+                    android:title="Personal Messages"/>
             <item
-                android:id="@+id/navFursuitGames"
-                android:icon="@drawable/icon_paw"
-                android:title="Collect'Em All" />
+                    android:id="@+id/navFursuitGames"
+                    android:icon="@drawable/icon_paw"
+                    android:title="Collect'Em All"/>
         </menu>
     </item>
-    <item android:title="External">
+    <item android:checkableBehavior="single" android:title="External">
         <menu>
             <item android:id="@+id/navWebSite"
                   android:title="Website"
@@ -55,7 +55,7 @@
         </menu>
     </item>
 
-    <item android:title="App Management">
+    <item android:checkableBehavior="single" android:title="App Management">
         <menu>
             <item android:id="@+id/navFeedback"
                   android:title="App Feedback"

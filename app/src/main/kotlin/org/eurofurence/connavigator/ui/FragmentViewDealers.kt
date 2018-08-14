@@ -27,7 +27,7 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by David on 15-5-2016.
  */
-class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, NavRepresented {
+class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScreen {
     override val db by lazyLocateDb()
     override val drawerItemId: Int
         get() = R.id.navDealersDen
