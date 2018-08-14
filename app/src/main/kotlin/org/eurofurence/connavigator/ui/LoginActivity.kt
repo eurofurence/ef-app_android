@@ -212,7 +212,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
                             }
                         }
 
-                        textView("Your login credentials for the app are the same as for the Eurofurence Registration System.\n\nIf you do not remember or have access to them, you can ask for a PIN code to sign in at the ConOps or Security office.") {
+                        textView("Your login credentials for the app are the same as for the Eurofurence Registration System.\n\nIf you do not remember or have access to them, you can ask for a PIN code to sign in at the registration desk or security office.") {
                             lparams(matchParent, wrapContent) {
                                 margin = dip(16)
                             }
