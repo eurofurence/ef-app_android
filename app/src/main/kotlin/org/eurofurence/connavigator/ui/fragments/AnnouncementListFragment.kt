@@ -66,7 +66,7 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
     var subscriptions = Disposables.empty()
 
     val ui = AnnouncementsUi()
-    val announcementAdapter by lazy { AnnoucementRecyclerDataAdapter() }
+    private val announcementAdapter by lazy { AnnoucementRecyclerDataAdapter() }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -90,7 +90,7 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
         subscriptions = Disposables.empty()
     }
 
-    fun getAnnouncements() = db.announcements.items
+    private fun getAnnouncements() = db.announcements.items
             .filterIf(!AppPreferences.showOldAnnouncements) { it.validFromDateTimeUtc.time <= now().millis && it.validUntilDateTimeUtc.time > now().millis }
             .sortedBy { it.validFromDateTimeUtc }
             .toList()

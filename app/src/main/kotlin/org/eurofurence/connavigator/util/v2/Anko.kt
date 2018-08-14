@@ -1,15 +1,12 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.v2
 
-import android.support.design.widget.TabLayout
 import android.support.v4.widget.TextViewCompat
 import android.view.View
-import android.view.ViewParent
-import android.widget.TableLayout
-import android.widget.TableRow
 import android.widget.TextView
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.applyRecursively
-import org.jetbrains.anko.childrenSequence
 import org.jetbrains.anko.displayMetrics
 
 /**

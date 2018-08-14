@@ -4,7 +4,7 @@ import io.reactivex.subjects.Subject
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class ObservedProperty<R,T>(val on: ReadWriteProperty<R, T>, val notify: Subject<T>) : ReadWriteProperty<R, T> {
+class ObservedProperty<R,T>(val on: ReadWriteProperty<R, T>, private val notify: Subject<T>) : ReadWriteProperty<R, T> {
     override fun getValue(thisRef: R, property: KProperty<*>): T {
         return on.getValue(thisRef, property)
     }

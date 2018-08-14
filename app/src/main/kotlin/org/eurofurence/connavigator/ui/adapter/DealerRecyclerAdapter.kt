@@ -34,7 +34,7 @@ class DealerDataHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     val layout: LinearLayout by view()
 }
 
-class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override val db: Db, val fragment: Fragment) :
+class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, override val db: Db, val fragment: Fragment) :
         RecyclerView.Adapter<DealerDataHolder>(), HasDb {
     override fun getItemCount(): Int {
         return effective_events.count()
@@ -77,7 +77,7 @@ class DealerRecyclerAdapter(val effective_events: List<DealerRecord>, override v
         }
 
         holder.layout.setOnLongClickListener {
-            DealerDialog(dealer).show(fragment.childFragmentManager, "Dealer menu")
+            DealerDialog().withArguments(dealer).show(fragment.childFragmentManager, "Dealer menu")
             true
         }
     }

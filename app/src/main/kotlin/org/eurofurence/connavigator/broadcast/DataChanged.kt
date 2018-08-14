@@ -10,7 +10,7 @@ import org.jetbrains.anko.info
  * App level broadcasts for data updates that invalidates the UI
  */
 object DataChanged : AnkoLogger {
-    val DATACHANGED = "DATACHANGED"
+    private const val DATACHANGED = "DATACHANGED"
 
     fun fire(context: Context, message: String) {
         info { "Sending data changed event with message \"$message\"" }

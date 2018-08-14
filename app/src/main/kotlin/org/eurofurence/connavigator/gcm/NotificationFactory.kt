@@ -1,6 +1,5 @@
 package org.eurofurence.connavigator.gcm
 
-import android.app.Activity
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -19,38 +18,9 @@ fun NotificationManager.cancelFromRelated(identity: UUID) =
         cancel(identity.toString(), 0)
 
 /**
- * Creates a basic notificaiton
+ * Creates a basic notification
  */
 class NotificationFactory(var context: Context) {
-    @Deprecated("This function should no longer be used")
-    fun buildNotification(title: String, message: String, pendingActivity: Class<*> = ActivityRoot::class.java): Notification {
-        if (!Activity::class.java.isAssignableFrom(pendingActivity))
-            error("Pending activity is not actually an activity")
-
-        val builder = NotificationCompat.Builder(context)
-
-        // On a click event we want to start an activity
-        val intentToExecute = Intent(context, pendingActivity)
-
-        // Attach the intent to a pending intent that our app can consume
-        val pendingIntent = PendingIntent.getActivity(context, 0, intentToExecute, 0)
-
-        // Do a lot of building
-        builder.setContentTitle(title)
-                .setContentText(message)
-                .setSmallIcon(R.drawable.ic_launcher_negative)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
-                .setAutoCancel(true)
-                .setLights(Color.argb(255, 0, 100, 89), 1000, 1000)
-                .setVibrate(longArrayOf(250, 100, 250, 100))
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setPriority(Notification.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-
-        return builder.build()
-    }
-
-
     fun broadcastNotification(builder: NotificationCompat.Builder, tag: String) {
         val notification = builder.build()
 
@@ -74,7 +44,7 @@ class NotificationFactory(var context: Context) {
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 
     /**
-     * Sets an activity to launch on notication taps
+     * Sets an activity to launch on notification taps
      */
     fun setActivity(builder: NotificationCompat.Builder): NotificationCompat.Builder {
         // On a click event we want to start an activity
@@ -94,7 +64,7 @@ class NotificationFactory(var context: Context) {
         setOngoing(true)
     }
 
-    fun addBigText(builder: NotificationCompat.Builder, bigText: String?) = builder.setStyle(
+    fun addBigText(builder: NotificationCompat.Builder, bigText: String?): NotificationCompat.Builder = builder.setStyle(
             NotificationCompat.BigTextStyle()
                     .bigText(bigText)
     )

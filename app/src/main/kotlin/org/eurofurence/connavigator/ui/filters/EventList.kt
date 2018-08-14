@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.ui.filters
 
 import com.google.firebase.perf.metrics.AddTrace
@@ -18,7 +20,7 @@ import kotlin.collections.set
  */
 class EventList(override val db: Db) : HasDb {
     val filters = HashMap<FilterType, String>()
-    val UPCOMING_TIME_IN_MINUTES = 30
+    private val upcomingTimeInMinutes = 30
 
     @AddTrace(name = "EventList:applyEventFilters", enabled = true)
     fun applyFilters(): List<EventRecord> {
@@ -52,7 +54,7 @@ class EventList(override val db: Db) : HasDb {
 
 
                 IS_UPCOMING -> events.removeAll {
-                    !eventIsUpcoming(it, now, UPCOMING_TIME_IN_MINUTES)
+                    !eventIsUpcoming(it, now, upcomingTimeInMinutes)
                 }
                 IS_FAVORITED -> events.removeAll {
                     it.id !in faves
@@ -116,10 +118,10 @@ class EventList(override val db: Db) : HasDb {
     fun sortByDateAndTime() = this.apply { filters[FilterType.ORDER_DAY_AND_TIME] = "" }
 
     fun sortByDate() =
-            this.apply { filters[org.eurofurence.connavigator.ui.filters.FilterType.ORDER_DAY] = "" }
+            this.apply { filters[FilterType.ORDER_DAY] = "" }
 
     fun sortByName() =
-            this.apply { filters[org.eurofurence.connavigator.ui.filters.FilterType.ORDER_NAME] = "" }
+            this.apply { filters[FilterType.ORDER_NAME] = "" }
 }
 
 enum class FilterType {

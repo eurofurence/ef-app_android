@@ -45,7 +45,8 @@ import org.jetbrains.anko.support.v4.px2dip
 import java.util.*
 
 class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
-    val dealerId by lazy { UUID.fromString(arguments.getString("id")) }
+    private val dealerId: UUID by lazy { UUID.fromString(arguments.getString("id")) }
+
     val ui by lazy { DealerUi() }
 
     override val db by lazyLocateDb()
@@ -154,8 +155,8 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             val radius = 300
             val circle = entry.tapRadius
-            val x = maxOf(0, (entry.x ?: 0) - (radius ?: 0))
-            val y = maxOf(0, (entry.y ?: 0) - (radius ?: 0))
+            val x = maxOf(0, (entry.x ?: 0) - radius)
+            val y = maxOf(0, (entry.y ?: 0) - radius)
             val w = minOf((mapImage.width ?: 0) - x - 1, radius + radius)
             val h = minOf((mapImage.height ?: 0) - y - 1, radius + radius)
             val ox = (entry.x ?: 0) - x
@@ -368,10 +369,10 @@ class DealerUi : AnkoComponent<Fragment> {
                         padding = dip(20)
 
                         ankoView(::ConstraintLayout, 0) {
-                            id = 5530
+                            id = R.id.dealer_container
 
                             map = photoView {
-                                id = 5531
+                                id = R.id.dealer_map
 
                                 backgroundResource = R.color.cardview_dark_background
                                 minimumScale = 1F
@@ -382,9 +383,9 @@ class DealerUi : AnkoComponent<Fragment> {
                             }
 
                             ConstraintSet().apply {
-                                connect(5531, START, 5530, START)
-                                connect(5531, END, 5530, END)
-                                setDimensionRatio(5531, "1:1")
+                                connect(R.id.dealer_map, START, R.id.dealer_container, START)
+                                connect(R.id.dealer_map, END, R.id.dealer_container, END)
+                                setDimensionRatio(R.id.dealer_map, "1:1")
                             }.applyTo(this)
                         }.lparams(matchParent, wrapContent)
 

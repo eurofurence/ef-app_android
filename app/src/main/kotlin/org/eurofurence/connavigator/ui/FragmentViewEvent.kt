@@ -43,12 +43,12 @@ import java.util.*
 /**
  * Created by David on 4/9/2016.
  */
-class FragmentViewEvent : Fragment(), HasDb {
+class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     var subscriptions = Disposables.empty()
 
-    val eventId: UUID? get() = UUID.fromString(arguments.getString("id"))
+    private val eventId: UUID? get() = UUID.fromString(arguments.getString("id"))
 
     val ui by lazy { EventUi() }
 
@@ -77,7 +77,6 @@ class FragmentViewEvent : Fragment(), HasDb {
             Analytics.event(Category.EVENT, Action.OPENED, event.title)
 
             val conferenceRoom = event[toRoom]
-            val conferenceDay = event[toDay]
 
             ui.title.text = event.fullTitle()
 
@@ -107,7 +106,7 @@ class FragmentViewEvent : Fragment(), HasDb {
             description.let {
                 if (it != ui.extrasContent.tag) {
                     ui.extrasContent.tag = it
-                    ui.extrasContent.setText(it)
+                    ui.extrasContent.text = it
                     ui.extras.visibility = if (it == "") View.GONE else View.VISIBLE
                 }
             }
@@ -132,7 +131,7 @@ class FragmentViewEvent : Fragment(), HasDb {
             }
 
             childFragmentManager.beginTransaction()
-                    .replace(27, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
+                    .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
                     .commit()
         }
     }
@@ -198,8 +197,8 @@ class EventUi : AnkoComponent<Fragment> {
                         adjustViewBounds = true
                     }.lparams(matchParent, wrapContent)
 
-                    splitter = verticalLayout {
-                        id = View.generateViewId()
+                    verticalLayout {
+                        id = R.id.event_splitter
                         backgroundResource = R.color.primaryDarker
                         padding = dip(15)
                         title = textView("LargeText") {
@@ -249,7 +248,7 @@ class EventUi : AnkoComponent<Fragment> {
                     }.lparams(matchParent, wrapContent)
 
                     verticalLayout {
-                        id = 27
+                        id = R.id.event_map
                     }
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, matchParent)
@@ -258,7 +257,7 @@ class EventUi : AnkoComponent<Fragment> {
                 imageResource = R.drawable.icon_menu
             }.lparams {
                 anchorGravity = Gravity.BOTTOM or Gravity.END
-                anchorId = splitter.id
+                anchorId = R.id.event_splitter
                 margin = dip(16)
             }
         }

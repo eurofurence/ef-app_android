@@ -6,7 +6,6 @@ import io.swagger.client.model.PostFcmDeviceRegistrationRequest
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -17,7 +16,7 @@ import org.jetbrains.anko.warn
  */
 class InstanceIdService : FirebaseInstanceIdService(), AnkoLogger {
     /**
-     * Checks if a user is logged in, if it is, we send a token to the appserver
+     * Checks if a user is logged in, if it is, we send a token to the app server
      */
     fun reportToken() {
         val token = FirebaseInstanceId.getInstance().token

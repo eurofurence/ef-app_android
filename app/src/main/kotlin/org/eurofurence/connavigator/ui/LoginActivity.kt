@@ -28,10 +28,10 @@ import org.joda.time.DateTime
 class LoginActivity : AppCompatActivity(), AnkoLogger {
     val ui by lazy { LoginUi() }
 
-    val loginReceiver = localReceiver(LoginReceiver.LOGIN_RESULT) {
+    private val loginReceiver = localReceiver(LoginReceiver.LOGIN_RESULT) {
         val success = it.booleans["success"]
 
-        info { "Received broadast from LoginReceiver" }
+        info { "Received broadcast from LoginReceiver" }
 
         runOnUiThread {
             if (success) {

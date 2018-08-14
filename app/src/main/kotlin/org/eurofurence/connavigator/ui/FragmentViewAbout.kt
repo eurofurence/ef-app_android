@@ -8,13 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.now
@@ -22,7 +20,6 @@ import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
-import us.feras.mdv.MarkdownView
 
 /**
  * Created by David on 28-4-2016.
@@ -33,12 +30,6 @@ class FragmentViewAbout : Fragment(), ContentAPI, NavRepresented {
 
 
     val ui = AboutUi()
-    private val attributations = "Google Map\n\nIcons8"
-
-    val textVersion: TextView by view()
-    val markdownAttributation: MarkdownView by view()
-    val aboutRequinard: LinearLayout by view()
-    val aboutPazuzu: LinearLayout by view()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -55,7 +46,9 @@ class FragmentViewAbout : Fragment(), ContentAPI, NavRepresented {
 }
 
 class AboutUi : AnkoComponent<Fragment> {
-    val avatarSize = 128
+    companion object {
+        private const val avatarSize = 128
+    }
 
     lateinit var requinardLayout: LinearLayout
     lateinit var pazuzuLayout: LinearLayout

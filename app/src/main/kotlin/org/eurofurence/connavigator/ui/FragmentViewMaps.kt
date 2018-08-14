@@ -20,7 +20,6 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.frameLayout
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.viewPager
 
 /**
  * Created by david on 8/3/16.
@@ -33,7 +32,7 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb, NavRepresented {
         get() = R.id.navMaps
 
     inner class MapFragmentPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
-        override fun getPageTitle(position: Int) =
+        override fun getPageTitle(position: Int): String =
                 browseableMaps[position].description
 
         override fun getItem(position: Int) =
@@ -65,9 +64,9 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb, NavRepresented {
 class MapsUi : AnkoComponent<Fragment> {
     lateinit var mapViewPager: ViewPager
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        frameLayout() {
+        frameLayout {
             mapViewPager = multitouchViewPager {
-                id = View.generateViewId()
+                id = R.id.map_view_pager
             }.lparams(matchParent, matchParent)
         }
     }

@@ -9,8 +9,6 @@ import android.view.Gravity
 import android.view.View
 import android.widget.*
 import at.grabner.circleprogress.CircleProgressView
-import com.github.lzyzsd.circleprogress.CircleProgress
-import com.github.lzyzsd.circleprogress.DonutProgress
 import com.google.firebase.perf.metrics.AddTrace
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
@@ -20,10 +18,7 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
-import org.eurofurence.connavigator.database.Db
-import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.UpdateIntentService
-import org.eurofurence.connavigator.database.locateDb
+import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AppPreferences
@@ -103,7 +98,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             ui.startLayout.visibility = View.GONE
             ui.loadingLayout.visibility = View.VISIBLE
 
-            UpdateIntentService.dispatchUpdate(this)
+            dispatchUpdate(this)
         }
 
         ui.noButton.setOnClickListener {
@@ -258,7 +253,7 @@ Is it okay to download the data now?
                     analyticalData = checkBox("Allow Eurofurence to collect anonymous analytical data.") {
                         hint = "This can be changed in your settings at any time."
                         isChecked = AnalyticsPreferences.enabled
-                        setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
+                        setOnCheckedChangeListener { _, b -> AnalyticsPreferences.enabled = b }
                     }.lparams(matchParent, wrapContent) {
                         padding = dip(30)
                     }
@@ -266,7 +261,7 @@ Is it okay to download the data now?
                     performanceData = checkBox("Allow Eurofurence to collect performance data.") {
                         hint = "This can be changed in your settings at any time."
                         isChecked = AnalyticsPreferences.performanceTracking
-                        setOnCheckedChangeListener { compoundButton, b -> AnalyticsPreferences.enabled = b }
+                        setOnCheckedChangeListener { _, b -> AnalyticsPreferences.enabled = b }
                     }.lparams(matchParent, wrapContent) {
                         padding = dip(30)
                     }
@@ -290,7 +285,6 @@ Is it okay to download the data now?
                 }
 
                 progressText = textView("Working... Please wait!") {
-                    id = 1
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
                     compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                 }.lparams(matchParent, wrapContent) {

@@ -47,13 +47,13 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, NavRepresented, Has
 
     val database by lazy { locateDb() }
     var subscriptions = Disposables.empty()
-    val now by lazy { DateTime.now() }
+    val now: DateTime by lazy { DateTime.now() }
 
-    val upcoming by lazy { EventRecyclerFragment().withArguments(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
-    val current by lazy { EventRecyclerFragment().withArguments(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
-    val favorited by lazy { EventRecyclerFragment().withArguments(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
-    val announcement by lazy { AnnouncementListFragment() }
-    val userStatus by lazy { UserStatusFragment() }
+    private val upcoming by lazy { EventRecyclerFragment().withArguments(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
+    private val current by lazy { EventRecyclerFragment().withArguments(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
+    private val favorited by lazy { EventRecyclerFragment().withArguments(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
+    private val announcement by lazy { AnnouncementListFragment() }
+    private val userStatus by lazy { UserStatusFragment() }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
@@ -91,11 +91,11 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, NavRepresented, Has
         info { "Configuring event recyclers" }
 
         childFragmentManager.beginTransaction()
-                .replace(5000, current)
-                .replace(5001, upcoming)
-                .replace(5002, favorited)
-                .replace(5003, announcement)
-                .replace(5004, userStatus)
+                .replace(R.id.home_current, current)
+                .replace(R.id.home_upcoming, upcoming)
+                .replace(R.id.home_favorited, favorited)
+                .replace(R.id.home_announcement, announcement)
+                .replace(R.id.home_user_status, userStatus)
                 .commitAllowingStateLoss()
     }
 
@@ -124,11 +124,11 @@ class HomeUi : AnkoComponent<Fragment> {
     lateinit var countdownArc: ArcProgress
     lateinit var countdownLayout: LinearLayout
 
-    lateinit var upcomingFragment: ViewGroup
-    lateinit var currentFragment: ViewGroup
-    lateinit var favoritesFragment: ViewGroup
-    lateinit var announcementFragment: ViewGroup
-    lateinit var loginWidget: ViewGroup
+    private lateinit var upcomingFragment: ViewGroup
+    private lateinit var currentFragment: ViewGroup
+    private lateinit var favoritesFragment: ViewGroup
+    private lateinit var announcementFragment: ViewGroup
+    private lateinit var loginWidget: ViewGroup
 
     @SuppressLint("ResourceType")
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
@@ -148,7 +148,7 @@ class HomeUi : AnkoComponent<Fragment> {
                 }
 
                 loginWidget = linearLayout {
-                    id = 5004
+                    id = R.id.home_user_status
                     lparams(matchParent, wrapContent)
                 }.lparams(matchParent, wrapContent) {
                     setMargins(0, dip(10), 0, 0)
@@ -172,21 +172,21 @@ class HomeUi : AnkoComponent<Fragment> {
                 }
 
                 announcementFragment = linearLayout {
-                    id = 5003
+                    id = R.id.home_announcement
                 }.lparams(matchParent, wrapContent) {
                     setMargins(0, dip(10), 0, 0)
                 }
 
                 upcomingFragment = linearLayout {
-                    id = 5000
+                    id = R.id.home_current
                 }.lparams(matchParent, wrapContent)
 
                 currentFragment = linearLayout {
-                    id = 5001
+                    id = R.id.home_upcoming
                 }.lparams(matchParent, wrapContent)
 
                 favoritesFragment = linearLayout {
-                    id = 5002
+                    id = R.id.home_favorited
                 }.lparams(matchParent, wrapContent)
             }
         }

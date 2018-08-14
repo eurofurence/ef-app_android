@@ -8,7 +8,7 @@ import android.content.Intent
 class SharingUtility {
     companion object {
         fun share(text: String): Intent {
-            val shareIntent = Intent();
+            val shareIntent = Intent()
 
             shareIntent.action = Intent.ACTION_SEND
             shareIntent.putExtra(Intent.EXTRA_TEXT, text)

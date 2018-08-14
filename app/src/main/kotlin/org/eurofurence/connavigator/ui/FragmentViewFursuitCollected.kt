@@ -35,7 +35,7 @@ class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
 
             api.apiV2FursuitsCollectingGamePlayerParticipationGet()
         } successUi {
-            info { "succesfully retrieved data!" }
+            info { "successfully retrieved data!" }
             info { it }
 
             ui.name.text = "Hello ${it.name}"
@@ -44,7 +44,7 @@ class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
             it.recentlyCollected.orEmpty().map {
                 ui.collectedLayout.addView(
                         TextView(context).apply {
-                            text = "${it.name}"
+                            text = it.name
                             horizontalPadding = dip(10)
                         }
                 )

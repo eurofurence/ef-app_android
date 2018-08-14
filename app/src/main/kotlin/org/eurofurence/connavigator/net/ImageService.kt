@@ -18,13 +18,14 @@ import io.swagger.client.model.ImageRecord
 import nl.komponents.kovenant.Deferred
 import nl.komponents.kovenant.deferred
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.util.extensions.logd
 import org.eurofurence.connavigator.util.extensions.url
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 
 /**
  * Provides methods for obtaining images from web and caching them.
  */
-object imageService {
+object imageService : AnkoLogger {
     /**
      * Image loading progress listener that does nothing.
      */
@@ -97,11 +98,8 @@ object imageService {
             }
 
 
-    fun getBitmap(image: ImageRecord): Bitmap =
-            imageLoader.loadImageSync(image.url, ImageSize(image.width ?: 0, image.height ?: 0))
-
     fun clear() {
-        logd { "Clearing image cache" }
+        debug { "Clearing image cache" }
         imageLoader.clearDiskCache()
         imageLoader.clearMemoryCache()
     }
@@ -113,7 +111,7 @@ object imageService {
         val imageFile = imageLoader.diskCache.get(image.url)
 
         if (imageFile.exists()) {
-            logd { "Deleting cached image" }
+            debug { "Deleting cached image" }
             imageFile.delete()
             preload(image)
         }

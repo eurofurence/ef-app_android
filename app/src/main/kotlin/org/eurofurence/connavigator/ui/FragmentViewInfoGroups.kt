@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.reactivex.disposables.Disposables
+import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.communication.ContentAPI
@@ -51,7 +52,7 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
         db.knowledgeGroups.items
                 .sortedBy { it.order }
                 .map { Pair(InfoGroupFragment().withArguments("id" to it.id.toString()), it.id.toString()) }
-                .forEach { transaction.add(1, it.first, it.second) }
+                .forEach { transaction.add(R.id.info_group_container, it.first, it.second) }
 
         transaction.commit()
     }
@@ -68,13 +69,11 @@ class ViewInfoGroupsUi : AnkoComponent<Fragment> {
         scrollView {
             lparams(matchParent, matchParent)
             relativeLayout {
-                lparams(matchParent, wrapContent)
                 verticalLayout {
-                    lparams(matchParent, wrapContent)
                     topPadding = dip(10)
-                    id = 1
-                }
-            }
+                    id = R.id.info_group_container
+                }.lparams(matchParent, wrapContent)
+            }.lparams(matchParent, wrapContent)
         }
     }
 

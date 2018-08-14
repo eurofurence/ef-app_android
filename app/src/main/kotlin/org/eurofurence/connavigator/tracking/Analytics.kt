@@ -6,9 +6,9 @@ import com.crashlytics.android.Crashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.perf.FirebasePerformance
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
-import org.eurofurence.connavigator.util.extensions.logd
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.debug
 
 /**o
  * Created by David on 20-4-2016.
@@ -18,30 +18,27 @@ class Analytics {
      * Collects all categories for analytics
      */
     object Category {
-        val EVENT = "event"
-        val DEALER = "dealer"
-        val INFO = "info"
-        val ANNOUNCEMENT = "announcement"
-        val SETTINGS = "settings"
+        const val EVENT = "event"
+        const val DEALER = "dealer"
+        const val INFO = "info"
+        const val SETTINGS = "settings"
     }
 
     /**
      * Collects all actions for analytics
      */
     object Action {
-        val SHARED = "shared"
-        val OPENED = "opened"
-        val FAVOURITE_ADD = "favourite added"
-        val FAVOURITE_DEL = "favourite removed"
-        val EXPORT_CALENDAR = "Exported to calendar"
-        val LINK_CLICKED = "Clicked external link"
-        val INCOMING = "Incoming from websites"
-        val CHANGED = "changed"
+        const val SHARED = "shared"
+        const val OPENED = "opened"
+        const val EXPORT_CALENDAR = "Exported to calendar"
+        const val LINK_CLICKED = "Clicked external link"
+        const val INCOMING = "Incoming from websites"
+        const val CHANGED = "changed"
     }
 
-    companion object {
+    companion object : AnkoLogger {
         lateinit var analytics: FirebaseAnalytics
-        val performance by lazy { FirebasePerformance.getInstance() }
+        val performance: FirebasePerformance by lazy { FirebasePerformance.getInstance() }
         fun init(context: Context) {
             analytics = FirebaseAnalytics.getInstance(context).apply {
                 setAnalyticsCollectionEnabled(AnalyticsPreferences.enabled)
@@ -69,7 +66,7 @@ class Analytics {
         )
 
         fun updateSettings() {
-            logd { "Analytics: ${AnalyticsPreferences.enabled}; Performance: ${AnalyticsPreferences.performanceTracking}" }
+            debug { "Analytics: ${AnalyticsPreferences.enabled}; Performance: ${AnalyticsPreferences.performanceTracking}" }
             analytics.setAnalyticsCollectionEnabled(AnalyticsPreferences.enabled)
             performance.isPerformanceCollectionEnabled = AnalyticsPreferences.performanceTracking
         }

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.extensions
 
 import android.content.Intent
@@ -164,13 +166,13 @@ class IntentContextJsonObjects(val intent: Intent) {
     /**
      * Gets the corresponding object extra or null if not present.
      */
-    operator fun <T> get(key: String, classOfT: Class<T>) =
+    operator fun <T> get(key: String, classOfT: Class<T>): T =
             JsonUtil.deserializeToObject<T>(intent.getStringExtra(key), classOfT)
 
     /**
      * Gets the corresponding object extra or null if not present.
      */
-    inline operator fun <reified T> get(key: String) =
+    inline operator fun <reified T> get(key: String): T =
             JsonUtil.deserializeToObject<T>(intent.getStringExtra(key), T::class.java)
 
     /**
@@ -194,7 +196,7 @@ class IntentContextJsonLists(val intent: Intent) {
     /**
      * Gets the corresponding object extra or null if not present.
      */
-    operator fun <T> get(key: String, classOfT: Class<T>) =
+    operator fun <T> get(key: String, classOfT: Class<T>): T =
             JsonUtil.deserializeToList<T>(intent.getStringExtra(key), classOfT)
 
     /**

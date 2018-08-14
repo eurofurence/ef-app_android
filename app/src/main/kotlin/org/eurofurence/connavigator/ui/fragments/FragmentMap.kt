@@ -29,7 +29,7 @@ import kotlin.properties.Delegates.notNull
 /**
  * Created by david on 8/3/16.
  */
-class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
+class FragmentMap : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     fun withArguments(mapRecord: MapRecord) = apply {
@@ -39,7 +39,7 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     val ui = MapUi()
-    var mapRecord by notNull<MapRecord>()
+    private var mapRecord by notNull<MapRecord>()
     val image by lazy { db.images[mapRecord.imageId]!! }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -64,9 +64,9 @@ class FragmentMap() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             ui.map.attacher.mediumScale = 2.5F
             ui.map.attacher.maximumScale = 5F
 
-            ui.map.attacher.setOnPhotoTapListener { _, percX, percY ->
-                val x = (image.width ?: 0) * percX
-                val y = (image.height ?: 0) * percY
+            ui.map.attacher.setOnPhotoTapListener { _, percentX, percentY ->
+                val x = (image.width ?: 0) * percentX
+                val y = (image.height ?: 0) * percentY
                 info { "Tap registered at x: $x, y: $y" }
 
                 val entries = mapRecord.findMatchingEntries(x, y)

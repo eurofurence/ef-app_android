@@ -37,7 +37,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, NavRepresented {
 
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()
-    val searchFragment by lazy { EventRecyclerFragment().withArguments(daysInsteadOfGlyphs = true) }
+    private val searchFragment by lazy { EventRecyclerFragment().withArguments(daysInsteadOfGlyphs = true) }
 
     private val detailsPopAdapter = object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
@@ -52,7 +52,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, NavRepresented {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fview_events_viewpager, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -84,12 +84,12 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, NavRepresented {
         changePagerAdapter(BackgroundPreferences.eventPagerMode)
     }
 
-    private fun changePagerAdapter(adapter: PagerAdapter, preferedPosition: Int? = null) {
+    private fun changePagerAdapter(adapter: PagerAdapter, preferredPosition: Int? = null) {
         eventPager.adapter = adapter
         eventPager.adapter.notifyDataSetChanged()
 
 
-        preferedPosition?.let {
+        preferredPosition?.let {
             eventPager.setCurrentItem(it, false)
         }
     }

@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
@@ -32,10 +31,7 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.R.id
 import org.eurofurence.connavigator.broadcast.ResetReceiver
-import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.UpdateIntentService
-import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.database.updateComplete
+import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.BackgroundPreferences
@@ -44,7 +40,10 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.communication.RootAPI
 import org.eurofurence.connavigator.util.delegators.header
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.applyOnContent
+import org.eurofurence.connavigator.util.extensions.booleans
+import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.objects
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
@@ -55,7 +54,7 @@ import java.util.*
 
 class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPreferenceChangeListener, HasDb, AnkoLogger {
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        logd { "Updating content data after preference change" }
+        debug { "Updating content data after preference change" }
 
         if (BuildConfig.DEBUG) {
             Analytics.event(Analytics.Category.SETTINGS, Analytics.Action.CHANGED, key)
@@ -76,9 +75,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     val toolbar: Toolbar by view()
     override val tabs: TabLayout by view()
     val drawer: DrawerLayout by view()
-    val fab: FloatingActionButton by view()
 
-    var currentMode: ActionBarMode = ActionBarMode.HOME
+    private var currentMode: ActionBarMode = ActionBarMode.HOME
 
     // Views in navigation view
     val navView: NavigationView by view()
@@ -88,14 +86,14 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
 
 
     // See if we're on the home screen. Used to check the back button
-    val onHome get() = supportFragmentManager.findFragmentByTag("content") is FragmentViewHome
+    private val onHome get() = supportFragmentManager.findFragmentByTag("content") is FragmentViewHome
 
     var subscriptions = Disposables.empty()
 
     /**
      * Listens to update responses, since the event recycler holds database related data
      */
-    val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
+    private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
         // Get intent extras
         val success = it.booleans["success"]
         val time = it.objects["time", Date::class.java]
@@ -110,7 +108,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     /**
      * Use a bound value instead of the specification.
      */
-    val updateCompleteMsg by updateComplete
+    private val updateCompleteMsg by updateComplete
 
 
     override fun makeSnackbar(text: String) {
@@ -121,7 +119,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         super.onCreate(savedInstanceState)
 
         // Stop the rotation
-        if (RemotePreferences.rotationEnabled == false) {
+        if (!RemotePreferences.rotationEnabled) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         // Assign the layout
@@ -218,7 +216,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     private fun handleBrowsingIntent(): Boolean {
         if (intent.action == Intent.ACTION_VIEW) {
 
-            logd { intent.dataString }
+            debug { intent.dataString }
             when {
             // Handle event links
                 intent.dataString.contains("/event/") -> {
@@ -276,7 +274,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         AuthPreferences.validate()
 
         if (!RemotePreferences.autoUpdateDisabled)
-            UpdateIntentService.dispatchUpdate(this)
+            dispatchUpdate(this)
     }
 
     override fun onPause() {
@@ -437,11 +435,11 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 }
                 R.id.navWebSite -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.eurofurence.org/")))
                 R.id.navWebTwitter -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/eurofurence")))
-                R.id.navDevReload -> UpdateIntentService.dispatchUpdate(this, showToastOnCompletion = true)
+                R.id.navDevReload -> dispatchUpdate(this, showToastOnCompletion = true)
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
                     alert("Empty app cache. You WILL need an internet connection to restart", "Clear database") {
-                        yesButton { ResetReceiver().clearData(this@ActivityRoot ) }
+                        yesButton { ResetReceiver().clearData(this@ActivityRoot) }
                         noButton { longToast("Not clearing DB") }
                     }.show()
                 }
@@ -476,12 +474,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     private fun <T : Fragment> navigateIfLoggedIn(fragment: Class<T>, mode: ActionBarMode = ActionBarMode.NONE): Boolean {
-        if (AuthPreferences.isLoggedIn()) {
+        return if (AuthPreferences.isLoggedIn()) {
             navigateRoot(fragment, mode)
-            return true
+            true
         } else {
             longToast("You need to login before you can see private messages!")
-            return false
+            false
         }
     }
 
@@ -557,7 +555,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     override val db by lazyLocateDb()
 
     private fun handleSettings() {
-        logv { "Starting settings activity" }
+        info { "Starting settings activity" }
         intent = Intent(this, ActivitySettings::class.java)
         startActivity(intent)
     }

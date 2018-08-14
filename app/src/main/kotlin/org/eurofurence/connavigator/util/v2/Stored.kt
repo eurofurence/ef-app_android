@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.v2
 
 import android.content.Context
@@ -21,7 +23,7 @@ abstract class Stored(val context: Context) {
      * A stored value.
      */
     inner class StoredValue<T : Any>(
-            val elementClass: KClass<T>, val swaggerStored: Boolean) {
+            private val elementClass: KClass<T>, private val swaggerStored: Boolean) {
 
         operator fun getValue(any: Any, kProperty: KProperty<*>): T? {
             val file = File(context.filesDir, "${kProperty.name}.val")
@@ -60,7 +62,7 @@ abstract class Stored(val context: Context) {
      * A stored list of values.
      */
     inner class StoredValues<T : Any>(
-            val elementClass: KClass<T>, val swaggerStored: Boolean) {
+            private val elementClass: KClass<T>, private val swaggerStored: Boolean) {
 
         operator fun getValue(any: Any, kProperty: KProperty<*>): List<T> {
             val file = File(context.filesDir, "${kProperty.name}.val")
@@ -81,18 +83,17 @@ abstract class Stored(val context: Context) {
         operator fun setValue(any: Any, kProperty: KProperty<*>, t: List<T>) {
             val file = File(context.filesDir, "${kProperty.name}.val")
 
-            if (t.isEmpty())
-                file.delete()
-            else if (swaggerStored)
-                JsonWriter(file.safeWriter()).use {
+            when {
+                t.isEmpty() -> file.delete()
+                swaggerStored -> JsonWriter(file.safeWriter()).use {
                     getGson().toJson(t, getListTypeForDeserialization(elementClass.java), it)
                 }
-            else
-                file.substitute { sub ->
+                else -> file.substitute { sub ->
                     ObjectOutputStream(sub.safeOutStream()).use {
                         it.writeObject(t)
                     }
                 }
+            }
         }
     }
 
@@ -100,7 +101,7 @@ abstract class Stored(val context: Context) {
      * A stored source that caches elements and creates an index via the [id] function.
      */
     inner class StoredSource<T : Any>(
-            val elementClass: KClass<T>,
+            private val elementClass: KClass<T>,
             val id: (T) -> UUID) : Source<T, UUID> {
         /**
          * Storage file, generated from the type name.
@@ -166,12 +167,12 @@ abstract class Stored(val context: Context) {
         override fun get(i: UUID?) = if (i != null) entries[i] else null
 
         /**
-         * Appliesthe delta to the store.
+         * Applies the delta to the store.
          */
         fun apply(abstractDelta: AbstractDelta<T>) {
             // Make new entries from original or new empty map
             val newEntries = if (abstractDelta.clearBeforeInsert)
-                hashMapOf<UUID, T>()
+                hashMapOf()
             else
                 entries.toMutableMap()
 

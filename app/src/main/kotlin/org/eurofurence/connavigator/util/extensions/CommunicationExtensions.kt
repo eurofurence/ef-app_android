@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.extensions
 
 import android.support.v4.app.Fragment
@@ -17,8 +19,7 @@ fun Fragment.findRoot(): RootAPI? = context.let {
  * Invokes the code if the container is a root API.
  */
 inline fun Fragment.applyOnRoot(block: RootAPI.() -> Unit) = findRoot().let {
-    if (it is RootAPI)
-        it.block()
+    it?.block()
 }
 
 /**

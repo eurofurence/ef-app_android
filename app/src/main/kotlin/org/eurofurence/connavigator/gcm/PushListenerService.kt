@@ -5,7 +5,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.eurofurence.connavigator.BuildConfig
-import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.database.dispatchUpdate
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
@@ -16,7 +16,7 @@ import org.jetbrains.anko.warn
  * Created by David on 14-4-2016.
  */
 class PushListenerService : FirebaseMessagingService(), AnkoLogger {
-    val factory by lazy { NotificationFactory(applicationContext) }
+    private val factory by lazy { NotificationFactory(applicationContext) }
 
     fun subscribe() {
         val messaging = FirebaseMessaging.getInstance()
@@ -50,7 +50,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
     private fun syncData(message: RemoteMessage) {
         info { "Received request to sync data" }
 
-        UpdateIntentService.dispatchUpdate(applicationContext)
+        dispatchUpdate(applicationContext)
         RemotePreferences.update()
     }
 

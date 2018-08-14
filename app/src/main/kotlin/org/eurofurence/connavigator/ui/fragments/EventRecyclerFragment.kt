@@ -27,7 +27,6 @@ import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.filters.FilterType
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
-import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.*
@@ -43,7 +42,7 @@ import kotlin.coroutines.experimental.buildSequence
  * Event view recycler to hold the viewpager items
  * TODO: Refactor the everliving fuck out of this shitty software
  */
-class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
+class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     var subscriptions = Disposables.empty()
@@ -83,7 +82,6 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
         val eventStartTime: TextView by view()
         val eventEndTime: TextView by view()
         val eventRoom: TextView by view()
-        val eventCard: LinearLayout by view("layout") // TODO Layout mismatch
         val layout: LinearLayout by view()
     }
 
@@ -179,7 +177,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             // Assign the on-click action
             holder.itemView.setOnClickListener {
-                logd { "Short event click" }
+                debug { "Short event click" }
                 applyOnRoot { navigateToEvent(event) }
             }
             holder.itemView.setOnLongClickListener {
@@ -203,7 +201,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
             // Put all filters.
             val filters = it.getStringArray("eventList")
             for (i in 0 until filters.size / 2) {
-                eventList.filters.put(FilterType.valueOf(filters[i]), filters[i + filters.size / 2])
+                eventList.filters[FilterType.valueOf(filters[i])] = filters[i + filters.size / 2]
             }
 
             title = it.getString("title")
@@ -267,7 +265,7 @@ class EventRecyclerFragment() : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     outRect.top = padding
                 }
 
-                val adapter = parent.getAdapter()
+                val adapter = parent.adapter
                 if (adapter != null && itemPosition == adapter.itemCount - 1) {
                     outRect.bottom = padding
                 }
@@ -395,7 +393,6 @@ class SingleEventUi : AnkoComponent<Fragment> {
 
 class EventListView : AnkoComponent<Fragment> {
     lateinit var title: TextView
-    //lateinit var loading: ProgressBar
     lateinit var eventList: RecyclerView
     lateinit var bigLayout: LinearLayout
 

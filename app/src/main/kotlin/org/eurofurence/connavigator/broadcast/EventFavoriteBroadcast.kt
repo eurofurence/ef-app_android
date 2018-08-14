@@ -46,22 +46,24 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
 
         val pendingIntent = PendingIntent.getBroadcast(context, event.id.hashCode(), notificationIntent, 0)
 
-        if (event.id in db.faves) {
-            // Remove item from favorites
-            info("Event is already favorited. Removing from favorites")
-            context.longToast("Removed ${event.title} from favorites")
-            context.alarmManager.cancel(pendingIntent)
-            db.faves = db.faves.filter { it != event.id }
-        } else if (notificationTime < now()) {
-            context.longToast("This event has already occured!")
-        } else {
-            info("Event is not yet favorited. Adding it to favorites")
-            context.longToast("Added ${event.title} to favorites")
-            context.alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
-            db.faves += event.id
+        when {
+            event.id in db.faves -> {
+                // Remove item from favorites
+                info("Event is already favorited. Removing from favorites")
+                context.longToast("Removed ${event.title} from favorites")
+                context.alarmManager.cancel(pendingIntent)
+                db.faves = db.faves.filter { it != event.id }
+            }
+            notificationTime < now() -> context.longToast("This event has already occurred!")
+            else -> {
+                info("Event is not yet favorited. Adding it to favorites")
+                context.longToast("Added ${event.title} to favorites")
+                context.alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
+                db.faves += event.id
+            }
         }
 
-        UpdateIntentService.dispatchUpdate(context)
+        dispatchUpdate(context)
     }
 
     private fun getNotificationTime(context: Context, db: Db, event: EventRecord): DateTime {
@@ -90,7 +92,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
     }
 
     private fun updateNotification(context: Context, eventId: UUID) {
-        info { "Updating notification for ${eventId.toString()}" }
+        info { "Updating notification for $eventId" }
         val db = context.locateDb()
         val event = db.events[eventId] ?: return
         info { "Event found: ${event.title}" }
@@ -108,5 +110,5 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
         info { "Updated pending activity" }
     }
 
-    public fun updateNotificatons(context: Context, eventIds: List<UUID>) = eventIds.map { updateNotification(context, it) }
+    fun updateNotifications(context: Context, eventIds: List<UUID>) = eventIds.map { updateNotification(context, it) }
 }

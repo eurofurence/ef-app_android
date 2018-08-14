@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.extensions
 
 import org.eurofurence.connavigator.tracking.Analytics
@@ -15,7 +17,7 @@ import org.eurofurence.connavigator.util.right
  * Handler proxy, this callback is invoked on exceptions in [catchAlternative], [catchToNull] and [catchToFalse].
  */
 val proxyException = Dispatcher<Throwable>().apply {
-    this += { ex: Throwable -> /* pass */ }
+    this += { _: Throwable -> /* pass */ }
 }
 
 /**
@@ -74,14 +76,14 @@ inline infix fun <reified E : Throwable> (() -> Unit).catchHandle(handler: (E) -
  * value
  */
 inline infix fun <reified R, reified E : Throwable> (() -> R).catchAlternative(handler: (E) -> R): R {
-    try {
-        return this()
+    return try {
+        this()
     } catch(t: Throwable) {
         if (t !is E)
             throw t
 
         proxyException(t)
-        return handler(t)
+        handler(t)
     }
 }
 
@@ -97,15 +99,15 @@ inline infix fun <reified R, reified E : Throwable> (() -> R).catchAlternative(h
  * value
  */
 inline infix fun <reified R, reified E : Throwable> (() -> R).catchToNull(handler: (E) -> Unit): R? {
-    try {
-        return this()
+    return try {
+        this()
     } catch(t: Throwable) {
         if (t !is E)
             throw t
 
         proxyException(t)
         handler(t)
-        return null
+        null
     }
 }
 
@@ -120,14 +122,14 @@ inline infix fun <reified R, reified E : Throwable> (() -> R).catchToNull(handle
  * value
  */
 inline fun <reified R, reified E : Throwable> catchToNull(block: () -> R): R? {
-    try {
-        return block()
+    return try {
+        block()
     } catch(t: Throwable) {
         if (t !is E)
             throw t
 
         proxyException(t)
-        return null
+        null
     }
 }
 
@@ -141,14 +143,14 @@ inline fun <reified R, reified E : Throwable> catchToNull(block: () -> R): R? {
  * @return Returns true only if the receiver succeeded and returned true.
  */
 inline infix fun <reified E : Throwable, reified R> (() -> R).catchToFalse(handler: (E) -> Unit): Boolean {
-    try {
-        return this() as? Boolean ?: true
+    return try {
+        this() as? Boolean ?: true
     } catch(t: Throwable) {
         if (t !is E)
             throw t
         proxyException(t)
         handler(t)
-        return false
+        false
     }
 }
 
@@ -161,13 +163,13 @@ inline infix fun <reified E : Throwable, reified R> (() -> R).catchToFalse(handl
  * @return Returns true only if the [block] succeeded and returned true.
  */
 inline fun <reified E : Throwable, reified R> catchToFalse(block: () -> R): Boolean {
-    try {
-        return block() as? Boolean ?: true
+    return try {
+        block() as? Boolean ?: true
     } catch(t: Throwable) {
         if (t !is E)
             throw t
         proxyException(t)
-        return false
+        false
     }
 }
 
@@ -180,11 +182,11 @@ inline fun <reified E : Throwable, reified R> catchToFalse(block: () -> R): Bool
  * @return Returns true only if the [block] succeeded.
  */
 inline fun <reified R> catchToAnyFalse(block: () -> R): Boolean {
-    try {
-        return block() as? Boolean ?: true
+    return try {
+        block() as? Boolean ?: true
     } catch(t: Throwable) {
         proxyException(t)
-        return false
+        false
     }
 }
 
@@ -197,11 +199,11 @@ inline fun <reified R> catchToAnyFalse(block: () -> R): Boolean {
  */
 @kotlin.jvm.JvmName("catchToAnyFalseFromReturn")
 inline fun catchToAnyFalse(block: () -> Boolean): Boolean {
-    try {
-        return block()
+    return try {
+        block()
     } catch(t: Throwable) {
         proxyException(t)
-        return false
+        false
     }
 }
 
@@ -216,15 +218,15 @@ inline fun catchToAnyFalse(block: () -> Boolean): Boolean {
  * @return Returns a choice of either receivers return value or the exception itself on failure.
  */
 inline infix fun <reified R, reified E : Throwable> (() -> R).catchToChoice(handler: (E) -> Unit): Choice<R, E> {
-    try {
-        return left(this())
+    return try {
+        left(this())
     } catch(t: Throwable) {
         if (t !is E)
             throw t
 
         proxyException(t)
         handler(t)
-        return right(t)
+        right(t)
     }
 }
 
@@ -239,14 +241,14 @@ inline infix fun <reified R, reified E : Throwable> (() -> R).catchToChoice(hand
  * @return Returns a choice of either [block]s return value or the exception itself on failure.
  */
 inline fun <reified R, reified E : Throwable> catchToChoice(block: () -> R): Choice<R, E> {
-    try {
-        return left(block())
+    return try {
+        left(block())
     } catch(t: Throwable) {
         if (t !is E)
             throw t
 
         proxyException(t)
-        return right(t)
+        right(t)
     }
 }
 
@@ -261,16 +263,16 @@ inline fun <reified R, reified E : Throwable> catchToChoice(block: () -> R): Cho
  * @return Returns the exception or null if succeeded.
  */
 inline infix fun <reified R, reified E : Throwable> (() -> R).catchToException(handler: (E) -> Unit): E? {
-    try {
+    return try {
         this()
-        return null
+        null
     } catch(t: Throwable) {
         if (t !is E)
             throw t
 
         proxyException(t)
         handler(t)
-        return t
+        t
     }
 }
 
@@ -284,15 +286,15 @@ inline infix fun <reified R, reified E : Throwable> (() -> R).catchToException(h
  * @return Returns the exception or null if succeeded.
  */
 inline fun <reified R, reified E : Throwable> catchToException(block: () -> R): E? {
-    try {
+    return try {
         block()
-        return null
+        null
     } catch(t: Throwable) {
         if (t !is E)
             throw t
 
         proxyException(t)
-        return t
+        t
     }
 }
 

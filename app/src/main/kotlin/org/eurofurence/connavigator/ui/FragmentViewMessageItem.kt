@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.github.kittinunf.fuel.Fuel
 import com.google.gson.Gson
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
@@ -16,29 +15,13 @@ import io.swagger.client.model.PrivateMessageRecord
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.markAsRead
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.webapi.apiService
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoContext.Companion
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.info
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.topPadding
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.wrapContent
 import us.feras.mdv.MarkdownView
 
 class FragmentViewMessageItem : Fragment(), AnkoLogger {

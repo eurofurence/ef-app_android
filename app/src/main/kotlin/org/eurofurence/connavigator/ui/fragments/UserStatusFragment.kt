@@ -36,7 +36,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
 
     var subscriptions = Disposables.empty()
 
-    fun checkMessages() = task {
+    private fun checkMessages() = task {
         info { "Checking message counts" }
         apiService.communications.let {
             it.addHeader("Authorization", AuthPreferences.asBearer())

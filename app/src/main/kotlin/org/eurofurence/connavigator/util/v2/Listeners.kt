@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.eurofurence.connavigator.util.v2
 
 import android.content.BroadcastReceiver
@@ -62,14 +64,14 @@ data class ListenerSpecBinding<T : Any>(val listenerSpec: ListenerSpec<T>, val c
         output.write(listenerSpec.serializer, t)
 
         // Send intent as broadcast
-        if (listenerSpec.external) {
+        return if (listenerSpec.external) {
             context.sendBroadcast(intent)
-            return BroadcastResult.SENT
+            BroadcastResult.SENT
         } else {
             if (LocalBroadcastManager.getInstance(context).sendBroadcast(intent))
-                return BroadcastResult.SEEN_HANDLED
+                BroadcastResult.SEEN_HANDLED
             else
-                return BroadcastResult.SEEN_UNHANDLED
+                BroadcastResult.SEEN_UNHANDLED
         }
     }
 
