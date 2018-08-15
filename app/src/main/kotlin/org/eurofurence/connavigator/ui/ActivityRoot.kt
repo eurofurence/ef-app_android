@@ -483,6 +483,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         }
     }
 
+    private var stateSaved = false
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
@@ -497,6 +499,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             outState.putBoolean("hasContentSub", true)
             supportFragmentManager.putFragment(outState, "contentSub", contentSub)
         }
+
+        stateSaved = true
     }
 
     override fun navigateToEvent(event: EventRecord) {
@@ -548,7 +552,10 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     }
 
     override fun popDetails() {
-        supportFragmentManager.popBackStack("contentSubAdded", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        // Pop the backstack including the details fragment, unless state is already saved.
+        supportFragmentManager
+                .takeUnless { stateSaved }
+                ?.popBackStack("contentSubAdded", FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
 
