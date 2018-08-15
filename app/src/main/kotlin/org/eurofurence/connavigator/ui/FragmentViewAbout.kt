@@ -166,7 +166,7 @@ class AboutUi : AnkoComponent<Fragment> {
 - NordicFuzzCon (Catch'em all)
 - Pattarchus
 - Snow-wolf
-- StrefiGreif
+- StreifiGreif
 - Xil
 
 **Made with**
