@@ -18,7 +18,10 @@ import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.withArguments
 
 
-class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb {
+class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb, MainScreen {
+    override val drawerItemId: Int
+        get() = R.id.navInfo
+
     override val db by lazyLocateDb()
     val ui = ViewInfoGroupsUi()
 

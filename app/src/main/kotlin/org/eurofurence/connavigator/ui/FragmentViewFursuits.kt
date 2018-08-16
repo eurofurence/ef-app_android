@@ -18,7 +18,7 @@ import org.jetbrains.anko.support.v4.viewPager
 /**
  * Created by requinard on 7/24/17.
  */
-class FragmentViewFursuits : Fragment(), NavRepresented {
+class FragmentViewFursuits : Fragment(), MainScreen {
     override val drawerItemId: Int
         get() = R.id.navFursuitGames
 

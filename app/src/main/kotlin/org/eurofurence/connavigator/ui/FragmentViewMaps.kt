@@ -24,7 +24,7 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by david on 8/3/16.
  */
-class FragmentViewMaps : Fragment(), ContentAPI, HasDb, NavRepresented {
+class FragmentViewMaps : Fragment(), ContentAPI, HasDb, MainScreen {
 
     val ui by lazy { MapsUi() }
     override val db by lazyLocateDb()

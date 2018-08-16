@@ -88,6 +88,8 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     // See if we're on the home screen. Used to check the back button
     private val onHome get() = supportFragmentManager.findFragmentByTag("content") is FragmentViewHome
 
+    private val onSub get() = supportFragmentManager.findFragmentById(R.id.content) !is MainScreen
+
     var subscriptions = Disposables.empty()
 
     /**
@@ -128,6 +130,11 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         setupBar()
         setupBarNavLink()
         setupNav()
+
+
+        supportFragmentManager.addOnBackStackChangedListener {
+            setupUpAction()
+        }
 
         subscriptions += RemotePreferences
                 .observer
@@ -183,10 +190,11 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.content, content, "content")
+                        .runOnCommit { setupUpAction() }
                         .commitAllowingStateLoss()
 
                 // Set nav drawer item if nav represented content fragment.
-                (content as? NavRepresented)?.let {
+                (content as? MainScreen)?.let {
                     navView.setCheckedItem(it.drawerItemId)
                 }
 
@@ -198,6 +206,32 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                             .addToBackStack("contentSubAdded")
                             .add(R.id.content, contentSub, "contentSub")
                             .commitAllowingStateLoss()
+            }
+        }
+    }
+
+    private var toolbarNavRegistered = false
+    private fun setupUpAction() {
+        supportActionBar?.let {
+            if (onSub) {
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                toggle.isDrawerIndicatorEnabled = false;
+                it.setDisplayHomeAsUpEnabled(true)
+                if (!toolbarNavRegistered) {
+                    toggle.setToolbarNavigationClickListener {
+                        // Doesn't have to be onBackPressed
+                        onBackPressed();
+                    }
+
+                    toolbarNavRegistered = true;
+                }
+            } else {
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+                it.setDisplayHomeAsUpEnabled(false);
+                toggle.isDrawerIndicatorEnabled = true;
+                toggle.toolbarNavigationClickListener = null;
+                toolbarNavRegistered = false;
             }
         }
     }
@@ -351,10 +385,12 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         setSupportActionBar(toolbar)
     }
 
+    private val toggle by lazy {
+        ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+    }
+
     private fun setupBarNavLink() {
         // Connect drawer and toolbar
-        val toggle = ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
     }
@@ -373,7 +409,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             val inst = type.newInstance()
 
             // Set nav drawer item if nav represented content fragment.
-            (inst as? NavRepresented)?.let {
+            (inst as? MainScreen)?.let {
                 navView.setCheckedItem(it.drawerItemId)
             }
 
@@ -382,6 +418,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     .beginTransaction()
                     .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
                     .replace(R.id.content, inst, "content")
+                    .runOnCommit { setupUpAction() }
                     .commitAllowingStateLoss()
         }
 
