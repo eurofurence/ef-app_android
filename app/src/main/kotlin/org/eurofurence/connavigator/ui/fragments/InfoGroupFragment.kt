@@ -31,7 +31,7 @@ import java.util.*
 /**
  * Renders an info group element and displays it's individual items
  */
-class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
+class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
     inner class InfoItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val layout: LinearLayout by view("layout")
         val name: TextView by view("title")
@@ -56,7 +56,7 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
     override val db by lazyLocateDb()
 
     private val infoGroupId: UUID? get() = UUID.fromString(arguments.getString("id"))
-    private val infoGroup by lazy { db.knowledgeGroups[infoGroupId]!! }
+    private val infoGroup by lazy { db.knowledgeGroups[infoGroupId] }
 
     val infoItems by lazy {
         db.knowledgeEntries.items
@@ -87,16 +87,21 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI {
 
     private fun fillUi() {
         ui.apply {
-            title.text = infoGroup.name
-            mainIcon.text = infoGroup.fontAwesomeIconCharacterUnicodeAddress?.toUnicode() ?: ""
-            description.text = infoGroup.description
-            groupLayout.setOnClickListener {
-                setDropdown()
-            }
-            recycler.apply {
-                adapter = DataAdapter()
-                layoutManager = NonScrollingLinearLayout(context)
-                itemAnimator = DefaultItemAnimator()
+            infoGroup?.let {
+                title.text = it.name
+                mainIcon.text = it.fontAwesomeIconCharacterUnicodeAddress?.toUnicode() ?: ""
+                description.text = it.description
+                groupLayout.setOnClickListener {
+                    setDropdown()
+                }
+                recycler.apply {
+                    adapter = DataAdapter()
+                    layoutManager = NonScrollingLinearLayout(context)
+                    itemAnimator = DefaultItemAnimator()
+                }
+            } ?: run {
+                warn { "Info group initialized on non-existent ID." }
+                groupLayout.visibility = View.GONE
             }
         }
     }
