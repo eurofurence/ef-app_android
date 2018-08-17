@@ -28,34 +28,39 @@
                 android:title="Points of Interest"/>
     </group>
 
-    <item android:checkableBehavior="single" android:title="Personal">
+    <item android:title="Personal">
         <menu>
-            <item
-                    android:id="@+id/navLogin"
-                    android:icon="@drawable/icon_user"
-                    android:title="Login"/>
-            <item
-                    android:id="@+id/navMessages"
-                    android:icon="@drawable/icon_message"
-                    android:title="Personal Messages"/>
-            <item
-                    android:id="@+id/navFursuitGames"
-                    android:icon="@drawable/icon_paw"
-                    android:title="Collect'Em All"/>
+            <group android:checkableBehavior="single">
+                <item
+                        android:id="@+id/navLogin"
+                        android:checkable="false"
+                        android:icon="@drawable/icon_user"
+                        android:title="Login"/>
+                <item
+                        android:id="@+id/navMessages"
+                        android:icon="@drawable/icon_message"
+                        android:title="Personal Messages"/>
+                <item
+                        android:id="@+id/navFursuitGames"
+                        android:icon="@drawable/icon_paw"
+                        android:title="Collect'Em All"/>
+            </group>
         </menu>
     </item>
-    <item android:checkableBehavior="single" android:title="External">
+    <item android:title="External">
         <menu>
-            <item android:id="@+id/navWebSite"
-                  android:title="Website"
-                  android:icon="@drawable/icon_domain"/>
-            <item android:id="@+id/navWebTwitter"
-                  android:title="Twitter"
-                  android:icon="@drawable/icon_twitter"/>
+            <group>
+                <item android:id="@+id/navWebSite"
+                      android:title="Website"
+                      android:icon="@drawable/icon_domain"/>
+                <item android:id="@+id/navWebTwitter"
+                      android:title="Twitter"
+                      android:icon="@drawable/icon_twitter"/>
+            </group>
         </menu>
     </item>
 
-    <item android:checkableBehavior="single" android:title="App Management">
+    <item android:id="@+id/groupManagement" android:title="App Management">
         <menu>
             <item android:id="@+id/navFeedback"
                   android:title="App Feedback"
