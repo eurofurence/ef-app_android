@@ -150,6 +150,13 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                     Analytics.updateSettings()
                 }
 
+        subscriptions += AuthPreferences
+                .observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    updateLoginMenuItem()
+                }
+
         // Show the home screen
         if (savedInstanceState == null || !savedInstanceState.getBoolean("hasContent"))
             setupContent()
@@ -486,6 +493,16 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             // Close drawer and return the result
             drawer.closeDrawer(GravityCompat.START)
             true
+        }
+    }
+
+    private fun updateLoginMenuItem() {
+        // Find login item, assign new text.
+        navView.menu.findItem(R.id.navLogin)?.let {
+            if (AuthPreferences.isLoggedIn())
+                it.title = "Login details"
+            else
+                it.title = "Login"
         }
     }
 
