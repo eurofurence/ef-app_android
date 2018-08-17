@@ -1,37 +1,73 @@
 # ef-app_android
-Eurofurence App (Android version)
+The official Eurofurence App for Android
 
-This is the official repo for the Eurofurence Android application. Commits to this repo are considered unstable. Releases in here, as well as releases on the [Google Play Store](https://play.google.com/store/apps/details?id=org.eurofurence.connavigator)
+This repository holds the code for the Eurofurence Android app with the following features:
 
-This app integrates seamlessly with the ef-app_backend application, when run on a server.
+- When using the EF API, it is a complete package to start the app
+- Update the UI instantly after data has changed with rxjava
+- Login to integrate with other systems for private messages
+- Notifications when favorited events are happening
+- Info section for quick information
+- Dealer information pages
+- Maps of the convention area
 
-## To build
+# Adapting for another convention
 
-- Clone this repo
-- gradlew build
+The following steps will modify the app to work for your convention. First off, we have some requests when adapting:
 
-## To change the backend URL (running your own backed)
+- Do not remove the credits under the about page
+- Do not change the license
+- Add your own credits in the layout with the images, above or below the original developers
 
-- go to `ApiService`
-- Change the `basePath` parameter
+Now we can get started with the app itself!
 
-## To change firebase/google api keys
+## Changes to be made
 
-- Download `google-services.json` from Firebase/Google Cloud
+* Change the package name in `app.gradle`
+* Apply the changes under the Firebase header
+* Change the settings in `res/xml/remote.xml` (This sets the API, countdowns and other remote settings)
+* OPTIONAL: mirror these settings in firebase so you can change them on the fly
+* Change the app colors in `res/values/colors.xml`
+* Change the logo in the `res/mipmap-*` folders (these need to be scaled accordingly)
+* Change the placeholder image in `res/drawable/placeholder_event.jpg`
+* Change the banner image in `res/drawable/banner_2018.jpg`
+* Change the text in `ui/ActivityStart.kt` to reflect your convention name
+* OPTIONAL: Translate all the strings for your language
 
-# Using this app for your own convention
+### Firebase
 
-We recommend to for this repo if you're intending on using it for your own convention. You can apply theming and related things, while still being up to date by pulling from the main repo.
+Firebase is used for Cloud Messaging, Remote Preferences, Performance, Analytics and Crash tracking. To talk to your own backend you will need to create a new project here and fetch new settings.
 
-# Helping out
+If you have already Firebase, you will just need to update the google-services.json
 
-- Create issues when you have one, even if it might be a bit silly (discussion is nice)
+* Go to [firebase](https://console.firebase.google.com/)
+* Add a new project
+* Add an app in this project
+* Enter the package name from `app.gradle`
+* Download the `google-services.json` and put the file in `app/`
+
+Built artifacts will now talk to your Firebase instance instead of Eurofurence!
+
+### Upgrading the API
+
+In case you make model changes to the backend, you will need to update the model definitions. 
+
+Make sure that the `swagger.json` is set in `app.gradle`, then run `gradle generateSwagger`
+ 
+## How to build
+
+To build the application yu will need to have Java and the Android SDK installed. Via the SDK you will need to install 
+
+- Google Play Services
+- Android SDK Tools
+- Support Repository
+- Android Build Tools (version is in app.gradle)
+
+When all is installed, IntelliJ / Android Studio will likely complain about missing components. Install these if neccesary.
+
+Afterwards, simply build it with gradle / IDE
 
 # Used 3rd party platforms
 
-- Icons8 (In app icons, thanks a ton!)
-- Google analytics (Basic event and screen tracking. No user data)
 - Firebase (Cloud messages, Remote configs)
-- Google API's (Maps)
 - Google Play (App uploading, cloud testing)
-- HockeyApp (Event tracking, Crash tracking, Feedback. No user specific data)
