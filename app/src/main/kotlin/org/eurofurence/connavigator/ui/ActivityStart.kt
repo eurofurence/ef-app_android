@@ -160,8 +160,8 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
     private fun checkVersion(): Boolean {
         val regex = Regex("\\d+.(\\d+).\\d+")
 
-        val current = regex.findAll(BuildConfig.VERSION_NAME).first().value
-        val previous = if(db.version != null) regex.findAll(db.version.toString()).first().value else ""
+        val current = regex.find(BuildConfig.VERSION_NAME)?.groupValues?.get(1) ?: ""
+        val previous = regex.find(db.version.toString())?.groupValues?.get(1) ?: ""
 
         info { "Last Known Version: $current vs $previous" }
         // if versions differ, reset
