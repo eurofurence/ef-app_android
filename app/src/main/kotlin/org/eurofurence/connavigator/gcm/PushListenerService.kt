@@ -6,6 +6,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.database.dispatchUpdate
+import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
@@ -85,6 +86,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         factory.addBigText(notification, message.text)
         factory.setActivity(notification)
 
-        factory.broadcastNotification(notification, message.relatedId ?: message.fallbackId)
+        if (AppPreferences.notificationsEnabled) factory.broadcastNotification(notification, message.relatedId
+                ?: message.fallbackId)
     }
 }

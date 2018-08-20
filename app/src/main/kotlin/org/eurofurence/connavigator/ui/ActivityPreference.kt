@@ -41,7 +41,7 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                     }
 
                     checkBox {
-                        text = "Show irrelevant announcements"
+                        text = "Show expired announcements"
                         isChecked = AppPreferences.showOldAnnouncements
                         setOnCheckedChangeListener { _, b -> AppPreferences.showOldAnnouncements = b }
                     }
@@ -61,6 +61,11 @@ class SettingsUi : AnkoComponent<ActivitySettings> {
                     checkBox("Immediately close app on back button press") {
                         isChecked = BackgroundPreferences.closeAppImmediately
                         setOnCheckedChangeListener { _, b -> BackgroundPreferences.closeAppImmediately = b }
+                    }
+
+                    checkBox("Send a notification when a new announcement is published") {
+                        isChecked = AppPreferences.notificationsEnabled
+                        setOnCheckedChangeListener { _, b -> AppPreferences.notificationsEnabled = b }
                     }
 
                     linearLayout {
