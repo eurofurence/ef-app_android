@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.util.extensions
 
+import android.util.Base64
 import android.util.Log
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.pref.AuthPreferences
@@ -11,7 +12,7 @@ fun MapRecord.findMatchingEntries(x: Float, y: Float) =
                 .filter { (x - (it.x ?: 0) power 2F) + (y - (it.y ?: 0) power 2F) < (it.tapRadius ?: 0) power 2 }
 
 
-val ImageRecord.url: String get() = "${apiService.apiPath}/Api/v2/Images/$id/Content"
+val ImageRecord.url: String get() = "${apiService.apiPath}/Api/v2/Images/$id/Content/with-hash:${Base64.encodeToString(contentHashSha1.toByteArray(), Base64.NO_WRAP)}"
 
 fun PrivateMessageRecord.markAsRead() {
     if (AuthPreferences.isLoggedIn()) {
