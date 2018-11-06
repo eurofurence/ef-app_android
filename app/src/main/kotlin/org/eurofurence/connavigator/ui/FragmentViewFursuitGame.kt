@@ -61,7 +61,7 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 invoker.addDefaultHeader("Authorization", AuthPreferences.asBearer())
             }
 
-            api.apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost(tag)
+            api.apiFursuitsCollectingGamePlayerParticipationCollectTokenSafePost(tag)
         } successUi {
             info { "Successfully executed network request! Showing fursuit" }
 

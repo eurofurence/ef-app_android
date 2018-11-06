@@ -4,11 +4,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**lastChangeDateTimeUtc** | [**Date**](Date.md) |  |  [optional]
-**id** | [**UUID**](UUID.md) |  |  [optional]
-**imageId** | [**UUID**](UUID.md) |  |  [optional]
+**lastChangeDateTimeUtc** | [**Date**](Date.md) |  | 
+**id** | [**UUID**](UUID.md) |  | 
+**imageId** | [**UUID**](UUID.md) |  | 
 **description** | **String** |  | 
-**isBrowseable** | **Boolean** |  |  [optional]
+**isBrowseable** | **Boolean** |  | 
 **entries** | [**List&lt;MapEntryRecord&gt;**](MapEntryRecord.md) |  | 
 
 

@@ -4,12 +4,12 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**lastChangeDateTimeUtc** | [**Date**](Date.md) |  |  [optional]
-**id** | [**UUID**](UUID.md) |  |  [optional]
+**lastChangeDateTimeUtc** | [**Date**](Date.md) |  | 
+**id** | [**UUID**](UUID.md) |  | 
 **internalReference** | **String** |  | 
-**width** | **Integer** |  |  [optional]
-**height** | **Integer** |  |  [optional]
-**sizeInBytes** | **Long** |  |  [optional]
+**width** | **Integer** |  | 
+**height** | **Integer** |  | 
+**sizeInBytes** | **Long** |  | 
 **mimeType** | **String** |  | 
 **contentHashSha1** | **String** |  | 
 

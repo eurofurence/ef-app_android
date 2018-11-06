@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**lastChangeDateTimeUtc** | [**Date**](Date.md) |  |  [optional]
-**id** | [**UUID**](UUID.md) |  |  [optional]
+**lastChangeDateTimeUtc** | [**Date**](Date.md) |  | 
+**id** | [**UUID**](UUID.md) |  | 
 **eventId** | [**UUID**](UUID.md) |  |  [optional]
 **authorUid** | **String** |  |  [optional]
 **rating** | **Integer** |  |  [optional]

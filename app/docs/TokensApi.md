@@ -4,13 +4,13 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2TokensRegSysPost**](TokensApi.md#apiV2TokensRegSysPost) | **POST** /Api/v2/Tokens/RegSys | 
-[**apiV2TokensWhoAmIGet**](TokensApi.md#apiV2TokensWhoAmIGet) | **GET** /Api/v2/Tokens/WhoAmI | 
+[**apiTokensRegSysPost**](TokensApi.md#apiTokensRegSysPost) | **POST** /Api/Tokens/RegSys | 
+[**apiTokensWhoAmIGet**](TokensApi.md#apiTokensWhoAmIGet) | **GET** /Api/Tokens/WhoAmI | 
 
 
-<a name="apiV2TokensRegSysPost"></a>
-# **apiV2TokensRegSysPost**
-> AuthenticationResponse apiV2TokensRegSysPost(request)
+<a name="apiTokensRegSysPost"></a>
+# **apiTokensRegSysPost**
+> AuthenticationResponse apiTokensRegSysPost(request)
 
 
 
@@ -22,10 +22,10 @@ Method | HTTP request | Description
 TokensApi apiInstance = new TokensApi();
 RegSysAuthenticationRequest request = new RegSysAuthenticationRequest(); // RegSysAuthenticationRequest | 
 try {
-    AuthenticationResponse result = apiInstance.apiV2TokensRegSysPost(request);
+    AuthenticationResponse result = apiInstance.apiTokensRegSysPost(request);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling TokensApi#apiV2TokensRegSysPost");
+    System.err.println("Exception when calling TokensApi#apiTokensRegSysPost");
     e.printStackTrace();
 }
 ```
@@ -49,9 +49,9 @@ No authorization required
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2TokensWhoAmIGet"></a>
-# **apiV2TokensWhoAmIGet**
-> AuthenticationResponse apiV2TokensWhoAmIGet()
+<a name="apiTokensWhoAmIGet"></a>
+# **apiTokensWhoAmIGet**
+> AuthenticationResponse apiTokensWhoAmIGet()
 
 
 
@@ -64,10 +64,10 @@ No authorization required
 
 TokensApi apiInstance = new TokensApi();
 try {
-    AuthenticationResponse result = apiInstance.apiV2TokensWhoAmIGet();
+    AuthenticationResponse result = apiInstance.apiTokensWhoAmIGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling TokensApi#apiV2TokensWhoAmIGet");
+    System.err.println("Exception when calling TokensApi#apiTokensWhoAmIGet");
     e.printStackTrace();
 }
 ```

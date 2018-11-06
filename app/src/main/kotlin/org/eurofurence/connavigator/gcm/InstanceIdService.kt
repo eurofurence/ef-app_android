@@ -33,15 +33,15 @@ class InstanceIdService : FirebaseInstanceIdService(), AnkoLogger {
 
         task {
             var sendTopics= listOf(
-                    "live",
                     "android",
-                    "version-${BuildConfig.VERSION_NAME}"
+                    "version-${BuildConfig.VERSION_NAME}",
+                    "cid-${BuildConfig.CONVENTION_IDENTIFIER}"
             )
 
-            if(BuildConfig.DEBUG) sendTopics += "test"
+            if(BuildConfig.DEBUG) sendTopics += "debug"
 
             info { "Making network request" }
-            apiService.pushNotifications.apiV2PushNotificationsFcmDeviceRegistrationPost(
+            apiService.pushNotifications.apiPushNotificationsFcmDeviceRegistrationPost(
                     PostFcmDeviceRegistrationRequest().apply {
                         deviceId = token
                         topics = sendTopics

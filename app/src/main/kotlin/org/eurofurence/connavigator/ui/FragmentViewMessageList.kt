@@ -100,7 +100,7 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb, MainS
         } then {
             info { "Fetching messages" }
             apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
-            apiService.communications.apiV2CommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
+            apiService.communications.apiCommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
         } success {
             info("Successfully retrieved ${it.size} messages")
             this.messages = it

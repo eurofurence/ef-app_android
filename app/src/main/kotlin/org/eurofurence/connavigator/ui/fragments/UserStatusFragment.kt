@@ -40,7 +40,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
         info { "Checking message counts" }
         apiService.communications.let {
             it.addHeader("Authorization", AuthPreferences.asBearer())
-            it.apiV2CommunicationPrivateMessagesGet()
+            it.apiCommunicationPrivateMessagesGet()
         }
     } successUi { messages ->
         context?.let {

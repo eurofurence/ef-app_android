@@ -4,13 +4,13 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2EventConferenceTracksByIdGet**](EventConferenceTracksApi.md#apiV2EventConferenceTracksByIdGet) | **GET** /Api/v2/EventConferenceTracks/{Id} | Retrieve a single event conference track in the event schedule.
-[**apiV2EventConferenceTracksGet**](EventConferenceTracksApi.md#apiV2EventConferenceTracksGet) | **GET** /Api/v2/EventConferenceTracks | Retrieves a list of all event conference tracks in the event schedule.
+[**apiEventConferenceTracksByIdGet**](EventConferenceTracksApi.md#apiEventConferenceTracksByIdGet) | **GET** /Api/EventConferenceTracks/{Id} | Retrieve a single event conference track in the event schedule.
+[**apiEventConferenceTracksGet**](EventConferenceTracksApi.md#apiEventConferenceTracksGet) | **GET** /Api/EventConferenceTracks | Retrieves a list of all event conference tracks in the event schedule.
 
 
-<a name="apiV2EventConferenceTracksByIdGet"></a>
-# **apiV2EventConferenceTracksByIdGet**
-> EventConferenceTrackRecord apiV2EventConferenceTracksByIdGet(id)
+<a name="apiEventConferenceTracksByIdGet"></a>
+# **apiEventConferenceTracksByIdGet**
+> EventConferenceTrackRecord apiEventConferenceTracksByIdGet(id)
 
 Retrieve a single event conference track in the event schedule.
 
@@ -22,10 +22,10 @@ Retrieve a single event conference track in the event schedule.
 EventConferenceTracksApi apiInstance = new EventConferenceTracksApi();
 UUID id = new UUID(); // UUID | id of the requested entity
 try {
-    EventConferenceTrackRecord result = apiInstance.apiV2EventConferenceTracksByIdGet(id);
+    EventConferenceTrackRecord result = apiInstance.apiEventConferenceTracksByIdGet(id);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventConferenceTracksApi#apiV2EventConferenceTracksByIdGet");
+    System.err.println("Exception when calling EventConferenceTracksApi#apiEventConferenceTracksByIdGet");
     e.printStackTrace();
 }
 ```
@@ -49,9 +49,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2EventConferenceTracksGet"></a>
-# **apiV2EventConferenceTracksGet**
-> List&lt;EventConferenceTrackRecord&gt; apiV2EventConferenceTracksGet()
+<a name="apiEventConferenceTracksGet"></a>
+# **apiEventConferenceTracksGet**
+> List&lt;EventConferenceTrackRecord&gt; apiEventConferenceTracksGet()
 
 Retrieves a list of all event conference tracks in the event schedule.
 
@@ -62,10 +62,10 @@ Retrieves a list of all event conference tracks in the event schedule.
 
 EventConferenceTracksApi apiInstance = new EventConferenceTracksApi();
 try {
-    List<EventConferenceTrackRecord> result = apiInstance.apiV2EventConferenceTracksGet();
+    List<EventConferenceTrackRecord> result = apiInstance.apiEventConferenceTracksGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventConferenceTracksApi#apiV2EventConferenceTracksGet");
+    System.err.println("Exception when calling EventConferenceTracksApi#apiEventConferenceTracksGet");
     e.printStackTrace();
 }
 ```

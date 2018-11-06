@@ -19,7 +19,7 @@ public class EventConferenceTrackRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
@@ -29,7 +29,7 @@ public class EventConferenceTrackRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public UUID getId() {
     return id;
   }

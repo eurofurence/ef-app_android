@@ -50,18 +50,18 @@ public class EventConferenceDaysApi {
    * @param id id of the requested entity
    * @return EventConferenceDayRecord
   */
-  public EventConferenceDayRecord apiV2EventConferenceDaysByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public EventConferenceDayRecord apiEventConferenceDaysByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2EventConferenceDaysByIdGet",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2EventConferenceDaysByIdGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiEventConferenceDaysByIdGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiEventConferenceDaysByIdGet"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/EventConferenceDays/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/EventConferenceDays/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -119,19 +119,19 @@ public class EventConferenceDaysApi {
    * 
    * @param id id of the requested entity
   */
-  public void apiV2EventConferenceDaysByIdGet (UUID id, final Response.Listener<EventConferenceDayRecord> responseListener, final Response.ErrorListener errorListener) {
+  public void apiEventConferenceDaysByIdGet (UUID id, final Response.Listener<EventConferenceDayRecord> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2EventConferenceDaysByIdGet",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2EventConferenceDaysByIdGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiEventConferenceDaysByIdGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiEventConferenceDaysByIdGet"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/EventConferenceDays/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/EventConferenceDays/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -186,12 +186,12 @@ public class EventConferenceDaysApi {
   * 
    * @return List<EventConferenceDayRecord>
   */
-  public List<EventConferenceDayRecord> apiV2EventConferenceDaysGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<EventConferenceDayRecord> apiEventConferenceDaysGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/EventConferenceDays".replaceAll("\\{format\\}","json");
+  String path = "/Api/EventConferenceDays".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -249,13 +249,13 @@ public class EventConferenceDaysApi {
    * 
 
   */
-  public void apiV2EventConferenceDaysGet (final Response.Listener<List<EventConferenceDayRecord>> responseListener, final Response.ErrorListener errorListener) {
+  public void apiEventConferenceDaysGet (final Response.Listener<List<EventConferenceDayRecord>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/EventConferenceDays".replaceAll("\\{format\\}","json");
+    String path = "/Api/EventConferenceDays".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

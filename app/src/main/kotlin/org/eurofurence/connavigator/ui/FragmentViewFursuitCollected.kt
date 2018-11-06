@@ -33,7 +33,7 @@ class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
                 invoker.addDefaultHeader("Authorization", AuthPreferences.asBearer())
             }
 
-            api.apiV2FursuitsCollectingGamePlayerParticipationGet()
+            api.apiFursuitsCollectingGamePlayerParticipationGet()
         } successUi {
             info { "successfully retrieved data!" }
             info { it }

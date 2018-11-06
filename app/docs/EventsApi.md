@@ -4,13 +4,13 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2EventsByIdGet**](EventsApi.md#apiV2EventsByIdGet) | **GET** /Api/v2/Events/{Id} | Retrieve a single event in the event schedule.
-[**apiV2EventsGet**](EventsApi.md#apiV2EventsGet) | **GET** /Api/v2/Events | Retrieves a list of all events in the event schedule.
+[**apiEventsByIdGet**](EventsApi.md#apiEventsByIdGet) | **GET** /Api/Events/{Id} | Retrieve a single event in the event schedule.
+[**apiEventsGet**](EventsApi.md#apiEventsGet) | **GET** /Api/Events | Retrieves a list of all events in the event schedule.
 
 
-<a name="apiV2EventsByIdGet"></a>
-# **apiV2EventsByIdGet**
-> EventRecord apiV2EventsByIdGet(id)
+<a name="apiEventsByIdGet"></a>
+# **apiEventsByIdGet**
+> EventRecord apiEventsByIdGet(id)
 
 Retrieve a single event in the event schedule.
 
@@ -22,10 +22,10 @@ Retrieve a single event in the event schedule.
 EventsApi apiInstance = new EventsApi();
 UUID id = new UUID(); // UUID | id of the requested entity
 try {
-    EventRecord result = apiInstance.apiV2EventsByIdGet(id);
+    EventRecord result = apiInstance.apiEventsByIdGet(id);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventsApi#apiV2EventsByIdGet");
+    System.err.println("Exception when calling EventsApi#apiEventsByIdGet");
     e.printStackTrace();
 }
 ```
@@ -49,9 +49,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2EventsGet"></a>
-# **apiV2EventsGet**
-> List&lt;EventRecord&gt; apiV2EventsGet()
+<a name="apiEventsGet"></a>
+# **apiEventsGet**
+> List&lt;EventRecord&gt; apiEventsGet()
 
 Retrieves a list of all events in the event schedule.
 
@@ -62,10 +62,10 @@ Retrieves a list of all events in the event schedule.
 
 EventsApi apiInstance = new EventsApi();
 try {
-    List<EventRecord> result = apiInstance.apiV2EventsGet();
+    List<EventRecord> result = apiInstance.apiEventsGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventsApi#apiV2EventsGet");
+    System.err.println("Exception when calling EventsApi#apiEventsGet");
     e.printStackTrace();
 }
 ```

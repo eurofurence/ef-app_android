@@ -50,18 +50,18 @@ public class DealersApi {
    * @param id id of the requested entity
    * @return DealerRecord
   */
-  public DealerRecord apiV2DealersByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public DealerRecord apiDealersByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2DealersByIdGet",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2DealersByIdGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiDealersByIdGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiDealersByIdGet"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Dealers/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/Dealers/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -119,19 +119,19 @@ public class DealersApi {
    * 
    * @param id id of the requested entity
   */
-  public void apiV2DealersByIdGet (UUID id, final Response.Listener<DealerRecord> responseListener, final Response.ErrorListener errorListener) {
+  public void apiDealersByIdGet (UUID id, final Response.Listener<DealerRecord> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2DealersByIdGet",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2DealersByIdGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiDealersByIdGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiDealersByIdGet"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Dealers/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/Dealers/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -186,12 +186,12 @@ public class DealersApi {
   * 
    * @return List<DealerRecord>
   */
-  public List<DealerRecord> apiV2DealersGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<DealerRecord> apiDealersGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/Dealers".replaceAll("\\{format\\}","json");
+  String path = "/Api/Dealers".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -249,13 +249,13 @@ public class DealersApi {
    * 
 
   */
-  public void apiV2DealersGet (final Response.Listener<List<DealerRecord>> responseListener, final Response.ErrorListener errorListener) {
+  public void apiDealersGet (final Response.Listener<List<DealerRecord>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/Dealers".replaceAll("\\{format\\}","json");
+    String path = "/Api/Dealers".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

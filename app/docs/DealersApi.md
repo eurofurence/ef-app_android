@@ -4,13 +4,13 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2DealersByIdGet**](DealersApi.md#apiV2DealersByIdGet) | **GET** /Api/v2/Dealers/{Id} | Retrieve a single dealer.
-[**apiV2DealersGet**](DealersApi.md#apiV2DealersGet) | **GET** /Api/v2/Dealers | Retrieves a list of all dealer entries.
+[**apiDealersByIdGet**](DealersApi.md#apiDealersByIdGet) | **GET** /Api/Dealers/{Id} | Retrieve a single dealer.
+[**apiDealersGet**](DealersApi.md#apiDealersGet) | **GET** /Api/Dealers | Retrieves a list of all dealer entries.
 
 
-<a name="apiV2DealersByIdGet"></a>
-# **apiV2DealersByIdGet**
-> DealerRecord apiV2DealersByIdGet(id)
+<a name="apiDealersByIdGet"></a>
+# **apiDealersByIdGet**
+> DealerRecord apiDealersByIdGet(id)
 
 Retrieve a single dealer.
 
@@ -22,10 +22,10 @@ Retrieve a single dealer.
 DealersApi apiInstance = new DealersApi();
 UUID id = new UUID(); // UUID | id of the requested entity
 try {
-    DealerRecord result = apiInstance.apiV2DealersByIdGet(id);
+    DealerRecord result = apiInstance.apiDealersByIdGet(id);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling DealersApi#apiV2DealersByIdGet");
+    System.err.println("Exception when calling DealersApi#apiDealersByIdGet");
     e.printStackTrace();
 }
 ```
@@ -49,9 +49,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2DealersGet"></a>
-# **apiV2DealersGet**
-> List&lt;DealerRecord&gt; apiV2DealersGet()
+<a name="apiDealersGet"></a>
+# **apiDealersGet**
+> List&lt;DealerRecord&gt; apiDealersGet()
 
 Retrieves a list of all dealer entries.
 
@@ -62,10 +62,10 @@ Retrieves a list of all dealer entries.
 
 DealersApi apiInstance = new DealersApi();
 try {
-    List<DealerRecord> result = apiInstance.apiV2DealersGet();
+    List<DealerRecord> result = apiInstance.apiDealersGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling DealersApi#apiV2DealersGet");
+    System.err.println("Exception when calling DealersApi#apiDealersGet");
     e.printStackTrace();
 }
 ```

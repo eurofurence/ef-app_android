@@ -4,12 +4,12 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2SyncGet**](SyncApi.md#apiV2SyncGet) | **GET** /Api/v2/Sync | Returns everything you could ever wish for.
+[**apiSyncGet**](SyncApi.md#apiSyncGet) | **GET** /Api/Sync | Returns everything you could ever wish for.
 
 
-<a name="apiV2SyncGet"></a>
-# **apiV2SyncGet**
-> AggregatedDeltaResponse apiV2SyncGet(since)
+<a name="apiSyncGet"></a>
+# **apiSyncGet**
+> AggregatedDeltaResponse apiSyncGet(since)
 
 Returns everything you could ever wish for.
 
@@ -21,10 +21,10 @@ Returns everything you could ever wish for.
 SyncApi apiInstance = new SyncApi();
 Date since = new Date(); // Date | 
 try {
-    AggregatedDeltaResponse result = apiInstance.apiV2SyncGet(since);
+    AggregatedDeltaResponse result = apiInstance.apiSyncGet(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SyncApi#apiV2SyncGet");
+    System.err.println("Exception when calling SyncApi#apiSyncGet");
     e.printStackTrace();
 }
 ```

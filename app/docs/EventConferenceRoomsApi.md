@@ -4,13 +4,13 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2EventConferenceRoomsByIdGet**](EventConferenceRoomsApi.md#apiV2EventConferenceRoomsByIdGet) | **GET** /Api/v2/EventConferenceRooms/{Id} | Retrieve a single event conference room in the event schedule.
-[**apiV2EventConferenceRoomsGet**](EventConferenceRoomsApi.md#apiV2EventConferenceRoomsGet) | **GET** /Api/v2/EventConferenceRooms | Retrieves a list of all event conference Rooms in the event schedule.
+[**apiEventConferenceRoomsByIdGet**](EventConferenceRoomsApi.md#apiEventConferenceRoomsByIdGet) | **GET** /Api/EventConferenceRooms/{Id} | Retrieve a single event conference room in the event schedule.
+[**apiEventConferenceRoomsGet**](EventConferenceRoomsApi.md#apiEventConferenceRoomsGet) | **GET** /Api/EventConferenceRooms | Retrieves a list of all event conference Rooms in the event schedule.
 
 
-<a name="apiV2EventConferenceRoomsByIdGet"></a>
-# **apiV2EventConferenceRoomsByIdGet**
-> EventConferenceRoomRecord apiV2EventConferenceRoomsByIdGet(id)
+<a name="apiEventConferenceRoomsByIdGet"></a>
+# **apiEventConferenceRoomsByIdGet**
+> EventConferenceRoomRecord apiEventConferenceRoomsByIdGet(id)
 
 Retrieve a single event conference room in the event schedule.
 
@@ -22,10 +22,10 @@ Retrieve a single event conference room in the event schedule.
 EventConferenceRoomsApi apiInstance = new EventConferenceRoomsApi();
 UUID id = new UUID(); // UUID | id of the requested entity
 try {
-    EventConferenceRoomRecord result = apiInstance.apiV2EventConferenceRoomsByIdGet(id);
+    EventConferenceRoomRecord result = apiInstance.apiEventConferenceRoomsByIdGet(id);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventConferenceRoomsApi#apiV2EventConferenceRoomsByIdGet");
+    System.err.println("Exception when calling EventConferenceRoomsApi#apiEventConferenceRoomsByIdGet");
     e.printStackTrace();
 }
 ```
@@ -49,9 +49,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2EventConferenceRoomsGet"></a>
-# **apiV2EventConferenceRoomsGet**
-> List&lt;EventConferenceRoomRecord&gt; apiV2EventConferenceRoomsGet()
+<a name="apiEventConferenceRoomsGet"></a>
+# **apiEventConferenceRoomsGet**
+> List&lt;EventConferenceRoomRecord&gt; apiEventConferenceRoomsGet()
 
 Retrieves a list of all event conference Rooms in the event schedule.
 
@@ -62,10 +62,10 @@ Retrieves a list of all event conference Rooms in the event schedule.
 
 EventConferenceRoomsApi apiInstance = new EventConferenceRoomsApi();
 try {
-    List<EventConferenceRoomRecord> result = apiInstance.apiV2EventConferenceRoomsGet();
+    List<EventConferenceRoomRecord> result = apiInstance.apiEventConferenceRoomsGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventConferenceRoomsApi#apiV2EventConferenceRoomsGet");
+    System.err.println("Exception when calling EventConferenceRoomsApi#apiEventConferenceRoomsGet");
     e.printStackTrace();
 }
 ```

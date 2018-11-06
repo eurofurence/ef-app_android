@@ -5,7 +5,6 @@ import io.swagger.client.model.FursuitParticipationRecord;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -31,7 +30,6 @@ public class FursuitParticipationInfo  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @Nullable
   public Boolean getIsParticipating() {
     return isParticipating;
   }

@@ -4,25 +4,26 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2FursuitsBadgesByIdImageGet**](FursuitsApi.md#apiV2FursuitsBadgesByIdImageGet) | **GET** /Api/v2/Fursuits/Badges/{Id}/Image | Retrieve the badge image content for a given fursuit badge id
-[**apiV2FursuitsBadgesGet**](FursuitsApi.md#apiV2FursuitsBadgesGet) | **GET** /Api/v2/Fursuits/Badges | Return all Fursuit Badge Registrations
-[**apiV2FursuitsBadgesRegistrationPost**](FursuitsApi.md#apiV2FursuitsBadgesRegistrationPost) | **POST** /Api/v2/Fursuits/Badges/Registration | Upsert Fursuit Badge information
-[**apiV2FursuitsCollectingGameFursuitParticipationGet**](FursuitsApi.md#apiV2FursuitsCollectingGameFursuitParticipationGet) | **GET** /Api/v2/Fursuits/CollectingGame/FursuitParticipation | 
-[**apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet**](FursuitsApi.md#apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet) | **GET** /Api/v2/Fursuits/CollectingGame/FursuitParticipation/Scoreboard | 
-[**apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost**](FursuitsApi.md#apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost) | **POST** /Api/v2/Fursuits/CollectingGame/FursuitParticpation/Badges/{FursuitBadgeId}/Token | Register (link/assign) a valid, unused token to a fursuit badge.
-[**apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost**](FursuitsApi.md#apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost) | **POST** /Api/v2/Fursuits/CollectingGame/FursuitParticpation/Badges/{FursuitBadgeId}/Token:safe | 
-[**apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost**](FursuitsApi.md#apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost) | **POST** /Api/v2/Fursuits/CollectingGame/PlayerParticipation/CollectToken | 
-[**apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost**](FursuitsApi.md#apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost) | **POST** /Api/v2/Fursuits/CollectingGame/PlayerParticipation/CollectToken:safe | 
-[**apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet**](FursuitsApi.md#apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet) | **GET** /Api/v2/Fursuits/CollectingGame/PlayerParticipation/CollectionEntries | 
-[**apiV2FursuitsCollectingGamePlayerParticipationGet**](FursuitsApi.md#apiV2FursuitsCollectingGamePlayerParticipationGet) | **GET** /Api/v2/Fursuits/CollectingGame/PlayerParticipation | 
-[**apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet**](FursuitsApi.md#apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet) | **GET** /Api/v2/Fursuits/CollectingGame/PlayerParticipation/Scoreboard | 
-[**apiV2FursuitsCollectingGameTokensBatchPost**](FursuitsApi.md#apiV2FursuitsCollectingGameTokensBatchPost) | **POST** /Api/v2/Fursuits/CollectingGame/Tokens/Batch | 
-[**apiV2FursuitsCollectingGameTokensPost**](FursuitsApi.md#apiV2FursuitsCollectingGameTokensPost) | **POST** /Api/v2/Fursuits/CollectingGame/Tokens | 
+[**apiFursuitsBadgesByIdImageGet**](FursuitsApi.md#apiFursuitsBadgesByIdImageGet) | **GET** /Api/Fursuits/Badges/{Id}/Image | Retrieve the badge image content for a given fursuit badge id
+[**apiFursuitsBadgesGet**](FursuitsApi.md#apiFursuitsBadgesGet) | **GET** /Api/Fursuits/Badges | Return all Fursuit Badge Registrations
+[**apiFursuitsBadgesRegistrationPost**](FursuitsApi.md#apiFursuitsBadgesRegistrationPost) | **POST** /Api/Fursuits/Badges/Registration | Upsert Fursuit Badge information
+[**apiFursuitsCollectingGameFursuitParticipationGet**](FursuitsApi.md#apiFursuitsCollectingGameFursuitParticipationGet) | **GET** /Api/Fursuits/CollectingGame/FursuitParticipation | 
+[**apiFursuitsCollectingGameFursuitParticipationScoreboardGet**](FursuitsApi.md#apiFursuitsCollectingGameFursuitParticipationScoreboardGet) | **GET** /Api/Fursuits/CollectingGame/FursuitParticipation/Scoreboard | 
+[**apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost**](FursuitsApi.md#apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost) | **POST** /Api/Fursuits/CollectingGame/FursuitParticpation/Badges/{FursuitBadgeId}/Token | Register (link/assign) a valid, unused token to a fursuit badge.
+[**apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost**](FursuitsApi.md#apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost) | **POST** /Api/Fursuits/CollectingGame/FursuitParticpation/Badges/{FursuitBadgeId}/Token:safe | 
+[**apiFursuitsCollectingGamePlayerParticipationCollectTokenPost**](FursuitsApi.md#apiFursuitsCollectingGamePlayerParticipationCollectTokenPost) | **POST** /Api/Fursuits/CollectingGame/PlayerParticipation/CollectToken | 
+[**apiFursuitsCollectingGamePlayerParticipationCollectTokenSafePost**](FursuitsApi.md#apiFursuitsCollectingGamePlayerParticipationCollectTokenSafePost) | **POST** /Api/Fursuits/CollectingGame/PlayerParticipation/CollectToken:safe | 
+[**apiFursuitsCollectingGamePlayerParticipationCollectionEntriesGet**](FursuitsApi.md#apiFursuitsCollectingGamePlayerParticipationCollectionEntriesGet) | **GET** /Api/Fursuits/CollectingGame/PlayerParticipation/CollectionEntries | 
+[**apiFursuitsCollectingGamePlayerParticipationGet**](FursuitsApi.md#apiFursuitsCollectingGamePlayerParticipationGet) | **GET** /Api/Fursuits/CollectingGame/PlayerParticipation | 
+[**apiFursuitsCollectingGamePlayerParticipationScoreboardGet**](FursuitsApi.md#apiFursuitsCollectingGamePlayerParticipationScoreboardGet) | **GET** /Api/Fursuits/CollectingGame/PlayerParticipation/Scoreboard | 
+[**apiFursuitsCollectingGameRecalculatePost**](FursuitsApi.md#apiFursuitsCollectingGameRecalculatePost) | **POST** /Api/Fursuits/CollectingGame/Recalculate | 
+[**apiFursuitsCollectingGameTokensBatchPost**](FursuitsApi.md#apiFursuitsCollectingGameTokensBatchPost) | **POST** /Api/Fursuits/CollectingGame/Tokens/Batch | 
+[**apiFursuitsCollectingGameTokensPost**](FursuitsApi.md#apiFursuitsCollectingGameTokensPost) | **POST** /Api/Fursuits/CollectingGame/Tokens | 
 
 
-<a name="apiV2FursuitsBadgesByIdImageGet"></a>
-# **apiV2FursuitsBadgesByIdImageGet**
-> byte[] apiV2FursuitsBadgesByIdImageGet(id)
+<a name="apiFursuitsBadgesByIdImageGet"></a>
+# **apiFursuitsBadgesByIdImageGet**
+> byte[] apiFursuitsBadgesByIdImageGet(id)
 
 Retrieve the badge image content for a given fursuit badge id
 
@@ -34,10 +35,10 @@ Retrieve the badge image content for a given fursuit badge id
 FursuitsApi apiInstance = new FursuitsApi();
 UUID id = new UUID(); // UUID | \"Id\" of the fursuit badge
 try {
-    byte[] result = apiInstance.apiV2FursuitsBadgesByIdImageGet(id);
+    byte[] result = apiInstance.apiFursuitsBadgesByIdImageGet(id);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsBadgesByIdImageGet");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsBadgesByIdImageGet");
     e.printStackTrace();
 }
 ```
@@ -61,9 +62,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsBadgesGet"></a>
-# **apiV2FursuitsBadgesGet**
-> List&lt;FursuitBadgeRecord&gt; apiV2FursuitsBadgesGet()
+<a name="apiFursuitsBadgesGet"></a>
+# **apiFursuitsBadgesGet**
+> List&lt;FursuitBadgeRecord&gt; apiFursuitsBadgesGet()
 
 Return all Fursuit Badge Registrations
 
@@ -76,10 +77,10 @@ Return all Fursuit Badge Registrations
 
 FursuitsApi apiInstance = new FursuitsApi();
 try {
-    List<FursuitBadgeRecord> result = apiInstance.apiV2FursuitsBadgesGet();
+    List<FursuitBadgeRecord> result = apiInstance.apiFursuitsBadgesGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsBadgesGet");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsBadgesGet");
     e.printStackTrace();
 }
 ```
@@ -100,9 +101,9 @@ This endpoint does not need any parameter.
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsBadgesRegistrationPost"></a>
-# **apiV2FursuitsBadgesRegistrationPost**
-> apiV2FursuitsBadgesRegistrationPost(registration)
+<a name="apiFursuitsBadgesRegistrationPost"></a>
+# **apiFursuitsBadgesRegistrationPost**
+> apiFursuitsBadgesRegistrationPost(registration)
 
 Upsert Fursuit Badge information
 
@@ -116,9 +117,9 @@ Upsert Fursuit Badge information
 FursuitsApi apiInstance = new FursuitsApi();
 FursuitBadgeRegistration registration = new FursuitBadgeRegistration(); // FursuitBadgeRegistration | 
 try {
-    apiInstance.apiV2FursuitsBadgesRegistrationPost(registration);
+    apiInstance.apiFursuitsBadgesRegistrationPost(registration);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsBadgesRegistrationPost");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsBadgesRegistrationPost");
     e.printStackTrace();
 }
 ```
@@ -142,9 +143,9 @@ null (empty response body)
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGameFursuitParticipationGet"></a>
-# **apiV2FursuitsCollectingGameFursuitParticipationGet**
-> List&lt;FursuitParticipationInfo&gt; apiV2FursuitsCollectingGameFursuitParticipationGet()
+<a name="apiFursuitsCollectingGameFursuitParticipationGet"></a>
+# **apiFursuitsCollectingGameFursuitParticipationGet**
+> List&lt;FursuitParticipationInfo&gt; apiFursuitsCollectingGameFursuitParticipationGet()
 
 
 
@@ -157,10 +158,10 @@ null (empty response body)
 
 FursuitsApi apiInstance = new FursuitsApi();
 try {
-    List<FursuitParticipationInfo> result = apiInstance.apiV2FursuitsCollectingGameFursuitParticipationGet();
+    List<FursuitParticipationInfo> result = apiInstance.apiFursuitsCollectingGameFursuitParticipationGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGameFursuitParticipationGet");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGameFursuitParticipationGet");
     e.printStackTrace();
 }
 ```
@@ -181,9 +182,9 @@ This endpoint does not need any parameter.
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet"></a>
-# **apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet**
-> List&lt;FursuitScoreboardEntry&gt; apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet(top)
+<a name="apiFursuitsCollectingGameFursuitParticipationScoreboardGet"></a>
+# **apiFursuitsCollectingGameFursuitParticipationScoreboardGet**
+> List&lt;FursuitScoreboardEntry&gt; apiFursuitsCollectingGameFursuitParticipationScoreboardGet(top)
 
 
 
@@ -193,12 +194,12 @@ This endpoint does not need any parameter.
 //import io.swagger.client.api.FursuitsApi;
 
 FursuitsApi apiInstance = new FursuitsApi();
-Integer top = 56; // Integer | 
+Integer top = 25; // Integer | 
 try {
-    List<FursuitScoreboardEntry> result = apiInstance.apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet(top);
+    List<FursuitScoreboardEntry> result = apiInstance.apiFursuitsCollectingGameFursuitParticipationScoreboardGet(top);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGameFursuitParticipationScoreboardGet");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGameFursuitParticipationScoreboardGet");
     e.printStackTrace();
 }
 ```
@@ -207,7 +208,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **top** | **Integer**|  | [optional]
+ **top** | **Integer**|  | [optional] [default to 25]
 
 ### Return type
 
@@ -222,9 +223,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost"></a>
-# **apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost**
-> apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost(fursuitBadgeId, tokenValue)
+<a name="apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost"></a>
+# **apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost**
+> apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost(fursuitBadgeId, tokenValue)
 
 Register (link/assign) a valid, unused token to a fursuit badge.
 
@@ -239,9 +240,9 @@ FursuitsApi apiInstance = new FursuitsApi();
 UUID fursuitBadgeId = new UUID(); // UUID | 
 String tokenValue = "tokenValue_example"; // String | 
 try {
-    apiInstance.apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost(fursuitBadgeId, tokenValue);
+    apiInstance.apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost(fursuitBadgeId, tokenValue);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenPost");
     e.printStackTrace();
 }
 ```
@@ -266,9 +267,9 @@ null (empty response body)
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost"></a>
-# **apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost**
-> ApiSafeResult apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost(fursuitBadgeId, tokenValue)
+<a name="apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost"></a>
+# **apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost**
+> ApiSafeResult apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost(fursuitBadgeId, tokenValue)
 
 
 
@@ -283,10 +284,10 @@ FursuitsApi apiInstance = new FursuitsApi();
 UUID fursuitBadgeId = new UUID(); // UUID | 
 String tokenValue = "tokenValue_example"; // String | 
 try {
-    ApiSafeResult result = apiInstance.apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost(fursuitBadgeId, tokenValue);
+    ApiSafeResult result = apiInstance.apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost(fursuitBadgeId, tokenValue);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGameFursuitParticpationBadgesByFursuitBadgeIdTokenSafePost");
     e.printStackTrace();
 }
 ```
@@ -311,9 +312,9 @@ Name | Type | Description  | Notes
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost"></a>
-# **apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost**
-> CollectTokenResponse apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost(tokenValue)
+<a name="apiFursuitsCollectingGamePlayerParticipationCollectTokenPost"></a>
+# **apiFursuitsCollectingGamePlayerParticipationCollectTokenPost**
+> CollectTokenResponse apiFursuitsCollectingGamePlayerParticipationCollectTokenPost(tokenValue)
 
 
 
@@ -327,10 +328,10 @@ Name | Type | Description  | Notes
 FursuitsApi apiInstance = new FursuitsApi();
 String tokenValue = "tokenValue_example"; // String | 
 try {
-    CollectTokenResponse result = apiInstance.apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost(tokenValue);
+    CollectTokenResponse result = apiInstance.apiFursuitsCollectingGamePlayerParticipationCollectTokenPost(tokenValue);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGamePlayerParticipationCollectTokenPost");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGamePlayerParticipationCollectTokenPost");
     e.printStackTrace();
 }
 ```
@@ -354,9 +355,9 @@ Name | Type | Description  | Notes
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost"></a>
-# **apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost**
-> ApiSafeResultCollectTokenResponse apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost(tokenValue)
+<a name="apiFursuitsCollectingGamePlayerParticipationCollectTokenSafePost"></a>
+# **apiFursuitsCollectingGamePlayerParticipationCollectTokenSafePost**
+> ApiSafeResultCollectTokenResponse apiFursuitsCollectingGamePlayerParticipationCollectTokenSafePost(tokenValue)
 
 
 
@@ -370,10 +371,10 @@ Name | Type | Description  | Notes
 FursuitsApi apiInstance = new FursuitsApi();
 String tokenValue = "tokenValue_example"; // String | 
 try {
-    ApiSafeResultCollectTokenResponse result = apiInstance.apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost(tokenValue);
+    ApiSafeResultCollectTokenResponse result = apiInstance.apiFursuitsCollectingGamePlayerParticipationCollectTokenSafePost(tokenValue);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGamePlayerParticipationCollectTokenSafePost");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGamePlayerParticipationCollectTokenSafePost");
     e.printStackTrace();
 }
 ```
@@ -397,9 +398,9 @@ Name | Type | Description  | Notes
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet"></a>
-# **apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet**
-> List&lt;PlayerCollectionEntry&gt; apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet()
+<a name="apiFursuitsCollectingGamePlayerParticipationCollectionEntriesGet"></a>
+# **apiFursuitsCollectingGamePlayerParticipationCollectionEntriesGet**
+> List&lt;PlayerCollectionEntry&gt; apiFursuitsCollectingGamePlayerParticipationCollectionEntriesGet()
 
 
 
@@ -412,10 +413,10 @@ Name | Type | Description  | Notes
 
 FursuitsApi apiInstance = new FursuitsApi();
 try {
-    List<PlayerCollectionEntry> result = apiInstance.apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet();
+    List<PlayerCollectionEntry> result = apiInstance.apiFursuitsCollectingGamePlayerParticipationCollectionEntriesGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGamePlayerParticipationCollectionEntriesGet");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGamePlayerParticipationCollectionEntriesGet");
     e.printStackTrace();
 }
 ```
@@ -436,9 +437,9 @@ This endpoint does not need any parameter.
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGamePlayerParticipationGet"></a>
-# **apiV2FursuitsCollectingGamePlayerParticipationGet**
-> PlayerParticipationInfo apiV2FursuitsCollectingGamePlayerParticipationGet()
+<a name="apiFursuitsCollectingGamePlayerParticipationGet"></a>
+# **apiFursuitsCollectingGamePlayerParticipationGet**
+> PlayerParticipationInfo apiFursuitsCollectingGamePlayerParticipationGet()
 
 
 
@@ -451,10 +452,10 @@ This endpoint does not need any parameter.
 
 FursuitsApi apiInstance = new FursuitsApi();
 try {
-    PlayerParticipationInfo result = apiInstance.apiV2FursuitsCollectingGamePlayerParticipationGet();
+    PlayerParticipationInfo result = apiInstance.apiFursuitsCollectingGamePlayerParticipationGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGamePlayerParticipationGet");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGamePlayerParticipationGet");
     e.printStackTrace();
 }
 ```
@@ -475,9 +476,9 @@ This endpoint does not need any parameter.
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet"></a>
-# **apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet**
-> List&lt;PlayerScoreboardEntry&gt; apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet(top)
+<a name="apiFursuitsCollectingGamePlayerParticipationScoreboardGet"></a>
+# **apiFursuitsCollectingGamePlayerParticipationScoreboardGet**
+> List&lt;PlayerScoreboardEntry&gt; apiFursuitsCollectingGamePlayerParticipationScoreboardGet(top)
 
 
 
@@ -487,12 +488,12 @@ This endpoint does not need any parameter.
 //import io.swagger.client.api.FursuitsApi;
 
 FursuitsApi apiInstance = new FursuitsApi();
-Integer top = 56; // Integer | 
+Integer top = 25; // Integer | 
 try {
-    List<PlayerScoreboardEntry> result = apiInstance.apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet(top);
+    List<PlayerScoreboardEntry> result = apiInstance.apiFursuitsCollectingGamePlayerParticipationScoreboardGet(top);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGamePlayerParticipationScoreboardGet");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGamePlayerParticipationScoreboardGet");
     e.printStackTrace();
 }
 ```
@@ -501,7 +502,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **top** | **Integer**|  | [optional]
+ **top** | **Integer**|  | [optional] [default to 25]
 
 ### Return type
 
@@ -516,9 +517,47 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGameTokensBatchPost"></a>
-# **apiV2FursuitsCollectingGameTokensBatchPost**
-> apiV2FursuitsCollectingGameTokensBatchPost(tokenValues)
+<a name="apiFursuitsCollectingGameRecalculatePost"></a>
+# **apiFursuitsCollectingGameRecalculatePost**
+> apiFursuitsCollectingGameRecalculatePost()
+
+
+
+  * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.FursuitsApi;
+
+FursuitsApi apiInstance = new FursuitsApi();
+try {
+    apiInstance.apiFursuitsCollectingGameRecalculatePost();
+} catch (ApiException e) {
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGameRecalculatePost");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+<a name="apiFursuitsCollectingGameTokensBatchPost"></a>
+# **apiFursuitsCollectingGameTokensBatchPost**
+> apiFursuitsCollectingGameTokensBatchPost(tokenValues)
 
 
 
@@ -532,9 +571,9 @@ No authorization required
 FursuitsApi apiInstance = new FursuitsApi();
 List<String> tokenValues = Arrays.asList(new List<String>()); // List<String> | 
 try {
-    apiInstance.apiV2FursuitsCollectingGameTokensBatchPost(tokenValues);
+    apiInstance.apiFursuitsCollectingGameTokensBatchPost(tokenValues);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGameTokensBatchPost");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGameTokensBatchPost");
     e.printStackTrace();
 }
 ```
@@ -558,9 +597,9 @@ null (empty response body)
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2FursuitsCollectingGameTokensPost"></a>
-# **apiV2FursuitsCollectingGameTokensPost**
-> apiV2FursuitsCollectingGameTokensPost(tokenValue)
+<a name="apiFursuitsCollectingGameTokensPost"></a>
+# **apiFursuitsCollectingGameTokensPost**
+> apiFursuitsCollectingGameTokensPost(tokenValue)
 
 
 
@@ -574,9 +613,9 @@ null (empty response body)
 FursuitsApi apiInstance = new FursuitsApi();
 String tokenValue = "tokenValue_example"; // String | 
 try {
-    apiInstance.apiV2FursuitsCollectingGameTokensPost(tokenValue);
+    apiInstance.apiFursuitsCollectingGameTokensPost(tokenValue);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FursuitsApi#apiV2FursuitsCollectingGameTokensPost");
+    System.err.println("Exception when calling FursuitsApi#apiFursuitsCollectingGameTokensPost");
     e.printStackTrace();
 }
 ```

@@ -62,7 +62,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
             info { "Retrieving sync since $date" }
 
             // Get sync from server
-            val sync = apiService.sync.apiV2SyncGet(date)
+            val sync = apiService.sync.apiSyncGet(date)
 
             info { sync }
 
@@ -72,7 +72,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
             if (shift) {
                 debug { "Changing dates instead of updating" }
                 // Get all dates explicitly
-                val base = apiService.days.apiV2EventConferenceDaysGet()
+                val base = apiService.days.apiEventConferenceDaysGet()
 
                 // Shift by offset
                 val currentDate = DateTime.now()

@@ -19,7 +19,7 @@ fun PrivateMessageRecord.markAsRead() {
         Log.i("PMR", "Marking message ${this.id} as read")
 
         apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
-        apiService.communications.apiV2CommunicationPrivateMessagesByMessageIdReadPost(this.id, true)
+        apiService.communications.apiCommunicationPrivateMessagesByMessageIdReadPost(this.id, true)
     } else {
         throw Exception("User is not logged in!")
     }

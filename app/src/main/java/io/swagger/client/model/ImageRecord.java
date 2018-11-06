@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -30,7 +29,7 @@ public class ImageRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
@@ -40,7 +39,7 @@ public class ImageRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public UUID getId() {
     return id;
   }
@@ -60,8 +59,7 @@ public class ImageRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
-  @Nullable
+  @ApiModelProperty(required = true, value = "")
   public Integer getWidth() {
     return width;
   }
@@ -71,8 +69,7 @@ public class ImageRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
-  @Nullable
+  @ApiModelProperty(required = true, value = "")
   public Integer getHeight() {
     return height;
   }
@@ -82,7 +79,7 @@ public class ImageRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public Long getSizeInBytes() {
     return sizeInBytes;
   }

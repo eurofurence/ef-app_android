@@ -39,7 +39,7 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
         info { "Attempting login for $username with reg number $regNumber, $username, $password" }
 
         task {
-            apiService.tokens.apiV2TokensRegSysPost(RegSysAuthenticationRequest().apply {
+            apiService.tokens.apiTokensRegSysPost(RegSysAuthenticationRequest().apply {
                 this.regNo = regNumber.toInt()
                 this.username = username
                 this.password = password

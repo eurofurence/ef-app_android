@@ -50,18 +50,18 @@ public class EventsApi {
    * @param id id of the requested entity
    * @return EventRecord
   */
-  public EventRecord apiV2EventsByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public EventRecord apiEventsByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2EventsByIdGet",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2EventsByIdGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiEventsByIdGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiEventsByIdGet"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Events/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/Events/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -119,19 +119,19 @@ public class EventsApi {
    * 
    * @param id id of the requested entity
   */
-  public void apiV2EventsByIdGet (UUID id, final Response.Listener<EventRecord> responseListener, final Response.ErrorListener errorListener) {
+  public void apiEventsByIdGet (UUID id, final Response.Listener<EventRecord> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2EventsByIdGet",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2EventsByIdGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiEventsByIdGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiEventsByIdGet"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Events/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/Events/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -186,12 +186,12 @@ public class EventsApi {
   * 
    * @return List<EventRecord>
   */
-  public List<EventRecord> apiV2EventsGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<EventRecord> apiEventsGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/Events".replaceAll("\\{format\\}","json");
+  String path = "/Api/Events".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -249,13 +249,13 @@ public class EventsApi {
    * 
 
   */
-  public void apiV2EventsGet (final Response.Listener<List<EventRecord>> responseListener, final Response.ErrorListener errorListener) {
+  public void apiEventsGet (final Response.Listener<List<EventRecord>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/Events".replaceAll("\\{format\\}","json");
+    String path = "/Api/Events".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

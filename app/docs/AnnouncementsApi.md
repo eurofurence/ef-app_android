@@ -4,17 +4,17 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2AnnouncementsByIdDelete**](AnnouncementsApi.md#apiV2AnnouncementsByIdDelete) | **DELETE** /Api/v2/Announcements/{Id} | 
-[**apiV2AnnouncementsByIdGet**](AnnouncementsApi.md#apiV2AnnouncementsByIdGet) | **GET** /Api/v2/Announcements/{Id} | Retrieve a single announcement.
-[**apiV2AnnouncementsDelete**](AnnouncementsApi.md#apiV2AnnouncementsDelete) | **DELETE** /Api/v2/Announcements | 
-[**apiV2AnnouncementsGet**](AnnouncementsApi.md#apiV2AnnouncementsGet) | **GET** /Api/v2/Announcements | Retrieves a list of all announcement entries.
-[**apiV2AnnouncementsPost**](AnnouncementsApi.md#apiV2AnnouncementsPost) | **POST** /Api/v2/Announcements | 
-[**apiV2AnnouncementsPut**](AnnouncementsApi.md#apiV2AnnouncementsPut) | **PUT** /Api/v2/Announcements | 
+[**apiAnnouncementsByIdDelete**](AnnouncementsApi.md#apiAnnouncementsByIdDelete) | **DELETE** /Api/Announcements/{Id} | 
+[**apiAnnouncementsByIdGet**](AnnouncementsApi.md#apiAnnouncementsByIdGet) | **GET** /Api/Announcements/{Id} | Retrieve a single announcement.
+[**apiAnnouncementsDelete**](AnnouncementsApi.md#apiAnnouncementsDelete) | **DELETE** /Api/Announcements | 
+[**apiAnnouncementsGet**](AnnouncementsApi.md#apiAnnouncementsGet) | **GET** /Api/Announcements | Retrieves a list of all announcement entries.
+[**apiAnnouncementsPost**](AnnouncementsApi.md#apiAnnouncementsPost) | **POST** /Api/Announcements | 
+[**apiAnnouncementsPut**](AnnouncementsApi.md#apiAnnouncementsPut) | **PUT** /Api/Announcements | 
 
 
-<a name="apiV2AnnouncementsByIdDelete"></a>
-# **apiV2AnnouncementsByIdDelete**
-> apiV2AnnouncementsByIdDelete(id)
+<a name="apiAnnouncementsByIdDelete"></a>
+# **apiAnnouncementsByIdDelete**
+> apiAnnouncementsByIdDelete(id)
 
 
 
@@ -28,9 +28,9 @@ Method | HTTP request | Description
 AnnouncementsApi apiInstance = new AnnouncementsApi();
 UUID id = new UUID(); // UUID | 
 try {
-    apiInstance.apiV2AnnouncementsByIdDelete(id);
+    apiInstance.apiAnnouncementsByIdDelete(id);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AnnouncementsApi#apiV2AnnouncementsByIdDelete");
+    System.err.println("Exception when calling AnnouncementsApi#apiAnnouncementsByIdDelete");
     e.printStackTrace();
 }
 ```
@@ -54,9 +54,9 @@ null (empty response body)
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-<a name="apiV2AnnouncementsByIdGet"></a>
-# **apiV2AnnouncementsByIdGet**
-> AnnouncementRecord apiV2AnnouncementsByIdGet(id)
+<a name="apiAnnouncementsByIdGet"></a>
+# **apiAnnouncementsByIdGet**
+> AnnouncementRecord apiAnnouncementsByIdGet(id)
 
 Retrieve a single announcement.
 
@@ -68,10 +68,10 @@ Retrieve a single announcement.
 AnnouncementsApi apiInstance = new AnnouncementsApi();
 UUID id = new UUID(); // UUID | id of the requested entity
 try {
-    AnnouncementRecord result = apiInstance.apiV2AnnouncementsByIdGet(id);
+    AnnouncementRecord result = apiInstance.apiAnnouncementsByIdGet(id);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AnnouncementsApi#apiV2AnnouncementsByIdGet");
+    System.err.println("Exception when calling AnnouncementsApi#apiAnnouncementsByIdGet");
     e.printStackTrace();
 }
 ```
@@ -95,9 +95,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2AnnouncementsDelete"></a>
-# **apiV2AnnouncementsDelete**
-> apiV2AnnouncementsDelete()
+<a name="apiAnnouncementsDelete"></a>
+# **apiAnnouncementsDelete**
+> apiAnnouncementsDelete()
 
 
 
@@ -110,9 +110,9 @@ No authorization required
 
 AnnouncementsApi apiInstance = new AnnouncementsApi();
 try {
-    apiInstance.apiV2AnnouncementsDelete();
+    apiInstance.apiAnnouncementsDelete();
 } catch (ApiException e) {
-    System.err.println("Exception when calling AnnouncementsApi#apiV2AnnouncementsDelete");
+    System.err.println("Exception when calling AnnouncementsApi#apiAnnouncementsDelete");
     e.printStackTrace();
 }
 ```
@@ -133,9 +133,9 @@ null (empty response body)
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-<a name="apiV2AnnouncementsGet"></a>
-# **apiV2AnnouncementsGet**
-> List&lt;AnnouncementRecord&gt; apiV2AnnouncementsGet()
+<a name="apiAnnouncementsGet"></a>
+# **apiAnnouncementsGet**
+> List&lt;AnnouncementRecord&gt; apiAnnouncementsGet()
 
 Retrieves a list of all announcement entries.
 
@@ -146,10 +146,10 @@ Retrieves a list of all announcement entries.
 
 AnnouncementsApi apiInstance = new AnnouncementsApi();
 try {
-    List<AnnouncementRecord> result = apiInstance.apiV2AnnouncementsGet();
+    List<AnnouncementRecord> result = apiInstance.apiAnnouncementsGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AnnouncementsApi#apiV2AnnouncementsGet");
+    System.err.println("Exception when calling AnnouncementsApi#apiAnnouncementsGet");
     e.printStackTrace();
 }
 ```
@@ -170,9 +170,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2AnnouncementsPost"></a>
-# **apiV2AnnouncementsPost**
-> apiV2AnnouncementsPost(record)
+<a name="apiAnnouncementsPost"></a>
+# **apiAnnouncementsPost**
+> apiAnnouncementsPost(record)
 
 
 
@@ -186,9 +186,9 @@ No authorization required
 AnnouncementsApi apiInstance = new AnnouncementsApi();
 AnnouncementRecord record = new AnnouncementRecord(); // AnnouncementRecord | 
 try {
-    apiInstance.apiV2AnnouncementsPost(record);
+    apiInstance.apiAnnouncementsPost(record);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AnnouncementsApi#apiV2AnnouncementsPost");
+    System.err.println("Exception when calling AnnouncementsApi#apiAnnouncementsPost");
     e.printStackTrace();
 }
 ```
@@ -212,9 +212,9 @@ null (empty response body)
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: Not defined
 
-<a name="apiV2AnnouncementsPut"></a>
-# **apiV2AnnouncementsPut**
-> apiV2AnnouncementsPut(record)
+<a name="apiAnnouncementsPut"></a>
+# **apiAnnouncementsPut**
+> apiAnnouncementsPut(record)
 
 
 
@@ -228,9 +228,9 @@ null (empty response body)
 AnnouncementsApi apiInstance = new AnnouncementsApi();
 AnnouncementRecord record = new AnnouncementRecord(); // AnnouncementRecord | 
 try {
-    apiInstance.apiV2AnnouncementsPut(record);
+    apiInstance.apiAnnouncementsPut(record);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AnnouncementsApi#apiV2AnnouncementsPut");
+    System.err.println("Exception when calling AnnouncementsApi#apiAnnouncementsPut");
     e.printStackTrace();
 }
 ```

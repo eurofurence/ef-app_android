@@ -4,13 +4,13 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2EventFeedbackGet**](EventFeedbackApi.md#apiV2EventFeedbackGet) | **GET** /Api/v2/EventFeedback | 
-[**apiV2EventFeedbackPost**](EventFeedbackApi.md#apiV2EventFeedbackPost) | **POST** /Api/v2/EventFeedback | 
+[**apiEventFeedbackGet**](EventFeedbackApi.md#apiEventFeedbackGet) | **GET** /Api/EventFeedback | 
+[**apiEventFeedbackPost**](EventFeedbackApi.md#apiEventFeedbackPost) | **POST** /Api/EventFeedback | 
 
 
-<a name="apiV2EventFeedbackGet"></a>
-# **apiV2EventFeedbackGet**
-> List&lt;EventFeedbackRecord&gt; apiV2EventFeedbackGet()
+<a name="apiEventFeedbackGet"></a>
+# **apiEventFeedbackGet**
+> List&lt;EventFeedbackRecord&gt; apiEventFeedbackGet()
 
 
 
@@ -23,10 +23,10 @@ Method | HTTP request | Description
 
 EventFeedbackApi apiInstance = new EventFeedbackApi();
 try {
-    List<EventFeedbackRecord> result = apiInstance.apiV2EventFeedbackGet();
+    List<EventFeedbackRecord> result = apiInstance.apiEventFeedbackGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventFeedbackApi#apiV2EventFeedbackGet");
+    System.err.println("Exception when calling EventFeedbackApi#apiEventFeedbackGet");
     e.printStackTrace();
 }
 ```
@@ -47,9 +47,9 @@ This endpoint does not need any parameter.
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2EventFeedbackPost"></a>
-# **apiV2EventFeedbackPost**
-> apiV2EventFeedbackPost(record)
+<a name="apiEventFeedbackPost"></a>
+# **apiEventFeedbackPost**
+> apiEventFeedbackPost(record)
 
 
 
@@ -63,9 +63,9 @@ This endpoint does not need any parameter.
 EventFeedbackApi apiInstance = new EventFeedbackApi();
 EventFeedbackRecord record = new EventFeedbackRecord(); // EventFeedbackRecord | 
 try {
-    apiInstance.apiV2EventFeedbackPost(record);
+    apiInstance.apiEventFeedbackPost(record);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventFeedbackApi#apiV2EventFeedbackPost");
+    System.err.println("Exception when calling EventFeedbackApi#apiEventFeedbackPost");
     e.printStackTrace();
 }
 ```

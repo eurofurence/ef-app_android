@@ -50,18 +50,18 @@ public class EventConferenceTracksApi {
    * @param id id of the requested entity
    * @return EventConferenceTrackRecord
   */
-  public EventConferenceTrackRecord apiV2EventConferenceTracksByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public EventConferenceTrackRecord apiEventConferenceTracksByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2EventConferenceTracksByIdGet",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2EventConferenceTracksByIdGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiEventConferenceTracksByIdGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiEventConferenceTracksByIdGet"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/EventConferenceTracks/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/EventConferenceTracks/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -119,19 +119,19 @@ public class EventConferenceTracksApi {
    * 
    * @param id id of the requested entity
   */
-  public void apiV2EventConferenceTracksByIdGet (UUID id, final Response.Listener<EventConferenceTrackRecord> responseListener, final Response.ErrorListener errorListener) {
+  public void apiEventConferenceTracksByIdGet (UUID id, final Response.Listener<EventConferenceTrackRecord> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2EventConferenceTracksByIdGet",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2EventConferenceTracksByIdGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiEventConferenceTracksByIdGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiEventConferenceTracksByIdGet"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/EventConferenceTracks/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/EventConferenceTracks/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -186,12 +186,12 @@ public class EventConferenceTracksApi {
   * 
    * @return List<EventConferenceTrackRecord>
   */
-  public List<EventConferenceTrackRecord> apiV2EventConferenceTracksGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<EventConferenceTrackRecord> apiEventConferenceTracksGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/EventConferenceTracks".replaceAll("\\{format\\}","json");
+  String path = "/Api/EventConferenceTracks".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -249,13 +249,13 @@ public class EventConferenceTracksApi {
    * 
 
   */
-  public void apiV2EventConferenceTracksGet (final Response.Listener<List<EventConferenceTrackRecord>> responseListener, final Response.ErrorListener errorListener) {
+  public void apiEventConferenceTracksGet (final Response.Listener<List<EventConferenceTrackRecord>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/EventConferenceTracks".replaceAll("\\{format\\}","json");
+    String path = "/Api/EventConferenceTracks".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

@@ -7,10 +7,9 @@ import com.android.volley.Network
 import com.android.volley.toolbox.BasicNetwork
 import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.ApiInvoker
 import io.swagger.client.api.*
-import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.util.extensions.catchHandle
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
@@ -20,7 +19,7 @@ import java.io.File
  * The API services manage extended API functionality
  */
 object apiService : AnkoLogger {
-    var apiPath: String? = RemotePreferences.apiBaseUrl
+    var apiPath: String = "${BuildConfig.API_BASE_URL}/${BuildConfig.CONVENTION_IDENTIFIER}"
 
     val announcements by lazy { AnnouncementsApi().apply { basePath = apiPath } }
 
@@ -59,12 +58,6 @@ object apiService : AnkoLogger {
      */
     fun initialize(context: Context) {
         {
-            apiPath = RemotePreferences.apiBaseUrl
-
-            RemotePreferences.observer
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { apiPath = it.apiBaseUrl }
-
             debug { "Initializing" }
 
             // Create the cache
