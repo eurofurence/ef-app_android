@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.DebugPreferences
@@ -65,6 +66,10 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
             val sync = apiService.sync.apiSyncGet(date)
 
             info { sync }
+
+            if (sync.conventionIdentifier != BuildConfig.CONVENTION_IDENTIFIER) {
+                throw Exception("Convention Identifier mismatch\n\nExpected: ${BuildConfig.CONVENTION_IDENTIFIER}\nReceived: ${sync.conventionIdentifier}")
+            }
 
             val shift = DebugPreferences.debugDates
             val shiftOffset = DebugPreferences.eventDateOffset
