@@ -122,7 +122,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         subscriptions += RemotePreferences.observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    ui.remoteLastUpdatedText.text = "Remote configs was updated ${it.timeSinceLastUpdate.millis / 1000} seconds ago."
+                    ui.remoteLastUpdatedText.text = "Remote configs were updated ${it.timeSinceLastUpdate.millis / 1000} seconds ago."
                 }
 
         subscriptions += AnalyticsPreferences.observer
@@ -209,6 +209,7 @@ class StartUi : AnkoComponent<ActivityStart> {
     lateinit var startLayout: LinearLayout
     lateinit var loadingLayout: RelativeLayout
     lateinit var remoteLastUpdatedText: TextView
+    lateinit var versionIdentifierText: TextView
     lateinit var progressText: TextView
 
     lateinit var analyticalData: CheckBox
@@ -279,7 +280,13 @@ Is it okay to download the data now?
                         padding = dip(30)
                     }
 
-                    remoteLastUpdatedText = textView("Remote configs was updated ${RemotePreferences.timeSinceLastUpdate.millis / 1000} seconds ago.")
+                    remoteLastUpdatedText = textView("Remote configs were updated ${RemotePreferences.timeSinceLastUpdate.millis / 1000} seconds ago.") {
+                        textSize = 10F
+                    }
+
+                    versionIdentifierText = textView("Version ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) / ${BuildConfig.CONVENTION_IDENTIFIER}") {
+                        textSize = 10F
+                    }
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, wrapContent)
 
