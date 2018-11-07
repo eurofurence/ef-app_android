@@ -27,6 +27,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.circleProgress
 import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.objects
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.eurofurence.connavigator.util.v2.thenNested
@@ -79,6 +80,19 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
 
                 this@ActivityStart.startActivity(intentFor<ActivityRoot>())
             }
+        } else {
+            // If sync fails on the first start - we should tell the user why and exit afterwards.
+            runOnUiThread {
+                this@ActivityStart.alert(
+                        "${(it.objects["reason"] as Exception).message ?: ""}\n\nApplication will exit now.",
+                        "Retrieving data from server failed"
+                    )
+                {
+                    okButton { System.exit(1) }
+                    onCancelled { System.exit(1) }
+                }
+                .show()
+            }
         }
     }
 
@@ -89,7 +103,6 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             startActivity(intentFor<ActivityRoot>())
             return
         }
-
         info { "Starting start activity" }
 
         ui.setContentView(this)
