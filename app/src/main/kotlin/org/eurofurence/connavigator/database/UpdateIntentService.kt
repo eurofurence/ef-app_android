@@ -136,6 +136,12 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
             } to UpdateComplete(true, date, null)
         } catchAlternative { ex: Throwable ->
             // Make the fail response message, transfer exception
+            if (showToastOnCompletion) {
+                runOnUiThread {
+                    longToast("Failed to update: ${ex.message}")
+                }
+            }
+
             error("Completed update with error", ex)
             UPDATE_COMPLETE.toIntent {
                 booleans["success"] = false
