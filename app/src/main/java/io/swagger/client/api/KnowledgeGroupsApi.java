@@ -50,18 +50,18 @@ public class KnowledgeGroupsApi {
    * @param id 
    * @return void
   */
-  public void apiV2KnowledgeGroupsByIdDelete (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiKnowledgeGroupsByIdDelete (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdDelete",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdDelete"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdDelete",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdDelete"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -119,19 +119,19 @@ public class KnowledgeGroupsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param id 
   */
-  public void apiV2KnowledgeGroupsByIdDelete (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiKnowledgeGroupsByIdDelete (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdDelete",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdDelete"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdDelete",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdDelete"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -183,18 +183,18 @@ public class KnowledgeGroupsApi {
    * @param id id of the requested entity
    * @return KnowledgeGroupRecord
   */
-  public KnowledgeGroupRecord apiV2KnowledgeGroupsByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public KnowledgeGroupRecord apiKnowledgeGroupsByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdGet",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdGet"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -252,19 +252,19 @@ public class KnowledgeGroupsApi {
    * 
    * @param id id of the requested entity
   */
-  public void apiV2KnowledgeGroupsByIdGet (UUID id, final Response.Listener<KnowledgeGroupRecord> responseListener, final Response.ErrorListener errorListener) {
+  public void apiKnowledgeGroupsByIdGet (UUID id, final Response.Listener<KnowledgeGroupRecord> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdGet",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdGet"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -321,18 +321,18 @@ public class KnowledgeGroupsApi {
    * @param record 
    * @return void
   */
-  public void apiV2KnowledgeGroupsByIdPut (UUID id, KnowledgeGroupRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiKnowledgeGroupsByIdPut (UUID id, KnowledgeGroupRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = record;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdPut",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdPut"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdPut",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdPut"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -390,19 +390,19 @@ public class KnowledgeGroupsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param id    * @param record 
   */
-  public void apiV2KnowledgeGroupsByIdPut (UUID id, KnowledgeGroupRecord record, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiKnowledgeGroupsByIdPut (UUID id, KnowledgeGroupRecord record, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = record;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdPut",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeGroupsByIdPut"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdPut",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeGroupsByIdPut"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/KnowledgeGroups/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -453,12 +453,12 @@ public class KnowledgeGroupsApi {
   * 
    * @return List<KnowledgeGroupRecord>
   */
-  public List<KnowledgeGroupRecord> apiV2KnowledgeGroupsGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<KnowledgeGroupRecord> apiKnowledgeGroupsGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/KnowledgeGroups".replaceAll("\\{format\\}","json");
+  String path = "/Api/KnowledgeGroups".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -516,13 +516,13 @@ public class KnowledgeGroupsApi {
    * 
 
   */
-  public void apiV2KnowledgeGroupsGet (final Response.Listener<List<KnowledgeGroupRecord>> responseListener, final Response.ErrorListener errorListener) {
+  public void apiKnowledgeGroupsGet (final Response.Listener<List<KnowledgeGroupRecord>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/KnowledgeGroups".replaceAll("\\{format\\}","json");
+    String path = "/Api/KnowledgeGroups".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -578,12 +578,12 @@ public class KnowledgeGroupsApi {
    * @param record 
    * @return UUID
   */
-  public UUID apiV2KnowledgeGroupsPost (KnowledgeGroupRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public UUID apiKnowledgeGroupsPost (KnowledgeGroupRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = record;
   
 
   // create path and map variables
-  String path = "/Api/v2/KnowledgeGroups".replaceAll("\\{format\\}","json");
+  String path = "/Api/KnowledgeGroups".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -641,13 +641,13 @@ public class KnowledgeGroupsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param record 
   */
-  public void apiV2KnowledgeGroupsPost (KnowledgeGroupRecord record, final Response.Listener<UUID> responseListener, final Response.ErrorListener errorListener) {
+  public void apiKnowledgeGroupsPost (KnowledgeGroupRecord record, final Response.Listener<UUID> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = record;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/KnowledgeGroups".replaceAll("\\{format\\}","json");
+    String path = "/Api/KnowledgeGroups".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

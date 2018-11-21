@@ -4,9 +4,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**lastChangeDateTimeUtc** | [**Date**](Date.md) |  |  [optional]
-**id** | [**UUID**](UUID.md) |  |  [optional]
-**registrationNumber** | **Integer** | Registration number (as on badge) of the attendee that acts on behalf/represents this dealer. |  [optional]
+**lastChangeDateTimeUtc** | [**Date**](Date.md) |  | 
+**id** | [**UUID**](UUID.md) |  | 
+**registrationNumber** | **Integer** | Registration number (as on badge) of the attendee that acts on behalf/represents this dealer. | 
 **attendeeNickname** | **String** | Nickname number (as on badge) of the attendee that acts on behalf/represents this dealer. | 
 **displayName** | **String** | **(pba)** Name under which this dealer is acting, e.G. name of the company or brand. | 
 **merchandise** | **String** | **(pba)** Brief description of merchandise/services offered. | 

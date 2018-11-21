@@ -53,12 +53,12 @@ public class PushNotificationsApi {
    * @param request 
    * @return void
   */
-  public void apiV2PushNotificationsFcmDeviceRegistrationPost (PostFcmDeviceRegistrationRequest request) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiPushNotificationsFcmDeviceRegistrationPost (PostFcmDeviceRegistrationRequest request) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = request;
   
 
   // create path and map variables
-  String path = "/Api/v2/PushNotifications/FcmDeviceRegistration".replaceAll("\\{format\\}","json");
+  String path = "/Api/PushNotifications/FcmDeviceRegistration".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -116,13 +116,13 @@ public class PushNotificationsApi {
    * 
    * @param request 
   */
-  public void apiV2PushNotificationsFcmDeviceRegistrationPost (PostFcmDeviceRegistrationRequest request, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiPushNotificationsFcmDeviceRegistrationPost (PostFcmDeviceRegistrationRequest request, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = request;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/PushNotifications/FcmDeviceRegistration".replaceAll("\\{format\\}","json");
+    String path = "/Api/PushNotifications/FcmDeviceRegistration".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -174,12 +174,12 @@ public class PushNotificationsApi {
    * @param since 
    * @return PushNotificationChannelStatistics
   */
-  public PushNotificationChannelStatistics apiV2PushNotificationsStatisticsGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public PushNotificationChannelStatistics apiPushNotificationsStatisticsGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/PushNotifications/Statistics".replaceAll("\\{format\\}","json");
+  String path = "/Api/PushNotifications/Statistics".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -238,13 +238,13 @@ public class PushNotificationsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**
    * @param since 
   */
-  public void apiV2PushNotificationsStatisticsGet (Date since, final Response.Listener<PushNotificationChannelStatistics> responseListener, final Response.ErrorListener errorListener) {
+  public void apiPushNotificationsStatisticsGet (Date since, final Response.Listener<PushNotificationChannelStatistics> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/PushNotifications/Statistics".replaceAll("\\{format\\}","json");
+    String path = "/Api/PushNotifications/Statistics".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -300,12 +300,12 @@ public class PushNotificationsApi {
   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
    * @return void
   */
-  public void apiV2PushNotificationsSyncRequestPost () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiPushNotificationsSyncRequestPost () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/PushNotifications/SyncRequest".replaceAll("\\{format\\}","json");
+  String path = "/Api/PushNotifications/SyncRequest".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -363,13 +363,13 @@ public class PushNotificationsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
 
   */
-  public void apiV2PushNotificationsSyncRequestPost (final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiPushNotificationsSyncRequestPost (final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/PushNotifications/SyncRequest".replaceAll("\\{format\\}","json");
+    String path = "/Api/PushNotifications/SyncRequest".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -421,12 +421,12 @@ public class PushNotificationsApi {
    * @param request 
    * @return void
   */
-  public void apiV2PushNotificationsWnsChannelRegistrationPost (PostWnsChannelRegistrationRequest request) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiPushNotificationsWnsChannelRegistrationPost (PostWnsChannelRegistrationRequest request) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = request;
   
 
   // create path and map variables
-  String path = "/Api/v2/PushNotifications/WnsChannelRegistration".replaceAll("\\{format\\}","json");
+  String path = "/Api/PushNotifications/WnsChannelRegistration".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -484,13 +484,13 @@ public class PushNotificationsApi {
    * 
    * @param request 
   */
-  public void apiV2PushNotificationsWnsChannelRegistrationPost (PostWnsChannelRegistrationRequest request, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiPushNotificationsWnsChannelRegistrationPost (PostWnsChannelRegistrationRequest request, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = request;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/PushNotifications/WnsChannelRegistration".replaceAll("\\{format\\}","json");
+    String path = "/Api/PushNotifications/WnsChannelRegistration".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -542,12 +542,12 @@ public class PushNotificationsApi {
    * @param request 
    * @return void
   */
-  public void apiV2PushNotificationsWnsToastPost (ToastTest request) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiPushNotificationsWnsToastPost (ToastTest request) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = request;
   
 
   // create path and map variables
-  String path = "/Api/v2/PushNotifications/WnsToast".replaceAll("\\{format\\}","json");
+  String path = "/Api/PushNotifications/WnsToast".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -605,13 +605,13 @@ public class PushNotificationsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**
    * @param request 
   */
-  public void apiV2PushNotificationsWnsToastPost (ToastTest request, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiPushNotificationsWnsToastPost (ToastTest request, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = request;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/PushNotifications/WnsToast".replaceAll("\\{format\\}","json");
+    String path = "/Api/PushNotifications/WnsToast".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

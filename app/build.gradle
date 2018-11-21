@@ -21,6 +21,9 @@ android {
         versionCode 99
         versionName "2.2.9"
         multiDexEnabled true
+
+        buildConfigField "String", "API_BASE_URL", '"https://app.eurofurence.org"'
+        buildConfigField "String", "CONVENTION_IDENTIFIER", '"EF25"'
     }
 
     dexOptions {
@@ -85,7 +88,7 @@ android {
 
 ext {
     // Location of the schema file
-    schema_location = "https://app.eurofurence.org:40000/swagger/v2/swagger.json"
+    schema_location = "https://app.eurofurence.org/EF25/swagger/api/swagger.json"
 
     // Dependency versions
     swagger_annotations_version = "1.5.0"

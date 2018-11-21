@@ -16,6 +16,8 @@ public class PrivateMessageRecord  {
   private UUID id = null;
   @SerializedName("RecipientUid")
   private String recipientUid = null;
+  @SerializedName("SenderUid")
+  private String senderUid = null;
   @SerializedName("CreatedDateTimeUtc")
   private Date createdDateTimeUtc = null;
   @SerializedName("ReceivedDateTimeUtc")
@@ -31,7 +33,7 @@ public class PrivateMessageRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
@@ -41,7 +43,7 @@ public class PrivateMessageRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public UUID getId() {
     return id;
   }
@@ -62,6 +64,16 @@ public class PrivateMessageRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
+  public String getSenderUid() {
+    return senderUid;
+  }
+  public void setSenderUid(String senderUid) {
+    this.senderUid = senderUid;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
   public Date getCreatedDateTimeUtc() {
     return createdDateTimeUtc;
   }
@@ -132,6 +144,7 @@ public class PrivateMessageRecord  {
     return (lastChangeDateTimeUtc == null ? privateMessageRecord.lastChangeDateTimeUtc == null : lastChangeDateTimeUtc.equals(privateMessageRecord.lastChangeDateTimeUtc)) &&
         (id == null ? privateMessageRecord.id == null : id.equals(privateMessageRecord.id)) &&
         (recipientUid == null ? privateMessageRecord.recipientUid == null : recipientUid.equals(privateMessageRecord.recipientUid)) &&
+        (senderUid == null ? privateMessageRecord.senderUid == null : senderUid.equals(privateMessageRecord.senderUid)) &&
         (createdDateTimeUtc == null ? privateMessageRecord.createdDateTimeUtc == null : createdDateTimeUtc.equals(privateMessageRecord.createdDateTimeUtc)) &&
         (receivedDateTimeUtc == null ? privateMessageRecord.receivedDateTimeUtc == null : receivedDateTimeUtc.equals(privateMessageRecord.receivedDateTimeUtc)) &&
         (readDateTimeUtc == null ? privateMessageRecord.readDateTimeUtc == null : readDateTimeUtc.equals(privateMessageRecord.readDateTimeUtc)) &&
@@ -146,6 +159,7 @@ public class PrivateMessageRecord  {
     result = 31 * result + (lastChangeDateTimeUtc == null ? 0: lastChangeDateTimeUtc.hashCode());
     result = 31 * result + (id == null ? 0: id.hashCode());
     result = 31 * result + (recipientUid == null ? 0: recipientUid.hashCode());
+    result = 31 * result + (senderUid == null ? 0: senderUid.hashCode());
     result = 31 * result + (createdDateTimeUtc == null ? 0: createdDateTimeUtc.hashCode());
     result = 31 * result + (receivedDateTimeUtc == null ? 0: receivedDateTimeUtc.hashCode());
     result = 31 * result + (readDateTimeUtc == null ? 0: readDateTimeUtc.hashCode());
@@ -163,6 +177,7 @@ public class PrivateMessageRecord  {
     sb.append("  lastChangeDateTimeUtc: ").append(lastChangeDateTimeUtc).append("\n");
     sb.append("  id: ").append(id).append("\n");
     sb.append("  recipientUid: ").append(recipientUid).append("\n");
+    sb.append("  senderUid: ").append(senderUid).append("\n");
     sb.append("  createdDateTimeUtc: ").append(createdDateTimeUtc).append("\n");
     sb.append("  receivedDateTimeUtc: ").append(receivedDateTimeUtc).append("\n");
     sb.append("  readDateTimeUtc: ").append(readDateTimeUtc).append("\n");

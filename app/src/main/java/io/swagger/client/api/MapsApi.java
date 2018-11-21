@@ -52,24 +52,24 @@ public class MapsApi {
    * @param entryId 
    * @return void
   */
-  public void apiV2MapsByIdEntriesByEntryIdDelete (UUID id, UUID entryId) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiMapsByIdEntriesByEntryIdDelete (UUID id, UUID entryId) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdDelete",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdDelete"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdDelete",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdDelete"));
       }
   
       // verify the required parameter 'entryId' is set
       if (entryId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdDelete",
-      new ApiException(400, "Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdDelete"));
+      VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdDelete",
+      new ApiException(400, "Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdDelete"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
+  String path = "/Api/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -127,25 +127,25 @@ public class MapsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Admin&#x60;**, **&#x60;Developer&#x60;**
    * @param id    * @param entryId 
   */
-  public void apiV2MapsByIdEntriesByEntryIdDelete (UUID id, UUID entryId, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiMapsByIdEntriesByEntryIdDelete (UUID id, UUID entryId, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdDelete",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdDelete"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdDelete",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdDelete"));
     }
     
     // verify the required parameter 'entryId' is set
     if (entryId == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdDelete",
-         new ApiException(400, "Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdDelete"));
+       VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdDelete",
+         new ApiException(400, "Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdDelete"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
+    String path = "/Api/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -198,24 +198,24 @@ public class MapsApi {
    * @param entryId 
    * @return MapEntryRecord
   */
-  public MapEntryRecord apiV2MapsByIdEntriesByEntryIdGet (UUID id, UUID entryId) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public MapEntryRecord apiMapsByIdEntriesByEntryIdGet (UUID id, UUID entryId) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdGet",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdGet"));
       }
   
       // verify the required parameter 'entryId' is set
       if (entryId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdGet",
-      new ApiException(400, "Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdGet",
+      new ApiException(400, "Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdGet"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
+  String path = "/Api/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -273,25 +273,25 @@ public class MapsApi {
    * 
    * @param id    * @param entryId 
   */
-  public void apiV2MapsByIdEntriesByEntryIdGet (UUID id, UUID entryId, final Response.Listener<MapEntryRecord> responseListener, final Response.ErrorListener errorListener) {
+  public void apiMapsByIdEntriesByEntryIdGet (UUID id, UUID entryId, final Response.Listener<MapEntryRecord> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdGet",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdGet"));
     }
     
     // verify the required parameter 'entryId' is set
     if (entryId == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdGet",
-         new ApiException(400, "Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdGet",
+         new ApiException(400, "Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdGet"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
+    String path = "/Api/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -349,24 +349,24 @@ public class MapsApi {
    * @param record \&quot;Id\&quot; property must match the {EntryId} part of the uri
    * @return UUID
   */
-  public UUID apiV2MapsByIdEntriesByEntryIdPut (UUID id, UUID entryId, MapEntryRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public UUID apiMapsByIdEntriesByEntryIdPut (UUID id, UUID entryId, MapEntryRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = record;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdPut",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdPut"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdPut",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdPut"));
       }
   
       // verify the required parameter 'entryId' is set
       if (entryId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdPut",
-      new ApiException(400, "Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdPut"));
+      VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdPut",
+      new ApiException(400, "Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdPut"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
+  String path = "/Api/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -424,25 +424,25 @@ public class MapsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Admin&#x60;**, **&#x60;Developer&#x60;**  This both works for updating an existing entry and creating a new entry. The id property of the  model (request body) must match the {EntryId} part of the uri.
    * @param id \&quot;Id\&quot; of the map.   * @param entryId \&quot;Id\&quot; of the entry that gets inserted.   * @param record \&quot;Id\&quot; property must match the {EntryId} part of the uri
   */
-  public void apiV2MapsByIdEntriesByEntryIdPut (UUID id, UUID entryId, MapEntryRecord record, final Response.Listener<UUID> responseListener, final Response.ErrorListener errorListener) {
+  public void apiMapsByIdEntriesByEntryIdPut (UUID id, UUID entryId, MapEntryRecord record, final Response.Listener<UUID> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = record;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdPut",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesByEntryIdPut"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdPut",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesByEntryIdPut"));
     }
     
     // verify the required parameter 'entryId' is set
     if (entryId == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdPut",
-         new ApiException(400, "Missing the required parameter 'entryId' when calling apiV2MapsByIdEntriesByEntryIdPut"));
+       VolleyError error = new VolleyError("Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdPut",
+         new ApiException(400, "Missing the required parameter 'entryId' when calling apiMapsByIdEntriesByEntryIdPut"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
+    String path = "/Api/Maps/{Id}/Entries/{EntryId}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString())).replaceAll("\\{" + "EntryId" + "\\}", apiInvoker.escapeString(entryId.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -498,18 +498,18 @@ public class MapsApi {
    * @param id 
    * @return void
   */
-  public void apiV2MapsByIdEntriesDelete (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiMapsByIdEntriesDelete (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesDelete",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesDelete"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesDelete",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesDelete"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -567,19 +567,19 @@ public class MapsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Admin&#x60;**, **&#x60;Developer&#x60;**
    * @param id 
   */
-  public void apiV2MapsByIdEntriesDelete (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiMapsByIdEntriesDelete (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesDelete",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesDelete"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesDelete",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesDelete"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -631,18 +631,18 @@ public class MapsApi {
    * @param id 
    * @return List<MapEntryRecord>
   */
-  public List<MapEntryRecord> apiV2MapsByIdEntriesGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<MapEntryRecord> apiMapsByIdEntriesGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesGet",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesGet"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -700,19 +700,19 @@ public class MapsApi {
    * 
    * @param id 
   */
-  public void apiV2MapsByIdEntriesGet (UUID id, final Response.Listener<List<MapEntryRecord>> responseListener, final Response.ErrorListener errorListener) {
+  public void apiMapsByIdEntriesGet (UUID id, final Response.Listener<List<MapEntryRecord>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesGet",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesGet"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -769,18 +769,18 @@ public class MapsApi {
    * @param record Do not specify the \&quot;Id\&quot; property. It will be auto-assigned and returned in the response.
    * @return UUID
   */
-  public UUID apiV2MapsByIdEntriesPost (UUID id, MapEntryRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public UUID apiMapsByIdEntriesPost (UUID id, MapEntryRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = record;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesPost",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesPost"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesPost",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesPost"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -838,19 +838,19 @@ public class MapsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Admin&#x60;**, **&#x60;Developer&#x60;**  If you can generate guids client-side, you can also use the PUT variant for both create and update.
    * @param id \&quot;Id\&quot; of the map   * @param record Do not specify the \&quot;Id\&quot; property. It will be auto-assigned and returned in the response.
   */
-  public void apiV2MapsByIdEntriesPost (UUID id, MapEntryRecord record, final Response.Listener<UUID> responseListener, final Response.ErrorListener errorListener) {
+  public void apiMapsByIdEntriesPost (UUID id, MapEntryRecord record, final Response.Listener<UUID> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = record;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdEntriesPost",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdEntriesPost"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdEntriesPost",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdEntriesPost"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/Maps/{Id}/Entries".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -906,18 +906,18 @@ public class MapsApi {
    * @param id 
    * @return MapRecord
   */
-  public MapRecord apiV2MapsByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public MapRecord apiMapsByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdGet",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdGet"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Maps/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/Maps/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -975,19 +975,19 @@ public class MapsApi {
    * 
    * @param id 
   */
-  public void apiV2MapsByIdGet (UUID id, final Response.Listener<MapRecord> responseListener, final Response.ErrorListener errorListener) {
+  public void apiMapsByIdGet (UUID id, final Response.Listener<MapRecord> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2MapsByIdGet",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2MapsByIdGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiMapsByIdGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiMapsByIdGet"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Maps/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/Maps/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -1042,12 +1042,12 @@ public class MapsApi {
   * 
    * @return List<MapRecord>
   */
-  public List<MapRecord> apiV2MapsGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<MapRecord> apiMapsGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/Maps".replaceAll("\\{format\\}","json");
+  String path = "/Api/Maps".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -1105,13 +1105,13 @@ public class MapsApi {
    * 
 
   */
-  public void apiV2MapsGet (final Response.Listener<List<MapRecord>> responseListener, final Response.ErrorListener errorListener) {
+  public void apiMapsGet (final Response.Listener<List<MapRecord>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/Maps".replaceAll("\\{format\\}","json");
+    String path = "/Api/Maps".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

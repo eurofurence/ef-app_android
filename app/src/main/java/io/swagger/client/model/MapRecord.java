@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -28,7 +27,7 @@ public class MapRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public Date getLastChangeDateTimeUtc() {
     return lastChangeDateTimeUtc;
   }
@@ -38,7 +37,7 @@ public class MapRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public UUID getId() {
     return id;
   }
@@ -48,7 +47,7 @@ public class MapRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public UUID getImageId() {
     return imageId;
   }
@@ -68,8 +67,7 @@ public class MapRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
-  @Nullable
+  @ApiModelProperty(required = true, value = "")
   public Boolean getIsBrowseable() {
     return isBrowseable;
   }
@@ -80,7 +78,6 @@ public class MapRecord  {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  @Nullable
   public List<MapEntryRecord> getEntries() {
     return entries;
   }

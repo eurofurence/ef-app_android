@@ -4,16 +4,16 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2PushNotificationsFcmDeviceRegistrationPost**](PushNotificationsApi.md#apiV2PushNotificationsFcmDeviceRegistrationPost) | **POST** /Api/v2/PushNotifications/FcmDeviceRegistration | 
-[**apiV2PushNotificationsStatisticsGet**](PushNotificationsApi.md#apiV2PushNotificationsStatisticsGet) | **GET** /Api/v2/PushNotifications/Statistics | 
-[**apiV2PushNotificationsSyncRequestPost**](PushNotificationsApi.md#apiV2PushNotificationsSyncRequestPost) | **POST** /Api/v2/PushNotifications/SyncRequest | 
-[**apiV2PushNotificationsWnsChannelRegistrationPost**](PushNotificationsApi.md#apiV2PushNotificationsWnsChannelRegistrationPost) | **POST** /Api/v2/PushNotifications/WnsChannelRegistration | 
-[**apiV2PushNotificationsWnsToastPost**](PushNotificationsApi.md#apiV2PushNotificationsWnsToastPost) | **POST** /Api/v2/PushNotifications/WnsToast | 
+[**apiPushNotificationsFcmDeviceRegistrationPost**](PushNotificationsApi.md#apiPushNotificationsFcmDeviceRegistrationPost) | **POST** /Api/PushNotifications/FcmDeviceRegistration | 
+[**apiPushNotificationsStatisticsGet**](PushNotificationsApi.md#apiPushNotificationsStatisticsGet) | **GET** /Api/PushNotifications/Statistics | 
+[**apiPushNotificationsSyncRequestPost**](PushNotificationsApi.md#apiPushNotificationsSyncRequestPost) | **POST** /Api/PushNotifications/SyncRequest | 
+[**apiPushNotificationsWnsChannelRegistrationPost**](PushNotificationsApi.md#apiPushNotificationsWnsChannelRegistrationPost) | **POST** /Api/PushNotifications/WnsChannelRegistration | 
+[**apiPushNotificationsWnsToastPost**](PushNotificationsApi.md#apiPushNotificationsWnsToastPost) | **POST** /Api/PushNotifications/WnsToast | 
 
 
-<a name="apiV2PushNotificationsFcmDeviceRegistrationPost"></a>
-# **apiV2PushNotificationsFcmDeviceRegistrationPost**
-> apiV2PushNotificationsFcmDeviceRegistrationPost(request)
+<a name="apiPushNotificationsFcmDeviceRegistrationPost"></a>
+# **apiPushNotificationsFcmDeviceRegistrationPost**
+> apiPushNotificationsFcmDeviceRegistrationPost(request)
 
 
 
@@ -25,9 +25,9 @@ Method | HTTP request | Description
 PushNotificationsApi apiInstance = new PushNotificationsApi();
 PostFcmDeviceRegistrationRequest request = new PostFcmDeviceRegistrationRequest(); // PostFcmDeviceRegistrationRequest | 
 try {
-    apiInstance.apiV2PushNotificationsFcmDeviceRegistrationPost(request);
+    apiInstance.apiPushNotificationsFcmDeviceRegistrationPost(request);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PushNotificationsApi#apiV2PushNotificationsFcmDeviceRegistrationPost");
+    System.err.println("Exception when calling PushNotificationsApi#apiPushNotificationsFcmDeviceRegistrationPost");
     e.printStackTrace();
 }
 ```
@@ -51,9 +51,9 @@ No authorization required
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: Not defined
 
-<a name="apiV2PushNotificationsStatisticsGet"></a>
-# **apiV2PushNotificationsStatisticsGet**
-> PushNotificationChannelStatistics apiV2PushNotificationsStatisticsGet(since)
+<a name="apiPushNotificationsStatisticsGet"></a>
+# **apiPushNotificationsStatisticsGet**
+> PushNotificationChannelStatistics apiPushNotificationsStatisticsGet(since)
 
 
 
@@ -67,10 +67,10 @@ No authorization required
 PushNotificationsApi apiInstance = new PushNotificationsApi();
 Date since = new Date(); // Date | 
 try {
-    PushNotificationChannelStatistics result = apiInstance.apiV2PushNotificationsStatisticsGet(since);
+    PushNotificationChannelStatistics result = apiInstance.apiPushNotificationsStatisticsGet(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PushNotificationsApi#apiV2PushNotificationsStatisticsGet");
+    System.err.println("Exception when calling PushNotificationsApi#apiPushNotificationsStatisticsGet");
     e.printStackTrace();
 }
 ```
@@ -94,9 +94,9 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2PushNotificationsSyncRequestPost"></a>
-# **apiV2PushNotificationsSyncRequestPost**
-> apiV2PushNotificationsSyncRequestPost()
+<a name="apiPushNotificationsSyncRequestPost"></a>
+# **apiPushNotificationsSyncRequestPost**
+> apiPushNotificationsSyncRequestPost()
 
 
 
@@ -109,9 +109,9 @@ Name | Type | Description  | Notes
 
 PushNotificationsApi apiInstance = new PushNotificationsApi();
 try {
-    apiInstance.apiV2PushNotificationsSyncRequestPost();
+    apiInstance.apiPushNotificationsSyncRequestPost();
 } catch (ApiException e) {
-    System.err.println("Exception when calling PushNotificationsApi#apiV2PushNotificationsSyncRequestPost");
+    System.err.println("Exception when calling PushNotificationsApi#apiPushNotificationsSyncRequestPost");
     e.printStackTrace();
 }
 ```
@@ -132,9 +132,9 @@ null (empty response body)
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-<a name="apiV2PushNotificationsWnsChannelRegistrationPost"></a>
-# **apiV2PushNotificationsWnsChannelRegistrationPost**
-> apiV2PushNotificationsWnsChannelRegistrationPost(request)
+<a name="apiPushNotificationsWnsChannelRegistrationPost"></a>
+# **apiPushNotificationsWnsChannelRegistrationPost**
+> apiPushNotificationsWnsChannelRegistrationPost(request)
 
 
 
@@ -146,9 +146,9 @@ null (empty response body)
 PushNotificationsApi apiInstance = new PushNotificationsApi();
 PostWnsChannelRegistrationRequest request = new PostWnsChannelRegistrationRequest(); // PostWnsChannelRegistrationRequest | 
 try {
-    apiInstance.apiV2PushNotificationsWnsChannelRegistrationPost(request);
+    apiInstance.apiPushNotificationsWnsChannelRegistrationPost(request);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PushNotificationsApi#apiV2PushNotificationsWnsChannelRegistrationPost");
+    System.err.println("Exception when calling PushNotificationsApi#apiPushNotificationsWnsChannelRegistrationPost");
     e.printStackTrace();
 }
 ```
@@ -172,9 +172,9 @@ No authorization required
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: Not defined
 
-<a name="apiV2PushNotificationsWnsToastPost"></a>
-# **apiV2PushNotificationsWnsToastPost**
-> apiV2PushNotificationsWnsToastPost(request)
+<a name="apiPushNotificationsWnsToastPost"></a>
+# **apiPushNotificationsWnsToastPost**
+> apiPushNotificationsWnsToastPost(request)
 
 
 
@@ -188,9 +188,9 @@ No authorization required
 PushNotificationsApi apiInstance = new PushNotificationsApi();
 ToastTest request = new ToastTest(); // ToastTest | 
 try {
-    apiInstance.apiV2PushNotificationsWnsToastPost(request);
+    apiInstance.apiPushNotificationsWnsToastPost(request);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PushNotificationsApi#apiV2PushNotificationsWnsToastPost");
+    System.err.println("Exception when calling PushNotificationsApi#apiPushNotificationsWnsToastPost");
     e.printStackTrace();
 }
 ```

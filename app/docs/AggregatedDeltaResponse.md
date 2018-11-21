@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**conventionIdentifier** | **String** |  |  [optional]
 **since** | [**Date**](Date.md) |  |  [optional]
 **currentDateTimeUtc** | [**Date**](Date.md) |  |  [optional]
 **events** | [**DeltaResponseEventRecord**](DeltaResponseEventRecord.md) |  |  [optional]

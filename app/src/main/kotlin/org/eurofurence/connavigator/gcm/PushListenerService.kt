@@ -22,14 +22,9 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         val messaging = FirebaseMessaging.getInstance()
 
         var topics = listOf(
-                "live-all",
-                "live-android"
+                "${BuildConfig.CONVENTION_IDENTIFIER}",
+                "${BuildConfig.CONVENTION_IDENTIFIER}-android"
         )
-
-        if (BuildConfig.DEBUG) {
-            topics += listOf("test-all", "test-android")
-        }
-
         topics.forEach { messaging.subscribeToTopic(it) }
 
         info { "Push token: " + FirebaseInstanceId.getInstance().token }

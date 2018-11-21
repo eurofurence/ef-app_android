@@ -19,6 +19,8 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class AggregatedDeltaResponse  {
   
+  @SerializedName("ConventionIdentifier")
+  private String conventionIdentifier = null;
   @SerializedName("Since")
   private Date since = null;
   @SerializedName("CurrentDateTimeUtc")
@@ -43,6 +45,16 @@ public class AggregatedDeltaResponse  {
   private DeltaResponseAnnouncementRecord announcements = null;
   @SerializedName("Maps")
   private DeltaResponseMapRecord maps = null;
+
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getConventionIdentifier() {
+    return conventionIdentifier;
+  }
+  public void setConventionIdentifier(String conventionIdentifier) {
+    this.conventionIdentifier = conventionIdentifier;
+  }
 
   /**
    **/
@@ -174,7 +186,8 @@ public class AggregatedDeltaResponse  {
       return false;
     }
     AggregatedDeltaResponse aggregatedDeltaResponse = (AggregatedDeltaResponse) o;
-    return (since == null ? aggregatedDeltaResponse.since == null : since.equals(aggregatedDeltaResponse.since)) &&
+    return (conventionIdentifier == null ? aggregatedDeltaResponse.conventionIdentifier == null : conventionIdentifier.equals(aggregatedDeltaResponse.conventionIdentifier)) &&
+        (since == null ? aggregatedDeltaResponse.since == null : since.equals(aggregatedDeltaResponse.since)) &&
         (currentDateTimeUtc == null ? aggregatedDeltaResponse.currentDateTimeUtc == null : currentDateTimeUtc.equals(aggregatedDeltaResponse.currentDateTimeUtc)) &&
         (events == null ? aggregatedDeltaResponse.events == null : events.equals(aggregatedDeltaResponse.events)) &&
         (eventConferenceDays == null ? aggregatedDeltaResponse.eventConferenceDays == null : eventConferenceDays.equals(aggregatedDeltaResponse.eventConferenceDays)) &&
@@ -191,6 +204,7 @@ public class AggregatedDeltaResponse  {
   @Override 
   public int hashCode() {
     int result = 17;
+    result = 31 * result + (conventionIdentifier == null ? 0: conventionIdentifier.hashCode());
     result = 31 * result + (since == null ? 0: since.hashCode());
     result = 31 * result + (currentDateTimeUtc == null ? 0: currentDateTimeUtc.hashCode());
     result = 31 * result + (events == null ? 0: events.hashCode());
@@ -211,6 +225,7 @@ public class AggregatedDeltaResponse  {
     StringBuilder sb = new StringBuilder();
     sb.append("class AggregatedDeltaResponse {\n");
     
+    sb.append("  conventionIdentifier: ").append(conventionIdentifier).append("\n");
     sb.append("  since: ").append(since).append("\n");
     sb.append("  currentDateTimeUtc: ").append(currentDateTimeUtc).append("\n");
     sb.append("  events: ").append(events).append("\n");

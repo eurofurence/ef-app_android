@@ -50,18 +50,18 @@ public class AnnouncementsApi {
    * @param id 
    * @return void
   */
-  public void apiV2AnnouncementsByIdDelete (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiAnnouncementsByIdDelete (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2AnnouncementsByIdDelete",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2AnnouncementsByIdDelete"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiAnnouncementsByIdDelete",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiAnnouncementsByIdDelete"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Announcements/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/Announcements/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -119,19 +119,19 @@ public class AnnouncementsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
    * @param id 
   */
-  public void apiV2AnnouncementsByIdDelete (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiAnnouncementsByIdDelete (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2AnnouncementsByIdDelete",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2AnnouncementsByIdDelete"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiAnnouncementsByIdDelete",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiAnnouncementsByIdDelete"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Announcements/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/Announcements/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -183,18 +183,18 @@ public class AnnouncementsApi {
    * @param id id of the requested entity
    * @return AnnouncementRecord
   */
-  public AnnouncementRecord apiV2AnnouncementsByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public AnnouncementRecord apiAnnouncementsByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2AnnouncementsByIdGet",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2AnnouncementsByIdGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiAnnouncementsByIdGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiAnnouncementsByIdGet"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/Announcements/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/Announcements/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -252,19 +252,19 @@ public class AnnouncementsApi {
    * 
    * @param id id of the requested entity
   */
-  public void apiV2AnnouncementsByIdGet (UUID id, final Response.Listener<AnnouncementRecord> responseListener, final Response.ErrorListener errorListener) {
+  public void apiAnnouncementsByIdGet (UUID id, final Response.Listener<AnnouncementRecord> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2AnnouncementsByIdGet",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2AnnouncementsByIdGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiAnnouncementsByIdGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiAnnouncementsByIdGet"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/Announcements/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/Announcements/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -319,12 +319,12 @@ public class AnnouncementsApi {
   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
    * @return void
   */
-  public void apiV2AnnouncementsDelete () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiAnnouncementsDelete () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/Announcements".replaceAll("\\{format\\}","json");
+  String path = "/Api/Announcements".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -382,13 +382,13 @@ public class AnnouncementsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
 
   */
-  public void apiV2AnnouncementsDelete (final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiAnnouncementsDelete (final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/Announcements".replaceAll("\\{format\\}","json");
+    String path = "/Api/Announcements".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -439,12 +439,12 @@ public class AnnouncementsApi {
   * 
    * @return List<AnnouncementRecord>
   */
-  public List<AnnouncementRecord> apiV2AnnouncementsGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<AnnouncementRecord> apiAnnouncementsGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/Announcements".replaceAll("\\{format\\}","json");
+  String path = "/Api/Announcements".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -502,13 +502,13 @@ public class AnnouncementsApi {
    * 
 
   */
-  public void apiV2AnnouncementsGet (final Response.Listener<List<AnnouncementRecord>> responseListener, final Response.ErrorListener errorListener) {
+  public void apiAnnouncementsGet (final Response.Listener<List<AnnouncementRecord>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/Announcements".replaceAll("\\{format\\}","json");
+    String path = "/Api/Announcements".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -564,12 +564,12 @@ public class AnnouncementsApi {
    * @param record 
    * @return void
   */
-  public void apiV2AnnouncementsPost (AnnouncementRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiAnnouncementsPost (AnnouncementRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = record;
   
 
   // create path and map variables
-  String path = "/Api/v2/Announcements".replaceAll("\\{format\\}","json");
+  String path = "/Api/Announcements".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -627,13 +627,13 @@ public class AnnouncementsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
    * @param record 
   */
-  public void apiV2AnnouncementsPost (AnnouncementRecord record, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiAnnouncementsPost (AnnouncementRecord record, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = record;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/Announcements".replaceAll("\\{format\\}","json");
+    String path = "/Api/Announcements".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -685,12 +685,12 @@ public class AnnouncementsApi {
    * @param record 
    * @return void
   */
-  public void apiV2AnnouncementsPut (AnnouncementRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiAnnouncementsPut (AnnouncementRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = record;
   
 
   // create path and map variables
-  String path = "/Api/v2/Announcements".replaceAll("\\{format\\}","json");
+  String path = "/Api/Announcements".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -748,13 +748,13 @@ public class AnnouncementsApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
    * @param record 
   */
-  public void apiV2AnnouncementsPut (AnnouncementRecord record, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiAnnouncementsPut (AnnouncementRecord record, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = record;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/Announcements".replaceAll("\\{format\\}","json");
+    String path = "/Api/Announcements".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

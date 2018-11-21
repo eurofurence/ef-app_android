@@ -5,12 +5,11 @@ import java.util.*;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
 public class PlayerParticipationInfo  {
-
+  
   @SerializedName("Name")
   private String name = null;
   @SerializedName("IsBanned")
@@ -34,7 +33,6 @@ public class PlayerParticipationInfo  {
 
   /**
    **/
-  @Nullable
   @ApiModelProperty(value = "")
   public Boolean getIsBanned() {
     return isBanned;
@@ -45,7 +43,6 @@ public class PlayerParticipationInfo  {
 
   /**
    **/
-  @Nullable
   @ApiModelProperty(value = "")
   public Integer getCollectionCount() {
     return collectionCount;
@@ -66,7 +63,6 @@ public class PlayerParticipationInfo  {
 
   /**
    **/
-  @Nullable
   @ApiModelProperty(value = "")
   public List<BadgeInfo> getRecentlyCollected() {
     return recentlyCollected;
@@ -92,7 +88,7 @@ public class PlayerParticipationInfo  {
         (recentlyCollected == null ? playerParticipationInfo.recentlyCollected == null : recentlyCollected.equals(playerParticipationInfo.recentlyCollected));
   }
 
-  @Override
+  @Override 
   public int hashCode() {
     int result = 17;
     result = 31 * result + (name == null ? 0: name.hashCode());
@@ -107,7 +103,7 @@ public class PlayerParticipationInfo  {
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class PlayerParticipationInfo {\n");
-
+    
     sb.append("  name: ").append(name).append("\n");
     sb.append("  isBanned: ").append(isBanned).append("\n");
     sb.append("  collectionCount: ").append(collectionCount).append("\n");

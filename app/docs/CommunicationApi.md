@@ -4,15 +4,16 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2CommunicationPrivateMessagesByMessageIdReadPost**](CommunicationApi.md#apiV2CommunicationPrivateMessagesByMessageIdReadPost) | **POST** /Api/v2/Communication/PrivateMessages/{MessageId}/Read | Marks a given private message as read (reading receipt).
-[**apiV2CommunicationPrivateMessagesByMessageIdStatusGet**](CommunicationApi.md#apiV2CommunicationPrivateMessagesByMessageIdStatusGet) | **GET** /Api/v2/Communication/PrivateMessages/{MessageId}/Status | 
-[**apiV2CommunicationPrivateMessagesGet**](CommunicationApi.md#apiV2CommunicationPrivateMessagesGet) | **GET** /Api/v2/Communication/PrivateMessages | Retrieves all private messages of an authenticated attendee.
-[**apiV2CommunicationPrivateMessagesPost**](CommunicationApi.md#apiV2CommunicationPrivateMessagesPost) | **POST** /Api/v2/Communication/PrivateMessages | Sends a private message to a specific recipient/attendee.
+[**apiCommunicationPrivateMessagesByMessageIdReadPost**](CommunicationApi.md#apiCommunicationPrivateMessagesByMessageIdReadPost) | **POST** /Api/Communication/PrivateMessages/{MessageId}/Read | Marks a given private message as read (reading receipt).
+[**apiCommunicationPrivateMessagesByMessageIdStatusGet**](CommunicationApi.md#apiCommunicationPrivateMessagesByMessageIdStatusGet) | **GET** /Api/Communication/PrivateMessages/{MessageId}/Status | 
+[**apiCommunicationPrivateMessagesGet**](CommunicationApi.md#apiCommunicationPrivateMessagesGet) | **GET** /Api/Communication/PrivateMessages | Retrieves all private messages of an authenticated attendee.
+[**apiCommunicationPrivateMessagesPost**](CommunicationApi.md#apiCommunicationPrivateMessagesPost) | **POST** /Api/Communication/PrivateMessages | Sends a private message to a specific recipient/attendee.
+[**apiCommunicationPrivateMessagesSentByMeGet**](CommunicationApi.md#apiCommunicationPrivateMessagesSentByMeGet) | **GET** /Api/Communication/PrivateMessages/:sent-by-me | 
 
 
-<a name="apiV2CommunicationPrivateMessagesByMessageIdReadPost"></a>
-# **apiV2CommunicationPrivateMessagesByMessageIdReadPost**
-> Date apiV2CommunicationPrivateMessagesByMessageIdReadPost(messageId, isRead)
+<a name="apiCommunicationPrivateMessagesByMessageIdReadPost"></a>
+# **apiCommunicationPrivateMessagesByMessageIdReadPost**
+> Date apiCommunicationPrivateMessagesByMessageIdReadPost(messageId, isRead)
 
 Marks a given private message as read (reading receipt).
 
@@ -25,12 +26,12 @@ Marks a given private message as read (reading receipt).
 
 CommunicationApi apiInstance = new CommunicationApi();
 UUID messageId = new UUID(); // UUID | `Id` of the message to mark as read
-Boolean isRead = true; // Boolean | 
+Boolean isRead = true; // Boolean | boolean, expected to be 'true' always
 try {
-    Date result = apiInstance.apiV2CommunicationPrivateMessagesByMessageIdReadPost(messageId, isRead);
+    Date result = apiInstance.apiCommunicationPrivateMessagesByMessageIdReadPost(messageId, isRead);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling CommunicationApi#apiV2CommunicationPrivateMessagesByMessageIdReadPost");
+    System.err.println("Exception when calling CommunicationApi#apiCommunicationPrivateMessagesByMessageIdReadPost");
     e.printStackTrace();
 }
 ```
@@ -40,7 +41,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **messageId** | [**UUID**](.md)| &#x60;Id&#x60; of the message to mark as read |
- **isRead** | **Boolean**|  | [optional]
+ **isRead** | **Boolean**| boolean, expected to be &#39;true&#39; always | [optional]
 
 ### Return type
 
@@ -55,9 +56,9 @@ Name | Type | Description  | Notes
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2CommunicationPrivateMessagesByMessageIdStatusGet"></a>
-# **apiV2CommunicationPrivateMessagesByMessageIdStatusGet**
-> PrivateMessageStatus apiV2CommunicationPrivateMessagesByMessageIdStatusGet(messageId)
+<a name="apiCommunicationPrivateMessagesByMessageIdStatusGet"></a>
+# **apiCommunicationPrivateMessagesByMessageIdStatusGet**
+> PrivateMessageStatus apiCommunicationPrivateMessagesByMessageIdStatusGet(messageId)
 
 
 
@@ -71,10 +72,10 @@ Name | Type | Description  | Notes
 CommunicationApi apiInstance = new CommunicationApi();
 UUID messageId = new UUID(); // UUID | 
 try {
-    PrivateMessageStatus result = apiInstance.apiV2CommunicationPrivateMessagesByMessageIdStatusGet(messageId);
+    PrivateMessageStatus result = apiInstance.apiCommunicationPrivateMessagesByMessageIdStatusGet(messageId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling CommunicationApi#apiV2CommunicationPrivateMessagesByMessageIdStatusGet");
+    System.err.println("Exception when calling CommunicationApi#apiCommunicationPrivateMessagesByMessageIdStatusGet");
     e.printStackTrace();
 }
 ```
@@ -98,9 +99,9 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2CommunicationPrivateMessagesGet"></a>
-# **apiV2CommunicationPrivateMessagesGet**
-> List&lt;PrivateMessageRecord&gt; apiV2CommunicationPrivateMessagesGet()
+<a name="apiCommunicationPrivateMessagesGet"></a>
+# **apiCommunicationPrivateMessagesGet**
+> List&lt;PrivateMessageRecord&gt; apiCommunicationPrivateMessagesGet()
 
 Retrieves all private messages of an authenticated attendee.
 
@@ -113,10 +114,10 @@ Retrieves all private messages of an authenticated attendee.
 
 CommunicationApi apiInstance = new CommunicationApi();
 try {
-    List<PrivateMessageRecord> result = apiInstance.apiV2CommunicationPrivateMessagesGet();
+    List<PrivateMessageRecord> result = apiInstance.apiCommunicationPrivateMessagesGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling CommunicationApi#apiV2CommunicationPrivateMessagesGet");
+    System.err.println("Exception when calling CommunicationApi#apiCommunicationPrivateMessagesGet");
     e.printStackTrace();
 }
 ```
@@ -137,9 +138,9 @@ This endpoint does not need any parameter.
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2CommunicationPrivateMessagesPost"></a>
-# **apiV2CommunicationPrivateMessagesPost**
-> UUID apiV2CommunicationPrivateMessagesPost(request)
+<a name="apiCommunicationPrivateMessagesPost"></a>
+# **apiCommunicationPrivateMessagesPost**
+> UUID apiCommunicationPrivateMessagesPost(request)
 
 Sends a private message to a specific recipient/attendee.
 
@@ -153,10 +154,10 @@ Sends a private message to a specific recipient/attendee.
 CommunicationApi apiInstance = new CommunicationApi();
 SendPrivateMessageRequest request = new SendPrivateMessageRequest(); // SendPrivateMessageRequest | 
 try {
-    UUID result = apiInstance.apiV2CommunicationPrivateMessagesPost(request);
+    UUID result = apiInstance.apiCommunicationPrivateMessagesPost(request);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling CommunicationApi#apiV2CommunicationPrivateMessagesPost");
+    System.err.println("Exception when calling CommunicationApi#apiCommunicationPrivateMessagesPost");
     e.printStackTrace();
 }
 ```
@@ -178,5 +179,44 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+<a name="apiCommunicationPrivateMessagesSentByMeGet"></a>
+# **apiCommunicationPrivateMessagesSentByMeGet**
+> List&lt;PrivateMessageRecord&gt; apiCommunicationPrivateMessagesSentByMeGet()
+
+
+
+  * Requires authorization   
+
+### Example
+```java
+// Import classes:
+//import io.swagger.client.api.CommunicationApi;
+
+CommunicationApi apiInstance = new CommunicationApi();
+try {
+    List<PrivateMessageRecord> result = apiInstance.apiCommunicationPrivateMessagesSentByMeGet();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling CommunicationApi#apiCommunicationPrivateMessagesSentByMeGet");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;PrivateMessageRecord&gt;**](PrivateMessageRecord.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 

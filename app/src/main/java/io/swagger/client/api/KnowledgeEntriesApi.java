@@ -50,18 +50,18 @@ public class KnowledgeEntriesApi {
    * @param id 
    * @return void
   */
-  public void apiV2KnowledgeEntriesByIdDelete (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiKnowledgeEntriesByIdDelete (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdDelete",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdDelete"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdDelete",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdDelete"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -119,19 +119,19 @@ public class KnowledgeEntriesApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param id 
   */
-  public void apiV2KnowledgeEntriesByIdDelete (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiKnowledgeEntriesByIdDelete (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdDelete",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdDelete"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdDelete",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdDelete"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -183,18 +183,18 @@ public class KnowledgeEntriesApi {
    * @param id id of the requested entity
    * @return KnowledgeEntryRecord
   */
-  public KnowledgeEntryRecord apiV2KnowledgeEntriesByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public KnowledgeEntryRecord apiKnowledgeEntriesByIdGet (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdGet",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdGet"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdGet",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdGet"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -252,19 +252,19 @@ public class KnowledgeEntriesApi {
    * 
    * @param id id of the requested entity
   */
-  public void apiV2KnowledgeEntriesByIdGet (UUID id, final Response.Listener<KnowledgeEntryRecord> responseListener, final Response.ErrorListener errorListener) {
+  public void apiKnowledgeEntriesByIdGet (UUID id, final Response.Listener<KnowledgeEntryRecord> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdGet",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdGet"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdGet",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdGet"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -321,18 +321,18 @@ public class KnowledgeEntriesApi {
    * @param record 
    * @return void
   */
-  public void apiV2KnowledgeEntriesByIdPut (UUID id, KnowledgeEntryRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiKnowledgeEntriesByIdPut (UUID id, KnowledgeEntryRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = record;
   
       // verify the required parameter 'id' is set
       if (id == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdPut",
-      new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdPut"));
+      VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdPut",
+      new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdPut"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+  String path = "/Api/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -390,19 +390,19 @@ public class KnowledgeEntriesApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param id    * @param record 
   */
-  public void apiV2KnowledgeEntriesByIdPut (UUID id, KnowledgeEntryRecord record, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiKnowledgeEntriesByIdPut (UUID id, KnowledgeEntryRecord record, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = record;
 
   
     // verify the required parameter 'id' is set
     if (id == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdPut",
-         new ApiException(400, "Missing the required parameter 'id' when calling apiV2KnowledgeEntriesByIdPut"));
+       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdPut",
+         new ApiException(400, "Missing the required parameter 'id' when calling apiKnowledgeEntriesByIdPut"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/Api/KnowledgeEntries/{Id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "Id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -453,12 +453,12 @@ public class KnowledgeEntriesApi {
   * 
    * @return List<KnowledgeEntryRecord>
   */
-  public List<KnowledgeEntryRecord> apiV2KnowledgeEntriesGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<KnowledgeEntryRecord> apiKnowledgeEntriesGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/KnowledgeEntries".replaceAll("\\{format\\}","json");
+  String path = "/Api/KnowledgeEntries".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -516,13 +516,13 @@ public class KnowledgeEntriesApi {
    * 
 
   */
-  public void apiV2KnowledgeEntriesGet (final Response.Listener<List<KnowledgeEntryRecord>> responseListener, final Response.ErrorListener errorListener) {
+  public void apiKnowledgeEntriesGet (final Response.Listener<List<KnowledgeEntryRecord>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/KnowledgeEntries".replaceAll("\\{format\\}","json");
+    String path = "/Api/KnowledgeEntries".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -578,12 +578,12 @@ public class KnowledgeEntriesApi {
    * @param record 
    * @return UUID
   */
-  public UUID apiV2KnowledgeEntriesPost (KnowledgeEntryRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public UUID apiKnowledgeEntriesPost (KnowledgeEntryRecord record) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = record;
   
 
   // create path and map variables
-  String path = "/Api/v2/KnowledgeEntries".replaceAll("\\{format\\}","json");
+  String path = "/Api/KnowledgeEntries".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -641,13 +641,13 @@ public class KnowledgeEntriesApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;KnowledgeBase-Maintainer&#x60;**, **&#x60;System&#x60;**
    * @param record 
   */
-  public void apiV2KnowledgeEntriesPost (KnowledgeEntryRecord record, final Response.Listener<UUID> responseListener, final Response.ErrorListener errorListener) {
+  public void apiKnowledgeEntriesPost (KnowledgeEntryRecord record, final Response.Listener<UUID> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = record;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/KnowledgeEntries".replaceAll("\\{format\\}","json");
+    String path = "/Api/KnowledgeEntries".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

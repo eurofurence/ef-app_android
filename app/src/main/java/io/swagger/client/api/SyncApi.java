@@ -50,12 +50,12 @@ public class SyncApi {
    * @param since 
    * @return AggregatedDeltaResponse
   */
-  public AggregatedDeltaResponse apiV2SyncGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public AggregatedDeltaResponse apiSyncGet (Date since) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/Sync".replaceAll("\\{format\\}","json");
+  String path = "/Api/Sync".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -114,13 +114,13 @@ public class SyncApi {
    * 
    * @param since 
   */
-  public void apiV2SyncGet (Date since, final Response.Listener<AggregatedDeltaResponse> responseListener, final Response.ErrorListener errorListener) {
+  public void apiSyncGet (Date since, final Response.Listener<AggregatedDeltaResponse> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/Sync".replaceAll("\\{format\\}","json");
+    String path = "/Api/Sync".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

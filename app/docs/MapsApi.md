@@ -4,19 +4,19 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2MapsByIdEntriesByEntryIdDelete**](MapsApi.md#apiV2MapsByIdEntriesByEntryIdDelete) | **DELETE** /Api/v2/Maps/{Id}/Entries/{EntryId} | Delete a specific map entry for a specific map
-[**apiV2MapsByIdEntriesByEntryIdGet**](MapsApi.md#apiV2MapsByIdEntriesByEntryIdGet) | **GET** /Api/v2/Maps/{Id}/Entries/{EntryId} | Get all specific map entry for a specific map
-[**apiV2MapsByIdEntriesByEntryIdPut**](MapsApi.md#apiV2MapsByIdEntriesByEntryIdPut) | **PUT** /Api/v2/Maps/{Id}/Entries/{EntryId} | Create or Update an existing map entry in a specific map
-[**apiV2MapsByIdEntriesDelete**](MapsApi.md#apiV2MapsByIdEntriesDelete) | **DELETE** /Api/v2/Maps/{Id}/Entries | Delete all map entries for a specific map
-[**apiV2MapsByIdEntriesGet**](MapsApi.md#apiV2MapsByIdEntriesGet) | **GET** /Api/v2/Maps/{Id}/Entries | Get all map entries for a specific map
-[**apiV2MapsByIdEntriesPost**](MapsApi.md#apiV2MapsByIdEntriesPost) | **POST** /Api/v2/Maps/{Id}/Entries | Create a new map entry in a specific map
-[**apiV2MapsByIdGet**](MapsApi.md#apiV2MapsByIdGet) | **GET** /Api/v2/Maps/{Id} | Get a specific map
-[**apiV2MapsGet**](MapsApi.md#apiV2MapsGet) | **GET** /Api/v2/Maps | Get all maps
+[**apiMapsByIdEntriesByEntryIdDelete**](MapsApi.md#apiMapsByIdEntriesByEntryIdDelete) | **DELETE** /Api/Maps/{Id}/Entries/{EntryId} | Delete a specific map entry for a specific map
+[**apiMapsByIdEntriesByEntryIdGet**](MapsApi.md#apiMapsByIdEntriesByEntryIdGet) | **GET** /Api/Maps/{Id}/Entries/{EntryId} | Get all specific map entry for a specific map
+[**apiMapsByIdEntriesByEntryIdPut**](MapsApi.md#apiMapsByIdEntriesByEntryIdPut) | **PUT** /Api/Maps/{Id}/Entries/{EntryId} | Create or Update an existing map entry in a specific map
+[**apiMapsByIdEntriesDelete**](MapsApi.md#apiMapsByIdEntriesDelete) | **DELETE** /Api/Maps/{Id}/Entries | Delete all map entries for a specific map
+[**apiMapsByIdEntriesGet**](MapsApi.md#apiMapsByIdEntriesGet) | **GET** /Api/Maps/{Id}/Entries | Get all map entries for a specific map
+[**apiMapsByIdEntriesPost**](MapsApi.md#apiMapsByIdEntriesPost) | **POST** /Api/Maps/{Id}/Entries | Create a new map entry in a specific map
+[**apiMapsByIdGet**](MapsApi.md#apiMapsByIdGet) | **GET** /Api/Maps/{Id} | Get a specific map
+[**apiMapsGet**](MapsApi.md#apiMapsGet) | **GET** /Api/Maps | Get all maps
 
 
-<a name="apiV2MapsByIdEntriesByEntryIdDelete"></a>
-# **apiV2MapsByIdEntriesByEntryIdDelete**
-> apiV2MapsByIdEntriesByEntryIdDelete(id, entryId)
+<a name="apiMapsByIdEntriesByEntryIdDelete"></a>
+# **apiMapsByIdEntriesByEntryIdDelete**
+> apiMapsByIdEntriesByEntryIdDelete(id, entryId)
 
 Delete a specific map entry for a specific map
 
@@ -31,9 +31,9 @@ MapsApi apiInstance = new MapsApi();
 UUID id = new UUID(); // UUID | 
 UUID entryId = new UUID(); // UUID | 
 try {
-    apiInstance.apiV2MapsByIdEntriesByEntryIdDelete(id, entryId);
+    apiInstance.apiMapsByIdEntriesByEntryIdDelete(id, entryId);
 } catch (ApiException e) {
-    System.err.println("Exception when calling MapsApi#apiV2MapsByIdEntriesByEntryIdDelete");
+    System.err.println("Exception when calling MapsApi#apiMapsByIdEntriesByEntryIdDelete");
     e.printStackTrace();
 }
 ```
@@ -58,9 +58,9 @@ null (empty response body)
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-<a name="apiV2MapsByIdEntriesByEntryIdGet"></a>
-# **apiV2MapsByIdEntriesByEntryIdGet**
-> MapEntryRecord apiV2MapsByIdEntriesByEntryIdGet(id, entryId)
+<a name="apiMapsByIdEntriesByEntryIdGet"></a>
+# **apiMapsByIdEntriesByEntryIdGet**
+> MapEntryRecord apiMapsByIdEntriesByEntryIdGet(id, entryId)
 
 Get all specific map entry for a specific map
 
@@ -73,10 +73,10 @@ MapsApi apiInstance = new MapsApi();
 UUID id = new UUID(); // UUID | 
 UUID entryId = new UUID(); // UUID | 
 try {
-    MapEntryRecord result = apiInstance.apiV2MapsByIdEntriesByEntryIdGet(id, entryId);
+    MapEntryRecord result = apiInstance.apiMapsByIdEntriesByEntryIdGet(id, entryId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling MapsApi#apiV2MapsByIdEntriesByEntryIdGet");
+    System.err.println("Exception when calling MapsApi#apiMapsByIdEntriesByEntryIdGet");
     e.printStackTrace();
 }
 ```
@@ -101,9 +101,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2MapsByIdEntriesByEntryIdPut"></a>
-# **apiV2MapsByIdEntriesByEntryIdPut**
-> UUID apiV2MapsByIdEntriesByEntryIdPut(id, entryId, record)
+<a name="apiMapsByIdEntriesByEntryIdPut"></a>
+# **apiMapsByIdEntriesByEntryIdPut**
+> UUID apiMapsByIdEntriesByEntryIdPut(id, entryId, record)
 
 Create or Update an existing map entry in a specific map
 
@@ -119,10 +119,10 @@ UUID id = new UUID(); // UUID | \"Id\" of the map.
 UUID entryId = new UUID(); // UUID | \"Id\" of the entry that gets inserted.
 MapEntryRecord record = new MapEntryRecord(); // MapEntryRecord | \"Id\" property must match the {EntryId} part of the uri
 try {
-    UUID result = apiInstance.apiV2MapsByIdEntriesByEntryIdPut(id, entryId, record);
+    UUID result = apiInstance.apiMapsByIdEntriesByEntryIdPut(id, entryId, record);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling MapsApi#apiV2MapsByIdEntriesByEntryIdPut");
+    System.err.println("Exception when calling MapsApi#apiMapsByIdEntriesByEntryIdPut");
     e.printStackTrace();
 }
 ```
@@ -148,9 +148,9 @@ Name | Type | Description  | Notes
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2MapsByIdEntriesDelete"></a>
-# **apiV2MapsByIdEntriesDelete**
-> apiV2MapsByIdEntriesDelete(id)
+<a name="apiMapsByIdEntriesDelete"></a>
+# **apiMapsByIdEntriesDelete**
+> apiMapsByIdEntriesDelete(id)
 
 Delete all map entries for a specific map
 
@@ -164,9 +164,9 @@ Delete all map entries for a specific map
 MapsApi apiInstance = new MapsApi();
 UUID id = new UUID(); // UUID | 
 try {
-    apiInstance.apiV2MapsByIdEntriesDelete(id);
+    apiInstance.apiMapsByIdEntriesDelete(id);
 } catch (ApiException e) {
-    System.err.println("Exception when calling MapsApi#apiV2MapsByIdEntriesDelete");
+    System.err.println("Exception when calling MapsApi#apiMapsByIdEntriesDelete");
     e.printStackTrace();
 }
 ```
@@ -190,9 +190,9 @@ null (empty response body)
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-<a name="apiV2MapsByIdEntriesGet"></a>
-# **apiV2MapsByIdEntriesGet**
-> List&lt;MapEntryRecord&gt; apiV2MapsByIdEntriesGet(id)
+<a name="apiMapsByIdEntriesGet"></a>
+# **apiMapsByIdEntriesGet**
+> List&lt;MapEntryRecord&gt; apiMapsByIdEntriesGet(id)
 
 Get all map entries for a specific map
 
@@ -204,10 +204,10 @@ Get all map entries for a specific map
 MapsApi apiInstance = new MapsApi();
 UUID id = new UUID(); // UUID | 
 try {
-    List<MapEntryRecord> result = apiInstance.apiV2MapsByIdEntriesGet(id);
+    List<MapEntryRecord> result = apiInstance.apiMapsByIdEntriesGet(id);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling MapsApi#apiV2MapsByIdEntriesGet");
+    System.err.println("Exception when calling MapsApi#apiMapsByIdEntriesGet");
     e.printStackTrace();
 }
 ```
@@ -231,9 +231,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2MapsByIdEntriesPost"></a>
-# **apiV2MapsByIdEntriesPost**
-> UUID apiV2MapsByIdEntriesPost(id, record)
+<a name="apiMapsByIdEntriesPost"></a>
+# **apiMapsByIdEntriesPost**
+> UUID apiMapsByIdEntriesPost(id, record)
 
 Create a new map entry in a specific map
 
@@ -248,10 +248,10 @@ MapsApi apiInstance = new MapsApi();
 UUID id = new UUID(); // UUID | \"Id\" of the map
 MapEntryRecord record = new MapEntryRecord(); // MapEntryRecord | Do not specify the \"Id\" property. It will be auto-assigned and returned in the response.
 try {
-    UUID result = apiInstance.apiV2MapsByIdEntriesPost(id, record);
+    UUID result = apiInstance.apiMapsByIdEntriesPost(id, record);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling MapsApi#apiV2MapsByIdEntriesPost");
+    System.err.println("Exception when calling MapsApi#apiMapsByIdEntriesPost");
     e.printStackTrace();
 }
 ```
@@ -276,9 +276,9 @@ Name | Type | Description  | Notes
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2MapsByIdGet"></a>
-# **apiV2MapsByIdGet**
-> MapRecord apiV2MapsByIdGet(id)
+<a name="apiMapsByIdGet"></a>
+# **apiMapsByIdGet**
+> MapRecord apiMapsByIdGet(id)
 
 Get a specific map
 
@@ -290,10 +290,10 @@ Get a specific map
 MapsApi apiInstance = new MapsApi();
 UUID id = new UUID(); // UUID | 
 try {
-    MapRecord result = apiInstance.apiV2MapsByIdGet(id);
+    MapRecord result = apiInstance.apiMapsByIdGet(id);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling MapsApi#apiV2MapsByIdGet");
+    System.err.println("Exception when calling MapsApi#apiMapsByIdGet");
     e.printStackTrace();
 }
 ```
@@ -317,9 +317,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2MapsGet"></a>
-# **apiV2MapsGet**
-> List&lt;MapRecord&gt; apiV2MapsGet()
+<a name="apiMapsGet"></a>
+# **apiMapsGet**
+> List&lt;MapRecord&gt; apiMapsGet()
 
 Get all maps
 
@@ -330,10 +330,10 @@ Get all maps
 
 MapsApi apiInstance = new MapsApi();
 try {
-    List<MapRecord> result = apiInstance.apiV2MapsGet();
+    List<MapRecord> result = apiInstance.apiMapsGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling MapsApi#apiV2MapsGet");
+    System.err.println("Exception when calling MapsApi#apiMapsGet");
     e.printStackTrace();
 }
 ```

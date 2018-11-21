@@ -48,18 +48,18 @@ public class ArtShowApi {
    * @param payload Art show log contents
    * @return void
   */
-  public void apiV2ArtShowItemActivitesLogPost (byte[] payload) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiArtShowItemActivitesLogPost (byte[] payload) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = payload;
   
       // verify the required parameter 'payload' is set
       if (payload == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'payload' when calling apiV2ArtShowItemActivitesLogPost",
-      new ApiException(400, "Missing the required parameter 'payload' when calling apiV2ArtShowItemActivitesLogPost"));
+      VolleyError error = new VolleyError("Missing the required parameter 'payload' when calling apiArtShowItemActivitesLogPost",
+      new ApiException(400, "Missing the required parameter 'payload' when calling apiArtShowItemActivitesLogPost"));
       }
   
 
   // create path and map variables
-  String path = "/Api/v2/ArtShow/ItemActivites/Log".replaceAll("\\{format\\}","json");
+  String path = "/Api/ArtShow/ItemActivites/Log".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -117,19 +117,19 @@ public class ArtShowApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
    * @param payload Art show log contents
   */
-  public void apiV2ArtShowItemActivitesLogPost (byte[] payload, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiArtShowItemActivitesLogPost (byte[] payload, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = payload;
 
   
     // verify the required parameter 'payload' is set
     if (payload == null) {
-       VolleyError error = new VolleyError("Missing the required parameter 'payload' when calling apiV2ArtShowItemActivitesLogPost",
-         new ApiException(400, "Missing the required parameter 'payload' when calling apiV2ArtShowItemActivitesLogPost"));
+       VolleyError error = new VolleyError("Missing the required parameter 'payload' when calling apiArtShowItemActivitesLogPost",
+         new ApiException(400, "Missing the required parameter 'payload' when calling apiArtShowItemActivitesLogPost"));
     }
     
 
     // create path and map variables
-    String path = "/Api/v2/ArtShow/ItemActivites/Log".replaceAll("\\{format\\}","json");
+    String path = "/Api/ArtShow/ItemActivites/Log".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -180,12 +180,12 @@ public class ArtShowApi {
   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
    * @return void
   */
-  public void apiV2ArtShowItemActivitesNotificationBundlesSendPost () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiArtShowItemActivitesNotificationBundlesSendPost () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/ArtShow/ItemActivites/NotificationBundles/Send".replaceAll("\\{format\\}","json");
+  String path = "/Api/ArtShow/ItemActivites/NotificationBundles/Send".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -243,13 +243,13 @@ public class ArtShowApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
 
   */
-  public void apiV2ArtShowItemActivitesNotificationBundlesSendPost (final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiArtShowItemActivitesNotificationBundlesSendPost (final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/ArtShow/ItemActivites/NotificationBundles/Send".replaceAll("\\{format\\}","json");
+    String path = "/Api/ArtShow/ItemActivites/NotificationBundles/Send".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -300,12 +300,12 @@ public class ArtShowApi {
   *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
    * @return void
   */
-  public void apiV2ArtShowItemActivitesNotificationBundlesSimulationGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public void apiArtShowItemActivitesNotificationBundlesSimulationGet () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
      Object postBody = null;
   
 
   // create path and map variables
-  String path = "/Api/v2/ArtShow/ItemActivites/NotificationBundles/Simulation".replaceAll("\\{format\\}","json");
+  String path = "/Api/ArtShow/ItemActivites/NotificationBundles/Simulation".replaceAll("\\{format\\}","json");
 
   // query params
   List<Pair> queryParams = new ArrayList<Pair>();
@@ -363,13 +363,13 @@ public class ArtShowApi {
    *   * Requires authorization     * Requires any of the following roles: **&#x60;Developer&#x60;**, **&#x60;System&#x60;**
 
   */
-  public void apiV2ArtShowItemActivitesNotificationBundlesSimulationGet (final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
+  public void apiArtShowItemActivitesNotificationBundlesSimulationGet (final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
   
 
     // create path and map variables
-    String path = "/Api/v2/ArtShow/ItemActivites/NotificationBundles/Simulation".replaceAll("\\{format\\}","json");
+    String path = "/Api/ArtShow/ItemActivites/NotificationBundles/Simulation".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

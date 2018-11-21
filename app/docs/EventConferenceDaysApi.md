@@ -4,13 +4,13 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2EventConferenceDaysByIdGet**](EventConferenceDaysApi.md#apiV2EventConferenceDaysByIdGet) | **GET** /Api/v2/EventConferenceDays/{Id} | Retrieve a single event conference day in the event schedule.
-[**apiV2EventConferenceDaysGet**](EventConferenceDaysApi.md#apiV2EventConferenceDaysGet) | **GET** /Api/v2/EventConferenceDays | Retrieves a list of all event conference days in the event schedule.
+[**apiEventConferenceDaysByIdGet**](EventConferenceDaysApi.md#apiEventConferenceDaysByIdGet) | **GET** /Api/EventConferenceDays/{Id} | Retrieve a single event conference day in the event schedule.
+[**apiEventConferenceDaysGet**](EventConferenceDaysApi.md#apiEventConferenceDaysGet) | **GET** /Api/EventConferenceDays | Retrieves a list of all event conference days in the event schedule.
 
 
-<a name="apiV2EventConferenceDaysByIdGet"></a>
-# **apiV2EventConferenceDaysByIdGet**
-> EventConferenceDayRecord apiV2EventConferenceDaysByIdGet(id)
+<a name="apiEventConferenceDaysByIdGet"></a>
+# **apiEventConferenceDaysByIdGet**
+> EventConferenceDayRecord apiEventConferenceDaysByIdGet(id)
 
 Retrieve a single event conference day in the event schedule.
 
@@ -22,10 +22,10 @@ Retrieve a single event conference day in the event schedule.
 EventConferenceDaysApi apiInstance = new EventConferenceDaysApi();
 UUID id = new UUID(); // UUID | id of the requested entity
 try {
-    EventConferenceDayRecord result = apiInstance.apiV2EventConferenceDaysByIdGet(id);
+    EventConferenceDayRecord result = apiInstance.apiEventConferenceDaysByIdGet(id);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventConferenceDaysApi#apiV2EventConferenceDaysByIdGet");
+    System.err.println("Exception when calling EventConferenceDaysApi#apiEventConferenceDaysByIdGet");
     e.printStackTrace();
 }
 ```
@@ -49,9 +49,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
-<a name="apiV2EventConferenceDaysGet"></a>
-# **apiV2EventConferenceDaysGet**
-> List&lt;EventConferenceDayRecord&gt; apiV2EventConferenceDaysGet()
+<a name="apiEventConferenceDaysGet"></a>
+# **apiEventConferenceDaysGet**
+> List&lt;EventConferenceDayRecord&gt; apiEventConferenceDaysGet()
 
 Retrieves a list of all event conference days in the event schedule.
 
@@ -62,10 +62,10 @@ Retrieves a list of all event conference days in the event schedule.
 
 EventConferenceDaysApi apiInstance = new EventConferenceDaysApi();
 try {
-    List<EventConferenceDayRecord> result = apiInstance.apiV2EventConferenceDaysGet();
+    List<EventConferenceDayRecord> result = apiInstance.apiEventConferenceDaysGet();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventConferenceDaysApi#apiV2EventConferenceDaysGet");
+    System.err.println("Exception when calling EventConferenceDaysApi#apiEventConferenceDaysGet");
     e.printStackTrace();
 }
 ```

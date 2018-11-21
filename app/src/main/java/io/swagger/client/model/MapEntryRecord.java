@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-import org.jetbrains.annotations.Nullable;
 
 
 @ApiModel(description = "")
@@ -25,7 +24,7 @@ public class MapEntryRecord  {
 
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public UUID getId() {
     return id;
   }
@@ -37,7 +36,6 @@ public class MapEntryRecord  {
    * \"X\" coordinate of the *center* of a *circular area*, expressed in pixels.
    **/
   @ApiModelProperty(value = "\"X\" coordinate of the *center* of a *circular area*, expressed in pixels.")
-  @Nullable
   public Integer getX() {
     return X;
   }
@@ -49,7 +47,6 @@ public class MapEntryRecord  {
    * \"Y\" coordinate of the *center* of a *circular area*, expressed in pixels.
    **/
   @ApiModelProperty(value = "\"Y\" coordinate of the *center* of a *circular area*, expressed in pixels.")
-  @Nullable
   public Integer getY() {
     return Y;
   }
@@ -61,7 +58,6 @@ public class MapEntryRecord  {
    * \"Radius\" of a *circular area* (the center of which described with X and Y), expressed in pixels.
    **/
   @ApiModelProperty(value = "\"Radius\" of a *circular area* (the center of which described with X and Y), expressed in pixels.")
-  @Nullable
   public Integer getTapRadius() {
     return tapRadius;
   }
@@ -72,7 +68,6 @@ public class MapEntryRecord  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @Nullable
   public List<LinkFragment> getLinks() {
     return links;
   }

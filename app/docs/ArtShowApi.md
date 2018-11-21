@@ -4,14 +4,14 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiV2ArtShowItemActivitesLogPost**](ArtShowApi.md#apiV2ArtShowItemActivitesLogPost) | **POST** /Api/v2/ArtShow/ItemActivites/Log | 
-[**apiV2ArtShowItemActivitesNotificationBundlesSendPost**](ArtShowApi.md#apiV2ArtShowItemActivitesNotificationBundlesSendPost) | **POST** /Api/v2/ArtShow/ItemActivites/NotificationBundles/Send | 
-[**apiV2ArtShowItemActivitesNotificationBundlesSimulationGet**](ArtShowApi.md#apiV2ArtShowItemActivitesNotificationBundlesSimulationGet) | **GET** /Api/v2/ArtShow/ItemActivites/NotificationBundles/Simulation | 
+[**apiArtShowItemActivitesLogPost**](ArtShowApi.md#apiArtShowItemActivitesLogPost) | **POST** /Api/ArtShow/ItemActivites/Log | 
+[**apiArtShowItemActivitesNotificationBundlesSendPost**](ArtShowApi.md#apiArtShowItemActivitesNotificationBundlesSendPost) | **POST** /Api/ArtShow/ItemActivites/NotificationBundles/Send | 
+[**apiArtShowItemActivitesNotificationBundlesSimulationGet**](ArtShowApi.md#apiArtShowItemActivitesNotificationBundlesSimulationGet) | **GET** /Api/ArtShow/ItemActivites/NotificationBundles/Simulation | 
 
 
-<a name="apiV2ArtShowItemActivitesLogPost"></a>
-# **apiV2ArtShowItemActivitesLogPost**
-> apiV2ArtShowItemActivitesLogPost(payload)
+<a name="apiArtShowItemActivitesLogPost"></a>
+# **apiArtShowItemActivitesLogPost**
+> apiArtShowItemActivitesLogPost(payload)
 
 
 
@@ -25,9 +25,9 @@ Method | HTTP request | Description
 ArtShowApi apiInstance = new ArtShowApi();
 byte[] payload = BINARY_DATA_HERE; // byte[] | Art show log contents
 try {
-    apiInstance.apiV2ArtShowItemActivitesLogPost(payload);
+    apiInstance.apiArtShowItemActivitesLogPost(payload);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ArtShowApi#apiV2ArtShowItemActivitesLogPost");
+    System.err.println("Exception when calling ArtShowApi#apiArtShowItemActivitesLogPost");
     e.printStackTrace();
 }
 ```
@@ -51,9 +51,9 @@ null (empty response body)
  - **Content-Type**: application/octet-stream
  - **Accept**: Not defined
 
-<a name="apiV2ArtShowItemActivitesNotificationBundlesSendPost"></a>
-# **apiV2ArtShowItemActivitesNotificationBundlesSendPost**
-> apiV2ArtShowItemActivitesNotificationBundlesSendPost()
+<a name="apiArtShowItemActivitesNotificationBundlesSendPost"></a>
+# **apiArtShowItemActivitesNotificationBundlesSendPost**
+> apiArtShowItemActivitesNotificationBundlesSendPost()
 
 
 
@@ -66,9 +66,9 @@ null (empty response body)
 
 ArtShowApi apiInstance = new ArtShowApi();
 try {
-    apiInstance.apiV2ArtShowItemActivitesNotificationBundlesSendPost();
+    apiInstance.apiArtShowItemActivitesNotificationBundlesSendPost();
 } catch (ApiException e) {
-    System.err.println("Exception when calling ArtShowApi#apiV2ArtShowItemActivitesNotificationBundlesSendPost");
+    System.err.println("Exception when calling ArtShowApi#apiArtShowItemActivitesNotificationBundlesSendPost");
     e.printStackTrace();
 }
 ```
@@ -89,9 +89,9 @@ null (empty response body)
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-<a name="apiV2ArtShowItemActivitesNotificationBundlesSimulationGet"></a>
-# **apiV2ArtShowItemActivitesNotificationBundlesSimulationGet**
-> apiV2ArtShowItemActivitesNotificationBundlesSimulationGet()
+<a name="apiArtShowItemActivitesNotificationBundlesSimulationGet"></a>
+# **apiArtShowItemActivitesNotificationBundlesSimulationGet**
+> apiArtShowItemActivitesNotificationBundlesSimulationGet()
 
 
 
@@ -104,9 +104,9 @@ null (empty response body)
 
 ArtShowApi apiInstance = new ArtShowApi();
 try {
-    apiInstance.apiV2ArtShowItemActivitesNotificationBundlesSimulationGet();
+    apiInstance.apiArtShowItemActivitesNotificationBundlesSimulationGet();
 } catch (ApiException e) {
-    System.err.println("Exception when calling ArtShowApi#apiV2ArtShowItemActivitesNotificationBundlesSimulationGet");
+    System.err.println("Exception when calling ArtShowApi#apiArtShowItemActivitesNotificationBundlesSimulationGet");
     e.printStackTrace();
 }
 ```
