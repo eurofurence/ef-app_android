@@ -48,17 +48,16 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
 
     var subscriptions = Disposables.empty()
 
-    private val eventId: UUID? get() = UUID.fromString(arguments.getString("id"))
+    private val eventId: UUID? get() = UUID.fromString(arguments?.getString("id"))
 
     val ui by lazy { EventUi() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.screen(activity, "Event Specific")
         subscriptions += db.subscribe {
             fillUi()
         }
@@ -71,7 +70,7 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
     }
 
     private fun fillUi() {
-        if ("id" in arguments) {
+        if ("id" in arguments!!) {
             val event: EventRecord = db.events[eventId] ?: return
 
             Analytics.event(Category.EVENT, Action.OPENED, event.title)
@@ -137,11 +136,15 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
     }
 
     private fun showDialog(event: EventRecord) {
-        eventDialog(context, event, db)
+        context?.let {
+            eventDialog(it, event, db)
+        }
     }
 
     private fun favoriteEvent(event: EventRecord) {
-        context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
+        context?.let {
+            it.sendBroadcast(IntentFor<EventFavoriteBroadcast>(it).apply { jsonObjects["event"] = event })
+        }
     }
 
     /**

@@ -52,7 +52,7 @@ class FragmentViewInfo : Fragment(), HasDb {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         fillUi()
@@ -66,8 +66,8 @@ class FragmentViewInfo : Fragment(), HasDb {
     }
 
     private fun fillUi() {
-        if ("knowledgeEntry" in arguments) {
-            val knowledgeEntry: KnowledgeEntryRecord = arguments.jsonObjects["knowledgeEntry"]
+        if ("knowledgeEntry" in arguments!!) {
+            val knowledgeEntry: KnowledgeEntryRecord = arguments!!.jsonObjects["knowledgeEntry"]
             val knowledgeGroup = db.knowledgeGroups[knowledgeEntry.knowledgeGroupId!!]!!
 
             Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)

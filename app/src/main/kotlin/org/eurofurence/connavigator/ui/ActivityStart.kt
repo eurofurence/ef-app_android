@@ -72,13 +72,13 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
 
                 longToast("Done with fetching!")
 
-                this@ActivityStart.startActivity(intentFor<ActivityRoot>())
+                this@ActivityStart.startActivity(intentFor<NavActivity>())
             } failUi {
                 AppPreferences.isFirstRun = false
 
                 longToast("Something went wrong while fetching!")
 
-                this@ActivityStart.startActivity(intentFor<ActivityRoot>())
+                this@ActivityStart.startActivity(intentFor<NavActivity>())
             }
         } else {
             // If sync fails on the first start - we should tell the user why and exit afterwards.

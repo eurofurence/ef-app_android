@@ -181,7 +181,9 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
                 applyOnRoot { navigateToEvent(event) }
             }
             holder.itemView.setOnLongClickListener {
-                eventDialog(context, event, db)
+                context?.apply{
+                    eventDialog(this, event, db)
+                }
                 true
             }
         }
@@ -190,7 +192,7 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // Initialize events list.
@@ -251,7 +253,7 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
         // Add top padding only if in main list.
         ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             val padding by lazy {
-                val metrics = context.resources.displayMetrics
+                val metrics = context!!.resources.displayMetrics
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
             }
 

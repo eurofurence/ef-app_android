@@ -55,7 +55,7 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
 
     override val db by lazyLocateDb()
 
-    private val infoGroupId: UUID? get() = UUID.fromString(arguments.getString("id"))
+    private val infoGroupId: UUID? get() = UUID.fromString(arguments!!.getString("id"))
     private val infoGroup by lazy { db.knowledgeGroups[infoGroupId] }
 
     val infoItems by lazy {
@@ -68,13 +68,13 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
 
     var subscriptions = Disposables.empty()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!arguments.contains("id")) {
+        if (!arguments!!.contains("id")) {
             longToast("No ID was passed to info fragment!")
             this.onDestroy()
         }
@@ -96,7 +96,7 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
                 }
                 recycler.apply {
                     adapter = DataAdapter()
-                    layoutManager = NonScrollingLinearLayout(context)
+                    layoutManager = NonScrollingLinearLayout(activity)
                     itemAnimator = DefaultItemAnimator()
                 }
             } ?: run {

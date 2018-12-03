@@ -31,8 +31,8 @@ class DealerDialog : DialogFragment(), AnkoLogger {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
 
-        return if ("dealerRecord" in arguments) {
-            dealerRecord = arguments.jsonObjects["dealerRecord"]
+        return if ("dealerRecord" in arguments!!) {
+            dealerRecord = arguments!!.jsonObjects["dealerRecord"]
 
             builder.setTitle("Dealer options for ${dealerRecord.displayName}")
 

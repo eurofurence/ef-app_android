@@ -55,7 +55,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fview_events_viewpager, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         configureViewpager()
 
         childFragmentManager.beginTransaction()
@@ -86,7 +86,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
 
     private fun changePagerAdapter(adapter: PagerAdapter, preferredPosition: Int? = null) {
         eventPager.adapter = adapter
-        eventPager.adapter.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
 
 
         preferredPosition?.let {
@@ -112,17 +112,17 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
         when (eventPager.visibility) {
             View.VISIBLE -> {
                 eventPager.visibility = View.GONE
-                val searchLayout = activity.findViewById(R.id.searchLayout)
+                val searchLayout = activity!!.findViewById<View>(R.id.searchLayout)
 
                 searchLayout.visibility = View.VISIBLE
                 searchLayout.requestFocus()
 
-                activity.inputMethodManager
+                activity!!.inputMethodManager
                         .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY)
             }
             else -> {
                 eventPager.visibility = View.VISIBLE
-                activity.findViewById(R.id.searchLayout).visibility = View.GONE
+                activity!!.findViewById<View>(R.id.searchLayout).visibility = View.GONE
             }
         }
     }

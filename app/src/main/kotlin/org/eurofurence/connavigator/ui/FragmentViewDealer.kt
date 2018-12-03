@@ -45,7 +45,7 @@ import org.jetbrains.anko.support.v4.px2dip
 import java.util.*
 
 class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
-    private val dealerId: UUID by lazy { UUID.fromString(arguments.getString("id")) }
+    private val dealerId: UUID by lazy { UUID.fromString(arguments?.getString("id")) }
 
     val ui by lazy { DealerUi() }
 
@@ -56,9 +56,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        // Send analytics pings
-        Analytics.screen(activity, "View Dealer Details")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         subscriptions += db.subscribe {
             fillUi()
         }
@@ -71,7 +69,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     private fun fillUi() {
-        if ("id" in arguments) {
+        if ("id" in arguments!!) {
             val dealer: DealerRecord = db.dealers[dealerId] ?: return
 
             Analytics.event(Category.DEALER, Action.OPENED, dealer.displayName

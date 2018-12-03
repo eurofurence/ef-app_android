@@ -34,7 +34,7 @@ class FragmentViewAbout : Fragment(), ContentAPI, MainScreen {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         applyOnRoot { changeTitle("About") }
 
         ui.requinardLayout.setOnClickListener { browse("https://furry.requinard.nl") }

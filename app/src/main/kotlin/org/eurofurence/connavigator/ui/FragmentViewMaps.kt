@@ -48,7 +48,7 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb, MainScreen {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         ui.mapViewPager.adapter = MapFragmentPagerAdapter(childFragmentManager)

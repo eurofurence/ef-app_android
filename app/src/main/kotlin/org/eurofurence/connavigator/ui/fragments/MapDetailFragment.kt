@@ -36,15 +36,15 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     val ui by lazy { MapDetailUi() }
-    val id get() = arguments.getString("id") ?: ""
-    val showTitle get() = arguments.getBoolean("showTitle")
+    val id get() = arguments?.getString("id") ?: ""
+    val showTitle get() = arguments!!.getBoolean("showTitle")
     var subscriptions = Disposables.empty()
     private var linkFound = false
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         subscriptions += db.subscribe {

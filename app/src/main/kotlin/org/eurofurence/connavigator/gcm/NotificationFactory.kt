@@ -70,7 +70,7 @@ class NotificationFactory(var context: Context) {
     )
 
     fun addRegularText(builder: NotificationCompat.Builder, title: String, text: String) = builder.apply {
-        this.mContentTitle = title
-        this.mContentText = text
+        this.setContentTitle(title)
+        this.setContentText(text)
     }
 }

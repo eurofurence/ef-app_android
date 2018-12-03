@@ -51,6 +51,8 @@
 
         <activity android:name=".ui.ActivitySettings"/>
 
+        <activity android:name=".ui.NavActivity" />
+
         <activity android:name=".ui.LoginActivity" />
 
         <!-- Service providing a detached retrieval of data from the internet. -->

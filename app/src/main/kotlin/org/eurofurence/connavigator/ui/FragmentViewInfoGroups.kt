@@ -17,6 +17,10 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.withArguments
 
+// TODO req: Replace null assertions in fragments
+// TODO req: port to nav graph
+// TODO req: fix build
+// TODO req: add state saving
 
 class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb, MainScreen {
     override val drawerItemId: Int
@@ -27,10 +31,10 @@ class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb, MainScreen {
 
     var subscriptions = Disposables.empty()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         applyOnRoot { changeTitle("Convention Information") }

@@ -158,7 +158,7 @@ fun Any.locateDb(): Db =
 
         // If fragment, check if context is DB, otherwise make new root DB
             is Fragment -> context.let {
-                if (it is Db) it else RootDb(context)
+                if (it is Db) it else RootDb(context!!)
             }
 
         // Otherwise fail

@@ -67,10 +67,10 @@ class UserStatusFragment : Fragment(), AnkoLogger {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         subscriptions += AuthPreferences
                 .observer
                 .observeOn(AndroidSchedulers.mainThread())

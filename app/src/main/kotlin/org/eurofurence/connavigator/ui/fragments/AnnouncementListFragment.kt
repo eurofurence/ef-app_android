@@ -68,10 +68,10 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
     val ui = AnnouncementsUi()
     private val announcementAdapter by lazy { AnnoucementRecyclerDataAdapter() }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         info { "Creating announcements list" }
 
         ui.announcements.adapter = announcementAdapter
@@ -116,7 +116,6 @@ class AnnouncementsUi : AnkoComponent<Fragment> {
             }
 
             announcements = recycler {
-                layoutManager = NonScrollingLinearLayout(context)
                 itemAnimator = DefaultItemAnimator()
             }.lparams(matchParent, wrapContent)
         }

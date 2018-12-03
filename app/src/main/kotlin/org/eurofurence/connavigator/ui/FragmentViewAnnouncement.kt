@@ -25,7 +25,7 @@ import java.util.*
 
 class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
     val ui = AnnouncementItemUi()
-    private val announcementId: UUID? by lazy { UUID.fromString(arguments.getString("id")) }
+    private val announcementId: UUID? by lazy { UUID.fromString(arguments?.getString("id")) }
 
     override val db by lazyLocateDb()
 
@@ -34,7 +34,7 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         info { "Created announcement view for $announcementId" }
 

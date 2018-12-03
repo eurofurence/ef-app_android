@@ -45,11 +45,11 @@ class FragmentMap : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if ("mapRecord" in arguments) {
-            mapRecord = arguments.jsonObjects["mapRecord"]
+        if ("mapRecord" in arguments!!) {
+            mapRecord = arguments!!.jsonObjects["mapRecord"]
 
             info { "Browsing to map ${mapRecord.description}" }
 

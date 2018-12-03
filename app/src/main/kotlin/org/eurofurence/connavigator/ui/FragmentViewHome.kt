@@ -57,7 +57,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, MainScreen, HasDb {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         applyOnRoot { changeTitle("Home") }
 
         configureEventRecyclers()
@@ -67,7 +67,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, MainScreen, HasDb {
                 .subscribe { configureProgressBar() }
 
         subscriptions += db.subscribe {
-            context.notificationManager.apply {
+            context!!.notificationManager.apply {
                 // Cancel all event notifications.
                 for (e in events.items)
                     cancelFromRelated(e.id)

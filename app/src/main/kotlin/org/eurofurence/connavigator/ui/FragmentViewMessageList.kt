@@ -62,10 +62,10 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb, MainS
                     ?: "Not yet"}"
 
             if (message.readDateTimeUtc != null) {
-                holder.icon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
+                holder.icon.textColor = ContextCompat.getColor(context!!, android.R.color.tertiary_text_dark)
                 holder.icon.text = "{fa-envelope-o 30sp}"
             } else {
-                holder.icon.textColor = ContextCompat.getColor(context, R.color.primaryDark)
+                holder.icon.textColor = ContextCompat.getColor(context!!, R.color.primaryDark)
                 holder.icon.text = "{fa-envelope 30sp}"
             }
 
@@ -77,17 +77,17 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb, MainS
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MessageViewholder(
-                SingleItemUi().createView(AnkoContext.create(context.applicationContext, parent))
+                SingleItemUi().createView(AnkoContext.create(context!!.applicationContext, parent))
         )
 
         override fun getItemCount() = messages.size
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         applyOnRoot { changeTitle("Personal Messages") }

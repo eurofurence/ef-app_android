@@ -56,8 +56,10 @@ class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, ov
         if (dealer[toThumbnail] != null) {
             imageService.load(dealer[toThumbnail], holder.dealerPreviewImage, false)
         } else {
-            holder.dealerPreviewImage.setImageDrawable(
-                    ContextCompat.getDrawable(fragment.context, R.drawable.dealer_black))
+            fragment.context?.let {
+                holder.dealerPreviewImage.setImageDrawable(
+                        ContextCompat.getDrawable(it, R.drawable.dealer_black))
+            }
         }
 
         holder.moon.visibility = if (dealer.isAfterDark == true) {
@@ -102,8 +104,8 @@ class DealerListItemUI : AnkoComponent<ViewGroup> {
                     padding = dip(5)
                     scaleType = ImageView.ScaleType.FIT_XY
                     id = R.id.dealerPreviewImage
-                }.lparams(dip(75), dip(75))  { gravity = Gravity.LEFT }
-            }.lparams(dip(0), wrapContent, 20F)  { gravity = Gravity.CENTER_VERTICAL }
+                }.lparams(dip(75), dip(75)) { gravity = Gravity.LEFT }
+            }.lparams(dip(0), wrapContent, 20F) { gravity = Gravity.CENTER_VERTICAL }
 
             verticalLayout {
                 textView {
