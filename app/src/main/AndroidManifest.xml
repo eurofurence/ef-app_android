@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.eurofurence.connavigator">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.eurofurence.connavigator">
 
 
     <uses-permission android:name="android.permission.INTERNET"/>
