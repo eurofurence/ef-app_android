@@ -10,6 +10,7 @@ import android.support.annotation.RequiresApi
 import io.swagger.client.JsonUtil
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.EnumDescriptor
+import java.util.*
 
 /**
  * This file contains very versatile serializers for Android Bundles and Intents.
@@ -409,5 +410,16 @@ class IntentInput(val target: Intent) : NamedValueDecoder(target.action) {
     override fun decodeTaggedUnit(name: String) {
         if (target.getByteExtra("$name._TYPE", (-1).toByte()) != VALUE_TYPE_UNIT)
             throw IllegalStateException()
+    }
+}
+
+@Serializer(forClass = Date::class)
+object DateSerializer : KSerializer<Date> {
+    override fun serialize(output: Encoder, obj: Date) {
+        output.encodeLong(obj.time)
+    }
+
+    override fun deserialize(input: Decoder): Date {
+        return Date(input.decodeLong())
     }
 }

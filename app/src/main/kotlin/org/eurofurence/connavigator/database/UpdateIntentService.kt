@@ -21,9 +21,12 @@ import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import java.util.*
 import kotlinx.serialization.Serializable
+import org.eurofurence.connavigator.util.v2.DateSerializer
 
 @Serializable
-data class UpdateComplete(val success: Boolean, val time: Date?, val exception: Throwable?)
+data class UpdateComplete(val success: Boolean,
+                          @Serializable(with = DateSerializer::class)
+                          val time: Date?, val exception: Throwable?)
 
 @ImplicitReflectionSerializer
 val updateComplete = internalSpec<UpdateComplete>()
