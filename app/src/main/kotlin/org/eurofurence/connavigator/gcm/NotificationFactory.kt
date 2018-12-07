@@ -10,7 +10,7 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.support.v4.app.NotificationCompat
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.ui.ActivityRoot
+import org.eurofurence.connavigator.ui.NavActivity
 import org.jetbrains.anko.intentFor
 import java.util.*
 
@@ -48,7 +48,7 @@ class NotificationFactory(var context: Context) {
      */
     fun setActivity(builder: NotificationCompat.Builder): NotificationCompat.Builder {
         // On a click event we want to start an activity
-        val intentToExecute = Intent(context, ActivityRoot::class.java)
+        val intentToExecute = Intent(context, NavActivity::class.java)
 
         // Attach the intent to a pending intent that our app can consume
         val pendingIntent = PendingIntent.getActivity(context, 0, intentToExecute, 0)

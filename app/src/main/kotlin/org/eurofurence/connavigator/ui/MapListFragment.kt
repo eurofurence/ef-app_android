@@ -24,12 +24,10 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by david on 8/3/16.
  */
-class FragmentViewMaps : Fragment(), ContentAPI, HasDb, MainScreen {
+class MapListFragment : Fragment(), HasDb {
 
     val ui by lazy { MapsUi() }
     override val db by lazyLocateDb()
-    override val drawerItemId: Int
-        get() = R.id.navMaps
 
     inner class MapFragmentPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int): String =

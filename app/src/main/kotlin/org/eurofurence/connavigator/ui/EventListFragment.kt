@@ -29,11 +29,8 @@ import org.jetbrains.anko.support.v4.selector
 /**
  * Created by David on 5/3/2016.
  */
-class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
+class EventListFragment : Fragment(), HasDb {
     override val db by lazyLocateDb()
-    override val drawerItemId: Int
-        get() = R.id.navEvents
-
 
     val eventPager: ViewPager by view()
     val eventSearchBar: EditText by view()
@@ -107,7 +104,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
         applyOnRoot { tabs.setupWithViewPager(null) }
     }
 
-    override fun onSearchButtonClick() {
+    fun onSearchButtonClick() {
         applyOnRoot { popDetails() }
         when (eventPager.visibility) {
             View.VISIBLE -> {
@@ -127,7 +124,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
         }
     }
 
-    override fun onFilterButtonClick() {
+    fun onFilterButtonClick() {
         applyOnRoot { popDetails() }
 
         selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks", "Favorites")) { _, position ->

@@ -3,29 +3,25 @@
 
     <group android:checkableBehavior="single">
         <item
-                android:id="@+id/navHome"
+                android:id="@id/fragmentViewHome"
                 android:icon="@drawable/icon_home"
                 android:title="Home"/>
         <item
-                android:id="@+id/navInfo"
+                android:id="@+id/infoListFragment"
                 android:icon="@drawable/icon_info"
                 android:title="Info"/>
         <item
-                android:id="@+id/navEvents"
+                android:id="@id/eventListFragment"
                 android:icon="@drawable/icon_calendar"
                 android:title="Events"/>
         <item
-                android:id="@+id/navDealersDen"
+                android:id="@id/dealerListFragment"
                 android:icon="@drawable/icon_dealer"
                 android:title="Dealers"/>
         <item
-                android:id="@+id/navMaps"
+                android:id="@id/mapListFragment"
                 android:icon="@drawable/icon_map_world"
                 android:title="Maps"/>
-        <item
-                android:id="@+id/navMap"
-                android:icon="@drawable/icon_map_world"
-                android:title="Points of Interest"/>
     </group>
 
     <item android:title="Personal">

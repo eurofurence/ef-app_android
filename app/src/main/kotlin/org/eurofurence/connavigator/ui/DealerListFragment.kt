@@ -27,10 +27,8 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by David on 15-5-2016.
  */
-class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScreen {
+class DealerListFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
-    override val drawerItemId: Int
-        get() = R.id.navDealersDen
 
     val ui by lazy { DealersUi() }
     private var effectiveDealers = emptyList<DealerRecord>()
@@ -80,7 +78,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScree
         }
     }
 
-    @AddTrace(name = "FragmentViewDealers:search", enabled = true)
+    @AddTrace(name = "DealerListFragment:search", enabled = true)
     fun updateFilter() {
         info { "Filtering dealers for text=$searchText, category=$searchCategory" }
 
@@ -99,7 +97,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScree
     private fun sortDealers(dealers: Iterable<DealerRecord>): List<DealerRecord> =
             dealers.sortedBy { (if (it.displayName != "") it.displayName else it.attendeeNickname).toLowerCase() }
 
-    override fun onSearchButtonClick() {
+    fun onSearchButtonClick() {
         applyOnRoot { popDetails() }
 
         if (ui.searchLayout.visibility == View.GONE) {
@@ -111,10 +109,6 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScree
             searchText = ""
             updateFilter()
         }
-    }
-
-    override fun dataUpdated() {
-        ui.dealerList.adapter = DealerRecyclerAdapter(sortDealers(dealers.items), db, this)
     }
 }
 

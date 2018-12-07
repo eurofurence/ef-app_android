@@ -6,9 +6,80 @@
     <fragment
         android:id="@+id/fragmentViewHome"
         android:name="org.eurofurence.connavigator.ui.FragmentViewHome"
-        android:label="FragmentViewHome" />
+        android:label="Home">
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewEvents"
+            app:destination="@id/eventListFragment" />
+        <deepLink app:uri="eurofurence://home/" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewEvent"
+            app:destination="@id/fragmentViewEvent" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewDealers"
+            app:destination="@id/dealerListFragment" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewMaps"
+            app:destination="@id/mapListFragment" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_infoListFragment2"
+            app:destination="@id/infoListFragment2" />
+    </fragment>
     <activity
         android:id="@+id/navActivity"
         android:name="org.eurofurence.connavigator.ui.NavActivity"
         android:label="NavActivity" />
+    <fragment
+        android:id="@+id/eventListFragment"
+        android:name="org.eurofurence.connavigator.ui.EventListFragment"
+        android:label="Event List">
+        <action
+            android:id="@+id/action_fragmentViewEvents_to_fragmentViewEvent"
+            app:destination="@id/fragmentViewEvent" />
+        <deepLink app:uri="eurofurence://events/" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentViewEvent"
+        android:name="org.eurofurence.connavigator.ui.EventItemFragment"
+        android:label="Event Details">
+        <argument
+            android:name="eventId"
+            android:defaultValue=" "
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/dealerListFragment"
+        android:name="org.eurofurence.connavigator.ui.DealerListFragment"
+        android:label="Dealer List">
+        <action
+            android:id="@+id/action_fragmentViewDealers_to_fragmentViewDealer"
+            app:destination="@id/dealerItemFragment" />
+        <deepLink app:uri="eurofurence://dealers" />
+    </fragment>
+    <fragment
+        android:id="@+id/dealerItemFragment"
+        android:name="org.eurofurence.connavigator.ui.DealerItemFragment"
+        android:label="Dealer Details">
+        <argument
+            android:name="dealerId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_fragmentViewDealer_to_fragmentViewMaps"
+            app:destination="@id/mapListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapListFragment"
+        android:name="org.eurofurence.connavigator.ui.MapListFragment"
+        android:label="Maps" />
+    <fragment
+        android:id="@+id/infoListFragment2"
+        android:name="org.eurofurence.connavigator.ui.InfoListFragment"
+        android:label="InfoListFragment" >
+        <action
+            android:id="@+id/action_infoListFragment2_to_infoItemFragment"
+            app:destination="@id/infoItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/infoItemFragment"
+        android:name="org.eurofurence.connavigator.ui.InfoItemFragment"
+        android:label="InfoItemFragment" />
 </navigation>

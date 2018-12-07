@@ -43,7 +43,7 @@ import java.util.*
 /**
  * Created by David on 4/9/2016.
  */
-class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
+class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     var subscriptions = Disposables.empty()

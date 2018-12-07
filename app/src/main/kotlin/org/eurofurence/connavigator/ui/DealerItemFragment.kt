@@ -44,7 +44,7 @@ import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.px2dip
 import java.util.*
 
-class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
+class DealerItemFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
     private val dealerId: UUID by lazy { UUID.fromString(arguments?.getString("id")) }
 
     val ui by lazy { DealerUi() }

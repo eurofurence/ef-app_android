@@ -100,7 +100,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         super.onCreate(savedInstanceState)
 
         if (!AppPreferences.isFirstRun && checkVersion()) {
-            startActivity(intentFor<ActivityRoot>())
+            startActivity(intentFor<NavActivity>())
             return
         }
         info { "Starting start activity" }

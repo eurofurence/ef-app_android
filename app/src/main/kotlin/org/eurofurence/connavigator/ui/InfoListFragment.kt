@@ -22,10 +22,7 @@ import org.jetbrains.anko.support.v4.withArguments
 // TODO req: fix build
 // TODO req: add state saving
 
-class FragmentViewInfoGroups : Fragment(), ContentAPI, HasDb, MainScreen {
-    override val drawerItemId: Int
-        get() = R.id.navInfo
-
+class InfoListFragment : Fragment(), HasDb{
     override val db by lazyLocateDb()
     val ui = ViewInfoGroupsUi()
 
