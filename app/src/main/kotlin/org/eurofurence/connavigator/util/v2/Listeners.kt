@@ -7,10 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
+import kotlinx.serialization.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
-import kotlin.serialization.KSerializer
-import kotlin.serialization.serializer
 
 /**
  * Result of a broadcast action.
@@ -61,7 +60,7 @@ data class ListenerSpecBinding<T : Any>(val listenerSpec: ListenerSpec<T>, val c
         // Write intent
         val intent = Intent(listenerSpec.action)
         val output = IntentOutput(intent)
-        output.write(listenerSpec.serializer, t)
+        output.encode(listenerSpec.serializer, t)
 
         // Send intent as broadcast
         return if (listenerSpec.external) {
@@ -83,7 +82,7 @@ data class ListenerSpecBinding<T : Any>(val listenerSpec: ListenerSpec<T>, val c
         val rec = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 val input = IntentInput(intent)
-                val item = input.read(listenerSpec.serializer)
+                val item = input.decode(listenerSpec.serializer)
                 context.block(item)
             }
         }
@@ -141,18 +140,21 @@ data class ListenerSpecBinding<T : Any>(val listenerSpec: ListenerSpec<T>, val c
 /**
  * Makes a listener specification form [external] and [action], inferring the serializer.
  */
+@ImplicitReflectionSerializer
 inline fun <reified T : Any> createSpec(external: Boolean, action: String) =
         ListenerSpec(external, action, T::class.serializer())
 
 /**
  * Makes an internal listener specification form [action], inferring the serializer.
  */
+@ImplicitReflectionSerializer
 inline fun <reified T : Any> internalSpec(action: String) =
         createSpec<T>(false, action)
 
 /**
  * Makes an external listener specification form [action], inferring the serializer.
  */
+@ImplicitReflectionSerializer
 inline fun <reified T : Any> externalSpec(action: String) =
         createSpec<T>(true, action)
 
@@ -160,17 +162,20 @@ inline fun <reified T : Any> externalSpec(action: String) =
 /**
  * Makes a listener specification form [external], inferring the action from the type name and also the serializer.
  */
+@ImplicitReflectionSerializer
 inline fun <reified T : Any> createSpec(external: Boolean) =
         ListenerSpec(external, T::class.qualifiedName ?: error("No qualified name!"), T::class.serializer())
 
 /**
  * Makes an internal listener specification, inferring the action from the type name and also the serializer.
  */
+@ImplicitReflectionSerializer
 inline fun <reified T : Any> internalSpec() =
         createSpec<T>(false)
 
 /**
  * Makes an external listener specification, inferring the action from the type name and also the serializer.
  */
+@ImplicitReflectionSerializer
 inline fun <reified T : Any> externalSpec() =
         createSpec<T>(true)

@@ -1,15 +1,8 @@
 apply plugin: "idea"
 apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
 apply plugin: 'io.fabric'
+apply plugin: "kotlin-android"
 apply plugin: 'kotlinx-serialization'
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        verbose = true
-        freeCompilerArgs += ["-Xplugin", "$projectDir/tools/kotlin-serialization-gradle.jar"]
-    }
-}
 
 android {
     compileSdkVersion 26
@@ -173,8 +166,8 @@ dependencies {
     implementation 'com.github.jakob-grabner:Circle-Progress-View:v1.3'
 
     // Preferences
-    implementation "com.chibatching.kotpref:kotpref:2.1.1"
-    implementation "com.chibatching.kotpref:enum-support:2.1.1"
+    implementation "com.chibatching.kotpref:kotpref:2.6.0"
+    implementation "com.chibatching.kotpref:enum-support:2.6.0"
 
     // Fuel for networking
     implementation "com.github.kittinunf.fuel:fuel:$fuel_version" //for JVM
@@ -190,7 +183,7 @@ dependencies {
     implementation group: 'org.ocpsoft.prettytime', name: 'prettytime', version: '3.2.7.Final'
 
     // Serialization
-    implementation files("tools/kotlin-serialization-runtime.jar")
+    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
 
     testImplementation "junit:junit:$junit_version"
 

@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.net.imageService
@@ -19,11 +20,12 @@ import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import java.util.*
-import kotlin.serialization.Serializable
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class UpdateComplete(val success: Boolean, val time: Date?, val exception: Throwable?)
 
+@ImplicitReflectionSerializer
 val updateComplete = internalSpec<UpdateComplete>()
 
 /**
@@ -49,9 +51,11 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
 
     override val db by lazyLocateDb()
 
+    @ImplicitReflectionSerializer
     private val updateCompleteMsg by updateComplete
 
     // TODO: Sticky intent since there should only be one pending update
+    @ImplicitReflectionSerializer
     override fun onHandleIntent(intent: Intent?) {
         info { "Handling update intent service intent" }
         val showToastOnCompletion = intent?.getBooleanExtra("showToastOnCompletion", false) ?: false

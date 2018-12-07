@@ -73,10 +73,11 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
         }
     }
 
-    val USERNAME = "USERNAME"
-    val REGNUMBER = "REGNUMBER"
-    val PASSWORD = "PASSWORD"
+    companion object {
+        val USERNAME = "USERNAME"
+        val REGNUMBER = "REGNUMBER"
+        val PASSWORD = "PASSWORD"
 
-    val LOGIN_RESULT = "LOGIN_RESULT"
-
+        val LOGIN_RESULT = "LOGIN_RESULT"
+    }
 }

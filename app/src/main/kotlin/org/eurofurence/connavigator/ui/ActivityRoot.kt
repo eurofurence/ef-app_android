@@ -27,6 +27,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.*
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.R.id
@@ -110,6 +111,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     /**
      * Use a bound value instead of the specification.
      */
+    @ImplicitReflectionSerializer
     private val updateCompleteMsg by updateComplete
 
 
@@ -305,6 +307,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
     private fun setupContent() =
             navigateRoot(FragmentViewHome::class.java, ActionBarMode.HOME)
 
+    @ImplicitReflectionSerializer
     override fun onResume() {
         super.onResume()
         updateReceiver.register()
@@ -318,6 +321,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             dispatchUpdate(this)
     }
 
+    @ImplicitReflectionSerializer
     override fun onPause() {
         updateCompleteMsg.unlistenAll()
         updateReceiver.unregister()

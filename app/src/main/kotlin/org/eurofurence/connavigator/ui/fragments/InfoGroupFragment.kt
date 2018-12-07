@@ -40,7 +40,7 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
     inner class DataAdapter : RecyclerView.Adapter<InfoItemViewHolder>() {
         override fun getItemCount() = infoItems.count()
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) =
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
                 InfoItemViewHolder(UI { SingleInfoUi().createView(this) }.view)
 
         override fun onBindViewHolder(holder: InfoItemViewHolder, position: Int) {
