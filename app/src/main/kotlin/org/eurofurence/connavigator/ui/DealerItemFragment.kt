@@ -42,10 +42,15 @@ import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.px2dip
+import java.lang.Exception
 import java.util.*
 
 class DealerItemFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
-    private val dealerId: UUID by lazy { UUID.fromString(arguments?.getString("id")) }
+    private val dealerId get() = try {
+        UUID.fromString(DealerItemFragmentArgs.fromBundle(arguments).dealerId)
+    } catch (e: Exception) {
+        null
+    }
 
     val ui by lazy { DealerUi() }
 
@@ -69,7 +74,7 @@ class DealerItemFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     private fun fillUi() {
-        if ("id" in arguments!!) {
+        if (dealerId != null) {
             val dealer: DealerRecord = db.dealers[dealerId] ?: return
 
             Analytics.event(Category.DEALER, Action.OPENED, dealer.displayName

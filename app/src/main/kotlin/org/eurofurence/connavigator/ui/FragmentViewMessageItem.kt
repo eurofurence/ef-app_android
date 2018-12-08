@@ -30,6 +30,7 @@ class FragmentViewMessageItem : Fragment(), AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
+    // todo rework for message item
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val message = Gson().fromJson(arguments!!.getString("message"), PrivateMessageRecord::class.java)
         ui.title.text = message.subject?.capitalize() ?: "No subject"

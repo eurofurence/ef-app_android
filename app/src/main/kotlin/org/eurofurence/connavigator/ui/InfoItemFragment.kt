@@ -27,6 +27,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
 import us.feras.mdv.MarkdownView
+import java.util.*
 
 
 /**
@@ -39,15 +40,12 @@ class InfoItemFragment : Fragment(), HasDb {
 
     var subscriptions = Disposables.empty()
 
-    /**
-     * Constructs the info view with an assigned bundle
-     */
-    fun withArguments(knowledgeEntry: KnowledgeEntryRecord) = apply {
-        arguments = Bundle().apply {
-            jsonObjects["knowledgeEntry"] = knowledgeEntry
+    val infoId
+        get() = try {
+            UUID.fromString(InfoItemFragmentArgs.fromBundle(arguments).itemId)
+        } catch (_: Exception) {
+            null
         }
-    }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -66,9 +64,9 @@ class InfoItemFragment : Fragment(), HasDb {
     }
 
     private fun fillUi() {
-        if ("knowledgeEntry" in arguments!!) {
-            val knowledgeEntry: KnowledgeEntryRecord = arguments!!.jsonObjects["knowledgeEntry"]
-            val knowledgeGroup = db.knowledgeGroups[knowledgeEntry.knowledgeGroupId!!]!!
+        if (infoId != null) {
+            val knowledgeEntry: KnowledgeEntryRecord = db.knowledgeEntries[infoId] ?: return
+            val knowledgeGroup = db.knowledgeGroups[knowledgeEntry.knowledgeGroupId] ?: return
 
             Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
 

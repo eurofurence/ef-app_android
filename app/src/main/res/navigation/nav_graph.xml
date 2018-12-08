@@ -80,7 +80,11 @@
     <fragment
         android:id="@+id/infoItemFragment"
         android:name="org.eurofurence.connavigator.ui.InfoItemFragment"
-        android:label="Info Details" />
+        android:label="Info Details" >
+        <argument
+            android:name="itemId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentViewAbout"
         android:name="org.eurofurence.connavigator.ui.FragmentViewAbout"

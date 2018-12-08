@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.joanzapata.iconify.widget.IconTextView
 import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.ui.DealerListFragmentDirections
 import org.eurofurence.connavigator.ui.dialogs.DealerDialog
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -75,7 +78,9 @@ class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, ov
         }
 
         holder.layout.setOnClickListener {
-            fragment.applyOnRoot { navigateToDealer(dealer) }
+            val action = DealerListFragmentDirections
+                    .actionFragmentViewDealersToFragmentViewDealer(dealer.id.toString())
+            fragment.findNavController().navigate(action)
         }
 
         holder.layout.setOnLongClickListener {

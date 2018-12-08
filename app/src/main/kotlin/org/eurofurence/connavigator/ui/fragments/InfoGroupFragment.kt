@@ -12,11 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.joanzapata.iconify.widget.IconTextView
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.ui.InfoListFragmentDirections
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
@@ -48,7 +50,8 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
 
             holder.name.text = item.title
             holder.layout.setOnClickListener {
-                applyOnRoot { navigateToKnowledgeEntry(item) }
+                val action = InfoListFragmentDirections.actionInfoListFragment2ToInfoItemFragment(item.id.toString())
+                findNavController().navigate(action)
             }
         }
     }
