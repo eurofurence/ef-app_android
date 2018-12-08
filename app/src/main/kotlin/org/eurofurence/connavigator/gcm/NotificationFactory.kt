@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.ui.NavActivity
 import org.jetbrains.anko.intentFor
+import org.joda.time.DateTime
 import java.util.*
 
 fun NotificationManager.cancelFromRelated(identity: UUID) =
@@ -66,6 +67,11 @@ class NotificationFactory(var context: Context) {
     fun addRegularText(title: String, text: String) = this.apply {
         builder.setContentTitle(title)
         builder.setContentText(text)
+    }
+
+    fun countdownTo(date: DateTime) = this.apply {
+        builder.setWhen(date.millis)
+                .setUsesChronometer(true)
     }
 
     fun build() = builder.build()

@@ -37,11 +37,11 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
 
         info("Changing status of event ${event.title}")
 
-        val notificationTime: DateTime = getNotificationTime(context, db, event)
+        val notificationTime = getNotificationTime(context, db, event)
 
         info("Notification time is $notificationTime")
 
-        val notificationIntent = createNotification(context, event)
+        val notificationIntent = createNotification(context, event, notificationTime)
 
         val pendingIntent = PendingIntent.getBroadcast(context, event.id.hashCode(), notificationIntent, 0)
 
@@ -74,7 +74,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
         }
     }
 
-    private fun createNotification(context: Context, event: EventRecord): Intent {
+    private fun createNotification(context: Context, event: EventRecord, time: DateTime): Intent {
         val notificationIntent = Intent(context, NotificationPublisher::class.java)
         val notificationFactory = NotificationFactory(context)
 
@@ -89,6 +89,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
                         "Upcoming event: ${event.title}",
                         "Starting at ${event.startTimeString()} in ${AppPreferences.notificationMinutesBefore} minutes")
                 .setPendingIntent(pendingIntent)
+                .countdownTo(time)
 
         notificationIntent.putExtra(NotificationPublisher.TAG, event.id.toString())
         notificationIntent.putExtra(NotificationPublisher.ITEM, notification.build())
