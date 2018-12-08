@@ -10,12 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
+import com.pawegio.kandroid.i
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.AnnouncementRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.AppPreferences
+import org.eurofurence.connavigator.ui.FragmentViewHomeDirections
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
@@ -45,9 +48,8 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
             holder.announcementTitle.text = announcement.title
             holder.announcementContent.text = announcement.area
             holder.layout.setOnClickListener {
-                applyOnRoot {
-                    navigateToAnnouncement(announcement)
-                }
+                val action = FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewAnnouncement(announcement.id)
+                findNavController().navigate(action)
             }
         }
 

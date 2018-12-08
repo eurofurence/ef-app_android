@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_fragmentViewHome_to_fragmentViewMessageList"
             app:destination="@id/fragmentViewMessageList" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewAnnouncement"
+            app:destination="@id/fragmentViewAnnouncement" />
     </fragment>
     <activity
         android:id="@+id/navActivity"
@@ -111,6 +114,14 @@
         android:label="Message Item" >
         <argument
             android:name="messageId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentViewAnnouncement"
+        android:name="org.eurofurence.connavigator.ui.FragmentViewAnnouncement"
+        android:label="Announcement" >
+        <argument
+            android:name="announcementId"
             app:argType="string" />
     </fragment>
 </navigation>
