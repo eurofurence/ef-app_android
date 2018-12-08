@@ -43,7 +43,7 @@
         <argument
             android:name="eventId"
             android:defaultValue=" "
-            app:argType="string" />
+            app:argType="string" /><deepLink app:uri="eurofurence://events/{eventId}/"/>
     </fragment>
     <fragment
         android:id="@+id/dealerListFragment"
@@ -52,7 +52,7 @@
         <action
             android:id="@+id/action_fragmentViewDealers_to_fragmentViewDealer"
             app:destination="@id/dealerItemFragment" />
-        <deepLink app:uri="eurofurence://dealers" />
+        <deepLink app:uri="eurofurence://dealers/" />
     </fragment>
     <fragment
         android:id="@+id/dealerItemFragment"
@@ -63,7 +63,7 @@
             app:argType="string" />
         <action
             android:id="@+id/action_fragmentViewDealer_to_fragmentViewMaps"
-            app:destination="@id/mapListFragment" />
+            app:destination="@id/mapListFragment" /><deepLink app:uri="eurofurence://dealers/{dealerId}/"/>
     </fragment>
     <fragment
         android:id="@+id/mapListFragment"
@@ -75,7 +75,7 @@
         android:label="Info List">
         <action
             android:id="@+id/action_infoListFragment2_to_infoItemFragment"
-            app:destination="@id/infoItemFragment" />
+            app:destination="@id/infoItemFragment" /><deepLink app:uri="eurofurence://info/"/>
     </fragment>
     <fragment
         android:id="@+id/infoItemFragment"
@@ -83,7 +83,7 @@
         android:label="Info Details" >
         <argument
             android:name="itemId"
-            app:argType="string" />
+            app:argType="string" /><deepLink app:uri="eurofurence://info/{itemId}/"/>
     </fragment>
     <fragment
         android:id="@+id/fragmentViewAbout"
