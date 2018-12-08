@@ -5,8 +5,10 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.navigation.NavDeepLinkBuilder
 import com.google.firebase.perf.metrics.AddTrace
 import io.swagger.client.model.EventRecord
+import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.gcm.NotificationPublisher
@@ -15,10 +17,7 @@ import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.now
 import org.eurofurence.connavigator.util.extensions.startTimeString
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.alarmManager
-import org.jetbrains.anko.info
-import org.jetbrains.anko.longToast
+import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import org.joda.time.DurationFieldType
 import java.util.*
@@ -78,16 +77,22 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
     private fun createNotification(context: Context, event: EventRecord): Intent {
         val notificationIntent = Intent(context, NotificationPublisher::class.java)
         val notificationFactory = NotificationFactory(context)
+
+        val pendingIntent = NavDeepLinkBuilder(context)
+                .setGraph(R.navigation.nav_graph)
+                .setDestination(R.id.fragmentViewEvent)
+                .setArguments(bundleOf("eventId" to event.id.toString()))
+                .createPendingIntent()
+
         val notification = notificationFactory.createBasicNotification()
-        notificationFactory.addRegularText(
-                notification,
-                "Upcoming event: ${event.title}",
-                "Starting at ${event.startTimeString()} in ${AppPreferences.notificationMinutesBefore} minutes"
-        )
-        notificationFactory.setActivity(notification)
+                .addRegularText(
+                        "Upcoming event: ${event.title}",
+                        "Starting at ${event.startTimeString()} in ${AppPreferences.notificationMinutesBefore} minutes")
+                .setPendingIntent(pendingIntent)
 
         notificationIntent.putExtra(NotificationPublisher.TAG, event.id.toString())
         notificationIntent.putExtra(NotificationPublisher.ITEM, notification.build())
+
         return notificationIntent
     }
 
