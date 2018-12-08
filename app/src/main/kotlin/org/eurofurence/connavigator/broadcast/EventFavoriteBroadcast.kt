@@ -109,7 +109,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
             return
         }
 
-        val notification = createNotification(context, event)
+        val notification = createNotification(context, event, notificationTime)
         val pendingIntent = PendingIntent.getBroadcast(context, event.id.hashCode(), notification, PendingIntent.FLAG_UPDATE_CURRENT)
 
         context.alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
