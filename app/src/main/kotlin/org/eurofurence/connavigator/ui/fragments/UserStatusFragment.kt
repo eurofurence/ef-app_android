@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import nl.komponents.kovenant.task
@@ -101,7 +102,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
                 title.text = "You are currently not logged in."
                 subtitle.text = "Tap here to login using your registration details and receive personalized information from Eurofurence!"
                 layout.setOnClickListener {
-                    startActivity(intentFor<LoginActivity>())
+                    findNavController().navigate(R.id.action_fragmentViewHome_to_loginActivity)
                 }
             }
 
@@ -115,7 +116,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
                 title.text = "Welcome, ${AuthPreferences.username.capitalize()}"
                 layout.setOnClickListener {
                     applyOnRoot {
-                        navigateRoot(FragmentViewMessageList::class.java)
+                        findNavController().navigate(R.id.action_fragmentViewHome_to_fragmentViewMessageList)
                     }
                 }
             }

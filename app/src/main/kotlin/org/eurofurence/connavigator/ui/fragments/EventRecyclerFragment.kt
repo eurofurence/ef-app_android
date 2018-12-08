@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.task
@@ -31,6 +33,7 @@ import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.design.tabLayout
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.dip
 import org.joda.time.DateTime
@@ -178,7 +181,7 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
             // Assign the on-click action
             holder.itemView.setOnClickListener {
                 debug { "Short event click" }
-                applyOnRoot { navigateToEvent(event) }
+                findNavController().navigate(R.id.action_fragmentViewEvents_to_fragmentViewEvent, bundleOf("eventId" to event.id.toString()))
             }
             holder.itemView.setOnLongClickListener {
                 context?.apply{

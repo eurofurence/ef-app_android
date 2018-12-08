@@ -28,7 +28,7 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                        android:id="@+id/navLogin"
+                        android:id="@id/loginActivity"
                         android:checkable="false"
                         android:icon="@drawable/icon_user"
                         android:title="Login"/>
@@ -68,7 +68,7 @@
             <item android:id="@+id/navDevClear"
                   android:title="Empty database"
                   android:icon="@drawable/icon_delete"/>
-            <item android:id="@+id/navDevSettings"
+            <item android:id="@id/activitySettings"
                   android:title="Settings"
                   android:icon="@drawable/icon_settings"/>
             <item android:id="@id/fragmentViewAbout"

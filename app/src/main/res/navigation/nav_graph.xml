@@ -16,6 +16,12 @@
         <action
             android:id="@+id/action_fragmentViewHome_to_fragmentViewMaps"
             app:destination="@id/mapListFragment" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_loginActivity"
+            app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewMessageList"
+            app:destination="@id/fragmentViewMessageList" />
     </fragment>
     <activity
         android:id="@+id/navActivity"
@@ -66,7 +72,7 @@
     <fragment
         android:id="@+id/infoListFragment"
         android:name="org.eurofurence.connavigator.ui.InfoListFragment"
-        android:label="InfoListFragment" >
+        android:label="Info List">
         <action
             android:id="@+id/action_infoListFragment2_to_infoItemFragment"
             app:destination="@id/infoItemFragment" />
@@ -74,9 +80,33 @@
     <fragment
         android:id="@+id/infoItemFragment"
         android:name="org.eurofurence.connavigator.ui.InfoItemFragment"
-        android:label="InfoItemFragment" />
+        android:label="Info Details" />
     <fragment
         android:id="@+id/fragmentViewAbout"
         android:name="org.eurofurence.connavigator.ui.FragmentViewAbout"
         android:label="About" />
+    <activity
+        android:id="@+id/activitySettings"
+        android:name="org.eurofurence.connavigator.ui.ActivitySettings"
+        android:label="ActivitySettings" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="org.eurofurence.connavigator.ui.LoginActivity"
+        android:label="LoginActivity" />
+    <fragment
+        android:id="@+id/fragmentViewMessageList"
+        android:name="org.eurofurence.connavigator.ui.FragmentViewMessageList"
+        android:label="Message List">
+        <action
+            android:id="@+id/action_fragmentViewMessageList_to_fragmentViewMessageItem2"
+            app:destination="@id/fragmentViewMessageItem" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentViewMessageItem"
+        android:name="org.eurofurence.connavigator.ui.FragmentViewMessageItem"
+        android:label="Message Item" >
+        <argument
+            android:name="messageId"
+            app:argType="string" />
+    </fragment>
 </navigation>

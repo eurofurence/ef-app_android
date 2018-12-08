@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.navigation.fragment.findNavController
+import android.widget.LinearLayout
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -20,12 +20,13 @@ import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.TrackEventPagerAdapter
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
-import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.jetbrains.anko.inputMethodManager
+import org.jetbrains.anko.*
+import org.jetbrains.anko.design.tabLayout
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.selector
+import org.jetbrains.anko.support.v4.viewPager
 
 /**
  * Created by David on 5/3/2016.
@@ -33,8 +34,8 @@ import org.jetbrains.anko.support.v4.selector
 class EventListFragment : Fragment(), HasDb {
     override val db by lazyLocateDb()
 
-    val eventPager: ViewPager by view()
-    val eventSearchBar: EditText by view()
+    val ui = EventListUi()
+
     private val searchFragment by lazy { EventRecyclerFragment().withArguments(daysInsteadOfGlyphs = true) }
 
     private val detailsPopAdapter = object : ViewPager.OnPageChangeListener {
@@ -51,16 +52,16 @@ class EventListFragment : Fragment(), HasDb {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fview_events_viewpager, container, false)
+            UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         configureViewpager()
 
         childFragmentManager.beginTransaction()
-                .replace(R.id.eventSearch, searchFragment)
+                .replace(2, searchFragment)
                 .commitAllowingStateLoss()
 
-        eventSearchBar.textWatcher {
+        ui.search.textWatcher {
             afterTextChanged { text ->
                 searchFragment.eventList.byTitle(text.toString())
                         .sortByDateAndTime()
@@ -68,7 +69,7 @@ class EventListFragment : Fragment(), HasDb {
             }
         }
 
-        eventPager.addOnPageChangeListener(detailsPopAdapter)
+        ui.pager.addOnPageChangeListener(detailsPopAdapter)
     }
 
 
@@ -77,12 +78,13 @@ class EventListFragment : Fragment(), HasDb {
     }
 
     private fun changePagerAdapter(adapter: PagerAdapter, preferredPosition: Int? = null) {
-        eventPager.adapter = adapter
+        ui.pager.adapter = adapter
         adapter.notifyDataSetChanged()
 
+        ui.tabs.setupWithViewPager(ui.pager)
 
         preferredPosition?.let {
-            eventPager.setCurrentItem(it, false)
+            ui.pager.setCurrentItem(it, false)
         }
     }
 
@@ -95,26 +97,25 @@ class EventListFragment : Fragment(), HasDb {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        eventPager.removeOnPageChangeListener(detailsPopAdapter)
+        ui.pager.removeOnPageChangeListener(detailsPopAdapter)
         applyOnRoot { tabs.setupWithViewPager(null) }
     }
 
     fun onSearchButtonClick() {
         applyOnRoot { popDetails() }
-        when (eventPager.visibility) {
+        when (ui.pager.visibility) {
             View.VISIBLE -> {
-                eventPager.visibility = View.GONE
-                val searchLayout = activity!!.findViewById<View>(R.id.searchLayout)
+                ui.pager.visibility = View.GONE
 
-                searchLayout.visibility = View.VISIBLE
-                searchLayout.requestFocus()
+                ui.searchLayout.visibility = View.VISIBLE
+                ui.searchLayout.requestFocus()
 
                 activity!!.inputMethodManager
                         .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY)
             }
             else -> {
-                eventPager.visibility = View.VISIBLE
-                activity!!.findViewById<View>(R.id.searchLayout).visibility = View.GONE
+                ui.pager.visibility = View.VISIBLE
+                ui.searchLayout.visibility = View.GONE
             }
         }
     }
@@ -138,4 +139,33 @@ enum class EventPagerMode {
     ROOMS,
     TRACKS,
     FAVORITES
+}
+
+class EventListUi : AnkoComponent<Fragment> {
+    lateinit var tabs: TabLayout
+    lateinit var pager: ViewPager
+    lateinit var search: EditText
+    lateinit var searchLayout: View
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
+        verticalLayout {
+            tabs = tabLayout {
+                backgroundResource = R.color.primaryDark
+            }.lparams(matchParent, wrapContent)
+
+            pager = viewPager{
+                id = 1
+            }.lparams(matchParent, matchParent)
+
+            scrollView {
+                verticalLayout {
+                    search = editText()
+
+                    searchLayout = linearLayout() {
+                        id = 2
+                    }
+                }
+            }
+        }
+    }
+
 }
