@@ -14,6 +14,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.broadcast.ResetReceiver
+import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.database.dispatchUpdate
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.navigationView
@@ -56,7 +59,17 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         info { "Selecting item" }
-        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.navDevReload -> UpdateIntentService().dispatchUpdate(this, true).let { true }
+            R.id.navDevClear -> alert("Are you sure you want to reset al your settings and clear all your data? You will have to download this again", "Clearing database") {
+                yesButton { ResetReceiver().clearData(this@NavActivity) }
+                noButton { }
+            }.show().let { true }
+            R.id.navWebSite -> browse("https://eurofurence.org")
+            R.id.navWebTwitter -> browse("https://twitter.com/eurofurence")
+            R.id.navFursuitGames -> browse("https://app.eurofurence.org/collectemall/")
+            else -> item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+        }
     }
 
 
@@ -91,5 +104,4 @@ internal class NavUi : AnkoComponent<NavActivity> {
             }
         }
     }
-
 }

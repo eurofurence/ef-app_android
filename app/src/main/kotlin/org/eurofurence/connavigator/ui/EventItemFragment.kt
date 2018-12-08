@@ -48,7 +48,12 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
 
     var subscriptions = Disposables.empty()
 
-    private val eventId: UUID? get() = UUID.fromString(arguments?.getString("id"))
+    private val eventId
+        get () = try {
+            UUID.fromString(EventItemFragmentArgs.fromBundle(arguments).eventId)
+        } catch (e: Exception) {
+            null
+        }
 
     val ui by lazy { EventUi() }
 
@@ -70,7 +75,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     }
 
     private fun fillUi() {
-        if ("id" in arguments!!) {
+        if (eventId != null) {
             val event: EventRecord = db.events[eventId] ?: return
 
             Analytics.event(Category.EVENT, Action.OPENED, event.title)
