@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.gcm
 
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -7,6 +8,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
+import android.os.Build
 import android.support.v4.app.NotificationCompat
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.ui.NavActivity
@@ -20,7 +22,11 @@ fun NotificationManager.cancelFromRelated(identity: UUID) =
  * Creates a basic notification
  */
 class NotificationFactory(var context: Context) {
-    val builder = NotificationCompat.Builder(context, "all")
+    val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        NotificationCompat.Builder(context, NotificationChannel.DEFAULT_CHANNEL_ID)
+    } else {
+        NotificationCompat.Builder(context)
+    }
 
     fun broadcast(tag: String) {
         val notification = builder.build()
