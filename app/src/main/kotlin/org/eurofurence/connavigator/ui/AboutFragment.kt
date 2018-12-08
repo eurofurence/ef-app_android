@@ -24,11 +24,7 @@ import org.jetbrains.anko.support.v4.browse
 /**
  * Created by David on 28-4-2016.
  */
-class FragmentViewAbout : Fragment(), ContentAPI, MainScreen {
-    override val drawerItemId: Int
-        get() = R.id.navAbout
-
-
+class FragmentViewAbout : Fragment(){
     val ui = AboutUi()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =

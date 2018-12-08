@@ -46,7 +46,10 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
 
         ui.bar.setupWithNavController(navController, appbarConfig)
 
-        ui.nav.setNavigationItemSelectedListener { onOptionsItemSelected(it) }
+        ui.nav.setNavigationItemSelectedListener {
+            ui.drawer.closeDrawers()
+            onOptionsItemSelected(it)
+        }
 
         super.onResume()
     }

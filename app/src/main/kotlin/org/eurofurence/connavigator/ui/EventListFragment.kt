@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.navigation.fragment.findNavController
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -67,13 +68,7 @@ class EventListFragment : Fragment(), HasDb {
             }
         }
 
-        applyOnRoot {
-            tabs.setupWithViewPager(eventPager)
-            tabs.tabMode = TabLayout.MODE_SCROLLABLE
-        }
         eventPager.addOnPageChangeListener(detailsPopAdapter)
-
-        applyOnRoot { changeTitle("Event Schedule") }
     }
 
 

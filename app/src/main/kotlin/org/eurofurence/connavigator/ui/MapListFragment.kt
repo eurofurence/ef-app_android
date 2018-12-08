@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui
 
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -15,10 +16,8 @@ import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.fragments.FragmentMap
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.multitouchViewPager
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.frameLayout
-import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.*
+import org.jetbrains.anko.design.tabLayout
 import org.jetbrains.anko.support.v4.UI
 
 /**
@@ -51,18 +50,19 @@ class MapListFragment : Fragment(), HasDb {
 
         ui.mapViewPager.adapter = MapFragmentPagerAdapter(childFragmentManager)
 
-        applyOnRoot {
-            tabs.setupWithViewPager(ui.mapViewPager)
-            changeTitle("Maps")
-        }
+        ui.tabs.setupWithViewPager(ui.mapViewPager)
     }
 }
 
 
 class MapsUi : AnkoComponent<Fragment> {
     lateinit var mapViewPager: ViewPager
+    lateinit var tabs: TabLayout
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         frameLayout {
+            tabs = tabLayout{
+                backgroundResource = R.color.primaryDark
+            }.lparams(matchParent, wrapContent)
             mapViewPager = multitouchViewPager {
                 id = R.id.map_view_pager
             }.lparams(matchParent, matchParent)

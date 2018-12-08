@@ -30,28 +30,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.ActivityRoot">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data
-                        android:scheme="eurofurence"
-                        android:host="event"/>
-                <data
-                        android:scheme="eurofurence"
-                        android:host="dealer"/>
-                <data
-                        android:scheme="eurofurence"
-                        android:host="info"/>
-            </intent-filter>
-        </activity>
-
         <activity android:name=".ui.ActivitySettings"/>
 
-        <activity android:name=".ui.NavActivity" />
+        <activity android:name=".ui.NavActivity">
+            <nav-graph android:value="@navigation/nav_graph" />
+        </activity>
 
         <activity android:name=".ui.LoginActivity" />
 

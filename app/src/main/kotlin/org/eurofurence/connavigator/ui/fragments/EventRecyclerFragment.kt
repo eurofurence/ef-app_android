@@ -401,7 +401,7 @@ class EventListView : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         bigLayout = verticalLayout {
             backgroundResource = R.color.cardview_light_background
-            lparams(matchParent, wrapContent)
+            lparams(matchParent, matchParent)
 
             title = textView("") {
                 compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
