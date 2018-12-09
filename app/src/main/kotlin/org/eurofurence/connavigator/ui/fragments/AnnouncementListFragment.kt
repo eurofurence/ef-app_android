@@ -48,7 +48,7 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
             holder.announcementTitle.text = announcement.title
             holder.announcementContent.text = announcement.area
             holder.layout.setOnClickListener {
-                val action = FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewAnnouncement(announcement.id)
+                val action = FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewAnnouncement(announcement.id.toString())
                 findNavController().navigate(action)
             }
         }
