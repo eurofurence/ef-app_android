@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
-import com.pawegio.kandroid.i
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.AnnouncementRecord
 import org.eurofurence.connavigator.R
@@ -22,7 +21,10 @@ import org.eurofurence.connavigator.ui.FragmentViewHomeDirections
 import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.filterIf
+import org.eurofurence.connavigator.util.extensions.fontAwesomeView
+import org.eurofurence.connavigator.util.extensions.now
+import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
@@ -76,7 +78,11 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         info { "Creating announcements list" }
 
-        ui.announcements.adapter = announcementAdapter
+        ui.announcements.apply {
+            adapter = announcementAdapter
+            layoutManager = NonScrollingLinearLayout(activity)
+            itemAnimator = DefaultItemAnimator()
+        }
 
         subscriptions += db.subscribe {
             info { "Updating items in announcement recycler" }

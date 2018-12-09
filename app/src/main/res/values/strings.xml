@@ -19,6 +19,7 @@
     <string name="announcement_show_old">announcement_show_old</string>
     <string name="notification_time_extra">notifications_time_extra</string>
     <string name="date_short">date_short</string>
+    <string name="event_shortcut_label">Events</string>
     <array name="polling_intervals">
         <item>100</item>
         <item>75</item>

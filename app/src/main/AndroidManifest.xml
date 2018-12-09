@@ -64,5 +64,8 @@
         <receiver android:name=".broadcast.LoginReceiver" />
         <receiver android:name=".broadcast.LogoutReceiver"/>
         <receiver android:name=".broadcast.ResetReceiver" />
+
+        <meta-data android:name="android.app.shortcuts"
+            android:resource="@xml/shortcuts" />
     </application>
 </manifest>

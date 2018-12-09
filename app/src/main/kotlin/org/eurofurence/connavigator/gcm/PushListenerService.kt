@@ -25,7 +25,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
     fun subscribe() {
         val messaging = FirebaseMessaging.getInstance()
 
-        var topics = listOf(
+        val topics = listOf(
                 "${BuildConfig.CONVENTION_IDENTIFIER}",
                 "${BuildConfig.CONVENTION_IDENTIFIER}-android"
         )
@@ -87,7 +87,8 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
             // Parse as a UUID so we're sure it's a uuid before making the intent
             val id = UUID.fromString(message.relatedId)
 
-            val action = FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewAnnouncement(id.toString())
+            val action = FragmentViewHomeDirections
+                    .actionFragmentViewHomeToFragmentViewAnnouncement(id.toString())
 
             NavDeepLinkBuilder(this)
                     .setGraph(R.navigation.nav_graph)

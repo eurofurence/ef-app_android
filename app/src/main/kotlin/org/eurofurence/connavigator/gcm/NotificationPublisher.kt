@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.pawegio.kandroid.d
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.notificationManager
 
 /**
@@ -14,18 +16,19 @@ import org.jetbrains.anko.notificationManager
  *
  *
  */
-class NotificationPublisher : BroadcastReceiver() {
+class NotificationPublisher : BroadcastReceiver(), AnkoLogger {
     companion object {
         const val TAG = "org.eurofurence.connavigator.gcm.NotificationPublisher.TAG"
         const val ITEM = "org.eurofurence.connavigator.gcm.NotificationPublisher.ITEM"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        d { "Received intent to send a notification" }
+        info { "Received intent to send a notification" }
         val notification = intent.getParcelableExtra<Notification>(ITEM)
         val tag = intent.getStringExtra(TAG) ?: ""
 
-        d { "Sending notification to system" }
-        context.notificationManager.notify(tag, 0, notification)
+        info { "Sending notification to system" }
+        context.notificationManager.notify(tag, tag.hashCode(), notification)
+        info { "Done sending notifications"}
     }
 }

@@ -138,6 +138,7 @@ class EventListFragment : Fragment(), HasDb {
         when (ui.pager.visibility) {
             View.VISIBLE -> {
                 ui.pager.visibility = View.GONE
+                ui.tabs.visibility = View.GONE
 
                 ui.searchLayout.visibility = View.VISIBLE
                 ui.searchLayout.requestFocus()
@@ -147,6 +148,7 @@ class EventListFragment : Fragment(), HasDb {
             }
             else -> {
                 ui.pager.visibility = View.VISIBLE
+                ui.tabs.visibility = View.VISIBLE
                 ui.searchLayout.visibility = View.GONE
             }
         }
@@ -190,13 +192,13 @@ class EventListUi : AnkoComponent<Fragment> {
 
             scrollView {
                 verticalLayout {
-                    search = editText()
+                    search = editText().lparams(matchParent, wrapContent)
 
                     searchLayout = linearLayout() {
                         id = 2
-                    }
-                }
-            }
+                    }.lparams(matchParent, wrapContent)
+                }.lparams(matchParent, wrapContent)
+            }.lparams(matchParent, matchParent)
         }
     }
 

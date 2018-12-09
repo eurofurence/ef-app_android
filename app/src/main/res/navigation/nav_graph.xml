@@ -122,6 +122,6 @@
         android:label="Announcement" >
         <argument
             android:name="announcementId"
-            app:argType="string" />
+            app:argType="string" /><deepLink app:uri="eurofurence://announcements/{announcementId}/"/>
     </fragment>
 </navigation>

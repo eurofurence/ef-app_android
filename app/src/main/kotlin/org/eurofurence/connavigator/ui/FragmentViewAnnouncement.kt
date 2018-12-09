@@ -66,7 +66,7 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
 
                 // Set image on top
                 if (image != null) {
-                    imageService.load(image, ui.image, false)
+                    imageService.load(image, ui.image, true)
                 } else {
                     ui.image.visibility = View.GONE
                 }
@@ -118,6 +118,7 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
                         imageResource = R.drawable.placeholder_event
                         scaleType = ImageView.ScaleType.FIT_CENTER
                         adjustViewBounds = true
+                        visibility = View.GONE
                     }.lparams(matchParent, wrapContent) {
                         margin = dip(20)
                     }
