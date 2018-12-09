@@ -5,12 +5,12 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.LinearLayout
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -95,10 +95,42 @@ class EventListFragment : Fragment(), HasDb {
         else -> changePagerAdapter(DayEventPagerAdapter(db, childFragmentManager), DayEventPagerAdapter.indexOfToday(db))
     }.apply { BackgroundPreferences.eventPagerMode = mode }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.apply {
+            this.findViewById<Toolbar>(R.id.toolbar).apply {
+                this.menu.clear()
+                this.inflateMenu(R.menu.event_list_menu)
+                this.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.action_filter -> onFilterButtonClick()
+                        R.id.action_search -> onSearchButtonClick()
+                    }
+
+                    true
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        activity?.apply {
+            val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
+
+            toolbar.menu.clear()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         ui.pager.removeOnPageChangeListener(detailsPopAdapter)
-        applyOnRoot { tabs.setupWithViewPager(null) }
+        activity?.apply {
+            val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
+
+            toolbar.menu.clear()
+        }
     }
 
     fun onSearchButtonClick() {
@@ -152,7 +184,7 @@ class EventListUi : AnkoComponent<Fragment> {
                 backgroundResource = R.color.primaryDark
             }.lparams(matchParent, wrapContent)
 
-            pager = viewPager{
+            pager = viewPager {
                 id = 1
             }.lparams(matchParent, matchParent)
 

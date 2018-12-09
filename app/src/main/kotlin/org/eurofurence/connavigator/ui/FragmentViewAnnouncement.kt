@@ -62,7 +62,7 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
                 ui.text.loadMarkdown(announcement.content)
 
                 // Retrieve top image
-                val image = announcement?.let { it[toAnnouncementImage] }
+                val image = announcement.let { it[toAnnouncementImage] }
 
                 // Set image on top
                 if (image != null) {

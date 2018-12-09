@@ -88,6 +88,7 @@ internal class NavUi : AnkoComponent<NavActivity> {
                     bar = toolbar() {
                         backgroundResource = R.color.primaryDark
                         setTitleTextColor(ContextCompat.getColor(context, R.color.textWhite))
+                        id = R.id.toolbar
                     }
 
                     linearLayout {

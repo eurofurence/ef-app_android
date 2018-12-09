@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.jetbrains.anko.*
@@ -78,6 +78,39 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        activity?.apply {
+            this.findViewById<Toolbar>(R.id.toolbar).apply {
+                this.menu.clear()
+                this.inflateMenu(R.menu.dealer_list_menu)
+                this.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.action_search -> onSearchButtonClick()
+                    }
+                    true
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        activity?.apply {
+            this.findViewById<Toolbar>(R.id.toolbar).menu.clear()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        activity?.apply {
+            this.findViewById<Toolbar>(R.id.toolbar).menu.clear()
+        }
+    }
+
     @AddTrace(name = "DealerListFragment:search", enabled = true)
     fun updateFilter() {
         info { "Filtering dealers for text=$searchText, category=$searchCategory" }
@@ -88,7 +121,9 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
             effectiveDealers = effectiveDealers.filter { it.displayName.contains(searchText, true) or it.attendeeNickname.contains(searchText, true) }
 
         if (!searchCategory.isEmpty())
-            effectiveDealers = effectiveDealers.filter { it.categories?.contains(searchCategory) ?: false }
+            effectiveDealers = effectiveDealers.filter {
+                it.categories?.contains(searchCategory) ?: false
+            }
 
         ui.dealerList.adapter = DealerRecyclerAdapter(sortDealers(effectiveDealers), db, this)
         ui.dealerList.adapter.notifyDataSetChanged()
