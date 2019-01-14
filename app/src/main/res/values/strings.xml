@@ -1,10 +1,173 @@
 <resources>
     <string name="app_name">Con Navigator</string>
 
+    <!-- Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="navigation_drawer_title">Eurofurence 24</string>
+    <string name="navigation_drawer_subtitle">Aviators - Conquer the Sky!</string>
+
+    <string name="navigation_drawer_item_home">Home</string>
+    <string name="navigation_drawer_item_info">Info</string>
+    <string name="navigation_drawer_item_events">Events</string>
+    <string name="navigation_drawer_item_dealers">Dealers</string>
+    <string name="navigation_drawer_item_maps">Maps</string>
+    <string name="navigation_drawer_item_poi">Point of Interest</string>
+
+    <string name="navigation_drawer_item_personal">Personal</string>
+    <string name="navigation_drawer_item_personal_messages">Personal Messages</string>
+    <string name="navigation_drawer_item_personal_collect_em_all">Collect \'Em All</string>
+
+    <string name="navigation_drawer_item_external">External</string>
+    <string name="navigation_drawer_item_external_website">Website</string>
+    <string name="navigation_drawer_item_external_twitter">Twitter</string>
+
+    <string name="navigation_drawer_item_app_management">App Management</string>
+    <string name="navigation_drawer_item_app_management_feedback">App Feedback</string>
+    <string name="navigation_drawer_item_app_management_update">Update</string>
+    <string name="navigation_drawer_item_app_management_about">About</string>
+    <!-- Navigation end -->
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="settings_ui_settings">UI settings</string>
+    <string name="settings_this_can_be_changed">This can be changed in your settings at any time.</string>
+
+    <string name="settings_app_settings">App Settings</string>
+    <string name="settings_app_settings_alert_time">Alert time</string>
+    <string name="settings_app_settings_alert_time_summary">Minutes a notification will appear for an event</string>
+    <string name="settings_app_settings_show_expired_announcements">Show expired Announcements</string>
+    <string name="settings_app_settings_show_expired_announcements_summary">This will show you all the announcements that have expired</string>
+    <string name="settings_app_settings_shortened_dates_and_times">Shortened dates and times</string>
+    <string name="settings_app_settings_shortened_dates_and_times_summary">Display dates in names instead of numbers (Friday vs 13&#8211;08)</string>
+
+    <string name="settings_analytics">Analytics</string>
+    <string name="settings_analytics_settings">Analytics settings</string>
+    <string name="settings_analytics_enabled">Enable Analytics</string>
+    <string name="settings_analytics_enabled_summary">Enable usage statistics</string>
+    <string name="settings_analytics_enabled_summary_on">Usage statistics turned on</string>
+    <string name="settings_analytics_enabled_summary_off">Usage statistics turned off</string>
+    <string name="settings_analytics_polling_intervals">Analytics Polling Interval</string>
+    <string name="settings_analytics_polling_intervals_summary">Percentage of user events to track</string>
+    <string name="settings_analytics_allow_collecting_of_analytical_data">Allow Eurofurence to collect anonymous analytical data.</string>
+    <string name="settings_analytics_allow_collecting_of_performance_data">Allow Eurofurence to collect performance data.</string>
+
+    <string name="settings_debug">Debug</string>
+    <string name="settings_debug_settings">Debug settings</string>
+    <string name="settings_debug_summary">Settings to debug the application</string>
+    <string name="settings_debug_event_dates">Debug event dates</string>
+    <string name="settings_debug_event_dates_summary">Change events dates to our current date so we can debug timed notifications as well as show upcoming</string>
+    <string name="settings_debug_date_offset">Debug date offset</string>
+    <string name="settings_debug_date_offset_summary">Amount of days to offset events</string>
+    <string name="settings_debug_schedule_notifications">Schedule notifications for testing</string>
+    <string name="settings_debug_schedule_notifications_summary">Schedules a notification in the near future for testing instead of actual event time</string>
+
+    <string name="settings_show_irrelevant_announcements">Show irrelevant announcements</string>
+    <string name="settings_use_days_of_the_week">Use days of the week instead of actual dates.</string>
+    <string name="settings_switch_short_and_long_press_for_events">Switch the short press and long press behaviour for events.</string>
+    <string name="settings_immediately_close_app_on_back">Immediately close app on back button press</string>
+    <string name="settings_get_notified_minutes_before">Get notified this many minutes before the start of a favorited event.</string>
+    <string name="settings_amount_of_minutes_to_get_an_alert">Amount of minutes to get an alert for a favorited event.</string>
+    <string name="settings_analytics_track_usage">Track usage with analytics</string>
+    <string name="settings_analytics_track_performance">Track performance statistics</string>
+    <string name="settings_tweak_event_days_so_it_seems_like_its_today">Tweak event days so it seems like it\'s the current date</string>
+    <string name="settings_amount_of_days_to_offset_by">The amount of days to offset by. Must be integer</string>
+    <string name="settings_amount_of_days_to_offset_event_schedule_by">Amount of days to offset the event schedule by</string>
+    <string name="settings_schedule_events_in_5_minutes">Schedule notifications in 5 minutes instead of event time</string>
+    <!-- Settings end -->
+
+    <!-- Action Bar -->
     <string name="action_settings">Settings</string>
+    <string name="action_report_bug">Report a Bug</string>
+    <string name="action_report_feedback">Feedback</string>
+    <string name="action_get_help">Get help</string>
+    <!-- Action Bar end -->
+
+    <!-- Event Pager -->
+    <string name="event_pager_search_by_title">Search by title</string>
+    <!-- Event Pager end -->
+
+    <!-- Dealer -->
+    <string name="dealers">Dealers</string>
+    <string name="dealer_name">Dealer Name</string>
+    <string name="dealer_subname">Subname</string>
+    <string name="dealer_about_artist">About the Artist</string>
+    <string name="dealer_about_art">About the Art</string>
+    <string name="dealer_telegram_handle">%1$s @ Telegram</string>
+    <string name="dealer_twitter_handle">%1$s @ Twitter</string>
+    <string name="dealer_location_and_availability">Location &amp; Availability</string>
+    <string name="dealer_only_present_on">{fa-exclamation-triangle 24sp} Only present on: %1$s</string>
+    <string name="dealer_located_in_the_after_dark">{fa-moon-o 24sp}  Located in the After Dark Dealers Den</string>
+    <string name="dealer_artist_did_not_supply_a_description">This artist did not supply any artist description to show to you :(</string>
+    <!-- Dealer end -->
+
+    <!-- Misc -->
+    <string name="misc_welcome_text">Welcome to the official Eurofurence App for Android!</string>
+    <string name="misc_welcome_before_use">Before you can use this application we need to download some data from the Eurofurence servers to your phone.\n\nThis will consume a few megabytes of traffic and can take anywhere from a few seconds up to a few minutes, depending on the speed of your connection.\n\nIs it okay to download the data now?</string>
+
+    <string name="misc_yes">Yes!</string>
+    <string name="misc_no">No!</string>
+    <string name="misc_no_not_right_now">No, Not right now</string>
+
+    <string name="misc_days">Days</string>
+    <string name="misc_current_day">Day %1$d</string>
+    <string name="misc_days_left">Only %1$d days left!</string>
+
+    <string name="misc_map">Map</string>
+    <string name="misc_filter">Filter</string>
+    <string name="misc_search">Search</string>
+
+    <string name="misc_show">Show: </string>
+    <string name="misc_find">Find: </string>
+
+    <string name="misc_categories">Categories</string>
+    <string name="misc_short_description">Short description</string>
+
+    <string name="misc_login">Login</string>
+    <string name="misc_login_details">Login details</string>
+    <string name="misc_login_needed">You need to login before you can see private messages!</string>
+
+    <string name="misc_did_not_find_any_event">I\'m sorry, we didn\'t find any event!</string>
+    <string name="misc_did_not_find_any_info">I\'m sorry, but we didn\'t find any info!</string>
+    <string name="misc_did_not_find_any_dealer">I\'m sorry, but we didn\'t find any dealer!</string>
+
+    <string name="misc_close_application">Close Application</string>
+    <string name="misc_closing_application">Closing application.</string>
+    <string name="misc_really_close_the_app">Are you sure you want to close the app?\n\n(You\'ll still receive notifications for announcements and personal messages when the app is closed.)</string>
+    <string name="misc_remember_choice">Remember this choice</string>
+    <string name="misc_no_will_close_the_app">Choosing \'No\' will close the application at this point.</string>
+
+    <string name="misc_clear_database">Clear database</string>
+    <string name="misc_clear_app_cache">Clear app cache. You WILL need an internet connection to restart</string>
+    <string name="misc_abort_clear_database">Not clearing DB</string>
+
+    <string name="misc_loading_assets">Loading assets (%1$d / %2$d)</string>
+    <string name="misc_fetching_done">Done with fetching!</string>
+    <string name="misc_fetching_failed">Something went wrong while fetching!</string>
+
+    <string name="misc_unable_to_load_announcement">Unable to load announcement</string>
+    <string name="misc_something_went_wrong">Something went wrong</string>
+
+    <string name="misc_application_will_exit">%1$s\n\nApplication will exit now.</string>
+    <string name="misc_retrieving_failed">Retrieving data from server failed</string>
+    <string name="misc_data_outdated">Your data is outdated. You will need to re-download all data</string>
+    <string name="misc_remote_config_were_updated">Remote configs were updated %1$d seconds ago.</string>
+    <string name="misc_remote_config_age">Remote Configuration %1$d hours     ago</string>
+
+    <string name="misc_version">Version</string>
+    <string name="misc_version_code">Version Code: %1$d</string>
+    <string name="misc_version_detailed">Version %1$s (%2$d) / %3$s </string>
+
+    <string name="misc_working_please_wait">Working... Please wait!</string>
+    <string name="misc_android_developers">Android Developers</string>
+    <!-- Misc end -->
+
+    <!-- Icons -->
+    <string name="icon_globe_24sp">{fa-globe 24sp}</string>
+    <string name="icon_twitter_24sp">{fa-twitter 24sp}</string>
+    <string name="icon_comments_24sp">{fa-comments 24sp}</string>
+    <!-- Icons end -->
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
