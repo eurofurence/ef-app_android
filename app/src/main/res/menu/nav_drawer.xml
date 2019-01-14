@@ -5,79 +5,79 @@
         <item
                 android:id="@+id/navHome"
                 android:icon="@drawable/icon_home"
-                android:title="Home"/>
+                android:title="@string/navigation_drawer_item_home"/>
         <item
                 android:id="@+id/navInfo"
                 android:icon="@drawable/icon_info"
-                android:title="Info"/>
+                android:title="@string/navigation_drawer_item_info"/>
         <item
                 android:id="@+id/navEvents"
                 android:icon="@drawable/icon_calendar"
-                android:title="Events"/>
+                android:title="@string/navigation_drawer_item_events"/>
         <item
                 android:id="@+id/navDealersDen"
                 android:icon="@drawable/icon_dealer"
-                android:title="Dealers"/>
+                android:title="@string/navigation_drawer_item_dealers"/>
         <item
                 android:id="@+id/navMaps"
                 android:icon="@drawable/icon_map_world"
-                android:title="Maps"/>
+                android:title="@string/navigation_drawer_item_maps"/>
         <item
                 android:id="@+id/navMap"
                 android:icon="@drawable/icon_map_world"
-                android:title="Points of Interest"/>
+                android:title="@string/navigation_drawer_item_poi"/>
     </group>
 
-    <item android:title="Personal">
+    <item android:title="@string/navigation_drawer_item_personal">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                         android:id="@+id/navLogin"
                         android:checkable="false"
                         android:icon="@drawable/icon_user"
-                        android:title="Login"/>
+                        android:title="@string/misc_login"/>
                 <item
                         android:id="@+id/navMessages"
                         android:icon="@drawable/icon_message"
-                        android:title="Personal Messages"/>
+                        android:title="@string/navigation_drawer_item_personal_messages"/>
                 <item
                         android:id="@+id/navFursuitGames"
                         android:icon="@drawable/icon_paw"
-                        android:title="Collect'Em All"/>
+                        android:title="@string/navigation_drawer_item_personal_collect_em_all"/>
             </group>
         </menu>
     </item>
-    <item android:title="External">
+    <item android:title="@string/navigation_drawer_item_external">
         <menu>
             <group>
                 <item android:id="@+id/navWebSite"
-                      android:title="Website"
+                      android:title="@string/navigation_drawer_item_external_website"
                       android:icon="@drawable/icon_domain"/>
                 <item android:id="@+id/navWebTwitter"
-                      android:title="Twitter"
+                      android:title="@string/navigation_drawer_item_external_twitter"
                       android:icon="@drawable/icon_twitter"/>
             </group>
         </menu>
     </item>
 
-    <item android:id="@+id/groupManagement" android:title="App Management">
+    <item android:id="@+id/groupManagement" android:title="@string/navigation_drawer_item_app_management">
         <menu>
             <item android:id="@+id/navFeedback"
-                  android:title="App Feedback"
+                  android:title="@string/navigation_drawer_item_app_management_feedback"
                   android:visible="false"
                   android:icon="@drawable/icon_like_filled"/>
             <item android:id="@+id/navDevReload"
-                  android:title="Update"
+                  android:title="@string/navigation_drawer_item_app_management_update"
                   android:icon="@drawable/icon_refresh"/>
             <item android:id="@+id/navDevClear"
-                  android:title="Empty database"
+                  android:title="@string/misc_clear_database"
                   android:icon="@drawable/icon_delete"/>
             <item android:id="@+id/navDevSettings"
-                  android:title="Settings"
+                  android:title="@string/settings"
                   android:icon="@drawable/icon_settings"/>
             <item android:id="@+id/navAbout"
                   android:icon="@drawable/icon_about"
-                  android:title="About"/>
+                  android:title="@string/navigation_drawer_item_app_management_about"/>
         </menu>
     </item>
 

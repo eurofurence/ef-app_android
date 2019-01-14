@@ -61,7 +61,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
                     // Increment the counter and display on UI.
                     imgCountLoaded++
                     ui.loadingSpinner.setValue(imgCountLoaded.toFloat())
-                    ui.progressText.text = "Loading assets ($imgCountLoaded / $imgCountTotal)"
+                    ui.progressText.text = getString(R.string.misc_loading_assets, imgCountLoaded, imgCountTotal)
                     Unit
                 }
             }
@@ -70,13 +70,13 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             promises successUi {
                 AppPreferences.isFirstRun = false
 
-                longToast("Done with fetching!")
+                longToast(getString(R.string.misc_fetching_done))
 
                 this@ActivityStart.startActivity(intentFor<ActivityRoot>())
             } failUi {
                 AppPreferences.isFirstRun = false
 
-                longToast("Something went wrong while fetching!")
+                longToast(getString(R.string.misc_fetching_failed))
 
                 this@ActivityStart.startActivity(intentFor<ActivityRoot>())
             }
@@ -84,8 +84,8 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             // If sync fails on the first start - we should tell the user why and exit afterwards.
             runOnUiThread {
                 this@ActivityStart.alert(
-                        "${(it.objects["reason"] as Exception).message ?: ""}\n\nApplication will exit now.",
-                        "Retrieving data from server failed"
+                        getString(R.string.misc_application_will_exit, (it.objects["reason"] as Exception).message ?: ""),
+                        getString(R.string.misc_retrieving_failed)
                     )
                 {
                     okButton { System.exit(1) }
@@ -115,14 +115,14 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         }
 
         ui.noButton.setOnClickListener {
-            longToast("Closing application.")
+            longToast(getString(R.string.misc_closing_application))
             System.exit(0)
         }
 
         subscriptions += RemotePreferences.observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    ui.remoteLastUpdatedText.text = "Remote configs were updated ${it.timeSinceLastUpdate.millis / 1000} seconds ago."
+                    ui.remoteLastUpdatedText.text = getString(R.string.misc_remote_config_were_updated, it.timeSinceLastUpdate.millis / 1000)
                 }
 
         subscriptions += AnalyticsPreferences.observer
@@ -179,7 +179,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         info { "Last Known Version: $current vs $previous" }
         // if versions differ, reset
         if (current != previous) {
-            alert("Your data is outdated. You will need to re-download all data") {
+            alert(getString(R.string.misc_data_outdated)) {
                 yesButton {
                     clearData()
                 }
@@ -229,7 +229,8 @@ class StartUi : AnkoComponent<ActivityStart> {
                     padding = dip(30)
                 }.lparams(dip(150), matchParent)
 
-                textView("Welcome to the official Eurofurence App for Android!") {
+                textView {
+                    textResource = R.string.misc_welcome_text
                     gravity = Gravity.CENTER
                     textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
                     compatAppearance = android.R.style.TextAppearance_Medium_Inverse
@@ -241,50 +242,55 @@ class StartUi : AnkoComponent<ActivityStart> {
                 startLayout = verticalLayout {
                     padding = dip(50)
 
-                    textView("""Before you can use this application we need to download some data from the Eurofurence servers to your phone.
-
-This will consume a few megabytes of traffic and can take anywhere from a few seconds up to a few minutes, depending on the speed of your connection.
-
-Is it okay to download the data now?
-                    """) {
+                    textView {
+                        textResource = R.string.misc_welcome_before_use
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault
                         textSize = 16F
                     }
 
-                    textView("Choosing 'No' will close the application at this point.")
+                    textView{
+                        textResource = R.string.misc_no_will_close_the_app
+                    }
 
                     linearLayout {
                         setPadding(0, 30, 0, 30)
 
-                        yesButton = button("Yes!") {
+                        yesButton = button {
+                            textResource = R.string.misc_yes
                             background.setColorFilter(ContextCompat.getColor(context, R.color.primaryDark), PorterDuff.Mode.SRC)
                             textColor = ContextCompat.getColor(context, R.color.textWhite)
                         }
 
-                        noButton = button("No, Not right now").lparams(matchParent, wrapContent)
+                        noButton = button {
+                            textResource = R.string.misc_no_not_right_now
+                        }.lparams(matchParent, wrapContent)
                     }.lparams(matchParent, wrapContent)
 
-                    analyticalData = checkBox("Allow Eurofurence to collect anonymous analytical data.") {
-                        hint = "This can be changed in your settings at any time."
+                    analyticalData = checkBox {
+                        textResource = R.string.settings_analytics_allow_collecting_of_analytical_data
+                        hintResource = R.string.settings_this_can_be_changed
                         isChecked = AnalyticsPreferences.enabled
                         setOnCheckedChangeListener { _, b -> AnalyticsPreferences.enabled = b }
                     }.lparams(matchParent, wrapContent) {
                         padding = dip(30)
                     }
 
-                    performanceData = checkBox("Allow Eurofurence to collect performance data.") {
-                        hint = "This can be changed in your settings at any time."
+                    performanceData = checkBox {
+                        textResource = R.string.settings_analytics_allow_collecting_of_performance_data
+                        hintResource = R.string.settings_this_can_be_changed
                         isChecked = AnalyticsPreferences.performanceTracking
                         setOnCheckedChangeListener { _, b -> AnalyticsPreferences.enabled = b }
                     }.lparams(matchParent, wrapContent) {
                         padding = dip(30)
                     }
 
-                    remoteLastUpdatedText = textView("Remote configs were updated ${RemotePreferences.timeSinceLastUpdate.millis / 1000} seconds ago.") {
+                    remoteLastUpdatedText = textView {
+                        text = resources.getString(R.string.misc_remote_config_were_updated, RemotePreferences.timeSinceLastUpdate.millis / 1000)
                         textSize = 10F
                     }
 
-                    versionIdentifierText = textView("Version ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) / ${BuildConfig.CONVENTION_IDENTIFIER}") {
+                    versionIdentifierText = textView {
+                        text = resources.getString(R.string.misc_version_detailed, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, BuildConfig.CONVENTION_IDENTIFIER)
                         textSize = 10F
                     }
                 }.lparams(matchParent, wrapContent)
@@ -304,7 +310,8 @@ Is it okay to download the data now?
                     padding = dip(50)
                 }
 
-                progressText = textView("Working... Please wait!") {
+                progressText = textView {
+                    textResource = R.string.misc_working_please_wait
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
                     compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                 }.lparams(matchParent, wrapContent) {

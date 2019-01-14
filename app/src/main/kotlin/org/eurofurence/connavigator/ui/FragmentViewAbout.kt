@@ -69,7 +69,8 @@ class AboutUi : AnkoComponent<Fragment> {
                     weightSum = 10f
 
                     verticalLayout {
-                        textView("Version") {
+                        textView {
+                            textResource = R.string.misc_version
                             compatAppearance = android.R.style.TextAppearance_Small
                         }
                         textView(BuildConfig.VERSION_NAME) {
@@ -80,10 +81,12 @@ class AboutUi : AnkoComponent<Fragment> {
                     }
 
                     verticalLayout {
-                        textView("Version Code: ${BuildConfig.VERSION_CODE}") {
+                        textView {
+                            text = resources.getString(R.string.misc_version_code, BuildConfig.VERSION_CODE)
                             compatAppearance = android.R.style.TextAppearance_Small
                         }
-                        textView("Remote Configuration: ${(now().millis - RemotePreferences.lastUpdatedDatetime.millis) / 1000 / 60 / 60} hours     ago") {
+                        textView {
+                            text = resources.getString(R.string.misc_remote_config_age, (now().millis - RemotePreferences.lastUpdatedDatetime.millis) / 1000 / 60 / 60)
                             compatAppearance = android.R.style.TextAppearance_Small
                         }
                     }.lparams(dip(0), wrapContent) {
@@ -97,7 +100,8 @@ class AboutUi : AnkoComponent<Fragment> {
                     backgroundResource = R.color.primaryDark
                     padding = dip(20)
 
-                    textView("Android Developers") {
+                    textView {
+                        textResource = R.string.misc_android_developers
                         compatAppearance = android.R.style.TextAppearance_Small_Inverse
                     }
 
@@ -191,10 +195,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     weightSum = 3F
 
 
-                    helpButton = button("Get help").lparams(dip(0), wrapContent) {
+                    helpButton = button{
+                        textResource = R.string.action_get_help
+                    }.lparams(dip(0), wrapContent) {
                         weight = 1F
                     }
-                    bugButton = button("Report a bug").lparams(dip(0), wrapContent) {
+                    bugButton = button{
+                        textResource = R.string.action_report_bug
+                    }.lparams(dip(0), wrapContent) {
                         weight = 2F
                     }
                 }

@@ -41,8 +41,8 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
         subscriptions += db.subscribe {
             val announcement = it.announcements[announcementId]
             info { "Updating announcement item" }
-            ui.title.text = announcement?.title ?: "Unable to load announcement"
-            ui.text.loadMarkdown(announcement?.content ?: "Something went wrong")
+            ui.title.text = announcement?.title ?: getString(R.string.misc_unable_to_load_announcement)
+            ui.text.loadMarkdown(announcement?.content ?: getString(R.string.misc_something_went_wrong))
 
             // Retrieve top image
             val image = announcement?.let { it[toAnnouncementImage] }

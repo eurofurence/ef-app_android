@@ -108,7 +108,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             ui.aboutArtist.text =
                     if (dealer.aboutTheArtistText.isNullOrEmpty())
-                        "This artist did not supply any artist description to show to you :("
+                        getString(R.string.dealer_artist_did_not_supply_a_description)
                     else
                         dealer.aboutTheArtistText
 
@@ -200,7 +200,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         if (dealer.attendsOnFriday == true) availableDayList.add("Fri")
         if (dealer.attendsOnSaturday == true) availableDayList.add("Sat")
 
-        ui.availableDaysText.text = "{fa-exclamation-triangle 24sp} Only present on: " + availableDayList.joinToString(", ")
+        ui.availableDaysText.text = getString(R.string.dealer_only_present_on, availableDayList.joinToString(", "))
 
         // After dark
         ui.afterDarkText.visibility = if (dealer.isAfterDark == true) View.VISIBLE else View.GONE
@@ -230,7 +230,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         if (!dealer.telegramHandle.isNullOrEmpty()) {
             info { "Setting up telegram button for ${dealer.telegramHandle}" }
             ui.telegramButton.apply {
-                text = "${dealer.telegramHandle} @ Telegram"
+                text = getString(R.string.dealer_telegram_handle, dealer.telegramHandle)
                 setOnClickListener { browse("https://telegram.me/${dealer.telegramHandle}") }
             }
             ui.telegramContainer.apply {
@@ -241,7 +241,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
         if (!dealer.twitterHandle.isNullOrEmpty()) {
             info { "Setting up twitter handle" }
             ui.twitterButton.apply {
-                text = "${dealer.twitterHandle} @ Twitter"
+                text = getString(R.string.dealer_twitter_handle, dealer.twitterHandle)
                 setOnClickListener { browse("https://twitter.com/${dealer.twitterHandle}") }
             }
             ui.twitterContainer.apply {
@@ -291,7 +291,7 @@ class DealerUi : AnkoComponent<Fragment> {
 
                         }
                         name = textView {
-                            text = "Dealer Name"
+                            textResource = R.string.dealer_name
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
                             compatAppearance = android.R.style.TextAppearance_Large_Inverse
 
@@ -299,14 +299,14 @@ class DealerUi : AnkoComponent<Fragment> {
                         }
 
                         nameSecond = textView {
-                            text = "Subname"
+                            textResource = R.string.dealer_subname
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
 
                         }
 
                         categories = textView {
-                            text = "Categories"
+                            textResource = R.string.misc_categories
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
                             setTypeface(null, Typeface.BOLD)
@@ -315,7 +315,7 @@ class DealerUi : AnkoComponent<Fragment> {
                         }
 
                         shortDescription = textView {
-                            text = "Short description"
+                            textResource = R.string.misc_short_description
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
                             setPadding(dip(10), dip(15), dip(10), dip(15))
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
@@ -328,7 +328,7 @@ class DealerUi : AnkoComponent<Fragment> {
 
                             fontAwesomeView {
                                 compatAppearance = android.R.style.TextAppearance_Medium_Inverse
-                                text = "{fa-globe 24sp}"
+                                textResource = R.string.icon_globe_24sp
                             }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
 
                             websites = verticalLayout {}.lparams(dip(0), wrapContent, 90F)
@@ -340,7 +340,7 @@ class DealerUi : AnkoComponent<Fragment> {
 
                             fontAwesomeView {
                                 compatAppearance = android.R.style.TextAppearance_Medium_Inverse
-                                text = "{fa-twitter 24sp}"
+                                textResource = R.string.icon_twitter_24sp
                             }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
 
                             twitterButton = button {}.lparams(dip(0), wrapContent, 90F)
@@ -352,7 +352,7 @@ class DealerUi : AnkoComponent<Fragment> {
 
                             fontAwesomeView {
                                 compatAppearance = android.R.style.TextAppearance_Medium_Inverse
-                                text = "{fa-comments 24sp}"
+                                textResource = R.string.icon_comments_24sp
                             }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
 
                             telegramButton = button {}.lparams(dip(0), wrapContent, 90F)
@@ -362,7 +362,7 @@ class DealerUi : AnkoComponent<Fragment> {
                     locationContainer = verticalLayout {
                         backgroundResource = R.color.cardview_light_background
                         textView {
-                            text = "Location & Availability"
+                            textResource = R.string.dealer_location_and_availability
                             compatAppearance = R.style.TextAppearance_AppCompat_Medium
                             bottomPadding = dip(5)
                         }
@@ -392,12 +392,12 @@ class DealerUi : AnkoComponent<Fragment> {
                         verticalLayout {
                             padding = dip(10)
                             availableDaysText = fontAwesomeView {
-                                text = "{fa-exclamation-triangle 24sp} Only present on: "
+                                textResource = R.string.dealer_only_present_on
                                 compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
                             }
 
                             afterDarkText = fontAwesomeView {
-                                text = "{fa-moon-o 24sp}  Located in the After Dark Dealers Den"
+                                textResource = R.string.dealer_located_in_the_after_dark
                                 compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
                             }
                         }
@@ -411,7 +411,7 @@ class DealerUi : AnkoComponent<Fragment> {
                         padding = dip(20)
                         backgroundResource = R.color.cardview_light_background
                         textView {
-                            text = "About the Artist"
+                            textResource = R.string.dealer_about_artist
                             compatAppearance = R.style.TextAppearance_AppCompat_Medium
                             bottomPadding = dip(5)
                         }
@@ -429,7 +429,7 @@ class DealerUi : AnkoComponent<Fragment> {
                         backgroundResource = R.color.cardview_light_background
 
                         textView {
-                            text = "About the Art"
+                            textResource = R.string.dealer_about_art
                             compatAppearance = R.style.TextAppearance_AppCompat_Medium
                             bottomPadding = dip(5)
                         }
