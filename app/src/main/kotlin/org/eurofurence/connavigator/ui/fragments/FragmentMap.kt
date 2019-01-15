@@ -81,8 +81,8 @@ class FragmentMap : Fragment(), ContentAPI, HasDb, AnkoLogger {
                     when (links.size) {
                         0 -> Unit
                         1 -> linkAction(links[0])
-                        else -> selector("Find out more", links.map {
-                            it.name ?: "No name provided for link"
+                        else -> selector(getString(R.string.misc_find_out_more), links.map {
+                            it.name ?: getString(R.string.misc_link_no_name_provided)
                         }) { _, position ->
                             linkAction(links[position])
                         }
@@ -122,7 +122,7 @@ private fun launchDealer(link: LinkFragment) {
     if (dealer !== null) {
         applyOnRoot { navigateToDealer(dealer) }
     } else {
-        longToast("Could not navigate to dealer")
+        longToast(getString(R.string.dealer_could_not_navigate_to))
     }
 }
 

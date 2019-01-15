@@ -108,7 +108,8 @@ class AnnouncementsUi : AnkoComponent<Fragment> {
             backgroundResource = R.color.cardview_light_background
             lparams(matchParent, wrapContent)
 
-            title = textView("Announcements") {
+            title = textView {
+                textResource = R.string.announcements
                 compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                 padding = dip(15)
             }.lparams(matchParent, wrapContent) {
@@ -139,14 +140,16 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
             }
 
             verticalLayout {
-                textView("Announcement Title") {
+                textView {
+                    textResource = R.string.announcement_title
                     id = R.id.announcementTitle
                     compatAppearance = android.R.style.TextAppearance_Medium
                 }.lparams(matchParent, wrapContent) {
                     setMargins(0, 0, 0, 0)
                 }
 
-                textView("Announcement Content") {
+                textView {
+                    textResource = R.string.announcement_content
                     id = R.id.announcementContent
                     compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                 }.lparams(matchParent, wrapContent) {

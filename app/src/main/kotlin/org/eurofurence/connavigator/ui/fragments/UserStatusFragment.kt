@@ -55,12 +55,12 @@ class UserStatusFragment : Fragment(), AnkoLogger {
 
             if (unreadMessages.isNotEmpty()) {
                 info { "Unread messages are present! Giving attention." }
-                ui.subtitle.text = "You have ${unreadMessages.size} new, unread personal message(s)!"
+                ui.subtitle.text = getString(R.string.message_you_have_unread_messages, unreadMessages.size)
                 ui.subtitle.textColor = ContextCompat.getColor(it, R.color.primaryDark)
                 ui.userIcon.textColor = ContextCompat.getColor(it, R.color.primaryDark)
             } else {
                 info { "No unread messages found, displaying total message counts" }
-                ui.subtitle.text = "You have ${messages.count()} personal message(s)."
+                ui.subtitle.text = getString(R.string.message_you_have_messages, messages.count())
                 ui.subtitle.textColor = ContextCompat.getColor(it, android.R.color.tertiary_text_dark)
                 ui.userIcon.textColor = ContextCompat.getColor(it, android.R.color.tertiary_text_dark)
             }
@@ -98,8 +98,8 @@ class UserStatusFragment : Fragment(), AnkoLogger {
             timer?.cancel()
 
             ui.apply {
-                title.text = "You are currently not logged in."
-                subtitle.text = "Tap here to login using your registration details and receive personalized information from Eurofurence!"
+                title.textResource = R.string.login_not_logged_in
+                subtitle.textResource = R.string.login_tap_to_login
                 layout.setOnClickListener {
                     startActivity(intentFor<LoginActivity>())
                 }
@@ -112,7 +112,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
                 checkMessages()
             }
             ui.apply {
-                title.text = "Welcome, ${AuthPreferences.username.capitalize()}"
+                title.text = getString(R.string.misc_welcome_user, AuthPreferences.username.capitalize())
                 layout.setOnClickListener {
                     applyOnRoot {
                         navigateRoot(FragmentViewMessageList::class.java)
@@ -147,11 +147,13 @@ class UserStatusUi : AnkoComponent<Fragment> {
             }
 
             verticalLayout {
-                title = textView("Title") {
+                title = textView {
+                    textResource = R.string.misc_title
                     compatAppearance = android.R.style.TextAppearance_Medium
                 }
 
-                subtitle = textView("Fetching . . .") {
+                subtitle = textView {
+                    textResource = R.string.misc_fetching
                     compatAppearance = android.R.style.TextAppearance_Small
                 }
                 lparams(dip(0), matchParent, 75F)

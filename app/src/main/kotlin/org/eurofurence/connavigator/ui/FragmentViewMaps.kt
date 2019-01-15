@@ -55,7 +55,7 @@ class FragmentViewMaps : Fragment(), ContentAPI, HasDb, MainScreen {
 
         applyOnRoot {
             tabs.setupWithViewPager(ui.mapViewPager)
-            changeTitle("Maps")
+            changeTitle(getString(R.string.misc_maps))
         }
     }
 }

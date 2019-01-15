@@ -268,7 +268,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                         navigateToEvent(eventValue)
                         return true
                     } else {
-                        makeSnackbar(getString(R.string.misc_did_not_find_any_event))
+                        makeSnackbar(getString(R.string.event_did_not_find))
                     }
                 }
 
@@ -294,7 +294,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                         navigateToDealer(dealerValue)
                         return true
                     } else {
-                        makeSnackbar(getString(R.string.misc_did_not_find_any_dealer))
+                        makeSnackbar(getString(R.string.dealer_did_not_find))
                     }
                 }
             }
@@ -335,11 +335,11 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         } else if (BackgroundPreferences.closeAppImmediately) {
             super.onBackPressed()
         } else {
-            alert(getString(R.string.misc_really_close_the_app), getString(R.string.misc_close_application)) {
+            alert(getString(R.string.close_really_close_the_app), getString(R.string.close_application)) {
                 customView {
                     verticalLayout {
                         checkBox {
-                            textResource = R.string.misc_remember_choice
+                            textResource = R.string.close_remember_choice
                             compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                             textColor = ContextCompat.getColor(context, R.color.textBlack)
                             setOnCheckedChangeListener { _, value -> BackgroundPreferences.closeAppImmediately = value }
@@ -483,9 +483,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navDevReload -> dispatchUpdate(this, showToastOnCompletion = true)
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
-                    alert(getString(R.string.misc_clear_app_cache), getString(R.string.misc_clear_database)) {
+                    alert(getString(R.string.clear_app_cache), getString(R.string.clear_database)) {
                         yesButton { ResetReceiver().clearData(this@ActivityRoot) }
-                        noButton { longToast(getString(R.string.misc_abort_clear_database)) }
+                        noButton { longToast(getString(R.string.clear_abort_clear_database)) }
                     }.show()
                 }
             }
@@ -501,9 +501,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         // Find login item, assign new text.
         navView.menu.findItem(R.id.navLogin)?.let {
             if (AuthPreferences.isLoggedIn())
-                it.title = getString(R.string.misc_login_details)
+                it.title = getString(R.string.login_details)
             else
-                it.title = getString(R.string.misc_login)
+                it.title = getString(R.string.login)
         }
     }
 
@@ -533,7 +533,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             navigateRoot(fragment, mode)
             true
         } else {
-            longToast(getString(R.string.misc_login_needed))
+            longToast(getString(R.string.login_needed))
             false
         }
     }

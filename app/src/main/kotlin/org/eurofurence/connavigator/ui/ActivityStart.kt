@@ -61,7 +61,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
                     // Increment the counter and display on UI.
                     imgCountLoaded++
                     ui.loadingSpinner.setValue(imgCountLoaded.toFloat())
-                    ui.progressText.text = getString(R.string.misc_loading_assets, imgCountLoaded, imgCountTotal)
+                    ui.progressText.text = getString(R.string.misc_fetching_assets, imgCountLoaded, imgCountTotal)
                     Unit
                 }
             }
@@ -85,7 +85,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
             runOnUiThread {
                 this@ActivityStart.alert(
                         getString(R.string.misc_application_will_exit, (it.objects["reason"] as Exception).message ?: ""),
-                        getString(R.string.misc_retrieving_failed)
+                        getString(R.string.error_retrieving_failed)
                     )
                 {
                     okButton { System.exit(1) }
@@ -115,7 +115,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         }
 
         ui.noButton.setOnClickListener {
-            longToast(getString(R.string.misc_closing_application))
+            longToast(getString(R.string.close_closing_application))
             System.exit(0)
         }
 
@@ -249,7 +249,7 @@ class StartUi : AnkoComponent<ActivityStart> {
                     }
 
                     textView{
-                        textResource = R.string.misc_no_will_close_the_app
+                        textResource = R.string.close_no_will_close_the_app
                     }
 
                     linearLayout {

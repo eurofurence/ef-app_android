@@ -19,6 +19,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.jetbrains.anko.*
+import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.joda.time.DateTime
 
@@ -36,11 +37,11 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
         runOnUiThread {
             if (success) {
                 info { "Login was success! Closing activity" }
-                longToast("Logged in as ${AuthPreferences.username}")
+                longToast(getString(R.string.login_logged_in_as, AuthPreferences.username))
                 finish()
             } else {
                 info { "Login failed! Showing error message" }
-                longToast("Failed to log you in!")
+                longToast(getString(R.string.login_failed))
                 ui.errorText.visibility = View.VISIBLE
                 ui.layoutMain.visibility = View.VISIBLE
                 ui.layoutBusy.visibility = View.GONE
@@ -59,7 +60,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
 
         ui.logout.setOnClickListener {
             info { "Logging user out" }
-            longToast("Logging you out, goodbye!")
+            longToast(getString(R.string.login_logged_out))
             sendBroadcast(intentFor<LogoutReceiver>())
             finish()
         }
@@ -99,7 +100,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
      * Validates the fields from the UI
      */
     private fun attemptSubmit() {
-        val emptyText = "This field is not supposed to be empty!"
+        val emptyText = getString(R.string.error_field_is_empty)
 
         if (ui.regNumber.text.isEmpty()) {
             ui.regNumber.error = emptyText
@@ -154,7 +155,8 @@ class LoginUi : AnkoComponent<LoginActivity> {
                         lparams(wrapContent, wrapContent)
                     }
 
-                    textView("Authenticating...") {
+                    textView {
+                        textResource = R.string.login_authenticating
                         padding = 20
                         gravity = Gravity.CENTER
 
@@ -167,7 +169,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
                 layoutMain = verticalLayout {
 
                     toolbar {
-                        title = "Login"
+                        titleResource = R.string.login
                         lparams(matchParent, wrapContent)
                         backgroundResource = R.color.primary
                         setTitleTextAppearance(ctx, android.R.style.TextAppearance_Medium_Inverse)
@@ -180,7 +182,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
                         lparams(matchParent, matchParent)
 
                         username = editText {
-                            hint = "Username"
+                            hintResource = R.string.login_username
                             inputType = InputType.TYPE_CLASS_TEXT
                             lparams(matchParent, wrapContent) {
                                 margin = dip(16)
@@ -188,7 +190,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
                         }
 
                         regNumber = editText {
-                            hint = "Registration number"
+                            hintResource = R.string.login_reg_number
                             inputType = InputType.TYPE_CLASS_NUMBER
 
                             lparams(matchParent, wrapContent) {
@@ -197,14 +199,15 @@ class LoginUi : AnkoComponent<LoginActivity> {
                         }
 
                         password = editText {
-                            hint = "Password"
+                            hintResource = R.string.login_password
                             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                             lparams(matchParent, wrapContent) {
                                 margin = dip(16)
                             }
                         }
 
-                        errorText = textView("Your login was unsuccessful, are you sure you entered the correct data?") {
+                        errorText = textView {
+                            textResource = R.string.login_unsuccessful
                             visibility = View.GONE
                             textColor = ContextCompat.getColor(ctx, R.color.primary)
                             lparams(matchParent, wrapContent) {
@@ -212,14 +215,15 @@ class LoginUi : AnkoComponent<LoginActivity> {
                             }
                         }
 
-                        textView("Your login credentials for the app are the same as for the Eurofurence Registration System.\n\nIf you do not remember or have access to them, you can ask for a PIN code to sign in at the registration desk or security office.") {
+                        textView {
+                            textResource = R.string.login_information
                             lparams(matchParent, wrapContent) {
                                 margin = dip(16)
                             }
                         }
 
                         submit = button {
-                            text = "Login"
+                            textResource = R.string.login
                             background.setColorFilter(ContextCompat.getColor(context, R.color.primaryDark), PorterDuff.Mode.SRC)
                             textColor = ContextCompat.getColor(context, R.color.textWhite)
 
@@ -228,7 +232,8 @@ class LoginUi : AnkoComponent<LoginActivity> {
                             }
                         }
 
-                        moreInformation = button("More Information") {
+                        moreInformation = button {
+                            textResource = R.string.misc_more_information
                             lparams(matchParent, wrapContent) {
                                 setMargins(dip(16), 0, dip(16), dip(16))
                             }
@@ -239,18 +244,21 @@ class LoginUi : AnkoComponent<LoginActivity> {
                     verticalLayout {
                         visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
 
-                        textView("Username: ${AuthPreferences.username}") {
+                        textView {
+                            text = resources.getString(R.string.login_logged_in_as, AuthPreferences.username)
                             lparams(matchParent, wrapContent) {
                                 margin = dip(16)
                             }
                         }
-                        textView("Login is valid until: ${DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime()}") {
+                        textView {
+                            text = resources.getString(R.string.login_valid_until, DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime())
                             lparams(matchParent, wrapContent) {
                                 margin = dip(16)
                             }
                         }
 
-                        logout = button("Logout") {
+                        logout = button {
+                            textResource = R.string.login_logout
                             lparams(matchParent, wrapContent) {
                                 margin = dip(16)
                             }

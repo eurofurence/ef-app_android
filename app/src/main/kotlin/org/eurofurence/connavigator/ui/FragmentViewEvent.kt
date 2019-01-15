@@ -87,9 +87,9 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
                 }
             }
 
-            ui.time.text = "${db.eventStart(event).dayOfWeek().asText} from ${event.startTimeString()} to ${event.endTimeString()}"
+            ui.time.text = getString(R.string.event_weekday_from_to, db.eventStart(event).dayOfWeek().asText, event.startTimeString(), event.endTimeString())
             ui.organizers.text = event.ownerString()
-            ui.room.text = conferenceRoom?.name ?: "Unable to locate room!"
+            ui.room.text = getString(R.string.misc_room_number, conferenceRoom?.name ?: getString(R.string.event_unable_to_locate_room))
 
             (event.posterImageId ?: event.bannerImageId).let {
                 if (it != ui.image.tag) {
@@ -201,24 +201,25 @@ class EventUi : AnkoComponent<Fragment> {
                         id = R.id.event_splitter
                         backgroundResource = R.color.primaryDarker
                         padding = dip(15)
-                        title = textView("LargeText") {
-
+                        title = textView {
+                            textResource = R.string.event
                             compatAppearance = android.R.style.TextAppearance_Large_Inverse
                             setPadding(0, dip(15), 0, dip(15))
                             gravity = Gravity.CENTER_HORIZONTAL
                         }.lparams(matchParent, wrapContent)
 
-                        time = textView("Con Day: %s") {
+                        time = textView {
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                             setPadding(0, 0, 0, dip(10))
                         }.lparams(matchParent, wrapContent, weight = 5F)
 
-                        room = textView("Room: %s") {
+                        room = textView {
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                             setPadding(0, 0, 0, dip(10))
                         }.lparams(matchParent, wrapContent, weight = 5F)
 
-                        organizers = textView("Run by %s") {
+                        organizers = textView {
+                            textResource = R.string.event_run_by
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                             setPadding(0, 0, 0, dip(10))
                         }.lparams(matchParent, wrapContent, weight = 5F)

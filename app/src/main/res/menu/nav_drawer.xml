@@ -5,7 +5,7 @@
         <item
                 android:id="@+id/navHome"
                 android:icon="@drawable/icon_home"
-                android:title="@string/navigation_drawer_item_home"/>
+                android:title="@string/misc_home"/>
         <item
                 android:id="@+id/navInfo"
                 android:icon="@drawable/icon_info"
@@ -13,15 +13,15 @@
         <item
                 android:id="@+id/navEvents"
                 android:icon="@drawable/icon_calendar"
-                android:title="@string/navigation_drawer_item_events"/>
+                android:title="@string/events"/>
         <item
                 android:id="@+id/navDealersDen"
                 android:icon="@drawable/icon_dealer"
-                android:title="@string/navigation_drawer_item_dealers"/>
+                android:title="@string/dealers"/>
         <item
                 android:id="@+id/navMaps"
                 android:icon="@drawable/icon_map_world"
-                android:title="@string/navigation_drawer_item_maps"/>
+                android:title="@string/misc_maps"/>
         <item
                 android:id="@+id/navMap"
                 android:icon="@drawable/icon_map_world"
@@ -35,7 +35,7 @@
                         android:id="@+id/navLogin"
                         android:checkable="false"
                         android:icon="@drawable/icon_user"
-                        android:title="@string/misc_login"/>
+                        android:title="@string/login"/>
                 <item
                         android:id="@+id/navMessages"
                         android:icon="@drawable/icon_message"
@@ -63,14 +63,14 @@
     <item android:id="@+id/groupManagement" android:title="@string/navigation_drawer_item_app_management">
         <menu>
             <item android:id="@+id/navFeedback"
-                  android:title="@string/navigation_drawer_item_app_management_feedback"
+                  android:title="@string/action_report_feedback"
                   android:visible="false"
                   android:icon="@drawable/icon_like_filled"/>
             <item android:id="@+id/navDevReload"
                   android:title="@string/navigation_drawer_item_app_management_update"
                   android:icon="@drawable/icon_refresh"/>
             <item android:id="@+id/navDevClear"
-                  android:title="@string/misc_clear_database"
+                  android:title="@string/clear_database"
                   android:icon="@drawable/icon_delete"/>
             <item android:id="@+id/navDevSettings"
                   android:title="@string/settings"

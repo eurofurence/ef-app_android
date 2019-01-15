@@ -328,7 +328,7 @@ class DealerUi : AnkoComponent<Fragment> {
 
                             fontAwesomeView {
                                 compatAppearance = android.R.style.TextAppearance_Medium_Inverse
-                                textResource = R.string.icon_globe_24sp
+                                text = "{fa-globe 24sp}"
                             }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
 
                             websites = verticalLayout {}.lparams(dip(0), wrapContent, 90F)
@@ -340,7 +340,7 @@ class DealerUi : AnkoComponent<Fragment> {
 
                             fontAwesomeView {
                                 compatAppearance = android.R.style.TextAppearance_Medium_Inverse
-                                textResource = R.string.icon_twitter_24sp
+                                text = "{fa-twitter 24sp}"
                             }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
 
                             twitterButton = button {}.lparams(dip(0), wrapContent, 90F)
@@ -352,7 +352,7 @@ class DealerUi : AnkoComponent<Fragment> {
 
                             fontAwesomeView {
                                 compatAppearance = android.R.style.TextAppearance_Medium_Inverse
-                                textResource = R.string.icon_comments_24sp
+                                text = "{fa-comments 24sp}"
                             }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
 
                             telegramButton = button {}.lparams(dip(0), wrapContent, 90F)
