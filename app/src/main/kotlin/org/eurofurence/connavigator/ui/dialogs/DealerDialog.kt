@@ -51,7 +51,7 @@ class DealerDialog : DialogFragment(), AnkoLogger {
                     Analytics.event(Analytics.Category.DEALER, Analytics.Action.SHARED, dealerRecord.displayName
                             ?: dealerRecord.attendeeNickname)
 
-                    startActivity(Intent.createChooser(SharingUtility.share(Formatter.shareDealer(dealerRecord)), getString(R.string.dealer_share_dealer)))
+                    startActivity(Intent.createChooser(SharingUtility.share(Formatter.shareDealer(dealerRecord, context)), getString(R.string.dealer_share_dealer)))
                 }
             }
 }

@@ -81,7 +81,7 @@
     <string name="event">Event</string>
     <string name="events">Events</string>
     <string name="event_schedule">Event Schedule</string>
-    <string name="event_tracks">Even tracks</string>
+    <string name="event_tracks">Event tracks</string>
     <string name="event_weekday_from_to">%1$s from %2$s to %3$s</string>
     <string name="event_unable_to_locate_room">Unable to locate room!</string>
     <string name="event_run_by">Run by %1$s</string>
@@ -89,12 +89,13 @@
     <string name="event_upcoming">Upcoming events</string>
     <string name="event_running">Running events</string>
     <string name="event_favorited">Favorited events</string>
-    <string name="event_options_for">Event options for %1$s</string>
+    <string name="event_options_for">Event options for event %1$s</string>
     <string name="event_add_to_favorites">Add event to favorites</string>
     <string name="event_remove_from_favorites">Remove event from favorites</string>
     <string name="event_changed_status">Changed event status!</string>
     <string name="event_share_event">Share Event</string>
     <string name="event_share_export_to_calendar">Export to calendar</string>
+    <string name="event_check_out_url">Check out %1$s!\n%2$s</string>
     <string name="event_countdown_minutes">%1$d min</string>
     <string name="event_did_not_find">I\'m sorry, we didn\'t find any event!</string>
     <!-- Event end -->
@@ -120,6 +121,7 @@
     <string name="dealer_artist_did_not_supply_a_description">This artist did not supply any artist description to show to you :(</string>
     <string name="dealer_options_for">Dealer options for %1$s</string>
     <string name="dealer_share_dealer">Share Dealer</string>
+    <string name="dealer_check_out_dealer_url">Check out %1$s at the dealers den!\n%2$s</string>
     <string name="dealer_could_not_navigate_to">Could not navigate to dealer</string>
     <string name="dealer_did_not_find">I\'m sorry, but we didn\'t find any dealer!</string>
     <!-- Dealer end -->
@@ -161,7 +163,7 @@
     <string name="login_username">Username</string>
     <string name="login_reg_number">Registration number</string>
     <string name="login_password">Password</string>
-    <string name="login_authenticating">Authenticating...</string>
+    <string name="login_authenticating">Authenticating&#8230;</string>
     <string name="login_details">Login details</string>
     <string name="login_logged_in_as">Logged in as %1$s</string>
     <string name="login_valid_until">Login is valid until: %1$s</string>
@@ -187,6 +189,7 @@
     <string name="clear_database">Clear database</string>
     <string name="clear_app_cache">Clear app cache. You WILL need an internet connection to restart</string>
     <string name="clear_abort_clear_database">Not clearing DB</string>
+    <string name="clear_completed_closing">App reset has been completed. Closing.</string>
     <!-- Clear DB end -->
 
     <!-- Misc -->
@@ -234,7 +237,7 @@
     <string name="misc_did_not_find_any_info">I\'m sorry, but we didn\'t find any info!</string>
 
     <string name="misc_fetching_assets">Loading assets (%1$d / %2$d)</string>
-    <string name="misc_fetching">Fetching . . .</string>
+    <string name="misc_fetching">Fetching&#8230;</string>
     <string name="misc_fetching_done">Done with fetching!</string>
     <string name="misc_fetching_failed">Something went wrong while fetching!</string>
 
@@ -253,7 +256,7 @@
     <string name="misc_version_code">Version Code: %1$d</string>
     <string name="misc_version_detailed">Version %1$s (%2$d) / %3$s </string>
 
-    <string name="misc_working_please_wait">Working... Please wait!</string>
+    <string name="misc_working_please_wait">Working&#8230; Please wait!</string>
     <string name="misc_android_developers">Android Developers</string>
 
     <string name="misc_concat_newline">%1$s\n%2$s</string>

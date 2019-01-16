@@ -1,7 +1,9 @@
 package org.eurofurence.connavigator.util
 
+import android.content.Context
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.EventRecord
+import org.eurofurence.connavigator.R
 import java.util.*
 
 /**
@@ -9,12 +11,12 @@ import java.util.*
  */
 object Formatter {
 
-    fun shareEvent(event: EventRecord): String {
-        return "Check out ${event.title}!\n${createUrl("event", event.id)}"
+    fun shareEvent(event: EventRecord, ctx: Context): String {
+        return ctx.getString(R.string.event_check_out_url, event.title, createUrl("event", event.id))
     }
 
-    fun shareDealer(dealer: DealerRecord): String {
-        return "Check out ${dealer.displayName} at the dealers den!\n${createUrl("dealer", dealer.id)}"
+    fun shareDealer(dealer: DealerRecord, ctx: Context): String {
+        return ctx.getString(R.string.dealer_check_out_dealer_url, dealer.displayName, createUrl("dealer", dealer.id))
     }
 
     private fun createUrl(type: String, id: UUID): String {

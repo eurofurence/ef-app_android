@@ -27,7 +27,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
     )
 
     return context.selector(
-            context.getString(R.string.event_options_for),
+            context.getString(R.string.event_options_for, event.title),
             options
     ) { _, position ->
         when (position) {
@@ -59,7 +59,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
 
                 Analytics.event(Analytics.Category.EVENT, Analytics.Action.SHARED, event.title)
                 //share
-                context.share(Formatter.shareEvent(event), context.getString(R.string.event_share_event))
+                context.share(Formatter.shareEvent(event, context), context.getString(R.string.event_share_event))
             }
         }
     }
