@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import io.swagger.client.ApiException
-import io.swagger.client.model.CollectTokenResponse
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.successUi
@@ -67,7 +66,7 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             it.result.let { result ->
                 if (it.isSuccessful == true && result != null) {
-                    ui.setFursuit(result)
+                    ui.setFursuit(getString(R.string.fursuit_game_name_species, result.name, result.species))
                     ui.setMode(FursuitUiMode.SHOW_SUIT)
                 } else {
                     ui.error.text = it.error?.message ?: getString(R.string.error_something_went_wrong)
@@ -125,8 +124,8 @@ class FursuitGameUi : AnkoComponent<Fragment> {
         }
     }
 
-    fun setFursuit(token: CollectTokenResponse) {
-        fursuitName.text = "${token.name} the ${token.species}" // TODO: IceTiger - getString(R.string.fursuit_game_name_species, token.name, token.species)
+    fun setFursuit(suiterName: String) {
+        fursuitName.text = suiterName
     }
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {

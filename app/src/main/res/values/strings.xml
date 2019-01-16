@@ -130,7 +130,7 @@
     <string name="fursuit_game">Fursuit Games</string>
     <string name="fursuit_game_you_have_collected_number_suits">You have collected %1$d suits, ranking you at number %2$d!</string>
     <string name="fursuit_game_already_caught">You\'ve already caught this suiter</string>
-    <!-- TODO: IceTiger - <string name="fursuit_game_name_species">%1$s the %1$s</string> -->
+    <string name="fursuit_game_name_species">%1$s the %2$s</string>
     <string name="fursuit_game_fill_in_id">Fill in a fursuiter ID!</string>
     <string name="fursuit_game_they_have_a_tag">They should have a tag somewhere!</string>
     <string name="fursuit_game_you_have_collected">You have collected</string>
