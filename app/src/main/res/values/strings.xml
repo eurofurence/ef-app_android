@@ -116,8 +116,8 @@
     <string name="dealer_telegram_handle">%1$s @ Telegram</string>
     <string name="dealer_twitter_handle">%1$s @ Twitter</string>
     <string name="dealer_location_and_availability">Location &amp; Availability</string>
-    <string name="dealer_only_present_on">{fa-exclamation-triangle 24sp} Only present on: %1$s</string>
-    <string name="dealer_located_in_the_after_dark">{fa-moon-o 24sp}  Located in the After Dark Dealers Den</string>
+    <string name="dealer_only_present_on">Only present on: %1$s</string>
+    <string name="dealer_located_in_the_after_dark">Located in the After Dark Dealers Den</string>
     <string name="dealer_artist_did_not_supply_a_description">This artist did not supply any artist description to show to you :(</string>
     <string name="dealer_options_for">Dealer options for %1$s</string>
     <string name="dealer_share_dealer">Share Dealer</string>

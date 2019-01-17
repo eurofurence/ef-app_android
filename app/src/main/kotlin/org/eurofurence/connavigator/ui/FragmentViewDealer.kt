@@ -392,12 +392,12 @@ class DealerUi : AnkoComponent<Fragment> {
                         verticalLayout {
                             padding = dip(10)
                             availableDaysText = fontAwesomeView {
-                                textResource = R.string.dealer_only_present_on
+                                text = "{fa-exclamation-triangle 24sp} ${resources.getString(R.string.dealer_only_present_on)}"
                                 compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
                             }
 
                             afterDarkText = fontAwesomeView {
-                                textResource = R.string.dealer_located_in_the_after_dark
+                                text = "{fa-moon-o 24sp} ${resources.getString(R.string.dealer_located_in_the_after_dark)}"
                                 compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
                             }
                         }
