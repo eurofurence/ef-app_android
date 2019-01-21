@@ -37,4 +37,10 @@
 
     <item name="event_splitter" type="id"/>
     <item name="map_view_pager" type="id"/>
+    <item name="toolbar" type="id" />
+    <item name="eventSearch" type="id" />
+
+    <item name="navDays" type="id" />
+    <item name="navTitle" type="id" />
+    <item name="navSubTitle" type="id" />
 </resources>

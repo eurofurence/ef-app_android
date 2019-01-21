@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,16 +18,25 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.database.dispatchUpdate
+import org.eurofurence.connavigator.pref.RemotePreferences
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.navigationView
 import org.jetbrains.anko.support.v4.drawerLayout
+import org.joda.time.DateTime
+import org.joda.time.Days
 
 class NavActivity : AppCompatActivity(), AnkoLogger {
     internal val ui = NavUi()
 
     val navFragment by lazy { NavHostFragment.create(R.navigation.nav_graph) }
     val navController by lazy { navFragment.findNavController() }
+
+    // TODO: Fill in date and subtitles. Cannot be found currently.
+    val navDays by lazy { findViewById<TextView>(R.id.navDays) }
+    val navTitle by lazy { findViewById<TextView>(R.id.navTitle) }
+    val navSubTitle by lazy { findViewById<TextView>(R.id.navSubTitle) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,6 +48,21 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
                 .replace(R.id.nav_graph, navFragment)
                 .setPrimaryNavigationFragment(navFragment)
                 .commit()
+
+        navTitle?.apply {
+            navTitle.text = RemotePreferences.eventTitle
+            navSubTitle.text = RemotePreferences.eventSubTitle
+
+            // Calculate the days between, using the current time.
+            val firstDay = DateTime(RemotePreferences.nextConStart)
+            val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
+
+            // On con vs. before con. This should be updated on day changes
+            if (days <= 0)
+                navDays.text = getString(R.string.misc_current_day, 1 - days)
+            else
+                navDays.text = getString(R.string.misc_days_left, days)
+        }
 
         info { "Inserted Nav Fragment" }
     }
@@ -61,7 +86,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
         info { "Selecting item" }
         return when (item.itemId) {
             R.id.navDevReload -> UpdateIntentService().dispatchUpdate(this, true).let { true }
-            R.id.navDevClear -> alert("Are you sure you want to reset al your settings and clear all your data? You will have to download this again", "Clearing database") {
+            R.id.navDevClear -> alert(getString(R.string.clear_app_cache), getString(R.string.clear_database)) {
                 yesButton { ResetReceiver().clearData(this@NavActivity) }
                 noButton { }
             }.show().let { true }
@@ -79,6 +104,7 @@ internal class NavUi : AnkoComponent<NavActivity> {
     lateinit var bar: Toolbar
     lateinit var drawer: DrawerLayout
     lateinit var nav: NavigationView
+
     override fun createView(ui: AnkoContext<NavActivity>) = with(ui) {
         drawerLayout {
             drawer = this
