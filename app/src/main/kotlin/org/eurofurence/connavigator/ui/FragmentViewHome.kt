@@ -49,16 +49,16 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, MainScreen, HasDb {
     var subscriptions = Disposables.empty()
     val now: DateTime by lazy { DateTime.now() }
 
-    private val upcoming by lazy { EventRecyclerFragment().withArguments(EventList(database).isUpcoming().sortByStartTime(), "Upcoming events", false) }
-    private val current by lazy { EventRecyclerFragment().withArguments(EventList(database).isCurrent().sortByStartTime(), "Running events", false) }
-    private val favorited by lazy { EventRecyclerFragment().withArguments(EventList(database).isFavorited().sortByDateAndTime(), "Favorited events", false, true) }
+    private val upcoming by lazy { EventRecyclerFragment().withArguments(EventList(database).isUpcoming().sortByStartTime(), getString(R.string.event_upcoming), false) }
+    private val current by lazy { EventRecyclerFragment().withArguments(EventList(database).isCurrent().sortByStartTime(), getString(R.string.event_running), false) }
+    private val favorited by lazy { EventRecyclerFragment().withArguments(EventList(database).isFavorited().sortByDateAndTime(), getString(R.string.event_favorited), false, true) }
     private val announcement by lazy { AnnouncementListFragment() }
     private val userStatus by lazy { UserStatusFragment() }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        applyOnRoot { changeTitle("Home") }
+        applyOnRoot { changeTitle(getString(R.string.misc_home)) }
 
         configureEventRecyclers()
 
@@ -159,8 +159,8 @@ class HomeUi : AnkoComponent<Fragment> {
                         lparams(displayMetrics.widthPixels / 2, displayMetrics.widthPixels / 2)
                         gravity = Gravity.CENTER
                         strokeWidth = 25F
-                        suffixText = "Days"
-                        bottomText = "Until next EF"
+                        suffixText = resources.getString(R.string.misc_days)
+                        bottomText = resources.getString(R.string.misc_until_next_ef)
                         bottomTextSize = dip(16F).toFloat()
                         suffixTextSize = dip(20F).toFloat()
 

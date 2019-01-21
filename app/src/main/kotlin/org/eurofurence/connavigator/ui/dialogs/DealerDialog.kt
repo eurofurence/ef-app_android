@@ -34,7 +34,7 @@ class DealerDialog : DialogFragment(), AnkoLogger {
         return if ("dealerRecord" in arguments) {
             dealerRecord = arguments.jsonObjects["dealerRecord"]
 
-            builder.setTitle("Dealer options for ${dealerRecord.displayName}")
+            builder.setTitle(getString(R.string.dealer_options_for, dealerRecord.displayName))
 
             builder.setItems(R.array.dealer_options) { _, i -> update(i) }
 
@@ -51,7 +51,7 @@ class DealerDialog : DialogFragment(), AnkoLogger {
                     Analytics.event(Analytics.Category.DEALER, Analytics.Action.SHARED, dealerRecord.displayName
                             ?: dealerRecord.attendeeNickname)
 
-                    startActivity(Intent.createChooser(SharingUtility.share(Formatter.shareDealer(dealerRecord)), "Share Dealer"))
+                    startActivity(Intent.createChooser(SharingUtility.share(Formatter.shareDealer(dealerRecord, context)), getString(R.string.dealer_share_dealer)))
                 }
             }
 }

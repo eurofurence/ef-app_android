@@ -268,7 +268,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                         navigateToEvent(eventValue)
                         return true
                     } else {
-                        makeSnackbar("I'm sorry, we didn't find any event!")
+                        makeSnackbar(getString(R.string.event_did_not_find))
                     }
                 }
 
@@ -281,7 +281,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                         navigateToKnowledgeEntry(knowledgeEntryValue)
                         return true
                     } else {
-                        makeSnackbar("I'm sorry, but we didn't find any info!")
+                        makeSnackbar(getString(R.string.misc_did_not_find_any_info))
                     }
                 }
 
@@ -294,7 +294,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                         navigateToDealer(dealerValue)
                         return true
                     } else {
-                        makeSnackbar("I'm sorry, but we didn't find any dealer!")
+                        makeSnackbar(getString(R.string.dealer_did_not_find))
                     }
                 }
             }
@@ -335,10 +335,11 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         } else if (BackgroundPreferences.closeAppImmediately) {
             super.onBackPressed()
         } else {
-            alert("Are you sure you want to close the app?\n\n(You'll still receive notifications for announcements and personal messages when the app is closed.)", "Close Application?") {
+            alert(getString(R.string.close_really_close_the_app), getString(R.string.close_application)) {
                 customView {
                     verticalLayout {
-                        checkBox("Remember this choice") {
+                        checkBox {
+                            textResource = R.string.close_remember_choice
                             compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                             textColor = ContextCompat.getColor(context, R.color.textBlack)
                             setOnCheckedChangeListener { _, value -> BackgroundPreferences.closeAppImmediately = value }
@@ -482,9 +483,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
                 R.id.navDevReload -> dispatchUpdate(this, showToastOnCompletion = true)
                 R.id.navDevSettings -> handleSettings()
                 R.id.navDevClear -> {
-                    alert("Empty app cache. You WILL need an internet connection to restart", "Clear database") {
+                    alert(getString(R.string.clear_app_cache), getString(R.string.clear_database)) {
                         yesButton { ResetReceiver().clearData(this@ActivityRoot) }
-                        noButton { longToast("Not clearing DB") }
+                        noButton { longToast(getString(R.string.clear_abort_clear_database)) }
                     }.show()
                 }
             }
@@ -500,9 +501,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         // Find login item, assign new text.
         navView.menu.findItem(R.id.navLogin)?.let {
             if (AuthPreferences.isLoggedIn())
-                it.title = "Login details"
+                it.title = getString(R.string.login_details)
             else
-                it.title = "Login"
+                it.title = getString(R.string.login)
         }
     }
 
@@ -522,9 +523,9 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
         navSubtitle.text = RemotePreferences.eventSubTitle
         // On con vs. before con. This should be updated on day changes
         if (days <= 0)
-            navDays.text = "Day ${1 - days}"
+            navDays.text = getString(R.string.misc_current_day, 1 - days)
         else
-            navDays.text = "Only $days days left!"
+            navDays.text = getString(R.string.misc_days_left, days)
     }
 
     private fun <T : Fragment> navigateIfLoggedIn(fragment: Class<T>, mode: ActionBarMode = ActionBarMode.NONE): Boolean {
@@ -532,7 +533,7 @@ class ActivityRoot : AppCompatActivity(), RootAPI, SharedPreferences.OnSharedPre
             navigateRoot(fragment, mode)
             true
         } else {
-            longToast("You need to login before you can see private messages!")
+            longToast(getString(R.string.login_needed))
             false
         }
     }

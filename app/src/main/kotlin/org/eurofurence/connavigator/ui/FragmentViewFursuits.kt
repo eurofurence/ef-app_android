@@ -26,9 +26,9 @@ class FragmentViewFursuits : Fragment(), MainScreen {
 
     inner class FursuitPagerAdapter : FragmentPagerAdapter(childFragmentManager) {
         override fun getPageTitle(position: Int) = when(position){
-            0 -> "Collect"
-            1 -> "My collection"
-            else -> "Collect"
+            0 -> getString(R.string.fursuit_game_collect)
+            1 -> getString(R.string.fursuit_game_my_collection)
+            else -> getString(R.string.fursuit_game_collect)
         }
 
         override fun getItem(position: Int): Fragment = when (position) {

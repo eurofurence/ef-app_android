@@ -76,7 +76,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
         }
         eventPager.addOnPageChangeListener(detailsPopAdapter)
 
-        applyOnRoot { changeTitle("Event Schedule") }
+        applyOnRoot { changeTitle(getString(R.string.event_schedule)) }
     }
 
 
@@ -130,7 +130,7 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
     override fun onFilterButtonClick() {
         applyOnRoot { popDetails() }
 
-        selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks", "Favorites")) { _, position ->
+        selector(getString(R.string.misc_filter_change_mode), listOf(getString(R.string.misc_days), getString(R.string.misc_rooms), getString(R.string.event_tracks), getString(R.string.event_schedule))) { _, position ->
             when (position) {
                 1 -> changePagerAdapter(EventPagerMode.ROOMS)
                 2 -> changePagerAdapter(EventPagerMode.TRACKS)

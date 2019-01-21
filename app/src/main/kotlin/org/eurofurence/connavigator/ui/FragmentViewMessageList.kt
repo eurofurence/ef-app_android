@@ -58,8 +58,10 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb, MainS
             val message = messages[position]
 
             holder.title.text = message.subject
-            holder.date.text = "From ${message.authorName}\nSent: ${message.createdDateTimeUtc?.toRelative()
-                    ?: "Not yet"}"
+            holder.date.text = getString(R.string.misc_concat_newline,
+                    getString(R.string.message_from_name, message.authorName),
+                    getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
+            )
 
             if (message.readDateTimeUtc != null) {
                 holder.icon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
@@ -90,7 +92,7 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb, MainS
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        applyOnRoot { changeTitle("Personal Messages") }
+        applyOnRoot { changeTitle(getString(R.string.navigation_drawer_item_personal_messages)) }
 
         info { "Filling in messages" }
 
@@ -110,7 +112,7 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb, MainS
             ui.messageList.visibility = View.VISIBLE
         } failUi {
             warn { "Failed to retrieve messages" }
-            longToast("Failed to retrieve messages!")
+            longToast(getString(R.string.message_failed_to_retrieve))
         }
     }
 

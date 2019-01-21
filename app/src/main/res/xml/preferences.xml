@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-            android:title="App Settings">
+            android:title="@string/settings_app_settings">
         <ListPreference android:key="@string/notification_time_extra"
-                        android:title="Alert time"
-                        android:summary="Minutes a notification will appear for an event"
+                        android:title="@string/settings_app_settings_alert_time"
+                        android:summary="@string/settings_app_settings_alert_time_summary"
                         android:entries="@array/notification_timeframe"
                         android:entryValues="@array/notification_timeframe_v"
                         android:defaultValue="15"/>
         <CheckBoxPreference android:key="@string/announcement_show_old"
-                            android:title="Show expired Announcements"
-                            android:summary="This will show you all the announcements that have expired"
+                            android:title="@string/settings_app_settings_show_expired_announcements"
+                            android:summary="@string/settings_app_settings_show_expired_announcements_summary"
                             android:defaultValue="false"/>
         <CheckBoxPreference android:key="@string/date_short"
-                            android:title="Shortened dates and times"
-                            android:contentDescription="Display dates in names instead of numbers (Friday vs 13-08)"
+                            android:title="@string/settings_app_settings_shortened_dates_and_times"
+                            android:contentDescription="@string/settings_app_settings_shortened_dates_and_times_summary"
                             android:defaultValue="true"
                             android:enabled="true"/>
     </PreferenceCategory>
     <PreferenceCategory
-            android:title="Analytics">
+            android:title="@string/settings_analytics">
         <CheckBoxPreference
                 android:key="@string/settings_tag_analytics_enabled"
-                android:title="Enable Analytics"
-                android:summary="Enable usage statistics"
-                android:summaryOn="Usage statistics turned on"
-                android:summaryOff="Usage statistics turned off"
+                android:title="@string/settings_analytics_enabled"
+                android:summary="@string/settings_analytics_enabled_summary"
+                android:summaryOn="@string/settings_analytics_enabled_summary_on"
+                android:summaryOff="@string/settings_analytics_enabled_summary_off"
                 android:defaultValue="true"/>
         <EditTextPreference
                 android:dependency="@string/settings_tag_analytics_interval"
                 android:key="analytics_polling_interval"
-                android:title="Analytics Polling Interval"
-                android:summary="Percentage of user events to track"
+                android:title="@string/settings_analytics_polling_intervals"
+                android:summary="@string/settings_analytics_polling_intervals_summary"
                 android:entries="@array/polling_intervals"
                 android:defaultValue="50"/>
     </PreferenceCategory>
     <PreferenceCategory
-            android:title="Debug"
-            android:summary="Settings to debug the application">
+            android:title="@string/settings_debug"
+            android:summary="@string/settings_debug_summary">
         <CheckBoxPreference
                 android:key="@string/debug_date_enabled"
-                android:title="Debug event dates"
-                android:summary="Change events dates to our current date so we can debug timed notifications as well as show upcoming"
+                android:title="@string/settings_debug_event_dates"
+                android:summary="@string/settings_debug_event_dates_summary"
                 android:defaultValue="false"/>
         <ListPreference
                 android:key="@string/debug_date_setting"
-                android:title="Debug date offset"
-                android:summary="Amount of days to offset events"
+                android:title="@string/settings_debug_date_offset"
+                android:summary="@string/settings_debug_date_offset_summary"
                 android:entries="@array/debug_days_to_add_v"
                 android:entryValues="@array/debug_days_to_add"
                 android:defaultValue="0"
                 android:dependency="@string/debug_date_enabled"/>
         <CheckBoxPreference
                 android:key="@string/debug_notifications_schedule"
-                android:title="Schedule notifications for testing"
-                android:summary="Schedules a notification in the near future for testing instead of actual event time"
+                android:title="@string/settings_debug_schedule_notifications"
+                android:summary="@string/settings_debug_schedule_notifications_summary"
                 android:defaultValue="false"/>
     </PreferenceCategory>
 </PreferenceScreen>
