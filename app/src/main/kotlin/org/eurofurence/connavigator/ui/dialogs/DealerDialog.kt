@@ -8,10 +8,10 @@ import android.support.v4.app.DialogFragment
 import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.SharingUtility
 import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.jsonObjects
+import org.eurofurence.connavigator.util.extensions.shareString
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import kotlin.properties.Delegates.notNull
@@ -51,7 +51,7 @@ class DealerDialog : DialogFragment(), AnkoLogger {
                     Analytics.event(Analytics.Category.DEALER, Analytics.Action.SHARED, dealerRecord.displayName
                             ?: dealerRecord.attendeeNickname)
 
-                    startActivity(Intent.createChooser(SharingUtility.share(Formatter.shareDealer(dealerRecord, context)), getString(R.string.dealer_share_dealer)))
+                    startActivity(Intent.createChooser(SharingUtility.share(dealerRecord.shareString(context!!)), getString(R.string.dealer_share_dealer)))
                 }
             }
 }

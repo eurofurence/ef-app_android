@@ -12,8 +12,8 @@ import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.eventEnd
 import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.util.Formatter
 import org.eurofurence.connavigator.util.extensions.jsonObjects
+import org.eurofurence.connavigator.util.extensions.shareString
 import org.jetbrains.anko.*
 
 /**
@@ -59,7 +59,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
 
                 Analytics.event(Analytics.Category.EVENT, Analytics.Action.SHARED, event.title)
                 //share
-                context.share(Formatter.shareEvent(event, context), context.getString(R.string.event_share_event))
+                context.share(event.shareString(context!!), context.getString(R.string.event_share_event))
             }
         }
     }
