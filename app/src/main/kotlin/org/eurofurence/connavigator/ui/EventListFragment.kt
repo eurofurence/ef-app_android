@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
@@ -184,6 +185,11 @@ class EventListUi : AnkoComponent<Fragment> {
         verticalLayout {
             tabs = tabLayout {
                 backgroundResource = R.color.primaryDark
+                setTabTextColors(
+                        ContextCompat.getColor(context, R.color.textWhite),
+                        ContextCompat.getColor(context, R.color.textWhite)
+                )
+                tabMode = TabLayout.MODE_SCROLLABLE
             }.lparams(matchParent, wrapContent)
 
             pager = viewPager {
