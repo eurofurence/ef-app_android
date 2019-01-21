@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -19,7 +19,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
@@ -40,7 +39,6 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        applyOnRoot { changeTitle(getString(R.string.dealers)) }
 
         effectiveDealers = sortDealers(dealers.items)
 
@@ -133,8 +131,6 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
             dealers.sortedBy { (if (it.displayName != "") it.displayName else it.attendeeNickname).toLowerCase() }
 
     fun onSearchButtonClick() {
-        applyOnRoot { popDetails() }
-
         if (ui.searchLayout.visibility == View.GONE) {
             info { "Showing search bar" }
             ui.searchLayout.visibility = View.VISIBLE

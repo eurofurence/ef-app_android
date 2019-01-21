@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -24,7 +24,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView
 
-class FragmentViewMessageItem : Fragment(), AnkoLogger {
+class MessageItemFragment : Fragment(), AnkoLogger {
     val ui = MessageItemUi()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =

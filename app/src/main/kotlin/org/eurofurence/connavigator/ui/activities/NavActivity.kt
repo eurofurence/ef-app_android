@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.activities
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView

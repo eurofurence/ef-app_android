@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
@@ -32,7 +32,6 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
@@ -45,7 +44,7 @@ import org.jetbrains.anko.support.v4.px2dip
 import java.lang.Exception
 import java.util.*
 
-class DealerItemFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
+class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
     private val dealerId get() = try {
         UUID.fromString(DealerItemFragmentArgs.fromBundle(arguments).dealerId)
     } catch (e: Exception) {

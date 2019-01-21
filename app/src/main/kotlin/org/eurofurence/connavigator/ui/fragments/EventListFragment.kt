@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -21,8 +21,6 @@ import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.TrackEventPagerAdapter
-import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.tabLayout
 import org.jetbrains.anko.support.v4.UI
@@ -38,19 +36,6 @@ class EventListFragment : Fragment(), HasDb {
     val ui = EventListUi()
 
     private val searchFragment by lazy { EventRecyclerFragment().withArguments(daysInsteadOfGlyphs = true) }
-
-    private val detailsPopAdapter = object : ViewPager.OnPageChangeListener {
-        override fun onPageScrollStateChanged(state: Int) {
-        }
-
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        }
-
-        override fun onPageSelected(position: Int) {
-            if (isResumed)
-                applyOnRoot { popDetails() }
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             UI { ui.createView(this) }.view
@@ -69,8 +54,6 @@ class EventListFragment : Fragment(), HasDb {
                 searchFragment.dataUpdated()
             }
         }
-
-        ui.pager.addOnPageChangeListener(detailsPopAdapter)
     }
 
 
@@ -126,7 +109,6 @@ class EventListFragment : Fragment(), HasDb {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        ui.pager.removeOnPageChangeListener(detailsPopAdapter)
         activity?.apply {
             val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
 
@@ -135,7 +117,6 @@ class EventListFragment : Fragment(), HasDb {
     }
 
     fun onSearchButtonClick() {
-        applyOnRoot { popDetails() }
         when (ui.pager.visibility) {
             View.VISIBLE -> {
                 ui.pager.visibility = View.GONE
@@ -156,8 +137,6 @@ class EventListFragment : Fragment(), HasDb {
     }
 
     fun onFilterButtonClick() {
-        applyOnRoot { popDetails() }
-
         selector(getString(R.string.misc_filter_change_mode), listOf(getString(R.string.misc_days), getString(R.string.misc_rooms), getString(R.string.event_tracks), getString(R.string.event_schedule))) { _, position ->
             when (position) {
                 1 -> changePagerAdapter(EventPagerMode.ROOMS)

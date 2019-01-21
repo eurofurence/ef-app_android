@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -20,12 +20,7 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.gcm.cancelFromRelated
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.EventList
-import org.eurofurence.connavigator.ui.fragments.AnnouncementListFragment
-import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
-import org.eurofurence.connavigator.ui.fragments.UserStatusFragment
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.arcProgress
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*

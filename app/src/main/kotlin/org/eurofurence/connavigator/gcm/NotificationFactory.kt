@@ -4,14 +4,12 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.ui.NavActivity
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.notificationManager
 import org.joda.time.DateTime

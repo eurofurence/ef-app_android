@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -28,7 +28,6 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
-import org.eurofurence.connavigator.ui.fragments.MapDetailFragment
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get

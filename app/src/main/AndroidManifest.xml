@@ -20,7 +20,7 @@
 
         <!-- Root screen of the app, will contain the different panels as fragments -->
         <activity
-                android:name=".ui.ActivityStart"
+                android:name=".ui.activities.StartActivity"
                 android:label="Eurofurence"
                 android:noHistory="true"
                 android:theme="@style/AppTheme">
@@ -30,13 +30,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.ActivitySettings"/>
+        <activity android:name=".ui.activities.SettingsActivity"/>
 
-        <activity android:name=".ui.NavActivity">
+        <activity android:name=".ui.activities.NavActivity">
             <nav-graph android:value="@navigation/nav_graph" />
         </activity>
 
-        <activity android:name=".ui.LoginActivity" />
+        <activity android:name=".ui.fragments.LoginActivity" />
 
         <!-- Service providing a detached retrieval of data from the internet. -->
         <service

@@ -17,8 +17,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.AppPreferences
-import org.eurofurence.connavigator.ui.FragmentViewHomeDirections
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.filterIf
@@ -31,7 +29,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
 class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
-    inner class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView), ContentAPI {
+    inner class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         val layout: LinearLayout by view()
         val announcementTitle: TextView by view()
         val announcementContent: TextView by view()

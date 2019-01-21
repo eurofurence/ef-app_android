@@ -18,8 +18,6 @@ import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.ui.InfoListFragmentDirections
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -33,7 +31,7 @@ import java.util.*
 /**
  * Renders an info group element and displays it's individual items
  */
-class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
+class InfoGroupFragment : Fragment(), HasDb, AnkoLogger {
     inner class InfoItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val layout: LinearLayout by view("layout")
         val name: TextView by view("title")

@@ -16,16 +16,12 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.gcm.cancelFromRelated
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.ui.FragmentViewMessageList
-import org.eurofurence.connavigator.ui.LoginActivity
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.intentFor
 import java.util.*
 import kotlin.concurrent.fixedRateTimer
 
@@ -115,9 +111,8 @@ class UserStatusFragment : Fragment(), AnkoLogger {
             ui.apply {
                 title.text = getString(R.string.misc_welcome_user, AuthPreferences.username.capitalize())
                 layout.setOnClickListener {
-                    applyOnRoot {
-                        findNavController().navigate(R.id.action_fragmentViewHome_to_fragmentViewMessageList)
-                    }
+                    val action = FragmentViewHomeDirections.ActionFragmentViewHomeToFragmentViewMessageList()
+                    findNavController().navigate(action)
                 }
             }
         }

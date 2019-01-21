@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.activities
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -17,7 +17,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.appcompat.v7.toolbar
 
-class ActivitySettings : AppCompatActivity(), AnkoLogger {
+class SettingsActivity : AppCompatActivity(), AnkoLogger {
     val ui by lazy { SettingsUi() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +26,8 @@ class ActivitySettings : AppCompatActivity(), AnkoLogger {
     }
 }
 
-class SettingsUi : AnkoComponent<ActivitySettings> {
-    override fun createView(ui: AnkoContext<ActivitySettings>) = with(ui) {
+class SettingsUi : AnkoComponent<SettingsActivity> {
+    override fun createView(ui: AnkoContext<SettingsActivity>) = with(ui) {
         scrollView {
             verticalLayout {
                 toolbar {

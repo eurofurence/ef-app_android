@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -13,9 +13,6 @@ import android.view.ViewGroup
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.ui.fragments.FragmentMap
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.multitouchViewPager
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.tabLayout

@@ -17,8 +17,8 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.ui.DealerListFragmentDirections
 import org.eurofurence.connavigator.ui.dialogs.DealerDialog
+import org.eurofurence.connavigator.ui.fragments.DealerListFragmentDirections
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance

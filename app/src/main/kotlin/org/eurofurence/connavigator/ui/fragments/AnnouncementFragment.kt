@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -26,11 +26,11 @@ import org.jetbrains.anko.support.v4.toast
 import us.feras.mdv.MarkdownView
 import java.util.*
 
-class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
+class AnnouncementFragment : Fragment(), HasDb, AnkoLogger {
     val ui = AnnouncementItemUi()
     private val announcementId
         get () = try {
-            UUID.fromString(FragmentViewAnnouncementArgs.fromBundle(arguments).announcementId)
+            UUID.fromString(AnnouncementFragmentArgs.fromBundle(arguments).announcementId)
         } catch (_: Exception) {
             null
         }

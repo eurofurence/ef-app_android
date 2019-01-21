@@ -23,8 +23,6 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.ui.EventListFragmentDirections
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.filters.FilterType
@@ -44,7 +42,7 @@ import kotlin.coroutines.experimental.buildSequence
  * Event view recycler to hold the viewpager items
  * TODO: Refactor the everliving fuck out of this shitty software
  */
-class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
+class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     var subscriptions = Disposables.empty()
@@ -180,10 +178,15 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
             // Assign the on-click action
             holder.itemView.setOnClickListener {
                 debug { "Short event click" }
-                val action = EventListFragmentDirections.ActionFragmentViewEventsToFragmentViewEvent()
-                        .setEventId(event.id.toString())
+                val action = when(findNavController().currentDestination?.id) {
+                    R.id.fragmentViewHome -> FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewEvent(event.id.toString())
+                    R.id.eventListFragment -> EventListFragmentDirections.actionFragmentViewEventsToFragmentViewEvent(event.id.toString())
+                    else -> null
+                }
 
-                findNavController().navigate(action)
+                action?.apply {
+                    findNavController().navigate(this)
+                }
             }
             holder.itemView.setOnLongClickListener {
                 context?.apply {
@@ -281,7 +284,7 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
 
-    override fun dataUpdated() {
+    fun dataUpdated() {
         info { "Data was updated, redoing UI" }
         task {
             info { "Refiltering data" }

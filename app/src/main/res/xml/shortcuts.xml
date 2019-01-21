@@ -7,7 +7,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="org.eurofurence.connavigator"
-            android:targetClass="org.eurofurence.connavigator.ui.NavActivity"
+            android:targetClass="org.eurofurence.connavigator.ui.activities.NavActivity"
             android:data="eurofurence://events/"/>
     </shortcut>
 </shortcuts>

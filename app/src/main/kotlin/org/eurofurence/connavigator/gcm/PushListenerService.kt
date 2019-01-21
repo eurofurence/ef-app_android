@@ -9,7 +9,7 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.dispatchUpdate
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.ui.FragmentViewHomeDirections
+import org.eurofurence.connavigator.ui.fragments.FragmentViewHomeDirections
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
