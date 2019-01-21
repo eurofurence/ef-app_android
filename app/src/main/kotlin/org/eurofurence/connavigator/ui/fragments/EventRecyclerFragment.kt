@@ -155,14 +155,14 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             when {
                 eventIsHappening(event, DateTime.now()) -> { // It's happening now
-                    holder.eventStartTime.text = "now"
+                    holder.eventStartTime.textResource = R.string.misc_now
                 }
                 eventStart(event).isBeforeNow -> // It's already happened
-                    holder.eventStartTime.text = "done"
+                    holder.eventStartTime.textResource = R.string.misc_done
                 eventIsUpcoming(event, DateTime.now(), 30) -> { //it's happening in 30 minutes
                     // It's upcoming, so we give a timer
                     val countdown = Minutes.minutesBetween(DateTime.now(), eventStart(event)).minutes
-                    holder.eventStartTime.text = "${countdown}min"
+                    holder.eventStartTime.text = getString(R.string.event_countdown_minutes, countdown)
                 }
                 else -> {
                     holder.eventStartTime.text = event.startTimeString()
@@ -170,7 +170,7 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
             }
 
             holder.eventEndTime.text = "$glyphEnd ${event.endTimeString()}"
-            holder.eventRoom.text = db.rooms[event.conferenceRoomId]?.name ?: "Unknown"
+            holder.eventRoom.text = db.rooms[event.conferenceRoomId]?.name ?: getString(R.string.misc_unknown)
 
             // Load image
 

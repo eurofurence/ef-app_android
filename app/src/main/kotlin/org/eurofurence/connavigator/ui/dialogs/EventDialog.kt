@@ -6,6 +6,7 @@ import android.provider.CalendarContract
 import android.support.v4.content.ContextCompat.startActivity
 import com.pawegio.kandroid.IntentFor
 import io.swagger.client.model.EventRecord
+import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.eventEnd
@@ -20,13 +21,13 @@ import org.jetbrains.anko.*
  */
 fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
     val options = listOf(
-            if (!db.faves.contains(event.id)) "Add event to favorites" else "Remove event from favorites",
-            "Export to calendar",
-            "Share"
+            if (!db.faves.contains(event.id)) context.getString(R.string.event_add_to_favorites) else context.getString(R.string.event_remove_from_favorites),
+            context.getString(R.string.event_share_export_to_calendar),
+            context.getString(R.string.event_share_event)
     )
 
     return context.selector(
-            "Event Options for event ${event.title}",
+            context.getString(R.string.event_options_for, event.title),
             options
     ) { _, position ->
         when (position) {
@@ -34,7 +35,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
                 debug { "Favouriting event for user" }
                 context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
 
-                context.toast("Changed event status!")
+                context.toast(context.getString(R.string.event_changed_status))
             }
             1 -> {
                 debug { "Writing event to calendar" }
@@ -58,7 +59,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
 
                 Analytics.event(Analytics.Category.EVENT, Analytics.Action.SHARED, event.title)
                 //share
-                context.share(Formatter.shareEvent(event), "Share event")
+                context.share(Formatter.shareEvent(event, context), context.getString(R.string.event_share_event))
             }
         }
     }

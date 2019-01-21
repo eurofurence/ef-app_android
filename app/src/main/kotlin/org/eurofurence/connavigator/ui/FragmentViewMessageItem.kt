@@ -30,15 +30,14 @@ class FragmentViewMessageItem : Fragment(), AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    // todo rework for message item
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val message = Gson().fromJson(arguments!!.getString("message"), PrivateMessageRecord::class.java)
-        ui.title.text = message.subject?.capitalize() ?: "No subject"
+        ui.title.text = message.subject?.capitalize() ?: getString(R.string.message_no_subject)
 
-        ui.author.text = "From: ${message.authorName}"
-        ui.sent.text = "Sent: ${message.createdDateTimeUtc?.toRelative() ?: "Not yet"}"
-        ui.received.text = "Received: ${message.receivedDateTimeUtc?.toRelative() ?: "Not yet"}"
-        ui.read.text = "Read: ${message.readDateTimeUtc?.toRelative() ?: "Not yet"}"
+        ui.author.text = getString(R.string.message_from_name, message.authorName)
+        ui.sent.text = getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
+        ui.received.text = getString(R.string.message_received_date, message.receivedDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
+        ui.read.text = getString(R.string.message_read_date, message.readDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
 
         ui.content.loadMarkdown(message.message)
 
@@ -55,7 +54,7 @@ class FragmentViewMessageItem : Fragment(), AnkoLogger {
             message.markAsRead()
         } successUi {
             info { "Message marked as read" }
-            longToast("Message has been marked as read!")
+            longToast(getString(R.string.message_marked_as_read))
         }
     }
 }
@@ -87,21 +86,26 @@ class MessageItemUi : AnkoComponent<Fragment> {
                 verticalLayout {
                     padding = dip(20)
 
-                    title = textView("Title") {
+                    title = textView {
+                        textResource = R.string.misc_title
                         compatAppearance = android.R.style.TextAppearance_Medium
                     }.lparams(matchParent, wrapContent)
 
-                    author = textView("Subtitle") {
+                    author = textView {
+                        textResource = R.string.misc_subtitle
                         topPadding = dip(10)
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                     }.lparams(matchParent, wrapContent)
-                    sent = textView("Sent") {
+                    sent = textView {
+                        textResource = R.string.message_sent
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                     }.lparams(matchParent, wrapContent)
-                    received = textView("Received") {
+                    received = textView {
+                        textResource = R.string.message_received
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                     }.lparams(matchParent, wrapContent)
-                    read = textView("Read") {
+                    read = textView {
+                        textResource = R.string.message_read
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                     }.lparams(matchParent, wrapContent)
                 }.lparams(dip(0), matchParent, 85F)
@@ -109,7 +113,7 @@ class MessageItemUi : AnkoComponent<Fragment> {
 
             linearLayout {
                 content = markdownView {
-                    loadMarkdown("Content")
+                    loadMarkdown(resources.getString(R.string.misc_content))
                 }
                 padding = dip(20)
                 backgroundResource = R.color.cardview_light_background

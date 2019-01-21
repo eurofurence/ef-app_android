@@ -1,16 +1,279 @@
 <resources>
     <string name="app_name">Con Navigator</string>
 
+    <!-- Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="navigation_drawer_title">Eurofurence 24</string>
+    <string name="navigation_drawer_subtitle">Aviators - Conquer the Sky!</string>
+
+    <string name="navigation_drawer_item_info">Info</string>
+    <string name="navigation_drawer_item_poi">Point of Interest</string>
+
+    <string name="navigation_drawer_item_personal">Personal</string>
+    <string name="navigation_drawer_item_personal_messages">Personal Messages</string>
+    <string name="navigation_drawer_item_personal_collect_em_all">Collect \'Em All</string>
+
+    <string name="navigation_drawer_item_external">External</string>
+    <string name="navigation_drawer_item_external_website">Website</string>
+    <string name="navigation_drawer_item_external_twitter">Twitter</string>
+
+    <string name="navigation_drawer_item_app_management">App Management</string>
+    <string name="navigation_drawer_item_app_management_update">Update</string>
+    <string name="navigation_drawer_item_app_management_about">About</string>
+    <!-- Navigation end -->
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="settings_ui_settings">UI settings</string>
+    <string name="settings_this_can_be_changed">This can be changed in your settings at any time.</string>
+
+    <string name="settings_app_settings">App Settings</string>
+    <string name="settings_app_settings_alert_time">Alert time</string>
+    <string name="settings_app_settings_alert_time_summary">Minutes a notification will appear for an event</string>
+    <string name="settings_app_settings_show_expired_announcements">Show expired Announcements</string>
+    <string name="settings_app_settings_show_expired_announcements_summary">This will show you all the announcements that have expired</string>
+    <string name="settings_app_settings_shortened_dates_and_times">Shortened dates and times</string>
+    <string name="settings_app_settings_shortened_dates_and_times_summary">Display dates in names instead of numbers (Friday vs 13&#8211;08)</string>
+
+    <string name="settings_analytics">Analytics</string>
+    <string name="settings_analytics_settings">Analytics settings</string>
+    <string name="settings_analytics_enabled">Enable Analytics</string>
+    <string name="settings_analytics_enabled_summary">Enable usage statistics</string>
+    <string name="settings_analytics_enabled_summary_on">Usage statistics turned on</string>
+    <string name="settings_analytics_enabled_summary_off">Usage statistics turned off</string>
+    <string name="settings_analytics_polling_intervals">Analytics Polling Interval</string>
+    <string name="settings_analytics_polling_intervals_summary">Percentage of user events to track</string>
+    <string name="settings_analytics_allow_collecting_of_analytical_data">Allow Eurofurence to collect anonymous analytical data.</string>
+    <string name="settings_analytics_allow_collecting_of_performance_data">Allow Eurofurence to collect performance data.</string>
+
+    <string name="settings_debug">Debug</string>
+    <string name="settings_debug_summary">Settings to debug the application</string>
+    <string name="settings_debug_event_dates">Debug event dates</string>
+    <string name="settings_debug_event_dates_summary">Change events dates to our current date so we can debug timed notifications as well as show upcoming</string>
+    <string name="settings_debug_date_offset">Debug date offset</string>
+    <string name="settings_debug_date_offset_summary">Amount of days to offset events</string>
+    <string name="settings_debug_schedule_notifications">Schedule notifications for testing</string>
+    <string name="settings_debug_schedule_notifications_summary">Schedules a notification in the near future for testing instead of actual event time</string>
+
+    <string name="settings_show_irrelevant_announcements">Show irrelevant announcements</string>
+    <string name="settings_use_days_of_the_week">Use days of the week instead of actual dates.</string>
+    <string name="settings_switch_short_and_long_press_for_events">Switch the short press and long press behaviour for events.</string>
+    <string name="settings_immediately_close_app_on_back">Immediately close app on back button press</string>
+    <string name="settings_get_notified_minutes_before">Get notified this many minutes before the start of a favorited event.</string>
+    <string name="settings_amount_of_minutes_to_get_an_alert">Amount of minutes to get an alert for a favorited event.</string>
+    <string name="settings_analytics_track_usage">Track usage with analytics</string>
+    <string name="settings_analytics_track_performance">Track performance statistics</string>
+    <string name="settings_tweak_event_days_so_it_seems_like_its_today">Tweak event days so it seems like it\'s the current date</string>
+    <string name="settings_amount_of_days_to_offset_by">The amount of days to offset by. Must be integer</string>
+    <string name="settings_amount_of_days_to_offset_event_schedule_by">Amount of days to offset the event schedule by</string>
+    <string name="settings_schedule_events_in_5_minutes">Schedule notifications in 5 minutes instead of event time</string>
+    <!-- Settings end -->
+
+    <!-- Action Bar -->
+    <string name="action_report_bug">Report a Bug</string>
+    <string name="action_report_feedback">Feedback</string>
+    <string name="action_get_help">Get help</string>
+    <!-- Action Bar end -->
+
+    <!-- Event  -->
+    <string name="event_list_title">Event List</string>
+    <string name="event_details_title">Event Details</string>
+    <string name="event">Event</string>
+    <string name="events">Events</string>
+    <string name="event_schedule">Event Schedule</string>
+    <string name="event_tracks">Event tracks</string>
+    <string name="event_weekday_from_to">%1$s from %2$s to %3$s</string>
+    <string name="event_unable_to_locate_room">Unable to locate room!</string>
+    <string name="event_run_by">Run by %1$s</string>
+    <string name="event_pager_search_by_title">Search by title</string>
+    <string name="event_upcoming">Upcoming events</string>
+    <string name="event_running">Running events</string>
+    <string name="event_favorited">Favorited events</string>
+    <string name="event_options_for">Event options for event %1$s</string>
+    <string name="event_add_to_favorites">Add event to favorites</string>
+    <string name="event_remove_from_favorites">Remove event from favorites</string>
+    <string name="event_changed_status">Changed event status!</string>
+    <string name="event_share_event">Share Event</string>
+    <string name="event_share_export_to_calendar">Export to calendar</string>
+    <string name="event_check_out_url">Check out %1$s!\n%2$s</string>
+    <string name="event_countdown_minutes">%1$d min</string>
+    <string name="event_did_not_find">I\'m sorry, we didn\'t find any event!</string>
+    <!-- Event end -->
+
+    <!-- Announcement -->
+    <string name="announcements">Announcements</string>
+    <string name="announcement_title">Announcement Title</string>
+    <string name="announcement_content">Announcement Content</string>
+    <string name="announcement_loading_failed">Unable to load announcement</string>
+    <!-- Announcement end -->
+
+    <!-- Dealer -->
+    <string name="dealer_list_title">Dealer List</string>
+    <string name="dealer_details_title">Dealer Details</string>
+    <string name="dealers">Dealers</string>
+    <string name="dealer_name">Dealer Name</string>
+    <string name="dealer_subname">Subname</string>
+    <string name="dealer_about_artist">About the Artist</string>
+    <string name="dealer_about_art">About the Art</string>
+    <string name="dealer_telegram_handle">%1$s @ Telegram</string>
+    <string name="dealer_twitter_handle">%1$s @ Twitter</string>
+    <string name="dealer_location_and_availability">Location &amp; Availability</string>
+    <string name="dealer_only_present_on">Only present on: %1$s</string>
+    <string name="dealer_located_in_the_after_dark">Located in the After Dark Dealers Den</string>
+    <string name="dealer_artist_did_not_supply_a_description">This artist did not supply any artist description to show to you :(</string>
+    <string name="dealer_options_for">Dealer options for %1$s</string>
+    <string name="dealer_share_dealer">Share Dealer</string>
+    <string name="dealer_check_out_dealer_url">Check out %1$s at the dealers den!\n%2$s</string>
+    <string name="dealer_could_not_navigate_to">Could not navigate to dealer</string>
+    <string name="dealer_did_not_find">I\'m sorry, but we didn\'t find any dealer!</string>
+    <!-- Dealer end -->
+
+    <!-- Collect 'Em all -->
+    <string name="fursuit_game">Fursuit Games</string>
+    <string name="fursuit_game_you_have_collected_number_suits">You have collected %1$d suits, ranking you at number %2$d!</string>
+    <string name="fursuit_game_already_caught">You\'ve already caught this suiter</string>
+    <string name="fursuit_game_name_species">%1$s the %2$s</string>
+    <string name="fursuit_game_fill_in_id">Fill in a fursuiter ID!</string>
+    <string name="fursuit_game_they_have_a_tag">They should have a tag somewhere!</string>
+    <string name="fursuit_game_you_have_collected">You have collected</string>
+    <string name="fursuit_game_return_to_tagging_menu">Return to the tagging menu</string>
+    <string name="fursuit_game_collect">Collect</string>
+    <string name="fursuit_game_my_collection">My collection</string>
+    <!-- Collect 'Em all -->
+
+    <!-- Message -->
+    <string name="message_list_title">Message List</string>
+    <string name="message_item_title">Message Item</string>
+    <string name="message_no_subject">No subject</string>
+    <string name="message_from_name">From: %1$s</string>
+    <string name="message_sent">Sent</string>
+    <string name="message_sent_date">Sent: %1$s</string>
+    <string name="message_received">Received</string>
+    <string name="message_received_date">Received: %1$s</string>
+    <string name="message_read">Read</string>
+    <string name="message_read_date">Read: %1$s</string>
+    <string name="message_marked_as_read">Message has been marked as read!</string>
+    <string name="message_failed_to_retrieve">Failed to retrieve messages!</string>
+    <string name="message_you_have_unread_messages">You have %1$d new, unread personal message(s)</string>
+    <string name="message_you_have_messages">You have %1$d personal message(s)</string>
+    <!-- Message end -->
+
+    <!-- Convention -->
+    <string name="convention_information">Convention Information</string>
+    <!-- Convention end -->
+
+    <!-- Login -->
+    <string name="login">Login</string>
+    <string name="login_username">Username</string>
+    <string name="login_reg_number">Registration number</string>
+    <string name="login_password">Password</string>
+    <string name="login_authenticating">Authenticating&#8230;</string>
+    <string name="login_details">Login details</string>
+    <string name="login_logged_in_as">Logged in as %1$s</string>
+    <string name="login_valid_until">Login is valid until: %1$s</string>
+    <string name="login_logout">Logout</string>
+    <string name="login_logged_out">Logging you out, goodbye!</string>
+    <string name="login_not_logged_in">You\'re not logged in!</string>
+    <string name="login_tap_to_login">Tap here to login using your registration details and receive personalized information from Eurofurence!</string>
+    <string name="login_unsuccessful">Your login was unsuccessful, are you sure you entered the correct data?</string>
+    <string name="login_information">Your login credentials for the app are the same as for the Eurofurence Registration System.\n\nIf you do not remember or have access to them, you can ask for a PIN code to sign in at the registration desk or security office.</string>
+    <string name="login_failed">Failed to log you in!</string>
+    <string name="login_needed">You need to login before you can see private messages!</string>
+    <!-- Login end -->
+
+    <!-- Close -->
+    <string name="close_application">Close Application</string>
+    <string name="close_closing_application">Closing application.</string>
+    <string name="close_really_close_the_app">Are you sure you want to close the app?\n\n(You\'ll still receive notifications for announcements and personal messages when the app is closed.)</string>
+    <string name="close_remember_choice">Remember this choice</string>
+    <string name="close_no_will_close_the_app">Choosing \'No\' will close the application at this point.</string>
+    <!-- Close end -->
+
+    <!-- Clear DB -->
+    <string name="clear_database">Clear database</string>
+    <string name="clear_app_cache">Clear app cache. You WILL need an internet connection to restart</string>
+    <string name="clear_abort_clear_database">Not clearing DB</string>
+    <string name="clear_completed_closing">App reset has been completed. Closing.</string>
+    <!-- Clear DB end -->
+
+    <!-- Misc -->
+    <string name="misc_welcome_text">Welcome to the official Eurofurence App for Android!</string>
+    <string name="misc_welcome_before_use">Before you can use this application we need to download some data from the Eurofurence servers to your phone.\n\nThis will consume a few megabytes of traffic and can take anywhere from a few seconds up to a few minutes, depending on the speed of your connection.\n\nIs it okay to download the data now?</string>
+    <string name="misc_welcome_user">Welcome %1$s</string>
+    <string name="misc_hello_player">Hello %1$s</string>
+    <string name="misc_home">Home</string>
+
+    <string name="misc_title">Title</string>
+    <string name="misc_subtitle">Subtitle</string>
+    <string name="misc_description">Description</string>
+    <string name="misc_short_description">Short description</string>
+    <string name="misc_categories">Categories</string>
+    <string name="misc_more_information">More Information</string>
+    <string name="misc_name">Name</string>
+
+    <string name="misc_yes">Yes!</string>
+    <string name="misc_no_not_right_now">No, Not right now</string>
+    <string name="misc_not_yet">Not yet</string>
+    <string name="misc_submit">Submit</string>
+    <string name="misc_now">now</string>
+    <string name="misc_done">done</string>
+    <string name="misc_location">Location</string>
+    <string name="misc_content">Content</string>
+    <string name="misc_days">Days</string>
+    <string name="misc_current_day">Day %1$d</string>
+    <string name="misc_days_left">Only %1$d days left!</string>
+    <string name="misc_until_next_ef">Until next EF</string>
+    <string name="misc_room_number">Room: %1$s</string>
+    <string name="misc_rooms">Rooms</string>
+    <string name="misc_map">Map</string>
+    <string name="misc_maps">Maps</string>
+
+    <string name="misc_filter">Filter</string>
+    <string name="misc_filter_change_mode">Change filtering mode</string>
+
+    <string name="misc_search">Search</string>
+    <string name="misc_show">Show: </string>
+    <string name="misc_find">Find: </string>
+    <string name="misc_find_out_more">Find out more</string>
+    <string name="misc_link_no_name_provided">No name provided for link</string>
+    <string name="misc_unknown">Unknown</string>
+
+    <string name="misc_did_not_find_any_info">I\'m sorry, but we didn\'t find any info!</string>
+
+    <string name="misc_fetching_assets">Loading assets (%1$d / %2$d)</string>
+    <string name="misc_fetching">Fetching&#8230;</string>
+    <string name="misc_fetching_done">Done with fetching!</string>
+    <string name="misc_fetching_failed">Something went wrong while fetching!</string>
+
+    <string name="error_field_is_empty">This field is not supposed to be empty!</string>
+    <string name="error_no_id_was_passed_to_info_fragment">No ID was passed to info fragment!</string>
+    <string name="error_something_went_wrong">Something went wrong</string>
+    <string name="error_occurred">An error occurred!</string>
+    <string name="error_retrieving_failed">Retrieving data from server failed</string>
+
+    <string name="misc_application_will_exit">%1$s\n\nApplication will exit now.</string>
+    <string name="misc_data_outdated">Your data is outdated. You will need to re-download all data</string>
+    <string name="misc_remote_config_were_updated">Remote configs were updated %1$d seconds ago.</string>
+    <string name="misc_remote_config_age">Remote Configuration %1$d hours     ago</string>
+
+    <string name="misc_version">Version</string>
+    <string name="misc_version_code">Version Code: %1$d</string>
+    <string name="misc_version_detailed">Version %1$s (%2$d) / %3$s </string>
+
+    <string name="misc_working_please_wait">Working&#8230; Please wait!</string>
+    <string name="misc_android_developers">Android Developers</string>
+
+    <string name="misc_concat_newline">%1$s\n%2$s</string>
+    <!-- Misc end -->
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fragment_main_event_content_description">Picture of an event</string>
     <string name="day">Day</string>
     <string name="room">Room</string>
+
     <string name="settings_tag_analytics_enabled">analytics_enabled</string>
     <string name="settings_tag_analytics_interval">analytics_enabled</string>
     <string name="debug_date_enabled">debug_date_enable</string>
@@ -20,6 +283,11 @@
     <string name="notification_time_extra">notifications_time_extra</string>
     <string name="date_short">date_short</string>
     <string name="event_shortcut_label">Events</string>
+    <string name="maps_title">Maps</string>
+    <string name="about">About</string>
+    <string name="info_list_title">Info List</string>
+    <string name="info_item_title">Info Item</string>
+
     <array name="polling_intervals">
         <item>100</item>
         <item>75</item>

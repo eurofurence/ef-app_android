@@ -34,7 +34,7 @@ class InfoListFragment : Fragment(), HasDb{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        applyOnRoot { changeTitle("Convention Information") }
+        applyOnRoot { changeTitle(getString(R.string.convention_information)) }
 
         fillUi()
         subscriptions += db.subscribe {

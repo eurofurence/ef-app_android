@@ -139,7 +139,8 @@ class MapDetailUi : AnkoComponent<Fragment> {
             lparams(matchParent, wrapContent)
             layout = verticalLayout {
                 backgroundResource = R.color.cardview_light_background
-                title = textView("Location") {
+                title = textView {
+                    textResource = R.string.misc_location
                     compatAppearance = android.R.style.TextAppearance_Small
                     padding = dip(20)
                 }

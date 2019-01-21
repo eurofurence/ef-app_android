@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import io.swagger.client.ApiException
-import io.swagger.client.model.CollectTokenResponse
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.successUi
@@ -65,10 +64,10 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
 
             it.result.let { result ->
                 if (it.isSuccessful == true && result != null) {
-                    ui.setFursuit(result)
+                    ui.setFursuit(getString(R.string.fursuit_game_name_species, result.name, result.species))
                     ui.setMode(FursuitUiMode.SHOW_SUIT)
                 } else {
-                    ui.error.text = it.error?.message ?: "Something went wrong"
+                    ui.error.text = it.error?.message ?: getString(R.string.error_something_went_wrong)
                     ui.setMode(FursuitUiMode.ERROR)
                 }
             }
@@ -78,9 +77,9 @@ class FragmentViewFursuitGame : Fragment(), ContentAPI, HasDb, AnkoLogger {
             val throwable = it as ApiException
 
             ui.error.text = when (throwable.code) {
-                400 -> it.message ?: "You've already caught this suiter"
-                401 -> "You're not logged in!"
-                else -> "An error occurred!"
+                400 -> it.message ?: getString(R.string.fursuit_game_already_caught)
+                401 -> getString(R.string.login_not_logged_in)
+                else -> getString(R.string.error_occurred)
             }
             ui.setMode(FursuitUiMode.ERROR)
         }
@@ -123,8 +122,8 @@ class FursuitGameUi : AnkoComponent<Fragment> {
         }
     }
 
-    fun setFursuit(token: CollectTokenResponse) {
-        fursuitName.text = "${token.name} the ${token.species}"
+    fun setFursuit(suiterName: String) {
+        fursuitName.text = suiterName
     }
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
@@ -142,7 +141,7 @@ class FursuitGameUi : AnkoComponent<Fragment> {
                 padding = dip(25)
 
                 textView {
-                    text = "Fill in a fursuiter ID!"
+                    textResource = R.string.fursuit_game_fill_in_id
                 }
 
                 error = textView {
@@ -150,11 +149,11 @@ class FursuitGameUi : AnkoComponent<Fragment> {
                 }
 
                 fursuitLabel = editText {
-                    hint = "They should have a tag somewhere!"
+                    hintResource = R.string.fursuit_game_they_have_a_tag
                 }.lparams(matchParent, wrapContent)
 
                 submit = button {
-                    text = "Submit"
+                    textResource = R.string.misc_submit
                 }
             }
 
@@ -165,7 +164,8 @@ class FursuitGameUi : AnkoComponent<Fragment> {
                     imageResource = R.drawable.placeholder_event
                 }
 
-                textView("You have collected") {
+                textView {
+                    textResource = R.string.fursuit_game_you_have_collected
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
                 }
 
@@ -174,7 +174,8 @@ class FursuitGameUi : AnkoComponent<Fragment> {
                     setTextAppearance(ctx, R.style.TextAppearance_AppCompat_Large)
                 }
 
-                button("Return to the tagging menu") {
+                button {
+                    textResource = R.string.fursuit_game_return_to_tagging_menu
                     setOnClickListener { setMode(FursuitUiMode.START) }
                 }
             }.lparams(matchParent, matchParent)

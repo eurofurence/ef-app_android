@@ -12,7 +12,7 @@ fun MapRecord.findMatchingEntries(x: Float, y: Float) =
                 .filter { (x - (it.x ?: 0) power 2F) + (y - (it.y ?: 0) power 2F) < (it.tapRadius ?: 0) power 2 }
 
 
-val ImageRecord.url: String get() = "${apiService.apiPath}/Api/v2/Images/$id/Content/with-hash:${Base64.encodeToString(contentHashSha1.toByteArray(), Base64.NO_WRAP)}"
+val ImageRecord.url: String get() = "${apiService.apiPath}/Api/Images/$id/Content/with-hash:${Base64.encodeToString(contentHashSha1.toByteArray(), Base64.NO_WRAP)}"
 
 fun PrivateMessageRecord.markAsRead() {
     if (AuthPreferences.isLoggedIn()) {

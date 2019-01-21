@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/fragmentViewHome"
         android:name="org.eurofurence.connavigator.ui.FragmentViewHome"
-        android:label="Home">
+        android:label="@string/misc_home">
         <deepLink app:uri="eurofurence://home/" />
         <action
             android:id="@+id/action_fragmentViewHome_to_fragmentViewEvent"
@@ -33,7 +33,7 @@
     <fragment
         android:id="@+id/eventListFragment"
         android:name="org.eurofurence.connavigator.ui.EventListFragment"
-        android:label="Event List">
+        android:label="@string/event_list_title">
         <action
             android:id="@+id/action_fragmentViewEvents_to_fragmentViewEvent"
             app:destination="@id/fragmentViewEvent" />
@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/fragmentViewEvent"
         android:name="org.eurofurence.connavigator.ui.EventItemFragment"
-        android:label="Event Details">
+        android:label="@string/event_details_title">
         <argument
             android:name="eventId"
             android:defaultValue=" "
@@ -51,7 +51,7 @@
     <fragment
         android:id="@+id/dealerListFragment"
         android:name="org.eurofurence.connavigator.ui.DealerListFragment"
-        android:label="Dealer List">
+        android:label="@string/dealer_list_title">
         <action
             android:id="@+id/action_fragmentViewDealers_to_fragmentViewDealer"
             app:destination="@id/dealerItemFragment" />
@@ -60,7 +60,7 @@
     <fragment
         android:id="@+id/dealerItemFragment"
         android:name="org.eurofurence.connavigator.ui.DealerItemFragment"
-        android:label="Dealer Details">
+        android:label="@string/dealer_details_title">
         <argument
             android:name="dealerId"
             app:argType="string" />
@@ -71,11 +71,11 @@
     <fragment
         android:id="@+id/mapListFragment"
         android:name="org.eurofurence.connavigator.ui.MapListFragment"
-        android:label="Maps" ><deepLink app:uri="eurofurence://maps/"/></fragment>
+        android:label="@string/maps_title" ><deepLink app:uri="eurofurence://maps/"/></fragment>
     <fragment
         android:id="@+id/infoListFragment"
         android:name="org.eurofurence.connavigator.ui.InfoListFragment"
-        android:label="Info List">
+        android:label="@string/info_list_title">
         <action
             android:id="@+id/action_infoListFragment2_to_infoItemFragment"
             app:destination="@id/infoItemFragment" /><deepLink app:uri="eurofurence://info/"/>
@@ -83,7 +83,7 @@
     <fragment
         android:id="@+id/infoItemFragment"
         android:name="org.eurofurence.connavigator.ui.InfoItemFragment"
-        android:label="Info Details" >
+        android:label="@string/info_item_title" >
         <argument
             android:name="itemId"
             app:argType="string" /><deepLink app:uri="eurofurence://info/{itemId}/"/>
@@ -91,19 +91,19 @@
     <fragment
         android:id="@+id/fragmentViewAbout"
         android:name="org.eurofurence.connavigator.ui.FragmentViewAbout"
-        android:label="About" />
+        android:label="@string/about" />
     <activity
         android:id="@+id/activitySettings"
         android:name="org.eurofurence.connavigator.ui.ActivitySettings"
-        android:label="ActivitySettings" />
+        android:label="@string/settings" />
     <activity
         android:id="@+id/loginActivity"
         android:name="org.eurofurence.connavigator.ui.LoginActivity"
-        android:label="LoginActivity" />
+        android:label="@string/login" />
     <fragment
         android:id="@+id/fragmentViewMessageList"
         android:name="org.eurofurence.connavigator.ui.FragmentViewMessageList"
-        android:label="Message List">
+        android:label="@string/message_list_title">
         <action
             android:id="@+id/action_fragmentViewMessageList_to_fragmentViewMessageItem2"
             app:destination="@id/fragmentViewMessageItem" />
@@ -111,7 +111,7 @@
     <fragment
         android:id="@+id/fragmentViewMessageItem"
         android:name="org.eurofurence.connavigator.ui.FragmentViewMessageItem"
-        android:label="Message Item" >
+        android:label="@string/message_item_title" >
         <argument
             android:name="messageId"
             app:argType="string" />
@@ -119,7 +119,7 @@
     <fragment
         android:id="@+id/fragmentViewAnnouncement"
         android:name="org.eurofurence.connavigator.ui.FragmentViewAnnouncement"
-        android:label="Announcement" >
+        android:label="@string/announcements" >
         <argument
             android:name="announcementId"
             app:argType="string" /><deepLink app:uri="eurofurence://announcements/{announcementId}/"/>

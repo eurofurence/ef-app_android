@@ -40,7 +40,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        applyOnRoot { changeTitle("Dealers") }
+        applyOnRoot { changeTitle(getString(R.string.dealers)) }
 
         effectiveDealers = sortDealers(dealers.items)
 
@@ -145,6 +145,10 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
             updateFilter()
         }
     }
+
+    fun dataUpdated() {
+        ui.dealerList.adapter = DealerRecyclerAdapter(sortDealers(dealers.items), db, this)
+    }
 }
 
 class DealersUi : AnkoComponent<Fragment> {
@@ -165,19 +169,21 @@ class DealersUi : AnkoComponent<Fragment> {
                     // Filter types
                     weightSum = 100F
 
-                    textView("Show:") {
+                    textView {
+                        textResource = R.string.misc_show
                         leftPadding = dip(5)
                     }.lparams(dip(0), wrapContent, 20F)
 
                     categorySpinner = spinner {
-                        prompt = "Filter"
+                        prompt = resources.getString(R.string.misc_filter)
                     }.lparams(dip(0), wrapContent, 80F)
                 }
 
                 searchLayout = linearLayout {
                     weightSum = 100F
                     visibility = View.GONE
-                    textView("Find: ") {
+                    textView {
+                        textResource = R.string.misc_find
                         leftPadding = dip(5)
                     }.lparams(dip(0), wrapContent, 20F)
 

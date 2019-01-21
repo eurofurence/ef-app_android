@@ -77,12 +77,8 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!arguments!!.contains("id")) {
-            longToast("No ID was passed to info fragment!")
-            this.onDestroy()
-        }
-
         fillUi()
+
         subscriptions += db.subscribe {
             fillUi()
         }
@@ -161,10 +157,12 @@ class InfoGroupUi : AnkoComponent<Fragment> {
                 verticalLayout {
                     topPadding = dip(20)
                     bottomPadding = dip(20)
-                    title = textView("Title") {
+                    title = textView {
+                        textResource = R.string.misc_title
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large
                     }
-                    description = textView("Description") {
+                    description = textView {
+                        textResource = R.string.misc_description
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                     }
                 }.lparams(dip(0), wrapContent) {
@@ -205,7 +203,8 @@ class SingleInfoUi : AnkoComponent<Fragment> {
                 weight = 4F
             }
 
-            textView("Name") {
+            textView {
+                textResource = R.string.misc_name
                 id = R.id.title
                 compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                 textColor = ContextCompat.getColor(context, R.color.textBlack)

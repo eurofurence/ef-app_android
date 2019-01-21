@@ -38,8 +38,8 @@ class FragmentViewFursuitCollected : Fragment(), AnkoLogger {
             info { "successfully retrieved data!" }
             info { it }
 
-            ui.name.text = "Hello ${it.name}"
-            ui.score.text = "You have collected ${it.collectionCount} suits, ranking you at number ${it.scoreboardRank}!"
+            ui.name.text = getString(R.string.misc_hello_player, it.name)
+            ui.score.text = getString(R.string.fursuit_game_you_have_collected_number_suits, it.collectionCount, it.scoreboardRank)
 
             it.recentlyCollected.orEmpty().map {
                 ui.collectedLayout.addView(

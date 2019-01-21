@@ -121,7 +121,8 @@ class InfoUi : AnkoComponent<Fragment> {
                         weight = 2F
                     }
 
-                    title = textView("Title") {
+                    title = textView {
+                        textResource = R.string.misc_title
                         padding = dip(15)
                         compatAppearance = android.R.style.TextAppearance_Large
                     }.lparams(dip(0), wrapContent) {

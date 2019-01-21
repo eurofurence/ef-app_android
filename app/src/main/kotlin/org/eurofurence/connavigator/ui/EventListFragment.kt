@@ -59,7 +59,7 @@ class EventListFragment : Fragment(), HasDb {
         configureViewpager()
 
         childFragmentManager.beginTransaction()
-                .replace(2, searchFragment)
+                .replace(R.id.eventSearch, searchFragment)
                 .commitAllowingStateLoss()
 
         ui.search.textWatcher {
@@ -158,7 +158,7 @@ class EventListFragment : Fragment(), HasDb {
     fun onFilterButtonClick() {
         applyOnRoot { popDetails() }
 
-        selector("Change filtering mode", listOf("Days", "Rooms", "Event tracks", "Favorites")) { _, position ->
+        selector(getString(R.string.misc_filter_change_mode), listOf(getString(R.string.misc_days), getString(R.string.misc_rooms), getString(R.string.event_tracks), getString(R.string.event_schedule))) { _, position ->
             when (position) {
                 1 -> changePagerAdapter(EventPagerMode.ROOMS)
                 2 -> changePagerAdapter(EventPagerMode.TRACKS)
@@ -201,7 +201,7 @@ class EventListUi : AnkoComponent<Fragment> {
                     search = editText().lparams(matchParent, wrapContent)
 
                     searchLayout = linearLayout() {
-                        id = 2
+                        id = R.id.eventSearch
                     }.lparams(matchParent, wrapContent)
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, matchParent)

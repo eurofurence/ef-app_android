@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import nl.komponents.kovenant.task
+import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.RootDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
@@ -36,7 +37,7 @@ class ResetReceiver : BroadcastReceiver(), AnkoLogger {
         DebugPreferences.clear()
         AnalyticsPreferences.clear()
 
-        context.longToast("App reset has been completed. Closing.")
+        context.longToast(context.getString(R.string.clear_completed_closing))
 
         task {
             Thread.sleep(1000)
