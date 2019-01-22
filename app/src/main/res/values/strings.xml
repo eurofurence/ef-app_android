@@ -5,8 +5,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="navigation_drawer_title">Eurofurence 24</string>
-    <string name="navigation_drawer_subtitle">Aviators - Conquer the Sky!</string>
+    <string name="navigation_drawer_title" translatable="false">Eurofurence 24</string>
+    <string name="navigation_drawer_subtitle" translatable="false">Aviators - Conquer the Sky!</string>
 
     <string name="navigation_drawer_item_info">Info</string>
     <string name="navigation_drawer_item_poi">Point of Interest</string>
