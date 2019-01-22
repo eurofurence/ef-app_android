@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.eurofurence.connavigator">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.eurofurence.connavigator">
 
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -19,7 +20,7 @@
 
         <!-- Root screen of the app, will contain the different panels as fragments -->
         <activity
-                android:name=".ui.ActivityStart"
+                android:name=".ui.activities.StartActivity"
                 android:label="Eurofurence"
                 android:noHistory="true"
                 android:theme="@style/AppTheme">
@@ -29,28 +30,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.ActivityRoot">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+        <activity android:name=".ui.activities.SettingsActivity"/>
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data
-                        android:scheme="eurofurence"
-                        android:host="event"/>
-                <data
-                        android:scheme="eurofurence"
-                        android:host="dealer"/>
-                <data
-                        android:scheme="eurofurence"
-                        android:host="info"/>
-            </intent-filter>
+        <activity android:name=".ui.activities.NavActivity">
+            <nav-graph android:value="@navigation/nav_graph" />
         </activity>
 
-        <activity android:name=".ui.ActivitySettings"/>
-
-        <activity android:name=".ui.LoginActivity" />
+        <activity android:name=".ui.fragments.LoginActivity" />
 
         <!-- Service providing a detached retrieval of data from the internet. -->
         <service
@@ -78,5 +64,8 @@
         <receiver android:name=".broadcast.LoginReceiver" />
         <receiver android:name=".broadcast.LogoutReceiver"/>
         <receiver android:name=".broadcast.ResetReceiver" />
+
+        <meta-data android:name="android.app.shortcuts"
+            android:resource="@xml/shortcuts" />
     </application>
 </manifest>

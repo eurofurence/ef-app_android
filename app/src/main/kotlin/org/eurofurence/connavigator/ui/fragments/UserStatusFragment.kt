@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import nl.komponents.kovenant.task
@@ -15,16 +16,12 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.gcm.cancelFromRelated
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.ui.FragmentViewMessageList
-import org.eurofurence.connavigator.ui.LoginActivity
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.intentFor
 import java.util.*
 import kotlin.concurrent.fixedRateTimer
 
@@ -67,10 +64,10 @@ class UserStatusFragment : Fragment(), AnkoLogger {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         subscriptions += AuthPreferences
                 .observer
                 .observeOn(AndroidSchedulers.mainThread())
@@ -101,7 +98,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
                 title.textResource = R.string.login_not_logged_in
                 subtitle.textResource = R.string.login_tap_to_login
                 layout.setOnClickListener {
-                    startActivity(intentFor<LoginActivity>())
+                    findNavController().navigate(R.id.action_fragmentViewHome_to_loginActivity)
                 }
             }
 
@@ -114,9 +111,8 @@ class UserStatusFragment : Fragment(), AnkoLogger {
             ui.apply {
                 title.text = getString(R.string.misc_welcome_user, AuthPreferences.username.capitalize())
                 layout.setOnClickListener {
-                    applyOnRoot {
-                        navigateRoot(FragmentViewMessageList::class.java)
-                    }
+                    val action = FragmentViewHomeDirections.ActionFragmentViewHomeToFragmentViewMessageList()
+                    findNavController().navigate(action)
                 }
             }
         }

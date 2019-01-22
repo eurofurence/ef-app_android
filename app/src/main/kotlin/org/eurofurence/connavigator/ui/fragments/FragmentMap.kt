@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.gson.Gson
 import io.swagger.client.model.LinkFragment
@@ -16,7 +17,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
@@ -29,7 +29,7 @@ import kotlin.properties.Delegates.notNull
 /**
  * Created by david on 8/3/16.
  */
-class FragmentMap : Fragment(), ContentAPI, HasDb, AnkoLogger {
+class FragmentMap : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     fun withArguments(mapRecord: MapRecord) = apply {
@@ -45,11 +45,11 @@ class FragmentMap : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if ("mapRecord" in arguments) {
-            mapRecord = arguments.jsonObjects["mapRecord"]
+        if ("mapRecord" in arguments!!) {
+            mapRecord = arguments!!.jsonObjects["mapRecord"]
 
             info { "Browsing to map ${mapRecord.description}" }
 
@@ -120,7 +120,8 @@ private fun launchDealer(link: LinkFragment) {
 
     info { "Dealer is ${dealer?.getName()}" }
     if (dealer !== null) {
-        applyOnRoot { navigateToDealer(dealer) }
+        val action = MapListFragmentDirections.ActionMapListFragmentToDealerItemFragment(dealer.id.toString())
+        findNavController().navigate(action)
     } else {
         longToast(getString(R.string.dealer_could_not_navigate_to))
     }

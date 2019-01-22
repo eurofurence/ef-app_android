@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
@@ -32,7 +32,6 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
@@ -42,10 +41,15 @@ import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.px2dip
+import java.lang.Exception
 import java.util.*
 
-class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
-    private val dealerId: UUID by lazy { UUID.fromString(arguments.getString("id")) }
+class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
+    private val dealerId get() = try {
+        UUID.fromString(DealerItemFragmentArgs.fromBundle(arguments).dealerId)
+    } catch (e: Exception) {
+        null
+    }
 
     val ui by lazy { DealerUi() }
 
@@ -56,9 +60,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        // Send analytics pings
-        Analytics.screen(activity, "View Dealer Details")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         subscriptions += db.subscribe {
             fillUi()
         }
@@ -71,7 +73,7 @@ class FragmentViewDealer : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
     private fun fillUi() {
-        if ("id" in arguments) {
+        if (dealerId != null) {
             val dealer: DealerRecord = db.dealers[dealerId] ?: return
 
             Analytics.event(Category.DEALER, Action.OPENED, dealer.displayName

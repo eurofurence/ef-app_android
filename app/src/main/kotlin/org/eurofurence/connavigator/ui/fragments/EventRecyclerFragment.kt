@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.task
@@ -22,7 +23,6 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.ui.filters.FilterType
@@ -42,7 +42,7 @@ import kotlin.coroutines.experimental.buildSequence
  * Event view recycler to hold the viewpager items
  * TODO: Refactor the everliving fuck out of this shitty software
  */
-class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
+class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     var subscriptions = Disposables.empty()
@@ -178,10 +178,20 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
             // Assign the on-click action
             holder.itemView.setOnClickListener {
                 debug { "Short event click" }
-                applyOnRoot { navigateToEvent(event) }
+                val action = when(findNavController().currentDestination?.id) {
+                    R.id.fragmentViewHome -> FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewEvent(event.id.toString())
+                    R.id.eventListFragment -> EventListFragmentDirections.actionFragmentViewEventsToFragmentViewEvent(event.id.toString())
+                    else -> null
+                }
+
+                action?.apply {
+                    findNavController().navigate(this)
+                }
             }
             holder.itemView.setOnLongClickListener {
-                eventDialog(context, event, db)
+                context?.apply {
+                    eventDialog(this, event, db)
+                }
                 true
             }
         }
@@ -190,7 +200,7 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // Initialize events list.
@@ -251,7 +261,7 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
         // Add top padding only if in main list.
         ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             val padding by lazy {
-                val metrics = context.resources.displayMetrics
+                val metrics = context!!.resources.displayMetrics
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
             }
 
@@ -274,7 +284,7 @@ class EventRecyclerFragment : Fragment(), ContentAPI, HasDb, AnkoLogger {
     }
 
 
-    override fun dataUpdated() {
+    fun dataUpdated() {
         info { "Data was updated, redoing UI" }
         task {
             info { "Refiltering data" }
@@ -399,7 +409,7 @@ class EventListView : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         bigLayout = verticalLayout {
             backgroundResource = R.color.cardview_light_background
-            lparams(matchParent, wrapContent)
+            lparams(matchParent, matchParent)
 
             title = textView("") {
                 compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small

@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -20,12 +20,7 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.gcm.cancelFromRelated
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.filters.EventList
-import org.eurofurence.connavigator.ui.fragments.AnnouncementListFragment
-import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
-import org.eurofurence.connavigator.ui.fragments.UserStatusFragment
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.arcProgress
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
@@ -37,13 +32,10 @@ import org.joda.time.Days
 /**
  * Created by David on 5/14/2016.
  */
-class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, MainScreen, HasDb {
+class FragmentViewHome : Fragment(), AnkoLogger, HasDb {
     override val db by lazyLocateDb()
 
     val ui by lazy { HomeUi() }
-
-    override val drawerItemId: Int
-        get() = R.id.navHome
 
     val database by lazy { locateDb() }
     var subscriptions = Disposables.empty()
@@ -57,8 +49,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, MainScreen, HasDb {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        applyOnRoot { changeTitle(getString(R.string.misc_home)) }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         configureEventRecyclers()
 
@@ -67,7 +58,7 @@ class FragmentViewHome : Fragment(), ContentAPI, AnkoLogger, MainScreen, HasDb {
                 .subscribe { configureProgressBar() }
 
         subscriptions += db.subscribe {
-            context.notificationManager.apply {
+            context!!.notificationManager.apply {
                 // Cancel all event notifications.
                 for (e in events.items)
                     cancelFromRelated(e.id)

@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -24,14 +24,14 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView
 
-class FragmentViewMessageItem : Fragment(), AnkoLogger {
+class MessageItemFragment : Fragment(), AnkoLogger {
     val ui = MessageItemUi()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        val message = Gson().fromJson(arguments.getString("message"), PrivateMessageRecord::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val message = Gson().fromJson(arguments!!.getString("message"), PrivateMessageRecord::class.java)
         ui.title.text = message.subject?.capitalize() ?: getString(R.string.message_no_subject)
 
         ui.author.text = getString(R.string.message_from_name, message.authorName)
@@ -42,10 +42,10 @@ class FragmentViewMessageItem : Fragment(), AnkoLogger {
         ui.content.loadMarkdown(message.message)
 
         if (message.readDateTimeUtc == null) {
-            ui.icon.textColor = ContextCompat.getColor(context, R.color.primaryDark)
+            ui.icon.textColor = ContextCompat.getColor(context!!, R.color.primaryDark)
             ui.icon.text = "{fa-envelope 30sp}"
         } else {
-            ui.icon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
+            ui.icon.textColor = ContextCompat.getColor(context!!, android.R.color.tertiary_text_dark)
             ui.icon.text = "{fa-envelope-o 30sp}"
         }
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="events"
+        android:enabled="true"
+        android:icon="@drawable/icon_calendar"
+        android:shortcutShortLabel="@string/event_shortcut_label">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="org.eurofurence.connavigator"
+            android:targetClass="org.eurofurence.connavigator.ui.activities.NavActivity"
+            android:data="eurofurence://events/"/>
+    </shortcut>
+</shortcuts>

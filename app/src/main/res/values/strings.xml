@@ -78,6 +78,8 @@
     <!-- Action Bar end -->
 
     <!-- Event  -->
+    <string name="event_list_title">Event List</string>
+    <string name="event_details_title">Event Details</string>
     <string name="event">Event</string>
     <string name="events">Events</string>
     <string name="event_schedule">Event Schedule</string>
@@ -108,6 +110,8 @@
     <!-- Announcement end -->
 
     <!-- Dealer -->
+    <string name="dealer_list_title">Dealer List</string>
+    <string name="dealer_details_title">Dealer Details</string>
     <string name="dealers">Dealers</string>
     <string name="dealer_name">Dealer Name</string>
     <string name="dealer_subname">Subname</string>
@@ -140,6 +144,8 @@
     <!-- Collect 'Em all -->
 
     <!-- Message -->
+    <string name="message_list_title">Message List</string>
+    <string name="message_item_title">Message Item</string>
     <string name="message_no_subject">No subject</string>
     <string name="message_from_name">From: %1$s</string>
     <string name="message_sent">Sent</string>
@@ -276,6 +282,12 @@
     <string name="announcement_show_old">announcement_show_old</string>
     <string name="notification_time_extra">notifications_time_extra</string>
     <string name="date_short">date_short</string>
+    <string name="event_shortcut_label">Events</string>
+    <string name="maps_title">Maps</string>
+    <string name="about">About</string>
+    <string name="info_list_title">Info List</string>
+    <string name="info_item_title">Info Item</string>
+
     <array name="polling_intervals">
         <item>100</item>
         <item>75</item>

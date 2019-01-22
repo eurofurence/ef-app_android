@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,8 +12,6 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.now
 import org.eurofurence.connavigator.util.v2.compatAppearance
@@ -24,19 +22,13 @@ import org.jetbrains.anko.support.v4.browse
 /**
  * Created by David on 28-4-2016.
  */
-class FragmentViewAbout : Fragment(), ContentAPI, MainScreen {
-    override val drawerItemId: Int
-        get() = R.id.navAbout
-
-
+class FragmentViewAbout : Fragment(){
     val ui = AboutUi()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        applyOnRoot { changeTitle("About") }
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         ui.requinardLayout.setOnClickListener { browse("https://furry.requinard.nl") }
         ui.pazuzuLayout.setOnClickListener { browse("https://twitter.com/Pazuzupizza") }
 
@@ -172,6 +164,7 @@ class AboutUi : AnkoComponent<Fragment> {
 - Snow-wolf
 - StreifiGreif
 - Xil
+- IceTiger
 
 **Made with**
 

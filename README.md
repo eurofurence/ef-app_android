@@ -31,7 +31,7 @@ Now we can get started with the app itself!
 * Change the logo in the `res/mipmap-*` folders (these need to be scaled accordingly)
 * Change the placeholder image in `res/drawable/placeholder_event.jpg`
 * Change the banner image in `res/drawable/banner_2018.jpg`
-* Change the text in `ui/ActivityStart.kt` to reflect your convention name
+* Change the text in `ui/StartActivity.kt` to reflect your convention name
 * OPTIONAL: Translate all the strings for your language
 
 ### Firebase

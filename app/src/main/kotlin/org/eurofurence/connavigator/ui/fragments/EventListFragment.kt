@@ -1,10 +1,12 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,64 +21,39 @@ import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.TrackEventPagerAdapter
-import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
-import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
-import org.jetbrains.anko.inputMethodManager
+import org.jetbrains.anko.*
+import org.jetbrains.anko.design.tabLayout
+import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.selector
+import org.jetbrains.anko.support.v4.viewPager
 
 /**
  * Created by David on 5/3/2016.
  */
-class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
+class EventListFragment : Fragment(), HasDb {
     override val db by lazyLocateDb()
-    override val drawerItemId: Int
-        get() = R.id.navEvents
 
+    val ui = EventListUi()
 
-    val eventPager: ViewPager by view()
-    val eventSearchBar: EditText by view()
     private val searchFragment by lazy { EventRecyclerFragment().withArguments(daysInsteadOfGlyphs = true) }
 
-    private val detailsPopAdapter = object : ViewPager.OnPageChangeListener {
-        override fun onPageScrollStateChanged(state: Int) {
-        }
-
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        }
-
-        override fun onPageSelected(position: Int) {
-            if (isResumed)
-                applyOnRoot { popDetails() }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fview_events_viewpager, container, false)
+            UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         configureViewpager()
 
         childFragmentManager.beginTransaction()
                 .replace(R.id.eventSearch, searchFragment)
                 .commitAllowingStateLoss()
 
-        eventSearchBar.textWatcher {
+        ui.search.textWatcher {
             afterTextChanged { text ->
                 searchFragment.eventList.byTitle(text.toString())
                         .sortByDateAndTime()
                 searchFragment.dataUpdated()
             }
         }
-
-        applyOnRoot {
-            tabs.setupWithViewPager(eventPager)
-            tabs.tabMode = TabLayout.MODE_SCROLLABLE
-        }
-        eventPager.addOnPageChangeListener(detailsPopAdapter)
-
-        applyOnRoot { changeTitle(getString(R.string.event_schedule)) }
     }
 
 
@@ -85,12 +62,13 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
     }
 
     private fun changePagerAdapter(adapter: PagerAdapter, preferredPosition: Int? = null) {
-        eventPager.adapter = adapter
-        eventPager.adapter.notifyDataSetChanged()
+        ui.pager.adapter = adapter
+        adapter.notifyDataSetChanged()
 
+        ui.tabs.setupWithViewPager(ui.pager)
 
         preferredPosition?.let {
-            eventPager.setCurrentItem(it, false)
+            ui.pager.setCurrentItem(it, false)
         }
     }
 
@@ -101,35 +79,64 @@ class FragmentViewEvents : Fragment(), ContentAPI, HasDb, MainScreen {
         else -> changePagerAdapter(DayEventPagerAdapter(db, childFragmentManager), DayEventPagerAdapter.indexOfToday(db))
     }.apply { BackgroundPreferences.eventPagerMode = mode }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        eventPager.removeOnPageChangeListener(detailsPopAdapter)
-        applyOnRoot { tabs.setupWithViewPager(null) }
-    }
+    override fun onResume() {
+        super.onResume()
+        activity?.apply {
+            this.findViewById<Toolbar>(R.id.toolbar).apply {
+                this.menu.clear()
+                this.inflateMenu(R.menu.event_list_menu)
+                this.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.action_filter -> onFilterButtonClick()
+                        R.id.action_search -> onSearchButtonClick()
+                    }
 
-    override fun onSearchButtonClick() {
-        applyOnRoot { popDetails() }
-        when (eventPager.visibility) {
-            View.VISIBLE -> {
-                eventPager.visibility = View.GONE
-                val searchLayout = activity.findViewById(R.id.searchLayout)
-
-                searchLayout.visibility = View.VISIBLE
-                searchLayout.requestFocus()
-
-                activity.inputMethodManager
-                        .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY)
-            }
-            else -> {
-                eventPager.visibility = View.VISIBLE
-                activity.findViewById(R.id.searchLayout).visibility = View.GONE
+                    true
+                }
             }
         }
     }
 
-    override fun onFilterButtonClick() {
-        applyOnRoot { popDetails() }
+    override fun onPause() {
+        super.onPause()
 
+        activity?.apply {
+            val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
+
+            toolbar.menu.clear()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        activity?.apply {
+            val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
+
+            toolbar.menu.clear()
+        }
+    }
+
+    fun onSearchButtonClick() {
+        when (ui.pager.visibility) {
+            View.VISIBLE -> {
+                ui.pager.visibility = View.GONE
+                ui.tabs.visibility = View.GONE
+
+                ui.searchLayout.visibility = View.VISIBLE
+                ui.searchLayout.requestFocus()
+
+                activity!!.inputMethodManager
+                        .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            }
+            else -> {
+                ui.pager.visibility = View.VISIBLE
+                ui.tabs.visibility = View.VISIBLE
+                ui.searchLayout.visibility = View.GONE
+            }
+        }
+    }
+
+    fun onFilterButtonClick() {
         selector(getString(R.string.misc_filter_change_mode), listOf(getString(R.string.misc_days), getString(R.string.misc_rooms), getString(R.string.event_tracks), getString(R.string.event_schedule))) { _, position ->
             when (position) {
                 1 -> changePagerAdapter(EventPagerMode.ROOMS)
@@ -146,4 +153,38 @@ enum class EventPagerMode {
     ROOMS,
     TRACKS,
     FAVORITES
+}
+
+class EventListUi : AnkoComponent<Fragment> {
+    lateinit var tabs: TabLayout
+    lateinit var pager: ViewPager
+    lateinit var search: EditText
+    lateinit var searchLayout: View
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
+        verticalLayout {
+            tabs = tabLayout {
+                backgroundResource = R.color.primaryDark
+                setTabTextColors(
+                        ContextCompat.getColor(context, R.color.textWhite),
+                        ContextCompat.getColor(context, R.color.textWhite)
+                )
+                tabMode = TabLayout.MODE_SCROLLABLE
+            }.lparams(matchParent, wrapContent)
+
+            pager = viewPager {
+                id = 1
+            }.lparams(matchParent, matchParent)
+
+            scrollView {
+                verticalLayout {
+                    search = editText().lparams(matchParent, wrapContent)
+
+                    searchLayout = linearLayout() {
+                        id = R.id.eventSearch
+                    }.lparams(matchParent, wrapContent)
+                }.lparams(matchParent, wrapContent)
+            }.lparams(matchParent, matchParent)
+        }
+    }
+
 }

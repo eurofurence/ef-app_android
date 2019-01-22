@@ -8,8 +8,9 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.support.annotation.RequiresApi
 import io.swagger.client.JsonUtil
-import kotlin.reflect.KClass
-import kotlin.serialization.*
+import kotlinx.serialization.*
+import kotlinx.serialization.internal.EnumDescriptor
+import java.util.*
 
 /**
  * This file contains very versatile serializers for Android Bundles and Intents.
@@ -48,26 +49,30 @@ const val VALUE_TYPE_JSON_LIST_EMPTY: Byte = 6
 /**
  * Writes the value to the intent.
  */
+@ImplicitReflectionSerializer
 inline fun <reified T : Any> Intent.write(t: T) =
-        IntentOutput(this).write(T::class.serializer(), t)
+        IntentOutput(this).encode(T::class.serializer(), t)
 
 /**
  * Reads the value from the intent.
  */
+@ImplicitReflectionSerializer
 inline fun <reified T : Any> Intent.read() =
-        IntentInput(this).read(T::class.serializer())
+        IntentInput(this).decode(T::class.serializer())
 
 /**
  * Writes the value to the bundle with the given root.
  */
+@ImplicitReflectionSerializer
 inline fun <reified T : Any> Bundle.write(root: String, t: T) =
-        BundleOutput(this, root).write(T::class.serializer(), t)
+        BundleOutput(this, root).encode(T::class.serializer(), t)
 
 /**
  * Reads the value from the bundle with the given root.
  */
+@ImplicitReflectionSerializer
 inline fun <reified T : Any> Bundle.read(root: String) =
-        BundleInput(this, root).read(T::class.serializer())
+        BundleInput(this, root).decode(T::class.serializer())
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 fun Bundle.toMap() =
@@ -89,7 +94,7 @@ fun Intent.toMapString() =
  * Serializes to a bundle.
  */
 
-class BundleOutput(val target: Bundle, val root: String, val defaultJson: Boolean = true) : NamedValueOutput(root) {
+class BundleOutput(val target: Bundle, val root: String, val defaultJson: Boolean = true) : NamedValueEncoder(root) {
 
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())
@@ -100,10 +105,7 @@ class BundleOutput(val target: Bundle, val root: String, val defaultJson: Boolea
     override fun elementName(desc: KSerialClassDesc, index: Int) =
             desc.getElementName(index)
 
-    override fun <T> isNamedSerializableRecursive(name: String, saver: KSerialSaver<T>, value: T) =
-            true
-
-    override fun writeNamed(name: String, value: Any) {
+    override fun encodeTaggedValue(name: String, value: Any) {
         if (value is Parcelable) {
             target.putByte("$name._TYPE", VALUE_TYPE_PARCELABLE)
             target.putParcelable(name, value)
@@ -125,55 +127,56 @@ class BundleOutput(val target: Bundle, val root: String, val defaultJson: Boolea
             throw SerializationException("Not supported $name=$value in ${target.toMapString()}")
     }
 
-    override fun writeNamedBoolean(name: String, value: Boolean) {
+    override fun encodeTaggedBoolean(name: String, value: Boolean) {
         target.putBoolean(name, value)
     }
 
-    override fun writeNamedByte(name: String, value: Byte) {
+    override fun encodeTaggedByte(name: String, value: Byte) {
         target.putByte(name, value)
     }
 
-    override fun writeNamedChar(name: String, value: Char) {
+    override fun encodeTaggedChar(name: String, value: Char) {
         target.putChar(name, value)
     }
 
-    override fun writeNamedDouble(name: String, value: Double) {
+    override fun encodeTaggedDouble(name: String, value: Double) {
         target.putDouble(name, value)
     }
 
-    override fun <T : Enum<T>> writeNamedEnum(name: String, enumClass: KClass<T>, value: T) {
-        target.putSerializable(name, value)
+    override fun encodeTaggedEnum(tag: String, enumDescription: EnumDescriptor, ordinal: Int) {
+        target.putString(tag, enumDescription.getElementName(ordinal))
     }
 
-    override fun writeNamedFloat(name: String, value: Float) {
+
+    override fun encodeTaggedFloat(name: String, value: Float) {
         target.putFloat(name, value)
     }
 
-    override fun writeNamedInt(name: String, value: Int) {
+    override fun encodeTaggedInt(name: String, value: Int) {
         target.putInt(name, value)
     }
 
-    override fun writeNamedLong(name: String, value: Long) {
+    override fun encodeTaggedLong(name: String, value: Long) {
         target.putLong(name, value)
     }
 
-    override fun writeNamedNotNullMark(name: String) {
+    override fun encodeTaggedNotNullMark(name: String) {
         target.putBoolean("$name._NULL", false)
     }
 
-    override fun writeNamedNull(name: String) {
+    override fun encodeTaggedNull(name: String) {
         target.putBoolean("$name._NULL", true)
     }
 
-    override fun writeNamedShort(name: String, value: Short) {
+    override fun encodeTaggedShort(name: String, value: Short) {
         target.putShort(name, value)
     }
 
-    override fun writeNamedString(name: String, value: String) {
+    override fun encodeTaggedString(name: String, value: String) {
         target.putString(name, value)
     }
 
-    override fun writeNamedUnit(name: String) {
+    override fun encodeTaggedUnit(name: String) {
         target.putByte("$name._TYPE", VALUE_TYPE_UNIT)
     }
 }
@@ -181,7 +184,7 @@ class BundleOutput(val target: Bundle, val root: String, val defaultJson: Boolea
 /**
  * Deserializes from a bundle.
  */
-class BundleInput(val target: Bundle, val root: String) : NamedValueInput(root) {
+class BundleInput(val target: Bundle, val root: String) : NamedValueDecoder(root) {
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())
                 childName
@@ -192,59 +195,58 @@ class BundleInput(val target: Bundle, val root: String) : NamedValueInput(root) 
     override fun elementName(desc: KSerialClassDesc, index: Int) =
             desc.getElementName(index)
 
-    override fun readNamed(name: String): Any =
+    override fun decodeTaggedValue(name: String): Any =
             when (target.getByte("$name._TYPE")) {
-            // Base cases
+                // Base cases
                 VALUE_TYPE_UNIT -> Unit
                 VALUE_TYPE_PARCELABLE -> target.getParcelable(name)
                 VALUE_TYPE_SERIALIZABLE -> target.getSerializable(name)
 
-            // Special JSON Deserialization
+                // Special JSON Deserialization
                 VALUE_TYPE_JSON_LIST_EMPTY -> ArrayList<Any>()
                 VALUE_TYPE_JSON_LIST -> JsonUtil.deserializeToList(
                         target.getString(name), Class.forName(target.getString("$name._CLASS")))
                 VALUE_TYPE_JSON -> JsonUtil.deserializeToObject(
                         target.getString(name), Class.forName(target.getString("$name._CLASS")))
 
-            // Default to exception
+                // Default to exception
                 else -> throw SerializationException("Not supported $name in ${target.toMapString()}")
             }
 
-    override fun readNamedBoolean(name: String) =
-            target.getBoolean(name)
+    override fun decodeTaggedBoolean(tag: String) =
+            target.getBoolean(tag)
 
-    override fun readNamedByte(name: String) =
+    override fun decodeTaggedByte(name: String) =
             target.getByte(name)
 
-    override fun readNamedChar(name: String) =
+    override fun decodeTaggedChar(name: String) =
             target.getChar(name)
 
-    override fun readNamedDouble(name: String) =
+    override fun decodeTaggedDouble(name: String) =
             target.getDouble(name)
 
-    @Suppress("unchecked_cast")
-    override fun <T : Enum<T>> readNamedEnum(name: String, enumClass: KClass<T>) =
-            target.getSerializable(name) as T
+    override fun decodeTaggedEnum(tag: String, enumDescription: EnumDescriptor) =
+            enumDescription.getElementIndexOrThrow(target.getString(tag))
 
-    override fun readNamedFloat(name: String) =
+    override fun decodeTaggedFloat(name: String) =
             target.getFloat(name)
 
-    override fun readNamedInt(name: String) =
+    override fun decodeTaggedInt(name: String) =
             target.getInt(name)
 
-    override fun readNamedLong(name: String) =
+    override fun decodeTaggedLong(name: String) =
             target.getLong(name)
 
-    override fun readNamedNotNullMark(name: String) =
+    override fun decodeTaggedNotNullMark(name: String) =
             !target.getBoolean("$name._NULL")
 
-    override fun readNamedShort(name: String) =
+    override fun decodeTaggedShort(name: String) =
             target.getShort(name)
 
-    override fun readNamedString(name: String): String =
+    override fun decodeTaggedString(name: String): String =
             target.getString(name)
 
-    override fun readNamedUnit(name: String) {
+    override fun decodeTaggedUnit(name: String) {
         if (target.getByte("$name._TYPE") != VALUE_TYPE_UNIT)
             throw IllegalStateException()
     }
@@ -253,7 +255,7 @@ class BundleInput(val target: Bundle, val root: String) : NamedValueInput(root) 
 /**
  * Serializes to an intent.
  */
-class IntentOutput(val target: Intent, val defaultJson: Boolean = true) : NamedValueOutput(target.action) {
+class IntentOutput(val target: Intent, val defaultJson: Boolean = true) : NamedValueEncoder(target.action) {
 
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())
@@ -264,10 +266,7 @@ class IntentOutput(val target: Intent, val defaultJson: Boolean = true) : NamedV
     override fun elementName(desc: KSerialClassDesc, index: Int) =
             desc.getElementName(index)
 
-    override fun <T> isNamedSerializableRecursive(name: String, saver: KSerialSaver<T>, value: T) =
-            true
-
-    override fun writeNamed(name: String, value: Any) {
+    override fun encodeTaggedValue(name: String, value: Any) {
         if (value is Parcelable) {
             target.putExtra("$name._TYPE", VALUE_TYPE_PARCELABLE)
             target.putExtra(name, value)
@@ -289,55 +288,55 @@ class IntentOutput(val target: Intent, val defaultJson: Boolean = true) : NamedV
             throw SerializationException("Not supported $name=$value in ${target.toMapString()}")
     }
 
-    override fun writeNamedBoolean(name: String, value: Boolean) {
+    override fun encodeTaggedBoolean(name: String, value: Boolean) {
         target.putExtra(name, value)
     }
 
-    override fun writeNamedByte(name: String, value: Byte) {
+    override fun encodeTaggedByte(name: String, value: Byte) {
         target.putExtra(name, value)
     }
 
-    override fun writeNamedChar(name: String, value: Char) {
+    override fun encodeTaggedChar(name: String, value: Char) {
         target.putExtra(name, value)
     }
 
-    override fun writeNamedDouble(name: String, value: Double) {
+    override fun encodeTaggedDouble(name: String, value: Double) {
         target.putExtra(name, value)
     }
 
-    override fun <T : Enum<T>> writeNamedEnum(name: String, enumClass: KClass<T>, value: T) {
+    override fun encodeTaggedEnum(tag: String, enumDescription: EnumDescriptor, ordinal: Int) {
+        target.putExtra(tag, enumDescription.getElementName(ordinal))
+    }
+
+    override fun encodeTaggedFloat(name: String, value: Float) {
         target.putExtra(name, value)
     }
 
-    override fun writeNamedFloat(name: String, value: Float) {
+    override fun encodeTaggedInt(name: String, value: Int) {
         target.putExtra(name, value)
     }
 
-    override fun writeNamedInt(name: String, value: Int) {
+    override fun encodeTaggedLong(name: String, value: Long) {
         target.putExtra(name, value)
     }
 
-    override fun writeNamedLong(name: String, value: Long) {
-        target.putExtra(name, value)
-    }
-
-    override fun writeNamedNotNullMark(name: String) {
+    override fun encodeTaggedNotNullMark(name: String) {
         target.putExtra("$name._NULL", false)
     }
 
-    override fun writeNamedNull(name: String) {
+    override fun encodeTaggedNull(name: String) {
         target.putExtra("$name._NULL", true)
     }
 
-    override fun writeNamedShort(name: String, value: Short) {
+    override fun encodeTaggedShort(name: String, value: Short) {
         target.putExtra(name, value)
     }
 
-    override fun writeNamedString(name: String, value: String) {
+    override fun encodeTaggedString(name: String, value: String) {
         target.putExtra(name, value)
     }
 
-    override fun writeNamedUnit(name: String) {
+    override fun encodeTaggedUnit(name: String) {
         target.putExtra("$name._TYPE", VALUE_TYPE_UNIT)
     }
 }
@@ -345,7 +344,7 @@ class IntentOutput(val target: Intent, val defaultJson: Boolean = true) : NamedV
 /**
  * Deserializes from an intent.
  */
-class IntentInput(val target: Intent) : NamedValueInput(target.action) {
+class IntentInput(val target: Intent) : NamedValueDecoder(target.action) {
     override fun composeName(parentName: String, childName: String) =
             if (parentName.isEmpty())
                 childName
@@ -356,14 +355,14 @@ class IntentInput(val target: Intent) : NamedValueInput(target.action) {
     override fun elementName(desc: KSerialClassDesc, index: Int) =
             desc.getElementName(index)
 
-    override fun readNamed(name: String): Any =
+    override fun decodeTaggedValue(name: String): Any =
             when (target.getByteExtra("$name._TYPE", (-1).toByte())) {
-            // Base cases
+                // Base cases
                 VALUE_TYPE_UNIT -> Unit
                 VALUE_TYPE_PARCELABLE -> target.getParcelableExtra(name)
                 VALUE_TYPE_SERIALIZABLE -> target.getSerializableExtra(name)
 
-            // Special JSON Deserialization
+                // Special JSON Deserialization
                 VALUE_TYPE_JSON_LIST_EMPTY ->
                     ArrayList<Any>()
                 VALUE_TYPE_JSON_LIST -> JsonUtil.deserializeToList(
@@ -371,46 +370,56 @@ class IntentInput(val target: Intent) : NamedValueInput(target.action) {
                 VALUE_TYPE_JSON -> JsonUtil.deserializeToObject(
                         target.getStringExtra(name), Class.forName(target.getStringExtra("$name._CLASS")))
 
-            // Default to exception
+                // Default to exception
                 else -> throw SerializationException("Not supported $name in ${target.toMapString()}")
             }
 
-    override fun readNamedBoolean(name: String) =
+    override fun decodeTaggedBoolean(name: String) =
             target.getBooleanExtra(name, false)
 
-    override fun readNamedByte(name: String) =
+    override fun decodeTaggedByte(name: String) =
             target.getByteExtra(name, 0.toByte())
 
-    override fun readNamedChar(name: String) =
+    override fun decodeTaggedChar(name: String) =
             target.getCharExtra(name, 0.toChar())
 
-    override fun readNamedDouble(name: String) =
+    override fun decodeTaggedDouble(name: String) =
             target.getDoubleExtra(name, 0.0)
 
-    @Suppress("unchecked_cast")
-    override fun <T : Enum<T>> readNamedEnum(name: String, enumClass: KClass<T>) =
-            target.getSerializableExtra(name) as T
+    override fun decodeTaggedEnum(tag: String, enumDescription: EnumDescriptor) =
+            enumDescription.getElementIndexOrThrow(target.getStringExtra(tag))
 
-    override fun readNamedFloat(name: String) =
+    override fun decodeTaggedFloat(name: String) =
             target.getFloatExtra(name, 0.0f)
 
-    override fun readNamedInt(name: String) =
+    override fun decodeTaggedInt(name: String) =
             target.getIntExtra(name, 0)
 
-    override fun readNamedLong(name: String) =
+    override fun decodeTaggedLong(name: String) =
             target.getLongExtra(name, 0L)
 
-    override fun readNamedNotNullMark(name: String) =
+    override fun decodeTaggedNotNullMark(name: String) =
             !target.getBooleanExtra("$name._NULL", false)
 
-    override fun readNamedShort(name: String) =
+    override fun decodeTaggedShort(name: String) =
             target.getShortExtra(name, 0.toShort())
 
-    override fun readNamedString(name: String): String =
+    override fun decodeTaggedString(name: String): String =
             target.getStringExtra(name)
 
-    override fun readNamedUnit(name: String) {
+    override fun decodeTaggedUnit(name: String) {
         if (target.getByteExtra("$name._TYPE", (-1).toByte()) != VALUE_TYPE_UNIT)
             throw IllegalStateException()
+    }
+}
+
+@Serializer(forClass = Date::class)
+object DateSerializer : KSerializer<Date> {
+    override fun serialize(output: Encoder, obj: Date) {
+        output.encodeLong(obj.time)
+    }
+
+    override fun deserialize(input: Decoder): Date {
+        return Date(input.decodeLong())
     }
 }

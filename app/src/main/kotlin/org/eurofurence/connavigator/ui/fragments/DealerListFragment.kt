@@ -1,12 +1,13 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +19,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
-import org.eurofurence.connavigator.ui.communication.ContentAPI
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
@@ -27,10 +26,8 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by David on 15-5-2016.
  */
-class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScreen {
+class DealerListFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
-    override val drawerItemId: Int
-        get() = R.id.navDealersDen
 
     val ui by lazy { DealersUi() }
     private var effectiveDealers = emptyList<DealerRecord>()
@@ -41,8 +38,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScree
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        applyOnRoot { changeTitle(getString(R.string.dealers)) }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         effectiveDealers = sortDealers(dealers.items)
 
@@ -80,7 +76,40 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScree
         }
     }
 
-    @AddTrace(name = "FragmentViewDealers:search", enabled = true)
+    override fun onResume() {
+        super.onResume()
+
+        activity?.apply {
+            this.findViewById<Toolbar>(R.id.toolbar).apply {
+                this.menu.clear()
+                this.inflateMenu(R.menu.dealer_list_menu)
+                this.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.action_search -> onSearchButtonClick()
+                    }
+                    true
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        activity?.apply {
+            this.findViewById<Toolbar>(R.id.toolbar).menu.clear()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        activity?.apply {
+            this.findViewById<Toolbar>(R.id.toolbar).menu.clear()
+        }
+    }
+
+    @AddTrace(name = "DealerListFragment:search", enabled = true)
     fun updateFilter() {
         info { "Filtering dealers for text=$searchText, category=$searchCategory" }
 
@@ -90,7 +119,9 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScree
             effectiveDealers = effectiveDealers.filter { it.displayName.contains(searchText, true) or it.attendeeNickname.contains(searchText, true) }
 
         if (!searchCategory.isEmpty())
-            effectiveDealers = effectiveDealers.filter { it.categories?.contains(searchCategory) ?: false }
+            effectiveDealers = effectiveDealers.filter {
+                it.categories?.contains(searchCategory) ?: false
+            }
 
         ui.dealerList.adapter = DealerRecyclerAdapter(sortDealers(effectiveDealers), db, this)
         ui.dealerList.adapter.notifyDataSetChanged()
@@ -99,9 +130,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScree
     private fun sortDealers(dealers: Iterable<DealerRecord>): List<DealerRecord> =
             dealers.sortedBy { (if (it.displayName != "") it.displayName else it.attendeeNickname).toLowerCase() }
 
-    override fun onSearchButtonClick() {
-        applyOnRoot { popDetails() }
-
+    fun onSearchButtonClick() {
         if (ui.searchLayout.visibility == View.GONE) {
             info { "Showing search bar" }
             ui.searchLayout.visibility = View.VISIBLE
@@ -113,7 +142,7 @@ class FragmentViewDealers : Fragment(), ContentAPI, HasDb, AnkoLogger, MainScree
         }
     }
 
-    override fun dataUpdated() {
+    fun dataUpdated() {
         ui.dealerList.adapter = DealerRecyclerAdapter(sortDealers(dealers.items), db, this)
     }
 }

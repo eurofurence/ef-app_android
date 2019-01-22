@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -28,7 +28,6 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
-import org.eurofurence.connavigator.ui.fragments.MapDetailFragment
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
@@ -43,22 +42,26 @@ import java.util.*
 /**
  * Created by David on 4/9/2016.
  */
-class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
+class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     var subscriptions = Disposables.empty()
 
-    private val eventId: UUID? get() = UUID.fromString(arguments.getString("id"))
+    private val eventId
+        get () = try {
+            UUID.fromString(EventItemFragmentArgs.fromBundle(arguments).eventId)
+        } catch (e: Exception) {
+            null
+        }
 
     val ui by lazy { EventUi() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.screen(activity, "Event Specific")
         subscriptions += db.subscribe {
             fillUi()
         }
@@ -71,7 +74,7 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
     }
 
     private fun fillUi() {
-        if ("id" in arguments) {
+        if (eventId != null) {
             val event: EventRecord = db.events[eventId] ?: return
 
             Analytics.event(Category.EVENT, Action.OPENED, event.title)
@@ -137,11 +140,15 @@ class FragmentViewEvent : Fragment(), HasDb, AnkoLogger {
     }
 
     private fun showDialog(event: EventRecord) {
-        eventDialog(context, event, db)
+        context?.let {
+            eventDialog(it, event, db)
+        }
     }
 
     private fun favoriteEvent(event: EventRecord) {
-        context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
+        context?.let {
+            it.sendBroadcast(IntentFor<EventFavoriteBroadcast>(it).apply { jsonObjects["event"] = event })
+        }
     }
 
     /**

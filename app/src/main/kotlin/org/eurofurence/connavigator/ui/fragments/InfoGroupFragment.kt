@@ -12,12 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.joanzapata.iconify.widget.IconTextView
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -31,7 +31,7 @@ import java.util.*
 /**
  * Renders an info group element and displays it's individual items
  */
-class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
+class InfoGroupFragment : Fragment(), HasDb, AnkoLogger {
     inner class InfoItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val layout: LinearLayout by view("layout")
         val name: TextView by view("title")
@@ -40,7 +40,7 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
     inner class DataAdapter : RecyclerView.Adapter<InfoItemViewHolder>() {
         override fun getItemCount() = infoItems.count()
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) =
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
                 InfoItemViewHolder(UI { SingleInfoUi().createView(this) }.view)
 
         override fun onBindViewHolder(holder: InfoItemViewHolder, position: Int) {
@@ -48,14 +48,15 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
 
             holder.name.text = item.title
             holder.layout.setOnClickListener {
-                applyOnRoot { navigateToKnowledgeEntry(item) }
+                val action = InfoListFragmentDirections.actionInfoListFragment2ToInfoItemFragment(item.id.toString())
+                findNavController().navigate(action)
             }
         }
     }
 
     override val db by lazyLocateDb()
 
-    private val infoGroupId: UUID? get() = UUID.fromString(arguments.getString("id"))
+    private val infoGroupId: UUID? get() = UUID.fromString(arguments!!.getString("id"))
     private val infoGroup by lazy { db.knowledgeGroups[infoGroupId] }
 
     val infoItems by lazy {
@@ -68,18 +69,14 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
 
     var subscriptions = Disposables.empty()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!arguments.contains("id")) {
-            longToast(getString(R.string.error_no_id_was_passed_to_info_fragment))
-            this.onDestroy()
-        }
-
         fillUi()
+
         subscriptions += db.subscribe {
             fillUi()
         }
@@ -96,7 +93,7 @@ class InfoGroupFragment : Fragment(), HasDb, ContentAPI, AnkoLogger {
                 }
                 recycler.apply {
                     adapter = DataAdapter()
-                    layoutManager = NonScrollingLinearLayout(context)
+                    layoutManager = NonScrollingLinearLayout(activity)
                     itemAnimator = DefaultItemAnimator()
                 }
             } ?: run {

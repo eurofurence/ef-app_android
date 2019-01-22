@@ -3,36 +3,32 @@
 
     <group android:checkableBehavior="single">
         <item
-                android:id="@+id/navHome"
+                android:id="@id/fragmentViewHome"
                 android:icon="@drawable/icon_home"
                 android:title="@string/misc_home"/>
         <item
-                android:id="@+id/navInfo"
+                android:id="@+id/infoListFragment"
                 android:icon="@drawable/icon_info"
                 android:title="@string/navigation_drawer_item_info"/>
         <item
-                android:id="@+id/navEvents"
+                android:id="@id/eventListFragment"
                 android:icon="@drawable/icon_calendar"
                 android:title="@string/events"/>
         <item
-                android:id="@+id/navDealersDen"
+                android:id="@id/dealerListFragment"
                 android:icon="@drawable/icon_dealer"
                 android:title="@string/dealers"/>
         <item
-                android:id="@+id/navMaps"
+                android:id="@id/mapListFragment"
                 android:icon="@drawable/icon_map_world"
                 android:title="@string/misc_maps"/>
-        <item
-                android:id="@+id/navMap"
-                android:icon="@drawable/icon_map_world"
-                android:title="@string/navigation_drawer_item_poi"/>
     </group>
 
     <item android:title="@string/navigation_drawer_item_personal">
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                        android:id="@+id/navLogin"
+                        android:id="@id/loginActivity"
                         android:checkable="false"
                         android:icon="@drawable/icon_user"
                         android:title="@string/login"/>
@@ -72,10 +68,10 @@
             <item android:id="@+id/navDevClear"
                   android:title="@string/clear_database"
                   android:icon="@drawable/icon_delete"/>
-            <item android:id="@+id/navDevSettings"
+            <item android:id="@id/activitySettings"
                   android:title="@string/settings"
                   android:icon="@drawable/icon_settings"/>
-            <item android:id="@+id/navAbout"
+            <item android:id="@id/fragmentViewAbout"
                   android:icon="@drawable/icon_about"
                   android:title="@string/navigation_drawer_item_app_management_about"/>
         </menu>

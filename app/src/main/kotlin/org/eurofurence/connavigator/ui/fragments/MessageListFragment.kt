@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
 import io.swagger.client.model.PrivateMessageRecord
@@ -23,9 +24,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.applyOnRoot
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.extensions.toRelative
@@ -37,10 +36,7 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by requinard on 6/28/17.
  */
-class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb, MainScreen {
-    override val drawerItemId: Int
-        get() = R.id.navMessages
-
+class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
     override val db by lazy { locateDb() }
     val ui by lazy { MessagesUi() }
 
@@ -64,35 +60,33 @@ class FragmentViewMessageList : Fragment(), ContentAPI, AnkoLogger, HasDb, MainS
             )
 
             if (message.readDateTimeUtc != null) {
-                holder.icon.textColor = ContextCompat.getColor(context, android.R.color.tertiary_text_dark)
+                holder.icon.textColor = ContextCompat.getColor(context!!, android.R.color.tertiary_text_dark)
                 holder.icon.text = "{fa-envelope-o 30sp}"
             } else {
-                holder.icon.textColor = ContextCompat.getColor(context, R.color.primaryDark)
+                holder.icon.textColor = ContextCompat.getColor(context!!, R.color.primaryDark)
                 holder.icon.text = "{fa-envelope 30sp}"
             }
 
             holder.layout.setOnClickListener {
-                applyOnRoot {
-                    navigateToMessage(message)
-                }
+                val action = FragmentViewMessageListDirections
+                        .ActionFragmentViewMessageListToFragmentViewMessageItem2(message.id.toString())
+                findNavController().navigate(action)
             }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MessageViewholder(
-                SingleItemUi().createView(AnkoContext.create(context.applicationContext, parent))
+                SingleItemUi().createView(AnkoContext.create(context!!.applicationContext, parent))
         )
 
         override fun getItemCount() = messages.size
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        applyOnRoot { changeTitle(getString(R.string.navigation_drawer_item_personal_messages)) }
 
         info { "Filling in messages" }
 

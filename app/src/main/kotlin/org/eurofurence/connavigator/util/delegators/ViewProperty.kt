@@ -29,7 +29,7 @@ class ViewProperty<in T, U : View>(private val findView: (T, String) -> U) {
 inline fun <reified T : View> view(nameInResource: String? = null) = ViewProperty {
     container: Activity, name ->
     // Find view by name, cast it
-    val r = container.findViewById(
+    val r = container.findViewById<T>(
             container.resources.getIdentifier(nameInResource ?: name, "id", container.packageName))
 
     if (r == null)
@@ -49,8 +49,8 @@ inline fun <reified T : View> Fragment.view(nameInResource: String? = null) = Vi
         throw NullPointerException("Fragments view is not populated")
 
     // Find view by name, cast it
-    val r = container.view!!.findViewById(
-            container.resources.getIdentifier(nameInResource ?: name, "id", container.context.packageName))
+    val r = container.view!!.findViewById<T>(
+            container.resources.getIdentifier(nameInResource ?: name, "id", container.context!!.packageName))
 
     if (r == null)
         throw IllegalArgumentException("Cannot locate ${nameInResource ?: name} in $container.")
@@ -66,7 +66,7 @@ inline fun <reified T : View> Fragment.view(nameInResource: String? = null) = Vi
 inline fun <reified T : View> View.view(nameInResource: String? = null) = ViewProperty {
     container: View, name ->
     // Find view by name, cast it
-    val r = container.findViewById(
+    val r = container.findViewById<T>(
             container.resources.getIdentifier(nameInResource ?: name, "id", container.context.packageName))
     if (r == null)
         throw IllegalArgumentException("Cannot locate ${nameInResource ?: name} in $container.")
@@ -82,7 +82,7 @@ inline fun <reified T : View> View.view(nameInResource: String? = null) = ViewPr
 inline fun <reified T : View> ViewHolder.view(nameInResource: String? = null) = ViewProperty {
     container: ViewHolder, name ->
     // Find view by name, cast it
-    val r = container.itemView.findViewById(
+    val r = container.itemView.findViewById<T>(
             container.itemView.resources.getIdentifier(
                     nameInResource ?: name, "id",
                     container.itemView.context.packageName))
@@ -105,7 +105,7 @@ inline fun <reified T : View> Activity.header(
             val header = navigationView().getHeaderView(index)
 
             // Find view by name, cast it
-            val r = header.findViewById(container.resources.getIdentifier(
+            val r = header.findViewById<T>(container.resources.getIdentifier(
                     nameInResource ?: name, "id",
                     container.packageName))
 

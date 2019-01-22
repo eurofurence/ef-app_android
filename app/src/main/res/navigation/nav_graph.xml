@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentViewHome">
+
+    <fragment
+        android:id="@+id/fragmentViewHome"
+        android:name="org.eurofurence.connavigator.ui.fragments.FragmentViewHome"
+        android:label="@string/misc_home">
+        <deepLink app:uri="eurofurence://home/" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewEvent"
+            app:destination="@id/fragmentViewEvent" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewMaps"
+            app:destination="@id/mapListFragment" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_loginActivity"
+            app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewMessageList"
+            app:destination="@id/fragmentViewMessageList" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewAnnouncement"
+            app:destination="@id/fragmentViewAnnouncement" /><action android:id="@+id/action_fragmentViewHome_to_fragmentViewEvent2" app:destination="@id/fragmentViewEvent"/>
+    </fragment>
+    <activity
+        android:id="@+id/navActivity"
+        android:name="org.eurofurence.connavigator.ui.activities.NavActivity"
+        android:label="NavActivity" />
+    <fragment
+        android:id="@+id/eventListFragment"
+        android:name="org.eurofurence.connavigator.ui.fragments.EventListFragment"
+        android:label="@string/event_list_title">
+        <action
+            android:id="@+id/action_fragmentViewEvents_to_fragmentViewEvent"
+            app:destination="@id/fragmentViewEvent" />
+        <deepLink app:uri="eurofurence://events/" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentViewEvent"
+        android:name="org.eurofurence.connavigator.ui.fragments.EventItemFragment"
+        android:label="@string/event_details_title">
+        <argument
+            android:name="eventId"
+            app:argType="string" /><deepLink app:uri="eurofurence://events/{eventId}/"/>
+    </fragment>
+    <fragment
+        android:id="@+id/dealerListFragment"
+        android:name="org.eurofurence.connavigator.ui.fragments.DealerListFragment"
+        android:label="@string/dealer_list_title">
+        <action
+            android:id="@+id/action_fragmentViewDealers_to_fragmentViewDealer"
+            app:destination="@id/dealerItemFragment" />
+        <deepLink app:uri="eurofurence://dealers/" />
+    </fragment>
+    <fragment
+        android:id="@+id/dealerItemFragment"
+        android:name="org.eurofurence.connavigator.ui.fragments.DealerItemFragment"
+        android:label="@string/dealer_details_title">
+        <argument
+            android:name="dealerId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_fragmentViewDealer_to_fragmentViewMaps"
+            app:destination="@id/mapListFragment" /><deepLink app:uri="eurofurence://dealers/{dealerId}/"/>
+    </fragment>
+    <fragment
+        android:id="@+id/mapListFragment"
+        android:name="org.eurofurence.connavigator.ui.fragments.MapListFragment"
+        android:label="@string/maps_title" ><deepLink app:uri="eurofurence://maps/"/>
+        <action
+            android:id="@+id/action_mapListFragment_to_dealerItemFragment"
+            app:destination="@id/dealerItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/infoListFragment"
+        android:name="org.eurofurence.connavigator.ui.fragments.InfoListFragment"
+        android:label="@string/info_list_title">
+        <action
+            android:id="@+id/action_infoListFragment2_to_infoItemFragment"
+            app:destination="@id/infoItemFragment" /><deepLink app:uri="eurofurence://info/"/>
+    </fragment>
+    <fragment
+        android:id="@+id/infoItemFragment"
+        android:name="org.eurofurence.connavigator.ui.fragments.InfoItemFragment"
+        android:label="@string/info_item_title" >
+        <argument
+            android:name="itemId"
+            app:argType="string" /><deepLink app:uri="eurofurence://info/{itemId}/"/>
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentViewAbout"
+        android:name="org.eurofurence.connavigator.ui.fragments.FragmentViewAbout"
+        android:label="@string/about" />
+    <activity
+        android:id="@+id/activitySettings"
+        android:name="org.eurofurence.connavigator.ui.activities.SettingsActivity"
+        android:label="@string/settings" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="org.eurofurence.connavigator.ui.fragments.LoginActivity"
+        android:label="@string/login" />
+    <fragment
+        android:id="@+id/fragmentViewMessageList"
+        android:name="org.eurofurence.connavigator.ui.fragments.FragmentViewMessageList"
+        android:label="@string/message_list_title">
+        <action
+            android:id="@+id/action_fragmentViewMessageList_to_fragmentViewMessageItem2"
+            app:destination="@id/fragmentViewMessageItem" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentViewMessageItem"
+        android:name="org.eurofurence.connavigator.ui.fragments.MessageItemFragment"
+        android:label="@string/message_item_title" >
+        <argument
+            android:name="messageId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentViewAnnouncement"
+        android:name="org.eurofurence.connavigator.ui.fragments.AnnouncementFragment"
+        android:label="@string/announcements" >
+        <argument
+            android:name="announcementId"
+            app:argType="string" /><deepLink app:uri="eurofurence://announcements/{announcementId}/"/>
+    </fragment>
+</navigation>

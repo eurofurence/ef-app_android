@@ -21,14 +21,6 @@ import org.jetbrains.anko.warn
  * Receives a login attempt and tries to follow through with it
  */
 class LoginReceiver : BroadcastReceiver(), AnkoLogger {
-    companion object {
-        const val USERNAME = "USERNAME"
-        const val REGNUMBER = "REGNUMBER"
-        const val PASSWORD = "PASSWORD"
-
-        const val LOGIN_RESULT = "LOGIN_RESULT"
-    }
-
     override fun onReceive(context: Context, intent: Intent) {
         info { "Received login attempt in broadcaster" }
 
@@ -79,5 +71,13 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
             LocalBroadcastManager.getInstance(context).sendBroadcastSync(responseIntent)
             DataChanged.fire(context, "Login failed")
         }
+    }
+
+    companion object {
+        val USERNAME = "USERNAME"
+        val REGNUMBER = "REGNUMBER"
+        val PASSWORD = "PASSWORD"
+
+        val LOGIN_RESULT = "LOGIN_RESULT"
     }
 }

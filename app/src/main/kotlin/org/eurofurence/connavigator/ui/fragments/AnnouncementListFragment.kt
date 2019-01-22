@@ -10,23 +10,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.AnnouncementRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.AppPreferences
-import org.eurofurence.connavigator.ui.communication.ContentAPI
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.filterIf
+import org.eurofurence.connavigator.util.extensions.fontAwesomeView
+import org.eurofurence.connavigator.util.extensions.now
+import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
 class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
-    inner class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView), ContentAPI {
+    inner class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         val layout: LinearLayout by view()
         val announcementTitle: TextView by view()
         val announcementContent: TextView by view()
@@ -45,9 +48,8 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
             holder.announcementTitle.text = announcement.title
             holder.announcementContent.text = announcement.area
             holder.layout.setOnClickListener {
-                applyOnRoot {
-                    navigateToAnnouncement(announcement)
-                }
+                val action = FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewAnnouncement(announcement.id.toString())
+                findNavController().navigate(action)
             }
         }
 
@@ -68,13 +70,17 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
     val ui = AnnouncementsUi()
     private val announcementAdapter by lazy { AnnoucementRecyclerDataAdapter() }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         info { "Creating announcements list" }
 
-        ui.announcements.adapter = announcementAdapter
+        ui.announcements.apply {
+            adapter = announcementAdapter
+            layoutManager = NonScrollingLinearLayout(activity)
+            itemAnimator = DefaultItemAnimator()
+        }
 
         subscriptions += db.subscribe {
             info { "Updating items in announcement recycler" }
@@ -117,7 +123,6 @@ class AnnouncementsUi : AnkoComponent<Fragment> {
             }
 
             announcements = recycler {
-                layoutManager = NonScrollingLinearLayout(context)
                 itemAnimator = DefaultItemAnimator()
             }.lparams(matchParent, wrapContent)
         }

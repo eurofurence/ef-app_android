@@ -2,13 +2,13 @@
 <resources>
     <item name="date" type="id"/>
     <item name="test_title" type="id"/>
-    <item name="danger" type="id">danger</item>
-    <item name="moon" type="id">moon</item>
+    <item name="danger" type="id" />
+    <item name="moon" type="id" />
 
-    <item name="dealer_container" type="id">5530</item>
-    <item name="dealer_map" type="id">5531</item>
+    <item name="dealer_container" type="id" />
+    <item name="dealer_map" type="id" />
 
-    <item name="event_map" type="id">27</item>
+    <item name="event_map" type="id" />
 
     <item name="home_current" type="id"/>
     <item name="home_upcoming" type="id"/>
@@ -37,4 +37,10 @@
 
     <item name="event_splitter" type="id"/>
     <item name="map_view_pager" type="id"/>
+    <item name="toolbar" type="id" />
+    <item name="eventSearch" type="id" />
+
+    <item name="navDays" type="id" />
+    <item name="navTitle" type="id" />
+    <item name="navSubTitle" type="id" />
 </resources>

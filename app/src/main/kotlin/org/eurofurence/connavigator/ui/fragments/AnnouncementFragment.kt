@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.github.chrisbanes.photoview.PhotoView
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
@@ -20,12 +22,18 @@ import org.eurofurence.connavigator.util.v2.get
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.toast
 import us.feras.mdv.MarkdownView
 import java.util.*
 
-class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
+class AnnouncementFragment : Fragment(), HasDb, AnkoLogger {
     val ui = AnnouncementItemUi()
-    private val announcementId: UUID? by lazy { UUID.fromString(arguments.getString("id")) }
+    private val announcementId
+        get () = try {
+            UUID.fromString(AnnouncementFragmentArgs.fromBundle(arguments).announcementId)
+        } catch (_: Exception) {
+            null
+        }
 
     override val db by lazyLocateDb()
 
@@ -34,24 +42,34 @@ class FragmentViewAnnouncement : Fragment(), HasDb, AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         info { "Created announcement view for $announcementId" }
 
+        if(announcementId == null){
+            toast("No announcement ID was sent!")
+            findNavController().popBackStack()
+        }
+
         subscriptions += db.subscribe {
             val announcement = it.announcements[announcementId]
-            info { "Updating announcement item" }
-            ui.title.text = announcement?.title ?: getString(R.string.announcement_loading_failed)
-            ui.text.loadMarkdown(announcement?.content ?: getString(R.string.error_something_went_wrong))
+            if (announcement != null) {
+                info { "Updating announcement item" }
 
-            // Retrieve top image
-            val image = announcement?.let { it[toAnnouncementImage] }
+                ui.loadingIndicator.visibility = View.GONE
 
-            // Set image on top
-            if (image != null) {
-                imageService.load(image, ui.image, false)
-            } else {
-                ui.image.visibility = View.GONE
+                ui.title.text = announcement.title
+                ui.text.loadMarkdown(announcement.content)
+
+                // Retrieve top image
+                val image = announcement.let { it[toAnnouncementImage] }
+
+                // Set image on top
+                if (image != null) {
+                    imageService.load(image, ui.image, true)
+                } else {
+                    ui.image.visibility = View.GONE
+                }
             }
         }
     }
@@ -67,6 +85,7 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
     lateinit var title: TextView
     lateinit var text: MarkdownView
     lateinit var image: PhotoView
+    lateinit var loadingIndicator: ProgressBar
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
             backgroundResource = R.color.backgroundGrey
@@ -77,6 +96,8 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
                 verticalLayout {
                     backgroundResource = R.color.cardview_light_background
                     isClickable = true
+
+                    loadingIndicator = progressBar()
 
                     linearLayout {
                         padding = dip(50)
@@ -97,6 +118,7 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
                         imageResource = R.drawable.placeholder_event
                         scaleType = ImageView.ScaleType.FIT_CENTER
                         adjustViewBounds = true
+                        visibility = View.GONE
                     }.lparams(matchParent, wrapContent) {
                         margin = dip(20)
                     }

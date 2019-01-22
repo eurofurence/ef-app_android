@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.joanzapata.iconify.widget.IconTextView
 import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
@@ -16,6 +18,7 @@ import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.dialogs.DealerDialog
+import org.eurofurence.connavigator.ui.fragments.DealerListFragmentDirections
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
@@ -56,8 +59,10 @@ class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, ov
         if (dealer[toThumbnail] != null) {
             imageService.load(dealer[toThumbnail], holder.dealerPreviewImage, false)
         } else {
-            holder.dealerPreviewImage.setImageDrawable(
-                    ContextCompat.getDrawable(fragment.context, R.drawable.dealer_black))
+            fragment.context?.let {
+                holder.dealerPreviewImage.setImageDrawable(
+                        ContextCompat.getDrawable(it, R.drawable.dealer_black))
+            }
         }
 
         holder.moon.visibility = if (dealer.isAfterDark == true) {
@@ -73,7 +78,9 @@ class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, ov
         }
 
         holder.layout.setOnClickListener {
-            fragment.applyOnRoot { navigateToDealer(dealer) }
+            val action = DealerListFragmentDirections
+                    .actionFragmentViewDealersToFragmentViewDealer(dealer.id.toString())
+            fragment.findNavController().navigate(action)
         }
 
         holder.layout.setOnLongClickListener {
@@ -102,8 +109,8 @@ class DealerListItemUI : AnkoComponent<ViewGroup> {
                     padding = dip(5)
                     scaleType = ImageView.ScaleType.FIT_XY
                     id = R.id.dealerPreviewImage
-                }.lparams(dip(75), dip(75))  { gravity = Gravity.LEFT }
-            }.lparams(dip(0), wrapContent, 20F)  { gravity = Gravity.CENTER_VERTICAL }
+                }.lparams(dip(75), dip(75)) { gravity = Gravity.LEFT }
+            }.lparams(dip(0), wrapContent, 20F) { gravity = Gravity.CENTER_VERTICAL }
 
             verticalLayout {
                 textView {

@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.ui
+package org.eurofurence.connavigator.ui.activities
 
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -36,7 +36,7 @@ import org.jetbrains.anko.*
 /**
  * Created by David on 28-4-2016.
  */
-class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
+class StartActivity : AppCompatActivity(), AnkoLogger, HasDb {
     override val db: Db
         get() = locateDb()
 
@@ -44,7 +44,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
 
     var subscriptions = Disposables.empty()
 
-    @AddTrace(name = "ActivityStart:UpdateIntentService", enabled = true)
+    @AddTrace(name = "StartActivity:UpdateIntentService", enabled = true)
     private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
         if (it.booleans["success"]) {
             val imgCountTotal = db.images.items.count()
@@ -72,18 +72,18 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
 
                 longToast(getString(R.string.misc_fetching_done))
 
-                this@ActivityStart.startActivity(intentFor<ActivityRoot>())
+                this@StartActivity.startActivity(intentFor<NavActivity>())
             } failUi {
                 AppPreferences.isFirstRun = false
 
                 longToast(getString(R.string.misc_fetching_failed))
 
-                this@ActivityStart.startActivity(intentFor<ActivityRoot>())
+                this@StartActivity.startActivity(intentFor<NavActivity>())
             }
         } else {
             // If sync fails on the first start - we should tell the user why and exit afterwards.
             runOnUiThread {
-                this@ActivityStart.alert(
+                this@StartActivity.alert(
                         getString(R.string.misc_application_will_exit, (it.objects["reason"] as Exception).message ?: ""),
                         getString(R.string.error_retrieving_failed)
                     )
@@ -100,7 +100,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
         super.onCreate(savedInstanceState)
 
         if (!AppPreferences.isFirstRun && checkVersion()) {
-            startActivity(intentFor<ActivityRoot>())
+            startActivity(intentFor<NavActivity>())
             return
         }
         info { "Starting start activity" }
@@ -202,7 +202,7 @@ class ActivityStart : AppCompatActivity(), AnkoLogger, HasDb {
     }
 }
 
-class StartUi : AnkoComponent<ActivityStart> {
+class StartUi : AnkoComponent<StartActivity> {
     lateinit var yesButton: Button
     lateinit var noButton: Button
     lateinit var loadingSpinner: CircleProgressView
@@ -216,7 +216,7 @@ class StartUi : AnkoComponent<ActivityStart> {
     lateinit var performanceData: CheckBox
     var initialized = false
 
-    override fun createView(ui: AnkoContext<ActivityStart>) = with(ui) {
+    override fun createView(ui: AnkoContext<StartActivity>) = with(ui) {
         verticalLayout {
             backgroundResource = R.color.backgroundGrey
 

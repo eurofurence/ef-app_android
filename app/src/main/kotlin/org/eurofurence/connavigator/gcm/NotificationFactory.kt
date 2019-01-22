@@ -1,17 +1,18 @@
 package org.eurofurence.connavigator.gcm
 
-import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
+import android.os.Build
 import android.support.v4.app.NotificationCompat
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.ui.ActivityRoot
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.notificationManager
+import org.joda.time.DateTime
 import java.util.*
 
 fun NotificationManager.cancelFromRelated(identity: UUID) =
@@ -21,7 +22,14 @@ fun NotificationManager.cancelFromRelated(identity: UUID) =
  * Creates a basic notification
  */
 class NotificationFactory(var context: Context) {
-    fun broadcastNotification(builder: NotificationCompat.Builder, tag: String) {
+    var builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        NotificationCompat.Builder(context, NotificationChannel.DEFAULT_CHANNEL_ID)
+    } else {
+        NotificationCompat.Builder(context)
+    }
+
+
+    fun broadcast(tag: String) {
         val notification = builder.build()
 
         val intent = context.intentFor<NotificationPublisher>(
@@ -35,42 +43,42 @@ class NotificationFactory(var context: Context) {
     /**
      * Creates a basic notification that features the EF logo, colours and vibration
      */
-    fun createBasicNotification(): NotificationCompat.Builder = NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.ic_launcher_negative)
-            .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
-            .setLights(Color.argb(255, 0, 100, 89), 1000, 1000)
-            .setVibrate(longArrayOf(250, 100, 250, 100))
-            .setAutoCancel(true)
-            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+    fun createBasicNotification() = this.apply {
+        builder = builder.setSmallIcon(R.drawable.ic_launcher_negative)
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
+                .setLights(Color.argb(255, 0, 100, 89), 1000, 1000)
+                .setVibrate(longArrayOf(250, 100, 250, 100))
+                .setAutoCancel(true)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("default", "Default", NotificationManager.IMPORTANCE_DEFAULT)
+            context.notificationManager.createNotificationChannel(channel)
+            builder = builder.setChannelId(channel.id)
+        }
+    }
 
     /**
      * Sets an activity to launch on notification taps
      */
-    fun setActivity(builder: NotificationCompat.Builder): NotificationCompat.Builder {
-        // On a click event we want to start an activity
-        val intentToExecute = Intent(context, ActivityRoot::class.java)
-
-        // Attach the intent to a pending intent that our app can consume
-        val pendingIntent = PendingIntent.getActivity(context, 0, intentToExecute, 0)
-
-        return builder.setContentIntent(pendingIntent)
+    fun setPendingIntent(pendingIntent: PendingIntent) = this.apply {
+        builder = builder.setContentIntent(pendingIntent)
     }
 
-    /**
-     * Makes a notification high priority and persistent
-     */
-    fun makeHighPriority(builder: NotificationCompat.Builder) = builder.apply {
-        priority = Notification.PRIORITY_HIGH
-        setOngoing(true)
+    fun addBigText(bigText: String) = this.apply {
+        builder = builder.setStyle(NotificationCompat.BigTextStyle()
+                .bigText(bigText))
     }
 
-    fun addBigText(builder: NotificationCompat.Builder, bigText: String?): NotificationCompat.Builder = builder.setStyle(
-            NotificationCompat.BigTextStyle()
-                    .bigText(bigText)
-    )
-
-    fun addRegularText(builder: NotificationCompat.Builder, title: String, text: String) = builder.apply {
-        this.mContentTitle = title
-        this.mContentText = text
+    fun addRegularText(title: String, text: String) = this.apply {
+        builder = builder.setContentTitle(title)
+        builder = builder.setContentText(text)
     }
+
+    fun countdownTo(date: DateTime) = this.apply {
+        builder = builder.setWhen(date.millis)
+                .setUsesChronometer(true)
+    }
+
+    fun build() = builder.build()
 }
