@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Con Navigator</string>
+    <string name="navigation_drawer_open">Open navigatielade</string>
+    <string name="navigation_drawer_close">Sluit navigatielade</string>
+    <string name="navigation_drawer_item_poi">Interessepunt</string>
+    <string name="navigation_drawer_item_personal">Persoonlijk</string>
+    <string name="navigation_drawer_item_personal_messages">Persoonlijke Berichten</string>
+    <string name="navigation_drawer_item_personal_collect_em_all">Vang Ze Allemaal</string>
+    <string name="navigation_drawer_item_external">Extra</string>
+    <string name="navigation_drawer_item_app_management">App Onderhoud</string>
+    <string name="navigation_drawer_item_app_management_about">Over</string>
+    <string name="settings">Instellingen</string>
+    <string name="settings_this_can_be_changed">Dit kan ten alle tijden in je instellingen aangepast worden.</string>
+    <string name="settings_app_settings">App Instellingen</string>
+    <string name="misc_current_day">Dag %1$d</string>
+    <string name="misc_days_left">Nog %1$d dagen te gaan!</string>
+    <string name="misc_until_next_ef">Tot de volgende EF</string>
+    <string name="misc_room_number">Kamer: %1$s</string>
+    <string name="misc_rooms">Kamers</string>
+    <string name="misc_map">Kaart</string>
+    <string name="misc_maps">Kaarten</string>
+    <string name="misc_filter_change_mode">Verander filtermodus</string>
+    <string name="misc_search">Zoeken</string>
+    <string name="misc_show">Laat zien:</string>
+    <string name="misc_find">Zoek:</string>
+    <string name="misc_find_out_more">Leer meer</string>
+    <string name="misc_link_no_name_provided">Geen naam gegeven voor link</string>
+    <string name="misc_unknown">Onbekend</string>
+    <string name="misc_did_not_find_any_info">Sorry, we hebben geen informatie gevonden!</string>
+    <string name="misc_fetching_assets">Bestanden laden (%1$d / %2$d)</string>
+    <string name="misc_fetching">Laden . . .</string>
+    <string name="misc_fetching_done">Klaar met laden!</string>
+    <string name="misc_fetching_failed">Er ging iets fout tijdens het laden!</string>
+    <string name="error_field_is_empty">Dit veld hoort niet leeg te zijn!</string>
+    <string name="error_no_id_was_passed_to_info_fragment">Er is geen ID doorgegeven!</string>
+    <string name="error_something_went_wrong">Er is iets fout gegaan</string>
+    <string name="error_occurred">Er is een probleem voorgekomen</string>
+</resources>
