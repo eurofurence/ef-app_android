@@ -164,6 +164,7 @@ class AboutUi : AnkoComponent<Fragment> {
 - Snow-wolf
 - StreifiGreif
 - Xil
+- IceTiger
 
 **Made with**
 
