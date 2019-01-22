@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -32,11 +33,6 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
     val navFragment by lazy { NavHostFragment.create(R.navigation.nav_graph) }
     val navController by lazy { navFragment.findNavController() }
 
-    // TODO: Fill in date and subtitles. Cannot be found currently.
-    val navDays by lazy { findViewById<TextView>(R.id.navDays) }
-    val navTitle by lazy { findViewById<TextView>(R.id.navTitle) }
-    val navSubTitle by lazy { findViewById<TextView>(R.id.navSubTitle) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,20 +45,19 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
                 .setPrimaryNavigationFragment(navFragment)
                 .commit()
 
-        navTitle?.apply {
-            navTitle.text = RemotePreferences.eventTitle
-            navSubTitle.text = RemotePreferences.eventSubTitle
 
-            // Calculate the days between, using the current time.
-            val firstDay = DateTime(RemotePreferences.nextConStart)
-            val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
+        ui.navTitle.text = RemotePreferences.eventTitle
+        ui.navSubtitle.text = RemotePreferences.eventSubTitle
 
-            // On con vs. before con. This should be updated on day changes
-            if (days <= 0)
-                navDays.text = getString(R.string.misc_current_day, 1 - days)
-            else
-                navDays.text = getString(R.string.misc_days_left, days)
-        }
+        // Calculate the days between, using the current time.
+        val firstDay = DateTime(RemotePreferences.nextConStart)
+        val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
+
+        // On con vs. before con. This should be updated on day changes
+        if (days <= 0)
+            ui.navDays.text = getString(R.string.misc_current_day, 1 - days)
+        else
+            ui.navDays.text = getString(R.string.misc_days_left, days)
 
         info { "Inserted Nav Fragment" }
     }
@@ -104,6 +99,11 @@ internal class NavUi : AnkoComponent<NavActivity> {
     lateinit var bar: Toolbar
     lateinit var drawer: DrawerLayout
     lateinit var nav: NavigationView
+    lateinit var header: View
+
+    val navDays get() = header.findViewById<TextView>(R.id.navDays)
+    val navTitle get() = header.findViewById<TextView>(R.id.navTitle)
+    val navSubtitle get() = header.findViewById<TextView>(R.id.navSubTitle)
 
     override fun createView(ui: AnkoContext<NavActivity>) = with(ui) {
         drawerLayout {
@@ -124,7 +124,7 @@ internal class NavUi : AnkoComponent<NavActivity> {
             }.lparams(matchParent, matchParent)
 
             nav = navigationView {
-                inflateHeaderView(R.layout.layout_nav_header)
+                header = inflateHeaderView(R.layout.layout_nav_header)
                 inflateMenu(R.menu.nav_drawer)
             }.lparams(wrapContent, matchParent) {
                 gravity = Gravity.START
