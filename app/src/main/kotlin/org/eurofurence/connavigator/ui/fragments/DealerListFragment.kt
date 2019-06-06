@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.Toolbar
 import com.google.firebase.perf.metrics.AddTrace
 import com.pawegio.kandroid.textWatcher
 import io.swagger.client.model.DealerRecord

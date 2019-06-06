@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.tabs.TabLayout
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
