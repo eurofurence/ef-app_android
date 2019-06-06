@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
@@ -26,17 +27,13 @@ import org.jetbrains.anko.support.v4.toast
 import us.feras.mdv.MarkdownView
 import java.util.*
 
-class AnnouncementFragment : Fragment(), HasDb, AnkoLogger {
-    val ui = AnnouncementItemUi()
-    private val announcementId
-        get () = try {
-            UUID.fromString(AnnouncementFragmentArgs.fromBundle(arguments!!).announcementId)
-        } catch (_: Exception) {
-            null
-        }
+class AnnouncementItemFragment : Fragment(), HasDb, AnkoLogger {
+    private val args: AnnouncementFragmentArgs by navArgs()
+    private val announcementId by lazy {UUID.fromString(args.announcementId)}
 
     override val db by lazyLocateDb()
 
+    val ui = AnnouncementItemUi()
     var subscriptions = Disposables.empty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =

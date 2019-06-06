@@ -1,7 +1,6 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -46,16 +46,9 @@ import java.util.*
  */
 class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
-
+    val args: EventItemFragmentArgs by navArgs()
     var subscriptions = Disposables.empty()
-
-    private val eventId
-        get () = try {
-            UUID.fromString(EventItemFragmentArgs.fromBundle(arguments!!).eventId)
-        } catch (e: Exception) {
-            null
-        }
-
+    val eventId by lazy { UUID.fromString(args.eventId) }
     val ui by lazy { EventUi() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =

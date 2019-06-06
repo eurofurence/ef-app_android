@@ -124,7 +124,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentViewAnnouncement"
-        android:name="org.eurofurence.connavigator.ui.fragments.AnnouncementFragment"
+        android:name="org.eurofurence.connavigator.ui.fragments.AnnouncementItemFragment"
         android:label="@string/announcements" >
         <argument
             android:name="announcementId"

@@ -1,8 +1,6 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +9,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.KnowledgeEntryRecord
@@ -20,7 +21,10 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
-import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.util.extensions.fontAwesomeTextView
+import org.eurofurence.connavigator.util.extensions.markdownView
+import org.eurofurence.connavigator.util.extensions.photoView
+import org.eurofurence.connavigator.util.extensions.toUnicode
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
@@ -34,18 +38,11 @@ import java.util.*
  * Views an info based on an ID passed to the intent
  */
 class InfoItemFragment : Fragment(), HasDb {
-    override val db by lazyLocateDb()
-
     val ui by lazy { InfoUi() }
-
     var subscriptions = Disposables.empty()
-
-    val infoId
-        get() = try {
-            UUID.fromString(InfoItemFragmentArgs.fromBundle(arguments!!).itemId)
-        } catch (_: Exception) {
-            null
-        }
+    private val args: InfoItemFragmentArgs by navArgs()
+    private val infoId: UUID? by lazy { UUID.fromString(args.itemId) }
+    override val db by lazyLocateDb()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view

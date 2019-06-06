@@ -3,11 +3,6 @@ package org.eurofurence.connavigator.ui.fragments
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.constraintlayout.widget.ConstraintSet.END
-import androidx.constraintlayout.widget.ConstraintSet.START
-import androidx.fragment.app.Fragment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +11,11 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet.END
+import androidx.constraintlayout.widget.ConstraintSet.START
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import com.joanzapata.iconify.widget.IconTextView
 import io.reactivex.disposables.Disposables
@@ -41,21 +41,16 @@ import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.px2dip
-import java.lang.Exception
 import java.util.*
 
 class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
-    private val dealerId get() = try {
-        UUID.fromString(DealerItemFragmentArgs.fromBundle(arguments!!).dealerId)
-    } catch (e: Exception) {
-        null
-    }
+    private val args: DealerItemFragmentArgs by navArgs()
+    private val dealerId by lazy { UUID.fromString(args.dealerId) }
 
     val ui by lazy { DealerUi() }
-
-    override val db by lazyLocateDb()
-
     var subscriptions = Disposables.empty()
+    
+    override val db by lazyLocateDb()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
