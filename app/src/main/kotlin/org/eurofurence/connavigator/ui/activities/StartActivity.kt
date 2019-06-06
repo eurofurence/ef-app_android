@@ -47,6 +47,7 @@ class StartActivity : AppCompatActivity(), AnkoLogger, HasDb {
     @AddTrace(name = "StartActivity:UpdateIntentService", enabled = true)
     private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
         if (it.booleans["success"]) {
+            db.version = BuildConfig.VERSION_NAME
             val imgCountTotal = db.images.items.count()
             var imgCountLoaded = 0
             ui.loadingSpinner.maxValue = imgCountTotal.toFloat()
