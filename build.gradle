@@ -21,6 +21,11 @@ buildscript {
     }
 }
 
+wrapper {
+    gradleVersion = '5.1.1'
+    distributionUrl = distributionUrl.replace("bin", "all")
+}
+
 allprojects {
     repositories {
         jcenter()
