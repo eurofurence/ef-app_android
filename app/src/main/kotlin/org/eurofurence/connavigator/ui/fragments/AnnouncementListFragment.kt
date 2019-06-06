@@ -1,9 +1,7 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.AnnouncementRecord
 import org.eurofurence.connavigator.R
@@ -29,7 +29,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
 class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
-    inner class AnnouncementDataholder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+    inner class AnnouncementDataholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val layout: LinearLayout by view()
         val announcementTitle: TextView by view()
         val announcementContent: TextView by view()

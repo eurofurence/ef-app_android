@@ -1,7 +1,7 @@
 package org.eurofurence.connavigator.ui.views
 
 import android.content.Context
-import android.support.v4.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
 import org.eurofurence.connavigator.util.extensions.catchToAnyFalse

@@ -2,7 +2,7 @@
 
 package org.eurofurence.connavigator.util.v2
 
-import android.support.v4.widget.TextViewCompat
+import androidx.core.widget.TextViewCompat
 import android.view.View
 import android.widget.TextView
 import org.jetbrains.anko.AnkoContext

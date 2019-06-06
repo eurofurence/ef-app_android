@@ -1,6 +1,6 @@
 package org.eurofurence.connavigator.app
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import com.chibatching.kotpref.Kotpref
 import com.google.firebase.perf.metrics.AddTrace
 import com.joanzapata.iconify.Iconify

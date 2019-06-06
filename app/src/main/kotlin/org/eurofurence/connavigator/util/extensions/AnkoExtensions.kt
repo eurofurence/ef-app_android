@@ -2,12 +2,12 @@
 
 package org.eurofurence.connavigator.util.extensions
 
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.widget.RecyclerView
 import android.view.ViewManager
+import androidx.recyclerview.widget.RecyclerView
 import at.grabner.circleprogress.CircleProgressView
 import com.github.chrisbanes.photoview.PhotoView
 import com.github.lzyzsd.circleprogress.ArcProgress
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.joanzapata.iconify.widget.IconButton
 import com.joanzapata.iconify.widget.IconTextView
 import org.eurofurence.connavigator.ui.views.FontAwesomeTextView

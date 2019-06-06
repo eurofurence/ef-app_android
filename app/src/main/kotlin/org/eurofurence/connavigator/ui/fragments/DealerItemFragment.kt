@@ -3,11 +3,11 @@ package org.eurofurence.connavigator.ui.fragments
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
-import android.support.constraint.ConstraintSet
-import android.support.constraint.ConstraintSet.END
-import android.support.constraint.ConstraintSet.START
-import android.support.v4.app.Fragment
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.constraintlayout.widget.ConstraintSet.END
+import androidx.constraintlayout.widget.ConstraintSet.START
+import androidx.fragment.app.Fragment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -384,7 +384,7 @@ class DealerUi : AnkoComponent<Fragment> {
                                 imageResource = R.drawable.placeholder_event
                             }
 
-                            ConstraintSet().apply {
+                            androidx.constraintlayout.widget.ConstraintSet().apply {
                                 connect(R.id.dealer_map, START, R.id.dealer_container, START)
                                 connect(R.id.dealer_map, END, R.id.dealer_container, END)
                                 setDimensionRatio(R.id.dealer_map, "1:1")

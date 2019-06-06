@@ -1,7 +1,7 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +45,7 @@ class InfoListFragment : Fragment(), HasDb{
                 .map { it.id.toString() }
                 .map { childFragmentManager.findFragmentByTag(it) }
                 .filter { it != null }
-                .forEach { transaction.remove(it) }
+                .forEach { transaction.remove(it!!) }
 
         // create new instances
         db.knowledgeGroups.items

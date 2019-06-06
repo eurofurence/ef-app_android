@@ -3,7 +3,7 @@ package org.eurofurence.connavigator.ui.dialogs
 import android.content.Context
 import android.content.Intent
 import android.provider.CalendarContract
-import android.support.v4.content.ContextCompat.startActivity
+import androidx.core.content.ContextCompat.startActivity
 import com.pawegio.kandroid.IntentFor
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R

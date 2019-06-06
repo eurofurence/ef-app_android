@@ -2,12 +2,12 @@ package org.eurofurence.connavigator.ui.activities
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import android.view.Gravity
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import at.grabner.circleprogress.CircleProgressView
 import com.google.firebase.perf.metrics.AddTrace
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -84,14 +84,15 @@ class StartActivity : AppCompatActivity(), AnkoLogger, HasDb {
             // If sync fails on the first start - we should tell the user why and exit afterwards.
             runOnUiThread {
                 this@StartActivity.alert(
-                        getString(R.string.misc_application_will_exit, (it.objects["reason"] as Exception).message ?: ""),
+                        getString(R.string.misc_application_will_exit, (it.objects["reason"] as Exception).message
+                                ?: ""),
                         getString(R.string.error_retrieving_failed)
-                    )
+                )
                 {
                     okButton { System.exit(1) }
                     onCancelled { System.exit(1) }
                 }
-                .show()
+                        .show()
             }
         }
     }
@@ -248,7 +249,7 @@ class StartUi : AnkoComponent<StartActivity> {
                         textSize = 16F
                     }
 
-                    textView{
+                    textView {
                         textResource = R.string.close_no_will_close_the_app
                     }
 

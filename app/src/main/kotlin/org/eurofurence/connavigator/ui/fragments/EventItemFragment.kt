@@ -1,8 +1,7 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.joanzapata.iconify.IconDrawable
 import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import com.pawegio.kandroid.IntentFor
@@ -92,7 +92,8 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
 
             ui.time.text = getString(R.string.event_weekday_from_to, db.eventStart(event).dayOfWeek().asText, event.startTimeString(), event.endTimeString())
             ui.organizers.text = event.ownerString()
-            ui.room.text = getString(R.string.misc_room_number, conferenceRoom?.name ?: getString(R.string.event_unable_to_locate_room))
+            ui.room.text = getString(R.string.misc_room_number, conferenceRoom?.name
+                    ?: getString(R.string.event_unable_to_locate_room))
 
             (event.posterImageId ?: event.bannerImageId).let {
                 if (it != ui.image.tag) {

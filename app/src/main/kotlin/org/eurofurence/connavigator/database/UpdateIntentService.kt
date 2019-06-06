@@ -3,7 +3,7 @@ package org.eurofurence.connavigator.database
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.LocalBroadcastManager
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.serialization.ImplicitReflectionSerializer
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast

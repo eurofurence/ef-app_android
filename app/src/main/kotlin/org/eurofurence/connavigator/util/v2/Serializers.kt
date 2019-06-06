@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import io.swagger.client.JsonUtil
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.EnumDescriptor

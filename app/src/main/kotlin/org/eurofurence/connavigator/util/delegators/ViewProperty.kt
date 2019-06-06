@@ -3,10 +3,10 @@
 package org.eurofurence.connavigator.util.delegators
 
 import android.app.Activity
-import android.support.design.widget.NavigationView
-import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView.ViewHolder
+import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import kotlin.reflect.KProperty
 
 /**
@@ -79,8 +79,8 @@ inline fun <reified T : View> View.view(nameInResource: String? = null) = ViewPr
  * @param T The class of the view to inject
  */
 @Deprecated("Use Anko instead of layout inflation.")
-inline fun <reified T : View> ViewHolder.view(nameInResource: String? = null) = ViewProperty {
-    container: ViewHolder, name ->
+inline fun <reified T : View> RecyclerView.ViewHolder.view(nameInResource: String? = null) = ViewProperty {
+    container: RecyclerView.ViewHolder, name ->
     // Find view by name, cast it
     val r = container.itemView.findViewById<T>(
             container.itemView.resources.getIdentifier(

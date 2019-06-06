@@ -3,7 +3,7 @@ package org.eurofurence.connavigator.broadcast
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.LocalBroadcastManager
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.chibatching.kotpref.bulk
 import io.swagger.client.model.RegSysAuthenticationRequest
 import nl.komponents.kovenant.task

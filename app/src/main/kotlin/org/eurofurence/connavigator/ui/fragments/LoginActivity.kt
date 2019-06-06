@@ -2,8 +2,7 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import android.text.InputType
 import android.view.Gravity
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.LoginReceiver
 import org.eurofurence.connavigator.broadcast.LogoutReceiver
@@ -152,16 +152,14 @@ class LoginUi : AnkoComponent<LoginActivity> {
                     orientation = LinearLayout.VERTICAL
 
                     progressBar {
-                        lparams(wrapContent, wrapContent)
-                    }
+
+                    }.lparams(wrapContent, wrapContent)
 
                     textView {
                         textResource = R.string.login_authenticating
                         padding = 20
                         gravity = Gravity.CENTER
-
-                        lparams(matchParent, wrapContent)
-                    }
+                    }.lparams(matchParent, wrapContent)
 
                     lparams(matchParent, matchParent)
                 }
@@ -184,42 +182,38 @@ class LoginUi : AnkoComponent<LoginActivity> {
                         username = editText {
                             hintResource = R.string.login_username
                             inputType = InputType.TYPE_CLASS_TEXT
-                            lparams(matchParent, wrapContent) {
-                                margin = dip(16)
-                            }
+                        }.lparams(matchParent, wrapContent) {
+                            margin = dip(16)
                         }
 
                         regNumber = editText {
                             hintResource = R.string.login_reg_number
                             inputType = InputType.TYPE_CLASS_NUMBER
-
-                            lparams(matchParent, wrapContent) {
-                                margin = dip(16)
-                            }
+                        }.lparams(matchParent, wrapContent) {
+                            margin = dip(16)
                         }
 
                         password = editText {
                             hintResource = R.string.login_password
                             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                            lparams(matchParent, wrapContent) {
-                                margin = dip(16)
-                            }
+                        }.lparams(matchParent, wrapContent) {
+                            margin = dip(16)
                         }
 
                         errorText = textView {
                             textResource = R.string.login_unsuccessful
                             visibility = View.GONE
                             textColor = ContextCompat.getColor(ctx, R.color.primary)
-                            lparams(matchParent, wrapContent) {
-                                margin = dip(16)
-                            }
+
+                        }.lparams(matchParent, wrapContent) {
+                            margin = dip(16)
                         }
 
                         textView {
                             textResource = R.string.login_information
-                            lparams(matchParent, wrapContent) {
-                                margin = dip(16)
-                            }
+
+                        }.lparams(matchParent, wrapContent) {
+                            margin = dip(16)
                         }
 
                         submit = button {
@@ -227,16 +221,16 @@ class LoginUi : AnkoComponent<LoginActivity> {
                             background.setColorFilter(ContextCompat.getColor(context, R.color.primaryDark), PorterDuff.Mode.SRC)
                             textColor = ContextCompat.getColor(context, R.color.textWhite)
 
-                            lparams(matchParent, wrapContent) {
-                                margin = dip(16)
-                            }
+
+                        }.lparams(matchParent, wrapContent) {
+                            margin = dip(16)
                         }
 
                         moreInformation = button {
                             textResource = R.string.misc_more_information
-                            lparams(matchParent, wrapContent) {
-                                setMargins(dip(16), 0, dip(16), dip(16))
-                            }
+
+                        }.lparams(matchParent, wrapContent) {
+                            setMargins(dip(16), 0, dip(16), dip(16))
                         }
                     }
 
@@ -246,22 +240,22 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
                         textView {
                             text = resources.getString(R.string.login_logged_in_as, AuthPreferences.username)
-                            lparams(matchParent, wrapContent) {
-                                margin = dip(16)
-                            }
+
+                        }.lparams(matchParent, wrapContent) {
+                            margin = dip(16)
                         }
                         textView {
                             text = resources.getString(R.string.login_valid_until, DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime())
-                            lparams(matchParent, wrapContent) {
-                                margin = dip(16)
-                            }
+
+                        }.lparams(matchParent, wrapContent) {
+                            margin = dip(16)
                         }
 
                         logout = button {
                             textResource = R.string.login_logout
-                            lparams(matchParent, wrapContent) {
-                                margin = dip(16)
-                            }
+
+                        }.lparams(matchParent, wrapContent) {
+                            margin = dip(16)
                         }
                     }
 

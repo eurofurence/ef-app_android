@@ -2,10 +2,7 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,6 +12,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.task
@@ -139,7 +139,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             val isFavorite = event.id in faves
             val isDeviatingFromConBook = event.isDeviatingFromConBook
 
-            holder.setGlyphs(buildSequence {
+            holder.setGlyphs(sequence {
                 yieldAll(glyphsFor(event))
                 if (isFavorite) yield("{fa-heart}")
                 if (isDeviatingFromConBook == true) yield("{fa-pencil}")
@@ -168,7 +168,8 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             }
 
             holder.eventEndTime.text = "$glyphEnd ${event.endTimeString()}"
-            holder.eventRoom.text = db.rooms[event.conferenceRoomId]?.name ?: getString(R.string.misc_unknown)
+            holder.eventRoom.text = db.rooms[event.conferenceRoomId]?.name
+                    ?: getString(R.string.misc_unknown)
 
             // Load image
 
@@ -178,7 +179,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             // Assign the on-click action
             holder.itemView.setOnClickListener {
                 debug { "Short event click" }
-                val action = when(findNavController().currentDestination?.id) {
+                val action = when (findNavController().currentDestination?.id) {
                     R.id.fragmentViewHome -> FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewEvent(event.id.toString())
                     R.id.eventListFragment -> EventListFragmentDirections.actionFragmentViewEventsToFragmentViewEvent(event.id.toString())
                     else -> null
@@ -214,7 +215,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 eventList.filters[FilterType.valueOf(filters[i])] = filters[i + filters.size / 2]
             }
 
-            title = it.getString("title")
+            title = it.getString("title") ?: "Could not get title"
             mainList = it.getBoolean("mainList")
             daysInsteadOfGlyphs = it.getBoolean("daysInsteadOfGlyphs")
         }
@@ -265,7 +266,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
             }
 
-            override fun getItemOffsets(outRect: Rect, view: View?, parent: RecyclerView, state: RecyclerView.State?) {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 val itemPosition = parent.getChildAdapterPosition(view)
                 if (itemPosition == RecyclerView.NO_POSITION) {
                     return
@@ -291,7 +292,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             effectiveEvents = eventList.applyFilters()
         } successUi {
             info { "Revealing new data" }
-            ui.eventList.adapter.notifyDataSetChanged()
+            ui.eventList.adapter?.notifyDataSetChanged()
 
             configureTitle()
         } failUi {
@@ -392,10 +393,9 @@ class SingleEventUi : AnkoComponent<Fragment> {
                 }
 
                 imageView {
-                    lparams(matchParent, wrapContent)
                     scaleType = ImageView.ScaleType.FIT_CENTER
                     id = R.id.eventImage
-                }
+                }.lparams(matchParent, wrapContent)
             }
         }
     }

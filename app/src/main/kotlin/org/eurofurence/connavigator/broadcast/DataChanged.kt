@@ -1,7 +1,7 @@
 package org.eurofurence.connavigator.broadcast
 
 import android.content.Context
-import android.support.v4.content.LocalBroadcastManager
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import org.eurofurence.connavigator.util.extensions.toIntent
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info

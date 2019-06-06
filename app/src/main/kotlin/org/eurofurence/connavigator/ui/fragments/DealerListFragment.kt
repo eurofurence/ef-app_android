@@ -3,15 +3,14 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.perf.metrics.AddTrace
 import com.pawegio.kandroid.textWatcher
 import io.swagger.client.model.DealerRecord
@@ -22,6 +21,7 @@ import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.act
 
 /**
  * Created by David on 15-5-2016.
@@ -54,7 +54,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
                 .sorted()
 
         ui.categorySpinner.adapter =
-                ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item,
+                ArrayAdapter<String>(this.act, android.R.layout.simple_spinner_dropdown_item,
                         listOf("All Categories").plus(distinctCategories))
 
         ui.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -124,7 +124,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
             }
 
         ui.dealerList.adapter = DealerRecyclerAdapter(sortDealers(effectiveDealers), db, this)
-        ui.dealerList.adapter.notifyDataSetChanged()
+        (ui.dealerList.adapter as DealerRecyclerAdapter).notifyDataSetChanged()
     }
 
     private fun sortDealers(dealers: Iterable<DealerRecord>): List<DealerRecord> =

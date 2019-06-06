@@ -1,11 +1,11 @@
 package org.eurofurence.connavigator.ui.activities
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import android.text.InputType
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
@@ -115,10 +115,9 @@ class SettingsUi : AnkoComponent<SettingsActivity> {
                     visibility = if (BuildConfig.DEBUG) View.VISIBLE else View.GONE
 
                     view {
-                        lparams(matchParent, dip(1)) {
-                            verticalMargin = dip(5)
-                        }
                         backgroundResource = R.color.primary
+                    }.lparams(matchParent, dip(1)) {
+                        verticalMargin = dip(5)
                     }
 
                     textView("Debug settings") {

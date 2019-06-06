@@ -1,20 +1,22 @@
 package org.eurofurence.connavigator.ui.activities
 
+import android.app.Activity
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.content.ContextCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import android.os.PersistableBundle
+import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
 import org.eurofurence.connavigator.database.UpdateIntentService

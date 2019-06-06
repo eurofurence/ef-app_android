@@ -1,8 +1,7 @@
 package org.eurofurence.connavigator.ui.adapter
 
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.joanzapata.iconify.widget.IconTextView
 import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
@@ -28,7 +28,7 @@ import org.jetbrains.anko.*
 /**
  * Created by David on 15-5-2016.
  */
-class DealerDataHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+class DealerDataHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val dealerName: TextView by view()
     val dealerSubText: TextView by view()
     val dealerPreviewImage: ImageView by view()
