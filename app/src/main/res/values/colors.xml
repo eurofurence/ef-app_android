@@ -13,7 +13,7 @@
     <color name="accentDark">#258BD3</color>
     <color name="accentDarker">#0976C3</color>
     <color name="textWhite">#dcdcdc</color>
-    <color name="textBlack">#111</color>
+    <color name="textBlack">#010101</color>
     <color name="backgroundGrey">#DDD</color>
     <color name="alert">#FFE082</color>
 </resources>

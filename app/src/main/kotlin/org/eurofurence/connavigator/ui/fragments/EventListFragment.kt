@@ -1,16 +1,17 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
-import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
@@ -41,9 +42,7 @@ class EventListFragment : Fragment(), HasDb {
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        configureViewpager()
-
-        this.
+        changePagerAdapter(BackgroundPreferences.eventPagerMode)
 
         childFragmentManager.beginTransaction()
                 .replace(R.id.eventSearch, searchFragment)
@@ -51,26 +50,11 @@ class EventListFragment : Fragment(), HasDb {
 
         ui.search.textWatcher {
             afterTextChanged { text ->
-                searchFragment.eventList.byTitle(text.toString())
-                        .sortByDateAndTime()
-                searchFragment.dataUpdated()
+                searchFragment.apply {
+                    eventList.byTitle(text.toString())
+                    eventList.sortByDateAndTime()
+                }.dataUpdated()
             }
-        }
-    }
-
-
-    private fun configureViewpager() {
-        changePagerAdapter(BackgroundPreferences.eventPagerMode)
-    }
-
-    private fun changePagerAdapter(adapter: PagerAdapter, preferredPosition: Int? = null) {
-        ui.pager.adapter = adapter
-        adapter.notifyDataSetChanged()
-
-        ui.tabs.setupWithViewPager(ui.pager)
-
-        preferredPosition?.let {
-            ui.pager.setCurrentItem(it, false)
         }
     }
 
@@ -81,6 +65,15 @@ class EventListFragment : Fragment(), HasDb {
         else -> changePagerAdapter(DayEventPagerAdapter(db, childFragmentManager), DayEventPagerAdapter.indexOfToday(db))
     }.apply { BackgroundPreferences.eventPagerMode = mode }
 
+
+    private fun changePagerAdapter(adapter: PagerAdapter, preferredPosition: Int? = null) {
+        ui.pager.adapter = adapter
+        ui.tabs.setupWithViewPager(ui.pager)
+
+        preferredPosition?.let {
+            ui.pager.setCurrentItem(it, false)
+        }
+    }
     override fun onResume() {
         super.onResume()
         activity?.apply {
@@ -175,6 +168,7 @@ class EventListUi : AnkoComponent<Fragment> {
 
             pager = viewPager {
                 id = 1
+                offscreenPageLimit = 1
             }.lparams(matchParent, matchParent)
 
             scrollView {

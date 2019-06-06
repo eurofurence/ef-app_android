@@ -46,7 +46,7 @@ import java.util.*
 
 class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
     private val dealerId get() = try {
-        UUID.fromString(DealerItemFragmentArgs.fromBundle(arguments).dealerId)
+        UUID.fromString(DealerItemFragmentArgs.fromBundle(arguments!!).dealerId)
     } catch (e: Exception) {
         null
     }

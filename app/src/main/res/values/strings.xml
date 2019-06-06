@@ -288,6 +288,13 @@
     <string name="info_list_title">Info List</string>
     <string name="info_item_title">Info Item</string>
 
+    <string name="event_feedback_thank">Thank you for your feedback!</string>
+    <string name="event_feedback_submit">submit</string>
+    <string name="event_feedback_comment_hint">Optional feedback for the convention organisation and/or the panelist</string>
+    <string name="event_feedback_comment_header">Anything else you would like us to know?</string>
+    <string name="event_feedback_rate_title">How would you rate this event?</string>
+    <string name="event_feedback_anonymous_help">Your feedback will be submitted anonymously. Any comments will be manually reviewed and may be forwarded to the host / panelist. Hateful language or insults will not be forwarded.</string>
+
     <array name="polling_intervals">
         <item>100</item>
         <item>75</item>

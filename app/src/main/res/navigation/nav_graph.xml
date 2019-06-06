@@ -46,6 +46,9 @@
         <argument
             android:name="eventId"
             app:argType="string" /><deepLink app:uri="eurofurence://events/{eventId}/"/>
+        <action
+            android:id="@+id/action_fragmentViewEvent_to_eventFeedbackFragment"
+            app:destination="@id/eventFeedbackFragment" />
     </fragment>
     <fragment
         android:id="@+id/dealerListFragment"
@@ -126,5 +129,16 @@
         <argument
             android:name="announcementId"
             app:argType="string" /><deepLink app:uri="eurofurence://announcements/{announcementId}/"/>
+    </fragment>
+    <fragment
+        android:id="@+id/eventFeedbackFragment"
+        android:name="org.eurofurence.connavigator.ui.fragments.EventFeedbackFragment"
+        android:label="EventFeedbackFragment" >
+        <argument
+            android:name="eventId"
+            app:argType="string" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="eurofurence://events/{eventId}/feedback/" />
     </fragment>
 </navigation>

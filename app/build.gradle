@@ -3,7 +3,7 @@ apply plugin: "com.android.application"
 apply plugin: 'io.fabric'
 apply plugin: "kotlin-android"
 apply plugin: 'kotlinx-serialization'
-apply plugin: "androidx.navigation.safeargs"
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdkVersion 29

@@ -30,7 +30,7 @@ class AnnouncementFragment : Fragment(), HasDb, AnkoLogger {
     val ui = AnnouncementItemUi()
     private val announcementId
         get () = try {
-            UUID.fromString(AnnouncementFragmentArgs.fromBundle(arguments).announcementId)
+            UUID.fromString(AnnouncementFragmentArgs.fromBundle(arguments!!).announcementId)
         } catch (_: Exception) {
             null
         }

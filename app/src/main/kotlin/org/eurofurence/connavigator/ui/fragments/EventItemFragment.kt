@@ -6,9 +6,11 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.joanzapata.iconify.IconDrawable
@@ -49,7 +51,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
 
     private val eventId
         get () = try {
-            UUID.fromString(EventItemFragmentArgs.fromBundle(arguments).eventId)
+            UUID.fromString(EventItemFragmentArgs.fromBundle(arguments!!).eventId)
         } catch (e: Exception) {
             null
         }
@@ -117,7 +119,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
 
             changeFabIcon()
 
-            ui.buttonSave.setOnClickListener {
+            ui.favoriteButton.setOnClickListener {
                 if (AppPreferences.dialogOnEventPress) {
                     showDialog(event)
                 } else {
@@ -125,7 +127,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
                 }
             }
 
-            ui.buttonSave.setOnLongClickListener {
+            ui.favoriteButton.setOnLongClickListener {
                 if (AppPreferences.dialogOnEventPress) {
                     favoriteEvent(event)
                 } else {
@@ -157,12 +159,12 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
      */
     private fun changeFabIcon() {
         (eventId in db.faves).let {
-            if (it != ui.buttonSave.tag) {
-                ui.buttonSave.tag = it
+            if (it != ui.favoriteButton.tag) {
+                ui.favoriteButton.tag = it
                 if (it)
-                    ui.buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart))
+                    ui.favoriteButton.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart))
                 else
-                    ui.buttonSave.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart_o))
+                    ui.favoriteButton.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart_o))
             }
         }
     }
@@ -187,7 +189,8 @@ class EventUi : AnkoComponent<Fragment> {
 
     lateinit var description: MarkdownView
 
-    lateinit var buttonSave: FloatingActionButton
+    lateinit var favoriteButton: FloatingActionButton
+    lateinit var feedbackButton: Button
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         coordinatorLayout {
@@ -232,6 +235,7 @@ class EventUi : AnkoComponent<Fragment> {
                             setPadding(0, 0, 0, dip(10))
                         }.lparams(matchParent, wrapContent, weight = 5F)
 
+                        feedbackButton = button("Feedback")
                     }.lparams(matchParent, wrapContent) {
                         setMargins(0, 0, 0, dip(10))
                     }
@@ -262,7 +266,7 @@ class EventUi : AnkoComponent<Fragment> {
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, matchParent)
 
-            buttonSave = floatingActionButton {
+            favoriteButton = floatingActionButton {
                 imageResource = R.drawable.icon_menu
             }.lparams {
                 anchorGravity = Gravity.BOTTOM or Gravity.END

@@ -65,6 +65,8 @@ class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Frag
 
     override fun getCount() = rooms.size
 
+
+
     private val rooms by lazy { db.rooms }
 }
 

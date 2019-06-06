@@ -12,7 +12,11 @@ import com.joanzapata.iconify.widget.IconButton
 import com.joanzapata.iconify.widget.IconTextView
 import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
 import org.eurofurence.connavigator.ui.views.MultitouchableViewPager
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko._LinearLayout
 import org.jetbrains.anko.custom.ankoView
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.wrapContent
 import us.feras.mdv.MarkdownView
 
 /**
@@ -30,3 +34,5 @@ inline fun ViewManager.fontAwesomeButton(init: IconButton.() -> Unit) = ankoView
 inline fun ViewManager.floatingActionButton(init: FloatingActionButton.() -> Unit) = ankoView({ FloatingActionButton(it) }, 0, init)
 inline fun ViewManager.fontAwesomeTextView(init: FontAwesomeTextView.() -> Unit) = ankoView({ FontAwesomeTextView(it) }, 0, init)
 inline fun ViewManager.multitouchViewPager(init: MultitouchableViewPager.() -> Unit) = ankoView({ MultitouchableViewPager(it) }, 0, init)
+
+fun _LinearLayout.weight(weight: Float) = lparams(dip(0), wrapContent, weight)

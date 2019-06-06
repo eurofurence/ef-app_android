@@ -111,7 +111,7 @@ class UserStatusFragment : Fragment(), AnkoLogger {
             ui.apply {
                 title.text = getString(R.string.misc_welcome_user, AuthPreferences.username.capitalize())
                 layout.setOnClickListener {
-                    val action = FragmentViewHomeDirections.ActionFragmentViewHomeToFragmentViewMessageList()
+                    val action = FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewMessageList()
                     findNavController().navigate(action)
                 }
             }

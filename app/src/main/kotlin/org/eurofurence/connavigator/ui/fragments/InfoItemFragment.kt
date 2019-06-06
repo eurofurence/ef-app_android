@@ -42,7 +42,7 @@ class InfoItemFragment : Fragment(), HasDb {
 
     val infoId
         get() = try {
-            UUID.fromString(InfoItemFragmentArgs.fromBundle(arguments).itemId)
+            UUID.fromString(InfoItemFragmentArgs.fromBundle(arguments!!).itemId)
         } catch (_: Exception) {
             null
         }
