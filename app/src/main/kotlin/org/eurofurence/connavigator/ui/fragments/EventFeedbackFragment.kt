@@ -10,12 +10,14 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import io.swagger.client.model.EventFeedbackRecord
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.eventStart
@@ -43,6 +45,9 @@ class EventFeedbackFragment : Fragment(), HasDb {
         super.onViewCreated(view, savedInstanceState)
 
         event?.let {
+            if (!it.isAcceptingFeedback && !BuildConfig.DEBUG)
+                findNavController().popBackStack()
+
             ui.apply {
                 titleView.text = it.fullTitle()
                 dateView.text = getString(R.string.event_weekday_from_to, db.eventStart(it).dayOfWeek().asText, it.startTimeString(), it.endTimeString())
