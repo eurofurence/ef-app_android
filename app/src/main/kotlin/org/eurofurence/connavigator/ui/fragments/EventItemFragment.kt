@@ -5,16 +5,14 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.joanzapata.iconify.IconDrawable
-import com.joanzapata.iconify.fonts.FontAwesomeIcons
 import com.pawegio.kandroid.IntentFor
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
@@ -29,6 +27,7 @@ import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
+import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
@@ -129,6 +128,18 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
                 true
             }
 
+            ui.feedbackButton.apply {
+                visibility = if (event.isAcceptingFeedback) View.VISIBLE else View.GONE
+
+                setImageDrawable(context.createFADrawable(R.string.fa_comment))
+
+                setOnClickListener {
+                    val action = EventItemFragmentDirections.actionFragmentViewEventToEventFeedbackFragment(args.eventId)
+
+                    findNavController().navigate(action)
+                }
+            }
+
             childFragmentManager.beginTransaction()
                     .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
                     .commit()
@@ -155,9 +166,9 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
             if (it != ui.favoriteButton.tag) {
                 ui.favoriteButton.tag = it
                 if (it)
-                    ui.favoriteButton.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart))
+                    ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heart_solid))
                 else
-                    ui.favoriteButton.setImageDrawable(IconDrawable(context, FontAwesomeIcons.fa_heart_o))
+                    ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heart))
             }
         }
     }
@@ -183,7 +194,7 @@ class EventUi : AnkoComponent<Fragment> {
     lateinit var description: MarkdownView
 
     lateinit var favoriteButton: FloatingActionButton
-    lateinit var feedbackButton: Button
+    lateinit var feedbackButton: FloatingActionButton
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         coordinatorLayout {
@@ -227,8 +238,6 @@ class EventUi : AnkoComponent<Fragment> {
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                             setPadding(0, 0, 0, dip(10))
                         }.lparams(matchParent, wrapContent, weight = 5F)
-
-                        feedbackButton = button("Feedback")
                     }.lparams(matchParent, wrapContent) {
                         setMargins(0, 0, 0, dip(10))
                     }
@@ -259,13 +268,26 @@ class EventUi : AnkoComponent<Fragment> {
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, matchParent)
 
-            favoriteButton = floatingActionButton {
-                imageResource = R.drawable.icon_menu
-            }.lparams {
+            // Icon Layout
+
+            linearLayout {
+                feedbackButton = floatingActionButton {
+                    imageResource = R.drawable.icon_menu
+                    backgroundColorResource = R.color.accent
+                }.lparams {
+                    margin = dip(LayoutConstants.MARGIN_SMALL)
+                }
+                favoriteButton = floatingActionButton {
+                }.lparams {
+                    margin = dip(LayoutConstants.MARGIN_SMALL)
+                }
+            }.lparams(wrapContent, wrapContent) {
                 anchorGravity = Gravity.BOTTOM or Gravity.END
                 anchorId = R.id.event_splitter
-                margin = dip(16)
+                margin = dip(LayoutConstants.MARGIN_LARGE)
             }
+
+
         }
     }
 

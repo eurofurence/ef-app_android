@@ -1,6 +1,6 @@
 # EventConferenceRoomsApi
 
-All URIs are relative to *https://localhost*
+All URIs are relative to *https://localhost/EF25*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

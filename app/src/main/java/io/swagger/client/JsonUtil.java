@@ -151,6 +151,10 @@ public class JsonUtil {
       return new TypeToken<List<FursuitScoreboardEntry>>(){}.getType();
     }
     
+    if ("ImageFragment".equalsIgnoreCase(className)) {
+      return new TypeToken<List<ImageFragment>>(){}.getType();
+    }
+    
     if ("ImageRecord".equalsIgnoreCase(className)) {
       return new TypeToken<List<ImageRecord>>(){}.getType();
     }
@@ -217,6 +221,14 @@ public class JsonUtil {
     
     if ("SendPrivateMessageRequest".equalsIgnoreCase(className)) {
       return new TypeToken<List<SendPrivateMessageRequest>>(){}.getType();
+    }
+    
+    if ("TableRegistrationRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<List<TableRegistrationRecord>>(){}.getType();
+    }
+    
+    if ("TableRegistrationRequest".equalsIgnoreCase(className)) {
+      return new TypeToken<List<TableRegistrationRequest>>(){}.getType();
     }
     
     if ("ToastTest".equalsIgnoreCase(className)) {
@@ -345,6 +357,10 @@ public class JsonUtil {
       return new TypeToken<FursuitScoreboardEntry>(){}.getType();
     }
     
+    if ("ImageFragment".equalsIgnoreCase(className)) {
+      return new TypeToken<ImageFragment>(){}.getType();
+    }
+    
     if ("ImageRecord".equalsIgnoreCase(className)) {
       return new TypeToken<ImageRecord>(){}.getType();
     }
@@ -411,6 +427,14 @@ public class JsonUtil {
     
     if ("SendPrivateMessageRequest".equalsIgnoreCase(className)) {
       return new TypeToken<SendPrivateMessageRequest>(){}.getType();
+    }
+    
+    if ("TableRegistrationRecord".equalsIgnoreCase(className)) {
+      return new TypeToken<TableRegistrationRecord>(){}.getType();
+    }
+    
+    if ("TableRegistrationRequest".equalsIgnoreCase(className)) {
+      return new TypeToken<TableRegistrationRequest>(){}.getType();
     }
     
     if ("ToastTest".equalsIgnoreCase(className)) {

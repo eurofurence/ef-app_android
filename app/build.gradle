@@ -180,6 +180,7 @@ dependencies {
 
     // Font awesome
     implementation 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.1'
+    implementation 'info.androidhive:fontawesome:0.0.5'
 
     // Observables
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
