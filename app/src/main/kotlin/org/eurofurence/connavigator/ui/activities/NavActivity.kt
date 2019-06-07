@@ -93,6 +93,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
             R.id.navWebSite -> browse("https://eurofurence.org")
             R.id.navWebTwitter -> browse("https://twitter.com/eurofurence")
             R.id.navFursuitGames -> navigateToFursuitGames()
+            R.id.navAdditionalServices -> navigateToAdditionalServices()
             else -> item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
         }
     }
@@ -102,7 +103,23 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
         val url = if (AuthPreferences.isLoggedIn())
             "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=true&returnPath=/collect&token=${AuthPreferences.token}"
         else
-            "https://app.eurofurence.org/collectemall/"
+            "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=true&returnPath=/"
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(url)
+            putExtra(Browser.EXTRA_APPLICATION_ID, BuildConfig.CONVENTION_IDENTIFIER)
+        }
+
+        startActivity(intent)
+
+        return true
+    }
+
+    private fun navigateToAdditionalServices(): Boolean {
+        val url = if (AuthPreferences.isLoggedIn())
+            "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=true&returnPath=/&token=${AuthPreferences.token}"
+        else
+            "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=true&returnPath=/"
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)

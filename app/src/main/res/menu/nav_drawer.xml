@@ -40,6 +40,12 @@
                         android:id="@+id/navFursuitGames"
                         android:icon="@drawable/icon_paw"
                         android:title="@string/navigation_drawer_item_personal_collect_em_all"/>
+
+                <item
+                    android:id="@+id/navAdditionalServices"
+                    android:icon="@drawable/common_google_signin_btn_icon_dark"
+                    android:title="@string/navigation_drawer_item_additional_services"
+                    />
             </group>
         </menu>
     </item>
