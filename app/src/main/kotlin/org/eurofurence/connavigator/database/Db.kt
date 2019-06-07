@@ -3,8 +3,8 @@
 package org.eurofurence.connavigator.database
 
 import android.content.Context
-import androidx.fragment.app.Fragment
 import android.util.Log
+import androidx.fragment.app.Fragment
 import com.google.firebase.perf.metrics.AddTrace
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -14,6 +14,8 @@ import io.swagger.client.model.*
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.util.v2.*
 import org.eurofurence.connavigator.util.v2.Stored.StoredSource
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.warn
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.Interval
@@ -153,15 +155,15 @@ interface Db {
  */
 fun Any.locateDb(): Db =
         when (this) {
-        // If context, make new root DB
+            // If context, make new root DB
             is Context -> RootDb(this)
 
-        // If fragment, check if context is DB, otherwise make new root DB
+            // If fragment, check if context is DB, otherwise make new root DB
             is Fragment -> context.let {
                 if (it is Db) it else RootDb(context!!)
             }
 
-        // Otherwise fail
+            // Otherwise fail
             else -> throw IllegalStateException(
                     "Cannot use automatic database from objects other than Context or Fragment.")
         }

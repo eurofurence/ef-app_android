@@ -21,8 +21,7 @@ import com.google.android.material.navigation.NavigationView
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
-import org.eurofurence.connavigator.database.UpdateIntentService
-import org.eurofurence.connavigator.database.dispatchUpdate
+import org.eurofurence.connavigator.database.*
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.jetbrains.anko.*
@@ -32,8 +31,9 @@ import org.jetbrains.anko.support.v4.drawerLayout
 import org.joda.time.DateTime
 import org.joda.time.Days
 
-class NavActivity : AppCompatActivity(), AnkoLogger {
+class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     internal val ui = NavUi()
+    override val db by lazyLocateDb()
 
     val navFragment by lazy { NavHostFragment.create(R.navigation.nav_graph) }
     val navController by lazy { navFragment.findNavController() }
@@ -64,7 +64,17 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
         else
             ui.navDays.text = getString(R.string.misc_days_left, days)
 
+        addNavDrawerIcons()
+
         info { "Inserted Nav Fragment" }
+    }
+
+    private fun addNavDrawerIcons() {
+        ui.nav.inflateMenu(R.menu.nav_drawer)
+
+        val menu = ui.nav.menu
+
+        info { "retrieved menu" }
     }
 
     override fun onResume() {
@@ -97,7 +107,6 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
             else -> item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
         }
     }
-
 
     private fun navigateToFursuitGames(): Boolean {
         val url = if (AuthPreferences.isLoggedIn())
@@ -162,7 +171,6 @@ internal class NavUi : AnkoComponent<NavActivity> {
 
             nav = navigationView {
                 header = inflateHeaderView(R.layout.layout_nav_header)
-                inflateMenu(R.menu.nav_drawer)
             }.lparams(wrapContent, matchParent) {
                 gravity = Gravity.START
             }
