@@ -1,10 +1,11 @@
 package org.eurofurence.connavigator.ui
 
-import android.content.Context
-import org.jetbrains.anko.dip
-
 object LayoutConstants {
-    val MARGIN_LARGE = 15
-    val MARGIN_SMALL = 5
-    val TEXT_ICON_SIZE = 24f
+    const val MARGIN_LARGE = 16
+    const val MARGIN_MEDIUM = 12
+    const val MARGIN_SMALL = 8
+    const val TEXT_ICON_SIZE = 24f
+
+    const val PAPER_SEPERATOR_MARGIN = MARGIN_SMALL
+    const val LAYOUT_PADDING = MARGIN_LARGE
 }

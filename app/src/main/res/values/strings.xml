@@ -295,6 +295,7 @@
     <string name="event_feedback_rate_title">How would you rate this event?</string>
     <string name="event_feedback_anonymous_help">Your feedback will be submitted anonymously. Any comments will be manually reviewed and may be forwarded to the host / panelist. Hateful language or insults will not be forwarded.</string>
     <string name="navigation_drawer_item_additional_services">Additional Services</string>
+    <string name="misc_widening_for_layout">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaa</string>
 
     <array name="polling_intervals">
         <item>100</item>

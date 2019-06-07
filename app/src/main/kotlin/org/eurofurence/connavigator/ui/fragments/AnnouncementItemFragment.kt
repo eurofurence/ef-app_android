@@ -16,6 +16,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.photoView
 import org.eurofurence.connavigator.util.v2.compatAppearance
@@ -107,7 +108,7 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
                     text = markdownView {
 
                     }.lparams(matchParent, wrapContent) {
-                        margin = dip(20 - 8)
+                        margin = dip(LayoutConstants.MARGIN_LARGE)
                     }
 
                     image = photoView {
@@ -117,7 +118,7 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
                         adjustViewBounds = true
                         visibility = View.GONE
                     }.lparams(matchParent, wrapContent) {
-                        margin = dip(20)
+                        margin = dip(LayoutConstants.MARGIN_LARGE)
                     }
                 }.lparams(matchParent, wrapContent)
             }

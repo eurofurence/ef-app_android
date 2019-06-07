@@ -215,36 +215,36 @@ class EventUi : AnkoComponent<Fragment> {
                     verticalLayout {
                         id = R.id.event_splitter
                         backgroundResource = R.color.primaryDarker
-                        padding = dip(15)
+                        padding = dip(LayoutConstants.LAYOUT_PADDING)
                         title = textView {
                             textResource = R.string.event
                             compatAppearance = android.R.style.TextAppearance_Large_Inverse
-                            setPadding(0, dip(15), 0, dip(15))
+                            verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
                             gravity = Gravity.CENTER_HORIZONTAL
                         }.lparams(matchParent, wrapContent)
 
                         time = textView {
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
-                            setPadding(0, 0, 0, dip(10))
+                            verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
                         }.lparams(matchParent, wrapContent, weight = 5F)
 
                         room = textView {
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
-                            setPadding(0, 0, 0, dip(10))
+                            verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
                         }.lparams(matchParent, wrapContent, weight = 5F)
 
                         organizers = textView {
                             textResource = R.string.event_run_by
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
-                            setPadding(0, 0, 0, dip(10))
+                            verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
                         }.lparams(matchParent, wrapContent, weight = 5F)
-                    }.lparams(matchParent, wrapContent) {
-                        setMargins(0, 0, 0, dip(10))
+                    }.lparams {
+                        bottomMargin = dip(LayoutConstants.PAPER_SEPERATOR_MARGIN)
                     }
 
                     extras = verticalLayout {
                         backgroundResource = R.color.cardview_light_background
-                        padding = dip(15)
+                        padding = dip(LayoutConstants.LAYOUT_PADDING)
 
                         extrasContent = fontAwesomeView {
                             text = "{fa-home} Glyphs"
@@ -252,12 +252,12 @@ class EventUi : AnkoComponent<Fragment> {
                             maxLines = 6
                         }.lparams(matchParent, wrapContent, weight = 5F)
                     }.lparams(matchParent, wrapContent) {
-                        setMargins(0, 0, 0, dip(10))
+                        verticalMargin = dip(LayoutConstants.PAPER_SEPERATOR_MARGIN)
                     }
 
                     verticalLayout {
                         backgroundResource = R.color.cardview_light_background
-                        padding = dip(25)
+                        padding = dip(LayoutConstants.MARGIN_LARGE)
                         description = ankoView(::MarkdownView, 0) {
                         }.lparams(matchParent, wrapContent)
                     }.lparams(matchParent, wrapContent)

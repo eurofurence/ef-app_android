@@ -20,6 +20,7 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
 import org.eurofurence.connavigator.util.extensions.fontAwesomeTextView
 import org.eurofurence.connavigator.util.extensions.markdownView
@@ -112,7 +113,7 @@ class InfoUi : AnkoComponent<Fragment> {
 
                     icon = fontAwesomeTextView {
                         textColor = ContextCompat.getColor(context, R.color.primary)
-                        textSize = 24f
+                        textSize = LayoutConstants.TEXT_ICON_SIZE
                         gravity = Gravity.CENTER
                     }.lparams(dip(0), matchParent) {
                         weight = 2F
@@ -120,7 +121,7 @@ class InfoUi : AnkoComponent<Fragment> {
 
                     title = textView {
                         textResource = R.string.misc_title
-                        padding = dip(15)
+                        padding = dip(LayoutConstants.MARGIN_SMALL)
                         compatAppearance = android.R.style.TextAppearance_Large
                     }.lparams(dip(0), wrapContent) {
                         weight = 8F
@@ -133,7 +134,7 @@ class InfoUi : AnkoComponent<Fragment> {
                 }.lparams(matchParent, wrapContent)
 
                 linearLayout {
-                    padding = dip(15)
+                    padding = dip(LayoutConstants.LAYOUT_PADDING)
                     backgroundResource = R.color.cardview_light_background
 
                     text = markdownView {
@@ -142,7 +143,7 @@ class InfoUi : AnkoComponent<Fragment> {
                 }
 
                 layout = verticalLayout {
-                    padding = dip(15)
+                    padding = dip(LayoutConstants.LAYOUT_PADDING)
                 }
             }
         }

@@ -3,14 +3,14 @@ package org.eurofurence.connavigator.ui.fragments
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
 import com.github.lzyzsd.circleprogress.ArcProgress
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
@@ -20,6 +20,7 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.gcm.cancelFromRelated
 import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.util.extensions.arcProgress
 import org.eurofurence.connavigator.util.v2.plus
@@ -135,14 +136,14 @@ class HomeUi : AnkoComponent<Fragment> {
                     setBackgroundColor(Color.WHITE)
                     ViewCompat.setElevation(this, 15f)
                 }.lparams(matchParent, wrapContent) {
-                    setMargins(0, 0, 0, 0)
+                    bottomMargin = dip(LayoutConstants.PAPER_SEPERATOR_MARGIN)
                 }
 
                 loginWidget = linearLayout {
                     id = R.id.home_user_status
                     lparams(matchParent, wrapContent)
                 }.lparams(matchParent, wrapContent) {
-                    setMargins(0, dip(10), 0, 0)
+                    verticalMargin = dip(LayoutConstants.PAPER_SEPERATOR_MARGIN)
                 }
 
                 countdownLayout = linearLayout {
@@ -159,13 +160,13 @@ class HomeUi : AnkoComponent<Fragment> {
                         unfinishedStrokeColor = ContextCompat.getColor(ctx, R.color.primary)
                         textColor = ContextCompat.getColor(ctx, R.color.textBlack)
                     }
-                    padding = dip(20)
+                    padding = dip(LayoutConstants.LAYOUT_PADDING)
                 }
 
                 announcementFragment = linearLayout {
                     id = R.id.home_announcement
                 }.lparams(matchParent, wrapContent) {
-                    setMargins(0, dip(10), 0, 0)
+                    verticalMargin = dip(LayoutConstants.PAPER_SEPERATOR_MARGIN)
                 }
 
                 upcomingFragment = linearLayout {
