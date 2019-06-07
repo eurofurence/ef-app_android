@@ -1,26 +1,29 @@
 package org.eurofurence.connavigator.ui.activities
 
-import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
-import androidx.core.content.ContextCompat
-import androidx.drawerlayout.widget.DrawerLayout
+import android.provider.Browser
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
 import org.eurofurence.connavigator.database.UpdateIntentService
 import org.eurofurence.connavigator.database.dispatchUpdate
+import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
@@ -89,12 +92,27 @@ class NavActivity : AppCompatActivity(), AnkoLogger {
             }.show().let { true }
             R.id.navWebSite -> browse("https://eurofurence.org")
             R.id.navWebTwitter -> browse("https://twitter.com/eurofurence")
-            R.id.navFursuitGames -> browse("https://app.eurofurence.org/collectemall/")
+            R.id.navFursuitGames -> navigateToFursuitGames()
             else -> item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
         }
     }
 
 
+    private fun navigateToFursuitGames(): Boolean {
+        val url = if (AuthPreferences.isLoggedIn())
+            "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=true&returnPath=/collect&token=${AuthPreferences.token}"
+        else
+            "https://app.eurofurence.org/collectemall/"
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(url)
+            putExtra(Browser.EXTRA_APPLICATION_ID, BuildConfig.CONVENTION_IDENTIFIER)
+        }
+
+        startActivity(intent)
+
+        return true
+    }
 }
 
 internal class NavUi : AnkoComponent<NavActivity> {

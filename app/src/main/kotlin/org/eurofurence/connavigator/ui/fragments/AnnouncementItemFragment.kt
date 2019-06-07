@@ -28,7 +28,7 @@ import us.feras.mdv.MarkdownView
 import java.util.*
 
 class AnnouncementItemFragment : Fragment(), HasDb, AnkoLogger {
-    private val args: AnnouncementFragmentArgs by navArgs()
+    private val args: AnnouncementItemFragmentArgs by navArgs()
     private val announcementId by lazy {UUID.fromString(args.announcementId)}
 
     override val db by lazyLocateDb()
