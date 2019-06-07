@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import io.swagger.client.model.EventFeedbackRecord
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.promiseOnUi
@@ -21,6 +22,7 @@ import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.util.extensions.*
+import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import java.util.*
@@ -53,14 +55,19 @@ class EventFeedbackFragment : Fragment(), HasDb {
         }
     }
 
-    fun submit() = promiseOnUi {
+    private fun submit() = promiseOnUi {
         ui.loading()
     } then {
         val rating = 1
         val comments = ui.textInput.text.toString()
 
-        // todo finish sending
-        Thread.sleep(1000)
+        val eventFeedback = EventFeedbackRecord().apply {
+            this.eventId = this@EventFeedbackFragment.eventId
+            this.message = comments
+            this.rating = rating
+        }
+
+        apiService.feedbacks.apiEventFeedbackPost(eventFeedback) // TODO: this will 404!
     } successUi {
         ui.done()
     }
