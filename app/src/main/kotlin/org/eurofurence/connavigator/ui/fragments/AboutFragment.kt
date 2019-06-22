@@ -12,7 +12,6 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.now
 import org.eurofurence.connavigator.util.v2.compatAppearance
@@ -58,7 +57,7 @@ class AboutUi : AnkoComponent<Fragment> {
 
                 linearLayout {
                     backgroundResource = R.color.cardview_light_background
-                    padding = dip(LayoutConstants.MARGIN_LARGE)
+                    padding = dip(20)
                     weightSum = 10f
 
                     verticalLayout {
@@ -86,12 +85,12 @@ class AboutUi : AnkoComponent<Fragment> {
                         weight = 7F
                     }
                 }.lparams(matchParent, wrapContent) {
-                    verticalMargin = dip(LayoutConstants.MARGIN_LARGE)
+                    topMargin = dip(20)
                 }
 
                 verticalLayout {
                     backgroundResource = R.color.primaryDark
-                    padding = dip(LayoutConstants.MARGIN_LARGE)
+                    padding = dip(20)
 
                     textView {
                         textResource = R.string.misc_android_developers
@@ -108,7 +107,7 @@ class AboutUi : AnkoComponent<Fragment> {
                             gravity = Gravity.CENTER_VERTICAL
                             text = "Requinard"
                             compatAppearance = android.R.style.TextAppearance_Large_Inverse
-                            padding = dip(LayoutConstants.MARGIN_SMALL)
+                            padding = dip(10)
                         }.lparams(matchParent, dip(75))
                     }.lparams(matchParent, wrapContent)
 
@@ -122,15 +121,15 @@ class AboutUi : AnkoComponent<Fragment> {
                             gravity = Gravity.CENTER_VERTICAL
                             text = "Pazuzu"
                             compatAppearance = android.R.style.TextAppearance_Large_Inverse
-                            padding = dip(LayoutConstants.MARGIN_SMALL)
+                            padding = dip(10)
                         }.lparams(matchParent, dip(75))
                     }
                 }.lparams(matchParent, wrapContent) {
-                    topMargin = dip(LayoutConstants.MARGIN_LARGE    )
+                    topMargin = dip(20)
                 }
 
                 verticalLayout {
-                    padding = dip(LayoutConstants.MARGIN_LARGE)
+                    padding = dip(20)
                     backgroundResource = R.color.cardview_light_background
 
                     markdownView {
@@ -181,11 +180,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     """)
                     }
                 }.lparams(matchParent, wrapContent) {
-                    topMargin = dip(LayoutConstants.MARGIN_LARGE)
+                    topMargin = dip(20)
                 }
 
                 linearLayout {
-                    padding = dip(LayoutConstants.MARGIN_LARGE)
+                    padding = dip(20)
                     weightSum = 3F
 
 

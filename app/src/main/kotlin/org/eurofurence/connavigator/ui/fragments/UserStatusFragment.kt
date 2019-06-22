@@ -16,7 +16,6 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.gcm.cancelFromRelated
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
@@ -130,7 +129,10 @@ class UserStatusUi : AnkoComponent<Fragment> {
         linearLayout {
             this@UserStatusUi.layout = this
             isClickable = true
-            padding = dip(LayoutConstants.LAYOUT_PADDING)
+
+            lparams(matchParent, wrapContent) {
+                setPadding(0, dip(20), 0, dip(20))
+            }
             weightSum = 100F
             backgroundResource = R.color.cardview_light_background
 

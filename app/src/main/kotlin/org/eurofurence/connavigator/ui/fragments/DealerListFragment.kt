@@ -18,7 +18,6 @@ import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.jetbrains.anko.*
@@ -160,18 +159,16 @@ class DealersUi : AnkoComponent<Fragment> {
             lparams(matchParent, matchParent)
             backgroundResource = R.color.backgroundGrey
 
-            textView(R.string.misc_widening_for_layout).lparams(matchParent, dip(0))
-
             verticalLayout {
                 // Search widgets
-                padding = dip(LayoutConstants.MARGIN_LARGE)
+                padding = dip(10)
                 linearLayout {
                     // Filter types
                     weightSum = 100F
 
                     textView {
                         textResource = R.string.misc_show
-                        padding = dip(LayoutConstants.MARGIN_SMALL)
+                        leftPadding = dip(5)
                     }.lparams(dip(0), wrapContent, 20F)
 
                     categorySpinner = spinner {
@@ -184,7 +181,7 @@ class DealersUi : AnkoComponent<Fragment> {
                     visibility = View.GONE
                     textView {
                         textResource = R.string.misc_find
-                        padding = dip(LayoutConstants.MARGIN_SMALL)
+                        leftPadding = dip(5)
                     }.lparams(dip(0), wrapContent, 20F)
 
                     search = editText { singleLine = true }.lparams(dip(0), wrapContent, 80F)

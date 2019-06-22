@@ -16,7 +16,6 @@ import androidx.constraintlayout.widget.ConstraintSet.END
 import androidx.constraintlayout.widget.ConstraintSet.START
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.RecyclerView
 import com.github.chrisbanes.photoview.PhotoView
 import com.joanzapata.iconify.widget.IconTextView
 import io.reactivex.disposables.Disposables
@@ -33,7 +32,6 @@ import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
@@ -284,7 +282,7 @@ class DealerUi : AnkoComponent<Fragment> {
                         lparams(matchParent, wrapContent)
                         backgroundResource = R.drawable.image_fade
 
-                        padding = dip(LayoutConstants.MARGIN_LARGE)
+                        padding = dip(20)
                         primaryImage = photoView {
                             lparams(matchParent, dip(300))
 
@@ -294,7 +292,7 @@ class DealerUi : AnkoComponent<Fragment> {
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
                             compatAppearance = android.R.style.TextAppearance_Large_Inverse
 
-                            verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
+                            topPadding = dip(10)
                         }
 
                         nameSecond = textView {
@@ -308,14 +306,15 @@ class DealerUi : AnkoComponent<Fragment> {
                             textResource = R.string.misc_categories
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
-                            padding = dip(LayoutConstants.MARGIN_SMALL)
                             setTypeface(null, Typeface.BOLD)
+                            setPadding(dip(10), dip(15), dip(10), dip(0))
+                            topPadding = dip(15)
                         }
 
                         shortDescription = textView {
                             textResource = R.string.misc_short_description
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
-                            padding = dip(LayoutConstants.MARGIN_SMALL)
+                            setPadding(dip(10), dip(15), dip(10), dip(15))
                             compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                         }
 
@@ -327,12 +326,9 @@ class DealerUi : AnkoComponent<Fragment> {
                             fontAwesomeView {
                                 compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                                 text = "{fa-globe 24sp}"
-                            }.lparams(dip(0), wrapContent, 10F) {
-                                gravity = Gravity.CENTER_VERTICAL
-                            }
+                            }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
 
-                            websites = verticalLayout {}
-                                    .lparams(dip(0), wrapContent, 90F)
+                            websites = verticalLayout {}.lparams(dip(0), wrapContent, 90F)
                         }
 
                         twitterContainer = linearLayout {
@@ -342,12 +338,9 @@ class DealerUi : AnkoComponent<Fragment> {
                             fontAwesomeView {
                                 compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                                 text = "{fa-twitter 24sp}"
-                            }.lparams(dip(0), wrapContent, 10F) {
-                                gravity = Gravity.CENTER_VERTICAL
-                            }
+                            }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
 
-                            twitterButton = button {}
-                                    .lparams(dip(0), wrapContent, 90F)
+                            twitterButton = button {}.lparams(dip(0), wrapContent, 90F)
                         }
 
                         telegramContainer = linearLayout {
@@ -357,9 +350,7 @@ class DealerUi : AnkoComponent<Fragment> {
                             fontAwesomeView {
                                 compatAppearance = android.R.style.TextAppearance_Medium_Inverse
                                 text = "{fa-comments 24sp}"
-                            }.lparams(dip(0), wrapContent, 10F) {
-                                gravity = Gravity.CENTER_VERTICAL
-                            }
+                            }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
 
                             telegramButton = button {}.lparams(dip(0), wrapContent, 90F)
                         }
@@ -370,8 +361,9 @@ class DealerUi : AnkoComponent<Fragment> {
                         textView {
                             textResource = R.string.dealer_location_and_availability
                             compatAppearance = R.style.TextAppearance_AppCompat_Medium
+                            bottomPadding = dip(5)
                         }
-                        padding = dip(LayoutConstants.MARGIN_LARGE)
+                        padding = dip(20)
 
                         ankoView(::ConstraintLayout, 0) {
                             id = R.id.dealer_container
@@ -395,7 +387,7 @@ class DealerUi : AnkoComponent<Fragment> {
                         }.lparams(matchParent, wrapContent)
 
                         verticalLayout {
-                            padding = dip(LayoutConstants.MARGIN_SMALL)
+                            padding = dip(10)
                             availableDaysText = fontAwesomeView {
                                 text = "{fa-exclamation-triangle 24sp} ${resources.getString(R.string.dealer_only_present_on)}"
                                 compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
@@ -407,18 +399,18 @@ class DealerUi : AnkoComponent<Fragment> {
                             }
                         }
                     }.lparams(matchParent, wrapContent) {
-                        verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                        topMargin = dip(10)
                     }
 
 
                     verticalLayout {
                         // artist
-                        padding = dip(LayoutConstants.MARGIN_LARGE)
+                        padding = dip(20)
                         backgroundResource = R.color.cardview_light_background
                         textView {
                             textResource = R.string.dealer_about_artist
                             compatAppearance = R.style.TextAppearance_AppCompat_Medium
-                            verticalPadding= dip(LayoutConstants.MARGIN_SMALL)
+                            bottomPadding = dip(5)
                         }
 
                         aboutArtist = textView {
@@ -426,17 +418,17 @@ class DealerUi : AnkoComponent<Fragment> {
                             textColor = Color.BLACK
                         }
                     }.lparams(matchParent, wrapContent) {
-                        verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                        topMargin = dip(10)
                     }
 
                     aboutArtContainer = verticalLayout {
-                        padding = dip(LayoutConstants.MARGIN_LARGE)
+                        padding = dip(20)
                         backgroundResource = R.color.cardview_light_background
 
                         textView {
                             textResource = R.string.dealer_about_art
                             compatAppearance = R.style.TextAppearance_AppCompat_Medium
-                            verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
+                            bottomPadding = dip(5)
                         }
 
                         aboutArt = textView {
@@ -445,7 +437,7 @@ class DealerUi : AnkoComponent<Fragment> {
                         }
 
                         artPreviewContainer = verticalLayout {
-                            verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
+                            topPadding = dip(10)
 
                             artPreview = photoView {
                                 backgroundResource = R.color.cardview_dark_background
@@ -456,13 +448,15 @@ class DealerUi : AnkoComponent<Fragment> {
 
                             artPreviewCaption = textView {
                                 textAlignment = View.TEXT_ALIGNMENT_CENTER
-                                padding = dip(LayoutConstants.MARGIN_LARGE)
+                                padding = dip(15)
+                                topPadding = dip(5)
                                 compatAppearance = R.style.TextAppearance_AppCompat_Small
                             }
                         }
                     }.lparams(matchParent, wrapContent) {
-                        topMargin = dip(LayoutConstants.MARGIN_LARGE)
+                        topMargin = dip(10)
                     }
+
                 }.lparams(matchParent, wrapContent)
             }
         }

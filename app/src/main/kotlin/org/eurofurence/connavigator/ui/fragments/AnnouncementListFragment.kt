@@ -17,7 +17,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.AppPreferences
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.filterIf
@@ -111,15 +110,16 @@ class AnnouncementsUi : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         verticalLayout {
             layout = this
-            padding = dip(LayoutConstants.LAYOUT_PADDING)
 
             backgroundResource = R.color.cardview_light_background
             lparams(matchParent, wrapContent)
 
             title = textView {
                 textResource = R.string.announcements
-                verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
                 compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
+                padding = dip(15)
+            }.lparams(matchParent, wrapContent) {
+                setMargins(0, 0, 0, 0)
             }
 
             announcements = recycler {
@@ -138,9 +138,10 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
 
             fontAwesomeView {
                 text = "{fa-file-text 24sp}"
+                lparams(dip(0), matchParent, 15F) {
+                    setMargins(0, dip(5), 0, 0)
+                }
                 gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-            }.lparams(dip(0), matchParent, 15F) {
-                verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
             }
 
             verticalLayout {
@@ -149,15 +150,20 @@ class AnnouncementUi : AnkoComponent<ViewGroup> {
                     id = R.id.announcementTitle
                     compatAppearance = android.R.style.TextAppearance_Medium
                 }.lparams(matchParent, wrapContent) {
-                    verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                    setMargins(0, 0, 0, 0)
                 }
 
                 textView {
                     textResource = R.string.announcement_content
                     id = R.id.announcementContent
                     compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
+                }.lparams(matchParent, wrapContent) {
+                    setMargins(0, 0, 0, dip(10))
                 }
-            }.lparams(dip(0), wrapContent, 75F)
+
+            }.lparams(dip(0), wrapContent, 80F) {
+                setMargins(0, 0, 0, dip(5))
+            }
         }
     }
 }

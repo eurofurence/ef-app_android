@@ -1,6 +1,8 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +19,6 @@ import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.markAsRead
 import org.eurofurence.connavigator.util.extensions.markdownView
@@ -50,12 +51,9 @@ class MessageItemFragment : Fragment(), AnkoLogger {
         ui.title.text = message.subject?.capitalize() ?: getString(R.string.message_no_subject)
 
         ui.author.text = getString(R.string.message_from_name, message.authorName)
-        ui.sent.text = getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative()
-                ?: getString(R.string.misc_not_yet))
-        ui.received.text = getString(R.string.message_received_date, message.receivedDateTimeUtc?.toRelative()
-                ?: getString(R.string.misc_not_yet))
-        ui.read.text = getString(R.string.message_read_date, message.readDateTimeUtc?.toRelative()
-                ?: getString(R.string.misc_not_yet))
+        ui.sent.text = getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
+        ui.received.text = getString(R.string.message_received_date, message.receivedDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
+        ui.read.text = getString(R.string.message_read_date, message.readDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
 
         ui.content.loadMarkdown(message.message)
 
@@ -98,11 +96,11 @@ class MessageItemUi : AnkoComponent<Fragment> {
                 icon = fontAwesomeView {
                     text = "{fa-envelope 30sp}"
                     gravity = Gravity.LEFT or Gravity.TOP
-                    padding = dip(LayoutConstants.MARGIN_SMALL)
+                    setPadding(dip(20),  dip(20), 0, 0)
                 }.lparams(dip(0), matchParent, 15F)
 
                 verticalLayout {
-                    padding = dip(LayoutConstants.LAYOUT_PADDING)
+                    padding = dip(20)
 
                     title = textView {
                         textResource = R.string.misc_title
@@ -111,7 +109,7 @@ class MessageItemUi : AnkoComponent<Fragment> {
 
                     author = textView {
                         textResource = R.string.misc_subtitle
-                        verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
+                        topPadding = dip(10)
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                     }.lparams(matchParent, wrapContent)
                     sent = textView {
@@ -133,7 +131,7 @@ class MessageItemUi : AnkoComponent<Fragment> {
                 content = markdownView {
                     loadMarkdown(resources.getString(R.string.misc_content))
                 }
-                padding = dip(LayoutConstants.LAYOUT_PADDING)
+                padding = dip(20)
                 backgroundResource = R.color.cardview_light_background
             }
         }

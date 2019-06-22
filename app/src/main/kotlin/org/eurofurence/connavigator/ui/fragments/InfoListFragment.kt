@@ -9,7 +9,6 @@ import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
@@ -70,10 +69,9 @@ class ViewInfoGroupsUi : AnkoComponent<Fragment> {
             lparams(matchParent, matchParent)
             relativeLayout {
                 verticalLayout {
+                    topPadding = dip(10)
                     id = R.id.info_group_container
-                }.lparams(matchParent, wrapContent) {
-                    verticalMargin = dip(LayoutConstants.PAPER_SEPERATOR_MARGIN)
-                }
+                }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, wrapContent)
         }
     }

@@ -24,7 +24,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.recycler
@@ -123,6 +122,7 @@ class SingleItemUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         linearLayout {
             backgroundResource = R.color.cardview_light_background
+            setPadding(0, dip(10), 0, dip(10))
             weightSum = 100F
             id = R.id.layout
             isClickable = true
@@ -132,6 +132,7 @@ class SingleItemUi : AnkoComponent<ViewGroup> {
                 id = R.id.icon
                 text = "{fa-envelope 30sp}"
                 gravity = Gravity.CENTER_VERTICAL
+                setPadding(dip(20), 0, 0, 0)
             }.lparams(dip(0), matchParent, 15F)
 
             verticalLayout {
@@ -164,7 +165,7 @@ class MessagesUi : AnkoComponent<Fragment> {
 
             loading = progressBar().lparams(matchParent, wrapContent)
             messageList = recycler { }.lparams(matchParent, matchParent) {
-                verticalMargin = dip(LayoutConstants.PAPER_SEPERATOR_MARGIN)
+                topMargin = dip(10)
             }
         }
     }

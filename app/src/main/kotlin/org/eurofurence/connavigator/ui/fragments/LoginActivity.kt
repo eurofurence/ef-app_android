@@ -16,7 +16,6 @@ import org.eurofurence.connavigator.broadcast.LoginReceiver
 import org.eurofurence.connavigator.broadcast.LogoutReceiver
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.jetbrains.anko.*
@@ -151,7 +150,6 @@ class LoginUi : AnkoComponent<LoginActivity> {
                     visibility = View.GONE
                     gravity = Gravity.CENTER
                     orientation = LinearLayout.VERTICAL
-                    padding = dip(LayoutConstants.LAYOUT_PADDING)
 
                     progressBar {
 
@@ -159,6 +157,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
                     textView {
                         textResource = R.string.login_authenticating
+                        padding = 20
                         gravity = Gravity.CENTER
                     }.lparams(matchParent, wrapContent)
 
@@ -177,28 +176,28 @@ class LoginUi : AnkoComponent<LoginActivity> {
                     // If not logged in
                     verticalLayout {
                         visibility = if (AuthPreferences.isLoggedIn()) View.GONE else View.VISIBLE
-                        padding = dip(LayoutConstants.LAYOUT_PADDING)
+
                         lparams(matchParent, matchParent)
 
                         username = editText {
                             hintResource = R.string.login_username
                             inputType = InputType.TYPE_CLASS_TEXT
                         }.lparams(matchParent, wrapContent) {
-                            verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                            margin = dip(16)
                         }
 
                         regNumber = editText {
                             hintResource = R.string.login_reg_number
                             inputType = InputType.TYPE_CLASS_NUMBER
                         }.lparams(matchParent, wrapContent) {
-                            verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                            margin = dip(16)
                         }
 
                         password = editText {
                             hintResource = R.string.login_password
                             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                         }.lparams(matchParent, wrapContent) {
-                            verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                            margin = dip(16)
                         }
 
                         errorText = textView {
@@ -207,14 +206,14 @@ class LoginUi : AnkoComponent<LoginActivity> {
                             textColor = ContextCompat.getColor(ctx, R.color.primary)
 
                         }.lparams(matchParent, wrapContent) {
-                            verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                            margin = dip(16)
                         }
 
                         textView {
                             textResource = R.string.login_information
 
                         }.lparams(matchParent, wrapContent) {
-                            verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                            margin = dip(16)
                         }
 
                         submit = button {
@@ -224,40 +223,39 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
 
                         }.lparams(matchParent, wrapContent) {
-                            verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                            margin = dip(16)
                         }
 
                         moreInformation = button {
                             textResource = R.string.misc_more_information
 
                         }.lparams(matchParent, wrapContent) {
-                            verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                            setMargins(dip(16), 0, dip(16), dip(16))
                         }
                     }
 
                     // If logged in
                     verticalLayout {
                         visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
-                        padding = dip(LayoutConstants.LAYOUT_PADDING)
 
                         textView {
                             text = resources.getString(R.string.login_logged_in_as, AuthPreferences.username)
 
                         }.lparams(matchParent, wrapContent) {
-                            verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                            margin = dip(16)
                         }
                         textView {
                             text = resources.getString(R.string.login_valid_until, DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime())
 
                         }.lparams(matchParent, wrapContent) {
-                            verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                            margin = dip(16)
                         }
 
                         logout = button {
                             textResource = R.string.login_logout
 
                         }.lparams(matchParent, wrapContent) {
-                            verticalMargin = dip(LayoutConstants.MARGIN_SMALL)
+                            margin = dip(16)
                         }
                     }
 

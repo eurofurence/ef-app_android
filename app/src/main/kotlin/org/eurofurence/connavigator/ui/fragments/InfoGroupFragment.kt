@@ -18,7 +18,6 @@ import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -147,15 +146,15 @@ class InfoGroupUi : AnkoComponent<Fragment> {
                     mainIcon = fontAwesomeTextView {
                         gravity = Gravity.CENTER
                         textColor = ContextCompat.getColor(context, R.color.primary)
-                        textSize = LayoutConstants.TEXT_ICON_SIZE
+                        textSize = 24f
                     }.lparams(matchParent, matchParent)
                 }.lparams(dip(0), matchParent) {
                     weight = 4F
                 }
 
                 verticalLayout {
-                    verticalPadding = dip(LayoutConstants.MARGIN_LARGE)
-
+                    topPadding = dip(20)
+                    bottomPadding = dip(20)
                     title = textView {
                         textResource = R.string.misc_title
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large

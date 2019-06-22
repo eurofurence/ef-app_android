@@ -18,7 +18,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.BackgroundPreferences
-import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter
@@ -174,14 +173,9 @@ class EventListUi : AnkoComponent<Fragment> {
 
             scrollView {
                 verticalLayout {
-                    verticalLayout {
-                        padding = dip(LayoutConstants.MARGIN_LARGE)
-                        search = editText{
-                            hint = "Search for an event by name"
-                        }.lparams(matchParent, wrapContent)
-                    }
+                    search = editText().lparams(matchParent, wrapContent)
 
-                    searchLayout = linearLayout {
+                    searchLayout = linearLayout() {
                         id = R.id.eventSearch
                     }.lparams(matchParent, wrapContent)
                 }.lparams(matchParent, wrapContent)
