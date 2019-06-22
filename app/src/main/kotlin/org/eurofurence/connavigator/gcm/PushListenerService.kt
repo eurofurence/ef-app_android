@@ -9,12 +9,12 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.dispatchUpdate
 import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.ui.fragments.FragmentViewHomeDirections
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
-import java.util.*
 
 /**
  * Created by David on 14-4-2016.
@@ -39,17 +39,17 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         debug { "Message payload :" + message.data }
 
         when (message.data["Event"]) {
-            "Sync" -> syncData(message)
+            "Sync" -> syncData()
             "Notification" -> createNotification(message)
             "Announcement" -> createAnnouncement(message)
             else -> warn("Message did not contain a valid event. Abandoning!")
         }
     }
 
-    private fun syncData(message: RemoteMessage) {
+    private fun syncData() {
         info { "Received request to sync data" }
 
-        dispatchUpdate(applicationContext)
+        dispatchUpdate(this)
         RemotePreferences.update()
     }
 
@@ -66,6 +66,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
 
     private val basicIntent
         get() = NavDeepLinkBuilder(this)
+                .setComponentName(NavActivity::class.java)
                 .setGraph(R.navigation.nav_graph)
                 .setDestination(R.id.fragmentViewHome)
                 .createPendingIntent()
@@ -83,25 +84,29 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
     private fun createAnnouncement(message: RemoteMessage) {
         info { "Received request to create announcement notification" }
 
-        val intent = try {
-            // Parse as a UUID so we're sure it's a uuid before making the intent
-            val id = UUID.fromString(message.relatedId)
+        syncData()
 
+        val intent = try {
             val action = FragmentViewHomeDirections
-                    .actionFragmentViewHomeToFragmentViewAnnouncement(id.toString())
+                    .actionFragmentViewHomeToFragmentViewAnnouncement(message.relatedId!!)
 
             NavDeepLinkBuilder(this)
+                    .setComponentName(NavActivity::class.java)
                     .setGraph(R.navigation.nav_graph)
                     .setDestination(R.id.fragmentViewAnnouncement)
                     .setArguments(action.arguments)
                     .createPendingIntent()
+                    .apply {
+                        info { "Created pending activity" }
+                    }
         } catch (_: Exception) {
+            warn { "Creating basic intent! You failed!!!" }
             basicIntent
         }
 
         factory.createBasicNotification()
-                .addRegularText("A new announcement from Eurofurence", message.title
-                        ?: "No title was sent!")
+                .addRegularText(message.title ?: "No title was sent!", message.text
+                        ?: "No extra text supplied")
                 .addBigText(message.text ?: "No big text was supplied")
                 .setPendingIntent(intent)
                 .broadcast(message.relatedId ?: message.fallbackId)
