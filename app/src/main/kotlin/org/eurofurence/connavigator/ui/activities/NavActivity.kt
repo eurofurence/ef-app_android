@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui.activities
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Browser
@@ -18,30 +19,69 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
-import org.eurofurence.connavigator.database.*
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.UpdateIntentService
+import org.eurofurence.connavigator.database.dispatchUpdate
+import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.util.extensions.booleans
+import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.objects
+import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.navigationView
 import org.jetbrains.anko.support.v4.drawerLayout
 import org.joda.time.DateTime
 import org.joda.time.Days
+import java.util.*
 
 class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     internal val ui = NavUi()
     override val db by lazyLocateDb()
 
+    var subscriptions = Disposables.empty()
     val navFragment by lazy { NavHostFragment.create(R.navigation.nav_graph) }
     val navController by lazy { navFragment.findNavController() }
+
+    override fun onPause() {
+        updateReceiver.unregister()
+        super.onPause()
+    }
+
+
+    /**
+     * Listens to update responses, since the event recycler holds database related data
+     */
+    private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
+        // Get intent extras
+        val success = it.booleans["success"]
+        val time = it.objects["time", Date::class.java]
+
+        info { "Received UPDATE_COMPLETE notification. Success: $success; Time: $time" }
+
+        if (success) {
+            db.observer.onNext(db)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         info { "Starting Nav Activity" }
+
+        // Stop the rotation
+        if (!RemotePreferences.rotationEnabled) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
 
         ui.setContentView(this)
 
@@ -66,7 +106,57 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
         addNavDrawerIcons()
 
+        subscriptions += RemotePreferences
+                .observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    updateNavCountdown()
+                }
+
+        subscriptions += AnalyticsPreferences
+                .observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Analytics.updateSettings()
+                }
+
+        subscriptions += AuthPreferences
+                .observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    updateLoginMenuItem()
+                }
+
+        updateReceiver.register()
+
         info { "Inserted Nav Fragment" }
+    }
+
+    private fun updateNavCountdown() {
+        // Set up dates to EF
+        // Manually set the first date, since the database is not updated with EF 22
+        val firstDay = DateTime(RemotePreferences.nextConStart)
+
+        // Calculate the days between, using the current time. Todo: timezones
+        val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
+
+        ui.navTitle.text = RemotePreferences.eventTitle
+        ui.navSubtitle.text = RemotePreferences.eventSubTitle
+        // On con vs. before con. This should be updated on day changes
+        if (days <= 0)
+            ui.navDays.text = "Day ${1 - days}"
+        else
+            ui.navDays.text = "Only $days days left!"
+    }
+
+    private fun updateLoginMenuItem() {
+        // Find login item, assign new text.
+        ui.nav.menu.findItem(R.id.loginActivity)?.let {
+            if (AuthPreferences.isLoggedIn())
+                it.title = "Login details"
+            else
+                it.title = "Login"
+        }
     }
 
     private fun addNavDrawerIcons() {
@@ -79,6 +169,8 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
     override fun onResume() {
         info { "setting up nav toolbar" }
+
+        updateReceiver.register()
 
         val appbarConfig = AppBarConfiguration(navController.graph, ui.drawer)
 
