@@ -163,9 +163,9 @@ internal class NavUi : AnkoComponent<NavActivity> {
                         id = R.id.toolbar
                     }
 
-                    linearLayout {
+                    frameLayout() {
                         id = R.id.nav_graph
-                    }
+                    }.lparams(matchParent, matchParent)
                 }
             }.lparams(matchParent, matchParent)
 

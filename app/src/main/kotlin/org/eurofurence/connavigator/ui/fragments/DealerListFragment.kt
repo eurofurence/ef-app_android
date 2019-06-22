@@ -142,10 +142,6 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
             updateFilter()
         }
     }
-
-    fun dataUpdated() {
-        ui.dealerList.adapter = DealerRecyclerAdapter(sortDealers(dealers.items), db, this)
-    }
 }
 
 class DealersUi : AnkoComponent<Fragment> {

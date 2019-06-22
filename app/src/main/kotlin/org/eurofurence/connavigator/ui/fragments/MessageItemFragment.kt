@@ -1,8 +1,6 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +9,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.google.gson.Gson
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
 import io.swagger.client.model.PrivateMessageRecord
 import nl.komponents.kovenant.task
-import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
@@ -41,7 +37,7 @@ class MessageItemFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         task {
             apiService.communications.apiCommunicationPrivateMessagesGet()
-        } successUi  {
+        } successUi {
             showMessage(it.find { it.id == messageId }!!)
         }
     }
@@ -51,9 +47,12 @@ class MessageItemFragment : Fragment(), AnkoLogger {
         ui.title.text = message.subject?.capitalize() ?: getString(R.string.message_no_subject)
 
         ui.author.text = getString(R.string.message_from_name, message.authorName)
-        ui.sent.text = getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
-        ui.received.text = getString(R.string.message_received_date, message.receivedDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
-        ui.read.text = getString(R.string.message_read_date, message.readDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
+        ui.sent.text = getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative()
+                ?: getString(R.string.misc_not_yet))
+        ui.received.text = getString(R.string.message_received_date, message.receivedDateTimeUtc?.toRelative()
+                ?: getString(R.string.misc_not_yet))
+        ui.read.text = getString(R.string.message_read_date, message.readDateTimeUtc?.toRelative()
+                ?: getString(R.string.misc_not_yet))
 
         ui.content.loadMarkdown(message.message)
 
@@ -96,7 +95,7 @@ class MessageItemUi : AnkoComponent<Fragment> {
                 icon = fontAwesomeView {
                     text = "{fa-envelope 30sp}"
                     gravity = Gravity.LEFT or Gravity.TOP
-                    setPadding(dip(20),  dip(20), 0, 0)
+                    setPadding(dip(20), dip(20), 0, 0)
                 }.lparams(dip(0), matchParent, 15F)
 
                 verticalLayout {
