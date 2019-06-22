@@ -113,6 +113,9 @@
         <action
             android:id="@+id/action_fragmentViewMessageList_to_fragmentViewMessageItem2"
             app:destination="@id/fragmentViewMessageItem" />
+        <deepLink
+            android:id="@+id/deepLink2"
+            app:uri="eurofurence://messages/" />
     </fragment>
     <fragment
         android:id="@+id/fragmentViewMessageItem"

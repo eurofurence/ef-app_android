@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.google.gson.Gson
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
 import io.swagger.client.model.PrivateMessageRecord
 import nl.komponents.kovenant.task
+import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.ui.LayoutConstants
@@ -21,18 +23,30 @@ import org.eurofurence.connavigator.util.extensions.markAsRead
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView
+import java.util.*
 
 class MessageItemFragment : Fragment(), AnkoLogger {
     val ui = MessageItemUi()
+    val args: MessageItemFragmentArgs by navArgs()
+    val messageId get() = UUID.fromString(args.messageId)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val message = Gson().fromJson(arguments!!.getString("message"), PrivateMessageRecord::class.java)
+        task {
+            apiService.communications.apiCommunicationPrivateMessagesGet()
+        } successUi  {
+            showMessage(it.find { it.id == messageId }!!)
+        }
+    }
+
+    fun showMessage(message: PrivateMessageRecord) {
+
         ui.title.text = message.subject?.capitalize() ?: getString(R.string.message_no_subject)
 
         ui.author.text = getString(R.string.message_from_name, message.authorName)
