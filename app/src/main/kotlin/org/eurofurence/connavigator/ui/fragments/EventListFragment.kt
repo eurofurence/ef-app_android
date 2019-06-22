@@ -9,7 +9,6 @@ import android.widget.EditText
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
@@ -22,6 +21,7 @@ import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.TrackEventPagerAdapter
+import org.eurofurence.connavigator.util.extensions.setFAIcon
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.tabLayout
 import org.jetbrains.anko.support.v4.UI
@@ -31,7 +31,7 @@ import org.jetbrains.anko.support.v4.viewPager
 /**
  * Created by David on 5/3/2016.
  */
-class EventListFragment : Fragment(), HasDb {
+class EventListFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     val ui = EventListUi()
@@ -74,20 +74,31 @@ class EventListFragment : Fragment(), HasDb {
             ui.pager.setCurrentItem(it, false)
         }
     }
+
     override fun onResume() {
         super.onResume()
         activity?.apply {
             this.findViewById<Toolbar>(R.id.toolbar).apply {
-                this.menu.clear()
-                this.inflateMenu(R.menu.event_list_menu)
-                this.setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.action_filter -> onFilterButtonClick()
-                        R.id.action_search -> onSearchButtonClick()
-                    }
+                createMenu(this)
+                true
+            }
+        }
+    }
 
-                    true
-                }
+    fun createMenu(toolbar: Toolbar) {
+        toolbar.menu.clear()
+        toolbar.inflateMenu(R.menu.event_list_menu)
+        context?.apply {
+            toolbar.menu.apply {
+                this.setFAIcon(context!!, R.id.action_filter, R.string.fa_filter_solid)
+                this.setFAIcon(context!!, R.id.action_search, R.string.fa_search_solid)
+            }
+        }
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_filter -> onFilterButtonClick().let { true }
+                R.id.action_search -> onSearchButtonClick().let { true }
+                else -> false
             }
         }
     }
@@ -142,6 +153,7 @@ class EventListFragment : Fragment(), HasDb {
         }
     }
 }
+
 
 enum class EventPagerMode {
     DAYS,

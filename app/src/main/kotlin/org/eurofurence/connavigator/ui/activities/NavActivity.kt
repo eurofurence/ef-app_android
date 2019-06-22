@@ -35,6 +35,7 @@ import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.objects
+import org.eurofurence.connavigator.util.extensions.setFAIcon
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
@@ -162,9 +163,30 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     private fun addNavDrawerIcons() {
         ui.nav.inflateMenu(R.menu.nav_drawer)
 
-        val menu = ui.nav.menu
+        ui.nav.menu.apply {
+            // Main
+            this.setFAIcon(this@NavActivity, R.id.fragmentViewHome, R.string.fa_home_solid)
+            this.setFAIcon(this@NavActivity, R.id.infoListFragment, R.string.fa_info_solid)
+            this.setFAIcon(this@NavActivity, R.id.eventListFragment, R.string.fa_calendar)
+            this.setFAIcon(this@NavActivity, R.id.dealerListFragment, R.string.fa_shopping_cart_solid)
+            this.setFAIcon(this@NavActivity, R.id.mapListFragment, R.string.fa_map)
 
-        info { "retrieved menu" }
+            // Personal
+            this.setFAIcon(this@NavActivity, R.id.loginActivity, R.string.fa_user_circle)
+            this.setFAIcon(this@NavActivity, R.id.navMessages, R.string.fa_envelope)
+            this.setFAIcon(this@NavActivity, R.id.navFursuitGames, R.string.fa_paw_solid)
+            this.setFAIcon(this@NavActivity, R.id.navAdditionalServices, R.string.fa_book_open_solid)
+
+            // Web
+            this.setFAIcon(this@NavActivity, R.id.navWebTwitter, R.string.fa_twitter)
+            this.setFAIcon(this@NavActivity, R.id.navWebSite, R.string.fa_globe_solid)
+
+            // App Management
+            this.setFAIcon(this@NavActivity, R.id.navDevReload, R.string.fa_cloud_download_alt_solid)
+            this.setFAIcon(this@NavActivity, R.id.navDevClear, R.string.fa_trash_solid)
+            this.setFAIcon(this@NavActivity, R.id.activitySettings, R.string.fa_cog_solid)
+            this.setFAIcon(this@NavActivity, R.id.fragmentViewAbout, R.string.fa_hands_helping_solid)
+        }
     }
 
     override fun onResume() {

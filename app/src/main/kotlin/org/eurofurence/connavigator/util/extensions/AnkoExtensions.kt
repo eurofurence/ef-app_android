@@ -2,6 +2,8 @@
 
 package org.eurofurence.connavigator.util.extensions
 
+import android.content.Context
+import android.view.Menu
 import android.view.ViewManager
 import androidx.recyclerview.widget.RecyclerView
 import at.grabner.circleprogress.CircleProgressView
@@ -10,9 +12,9 @@ import com.github.lzyzsd.circleprogress.ArcProgress
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.joanzapata.iconify.widget.IconButton
 import com.joanzapata.iconify.widget.IconTextView
+import info.androidhive.fontawesome.FontDrawable
 import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
 import org.eurofurence.connavigator.ui.views.MultitouchableViewPager
-import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko._LinearLayout
 import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.dip
@@ -36,3 +38,7 @@ inline fun ViewManager.fontAwesomeTextView(init: FontAwesomeTextView.() -> Unit)
 inline fun ViewManager.multitouchViewPager(init: MultitouchableViewPager.() -> Unit) = ankoView({ MultitouchableViewPager(it) }, 0, init)
 
 fun _LinearLayout.weight(weight: Float) = lparams(dip(0), wrapContent, weight)
+
+fun Menu.setFAIcon(context: Context, menuIcon: Int, faIconId: Int, isBrand: Boolean = false) = this.findItem(menuIcon)?.let {
+    it.icon = FontDrawable(context, faIconId, true, isBrand)
+}
