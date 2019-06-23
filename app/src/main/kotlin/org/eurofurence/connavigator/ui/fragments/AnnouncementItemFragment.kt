@@ -1,13 +1,14 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
@@ -16,6 +17,8 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.util.extensions.fontAwesomeTextView
+import org.eurofurence.connavigator.util.extensions.jodatime
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.photoView
 import org.eurofurence.connavigator.util.v2.compatAppearance
@@ -24,12 +27,13 @@ import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.toast
+import org.joda.time.DateTime
 import us.feras.mdv.MarkdownView
 import java.util.*
 
 class AnnouncementItemFragment : Fragment(), HasDb, AnkoLogger {
     private val args: AnnouncementItemFragmentArgs by navArgs()
-    private val announcementId by lazy {UUID.fromString(args.announcementId)}
+    private val announcementId by lazy { UUID.fromString(args.announcementId) }
 
     override val db by lazyLocateDb()
 
@@ -43,7 +47,7 @@ class AnnouncementItemFragment : Fragment(), HasDb, AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
         info { "Created announcement view for $announcementId" }
 
-        if(announcementId == null){
+        if (announcementId == null) {
             toast("No announcement ID was sent!")
             findNavController().popBackStack()
         }
@@ -67,6 +71,11 @@ class AnnouncementItemFragment : Fragment(), HasDb, AnkoLogger {
                 } else {
                     ui.image.visibility = View.GONE
                 }
+
+                ui.warningLayout.visibility = if (DateTime.now().isAfter(announcement.validUntilDateTimeUtc.jodatime()))
+                    View.VISIBLE
+                else
+                    View.GONE
             }
         }
     }
@@ -83,6 +92,7 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
     lateinit var text: MarkdownView
     lateinit var image: PhotoView
     lateinit var loadingIndicator: ProgressBar
+    lateinit var warningLayout: LinearLayout
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
             backgroundResource = R.color.backgroundGrey
@@ -102,6 +112,16 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
                         title = textView {
                             compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large_Inverse
                         }
+                    }
+
+                    warningLayout = linearLayout {
+                        padding = dip(20 - 8)
+
+                        fontAwesomeTextView {
+                            text = "This announcement has expired!"
+                            textAlignment = View.TEXT_ALIGNMENT_CENTER
+                            textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
+                        }.lparams(matchParent, wrapContent)
                     }
 
                     text = markdownView {

@@ -67,6 +67,8 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
             }
         }
 
+        db.observer.onNext(db)
+
         dispatchUpdate(context)
     }
 

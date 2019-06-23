@@ -3,6 +3,7 @@
 package org.eurofurence.connavigator.util.extensions
 
 import android.content.Context
+import android.text.Layout
 import android.view.Menu
 import android.view.ViewManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,5 +41,7 @@ inline fun ViewManager.multitouchViewPager(init: MultitouchableViewPager.() -> U
 fun _LinearLayout.weight(weight: Float) = lparams(dip(0), wrapContent, weight)
 
 fun Menu.setFAIcon(context: Context, menuIcon: Int, faIconId: Int, isBrand: Boolean = false) = this.findItem(menuIcon)?.let {
-    it.icon = FontDrawable(context, faIconId, true, isBrand)
+    it.icon = FontDrawable(context, faIconId, true, isBrand).apply {
+        textSize = 22F
+    }
 }

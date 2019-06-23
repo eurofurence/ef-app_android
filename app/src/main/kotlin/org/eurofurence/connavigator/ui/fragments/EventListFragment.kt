@@ -185,7 +185,11 @@ class EventListUi : AnkoComponent<Fragment> {
 
             scrollView {
                 verticalLayout {
-                    search = editText().lparams(matchParent, wrapContent)
+                    search = editText {
+                        hint = "Search for an event title"
+                    }.lparams(matchParent, wrapContent) {
+                        margin = dip(10)
+                    }
 
                     searchLayout = linearLayout() {
                         id = R.id.eventSearch
