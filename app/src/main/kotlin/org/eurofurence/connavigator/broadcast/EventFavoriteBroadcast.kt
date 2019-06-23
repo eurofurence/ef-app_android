@@ -14,10 +14,15 @@ import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.gcm.NotificationPublisher
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.DebugPreferences
+import org.eurofurence.connavigator.ui.activities.NavActivity
+import org.eurofurence.connavigator.ui.fragments.FragmentViewHomeDirections
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.now
 import org.eurofurence.connavigator.util.extensions.startTimeString
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.alarmManager
+import org.jetbrains.anko.info
+import org.jetbrains.anko.longToast
 import org.joda.time.DateTime
 import org.joda.time.DurationFieldType
 import java.util.*
@@ -78,16 +83,20 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
         val notificationIntent = Intent(context, NotificationPublisher::class.java)
         val notificationFactory = NotificationFactory(context)
 
+        val action = FragmentViewHomeDirections
+                .actionFragmentViewHomeToFragmentViewEvent(event.id.toString())
+
         val pendingIntent = NavDeepLinkBuilder(context)
+                .setComponentName(NavActivity::class.java)
                 .setGraph(R.navigation.nav_graph)
                 .setDestination(R.id.fragmentViewEvent)
-                .setArguments(bundleOf("eventId" to event.id.toString()))
+                .setArguments(action.arguments)
                 .createPendingIntent()
 
         val notification = notificationFactory.createBasicNotification()
                 .addRegularText(
                         "Upcoming event: ${event.title}",
-                        "Starting at ${event.startTimeString()} in ${AppPreferences.notificationMinutesBefore} minutes")
+                        "Starting at ${event.startTimeString()}")
                 .setPendingIntent(pendingIntent)
                 .countdownTo(time)
 
