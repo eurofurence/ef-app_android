@@ -74,10 +74,21 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
     private fun createNotification(message: RemoteMessage) {
         info { "Received request to create generic notification" }
 
+        val action = FragmentViewHomeDirections
+                .actionFragmentViewHomeToFragmentViewMessageItem(message.relatedId!!)
+
+        val intent = NavDeepLinkBuilder(this)
+                .setComponentName(NavActivity::class.java)
+                .setGraph(R.navigation.nav_graph)
+                .setDestination(R.id.fragmentViewMessageItem)
+                .setArguments(action.arguments)
+                .createPendingIntent()
+
+
         factory.createBasicNotification()
                 .addRegularText(message.title ?: "No title was sent!", message.message
                         ?: "No message was sent!")
-                .setPendingIntent(basicIntent)
+                .setPendingIntent(intent)
                 .broadcast(message.relatedId ?: message.fallbackId)
     }
 

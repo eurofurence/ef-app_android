@@ -25,6 +25,12 @@
         <action
             android:id="@+id/action_fragmentViewHome_to_fragmentViewAnnouncement"
             app:destination="@id/fragmentViewAnnouncement" /><action android:id="@+id/action_fragmentViewHome_to_fragmentViewEvent2" app:destination="@id/fragmentViewEvent"/>
+        <action
+            android:id="@+id/action_fragmentViewHome_self"
+            app:destination="@id/fragmentViewHome" />
+        <action
+            android:id="@+id/action_fragmentViewHome_to_fragmentViewMessageItem"
+            app:destination="@id/fragmentViewMessageItem" />
     </fragment>
     <activity
         android:id="@+id/navActivity"
