@@ -1,5 +1,7 @@
 package org.eurofurence.connavigator.gcm
 
+import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,6 +11,7 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.notificationManager
@@ -38,6 +41,17 @@ class NotificationFactory(var context: Context) {
         )
 
         context.sendBroadcast(intent)
+    }
+
+    fun setupChannels() {
+        EFNotificationChannel.values().map {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // If we're debugging, remove the notification channels
+                if (BuildConfig.DEBUG) context.notificationManager.deleteNotificationChannel(it.toString())
+
+                context.notificationManager.createNotificationChannel(this.getChannel(it))
+            }
+        }
     }
 
     /**
@@ -80,5 +94,33 @@ class NotificationFactory(var context: Context) {
                 .setUsesChronometer(true)
     }
 
-    fun build() = builder.build()
+    fun setChannel(channel: EFNotificationChannel) = this.apply {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder = builder.setChannelId(getChannel(channel).id)
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private fun getChannel(channel: EFNotificationChannel) = when (channel) {
+        EFNotificationChannel.EVENT -> NotificationChannel(channel.toString(), "Event Reminders", NotificationManager.IMPORTANCE_DEFAULT).apply {
+            description = "Receive a reminder when an event you added to your favorites is about to happen."
+        }
+        EFNotificationChannel.ANNOUNCEMENT -> NotificationChannel(channel.toString(), "Announcements", NotificationManager.IMPORTANCE_DEFAULT).apply {
+            description = "Receive a notification when EF sends convention wide announcements."
+        }
+        EFNotificationChannel.PRIVATE_MESSAGE -> NotificationChannel(channel.toString(), "Private Messages", NotificationManager.IMPORTANCE_HIGH).apply {
+            description = "Receive a notification when you have logged in and received a private message."
+        }
+        else -> NotificationChannel(channel.toString(), "Default", NotificationManager.IMPORTANCE_LOW)
+    }
+
+
+    fun build(): Notification = builder.build()
+}
+
+enum class EFNotificationChannel {
+    DEFAULT,
+    EVENT,
+    ANNOUNCEMENT,
+    PRIVATE_MESSAGE
 }

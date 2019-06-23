@@ -29,11 +29,11 @@ class EventList(override val db: Db) : HasDb {
         val now = DateTime.now()
         for ((k, v) in filters)
             when (k) {
-                BY_TITLE -> events.removeAll { !it.fullTitle().contains(v, true) }
+                BY_TITLE -> events.filter { !it.fullTitle().contains(v, true) }
 
-                ON_DAY -> events.removeAll { it.conferenceDayId.toString() != v }
-                ON_TRACK -> events.removeAll { it.conferenceTrackId.toString() != v }
-                IN_ROOM -> events.removeAll { it.conferenceRoomId.toString() != v }
+                ON_DAY -> events.filter { it.conferenceDayId.toString() != v }
+                ON_TRACK -> events.filter { it.conferenceTrackId.toString() != v }
+                IN_ROOM -> events.filter { it.conferenceRoomId.toString() != v }
 
                 ORDER_START_TIME -> events.sortWith(Comparator { a, b ->
                     a.startDateTimeUtc.compareTo(b.startDateTimeUtc).takeIf { it != 0 }

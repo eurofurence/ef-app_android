@@ -9,6 +9,7 @@ import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.gcm.InstanceIdService
+import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.gcm.PushListenerService
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AuthPreferences
@@ -43,6 +44,9 @@ class ConnavigatorApplication : MultiDexApplication() {
 
         // Promises
         startKovenant()
+
+        // Set up notificatioChannels
+        NotificationFactory(applicationContext).setupChannels()
 
         // Listen to cloud updates
         PushListenerService().subscribe()

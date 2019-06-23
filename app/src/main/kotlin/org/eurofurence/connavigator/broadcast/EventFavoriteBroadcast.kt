@@ -10,6 +10,7 @@ import com.google.firebase.perf.metrics.AddTrace
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.*
+import org.eurofurence.connavigator.gcm.EFNotificationChannel
 import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.gcm.NotificationPublisher
 import org.eurofurence.connavigator.pref.AppPreferences
@@ -100,6 +101,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
                         "Upcoming event: ${event.title}",
                         "Starting at ${event.startTimeString()}")
                 .setPendingIntent(pendingIntent)
+                .setChannel(EFNotificationChannel.EVENT)
                 .countdownTo(time)
 
         notificationIntent.putExtra(NotificationPublisher.TAG, event.id.toString())
