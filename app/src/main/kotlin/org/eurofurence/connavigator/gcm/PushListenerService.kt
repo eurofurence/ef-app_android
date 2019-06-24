@@ -89,6 +89,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
                 .addRegularText(message.title ?: "No title was sent!", message.message
                         ?: "No message was sent!")
                 .setPendingIntent(intent)
+                .setChannel(EFNotificationChannel.PRIVATE_MESSAGE)
                 .broadcast(message.relatedId ?: message.fallbackId)
     }
 
@@ -120,6 +121,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
                         ?: "No extra text supplied")
                 .addBigText(message.text ?: "No big text was supplied")
                 .setPendingIntent(intent)
+                .setChannel(EFNotificationChannel.ANNOUNCEMENT)
                 .broadcast(message.relatedId ?: message.fallbackId)
     }
 }

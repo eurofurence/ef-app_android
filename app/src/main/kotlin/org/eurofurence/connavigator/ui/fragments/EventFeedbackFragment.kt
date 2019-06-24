@@ -5,16 +5,14 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import io.swagger.client.model.EventFeedbackRecord
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.then
+import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.promiseOnUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.BuildConfig
@@ -27,6 +25,7 @@ import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.longToast
 import java.util.*
 
 class EventFeedbackFragment : Fragment(), HasDb {
@@ -63,7 +62,7 @@ class EventFeedbackFragment : Fragment(), HasDb {
     private fun submit() = promiseOnUi {
         ui.loading()
     } then {
-        val rating = 1
+        val rating = ui.ratingBar.rating.toInt()
         val comments = ui.textInput.text.toString()
 
         val eventFeedback = EventFeedbackRecord().apply {
@@ -72,8 +71,11 @@ class EventFeedbackFragment : Fragment(), HasDb {
             this.rating = rating
         }
 
-        apiService.feedbacks.apiEventFeedbackPost(eventFeedback) // TODO: this will 404!
+        apiService.feedbacks.apiEventFeedbackPost(eventFeedback)
     } successUi {
+        ui.done()
+    } failUi {
+        longToast("Failed to send feedback!")
         ui.done()
     }
 }
@@ -86,7 +88,7 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
 
     lateinit var submitButton: Button
     lateinit var textInput: EditText
-
+    lateinit var ratingBar: RatingBar
     lateinit var dataInputLayout: LinearLayout
     lateinit var loadingLayout: LinearLayout
     lateinit var doneLayout: LinearLayout
@@ -108,7 +110,6 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
             backgroundResource = R.color.backgroundGrey
 
             verticalLayout {
-                textView("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").lparams(matchParent, dip(0))
                 // Event Info
                 linearLayout {
                     weightSum = 10F
@@ -148,12 +149,13 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
                             textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                         }
 
-                        imageView(R.drawable.placeholder_event) {
+                        ratingBar {
                             verticalPadding = dip(LayoutConstants.MARGIN_LARGE)
-                        }.lparams(matchParent, dip(100)) // placeholder for rating
+                            numStars = 5
+                            stepSize = 1F
+                        }.lparams(wrapContent, wrapContent)
 
                         textView(R.string.event_feedback_comment_header) {
-                            verticalPadding = dip(LayoutConstants.MARGIN_LARGE)
                             textColorResource = R.color.textBlack
                             textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                         }
