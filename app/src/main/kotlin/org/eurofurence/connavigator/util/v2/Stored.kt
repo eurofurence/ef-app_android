@@ -4,7 +4,9 @@ package org.eurofurence.connavigator.util.v2
 
 import android.content.Context
 import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
+import io.reactivex.Flowable
 import io.swagger.client.JsonUtil.getGson
 import io.swagger.client.JsonUtil.getListTypeForDeserialization
 import org.eurofurence.connavigator.util.extensions.*
@@ -116,7 +118,13 @@ abstract class Stored(val context: Context) {
         /**
          * Last value of read or write-through.
          */
-        private var readValue: Map<UUID, T> = emptyMap()
+        private val readValue = hashMapOf<UUID, T>()
+
+        /**
+         * Streams the elements as an observable.
+         */
+        fun stream(): Flowable<T> =
+                Flowable.fromIterable(items)
 
         /**
          * The entries of the database, writing serializes with GSON.
@@ -131,10 +139,30 @@ abstract class Stored(val context: Context) {
                     // File modified since last read, load changes
                     if (file.lastModified() != readTime)
                         JsonReader(file.safeReader()).use {
+                            // Carry file time attribute and reset the values.
                             readTime = file.lastModified()
-                            readValue = getGson()
-                                    .fromJson<List<T>>(it, getListTypeForDeserialization(elementClass.java))
-                                    .associateBy(id)
+                            readValue.clear()
+
+                            // Get the GSON object and keep it, as it is used multiple times.
+                            val gson = getGson()
+
+                            // Assert that the file contains an array.
+                            if (it.peek() == JsonToken.BEGIN_ARRAY) {
+                                // Consume the start.
+                                it.beginArray()
+
+                                // Until stopped on the end of the array, produce items.
+                                while (it.peek() != JsonToken.END_ARRAY) {
+                                    // Get the current item from the reader at it's position.
+                                    val current = gson.fromJson<T>(it, elementClass.java)
+
+                                    // Add it to the map.
+                                    readValue[id(current)] = current
+                                }
+
+                                // After the array, consume end for sanity.
+                                it.endArray()
+                            }
                         }
 
                     // Return the cached value
@@ -152,7 +180,8 @@ abstract class Stored(val context: Context) {
 
                     // Cache values and store the write time
                     readTime = file.lastModified()
-                    readValue = values
+                    readValue.clear()
+                    readValue.putAll(values)
                 }
             }
 
@@ -196,7 +225,7 @@ abstract class Stored(val context: Context) {
             synchronized(file) {
                 file.delete()
                 readTime = null
-                readValue = emptyMap()
+                readValue.clear()
             }
         }
 

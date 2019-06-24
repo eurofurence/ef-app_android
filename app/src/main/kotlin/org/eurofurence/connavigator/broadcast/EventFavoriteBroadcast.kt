@@ -15,6 +15,7 @@ import org.eurofurence.connavigator.gcm.NotificationPublisher
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.ui.activities.NavActivity
+import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.ui.fragments.FragmentViewHomeDirections
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.now
@@ -75,7 +76,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
             context.longToast("Notification should show up in 30 seconds")
             DateTime.now().withFieldAdded(DurationFieldType.seconds(), 30)
         } else {
-            db.eventStart(event).withFieldAdded(DurationFieldType.minutes(), -(AppPreferences.notificationMinutesBefore))
+            event.start.withFieldAdded(DurationFieldType.minutes(), -(AppPreferences.notificationMinutesBefore))
         }
     }
 

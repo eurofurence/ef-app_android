@@ -11,7 +11,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.swagger.client.model.*
-import org.eurofurence.connavigator.ui.filters.EventList
 import org.eurofurence.connavigator.util.v2.*
 import org.eurofurence.connavigator.util.v2.Stored.StoredSource
 import org.jetbrains.anko.AnkoLogger
@@ -360,89 +359,6 @@ class RootDb(context: Context) : Stored(context), Db {
 
     override fun subscribe(function: (db: Db) -> Any): Disposable = observer.observeOn(AndroidSchedulers.mainThread())
             .subscribe { function(it) }
-}
-
-
-/**
- * Sees if an event is happening during the specified datetime
- */
-fun Db.eventIsHappening(event: EventRecord, date: DateTime) =
-        eventInterval(event).contains(date)
-
-/**
- * Checks whether an event is upcoming in the next x minutes.
- * @param event: Event to check
- * @param date: Date that event might be upcoming
- * @param minutes: Amount of minutes you want to check ahead
- */
-fun Db.eventIsUpcoming(event: EventRecord, date: DateTime, minutes: Int) =
-        Interval(date, date.plusMinutes(minutes)).contains(eventStart(event))
-
-
-/**
- * Gets the day of the event.
- */
-fun Db.eventDayNumber(eventEntry: EventRecord) =
-        DateTime(eventEntry[toDay]?.date)
-
-/**
- * Gets the start time and day of the event.
- */
-fun Db.eventStart(eventEntry: EventRecord): DateTime =
-        eventDayNumber(eventEntry).withTime(LocalTime.parse(eventEntry.startTime))
-
-
-/**
- * Gets the end time and day of the event. Special behavior: if end time is smaller than the start time, it is
- * assumed that the next day is meant.
- */
-fun Db.eventEnd(eventEntry: EventRecord): DateTime {
-    val st = LocalTime.parse(eventEntry.startTime)
-    val et = LocalTime.parse(eventEntry.endTime)
-
-    return if (et < st)
-        eventDayNumber(eventEntry).plusDays(1).withTime(et)
-    else
-        eventDayNumber(eventEntry).withTime(et)
-}
-
-
-/**
- * Gets the time interval this event is happening in
- */
-fun Db.eventInterval(eventEntry: EventRecord): Interval =
-        Interval(eventStart(eventEntry), eventEnd(eventEntry))
-
-/**
- * You input an event and it will check it it overlaps with a favorited event
- */
-fun Db.eventIsConflicting(eventEntry: EventRecord): Boolean =
-        events.items
-                .filter { it.conferenceDayId == eventEntry.conferenceDayId }
-                .filter { it.id in faves }
-                .filter { it.id != eventEntry.id }
-                .any { eventInterval(eventEntry).overlaps(eventInterval(it)) } // If this list is bigger then 0, we have conflicting events
-
-fun Db.filterEvents() =
-        EventList(this)
-
-/**
- * see if today is an event day
- * Returns the current number of the day from 1
- * returns 0 if before or after the event
- */
-fun Db.eventDayNumber(): Int {
-    Log.d("DB", "Calculating day of the event")
-    val firstDay = DateTime(this.days.items.first().date.time)
-    val lastDay = DateTime(this.days.items.last().date.time)
-
-    if (firstDay.isAfterNow or lastDay.isBeforeNow) {
-        Log.d("DB", "Today is before or after the event! Returning zero")
-        return 0
-    }
-    val days = Days.daysBetween(firstDay, DateTime.now()).days + 1
-    Log.d("DB", "Today is day $days")
-    return days
 }
 
 /**

@@ -21,6 +21,9 @@ import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.TrackEventPagerAdapter
+import org.eurofurence.connavigator.ui.filters.FilterByTitle
+import org.eurofurence.connavigator.ui.filters.OrderDayAndTime
+import org.eurofurence.connavigator.ui.filters.then
 import org.eurofurence.connavigator.util.extensions.setFAIcon
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.tabLayout
@@ -36,7 +39,10 @@ class EventListFragment : Fragment(), HasDb, AnkoLogger {
 
     val ui = EventListUi()
 
-    private val searchFragment by lazy { EventRecyclerFragment().withArguments(daysInsteadOfGlyphs = true) }
+    private val searchFragment by lazy {
+        EventRecyclerFragment()
+                .withArguments(daysInsteadOfGlyphs = true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             UI { ui.createView(this) }.view
@@ -51,8 +57,7 @@ class EventListFragment : Fragment(), HasDb, AnkoLogger {
         ui.search.textWatcher {
             afterTextChanged { text ->
                 searchFragment.apply {
-                    eventList.byTitle(text.toString())
-                    eventList.sortByDateAndTime()
+                    filters = FilterByTitle(text.toString()) then OrderDayAndTime()
                 }.dataUpdated()
             }
         }
@@ -180,7 +185,7 @@ class EventListUi : AnkoComponent<Fragment> {
 
             pager = viewPager {
                 id = 1
-                offscreenPageLimit = 1
+                //offscreenPageLimit = 1
             }.lparams(matchParent, matchParent)
 
             scrollView {

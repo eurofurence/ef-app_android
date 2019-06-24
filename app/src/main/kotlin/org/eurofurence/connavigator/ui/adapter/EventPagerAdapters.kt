@@ -1,12 +1,11 @@
 package org.eurofurence.connavigator.ui.adapter
 
-import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import org.eurofurence.connavigator.database.Db
-import org.eurofurence.connavigator.database.filterEvents
 import org.eurofurence.connavigator.pref.AppPreferences
+import org.eurofurence.connavigator.ui.filters.*
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -16,10 +15,6 @@ infix fun Date.sameDayAs(other: Date) =
         time / (24 * 60 * 60 * 1000) == other.time / (24 * 60 * 60 * 1000)
 
 class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
-    override fun saveState(): Parcelable? {
-        return null
-    }
-    val days by lazy { db.days }
 
     companion object {
         fun indexOfToday(db: Db) =
@@ -30,55 +25,46 @@ class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fragm
 
     override fun getPageTitle(position: Int): CharSequence? {
         return if (AppPreferences.shortenDates) {
-            DateTime(days.asc { it.date }[position].date).dayOfWeek().asShortText
+            DateTime(days[position].date).dayOfWeek().asShortText
         } else {
-            DateTime(days.asc { it.date }[position].date).toString(DateTimeFormat.forPattern("MMM d"))
+            DateTime(days[position].date).toString(DateTimeFormat.forPattern("MMM d"))
         }
     }
 
 
     override fun getItem(position: Int): Fragment? {
-        return EventRecyclerFragment().withArguments(db.filterEvents()
-                .onDay(days.asc { it.date }[position].id)
-                .sortByStartTime())
+        return EventRecyclerFragment().withArguments(
+                FilterOnDay(days[position].id) then OrderTime())
     }
 
     override fun getCount(): Int {
         return days.size
     }
+
+    private val days by lazy { db.days.asc { it.date } }
 }
 
 class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
-    override fun saveState(): Parcelable? {
-        return null
-    }
+
     override fun getItem(position: Int): Fragment {
         return EventRecyclerFragment().withArguments(
-                eventList = db.filterEvents()
-                    .inRoom(rooms.asc { it.name }[position].id)
-                    .sortByStartTime(),
+                FilterInRoom(rooms[position].id) then OrderTime(),
                 daysInsteadOfGlyphs = true
         )
     }
 
-    override fun getPageTitle(position: Int): String = rooms.asc { it.name }[position].name
+    override fun getPageTitle(position: Int): String = rooms[position].name
 
     override fun getCount() = rooms.size
 
 
-
-    private val rooms by lazy { db.rooms }
+    private val rooms by lazy { db.rooms.asc { it.name } }
 }
 
 class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
-    override fun saveState(): Parcelable? {
-        return null
-    }
     override fun getItem(position: Int): Fragment {
         return EventRecyclerFragment().withArguments(
-                eventList = db.filterEvents()
-                    .onTrack(tracks[position].id)
-                    .sortByStartTime(),
+                FilterOnTrack(tracks[position].id) then OrderTime(),
                 daysInsteadOfGlyphs = true
         )
     }
@@ -90,17 +76,13 @@ class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fra
     private val tracks by lazy { db.tracks.asc { it.name } }
 }
 
-class FavoriteEventPagerAdapter(val db: Db, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager){
+class FavoriteEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
     override fun getItem(position: Int) = EventRecyclerFragment().withArguments(
-            eventList = db.filterEvents()
-                    .isFavorited()
-                    .onDay(days[position].id)
-                    .sortByStartTime()
-    )
+            FilterIsFavorited() then FilterOnDay(days[position].id) then OrderTime())
 
     override fun getPageTitle(position: Int): String = days[position].name
 
     override fun getCount() = days.size
 
-    val days by lazy { db.days.asc { it.date }}
+    val days by lazy { db.days.asc { it.date } }
 }

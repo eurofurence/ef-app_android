@@ -20,9 +20,9 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.LayoutConstants
+import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
@@ -50,7 +50,7 @@ class EventFeedbackFragment : Fragment(), HasDb {
 
             ui.apply {
                 titleView.text = it.fullTitle()
-                dateView.text = getString(R.string.event_weekday_from_to, db.eventStart(it).dayOfWeek().asText, it.startTimeString(), it.endTimeString())
+                dateView.text = getString(R.string.event_weekday_from_to, it.start.dayOfWeek().asText, it.startTimeString(), it.endTimeString())
                 hostView.text = it.ownerString()
                 locationView.text = getString(R.string.misc_room_number, conferenceRoom?.name
                         ?: getString(R.string.event_unable_to_locate_room))
