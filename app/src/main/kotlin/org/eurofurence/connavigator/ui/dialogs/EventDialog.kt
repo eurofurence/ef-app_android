@@ -9,9 +9,9 @@ import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.Db
-import org.eurofurence.connavigator.database.eventEnd
-import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.ui.filters.end
+import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.shareString
 import org.jetbrains.anko.*
@@ -46,8 +46,8 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
 
                 calendarIntent.type = "vnd.android.cursor.item/event"
                 calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title)
-                calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, db.eventStart(event).millis)
-                calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, db.eventEnd(event).millis)
+                calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.start.millis)
+                calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.end.millis)
                 calendarIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, db.toRoom(event)?.name)
                 calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
 

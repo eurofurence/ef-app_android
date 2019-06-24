@@ -20,7 +20,7 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.gcm.cancelFromRelated
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.ui.filters.EventList
+import org.eurofurence.connavigator.ui.filters.*
 import org.eurofurence.connavigator.util.extensions.arcProgress
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
@@ -28,6 +28,7 @@ import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.nestedScrollView
 import org.joda.time.DateTime
 import org.joda.time.Days
+import kotlin.comparisons.then
 
 /**
  * Created by David on 5/14/2016.
@@ -41,9 +42,21 @@ class FragmentViewHome : Fragment(), AnkoLogger, HasDb {
     var subscriptions = Disposables.empty()
     val now: DateTime by lazy { DateTime.now() }
 
-    private val upcoming by lazy { EventRecyclerFragment().withArguments(EventList(database).isUpcoming().sortByStartTime(), getString(R.string.event_upcoming), false) }
-    private val current by lazy { EventRecyclerFragment().withArguments(EventList(database).isCurrent().sortByStartTime(), getString(R.string.event_running), false) }
-    private val favorited by lazy { EventRecyclerFragment().withArguments(EventList(database).isFavorited().sortByDateAndTime(), getString(R.string.event_favorited), false, true) }
+    private val upcoming by lazy {
+        EventRecyclerFragment()
+                .withArguments(FilterIsUpcoming() then OrderTime(), getString(R.string.event_upcoming), false)
+    }
+
+    private val current by lazy {
+        EventRecyclerFragment()
+                .withArguments(FilterIsCurrent() then OrderTime(), getString(R.string.event_running), false)
+    }
+
+    private val favorited by lazy {
+        EventRecyclerFragment()
+                .withArguments(FilterIsFavorited() then OrderDayAndTime(), getString(R.string.event_favorited), false, true)
+    }
+
     private val announcement by lazy { AnnouncementListFragment() }
     private val userStatus by lazy { UserStatusFragment() }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =

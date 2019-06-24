@@ -20,7 +20,6 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.descriptionFor
-import org.eurofurence.connavigator.database.eventStart
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.AppPreferences
@@ -29,6 +28,7 @@ import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
 import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
+import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
@@ -84,7 +84,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
                 }
             }
 
-            ui.time.text = getString(R.string.event_weekday_from_to, db.eventStart(event).dayOfWeek().asText, event.startTimeString(), event.endTimeString())
+            ui.time.text = getString(R.string.event_weekday_from_to, event.start.dayOfWeek().asText, event.startTimeString(), event.endTimeString())
             ui.organizers.text = event.ownerString()
             ui.room.text = getString(R.string.misc_room_number, conferenceRoom?.name
                     ?: getString(R.string.event_unable_to_locate_room))
