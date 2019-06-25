@@ -117,7 +117,7 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
 
                     verticalLayout {
                         fontAwesomeView {
-                            padding = dip(LayoutConstants.MARGIN_LARGE)
+                            verticalPadding = dip(LayoutConstants.MARGIN_LARGE)
                             text = "f075".toUnicode()
                             textSize = LayoutConstants.TEXT_ICON_SIZE
                             textColorResource = R.color.primaryDark
@@ -127,7 +127,7 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
 
                     verticalLayout {
                         titleView = textView() {
-                            padding = dip(LayoutConstants.MARGIN_SMALL)
+                            verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
                             textAppearance = android.R.style.TextAppearance_DeviceDefault_Large
                         }
 
