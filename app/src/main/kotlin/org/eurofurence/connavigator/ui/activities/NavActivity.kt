@@ -223,10 +223,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     }
 
     private fun navigateToFursuitGames(): Boolean {
-        val url = if (AuthPreferences.isLoggedIn())
-            "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=true&returnPath=/collect&token=${AuthPreferences.token}"
-        else
-            "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=true&returnPath=/"
+        val url = "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=false&returnPath=/collect&token=${if (AuthPreferences.isLoggedIn()) AuthPreferences.token else "empty"}"
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)
@@ -239,10 +236,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     }
 
     private fun navigateToAdditionalServices(): Boolean {
-        val url = if (AuthPreferences.isLoggedIn())
-            "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=true&returnPath=/&token=${AuthPreferences.token}"
-        else
-            "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=true&returnPath=/"
+        val url = "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=false&returnPath=/&token=${if (AuthPreferences.isLoggedIn()) AuthPreferences.token else "empty"}"
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)
