@@ -149,7 +149,7 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
                             textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                         }
 
-                        ratingBar {
+                        ratingBar = ratingBar {
                             verticalPadding = dip(LayoutConstants.MARGIN_LARGE)
                             numStars = 5
                             stepSize = 1F
