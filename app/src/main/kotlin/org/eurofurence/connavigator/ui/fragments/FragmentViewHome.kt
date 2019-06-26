@@ -19,6 +19,7 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.gcm.cancelFromRelated
+import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.filters.*
 import org.eurofurence.connavigator.util.extensions.arcProgress
@@ -63,6 +64,8 @@ class FragmentViewHome : Fragment(), AnkoLogger, HasDb {
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        AuthPreferences.validate()
 
         configureEventRecyclers()
 

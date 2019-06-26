@@ -20,7 +20,14 @@ object AuthPreferences : KotprefModel() {
 
     fun isLoggedIn() = token.isNotEmpty()
     fun asBearer() = "Bearer $token"
-    fun isValid() = DateTime.now().isBefore(tokenValidUntil)
+
+    /*
+        We'll consider the token to be invalid 24h before it expires. Since token lifetime is
+        compared against local time, this catches some edge cases with small time drift
+        or wrong timezones on the client device, and generally shouldn't be a problem
+        since token lifetime is several weeks.
+     */
+    fun isValid() = DateTime.now().plusDays(1).isBefore(tokenValidUntil)
 
     /**
      * Checks if a token is valid. if not, remove the token
