@@ -61,7 +61,8 @@ class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, ov
         } else {
             fragment.context?.let {
                 holder.dealerPreviewImage.setImageDrawable(
-                        ContextCompat.getDrawable(it, R.drawable.dealer_black))
+                        ContextCompat.getDrawable(it, R.drawable.dealer_frame))
+
             }
         }
 
@@ -102,7 +103,7 @@ class DealerListItemUI : AnkoComponent<ViewGroup> {
             backgroundResource = R.color.cardview_light_background
             id = R.id.layout
             weightSum = 100F
-            padding = dip(10)
+            horizontalPadding = dip(10)
 
             verticalLayout {
                 imageView {

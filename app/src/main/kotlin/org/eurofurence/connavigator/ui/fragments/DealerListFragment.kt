@@ -190,6 +190,9 @@ class DealersUi : AnkoComponent<Fragment> {
 
             dealerList = recycler {
                 lparams(matchParent, matchParent)
+                verticalPadding = dip(10)
+                clipToPadding = false
+                backgroundResource = R.color.cardview_light_background
             }
         }
     }

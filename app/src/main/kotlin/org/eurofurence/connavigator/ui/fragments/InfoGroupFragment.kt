@@ -153,8 +153,7 @@ class InfoGroupUi : AnkoComponent<Fragment> {
                 }
 
                 verticalLayout {
-                    topPadding = dip(20)
-                    bottomPadding = dip(20)
+                    verticalPadding = dip(15)
                     title = textView {
                         textResource = R.string.misc_title
                         compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large
