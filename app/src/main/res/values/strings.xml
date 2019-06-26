@@ -171,8 +171,9 @@
     <string name="login_password">Password</string>
     <string name="login_authenticating">Authenticating&#8230;</string>
     <string name="login_details">Login details</string>
-    <string name="login_logged_in_as">Logged in as %1$s</string>
-    <string name="login_valid_until">Login is valid until: %1$s</string>
+    <string name="login_logged_in_as">You are currently logged in as %1$s.</string>
+    <string name="login_benefits">While being logged in, you will receive personal notifications from Eurofurence on this device and you can use additional services that require authentication.</string>
+    <string name="login_valid_until">You will be automatically logged out in about %1$s.</string>
     <string name="login_logout">Logout</string>
     <string name="login_logged_out">Logging you out, goodbye!</string>
     <string name="login_not_logged_in">You\'re not logged in!</string>
@@ -181,6 +182,8 @@
     <string name="login_information">Your login credentials for the app are the same as for the Eurofurence Registration System.\n\nIf you do not remember or have access to them, you can ask for a PIN code to sign in at the registration desk or security office.</string>
     <string name="login_failed">Failed to log you in!</string>
     <string name="login_needed">You need to login before you can see private messages!</string>
+    <string name="login_privacy_notice">Privacy Notice</string>
+    <string name="login_telemetry_disclaimer">Eurofurence does not correlate logged in attendees on devices with application telemetry.</string>
     <!-- Login end -->
 
     <!-- Close -->

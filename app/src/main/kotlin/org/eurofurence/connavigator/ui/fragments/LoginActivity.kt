@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.graphics.PorterDuff
+import android.graphics.Typeface
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import android.text.InputType
@@ -18,6 +19,8 @@ import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
+import org.eurofurence.connavigator.util.extensions.toRelative
+import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.appcompat.v7.toolbar
@@ -238,25 +241,46 @@ class LoginUi : AnkoComponent<LoginActivity> {
                     verticalLayout {
                         visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
 
+                        padding = dip(16)
+
                         textView {
                             text = resources.getString(R.string.login_logged_in_as, AuthPreferences.username)
-
+                            compatAppearance = android.R.style.TextAppearance_DeviceDefault
+                            typeface = Typeface.DEFAULT_BOLD
                         }.lparams(matchParent, wrapContent) {
-                            margin = dip(16)
+                            bottomMargin = dip(8)
                         }
+
                         textView {
-                            text = resources.getString(R.string.login_valid_until, DateTime(AuthPreferences.tokenValidUntil).toLocalDateTime())
-
+                            textResource = R.string.login_benefits
                         }.lparams(matchParent, wrapContent) {
-                            margin = dip(16)
+                            bottomMargin = dip(8)
                         }
+
+                        textView {
+                            text = resources.getString(
+                                    R.string.login_valid_until,
+                                    DateTime(AuthPreferences.tokenValidUntil).minusDays(1).toDate().toRelative())
+                        }.lparams(matchParent, wrapContent)
 
                         logout = button {
                             textResource = R.string.login_logout
 
                         }.lparams(matchParent, wrapContent) {
-                            margin = dip(16)
+                            verticalMargin = dip(16)
                         }
+
+                        textView {
+                            textResource = R.string.login_privacy_notice
+                            compatAppearance = android.R.style.TextAppearance_DeviceDefault
+                            typeface = Typeface.DEFAULT_BOLD
+                        }.lparams(matchParent, wrapContent) {
+                            bottomMargin = dip(8)
+                        }
+
+                        textView {
+                            textResource = R.string.login_telemetry_disclaimer
+                        }.lparams(matchParent, wrapContent)
                     }
 
                     lparams(matchParent, matchParent)
