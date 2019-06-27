@@ -113,7 +113,7 @@ class StartActivity : AppCompatActivity(), AnkoLogger, HasDb {
             ui.startLayout.visibility = View.GONE
             ui.loadingLayout.visibility = View.VISIBLE
 
-            dispatchUpdate(this)
+            dispatchUpdate(this, preloadChangedImages = false)
         }
 
         ui.noButton.setOnClickListener {

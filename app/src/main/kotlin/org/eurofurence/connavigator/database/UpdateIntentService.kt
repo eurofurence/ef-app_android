@@ -10,10 +10,6 @@ import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.util.extensions.booleans
-import org.eurofurence.connavigator.util.extensions.catchAlternative
-import org.eurofurence.connavigator.util.extensions.objects
-import org.eurofurence.connavigator.util.extensions.toIntent
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.util.v2.internalSpec
 import org.eurofurence.connavigator.webapi.apiService
@@ -21,6 +17,7 @@ import org.jetbrains.anko.*
 import org.joda.time.DateTime
 import java.util.*
 import kotlinx.serialization.Serializable
+import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.DateSerializer
 
 @Serializable
@@ -35,11 +32,14 @@ val updateComplete = internalSpec<UpdateComplete>()
  * Dispatches an update
  * @param context The host context for the service
  */
-fun AnkoLogger.dispatchUpdate(context: Context, showToastOnCompletion: Boolean = false) {
+fun AnkoLogger.dispatchUpdate(context: Context,
+                              showToastOnCompletion: Boolean = false,
+                              preloadChangedImages: Boolean = true) {
     info { "Dispatching update" }
 
     val intent = Intent(context, UpdateIntentService::class.java)
     intent.putExtra("showToastOnCompletion", showToastOnCompletion)
+    intent.putExtra("preloadChangedImages", preloadChangedImages)
 
     context.startService(intent)
 }
@@ -62,6 +62,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
     override fun onHandleIntent(intent: Intent?) {
         info { "Handling update intent service intent" }
         val showToastOnCompletion = intent?.getBooleanExtra("showToastOnCompletion", false) ?: false
+        val preloadChangedImages = intent?.getBooleanExtra("preloadChangedImages", false) ?: false
 
         // Initialize the response, the following code is net and IO oriented, it could fail
         val (response, responseObject) = {
@@ -97,9 +98,26 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
                 sync.eventConferenceDays.deletedEntities = emptyList()
             }
 
-            for (image in sync.images.changedEntities)
-                imageService.recache(image)
+            /*
+                All images that have been deleted or changed can get removed from cache to free
+                space. We need to base the query on existing (local) records so the imageService
+                can access the cache by the "old" urls.
+              */
+            var invalidatedImages = images.items.filter {
+                sync.images.deletedEntities.contains(it.id)
+                || sync.images.changedEntities.any { rec -> rec.id == it.id } }
 
+            for (image in invalidatedImages)
+                imageService.removeFromCache(image)
+
+            /*
+                Preload images if they changed. Only StartActivity doesn't want this, because it's
+                doing it manually with UI presentation.
+              */
+            if (preloadChangedImages) {
+                for (image in sync.images.changedEntities)
+                    imageService.preload(image)
+            }
 
             // Apply sync
             announcements.apply(sync.announcements.convert())

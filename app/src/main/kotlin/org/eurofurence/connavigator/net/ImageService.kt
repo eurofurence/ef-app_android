@@ -104,18 +104,15 @@ object imageService : AnkoLogger {
         imageLoader.clearMemoryCache()
     }
 
-    /**
-     * Reload an image
-     */
-    fun recache(image: ImageRecord) {
+    fun removeFromCache(image: ImageRecord) {
         val imageFile = imageLoader.diskCache.get(image.url)
 
         if (imageFile.exists()) {
             debug { "Deleting cached image" }
             imageFile.delete()
-            preload(image)
         }
 
         MemoryCacheUtils.removeFromCache(image.url, imageLoader.memoryCache)
     }
+
 }
