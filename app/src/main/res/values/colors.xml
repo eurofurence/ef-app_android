@@ -15,5 +15,6 @@
     <color name="textWhite">#dcdcdc</color>
     <color name="textBlack">#010101</color>
     <color name="backgroundGrey">#DDD</color>
+    <color name="mutedText">#888</color>
     <color name="alert">#FFE082</color>
 </resources>
