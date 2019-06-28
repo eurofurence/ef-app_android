@@ -1,25 +1,18 @@
 package org.eurofurence.connavigator.ui.fragments
 
-import android.graphics.Color
-import android.graphics.Rect
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintSet.PARENT_ID
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.joanzapata.iconify.widget.IconTextView
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.task
@@ -29,22 +22,19 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.glyphsFor
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
-import org.eurofurence.connavigator.ui.filters.*
+import org.eurofurence.connavigator.ui.filters.FilterChain
+import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.ListAutoAdapter
 import org.eurofurence.connavigator.util.extensions.*
-import org.eurofurence.connavigator.util.v2.*
+import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
-import org.jetbrains.anko.constraint.layout.ConstraintSetBuilder.Side.*
-import org.jetbrains.anko.constraint.layout.applyConstraintSet
-import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.dip
-import org.jetbrains.anko.support.v4.runOnUiThread
-import org.jetbrains.anko.support.v4.uiThread
-import org.joda.time.*
+import org.joda.time.Hours
+import org.joda.time.Minutes
 
 
 /**
@@ -147,7 +137,9 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 isSingleLine = true
 
                 // Bind from room or use default.
-                from { db.rooms[conferenceRoomId]?.name } into { content = it ?: R.string.misc_unknown }
+                from { db.rooms[conferenceRoomId]?.name } into {
+                    content = it ?: R.string.misc_unknown
+                }
 
             }.lparams(
                     width = matchParent,
@@ -168,8 +160,10 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                     // TODO: special formats, happening now etc.
                     from { startTimeString() } into { text = it }
                 }.lparams(
-                        width = dip(55),
-                        height = wrapContent)
+                        width = wrapContent,
+                        height = wrapContent) {
+                    minimumWidth = dip(60)
+                }
 
                 // Separator block
                 textView {
@@ -190,9 +184,10 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
                     from { endTimeString() } into { text = it }
                 }.lparams(
-                        width = dip(50),
+                        width = wrapContent,
                         height = matchParent) {
                     rightMargin = 1
+                    minimumWidth = dip(60)
                 }
 
                 // Display day if in a view that has no day tab.
