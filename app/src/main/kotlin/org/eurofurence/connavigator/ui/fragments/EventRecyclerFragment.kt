@@ -92,12 +92,12 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             textView {
                 setPadding(dip(5), dip(5), dip(5), dip(5))
                 textColorResource = R.color.mutedText
-                backgroundColorResource = if(mainList) R.color.backgroundGrey else R.color.cardview_light_background
+                backgroundColorResource = R.color.backgroundGrey
 
                 fromAll { before, _ ->
                     (before.firstOrNull()?.start?.equals(start) != true) to start
                 } into { (visible, start) ->
-                    if (visible) {
+                    if (visible && mainList) {
                         val now = DatetimeProxy.now()
                         val hours = Hours.hoursBetween(now, start).hours
                         val minutes = Minutes.minutesBetween(now, start).minutes
