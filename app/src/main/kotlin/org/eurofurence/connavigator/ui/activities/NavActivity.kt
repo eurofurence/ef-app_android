@@ -132,6 +132,8 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
         updateReceiver.register()
 
         info { "Inserted Nav Fragment" }
+
+        dispatchUpdate(this)
     }
 
     private fun updateNavCountdown() {
