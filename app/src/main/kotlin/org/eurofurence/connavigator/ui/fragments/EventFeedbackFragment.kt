@@ -65,6 +65,10 @@ class EventFeedbackFragment : Fragment(), HasDb {
         val rating = ui.ratingBar.rating.toInt()
         val comments = ui.textInput.text.toString()
 
+        if(rating == 0) {
+            throw Exception()
+        }
+
         val eventFeedback = EventFeedbackRecord().apply {
             this.eventId = this@EventFeedbackFragment.eventId
             this.message = comments
@@ -75,8 +79,12 @@ class EventFeedbackFragment : Fragment(), HasDb {
     } successUi {
         ui.done()
     } failUi {
-        longToast("Failed to send feedback!")
-        ui.done()
+        if(ui.ratingBar.rating == 0f ) {
+                longToast("You have to select a rating!")
+        } else {
+            longToast("Failed to send feedback! Try again.")
+        }
+        ui.dataInput()
     }
 }
 
@@ -93,10 +101,13 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
     lateinit var loadingLayout: LinearLayout
     lateinit var doneLayout: LinearLayout
 
-    fun loading() {
-        dataInputLayout.visibility = View.GONE
-        loadingLayout.visibility = View.VISIBLE
+    fun dataInput() {
+        dataInputLayout.visibility = View.VISIBLE
+        loadingLayout.visibility = View.GONE
         doneLayout.visibility = View.GONE
+    }
+
+    fun loading() {
     }
 
     fun done() {
@@ -118,7 +129,7 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
                     verticalLayout {
                         fontAwesomeView {
                             verticalPadding = dip(LayoutConstants.MARGIN_LARGE)
-                            text = "f075".toUnicode()
+                            text = "{fa-comments 30sp}"
                             textSize = LayoutConstants.TEXT_ICON_SIZE
                             textColorResource = R.color.primaryDark
                             gravity = Gravity.CENTER

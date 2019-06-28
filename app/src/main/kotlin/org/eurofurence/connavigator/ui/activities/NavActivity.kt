@@ -32,6 +32,7 @@ import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.ui.fragments.FragmentViewHomeDirections
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.objects
@@ -178,7 +179,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
             this.setFAIcon(this@NavActivity, R.id.navAdditionalServices, R.string.fa_book_open_solid)
 
             // Web
-            this.setFAIcon(this@NavActivity, R.id.navWebTwitter, R.string.fa_twitter)
+            this.setFAIcon(this@NavActivity, R.id.navWebTwitter, R.string.fa_twitter, isBrand = true)
             this.setFAIcon(this@NavActivity, R.id.navWebSite, R.string.fa_globe_solid)
 
             // App Management
@@ -214,12 +215,25 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
                 yesButton { ResetReceiver().clearData(this@NavActivity) }
                 noButton { }
             }.show().let { true }
+            R.id.navMessages -> navigateToMessages()
             R.id.navWebSite -> browse("https://eurofurence.org")
             R.id.navWebTwitter -> browse("https://twitter.com/eurofurence")
             R.id.navFursuitGames -> navigateToFursuitGames()
             R.id.navAdditionalServices -> navigateToAdditionalServices()
             else -> item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun navigateToMessages(): Boolean {
+        val action = if (AuthPreferences.isLoggedIn()) {
+            FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewMessageList()
+        } else {
+            longToast("You are not logged in yet!")
+            FragmentViewHomeDirections.actionFragmentViewHomeToLoginActivity()
+        }
+
+        navController.navigate(action)
+        return true
     }
 
     private fun navigateToFursuitGames(): Boolean {
@@ -265,9 +279,10 @@ internal class NavUi : AnkoComponent<NavActivity> {
             frameLayout {
                 backgroundResource = R.color.backgroundGrey
                 verticalLayout {
-                    bar = toolbar() {
+                    bar = toolbar {
                         backgroundResource = R.color.primaryDark
                         setTitleTextColor(ContextCompat.getColor(context, R.color.textWhite))
+                        setSubtitleTextColor(ContextCompat.getColor(context, R.color.textWhite))
                         id = R.id.toolbar
                     }
 

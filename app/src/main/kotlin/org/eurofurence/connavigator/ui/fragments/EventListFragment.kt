@@ -95,8 +95,8 @@ class EventListFragment : Fragment(), HasDb, AnkoLogger {
         toolbar.inflateMenu(R.menu.event_list_menu)
         context?.apply {
             toolbar.menu.apply {
-                this.setFAIcon(context!!, R.id.action_filter, R.string.fa_filter_solid)
-                this.setFAIcon(context!!, R.id.action_search, R.string.fa_search_solid)
+                this.setFAIcon(context!!, R.id.action_filter, R.string.fa_filter_solid, white = true)
+                this.setFAIcon(context!!, R.id.action_search, R.string.fa_search_solid, white = true)
             }
         }
         toolbar.setOnMenuItemClickListener {
@@ -134,7 +134,7 @@ class EventListFragment : Fragment(), HasDb, AnkoLogger {
                 ui.tabs.visibility = View.GONE
 
                 ui.searchLayout.visibility = View.VISIBLE
-                ui.searchLayout.requestFocus()
+                ui.search.requestFocus()
 
                 activity!!.inputMethodManager
                         .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY)
@@ -192,6 +192,7 @@ class EventListUi : AnkoComponent<Fragment> {
                 verticalLayout {
                     search = editText {
                         hint = "Search for an event title"
+                        singleLine = true
                     }.lparams(matchParent, wrapContent) {
                         margin = dip(10)
                     }

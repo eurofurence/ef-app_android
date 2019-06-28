@@ -6,6 +6,7 @@ import android.content.Context
 import android.text.Layout
 import android.view.Menu
 import android.view.ViewManager
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import at.grabner.circleprogress.CircleProgressView
 import com.github.chrisbanes.photoview.PhotoView
@@ -14,6 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.joanzapata.iconify.widget.IconButton
 import com.joanzapata.iconify.widget.IconTextView
 import info.androidhive.fontawesome.FontDrawable
+import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
 import org.eurofurence.connavigator.ui.views.MultitouchableViewPager
 import org.jetbrains.anko._LinearLayout
@@ -40,8 +42,13 @@ inline fun ViewManager.multitouchViewPager(init: MultitouchableViewPager.() -> U
 
 fun _LinearLayout.weight(weight: Float) = lparams(dip(0), wrapContent, weight)
 
-fun Menu.setFAIcon(context: Context, menuIcon: Int, faIconId: Int, isBrand: Boolean = false) = this.findItem(menuIcon)?.let {
-    it.icon = FontDrawable(context, faIconId, true, isBrand).apply {
+fun Menu.setFAIcon(context: Context, menuIcon: Int, faIconId: Int, isBrand: Boolean = false, white: Boolean = false) = this.findItem(menuIcon)?.let {
+    it.icon = FontDrawable(context, faIconId, !isBrand, isBrand).apply {
         textSize = 22F
+        textAlign = Layout.Alignment.ALIGN_CENTER
+        setTextColor(ContextCompat.getColor(context,
+                if (white) R.color.textWhite else R.color.iconColor
+        ))
+
     }
 }

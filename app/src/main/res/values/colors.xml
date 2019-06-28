@@ -16,4 +16,5 @@
     <color name="textBlack">#010101</color>
     <color name="backgroundGrey">#DDD</color>
     <color name="alert">#FFE082</color>
+    <color name="iconColor">#666</color>
 </resources>

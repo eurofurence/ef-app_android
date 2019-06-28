@@ -86,7 +86,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
                 this.menu.clear()
                 this.inflateMenu(R.menu.dealer_list_menu)
                 this.context?.let {
-                    this.menu.setFAIcon(it, R.id.action_search, R.string.fa_search_solid)
+                    this.menu.setFAIcon(it, R.id.action_search, R.string.fa_search_solid, white = true)
                 }
                 this.setOnMenuItemClickListener {
                     when (it.itemId) {
@@ -139,6 +139,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
         if (ui.searchLayout.visibility == View.GONE) {
             info { "Showing search bar" }
             ui.searchLayout.visibility = View.VISIBLE
+            ui.search.requestFocus()
         } else {
             info { "Hiding search bar" }
             ui.searchLayout.visibility = View.GONE

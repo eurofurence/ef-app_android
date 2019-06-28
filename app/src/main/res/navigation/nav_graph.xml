@@ -142,7 +142,7 @@
     <fragment
         android:id="@+id/eventFeedbackFragment"
         android:name="org.eurofurence.connavigator.ui.fragments.EventFeedbackFragment"
-        android:label="EventFeedbackFragment" >
+        android:label="Event Feedback">
         <argument
             android:name="eventId"
             app:argType="string" />
