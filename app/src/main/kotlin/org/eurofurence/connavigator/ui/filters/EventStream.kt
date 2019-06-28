@@ -4,6 +4,7 @@ package org.eurofurence.connavigator.ui.filters
 
 import io.reactivex.Flowable
 import io.swagger.client.model.EventRecord
+import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.extensions.fullTitle
 import org.joda.time.DateTime
 import org.joda.time.Interval
@@ -79,7 +80,7 @@ fun EventStream.orderDayAndTime(): EventStream =
 /**
  * Filters on starting within [now] and [upcomingTimeInMinutes] minutes from [now].
  */
-fun EventStream.isUpcoming(now: DateTime = DateTime(), upcomingTimeInMinutes: Int = 30): EventStream =
+fun EventStream.isUpcoming(now: DateTime = DatetimeProxy.now(), upcomingTimeInMinutes: Int = 30): EventStream =
         // Compute the interval that is considered as upcoming, reuse it in the filter.
         upcomingInterval().let { interval ->
             // Filter on start time contained in interval.
@@ -99,7 +100,7 @@ fun EventStream.isFavorited(faves: Collection<UUID>): EventStream =
 /**
  * Returns events that are running [now].
  */
-fun EventStream.isCurrent(now: DateTime = DateTime()): EventStream =
+fun EventStream.isCurrent(now: DateTime = DatetimeProxy.now()): EventStream =
         filter {
             Interval(it.startDateTimeUtc.time, it.endDateTimeUtc.time).contains(now)
         }

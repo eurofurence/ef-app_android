@@ -57,7 +57,7 @@
     <string name="settings_debug_schedule_notifications">Schedule notifications for testing</string>
     <string name="settings_debug_schedule_notifications_summary">Schedules a notification in the near future for testing instead of actual event time</string>
 
-    <string name="settings_show_irrelevant_announcements">Show irrelevant announcements</string>
+    <string name="settings_show_irrelevant_announcements">Show expired announcements</string>
     <string name="settings_use_days_of_the_week">Use days of the week instead of actual dates.</string>
     <string name="settings_switch_short_and_long_press_for_events">Switch the short press and long press behaviour for events.</string>
     <string name="settings_immediately_close_app_on_back">Immediately close app on back button press</string>
@@ -68,7 +68,7 @@
     <string name="settings_tweak_event_days_so_it_seems_like_its_today">Tweak event days so it seems like it\'s the current date</string>
     <string name="settings_amount_of_days_to_offset_by">The amount of days to offset by. Must be integer</string>
     <string name="settings_amount_of_days_to_offset_event_schedule_by">Amount of days to offset the event schedule by</string>
-    <string name="settings_schedule_events_in_5_minutes">Schedule notifications in 5 minutes instead of event time</string>
+    <string name="settings_schedule_events_in_5_minutes">Schedule event reminders ASAP.</string>
     <!-- Settings end -->
 
     <!-- Action Bar -->

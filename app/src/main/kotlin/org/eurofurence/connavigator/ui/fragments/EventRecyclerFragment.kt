@@ -26,6 +26,7 @@ import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.FilterChain
 import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
+import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.ListAutoAdapter
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.compatAppearance
@@ -97,7 +98,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                     (before.firstOrNull()?.start?.equals(start) != true) to start
                 } into { (visible, start) ->
                     if (visible) {
-                        val now = now() // .plusDays(48) // HONN!
+                        val now = DatetimeProxy.now()
                         val hours = Hours.hoursBetween(now, start).hours
                         val minutes = Minutes.minutesBetween(now, start).minutes
                         text = when {

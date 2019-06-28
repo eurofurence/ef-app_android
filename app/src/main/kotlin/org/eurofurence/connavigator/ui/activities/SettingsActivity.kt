@@ -1,18 +1,18 @@
 package org.eurofurence.connavigator.ui.activities
 
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import android.text.InputType
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AppPreferences
-import org.eurofurence.connavigator.pref.BackgroundPreferences
 import org.eurofurence.connavigator.pref.DebugPreferences
+import org.eurofurence.connavigator.util.DatetimeProxy
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.appcompat.v7.toolbar
@@ -27,6 +27,12 @@ class SettingsActivity : AppCompatActivity(), AnkoLogger {
 }
 
 class SettingsUi : AnkoComponent<SettingsActivity> {
+    private fun updateTime() {
+        timeText.text = DatetimeProxy.now().toString()
+    }
+
+    lateinit var timeText: TextView
+
     override fun createView(ui: AnkoContext<SettingsActivity>) = with(ui) {
         scrollView {
             verticalLayout {
@@ -58,12 +64,6 @@ class SettingsUi : AnkoComponent<SettingsActivity> {
                         textResource = R.string.settings_switch_short_and_long_press_for_events
                         isChecked = AppPreferences.dialogOnEventPress
                         setOnCheckedChangeListener { _, b -> AppPreferences.dialogOnEventPress = b }
-                    }
-
-                    checkBox {
-                        textResource = R.string.settings_immediately_close_app_on_back
-                        isChecked = BackgroundPreferences.closeAppImmediately
-                        setOnCheckedChangeListener { _, b -> BackgroundPreferences.closeAppImmediately = b }
                     }
 
                     linearLayout {
@@ -124,35 +124,58 @@ class SettingsUi : AnkoComponent<SettingsActivity> {
                         padding = dip(15)
                     }
 
-                    checkBox {
-                        textResource = R.string.settings_tweak_event_days_so_it_seems_like_its_today
-                        isChecked = DebugPreferences.debugDates
-                        setOnClickListener { DebugPreferences.debugDates = !DebugPreferences.debugDates }
+                    timeText = textView(DatetimeProxy.now().toString())
+                    linearLayout {
+                        button("-1M") {
+                            setOnClickListener {
+                                DatetimeProxy.addMinutes(-1)
+                                updateTime()
+                            }
+                        }
+                        button("-1H") {
+                            setOnClickListener {
+                                DatetimeProxy.addHours(-1)
+                                updateTime()
+                            }
+                        }
+                        button("-1D") {
+                            setOnClickListener {
+                                DatetimeProxy.addDays(-1)
+                                updateTime()
+                            }
+                        }
+                    }
+                    linearLayout {
+                        button("RESET") {
+                            setOnClickListener {
+                                DatetimeProxy.reset()
+                                updateTime()
+                            }
+                        }
                     }
 
                     linearLayout {
-                        weightSum = 10F
-
-                        editText {
-                            hintResource = R.string.settings_amount_of_days_to_offset_by
-                            setText(DebugPreferences.eventDateOffset.toString(), TextView.BufferType.EDITABLE)
-                            textWatcher {
-                                afterTextChanged { text ->
-                                    if (text!!.isNotEmpty()) DebugPreferences.eventDateOffset = text.toString().toInt()
-                                }
+                        button("+1M") {
+                            setOnClickListener {
+                                DatetimeProxy.addMinutes(1)
+                                updateTime()
                             }
-                            inputType = InputType.TYPE_CLASS_NUMBER
-                        }.lparams(dip(0), wrapContent) {
-                            weight = 2F
                         }
-
-                        textView("Amount of days to offset the event schedule by") {
-                            textResource = R.string.settings_amount_of_days_to_offset_event_schedule_by
-                            textColor = ContextCompat.getColor(ctx, R.color.textBlack)
-                        }.lparams(dip(0), wrapContent) {
-                            weight = 8F
+                        button("+1H") {
+                            setOnClickListener {
+                                DatetimeProxy.addHours(1)
+                                updateTime()
+                            }
+                        }
+                        button("+1D") {
+                            setOnClickListener {
+                                DatetimeProxy.addDays(1)
+                                updateTime()
+                            }
                         }
                     }
+
+
 
                     checkBox {
                         textResource = R.string.settings_schedule_events_in_5_minutes
