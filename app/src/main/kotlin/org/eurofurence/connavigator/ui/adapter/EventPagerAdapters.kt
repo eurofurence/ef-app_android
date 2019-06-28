@@ -15,6 +15,7 @@ infix fun Date.sameDayAs(other: Date) =
         time / (24 * 60 * 60 * 1000) == other.time / (24 * 60 * 60 * 1000)
 
 class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+    private val elements = hashMapOf<Int, EventRecyclerFragment>()
 
     companion object {
         fun indexOfToday(db: Db) =
@@ -33,8 +34,10 @@ class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fragm
 
 
     override fun getItem(position: Int): Fragment? {
-        return EventRecyclerFragment().withArguments(
-                FilterOnDay(days[position].id) then OrderTime())
+        return elements.getOrPut(position) {
+            EventRecyclerFragment().withArguments(
+                    FilterOnDay(days[position].id) then OrderTime())
+        }
     }
 
     override fun getCount(): Int {
@@ -45,7 +48,6 @@ class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fragm
 }
 
 class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
-
     override fun getItem(position: Int): Fragment {
         return EventRecyclerFragment().withArguments(
                 FilterInRoom(rooms[position].id) then OrderTime(),

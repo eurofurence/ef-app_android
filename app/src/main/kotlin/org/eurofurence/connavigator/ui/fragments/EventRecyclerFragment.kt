@@ -1,7 +1,9 @@
 package org.eurofurence.connavigator.ui.fragments
 
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -14,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintSet.PARENT_ID
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.joanzapata.iconify.widget.IconTextView
@@ -28,11 +31,9 @@ import org.eurofurence.connavigator.database.glyphsFor
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
-import org.eurofurence.connavigator.ui.filters.FilterChain
-import org.eurofurence.connavigator.ui.filters.isHappening
-import org.eurofurence.connavigator.ui.filters.isUpcoming
-import org.eurofurence.connavigator.ui.filters.start
+import org.eurofurence.connavigator.ui.filters.*
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
+import org.eurofurence.connavigator.util.ListAutoAdapter
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.*
 import org.jetbrains.anko.*
@@ -41,8 +42,9 @@ import org.jetbrains.anko.constraint.layout.applyConstraintSet
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.dip
-import org.joda.time.DateTime
-import org.joda.time.Minutes
+import org.jetbrains.anko.support.v4.runOnUiThread
+import org.jetbrains.anko.support.v4.uiThread
+import org.joda.time.*
 
 
 /**
@@ -50,7 +52,7 @@ import org.joda.time.Minutes
  * TODO: Refactor the everliving fuck out of this shitty software
  */
 class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
-    private val results = ArrayList<EventRecord>()
+    //private val results = ArrayList<EventRecord>()
 
     override val db by lazyLocateDb()
 
@@ -85,151 +87,187 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
         }
     }
 
-    // Event view holder finds and memorizes the views in an event card
-    inner class EventViewHolder(val ui: SingleEventUi, view: View) : RecyclerView.ViewHolder(view) {
-        /**
-         * Assigns the to glyphs via the text.
-         */
-        fun assignGlyph(to: String?) {
-            if (ui.glyphs.text?.toString() == to)
-                return
-            ui.glyphs.text = to
-        }
+    val autoAdapter = ListAutoAdapter<EventRecord>({ id }) {
+        verticalLayout {
+            // Set background to white.
+            backgroundColorResource = R.color.backgroundGrey
 
-        fun assignGlyphOverflow(to: String?) {
-            if (ui.glyphs2.text?.toString() == to)
-                return
-            ui.glyphs2.text = to
-        }
+            // Set own layout params.
+            lparams(
+                    width = matchParent,
+                    height = wrapContent)
 
-        fun assignGlyphsFrom(glyphs: List<String>) {
-            when (glyphs.size) {
-                0 -> {
-                    assignGlyph(null)
-                    assignGlyphOverflow(null)
+            // The group header, if top element.
+            textView {
+                setPadding(dip(5), dip(5), dip(5), dip(5))
+                textColorResource = R.color.mutedText
+                backgroundColorResource = R.color.backgroundGrey
+
+                fromAll { before, _ ->
+                    (before.firstOrNull()?.start?.equals(start) != true) to start
+                } into { (visible, start) ->
+                    if (visible) {
+                        val now = now() // .plusDays(48) // HONN!
+                        val hours = Hours.hoursBetween(now, start).hours
+                        val minutes = Minutes.minutesBetween(now, start).minutes
+                        text = when {
+                            hours < -4 -> "At ${start.toString("HH:mm")}"
+                            hours in -4..1 -> "Started ${-hours} hours ago"
+                            minutes in -59..-1 -> "Started in the last hour"
+                            minutes in 1..59 -> "Starting in $minutes minutes"
+                            hours in 1..12 -> "Starting in $hours hours"
+                            hours > 12 -> "At ${start.toString("HH:mm")}"
+                            else -> "Now"
+                        }
+                        visibility = View.VISIBLE
+                    } else {
+                        visibility = View.GONE
+                    }
                 }
-                1 -> {
-                    assignGlyph(glyphs[0])
-                    assignGlyphOverflow(null)
-                }
-                2 -> {
-                    assignGlyph("${glyphs[0]} ${glyphs[1]}")
-                    assignGlyphOverflow(null)
-                }
-                3 -> {
-                    assignGlyph("${glyphs[0]} ${glyphs[1]}")
-                    assignGlyphOverflow(glyphs[2])
-                }
-                else -> {
-                    assignGlyph("${glyphs[0]} ${glyphs[1]}")
-                    assignGlyphOverflow("${glyphs[2]} ${glyphs[3]}")
-                }
-            }
-        }
-    }
+            }.lparams(
+                    width = matchParent,
+                    height = wrapContent)
 
-    inner class DataAdapter : RecyclerView.Adapter<EventViewHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, pos: Int): EventViewHolder {
-            // Get UI, create it's views.
-            val ui = SingleEventUi()
-            val view = UI { ui.createView(this) }.view
+            // The title of the event.
+            fontAwesomeView {
+                setPadding(dip(15), dip(15), dip(15), dip(5))
+                backgroundColorResource = R.color.cardview_light_background
+                compatAppearance = android.R.style.TextAppearance_Medium
 
-            // Return event view holder on that UI.
-            return EventViewHolder(ui, view)
-        }
-
-        override fun getItemCount() =
-                results.size
-
-        override fun onBindViewHolder(holder: EventViewHolder, pos: Int) {
-
-            // Get the event for the position
-            val event = results[pos]
-
-            // Reveal separator if different start time.
-            holder.ui.separator.visibility = if (pos > 0 && results[pos - 1].start != event.start)
-                View.VISIBLE
-            else
-                View.GONE
-
-            // Detect some flags for glyph computation.
-            val isFavorite = event.id in faves
-            val isDeviatingFromConBook = event.isDeviatingFromConBook
-
-            // Assign glyphs.
-            holder.assignGlyphsFrom(glyphsFor(event) + listOfNotNull(
-                    "{fa-heart}".takeIf { isFavorite },
-                    "{fa-pencil}".takeIf { isDeviatingFromConBook }))
-
-
-            // Override glyphs for day names if necessary.
-            if (daysInsteadOfGlyphs)
-                holder.assignGlyphOverflow(event.start.dayOfWeek().asShortText)
-
-            // Set title.
-            holder.ui.title.text = event.fullTitle()
-
-            // Disambiguate on start time.
-            when {
-                // Event is happening right now.
-                event.isHappening -> {
-                    holder.ui.start.textResource = R.string.misc_now
-                }
-
-                // It's already happened.
-                event.start.isBeforeNow -> {
-                    holder.ui.start.textResource = R.string.misc_done
-                }
-
-                // It's about to happen.
-                event.isUpcoming -> {
-                    // Compute how many minutes are left.
-                    val countdown = Minutes.minutesBetween(DateTime.now(), event.start).minutes
-
-                    // Assign countdown.
-                    holder.ui.start.text = getString(R.string.event_countdown_minutes, countdown)
-                }
-                else -> {
-                    // Nothing special about the event, format time only.
-                    holder.ui.start.text = event.startTimeString()
+                // Bind from event's title.
+                from { isDeviatingFromConBook to title } into { (deviating, title) ->
+                    text = if (deviating) "{fa-pencil} $title" else title
                 }
             }
 
-            // Simply assign end time.
-            holder.ui.end.text = "{fa-caret-right} ${event.endTimeString()}"
+            // The location of the event.
+            textView {
+                setPadding(dip(15), dip(5), dip(15), dip(15))
+                backgroundColorResource = R.color.cardview_light_background
+                isSingleLine = true
 
-            // Assign room.
-            val name = db.rooms[event.conferenceRoomId]?.name
-            if (name != null)
-                holder.ui.room.text = name
-            else
-                holder.ui.room.textResource = R.string.misc_unknown
+                // Bind from room or use default.
+                from { db.rooms[conferenceRoomId]?.name } into { content = it ?: R.string.misc_unknown }
 
+            }.lparams(
+                    width = matchParent,
+                    height = wrapContent) {
+                bottomMargin = 1
+            }
 
-            // Load image.
-            val image = db.images[event.bannerImageId]
-            imageService.load(image, holder.ui.image)
+            // Horizontal stack of times and extra info.
+            linearLayout {
 
-            // Assign the on-click action.
-            holder.itemView.setOnClickListener {
-                debug { "Short event click" }
-                val action = when (findNavController().currentDestination?.id) {
-                    R.id.fragmentViewHome -> FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewEvent(event.id.toString())
-                    R.id.eventListFragment -> EventListFragmentDirections.actionFragmentViewEventsToFragmentViewEvent(event.id.toString())
-                    else -> null
+                // Start time text.
+                textView {
+                    setPadding(dip(15), dip(10), dip(10), dip(10))
+                    backgroundColorResource = R.color.cardview_light_background
+                    isSingleLine = true
+                    gravity = Gravity.CENTER
+
+                    // TODO: special formats, happening now etc.
+                    from { startTimeString() } into { text = it }
+                }.lparams(
+                        width = dip(55),
+                        height = wrapContent)
+
+                // Separator block
+                textView {
+                    verticalPadding = dip(10)
+                    backgroundColorResource = R.color.cardview_light_background
+                    gravity = Gravity.CENTER
+                    text = "⋯"
+                }.lparams(
+                        width = wrapContent,
+                        height = matchParent)
+
+                // End time text.
+                textView {
+                    padding = dip(10)
+                    backgroundColorResource = R.color.cardview_light_background
+                    isSingleLine = true
+                    gravity = Gravity.CENTER
+
+                    from { endTimeString() } into { text = it }
+                }.lparams(
+                        width = dip(50),
+                        height = matchParent) {
+                    rightMargin = 1
                 }
 
-                action?.apply {
-                    findNavController().navigate(this)
+                // Display day if in a view that has no day tab.
+                fontAwesomeView {
+                    padding = dip(10)
+                    backgroundColorResource = R.color.cardview_light_background
+                    isSingleLine = true
+                    gravity = Gravity.CENTER
+
+                    from { daysInsteadOfGlyphs to start.dayOfWeek().asShortText } into { (visible, day) ->
+                        visibility = if (visible) View.VISIBLE else View.GONE
+                        text = day
+                    }
+                }.lparams(
+                        width = wrapContent,
+                        height = matchParent) {
+                    rightMargin = 1
+                }
+
+                fontAwesomeView {
+                    padding = dip(10)
+                    backgroundColorResource = R.color.cardview_light_background
+                    isSingleLine = true
+                    gravity = Gravity.CENTER
+                    text = "{fa-heart}"
+
+                    from { id in faves } into {
+                        visibility = if (it) View.VISIBLE else View.GONE
+                    }
+                }.lparams(
+                        width = wrapContent,
+                        height = matchParent) {
+                    rightMargin = 1
+                }
+
+                fontAwesomeView {
+                    setPadding(dip(10), dip(10), dip(15), dip(10))
+                    backgroundColorResource = R.color.cardview_light_background
+                    isSingleLine = true
+                    gravity = Gravity.CENTER_VERTICAL
+
+                    // Bind from glyphs plus some extra glyphs.
+                    from { glyphsFor(this) } into { text = it.joinToString(" ") }
+                }.lparams(
+                        width = matchParent,
+                        height = matchParent)
+            }.lparams(
+                    width = matchParent,
+                    height = wrapContent)//dip(40))
+
+            // Add short click listener.
+            from { id.toString() } into { id ->
+                isClickable = true
+                setOnClickListener {
+                    val action = when (findNavController().currentDestination?.id) {
+                        R.id.fragmentViewHome -> FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewEvent(id)
+                        R.id.eventListFragment -> EventListFragmentDirections.actionFragmentViewEventsToFragmentViewEvent(id)
+                        else -> null
+                    }
+
+                    action?.apply {
+                        findNavController().navigate(this)
+                    }
                 }
             }
 
-            // Assign the on-long-click action.
-            holder.itemView.setOnLongClickListener {
-                context?.apply {
-                    eventDialog(this, event, db)
+            // Add long click listener.
+            from { this } into { record ->
+                isLongClickable = true
+                setOnLongClickListener {
+                    context?.apply {
+                        eventDialog(this, record, db)
+                    }
+                    true
                 }
-                true
             }
         }
     }
@@ -247,7 +285,6 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             mainList = it.getBoolean("mainList")
             daysInsteadOfGlyphs = it.getBoolean("daysInsteadOfGlyphs")
         }
-
 
         info { "Filling in view" }
 
@@ -272,12 +309,12 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
         ui.title.text = title
 
         ui.title.visibility = if (title.isNotEmpty()) View.VISIBLE else View.GONE
-        ui.bigLayout.visibility = if (results.any()) View.VISIBLE else View.GONE
+        ui.bigLayout.visibility = if (autoAdapter.list.isNotEmpty()) View.VISIBLE else View.GONE
     }
 
     private fun configureList() {
         info { "Configuring recycler" }
-        ui.eventList.adapter = DataAdapter()
+        ui.eventList.adapter = autoAdapter
         ui.eventList.layoutManager = if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
         ui.eventList.itemAnimator = DefaultItemAnimator()
 
@@ -287,300 +324,53 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
 
         // Add top padding only if in main list.
-        ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            val padding by lazy {
-                val metrics = context!!.resources.displayMetrics
-                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
-            }
-
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                val itemPosition = parent.getChildAdapterPosition(view)
-                if (itemPosition == RecyclerView.NO_POSITION) {
-                    return
-                }
-
-                if (itemPosition == 0 && mainList) {
-                    outRect.top = padding
-                }
-
-                val adapter = parent.adapter
-                if (adapter != null && itemPosition == adapter.itemCount - 1) {
-                    outRect.bottom = padding
-                }
-            }
-        })
+        ui.eventList.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
+//        ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+//            val padding by lazy {
+//                val metrics = context!!.resources.displayMetrics
+//                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
+//            }
+//
+//            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+//                val itemPosition = parent.getChildAdapterPosition(view)
+//                if (itemPosition == RecyclerView.NO_POSITION) {
+//                    return
+//                }
+//
+//                if (itemPosition == 0 && mainList) {
+//                    outRect.top = padding
+//                }
+//
+//                val adapter = parent.adapter
+//                if (adapter != null && itemPosition == adapter.itemCount - 1) {
+//                    outRect.bottom = padding
+//                }
+//            }
+//        })
     }
 
 
     fun dataUpdated() {
-        info { "Data was updated, redoing UI" }
         task {
-            info { "${System.currentTimeMillis()} Refiltering data" }
+            info { "Updating UI from data change" }
 
-
-            // Resolve filter results into list.
             filters.resolve(db)
-        } successUi { resolved ->
-            info { "${System.currentTimeMillis()} Revealing new data" }
+        } successUi {
+            info { "Data retrieved, presenting" }
 
-            // Clear existing results and add new.
-            results.clear()
-            resolved.forEach {
-                results.add(it)
+            autoAdapter.list.clear()
+            it.forEach { item ->
+                autoAdapter.list.add(item)
             }
+            autoAdapter.notifyDataSetChanged()
 
-            // Notify change.
-            ui.eventList.adapter?.notifyDataSetChanged()
+            info { "Updating title" }
 
             configureTitle()
         } failUi {
-            info { "${System.currentTimeMillis()} Failed to get data" }
+            info { "Data failed, updating title" }
+
             configureTitle()
-        }
-    }
-}
-
-//class SingleEventUi : AnkoComponent<Fragment> {
-//    lateinit var separator: View
-//    lateinit var image: ImageView
-//    lateinit var title: TextView
-//    lateinit var glyphs: IconTextView
-//    lateinit var glyphs2: IconTextView
-//    lateinit var start: TextView
-//    lateinit var end: IconTextView
-//    lateinit var room: TextView
-//
-//    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-//        constraintLayout {
-//            separator = view {
-//                id = R.id.se_separator
-//                setBackgroundResource(R.drawable.wave_separator)
-//
-//            }.lparams(wrapContent, dip(10)) {
-//                setMargins(8, 8, 8, 8)
-//            }
-//
-//            start = textView {
-//                id = R.id.se_start
-//                compatAppearance = android.R.style.TextAppearance_Medium
-//                singleLine = true
-//            }.lparams(dip(50), wrapContent) {
-//                setMargins(8, 8, 8, 8)
-//            }
-//
-//            glyphs = fontAwesomeView {
-//                id = R.id.se_glyphs
-//                gravity = Gravity.END
-//                compatAppearance = android.R.style.TextAppearance_Small
-//                singleLine = true
-//            }.lparams(dip(30), wrapContent) {
-//                setMargins(8, 8, 8, 8)
-//            }
-//
-//            title = textView {
-//                id = R.id.se_title
-//                compatAppearance = android.R.style.TextAppearance_Medium
-//                singleLine = false
-//                maxLines = 3
-//            }.lparams(width = matchParent) {
-//                setMargins(8, 8, 8, 8)
-//            }
-//
-//            end = fontAwesomeView {
-//                id = R.id.se_end
-//                gravity = Gravity.END
-//                compatAppearance = android.R.style.TextAppearance_Small
-//                singleLine = true
-//            }.lparams(dip(50), wrapContent) {
-//                setMargins(8, 8, 8, 8)
-//            }
-//
-//            glyphs2 = fontAwesomeView {
-//                id = R.id.se_glyphs2
-//                gravity = Gravity.END
-//                compatAppearance = android.R.style.TextAppearance_Small
-//                singleLine = true
-//            }.lparams(dip(30), wrapContent) {
-//                setMargins(8, 8, 8, 8)
-//            }
-//
-//            room = textView {
-//                id = R.id.se_room
-//                compatAppearance = android.R.style.TextAppearance_Small
-//                singleLine = false
-//                maxLines = 3
-//            }
-//
-//            image = imageView {
-//                id = R.id.se_image
-//                scaleType = ImageView.ScaleType.FIT_CENTER
-//            }.lparams(0, wrapContent) {
-//                setMargins(0, 8, 0, 0)
-//            }
-//
-//            applyConstraintSet {
-//                separator {
-//                    connect(
-//                            TOP to TOP of PARENT_ID,
-//                            START to START of PARENT_ID,
-//                            END to END of PARENT_ID)
-//
-//                }
-//
-//                start {
-//                    connect(BASELINE to BASELINE of title,
-//                            START to START of PARENT_ID)
-//                }
-//
-//                end {
-//                    connect(BASELINE to BASELINE of room,
-//                            START to START of PARENT_ID)
-//                }
-//
-//                glyphs {
-//                    connect(
-//                            BASELINE to BASELINE of title,
-//                            START to END of start)
-//                }
-//
-//                glyphs2 {
-//                    connect(
-//                            BASELINE to BASELINE of room,
-//                            START to END of end)
-//                }
-//
-//                title {
-//                    connect(
-//                            TOP to BOTTOM of separator,
-//                            END to END of PARENT_ID,
-//                            START to END of glyphs)
-//                }
-//
-//                room {
-//                    connect(
-//                            END to END of PARENT_ID,
-//                            TOP to BOTTOM of title,
-//                            START to END of glyphs2
-//                    )
-//                }
-//
-//                image {
-//                    connect(
-//                            START to START of PARENT_ID,
-//                            END to END of PARENT_ID,
-//                            TOP to BOTTOM of room
-//                    )
-//                }
-//
-//            }
-//        }
-//    }
-//}
-
-class SingleEventUi : AnkoComponent<Fragment> {
-    lateinit var separator: View
-    lateinit var image: ImageView
-    lateinit var title: TextView
-    lateinit var glyphs: IconTextView
-    lateinit var glyphs2: IconTextView
-    lateinit var start: TextView
-    lateinit var end: IconTextView
-    lateinit var room: TextView
-
-    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        verticalLayout {
-            isClickable = true
-            isLongClickable = true
-
-            lparams(matchParent, wrapContent)
-            backgroundResource = R.color.cardview_light_background
-
-            separator = linearLayout {
-                id = R.id.eventSeparator
-                lparams(matchParent, wrapContent)
-                verticalPadding = dip(10)
-
-                linearLayout {
-                    lparams(matchParent, matchParent)
-                    setBackgroundResource(R.drawable.wave_separator)
-                }
-            }
-
-            verticalLayout {
-                setPadding(dip(15), dip(3), dip(15), dip(3))
-                id = R.id.layout
-
-
-                tableLayout {
-                    setColumnStretchable(2, true)
-                    setColumnShrinkable(2, true)
-                    horizontalPadding = dip(3)
-
-                    lparams(matchParent, wrapContent)
-
-
-                    tableRow {
-                        start = textView {
-                            id = R.id.eventStartTime
-                            minMaxWidth = fw(15.percent())
-                            gravity = Gravity.CENTER_VERTICAL
-                            compatAppearance = android.R.style.TextAppearance_Medium
-                            singleLine = true
-                        }
-
-                        glyphs = fontAwesomeView {
-                            lparams(matchParent, matchParent)
-                            id = R.id.eventGlyph
-                            minMaxWidth = fw(15.percent())
-                            horizontalPadding = dip(5)
-                            gravity = Gravity.END or Gravity.CENTER_VERTICAL
-                            compatAppearance = android.R.style.TextAppearance_Small
-                            singleLine = true
-                        }
-
-                        title = textView {
-                            id = R.id.eventTitle
-                            gravity = Gravity.CENTER_VERTICAL
-                            compatAppearance = android.R.style.TextAppearance_Medium
-                            singleLine = false
-                            maxLines = 3
-                        }.lparams(width = matchParent)
-                    }
-
-                    tableRow {
-                        end = fontAwesomeView {
-                            id = R.id.eventEndTime
-                            minMaxWidth = fw(15.percent())
-                            gravity = Gravity.END or Gravity.CENTER_VERTICAL
-                            compatAppearance = android.R.style.TextAppearance_Small
-                            singleLine = true
-                        }
-
-                        glyphs2 = fontAwesomeView {
-                            lparams(matchParent, matchParent)
-                            id = R.id.eventGlyphOverflow
-                            minMaxWidth = fw(15.percent())
-                            horizontalPadding = dip(5)
-                            gravity = Gravity.END or Gravity.CENTER_VERTICAL
-                            compatAppearance = android.R.style.TextAppearance_Small
-                            singleLine = true
-                        }
-
-                        room = textView {
-                            id = R.id.eventRoom
-                            gravity = Gravity.CENTER_VERTICAL
-                            compatAppearance = android.R.style.TextAppearance_Small
-                            singleLine = false
-                            maxLines = 3
-                        }
-                    }
-                }
-
-                image = imageView {
-                    scaleType = ImageView.ScaleType.FIT_CENTER
-                    id = R.id.eventImage
-                }.lparams(matchParent, wrapContent)
-            }
         }
     }
 }

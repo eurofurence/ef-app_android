@@ -1,6 +1,8 @@
 package org.eurofurence.connavigator.util.extensions
 
 import org.joda.time.DateTime
+import org.joda.time.Hours
+import org.joda.time.Minutes
 import org.ocpsoft.prettytime.PrettyTime
 import java.util.*
 
