@@ -92,7 +92,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             textView {
                 setPadding(dip(5), dip(5), dip(5), dip(5))
                 textColorResource = R.color.mutedText
-                backgroundColorResource = R.color.backgroundGrey
+                backgroundColorResource = if(mainList) R.color.backgroundGrey else R.color.cardview_light_background
 
                 fromAll { before, _ ->
                     (before.firstOrNull()?.start?.equals(start) != true) to start
