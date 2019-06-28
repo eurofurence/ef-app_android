@@ -143,7 +143,7 @@ class HomeUi : AnkoComponent<Fragment> {
 
                 lparams(matchParent, matchParent)
 
-                imageView(R.drawable.banner_2018) {
+                imageView(R.drawable.banner_2019) {
                     adjustViewBounds = true
                     setBackgroundColor(Color.WHITE)
                     ViewCompat.setElevation(this, 15f)

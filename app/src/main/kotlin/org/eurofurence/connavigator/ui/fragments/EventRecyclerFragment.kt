@@ -195,16 +195,16 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                     rightMargin = 1
                 }
 
-
+                // Display day if in a view that has no day tab.
                 fontAwesomeView {
                     padding = dip(10)
                     backgroundColorResource = R.color.cardview_light_background
                     isSingleLine = true
                     gravity = Gravity.CENTER
-                    text = "{fa-heart}"
 
-                    from { id in faves } into {
-                        visibility = if (it) View.VISIBLE else View.GONE
+                    from { daysInsteadOfGlyphs to start.dayOfWeek().asShortText } into { (visible, day) ->
+                        visibility = if (visible) View.VISIBLE else View.GONE
+                        text = day
                     }
                 }.lparams(
                         width = wrapContent,
@@ -217,10 +217,10 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                     backgroundColorResource = R.color.cardview_light_background
                     isSingleLine = true
                     gravity = Gravity.CENTER
+                    text = "{fa-heart}"
 
-                    from { daysInsteadOfGlyphs to start.dayOfWeek().asShortText } into { (visible, day) ->
-                        visibility = if (visible) View.VISIBLE else View.GONE
-                        text = day
+                    from { id in faves } into {
+                        visibility = if (it) View.VISIBLE else View.GONE
                     }
                 }.lparams(
                         width = wrapContent,
