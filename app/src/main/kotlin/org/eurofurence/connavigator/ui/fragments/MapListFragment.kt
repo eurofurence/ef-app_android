@@ -31,7 +31,7 @@ class MapListFragment : Fragment(), HasDb {
                 browseableMaps[position].description
 
         override fun getItem(position: Int) =
-                FragmentMap().withArguments(browseableMaps[position])
+                MapFragment().withArguments(browseableMaps[position])
 
 
         override fun getCount() =

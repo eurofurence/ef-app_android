@@ -17,7 +17,7 @@ import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.ui.filters.start
-import org.eurofurence.connavigator.ui.fragments.FragmentViewHomeDirections
+import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.now
 import org.eurofurence.connavigator.util.extensions.startTimeString
@@ -87,13 +87,13 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
         val notificationIntent = Intent(context, NotificationPublisher::class.java)
         val notificationFactory = NotificationFactory(context)
 
-        val action = FragmentViewHomeDirections
+        val action = HomeFragmentDirections
                 .actionFragmentViewHomeToFragmentViewEvent(event.id.toString())
 
         val pendingIntent = NavDeepLinkBuilder(context)
                 .setComponentName(NavActivity::class.java)
                 .setGraph(R.navigation.nav_graph)
-                .setDestination(R.id.fragmentViewEvent)
+                .setDestination(R.id.navEventItem)
                 .setArguments(action.arguments)
                 .createPendingIntent()
 

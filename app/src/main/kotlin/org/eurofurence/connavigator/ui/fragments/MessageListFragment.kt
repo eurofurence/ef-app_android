@@ -69,7 +69,7 @@ class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
 
             holder.layout.setOnClickListener {
                 val action = FragmentViewMessageListDirections
-                        .actionFragmentViewMessageListToFragmentViewMessageItem2(message.id.toString())
+                        .actionFragmentViewMessageListToFragmentViewMessageItem(message.id.toString())
                 findNavController().navigate(action)
             }
         }

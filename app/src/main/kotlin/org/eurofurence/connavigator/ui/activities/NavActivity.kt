@@ -32,7 +32,7 @@ import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.ui.fragments.FragmentViewHomeDirections
+import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.objects
@@ -155,7 +155,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
     private fun updateLoginMenuItem() {
         // Find login item, assign new text.
-        ui.nav.menu.findItem(R.id.loginActivity)?.let {
+        ui.nav.menu.findItem(R.id.navLogin)?.let {
             if (AuthPreferences.isLoggedIn())
                 it.title = "Login details"
             else
@@ -168,14 +168,14 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
         ui.nav.menu.apply {
             // Main
-            this.setFAIcon(this@NavActivity, R.id.fragmentViewHome, R.string.fa_home_solid)
-            this.setFAIcon(this@NavActivity, R.id.infoListFragment, R.string.fa_info_solid)
-            this.setFAIcon(this@NavActivity, R.id.eventListFragment, R.string.fa_calendar)
-            this.setFAIcon(this@NavActivity, R.id.dealerListFragment, R.string.fa_shopping_cart_solid)
-            this.setFAIcon(this@NavActivity, R.id.mapListFragment, R.string.fa_map)
+            this.setFAIcon(this@NavActivity, R.id.navHome, R.string.fa_home_solid)
+            this.setFAIcon(this@NavActivity, R.id.navInfoList, R.string.fa_info_solid)
+            this.setFAIcon(this@NavActivity, R.id.navEventList, R.string.fa_calendar)
+            this.setFAIcon(this@NavActivity, R.id.navDealerList, R.string.fa_shopping_cart_solid)
+            this.setFAIcon(this@NavActivity, R.id.navMapList, R.string.fa_map)
 
             // Personal
-            this.setFAIcon(this@NavActivity, R.id.loginActivity, R.string.fa_user_circle)
+            this.setFAIcon(this@NavActivity, R.id.navLogin, R.string.fa_user_circle)
             this.setFAIcon(this@NavActivity, R.id.navMessages, R.string.fa_envelope)
             this.setFAIcon(this@NavActivity, R.id.navFursuitGames, R.string.fa_paw_solid)
             this.setFAIcon(this@NavActivity, R.id.navAdditionalServices, R.string.fa_book_open_solid)
@@ -187,8 +187,8 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
             // App Management
             this.setFAIcon(this@NavActivity, R.id.navDevReload, R.string.fa_cloud_download_alt_solid)
             this.setFAIcon(this@NavActivity, R.id.navDevClear, R.string.fa_trash_solid)
-            this.setFAIcon(this@NavActivity, R.id.activitySettings, R.string.fa_cog_solid)
-            this.setFAIcon(this@NavActivity, R.id.fragmentViewAbout, R.string.fa_hands_helping_solid)
+            this.setFAIcon(this@NavActivity, R.id.navSettings, R.string.fa_cog_solid)
+            this.setFAIcon(this@NavActivity, R.id.navAbout, R.string.fa_hands_helping_solid)
         }
     }
 
@@ -228,10 +228,10 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
     private fun navigateToMessages(): Boolean {
         val action = if (AuthPreferences.isLoggedIn()) {
-            FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewMessageList()
+            HomeFragmentDirections.actionFragmentViewHomeToFragmentViewMessageList()
         } else {
             longToast("You are not logged in yet!")
-            FragmentViewHomeDirections.actionFragmentViewHomeToLoginActivity()
+            HomeFragmentDirections.actionFragmentViewHomeToLoginActivity()
         }
 
         navController.navigate(action)

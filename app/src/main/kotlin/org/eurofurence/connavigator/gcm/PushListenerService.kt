@@ -10,7 +10,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.dispatchUpdate
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.activities.NavActivity
-import org.eurofurence.connavigator.ui.fragments.FragmentViewHomeDirections
+import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
@@ -68,19 +68,19 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         get() = NavDeepLinkBuilder(this)
                 .setComponentName(NavActivity::class.java)
                 .setGraph(R.navigation.nav_graph)
-                .setDestination(R.id.fragmentViewHome)
+                .setDestination(R.id.navHome)
                 .createPendingIntent()
 
     private fun createNotification(message: RemoteMessage) {
         info { "Received request to create generic notification" }
 
-        val action = FragmentViewHomeDirections
+        val action = HomeFragmentDirections
                 .actionFragmentViewHomeToFragmentViewMessageItem(message.relatedId!!)
 
         val intent = NavDeepLinkBuilder(this)
                 .setComponentName(NavActivity::class.java)
                 .setGraph(R.navigation.nav_graph)
-                .setDestination(R.id.fragmentViewMessageItem)
+                .setDestination(R.id.navMessageItem)
                 .setArguments(action.arguments)
                 .createPendingIntent()
 
@@ -99,13 +99,13 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         syncData()
 
         val intent = try {
-            val action = FragmentViewHomeDirections
+            val action = HomeFragmentDirections
                     .actionFragmentViewHomeToFragmentViewAnnouncement(message.relatedId!!)
 
             NavDeepLinkBuilder(this)
                     .setComponentName(NavActivity::class.java)
                     .setGraph(R.navigation.nav_graph)
-                    .setDestination(R.id.fragmentViewAnnouncement)
+                    .setDestination(R.id.navAnnouncementItem)
                     .setArguments(action.arguments)
                     .createPendingIntent()
                     .apply {

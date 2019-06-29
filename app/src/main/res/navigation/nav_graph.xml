@@ -1,72 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentViewHome">
+    app:startDestination="@id/navHome">
 
     <fragment
-        android:id="@+id/fragmentViewHome"
-        android:name="org.eurofurence.connavigator.ui.fragments.FragmentViewHome"
+        android:id="@+id/navHome"
+        android:name="org.eurofurence.connavigator.ui.fragments.HomeFragment"
         android:label="@string/misc_home">
         <deepLink app:uri="eurofurence://home/" />
         <action
             android:id="@+id/action_fragmentViewHome_to_fragmentViewEvent"
-            app:destination="@id/fragmentViewEvent" />
+            app:destination="@id/navEventItem" />
         <action
             android:id="@+id/action_fragmentViewHome_to_fragmentViewMaps"
-            app:destination="@id/mapListFragment" />
+            app:destination="@id/navMapList" />
         <action
             android:id="@+id/action_fragmentViewHome_to_loginActivity"
-            app:destination="@id/loginActivity" />
+            app:destination="@id/navLogin" />
         <action
             android:id="@+id/action_fragmentViewHome_to_fragmentViewMessageList"
-            app:destination="@id/fragmentViewMessageList" />
+            app:destination="@id/navMessageList"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_fragmentViewHome_to_fragmentViewAnnouncement"
-            app:destination="@id/fragmentViewAnnouncement" /><action android:id="@+id/action_fragmentViewHome_to_fragmentViewEvent2" app:destination="@id/fragmentViewEvent"/>
-        <action
-            android:id="@+id/action_fragmentViewHome_self"
-            app:destination="@id/fragmentViewHome" />
+            app:destination="@id/navAnnouncementItem"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_fragmentViewHome_to_fragmentViewMessageItem"
-            app:destination="@id/fragmentViewMessageItem" />
+            app:destination="@id/navMessageItem"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_navHome_to_navEventList"
+            app:destination="@id/navEventList"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_navHome_to_navDealerList"
+            app:destination="@id/navDealerList"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_navHome_to_infoListFragment"
+            app:destination="@id/navInfoList"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_navHome_to_fragmentViewAbout"
+            app:destination="@id/navAbout"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_navHome_to_navMapList"
+            app:destination="@id/navMapList" />
+        <action
+            android:id="@+id/action_navHome_to_navSettings"
+            app:destination="@id/navSettings"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
-    <activity
-        android:id="@+id/navActivity"
-        android:name="org.eurofurence.connavigator.ui.activities.NavActivity"
-        android:label="NavActivity" />
     <fragment
-        android:id="@+id/eventListFragment"
+        android:id="@+id/navEventList"
         android:name="org.eurofurence.connavigator.ui.fragments.EventListFragment"
         android:label="@string/event_list_title">
         <action
             android:id="@+id/action_fragmentViewEvents_to_fragmentViewEvent"
-            app:destination="@id/fragmentViewEvent" />
+            app:destination="@id/navEventItem" />
         <deepLink app:uri="eurofurence://events/" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentViewEvent"
+        android:id="@+id/navEventItem"
         android:name="org.eurofurence.connavigator.ui.fragments.EventItemFragment"
         android:label="@string/event_details_title">
         <argument
             android:name="eventId"
-            app:argType="string" /><deepLink app:uri="eurofurence://events/{eventId}/"/>
+            app:argType="string" />
+        <deepLink app:uri="eurofurence://events/{eventId}/" />
         <action
             android:id="@+id/action_fragmentViewEvent_to_eventFeedbackFragment"
-            app:destination="@id/eventFeedbackFragment" />
+            app:destination="@id/navEventFeedback" />
+        <action
+            android:id="@+id/action_navEventItem_to_navMapList"
+            app:destination="@id/navMapList" />
     </fragment>
     <fragment
-        android:id="@+id/dealerListFragment"
+        android:id="@+id/navDealerList"
         android:name="org.eurofurence.connavigator.ui.fragments.DealerListFragment"
         android:label="@string/dealer_list_title">
         <action
             android:id="@+id/action_fragmentViewDealers_to_fragmentViewDealer"
-            app:destination="@id/dealerItemFragment" />
+            app:destination="@id/navDealerItem" />
         <deepLink app:uri="eurofurence://dealers/" />
     </fragment>
     <fragment
-        android:id="@+id/dealerItemFragment"
+        android:id="@+id/navDealerItem"
         android:name="org.eurofurence.connavigator.ui.fragments.DealerItemFragment"
         android:label="@string/dealer_details_title">
         <argument
@@ -74,73 +120,78 @@
             app:argType="string" />
         <action
             android:id="@+id/action_fragmentViewDealer_to_fragmentViewMaps"
-            app:destination="@id/mapListFragment" /><deepLink app:uri="eurofurence://dealers/{dealerId}/"/>
+            app:destination="@id/navMapList" />
+        <deepLink app:uri="eurofurence://dealers/{dealerId}/" />
     </fragment>
     <fragment
-        android:id="@+id/mapListFragment"
+        android:id="@+id/navMapList"
         android:name="org.eurofurence.connavigator.ui.fragments.MapListFragment"
-        android:label="@string/maps_title" ><deepLink app:uri="eurofurence://maps/"/>
+        android:label="@string/maps_title">
+        <deepLink app:uri="eurofurence://maps/" />
         <action
             android:id="@+id/action_mapListFragment_to_dealerItemFragment"
-            app:destination="@id/dealerItemFragment" />
+            app:destination="@id/navDealerItem" />
     </fragment>
     <fragment
-        android:id="@+id/infoListFragment"
+        android:id="@+id/navInfoList"
         android:name="org.eurofurence.connavigator.ui.fragments.InfoListFragment"
         android:label="@string/info_list_title">
         <action
-            android:id="@+id/action_infoListFragment2_to_infoItemFragment"
-            app:destination="@id/infoItemFragment" /><deepLink app:uri="eurofurence://info/"/>
+            android:id="@+id/action_infoListFragment_to_infoItemFragment"
+            app:destination="@id/navInfoItem" />
+        <deepLink app:uri="eurofurence://info/" />
     </fragment>
     <fragment
-        android:id="@+id/infoItemFragment"
+        android:id="@+id/navInfoItem"
         android:name="org.eurofurence.connavigator.ui.fragments.InfoItemFragment"
-        android:label="@string/info_item_title" >
+        android:label="@string/info_item_title">
         <argument
             android:name="itemId"
-            app:argType="string" /><deepLink app:uri="eurofurence://info/{itemId}/"/>
+            app:argType="string" />
+        <deepLink app:uri="eurofurence://info/{itemId}/" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentViewAbout"
+        android:id="@+id/navAbout"
         android:name="org.eurofurence.connavigator.ui.fragments.FragmentViewAbout"
         android:label="@string/about" />
     <activity
-        android:id="@+id/activitySettings"
+        android:id="@+id/navSettings"
         android:name="org.eurofurence.connavigator.ui.activities.SettingsActivity"
         android:label="@string/settings" />
     <activity
-        android:id="@+id/loginActivity"
+        android:id="@+id/navLogin"
         android:name="org.eurofurence.connavigator.ui.fragments.LoginActivity"
         android:label="@string/login" />
     <fragment
-        android:id="@+id/fragmentViewMessageList"
+        android:id="@+id/navMessageList"
         android:name="org.eurofurence.connavigator.ui.fragments.FragmentViewMessageList"
         android:label="@string/message_list_title">
         <action
-            android:id="@+id/action_fragmentViewMessageList_to_fragmentViewMessageItem2"
-            app:destination="@id/fragmentViewMessageItem" />
+            android:id="@+id/action_fragmentViewMessageList_to_fragmentViewMessageItem"
+            app:destination="@id/navMessageItem" />
         <deepLink
-            android:id="@+id/deepLink2"
+            android:id="@+id/deepLink"
             app:uri="eurofurence://messages/" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentViewMessageItem"
+        android:id="@+id/navMessageItem"
         android:name="org.eurofurence.connavigator.ui.fragments.MessageItemFragment"
-        android:label="@string/message_item_title" >
+        android:label="@string/message_item_title">
         <argument
             android:name="messageId"
             app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentViewAnnouncement"
+        android:id="@+id/navAnnouncementItem"
         android:name="org.eurofurence.connavigator.ui.fragments.AnnouncementItemFragment"
-        android:label="@string/announcements" >
+        android:label="@string/announcements">
         <argument
             android:name="announcementId"
-            app:argType="string" /><deepLink app:uri="eurofurence://announcements/{announcementId}/"/>
+            app:argType="string" />
+        <deepLink app:uri="eurofurence://announcements/{announcementId}/" />
     </fragment>
     <fragment
-        android:id="@+id/eventFeedbackFragment"
+        android:id="@+id/navEventFeedback"
         android:name="org.eurofurence.connavigator.ui.fragments.EventFeedbackFragment"
         android:label="Event Feedback">
         <argument
