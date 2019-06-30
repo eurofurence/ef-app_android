@@ -3,11 +3,11 @@ package org.eurofurence.connavigator.ui.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.gson.Gson
@@ -29,7 +29,7 @@ import kotlin.properties.Delegates.notNull
 /**
  * Created by david on 8/3/16.
  */
-class FragmentMap : Fragment(), HasDb, AnkoLogger {
+class MapFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     fun withArguments(mapRecord: MapRecord) = apply {
@@ -89,59 +89,58 @@ class FragmentMap : Fragment(), HasDb, AnkoLogger {
                     }
                 }
             }
-    } else
-    {
-        ui.map.setImageResource(R.drawable.placeholder_event)
-    }
-}
-
-private fun linkAction(link: LinkFragment) {
-    when (link.fragmentType) {
-        LinkFragment.FragmentTypeEnum.DealerDetail -> launchDealer(link)
-        LinkFragment.FragmentTypeEnum.MapExternal -> launchMap(link)
-        LinkFragment.FragmentTypeEnum.WebExternal -> browse(link.target)
-        else -> warn { "No items selected" }
-    }
-}
-
-private fun launchMap(link: LinkFragment) {
-    info { "Launching map" }
-    val mapData = Gson().fromJson(link.target, MapExternal::class.java)
-    info { "Launching to ${mapData.name}" }
-
-    val intent = Intent(Intent.ACTION_VIEW)
-    intent.data = Uri.parse("geo:${mapData.lat},${mapData.lon}")
-    startActivity(intent)
-}
-
-private fun launchDealer(link: LinkFragment) {
-    info { "Launching dealer" }
-    val dealer = db.dealers[UUID.fromString(link.target)]
-
-    info { "Dealer is ${dealer?.getName()}" }
-    if (dealer !== null) {
-        val action = MapListFragmentDirections.actionMapListFragmentToDealerItemFragment(dealer.id.toString())
-        findNavController().navigate(action)
-    } else {
-        longToast(getString(R.string.dealer_could_not_navigate_to))
-    }
-}
-
-class MapUi : AnkoComponent<Fragment> {
-    lateinit var map: PhotoView
-    lateinit var title: TextView
-
-    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        relativeLayout {
-            backgroundResource = R.color.cardview_dark_background
-            map = photoView {
-                lparams(matchParent, matchParent)
-            }
-
-            title = textView()
+        } else {
+            ui.map.setImageResource(R.drawable.placeholder_event)
         }
     }
-}
+
+    private fun linkAction(link: LinkFragment) {
+        when (link.fragmentType) {
+            LinkFragment.FragmentTypeEnum.DealerDetail -> launchDealer(link)
+            LinkFragment.FragmentTypeEnum.MapExternal -> launchMap(link)
+            LinkFragment.FragmentTypeEnum.WebExternal -> browse(link.target)
+            else -> warn { "No items selected" }
+        }
+    }
+
+    private fun launchMap(link: LinkFragment) {
+        info { "Launching map" }
+        val mapData = Gson().fromJson(link.target, MapExternal::class.java)
+        info { "Launching to ${mapData.name}" }
+
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse("geo:${mapData.lat},${mapData.lon}")
+        startActivity(intent)
+    }
+
+    private fun launchDealer(link: LinkFragment) {
+        info { "Launching dealer" }
+        val dealer = db.dealers[UUID.fromString(link.target)]
+
+        info { "Dealer is ${dealer?.getName()}" }
+        if (dealer !== null) {
+            val action = MapListFragmentDirections.actionMapListFragmentToDealerItemFragment(dealer.id.toString())
+            findNavController().navigate(action)
+        } else {
+            longToast(getString(R.string.dealer_could_not_navigate_to))
+        }
+    }
+
+    class MapUi : AnkoComponent<Fragment> {
+        lateinit var map: PhotoView
+        lateinit var title: TextView
+
+        override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
+            relativeLayout {
+                backgroundResource = R.color.cardview_dark_background
+                map = photoView {
+                    lparams(matchParent, matchParent)
+                }
+
+                title = textView()
+            }
+        }
+    }
 }
 
 data class MapExternal(

@@ -34,7 +34,7 @@ import org.joda.time.Days
 /**
  * Created by David on 5/14/2016.
  */
-class FragmentViewHome : Fragment(), AnkoLogger, HasDb {
+class HomeFragment : Fragment(), AnkoLogger, HasDb {
     override val db by lazyLocateDb()
 
     val ui by lazy { HomeUi() }

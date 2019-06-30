@@ -244,8 +244,8 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 isClickable = true
                 setOnClickListener {
                     val action = when (findNavController().currentDestination?.id) {
-                        R.id.fragmentViewHome -> FragmentViewHomeDirections.actionFragmentViewHomeToFragmentViewEvent(id)
-                        R.id.eventListFragment -> EventListFragmentDirections.actionFragmentViewEventsToFragmentViewEvent(id)
+                        R.id.navHome -> HomeFragmentDirections.actionFragmentViewHomeToFragmentViewEvent(id)
+                        R.id.navEventList -> EventListFragmentDirections.actionFragmentViewEventsToFragmentViewEvent(id)
                         else -> null
                     }
 

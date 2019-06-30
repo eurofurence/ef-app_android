@@ -48,7 +48,7 @@ class InfoGroupFragment : Fragment(), HasDb, AnkoLogger {
 
             holder.name.text = item.title
             holder.layout.setOnClickListener {
-                val action = InfoListFragmentDirections.actionInfoListFragment2ToInfoItemFragment(item.id.toString())
+                val action = InfoListFragmentDirections.actionInfoListFragmentToInfoItemFragment(item.id.toString())
                 findNavController().navigate(action)
             }
         }
