@@ -3,14 +3,14 @@ package org.eurofurence.connavigator.ui.fragments
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
 import com.github.lzyzsd.circleprogress.ArcProgress
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
@@ -22,6 +22,7 @@ import org.eurofurence.connavigator.gcm.cancelFromRelated
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.filters.*
+import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.extensions.arcProgress
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
@@ -29,7 +30,6 @@ import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.nestedScrollView
 import org.joda.time.DateTime
 import org.joda.time.Days
-import kotlin.comparisons.then
 
 /**
  * Created by David on 5/14/2016.
@@ -41,8 +41,8 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
 
     val database by lazy { locateDb() }
     var subscriptions = Disposables.empty()
-    val now: DateTime by lazy { DateTime.now() }
-
+    val now: DateTime get() = DatetimeProxy.now()
+    
     private val upcoming by lazy {
         EventRecyclerFragment()
                 .withArguments(FilterIsUpcoming() then OrderTime(), getString(R.string.event_upcoming), false)

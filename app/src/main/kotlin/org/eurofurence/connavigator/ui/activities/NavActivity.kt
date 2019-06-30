@@ -33,6 +33,7 @@ import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
+import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.objects
@@ -98,7 +99,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
         // Calculate the days between, using the current time.
         val firstDay = DateTime(RemotePreferences.nextConStart)
-        val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
+        val days = Days.daysBetween(DatetimeProxy.now(), DateTime(firstDay)).days
 
         // On con vs. before con. This should be updated on day changes
         if (days <= 0)
@@ -142,7 +143,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
         val firstDay = DateTime(RemotePreferences.nextConStart)
 
         // Calculate the days between, using the current time. Todo: timezones
-        val days = Days.daysBetween(DateTime.now(), DateTime(firstDay)).days
+        val days = Days.daysBetween(DatetimeProxy.now(), DateTime(firstDay)).days
 
         ui.navTitle.text = RemotePreferences.eventTitle
         ui.navSubtitle.text = RemotePreferences.eventSubTitle

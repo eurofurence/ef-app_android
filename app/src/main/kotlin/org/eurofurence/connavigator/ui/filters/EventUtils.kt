@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui.filters
 
 import io.swagger.client.model.EventRecord
+import org.eurofurence.connavigator.util.DatetimeProxy
 import org.joda.time.DateTime
 import org.joda.time.Interval
 
@@ -10,7 +11,7 @@ import org.joda.time.Interval
  * Returns an interval from [now] to [upcomingTimeInMinutes] minutes in the
  * future.
  */
-fun upcomingInterval(now: DateTime = DateTime.now(), upcomingTimeInMinutes: Int = 30) =
+fun upcomingInterval(now: DateTime = DatetimeProxy.now(), upcomingTimeInMinutes: Int = 30) =
         Interval(now, now.plusMinutes(upcomingTimeInMinutes))
 
 

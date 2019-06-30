@@ -79,25 +79,6 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
                 throw Exception("Convention Identifier mismatch\n\nExpected: ${BuildConfig.CONVENTION_IDENTIFIER}\nReceived: ${sync.conventionIdentifier}")
             }
 
-            val shift = DebugPreferences.debugDates
-            val shiftOffset = DebugPreferences.eventDateOffset
-
-            if (shift) {
-                debug { "Changing dates instead of updating" }
-                // Get all dates explicitly
-                val base = apiService.days.apiEventConferenceDaysGet()
-
-                // Shift by offset
-                val currentDate = DateTime.now()
-                for ((i, day) in base.sortedBy { it.date }.withIndex())
-                    day.date = currentDate.plusDays(i - shiftOffset).toDate()
-
-                // Make a new sync package entry
-                sync.eventConferenceDays.removeAllBeforeInsert = true
-                sync.eventConferenceDays.changedEntities = base
-                sync.eventConferenceDays.deletedEntities = emptyList()
-            }
-
             /*
                 All images that have been deleted or changed can get removed from cache to free
                 space. We need to base the query on existing (local) records so the imageService
