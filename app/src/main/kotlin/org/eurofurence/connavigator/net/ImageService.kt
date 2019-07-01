@@ -66,7 +66,7 @@ object imageService : AnkoLogger {
     /**
      * Loads the image at the URL and displays it in the image view.
      */
-    fun load(image: ImageRecord?, imageView: ImageView, showHide: Boolean = true) = deferred<Bitmap?, Exception>().also { promise ->
+    fun load(image: ImageRecord?, imageView: ImageView, hideIfNull: Boolean = true) = deferred<Bitmap?, Exception>().also { promise ->
         // Load image if not null
         if (image != null)
             imageLoader.displayImage(image.url, ImageViewAware(imageView), null,
@@ -75,7 +75,7 @@ object imageService : AnkoLogger {
             imageLoader.displayImage("", imageView, resolveOnCompletion(promise))
 
         // If visibility modification desired, perform it
-        if (showHide)
+        if (hideIfNull)
             imageView.visibility = if (image == null) View.GONE else View.VISIBLE
     }.promise
 

@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.glyphsFor
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.net.imageService
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.FilterChain
 import org.eurofurence.connavigator.ui.filters.start
@@ -124,9 +126,10 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 setPadding(dip(15), dip(15), dip(15), dip(5))
                 backgroundColorResource = R.color.cardview_light_background
                 compatAppearance = android.R.style.TextAppearance_Medium
+                singleLine = true
 
                 // Bind from event's title.
-                from { isDeviatingFromConBook to title } into { (deviating, title) ->
+                from { isDeviatingFromConBook to fullTitle() } into { (deviating, title) ->
                     text = if (deviating) "{fa-pencil} $title" else title
                 }
             }
@@ -147,6 +150,15 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                     height = wrapContent) {
                 bottomMargin = 1
             }
+
+            // Banner, if it's present
+            imageView {
+                backgroundColorResource = R.color.cardview_light_background
+                visibility = View.GONE
+                from { bannerImageId } into {
+                    imageService.load(db.images[it], this)
+                }
+            }.lparams(matchParent, wrapContent)
 
             // Horizontal stack of times and extra info.
             linearLayout {

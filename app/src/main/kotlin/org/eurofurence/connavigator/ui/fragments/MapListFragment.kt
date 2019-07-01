@@ -57,7 +57,7 @@ class MapsUi : AnkoComponent<Fragment> {
     lateinit var mapViewPager: ViewPager
     lateinit var tabs: TabLayout
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        frameLayout {
+        verticalLayout {
             tabs = tabLayout{
                 backgroundResource = R.color.primaryDark
                 setTabTextColors(

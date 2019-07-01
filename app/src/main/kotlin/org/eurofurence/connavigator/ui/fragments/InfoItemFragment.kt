@@ -68,7 +68,7 @@ class InfoItemFragment : Fragment(), HasDb {
             Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
 
             if (knowledgeEntry.imageIds != null && knowledgeEntry.imageIds?.isNotEmpty() == true) {
-                imageService.load(db.images[knowledgeEntry.imageIds?.first()], ui.image, showHide = false)
+                imageService.load(db.images[knowledgeEntry.imageIds?.first()], ui.image, hideIfNull = false)
             } else {
                 ui.image.visibility = View.GONE
             }
