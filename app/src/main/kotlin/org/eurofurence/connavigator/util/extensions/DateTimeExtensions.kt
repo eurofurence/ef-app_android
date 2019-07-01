@@ -11,6 +11,6 @@ import java.util.*
  */
 fun Date.jodatime() = DateTime(this.time)
 
-fun Date.toRelative(): String = PrettyTime().format(this)
+fun Date.toRelative(): String = PrettyTime(Locale.US).format(this)
 
 fun now(): DateTime = DateTime.now()
