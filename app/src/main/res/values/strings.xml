@@ -206,7 +206,8 @@
     <string name="misc_welcome_before_use">Before you can use this application we need to download some data from the Eurofurence servers to your phone.\n\nThis will consume a few megabytes of traffic and can take anywhere from a few seconds up to a few minutes, depending on the speed of your connection.\n\nIs it okay to download the data now?</string>
     <string name="misc_welcome_user">Welcome %1$s</string>
     <string name="misc_hello_player">Hello %1$s</string>
-    <string name="misc_home">EF25</string>
+    <string name="misc_home">Home</string>
+    <string name="misc_home_title">Eurofurence 25 (Home)</string>
 
     <string name="misc_title">Title</string>
     <string name="misc_subtitle">Subtitle</string>

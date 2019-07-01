@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/navHome"
         android:name="org.eurofurence.connavigator.ui.fragments.HomeFragment"
-        android:label="@string/misc_home">
+        android:label="@string/misc_home_title">
         <deepLink app:uri="eurofurence://home/" />
         <action
             android:id="@+id/action_fragmentViewHome_to_fragmentViewEvent"
