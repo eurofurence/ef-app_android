@@ -148,7 +148,6 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             }.lparams(
                     width = matchParent,
                     height = wrapContent) {
-                bottomMargin = 1
             }
 
             // Banner, if it's present
@@ -158,7 +157,9 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 from { bannerImageId } into {
                     imageService.load(db.images[it], this)
                 }
-            }.lparams(matchParent, wrapContent)
+            }.lparams(matchParent, wrapContent) {
+                topMargin = dip(-10)
+            }
 
             // Horizontal stack of times and extra info.
             linearLayout {
@@ -249,7 +250,9 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                         height = matchParent)
             }.lparams(
                     width = matchParent,
-                    height = wrapContent)//dip(40))
+                    height = wrapContent) {
+                topMargin = 1
+            }//dip(40))
 
             // Add short click listener.
             from { id.toString() } into { id ->
