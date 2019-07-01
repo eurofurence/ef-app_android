@@ -108,6 +108,20 @@ class EventListFragment : Fragment(), HasDb, AnkoLogger {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.apply {
+            putInt("current_item", ui.pager.currentItem)
+        }
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        savedInstanceState?.getInt("current_item")?.apply {
+            ui.pager.currentItem = this
+        }
+        super.onViewStateRestored(savedInstanceState)
+    }
+
     override fun onPause() {
         super.onPause()
 

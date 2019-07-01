@@ -227,6 +227,16 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBundle("nav", navController.saveState())
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        navController.restoreState(savedInstanceState.getBundle("nav"))
+        super.onRestoreInstanceState(savedInstanceState)
+    }
+
     private fun navigateToMessages(): Boolean {
         val action = if (AuthPreferences.isLoggedIn()) {
             HomeFragmentDirections.actionFragmentViewHomeToFragmentViewMessageList()
