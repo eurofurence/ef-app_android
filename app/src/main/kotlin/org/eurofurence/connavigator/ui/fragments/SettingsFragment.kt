@@ -1,11 +1,13 @@
-package org.eurofurence.connavigator.ui.activities
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.text.InputType
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
@@ -16,31 +18,25 @@ import org.eurofurence.connavigator.util.DatetimeProxy
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.appcompat.v7.toolbar
+import org.jetbrains.anko.support.v4.UI
 
-class SettingsActivity : AppCompatActivity(), AnkoLogger {
+class SettingsFragment : Fragment(), AnkoLogger {
     val ui by lazy { SettingsUi() }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        ui.setContentView(this)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+            UI { ui.createView(this) }.view
 }
 
-class SettingsUi : AnkoComponent<SettingsActivity> {
+class SettingsUi : AnkoComponent<Fragment> {
     private fun updateTime() {
         timeText.text = DatetimeProxy.now().toString()
     }
 
     lateinit var timeText: TextView
 
-    override fun createView(ui: AnkoContext<SettingsActivity>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         scrollView {
             verticalLayout {
-                toolbar {
-                    titleResource = R.string.settings
-                    setTitleTextColor(ContextCompat.getColor(ctx, R.color.textWhite))
-                    backgroundResource = R.color.primary
-                }
                 verticalLayout {
                     padding = dip(10)
                     textView {

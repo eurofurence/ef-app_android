@@ -154,9 +154,9 @@
         android:id="@+id/navAbout"
         android:name="org.eurofurence.connavigator.ui.fragments.FragmentViewAbout"
         android:label="@string/about" />
-    <activity
+    <fragment
         android:id="@+id/navSettings"
-        android:name="org.eurofurence.connavigator.ui.activities.SettingsActivity"
+        android:name="org.eurofurence.connavigator.ui.fragments.SettingsFragment"
         android:label="@string/settings" />
     <activity
         android:id="@+id/navLogin"
