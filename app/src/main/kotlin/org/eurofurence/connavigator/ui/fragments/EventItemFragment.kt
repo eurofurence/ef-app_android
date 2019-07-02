@@ -21,7 +21,7 @@ import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.descriptionFor
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
@@ -94,7 +94,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
                     ui.image.tag = it
                     if (it != null) {
                         ui.image.visibility = View.VISIBLE
-                        imageService.load(db.images[it], ui.image)
+                        ImageService.load(db.images[it], ui.image)
                     } else
                         ui.image.visibility = View.GONE
                 }

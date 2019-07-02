@@ -25,8 +25,8 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.UpdateIntentService
-import org.eurofurence.connavigator.database.dispatchUpdate
+import org.eurofurence.connavigator.services.UpdateIntentService
+import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AuthPreferences

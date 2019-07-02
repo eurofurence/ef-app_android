@@ -15,6 +15,7 @@ import org.eurofurence.connavigator.gcm.NotificationFactory
 import org.eurofurence.connavigator.gcm.NotificationPublisher
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.DebugPreferences
+import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections

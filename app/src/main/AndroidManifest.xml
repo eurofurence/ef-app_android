@@ -40,10 +40,10 @@
 
         <!-- Service providing a detached retrieval of data from the internet. -->
         <service
-                android:name=".database.UpdateIntentService"
+                android:name=".services.UpdateIntentService"
                 android:exported="false"/>
 
-        <service android:name=".gcm.InstanceIdService"
+        <service android:name=".services.InstanceIdService"
                  android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
@@ -51,7 +51,7 @@
         </service>
 
         <service
-                android:name=".gcm.PushListenerService"
+                android:name=".services.PushListenerService"
                 android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

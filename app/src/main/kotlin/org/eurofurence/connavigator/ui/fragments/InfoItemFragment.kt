@@ -18,7 +18,7 @@ import io.swagger.client.model.KnowledgeEntryRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
 import org.eurofurence.connavigator.util.extensions.fontAwesomeTextView
@@ -68,7 +68,7 @@ class InfoItemFragment : Fragment(), HasDb {
             Analytics.event(Analytics.Category.INFO, Analytics.Action.OPENED, knowledgeEntry.title)
 
             if (knowledgeEntry.imageIds != null && knowledgeEntry.imageIds?.isNotEmpty() == true) {
-                imageService.load(db.images[knowledgeEntry.imageIds?.first()], ui.image, hideIfNull = false)
+                ImageService.load(db.images[knowledgeEntry.imageIds?.first()], ui.image, hideIfNull = false)
             } else {
                 ui.image.visibility = View.GONE
             }

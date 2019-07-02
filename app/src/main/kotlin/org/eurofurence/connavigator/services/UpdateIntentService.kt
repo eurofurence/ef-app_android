@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.database
+package org.eurofurence.connavigator.services
 
 import android.app.IntentService
 import android.content.Context
@@ -7,16 +7,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.serialization.ImplicitReflectionSerializer
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
-import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.pref.DebugPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.util.v2.internalSpec
-import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.*
-import org.joda.time.DateTime
 import java.util.*
 import kotlinx.serialization.Serializable
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.DateSerializer
 
@@ -81,7 +79,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
 
             /*
                 All images that have been deleted or changed can get removed from cache to free
-                space. We need to base the query on existing (local) records so the imageService
+                space. We need to base the query on existing (local) records so the ImageService
                 can access the cache by the "old" urls.
               */
             var invalidatedImages = images.items.filter {
@@ -89,7 +87,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
                 || sync.images.changedEntities.any { rec -> rec.id == it.id } }
 
             for (image in invalidatedImages)
-                imageService.removeFromCache(image)
+                ImageService.removeFromCache(image)
 
             /*
                 Preload images if they changed. Only StartActivity doesn't want this, because it's
@@ -97,7 +95,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
               */
             if (preloadChangedImages) {
                 for (image in sync.images.changedEntities)
-                    imageService.preload(image)
+                    ImageService.preload(image)
             }
 
             // Apply sync

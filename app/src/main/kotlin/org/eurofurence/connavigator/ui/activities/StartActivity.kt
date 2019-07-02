@@ -19,10 +19,12 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.broadcast.ResetReceiver
 import org.eurofurence.connavigator.database.*
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.pref.AnalyticsPreferences
 import org.eurofurence.connavigator.pref.AppPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.services.UpdateIntentService
+import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.circleProgress
@@ -57,7 +59,7 @@ class StartActivity : AppCompatActivity(), AnkoLogger, HasDb {
             val promises = db.images.items.fold(Promise.of<Any?>(Unit)) { p, img ->
                 p thenNested {
                     // After the previous image, load the next one.
-                    imageService.preload(img)
+                    ImageService.preload(img)
                 } successUi {
                     // Increment the counter and display on UI.
                     imgCountLoaded++

@@ -28,7 +28,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.findLinkFragment
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.tracking.Analytics
 import org.eurofurence.connavigator.tracking.Analytics.Action
 import org.eurofurence.connavigator.tracking.Analytics.Category
@@ -79,13 +79,13 @@ class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
 
             // Set image on top
             if (image != null) {
-                imageService.load(image, ui.primaryImage, false)
+                ImageService.load(image, ui.primaryImage, false)
             } else {
                 ui.primaryImage.visibility = View.GONE
             }
 
             // Load art preview image
-            imageService.load(dealer[toPreview], ui.artPreview)
+            ImageService.load(dealer[toPreview], ui.artPreview)
 
             ui.artPreviewCaption.text = dealer.artPreviewCaption
 
@@ -159,7 +159,7 @@ class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
             val ox = (entry.x ?: 0) - x
             val oy = (entry.y ?: 0) - y
 
-            imageService.preload(mapImage) successUi {
+            ImageService.preload(mapImage) successUi {
                 if (it == null)
                     ui.map.visibility = View.GONE
                 else {

@@ -10,7 +10,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.now
@@ -100,7 +100,7 @@ class AboutUi : AnkoComponent<Fragment> {
                     requinardLayout = linearLayout {
                         setPadding(0, dip(10), 0, 0)
                         imageView {
-                            imageService.imageLoader.displayImage("https://en.gravatar.com/avatar/42d336e4b6f13d687c32eaaf9c8fb0ea?s=$avatarSize", this)
+                            ImageService.imageLoader.displayImage("https://en.gravatar.com/avatar/42d336e4b6f13d687c32eaaf9c8fb0ea?s=$avatarSize", this)
                         }.lparams(dip(75), dip(75))
 
                         textView {
@@ -114,7 +114,7 @@ class AboutUi : AnkoComponent<Fragment> {
                     pazuzuLayout = linearLayout {
                         setPadding(0, dip(10), 0, 0)
                         imageView {
-                            imageService.imageLoader.displayImage("https://en.gravatar.com/avatar/a5db6ad5350a2ee91408120b94d9fa24?s=$avatarSize", this)
+                            ImageService.imageLoader.displayImage("https://en.gravatar.com/avatar/a5db6ad5350a2ee91408120b94d9fa24?s=$avatarSize", this)
                         }.lparams(dip(75), dip(75))
 
                         textView {

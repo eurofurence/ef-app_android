@@ -8,14 +8,14 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.gcm.InstanceIdService
+import org.eurofurence.connavigator.services.InstanceIdService
 import org.eurofurence.connavigator.gcm.NotificationFactory
-import org.eurofurence.connavigator.gcm.PushListenerService
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.PushListenerService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.services.apiService
 
 /**
  * The application initialization point.
@@ -38,7 +38,7 @@ class ConnavigatorApplication : MultiDexApplication() {
         RemotePreferences.init()
 
         // Initialize some services
-        imageService.initialize(this)
+        ImageService.initialize(this)
         apiService.initialize(this)
         Analytics.init(this)
 

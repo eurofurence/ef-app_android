@@ -19,7 +19,7 @@ import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.services.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import java.util.*

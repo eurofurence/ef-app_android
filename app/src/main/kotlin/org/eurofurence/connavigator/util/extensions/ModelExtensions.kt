@@ -6,7 +6,7 @@ import android.util.Log
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.services.apiService
 import java.util.*
 
 fun MapRecord.findMatchingEntries(x: Float, y: Float) =

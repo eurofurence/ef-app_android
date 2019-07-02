@@ -7,11 +7,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.chibatching.kotpref.bulk
 import io.swagger.client.model.RegSysAuthenticationRequest
 import nl.komponents.kovenant.task
-import org.eurofurence.connavigator.gcm.InstanceIdService
+import org.eurofurence.connavigator.services.InstanceIdService
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.toIntent
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.services.apiService
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
 import org.jetbrains.anko.info
