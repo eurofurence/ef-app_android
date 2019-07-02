@@ -8,14 +8,10 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.services.InstanceIdService
-import org.eurofurence.connavigator.gcm.NotificationFactory
-import org.eurofurence.connavigator.services.PushListenerService
-import org.eurofurence.connavigator.services.ImageService
-import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.services.apiService
+import org.eurofurence.connavigator.notifications.NotificationFactory
+import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.preferences.RemotePreferences
+import org.eurofurence.connavigator.services.*
 
 /**
  * The application initialization point.
@@ -40,10 +36,13 @@ class ConnavigatorApplication : MultiDexApplication() {
         // Initialize some services
         ImageService.initialize(this)
         apiService.initialize(this)
-        Analytics.init(this)
+        AnalyticsService.init(this)
 
         // Promises
         startKovenant()
+
+        // Verify database integrity.
+        DatabaseCheckService(applicationContext).run()
 
         // Set up notificatioChannels
         NotificationFactory(applicationContext).setupChannels()

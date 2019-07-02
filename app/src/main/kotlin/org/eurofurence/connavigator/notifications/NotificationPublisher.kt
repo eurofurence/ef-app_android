@@ -1,10 +1,9 @@
-package org.eurofurence.connavigator.gcm
+package org.eurofurence.connavigator.notifications
 
 import android.app.Notification
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.pawegio.kandroid.d
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.notificationManager

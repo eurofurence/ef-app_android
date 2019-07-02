@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Con Navigator</string>
+    <string name="app_name">Eurofurence</string>
 
     <!-- Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

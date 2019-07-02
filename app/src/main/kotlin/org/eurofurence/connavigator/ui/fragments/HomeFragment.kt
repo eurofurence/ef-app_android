@@ -18,9 +18,9 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.database.locateDb
-import org.eurofurence.connavigator.gcm.cancelFromRelated
-import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.notifications.cancelFromRelated
+import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.ui.filters.*
 import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.extensions.arcProgress

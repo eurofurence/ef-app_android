@@ -5,7 +5,7 @@ import android.util.Base64
 import android.util.Log
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.pref.AuthPreferences
+import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.services.apiService
 import java.util.*
 

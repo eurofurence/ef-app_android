@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.broadcast
+package org.eurofurence.connavigator.events
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -8,7 +8,7 @@ import com.chibatching.kotpref.bulk
 import io.swagger.client.model.RegSysAuthenticationRequest
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.services.InstanceIdService
-import org.eurofurence.connavigator.pref.AuthPreferences
+import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.toIntent
 import org.eurofurence.connavigator.services.apiService

@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package org.eurofurence.connavigator.pref
+package org.eurofurence.connavigator.preferences
 
 import com.chibatching.kotpref.KotprefModel
 import io.reactivex.subjects.BehaviorSubject

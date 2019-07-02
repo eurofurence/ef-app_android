@@ -9,9 +9,9 @@ import androidx.core.content.ContextCompat
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.pref.AnalyticsPreferences
-import org.eurofurence.connavigator.pref.AppPreferences
-import org.eurofurence.connavigator.pref.DebugPreferences
+import org.eurofurence.connavigator.preferences.AnalyticsPreferences
+import org.eurofurence.connavigator.preferences.AppPreferences
+import org.eurofurence.connavigator.preferences.DebugPreferences
 import org.eurofurence.connavigator.util.DatetimeProxy
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource

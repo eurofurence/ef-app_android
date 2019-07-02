@@ -23,15 +23,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.broadcast.ResetReceiver
+import org.eurofurence.connavigator.events.ResetReceiver
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.services.UpdateIntentService
 import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.pref.AnalyticsPreferences
-import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.preferences.AnalyticsPreferences
+import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.preferences.RemotePreferences
+import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.extensions.booleans
@@ -120,7 +120,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
                 .observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    Analytics.updateSettings()
+                    AnalyticsService.updateSettings()
                 }
 
         subscriptions += AuthPreferences
@@ -133,8 +133,6 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
         updateReceiver.register()
 
         info { "Inserted Nav Fragment" }
-
-        dispatchUpdate(this)
     }
 
     private fun updateNavCountdown() {

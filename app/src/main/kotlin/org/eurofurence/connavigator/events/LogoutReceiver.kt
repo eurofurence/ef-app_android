@@ -1,10 +1,10 @@
-package org.eurofurence.connavigator.broadcast
+package org.eurofurence.connavigator.events
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import org.eurofurence.connavigator.services.InstanceIdService
-import org.eurofurence.connavigator.pref.AuthPreferences
+import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 

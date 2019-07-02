@@ -6,8 +6,8 @@ import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.serialization.ImplicitReflectionSerializer
 import org.eurofurence.connavigator.BuildConfig
-import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
-import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.events.EventFavoriteBroadcast
+import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.util.v2.internalSpec
 import org.jetbrains.anko.*

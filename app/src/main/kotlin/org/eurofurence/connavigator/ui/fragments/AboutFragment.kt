@@ -11,7 +11,7 @@ import android.widget.LinearLayout
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.services.ImageService
-import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.now
 import org.eurofurence.connavigator.util.v2.compatAppearance

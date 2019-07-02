@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.broadcast
+package org.eurofurence.connavigator.events
 
 import android.content.Context
 import androidx.localbroadcastmanager.content.LocalBroadcastManager

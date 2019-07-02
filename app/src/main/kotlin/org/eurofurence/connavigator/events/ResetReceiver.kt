@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.broadcast
+package org.eurofurence.connavigator.events
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,9 +7,9 @@ import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.RootDb
 import org.eurofurence.connavigator.services.ImageService
-import org.eurofurence.connavigator.pref.AnalyticsPreferences
-import org.eurofurence.connavigator.pref.AppPreferences
-import org.eurofurence.connavigator.pref.DebugPreferences
+import org.eurofurence.connavigator.preferences.AnalyticsPreferences
+import org.eurofurence.connavigator.preferences.AppPreferences
+import org.eurofurence.connavigator.preferences.DebugPreferences
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.longToast

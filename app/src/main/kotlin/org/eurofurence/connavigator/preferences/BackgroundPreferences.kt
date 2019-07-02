@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.pref
+package org.eurofurence.connavigator.preferences
 
 import com.chibatching.kotpref.KotprefModel
 import com.chibatching.kotpref.enumpref.enumValuePref
@@ -10,4 +10,5 @@ import org.eurofurence.connavigator.ui.fragments.EventPagerMode
 object BackgroundPreferences: KotprefModel() {
     var eventPagerMode by enumValuePref(EventPagerMode.DAYS)
     var closeAppImmediately by booleanPref(false)
+    var lastKnownVersion by stringPref("")
 }

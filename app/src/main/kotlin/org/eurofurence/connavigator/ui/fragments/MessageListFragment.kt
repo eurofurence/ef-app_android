@@ -23,7 +23,7 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.locateDb
-import org.eurofurence.connavigator.pref.AuthPreferences
+import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.recycler

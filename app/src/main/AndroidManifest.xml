@@ -18,22 +18,18 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 
-        <!-- Root screen of the app, will contain the different panels as fragments -->
-        <activity
-                android:name=".ui.activities.StartActivity"
-                android:label="Eurofurence"
-                android:noHistory="true"
-                android:theme="@style/AppTheme">
+        <activity android:name=".ui.activities.SettingsActivity"/>
+
+        <activity android:name=".ui.activities.NavActivity"
+            android:label="Eurofurence"
+            android:noHistory="true"
+            android:theme="@style/AppTheme"
+            >
+            <nav-graph android:value="@navigation/nav_graph" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-
-        <activity android:name=".ui.activities.SettingsActivity"/>
-
-        <activity android:name=".ui.activities.NavActivity">
-            <nav-graph android:value="@navigation/nav_graph" />
         </activity>
 
         <activity android:name=".ui.fragments.LoginActivity" />
@@ -59,11 +55,11 @@
         </service>
 
         <!-- Pending intents -->
-        <receiver android:name=".gcm.NotificationPublisher"/>
-        <receiver android:name=".broadcast.EventFavoriteBroadcast" />
-        <receiver android:name=".broadcast.LoginReceiver" />
-        <receiver android:name=".broadcast.LogoutReceiver"/>
-        <receiver android:name=".broadcast.ResetReceiver" />
+        <receiver android:name=".notifications.NotificationPublisher"/>
+        <receiver android:name=".events.EventFavoriteBroadcast" />
+        <receiver android:name=".events.LoginReceiver" />
+        <receiver android:name=".events.LogoutReceiver"/>
+        <receiver android:name=".events.ResetReceiver" />
 
         <meta-data android:name="android.app.shortcuts"
             android:resource="@xml/shortcuts" />
