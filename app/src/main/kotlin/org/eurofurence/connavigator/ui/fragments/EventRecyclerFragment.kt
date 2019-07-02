@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -92,7 +93,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
             // The group header, if top element.
             textView {
-                setPadding(dip(5), dip(5), dip(5), dip(5))
+                setPadding(dip(5), dip(5), dip(5), dip(2))
                 textColorResource = R.color.mutedText
                 backgroundColorResource = R.color.backgroundGrey
 
@@ -105,9 +106,11 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                         val minutes = Minutes.minutesBetween(now, start).minutes
                         text = when {
                             hours < -4 -> "At ${start.toString("HH:mm")}"
-                            hours in -4..1 -> "Started ${-hours} hours ago"
+                            hours in -4..-2 -> "Started ${-hours} hours ago"
+                            hours == -1 -> "Started more than an hour ago"
                             minutes in -59..-1 -> "Started in the last hour"
-                            minutes in 1..59 -> "Starting in $minutes minutes"
+                            minutes in 1..30 -> "Starting in less than 30 minutes"
+                            minutes in 31..59 -> "Starting in less than an hour"
                             hours in 1..12 -> "Starting in $hours hours"
                             hours > 12 -> "At ${start.toString("HH:mm")}"
                             else -> "Now"
@@ -123,10 +126,11 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
             // The title of the event.
             fontAwesomeView {
-                setPadding(dip(15), dip(15), dip(15), dip(5))
+                setPadding(dip(15), dip(10), dip(15), dip(5))
                 backgroundColorResource = R.color.cardview_light_background
                 compatAppearance = android.R.style.TextAppearance_Medium
                 singleLine = true
+                ellipsize = TextUtils.TruncateAt.END
 
                 // Bind from event's title.
                 from { isDeviatingFromConBook to fullTitle() } into { (deviating, title) ->
@@ -136,7 +140,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
             // The location of the event.
             textView {
-                setPadding(dip(15), dip(5), dip(15), dip(15))
+                setPadding(dip(15), dip(5), dip(15), dip(10))
                 backgroundColorResource = R.color.cardview_light_background
                 isSingleLine = true
 
@@ -147,19 +151,19 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
             }.lparams(
                     width = matchParent,
-                    height = wrapContent) {
-            }
+                    height = wrapContent)
 
             // Banner, if it's present
             imageView {
                 backgroundColorResource = R.color.cardview_light_background
+                adjustViewBounds = true
                 visibility = View.GONE
                 from { bannerImageId } into {
                     imageService.load(db.images[it], this)
                 }
-            }.lparams(matchParent, wrapContent) {
-                topMargin = dip(-10)
-            }
+            }.lparams(
+                    width = matchParent,
+                    height = wrapContent)
 
             // Horizontal stack of times and extra info.
             linearLayout {
