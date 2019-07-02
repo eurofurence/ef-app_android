@@ -1,7 +1,6 @@
 package org.eurofurence.connavigator.ui.activities
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Browser
@@ -23,15 +22,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.events.ResetReceiver
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.services.UpdateIntentService
-import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.events.ResetReceiver
 import org.eurofurence.connavigator.preferences.AnalyticsPreferences
 import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.services.AnalyticsService
+import org.eurofurence.connavigator.services.UpdateIntentService
+import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.extensions.booleans
@@ -80,11 +79,6 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
         super.onCreate(savedInstanceState)
 
         info { "Starting Nav Activity" }
-
-        // Stop the rotation
-        if (!RemotePreferences.rotationEnabled) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
 
         ui.setContentView(this)
 

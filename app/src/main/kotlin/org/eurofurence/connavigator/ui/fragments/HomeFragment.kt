@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -42,7 +43,7 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
     val database by lazy { locateDb() }
     var subscriptions = Disposables.empty()
     val now: DateTime get() = DatetimeProxy.now()
-    
+
     private val upcoming by lazy {
         EventRecyclerFragment()
                 .withArguments(FilterIsUpcoming() then OrderTime(), getString(R.string.event_upcoming), false)
@@ -60,6 +61,8 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
 
     private val announcement by lazy { AnnouncementListFragment() }
     private val userStatus by lazy { UserStatusFragment() }
+    private val loadingWidget by lazy { LoadingIndicatorFragment() }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
@@ -98,6 +101,7 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
         info { "Configuring event recyclers" }
 
         childFragmentManager.beginTransaction()
+                .replace(R.id.loadingWidget, loadingWidget)
                 .replace(R.id.home_current, current)
                 .replace(R.id.home_upcoming, upcoming)
                 .replace(R.id.home_favorited, favorited)
@@ -136,6 +140,7 @@ class HomeUi : AnkoComponent<Fragment> {
     private lateinit var favoritesFragment: ViewGroup
     private lateinit var announcementFragment: ViewGroup
     private lateinit var loginWidget: ViewGroup
+    private lateinit var loadingWidget: FrameLayout
 
     @SuppressLint("ResourceType")
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
@@ -152,6 +157,10 @@ class HomeUi : AnkoComponent<Fragment> {
                     ViewCompat.setElevation(this, 15f)
                 }.lparams(matchParent, wrapContent) {
                     setMargins(0, 0, 0, 0)
+                }
+
+                loadingWidget = frameLayout {
+                    id = R.id.loadingWidget
                 }
 
                 loginWidget = linearLayout {

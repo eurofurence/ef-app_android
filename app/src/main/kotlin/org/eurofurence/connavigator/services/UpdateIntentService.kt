@@ -15,6 +15,7 @@ import java.util.*
 import kotlinx.serialization.Serializable
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.DateSerializer
 
@@ -61,6 +62,8 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
         info { "Handling update intent service intent" }
         val showToastOnCompletion = intent?.getBooleanExtra("showToastOnCompletion", false) ?: false
         val preloadChangedImages = intent?.getBooleanExtra("preloadChangedImages", false) ?: false
+
+        BackgroundPreferences.isLoading = true
 
         // Initialize the response, the following code is net and IO oriented, it could fail
         val (response, responseObject) = {
@@ -127,6 +130,8 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
 
             // Make the success response message
             info { "Completed update successfully" }
+
+            BackgroundPreferences.isLoading = false
 
             if (showToastOnCompletion) {
                 runOnUiThread {
