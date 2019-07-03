@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.broadcast
+package org.eurofurence.connavigator.events
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -10,11 +10,12 @@ import com.google.firebase.perf.metrics.AddTrace
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.*
-import org.eurofurence.connavigator.gcm.EFNotificationChannel
-import org.eurofurence.connavigator.gcm.NotificationFactory
-import org.eurofurence.connavigator.gcm.NotificationPublisher
-import org.eurofurence.connavigator.pref.AppPreferences
-import org.eurofurence.connavigator.pref.DebugPreferences
+import org.eurofurence.connavigator.notifications.EFNotificationChannel
+import org.eurofurence.connavigator.notifications.NotificationFactory
+import org.eurofurence.connavigator.notifications.NotificationPublisher
+import org.eurofurence.connavigator.preferences.AppPreferences
+import org.eurofurence.connavigator.preferences.DebugPreferences
+import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections

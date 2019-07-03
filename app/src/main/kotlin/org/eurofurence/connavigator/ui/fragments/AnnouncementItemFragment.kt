@@ -16,7 +16,7 @@ import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.util.extensions.fontAwesomeTextView
 import org.eurofurence.connavigator.util.extensions.jodatime
 import org.eurofurence.connavigator.util.extensions.markdownView
@@ -67,7 +67,7 @@ class AnnouncementItemFragment : Fragment(), HasDb, AnkoLogger {
 
                 // Set image on top
                 if (image != null) {
-                    imageService.load(image, ui.image, true)
+                    ImageService.load(image, ui.image, true)
                 } else {
                     ui.image.visibility = View.GONE
                 }

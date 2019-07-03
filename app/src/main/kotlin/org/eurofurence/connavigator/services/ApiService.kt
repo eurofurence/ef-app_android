@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package org.eurofurence.connavigator.webapi
+package org.eurofurence.connavigator.services
 
 import android.content.Context
 import com.android.volley.Network

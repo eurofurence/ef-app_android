@@ -17,15 +17,15 @@ import com.pawegio.kandroid.IntentFor
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
+import org.eurofurence.connavigator.events.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.descriptionFor
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
-import org.eurofurence.connavigator.pref.AppPreferences
-import org.eurofurence.connavigator.tracking.Analytics
-import org.eurofurence.connavigator.tracking.Analytics.Action
-import org.eurofurence.connavigator.tracking.Analytics.Category
+import org.eurofurence.connavigator.services.ImageService
+import org.eurofurence.connavigator.preferences.AppPreferences
+import org.eurofurence.connavigator.services.AnalyticsService
+import org.eurofurence.connavigator.services.AnalyticsService.Action
+import org.eurofurence.connavigator.services.AnalyticsService.Category
 import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.start
@@ -71,7 +71,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
         if (eventId != null) {
             val event: EventRecord = db.events[eventId] ?: return
 
-            Analytics.event(Category.EVENT, Action.OPENED, event.title)
+            AnalyticsService.event(Category.EVENT, Action.OPENED, event.title)
 
             val conferenceRoom = event[toRoom]
 
@@ -94,7 +94,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
                     ui.image.tag = it
                     if (it != null) {
                         ui.image.visibility = View.VISIBLE
-                        imageService.load(db.images[it], ui.image)
+                        ImageService.load(db.images[it], ui.image)
                     } else
                         ui.image.visibility = View.GONE
                 }

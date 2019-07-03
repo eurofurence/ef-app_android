@@ -20,7 +20,7 @@ import org.eurofurence.connavigator.util.extensions.markAsRead
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.services.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView

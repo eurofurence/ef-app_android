@@ -23,7 +23,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.findLinkFragment
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.util.extensions.photoView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
@@ -95,7 +95,7 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
             val ox = (entry.x ?: 0) - x
             val oy = (entry.y ?: 0) - y
 
-            imageService.preload(mapImage) successUi {
+            ImageService.preload(mapImage) successUi {
                 if (it == null)
                     ui.layout.visibility = View.GONE
                 else {

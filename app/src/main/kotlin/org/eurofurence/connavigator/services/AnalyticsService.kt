@@ -1,11 +1,11 @@
-package org.eurofurence.connavigator.tracking
+package org.eurofurence.connavigator.services
 
 import android.app.Activity
 import android.content.Context
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.perf.FirebasePerformance
-import org.eurofurence.connavigator.pref.AnalyticsPreferences
+import org.eurofurence.connavigator.preferences.AnalyticsPreferences
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.debug
@@ -13,7 +13,7 @@ import org.jetbrains.anko.debug
 /**o
  * Created by David on 20-4-2016.
  */
-class Analytics {
+class AnalyticsService {
     /**
      * Collects all categories for analytics
      */
@@ -66,7 +66,7 @@ class Analytics {
         )
 
         fun updateSettings() {
-            debug { "Analytics: ${AnalyticsPreferences.enabled}; Performance: ${AnalyticsPreferences.performanceTracking}" }
+            debug { "AnalyticsService: ${AnalyticsPreferences.enabled}; Performance: ${AnalyticsPreferences.performanceTracking}" }
             analytics.setAnalyticsCollectionEnabled(AnalyticsPreferences.enabled)
             performance.isPerformanceCollectionEnabled = AnalyticsPreferences.performanceTracking
         }

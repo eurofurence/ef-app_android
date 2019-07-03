@@ -16,7 +16,7 @@ import io.swagger.client.model.MapRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
@@ -57,7 +57,7 @@ class MapFragment : Fragment(), HasDb, AnkoLogger {
             ui.title.visibility = View.GONE
 
             (db.images[mapRecord.imageId])?.let {
-                imageService.load(it, ui.map, false)
+                ImageService.load(it, ui.map, false)
             } ?: return
 
             ui.map.attacher.minimumScale = 1F

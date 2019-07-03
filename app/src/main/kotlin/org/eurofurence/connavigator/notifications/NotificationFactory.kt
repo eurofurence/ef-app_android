@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.gcm
+package org.eurofurence.connavigator.notifications
 
 import android.annotation.SuppressLint
 import android.app.Notification
