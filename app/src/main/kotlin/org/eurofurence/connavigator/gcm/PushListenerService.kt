@@ -11,6 +11,7 @@ import org.eurofurence.connavigator.database.dispatchUpdate
 import org.eurofurence.connavigator.pref.RemotePreferences
 import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
+import org.eurofurence.connavigator.webapi.pmService
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
@@ -73,6 +74,9 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
 
     private fun createNotification(message: RemoteMessage) {
         info { "Received request to create generic notification" }
+
+        // TODO: Good good or bad bad?
+        pmService.fetchInBackground()
 
         val action = HomeFragmentDirections
                 .actionFragmentViewHomeToFragmentViewMessageItem(message.relatedId!!)
