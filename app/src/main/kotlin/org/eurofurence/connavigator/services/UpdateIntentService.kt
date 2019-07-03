@@ -132,6 +132,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
             info { "Completed update successfully" }
 
             BackgroundPreferences.isLoading = false
+            BackgroundPreferences.fetchHasSucceeded = true
 
             if (showToastOnCompletion) {
                 runOnUiThread {
@@ -150,6 +151,9 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
                     longToast("Failed to update: ${ex.message}")
                 }
             }
+
+            BackgroundPreferences.fetchHasSucceeded = false
+            BackgroundPreferences.isLoading = false
 
             error("Completed update with error", ex)
             UPDATE_COMPLETE.toIntent {

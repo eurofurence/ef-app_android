@@ -27,6 +27,7 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.events.ResetReceiver
 import org.eurofurence.connavigator.preferences.AnalyticsPreferences
 import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.services.UpdateIntentService
@@ -86,7 +87,6 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
                 .replace(R.id.nav_graph, navFragment)
                 .setPrimaryNavigationFragment(navFragment)
                 .commit()
-
 
         ui.navTitle.text = RemotePreferences.eventTitle
         ui.navSubtitle.text = RemotePreferences.eventSubTitle
@@ -204,6 +204,12 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         info { "Selecting item" }
+
+        if (!BackgroundPreferences.fetchHasSucceeded and BackgroundPreferences.isLoading){
+            longToast("Please wait until we've completed our initial fetch of data")
+            return true
+        }
+
         return when (item.itemId) {
             R.id.navDevReload -> UpdateIntentService().dispatchUpdate(this, true).let { true }
             R.id.navDevClear -> alert(getString(R.string.clear_app_cache), getString(R.string.clear_database)) {

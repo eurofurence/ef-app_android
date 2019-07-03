@@ -12,7 +12,7 @@ import org.eurofurence.connavigator.util.notify
 object BackgroundPreferences : KotprefModel() {
     val observer = BehaviorSubject.create<Boolean>().apply { onNext(false) }
     var eventPagerMode by enumValuePref(EventPagerMode.DAYS)
-    var closeAppImmediately by booleanPref(false)
     var lastKnownVersion by stringPref("")
+    var fetchHasSucceeded by booleanPref(false).notify(this.observer)
     var isLoading by booleanPref(false).notify(this.observer)
 }
