@@ -15,7 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposables
 import io.swagger.client.model.PrivateMessageRecord
+import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.promiseOnUi
@@ -29,9 +33,12 @@ import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.plus
 import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.webapi.pmService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.uiThread
 
 /**
  * Created by requinard on 6/28/17.
@@ -41,6 +48,7 @@ class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
     val ui by lazy { MessagesUi() }
 
     var messages = emptyList<PrivateMessageRecord>()
+    var subscriptions = Disposables.empty()
 
     inner class MessageViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView by view()
@@ -56,7 +64,8 @@ class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
             holder.title.text = message.subject
             holder.date.text = getString(R.string.misc_concat_newline,
                     getString(R.string.message_from_name, message.authorName),
-                    getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
+                    getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative()
+                            ?: getString(R.string.misc_not_yet))
             )
 
             if (message.readDateTimeUtc != null) {
@@ -90,24 +99,45 @@ class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
 
         info { "Filling in messages" }
 
-        promiseOnUi {
-            ui.loading.visibility = View.VISIBLE
-            ui.messageList.visibility = View.GONE
-        } then {
-            info { "Fetching messages" }
-            apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
-            apiService.communications.apiCommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
-        } success {
-            info("Successfully retrieved ${it.size} messages")
-            this.messages = it
-        } successUi {
-            configureRecycler()
-            ui.loading.visibility = View.GONE
-            ui.messageList.visibility = View.VISIBLE
-        } failUi {
-            warn { "Failed to retrieve messages" }
-            longToast(getString(R.string.message_failed_to_retrieve))
-        }
+        // Configure the recycler, TODO: use auto adapter.
+        configureRecycler()
+
+        subscriptions += pmService.updated
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    // Next item, assert proper visibility.
+                    ui.loading.visibility = View.GONE
+                    ui.messageList.visibility = View.VISIBLE
+
+                    // Assign messages, use proper sorting.
+                    messages = it.values.sortedBy(PrivateMessageRecord::getReadDateTimeUtc)
+
+                    // Notify the data set of the change.
+                    ui.messageList.adapter?.notifyDataSetChanged()
+
+                }, {
+                    // On error, display a long toast indicating error and set nothing visible.
+                    ui.loading.visibility = View.GONE
+                    ui.messageList.visibility = View.GONE
+
+                    warn { "Failed to retrieve messages" }
+                    longToast(getString(R.string.message_failed_to_retrieve))
+                }, {
+                    // Will never be completed.
+                }, {
+                    // Prepare by displaying loading only.
+                    ui.loading.visibility = View.VISIBLE
+                    ui.messageList.visibility = View.GONE
+
+                    // Do proactive fetch.
+                    pmService.fetchInBackground()
+                })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     private fun configureRecycler() {

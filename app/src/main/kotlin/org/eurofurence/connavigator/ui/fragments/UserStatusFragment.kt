@@ -75,8 +75,6 @@ class UserStatusFragment : Fragment(), AnkoLogger {
                     info { "Received from observable" }
                     updateState()
                 }
-
-        updateState()
     }
 
     override fun onDestroyView() {

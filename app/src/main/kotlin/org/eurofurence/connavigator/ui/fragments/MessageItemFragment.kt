@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposables
 import io.swagger.client.model.PrivateMessageRecord
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.successUi
@@ -20,7 +22,8 @@ import org.eurofurence.connavigator.util.extensions.markAsRead
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.util.v2.plus
+import org.eurofurence.connavigator.webapi.pmService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView
@@ -31,15 +34,25 @@ class MessageItemFragment : Fragment(), AnkoLogger {
     val args: MessageItemFragmentArgs by navArgs()
     val messageId get() = UUID.fromString(args.messageId)
 
+    var subscriptions = Disposables.empty()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        task {
-            apiService.communications.apiCommunicationPrivateMessagesGet()
-        } successUi {
-            showMessage(it.find { it.id == messageId }!!)
-        }
+        super.onViewCreated(view, savedInstanceState)
+
+        subscriptions += pmService
+                .observeFind(messageId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    showMessage(it)
+                }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     fun showMessage(message: PrivateMessageRecord) {
