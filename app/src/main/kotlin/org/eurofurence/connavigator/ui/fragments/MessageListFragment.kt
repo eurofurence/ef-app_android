@@ -39,16 +39,25 @@ import org.eurofurence.connavigator.webapi.pmService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.uiThread
+import java.util.*
+import kotlin.concurrent.fixedRateTimer
 
 /**
  * Created by requinard on 6/28/17.
  */
-class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
+class FragmentViewMessageList : AutoDisposingFragment(), AnkoLogger, HasDb {
     override val db by lazy { locateDb() }
     val ui by lazy { MessagesUi() }
 
+    /**
+     * A timer that will periodically check for new messages, if the user is logged in.
+     */
+    private var timer: Timer? = null
+
+    /**
+     * The list of currently displayed messages.
+     */
     var messages = emptyList<PrivateMessageRecord>()
-    var subscriptions = Disposables.empty()
 
     inner class MessageViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView by view()
@@ -102,7 +111,40 @@ class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
         // Configure the recycler, TODO: use auto adapter.
         configureRecycler()
 
-        subscriptions += pmService.updated
+        // Connect to the authentication status, as it is done in the user status fragment.
+        subscribeToAuthentication()
+
+        // Subscribe to the actual list of PMs.
+        subscribeToPMs()
+    }
+
+    /**
+     * Subscribes to authentication changes, turning on periodic refresh if any user is logged in.
+     */
+    private fun subscribeToAuthentication() {
+        AuthPreferences
+                .updated
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .map { it.isLoggedIn }
+                .distinct()
+                .subscribe {
+                    if (it) {
+                        timer?.cancel()
+                        timer = fixedRateTimer(period = 60000L) {
+                            pmService.fetchInBackground()
+                        }
+                    } else {
+                        timer?.cancel()
+                    }
+                }
+                .collectOnDestroyView()
+    }
+
+    /**
+     * Subscribes to the PMs by piping them into the adapter (and indicating some loading time if necessary).
+     */
+    private fun subscribeToPMs() {
+        pmService.updated
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     // Next item, assert proper visibility.
@@ -132,12 +174,14 @@ class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
                     // Do proactive fetch.
                     pmService.fetchInBackground()
                 })
+                .collectOnDestroyView()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
+
+        // Cancel periodic fetch if active.
+        timer?.cancel()
     }
 
     private fun configureRecycler() {

@@ -29,30 +29,29 @@ import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView
 import java.util.*
 
-class MessageItemFragment : Fragment(), AnkoLogger {
+class MessageItemFragment : AutoDisposingFragment(), AnkoLogger {
     val ui = MessageItemUi()
     val args: MessageItemFragmentArgs by navArgs()
     val messageId get() = UUID.fromString(args.messageId)
 
-    var subscriptions = Disposables.empty()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        subscriptions += pmService
+        pmService
                 .observeFind(messageId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     showMessage(it)
                 }
+                .collectOnDestroyView()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
     }
 
     fun showMessage(message: PrivateMessageRecord) {

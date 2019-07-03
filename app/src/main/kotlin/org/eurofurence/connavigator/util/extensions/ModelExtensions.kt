@@ -18,7 +18,7 @@ fun MapRecord.findMatchingEntries(x: Float, y: Float) =
 val ImageRecord.url: String get() = "${apiService.apiPath}/Api/Images/$id/Content/with-hash:${Base64.encodeToString(contentHashSha1.toByteArray(), Base64.NO_WRAP)}"
 
 fun PrivateMessageRecord.markAsRead() {
-    if (AuthPreferences.isLoggedIn()) {
+    if (AuthPreferences.isLoggedIn) {
         Log.i("PMR", "Marking message ${this.id} as read")
 
         apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())

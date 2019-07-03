@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.webapi
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.swagger.client.model.PrivateMessageRecord
+import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.pref.AuthPreferences
 import org.jetbrains.anko.AnkoLogger
@@ -51,8 +52,8 @@ object pmService : AnkoLogger {
 
             // Notify subject of successful messages, if they are actually different.
             if (next != all) {
-                updated.onNext(all)
                 all = next
+                updated.onNext(all)
             }
 
             // Everything went well, return true.
@@ -66,10 +67,24 @@ object pmService : AnkoLogger {
     }
 
     /**
+     * Stores currently executing promises to prevent unnecessary calls.
+     */
+    private var lastFetch: Promise<Boolean, Exception>? = null
+
+    /**
      * Performs a fetch in the background as a task.
      */
-    fun fetchInBackground() = task {
-        fetch()
+    fun fetchInBackground(): Promise<Boolean, Exception> {
+        // Return an existing promise if not null, otherwise create one.
+        return lastFetch ?: task {
+            // Promise was null, fetch and reset promise afterwards.
+            fetch().also {
+                lastFetch = null
+            }
+        }.also {
+            // Promise was created, assign it.
+            lastFetch = it
+        }
     }
 
     /**

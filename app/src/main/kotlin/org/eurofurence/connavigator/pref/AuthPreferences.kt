@@ -3,22 +3,102 @@
 package org.eurofurence.connavigator.pref
 
 import com.chibatching.kotpref.KotprefModel
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.eurofurence.connavigator.util.notify
 import org.joda.time.DateTime
 
+/**
+ * An authentication model status.
+ * @property token The authentication token.
+ * @property tokenValidUntil The time until which the token is valid.
+ * @property uid The user ID.
+ * @property username The username.
+ * @property lastReportedFirebaseToken The last reported firebase token.
+ */
+data class Authentication(
+        val token: String,
+        val tokenValidUntil: Long,
+        val uid: String,
+        val username: String,
+        val lastReportedFirebaseToken: String) {
+    val isLoggedIn get() = token.isNotEmpty()
+}
+
 object AuthPreferences : KotprefModel() {
-    var observer: BehaviorSubject<String> = BehaviorSubject.create<String>().apply { onNext("init") }
+    /**
+     * The current token.
+     */
+    var token: String by stringPref("").notify { _, _ ->
+        updatedSubject.onNext(authentication)
+    }
 
-    var token: String by stringPref("").notify(observer)
+    /**
+     * The current token validity.
+     */
+    var tokenValidUntil by longPref(0).notify { _, _ ->
+        updatedSubject.onNext(authentication)
+    }
 
-    var tokenValidUntil by longPref(0)
-    var uid by stringPref("")
-    var username: String by stringPref("").notify(observer)
+    /**
+     * The current user ID.
+     */
+    var uid by stringPref("").notify { _, _ ->
+        updatedSubject.onNext(authentication)
+    }
 
-    var lastReportedFirebaseToken: String by stringPref("").notify(observer)
+    /**
+     * The current user name.
+     */
+    var username: String by stringPref("").notify { _, _ ->
+        updatedSubject.onNext(authentication)
+    }
 
-    fun isLoggedIn() = token.isNotEmpty()
+    /**
+     * The last reported firebase token.
+     */
+    var lastReportedFirebaseToken: String by stringPref("").notify { _, _ ->
+        updatedSubject.onNext(authentication)
+    }
+
+    /**
+     * Gets the current authentication model.
+     */
+    val authentication: Authentication
+        get() = Authentication(
+                token,
+                tokenValidUntil,
+                uid,
+                username,
+                lastReportedFirebaseToken)
+
+    /**
+     * Subject collecting all updates.
+     */
+    private val updatedSubject: BehaviorSubject<Authentication> =
+            BehaviorSubject.createDefault(authentication)
+
+    /**
+     * Authentication updates.
+     */
+    val updated: Observable<Authentication> = updatedSubject.distinct()
+
+    /**
+     * True if logged in, see [Authentication.isLoggedIn].
+     */
+    val isLoggedIn
+        get() =
+            authentication.isLoggedIn
+
+    /**
+     * Gets the token, or, iff not logged in, the string "empty".
+     */
+    fun tokenOrEmpty() =
+            if (authentication.isLoggedIn) token else "empty"
+
+    /**
+     * Returns the token as a bearer authentication for use in HTTP requrests.
+     */
     fun asBearer() = "Bearer $token"
 
     /*

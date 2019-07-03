@@ -178,7 +178,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
                     // If not logged in
                     verticalLayout {
-                        visibility = if (AuthPreferences.isLoggedIn()) View.GONE else View.VISIBLE
+                        visibility = if (AuthPreferences.isLoggedIn) View.GONE else View.VISIBLE
 
                         lparams(matchParent, matchParent)
 
@@ -239,7 +239,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
                     // If logged in
                     verticalLayout {
-                        visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
+                        visibility = if (AuthPreferences.isLoggedIn) View.VISIBLE else View.GONE
 
                         padding = dip(16)
 
