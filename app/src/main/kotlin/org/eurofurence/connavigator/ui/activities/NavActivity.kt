@@ -232,7 +232,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Beundle) {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         navController.restoreState(savedInstanceState.getBundle("nav"))
         super.onRestoreInstanceState(savedInstanceState)
     }
