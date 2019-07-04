@@ -42,46 +42,43 @@ class MessageItemFragment : AutoDisposingFragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
 
         pmService
-                .observeFind(messageId)
+                .updated
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    showMessage(it)
+                    showMessage(pmService.find(messageId))
                 }
                 .collectOnDestroyView()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
+    fun showMessage(message: PrivateMessageRecord?) {
+        message?.let {
+            ui.title.text = message.subject?.capitalize() ?: getString(R.string.message_no_subject)
 
-    fun showMessage(message: PrivateMessageRecord) {
+            ui.author.text = getString(R.string.message_from_name, message.authorName)
+            ui.sent.text = getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative()
+                    ?: getString(R.string.misc_not_yet))
+            ui.received.text = getString(R.string.message_received_date, message.receivedDateTimeUtc?.toRelative()
+                    ?: getString(R.string.misc_not_yet))
+            ui.read.text = getString(R.string.message_read_date, message.readDateTimeUtc?.toRelative()
+                    ?: getString(R.string.misc_not_yet))
 
-        ui.title.text = message.subject?.capitalize() ?: getString(R.string.message_no_subject)
+            ui.content.loadMarkdown(message.message)
 
-        ui.author.text = getString(R.string.message_from_name, message.authorName)
-        ui.sent.text = getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative()
-                ?: getString(R.string.misc_not_yet))
-        ui.received.text = getString(R.string.message_received_date, message.receivedDateTimeUtc?.toRelative()
-                ?: getString(R.string.misc_not_yet))
-        ui.read.text = getString(R.string.message_read_date, message.readDateTimeUtc?.toRelative()
-                ?: getString(R.string.misc_not_yet))
+            if (message.readDateTimeUtc == null) {
+                ui.icon.textColor = ContextCompat.getColor(context!!, R.color.primaryDark)
+                ui.icon.text = "{fa-envelope 30sp}"
+            } else {
+                ui.icon.textColor = ContextCompat.getColor(context!!, android.R.color.tertiary_text_dark)
+                ui.icon.text = "{fa-envelope-o 30sp}"
+            }
 
-        ui.content.loadMarkdown(message.message)
-
-        if (message.readDateTimeUtc == null) {
-            ui.icon.textColor = ContextCompat.getColor(context!!, R.color.primaryDark)
-            ui.icon.text = "{fa-envelope 30sp}"
-        } else {
-            ui.icon.textColor = ContextCompat.getColor(context!!, android.R.color.tertiary_text_dark)
-            ui.icon.text = "{fa-envelope-o 30sp}"
-        }
-
-        task {
-            info { "Marking message ${message.id} as read" }
-            message.markAsRead()
-        } successUi {
-            info { "Message marked as read" }
-            longToast(getString(R.string.message_marked_as_read))
+            task {
+                info { "Marking message ${message.id} as read" }
+                message.markAsRead()
+            } successUi {
+                info { "Message marked as read" }
+                longToast(getString(R.string.message_marked_as_read))
+            }
         }
     }
 }

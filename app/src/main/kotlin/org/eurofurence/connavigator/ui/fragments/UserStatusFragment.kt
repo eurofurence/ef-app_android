@@ -29,11 +29,6 @@ import kotlin.concurrent.fixedRateTimer
 class UserStatusFragment : AutoDisposingFragment(), AnkoLogger {
     val ui = UserStatusUi()
 
-    /**
-     * A timer that will periodically check for new messages, if the user is logged in.
-     */
-    private var timer: Timer? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
@@ -61,12 +56,6 @@ class UserStatusFragment : AutoDisposingFragment(), AnkoLogger {
                         // Log status change.
                         info { "User is logged in" }
 
-                        // Reset timer to fetch messages.
-                        timer?.cancel()
-                        timer = fixedRateTimer(period = 60000L) {
-                            pmService.fetchInBackground()
-                        }
-
                         // Display logged in, name and set UI action.
                         ui.apply {
                             title.text = getString(R.string.misc_welcome_user, username.capitalize())
@@ -78,9 +67,6 @@ class UserStatusFragment : AutoDisposingFragment(), AnkoLogger {
                     } else {
                         // Log status change.
                         info { "User is not logged in" }
-
-                        // Cancel timer.
-                        timer?.cancel()
 
                         // Display not logged in, reset UI action.
                         ui.apply {
@@ -126,15 +112,6 @@ class UserStatusFragment : AutoDisposingFragment(), AnkoLogger {
                     }
                 }
                 .collectOnDestroyView()
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        // Cancel periodic fetch if active.
-        timer?.cancel()
-        info { "Check timer canceled" }
 
     }
 }
