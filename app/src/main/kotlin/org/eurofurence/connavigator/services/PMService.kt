@@ -42,11 +42,23 @@ object PMService : AnkoLogger {
             }
 
     /**
+     * Invalidates the cache.
+     */
+    fun invalidate() {
+        all = emptyMap()
+        updated.onNext(all)
+    }
+
+    /**
      * Updates the data, notifies subjects.
      * @param validFor The time a fetch is considered valid for. If last fetch time is this time ago, a new fetch
      * will be issued.
      */
     fun fetch() {
+        // Only update on being logged in, otherwise set empty and return.
+        if (!AuthPreferences.isLoggedIn)
+            return
+
         info { "Fetching PM data." }
 
         // Call API method to get all private message records and store them.

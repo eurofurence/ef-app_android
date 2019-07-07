@@ -86,6 +86,10 @@ class LoginFragment : Fragment(), AnkoLogger {
 
         ui.logout.setOnClickListener {
             info { "Logging user out" }
+
+            // Invalidate cache.
+            PMService.invalidate()
+
             longToast(getString(R.string.login_logged_out))
             context?.sendBroadcast(intentFor<LogoutReceiver>())
 
