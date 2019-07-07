@@ -10,16 +10,20 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.BiFunction
+import io.swagger.client.model.PrivateMessageRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.notifications.cancelFromRelated
 import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.preferences.Authentication
 import org.eurofurence.connavigator.services.PMService
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
+import java.util.*
 
-class UserStatusFragment : AutoDisposingFragment(), AnkoLogger {
+class UserStatusFragment : DisposingFragment(), AnkoLogger {
     val ui = UserStatusUi()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -52,6 +56,7 @@ class UserStatusFragment : AutoDisposingFragment(), AnkoLogger {
                         // Display logged in, name and set UI action.
                         ui.apply {
                             title.text = getString(R.string.misc_welcome_user, username.capitalize())
+                            subtitle.textResource = R.string.login_tap_to_login
                             layout.setOnClickListener {
                                 val action = HomeFragmentDirections.actionFragmentViewHomeToFragmentViewMessageList()
                                 findNavController().navigate(action)
@@ -79,30 +84,40 @@ class UserStatusFragment : AutoDisposingFragment(), AnkoLogger {
      * of unread messages.
      */
     private fun subscribeToPMs() {
-        PMService
-                .updated
+
+        AuthPreferences.updated
+                // Include update status in observable.
+                .withLatestFrom(PMService.updated,
+                        BiFunction { l: Authentication, r: Map<UUID, PrivateMessageRecord> ->
+                            l to r
+                        })
+
+                // Use UI thread for subscription.
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe { messages ->
-                    context?.apply {
-                        for ((_, m) in messages)
-                            notificationManager.cancelFromRelated(m.id)
 
-                        info { "Fetched messages, ${messages.count()} messages found" }
+                // React to authentication and messages status.
+                .subscribe { (auth, messages) ->
+                    if (auth.isLoggedIn)
+                        context?.apply {
+                            for ((_, m) in messages)
+                                notificationManager.cancelFromRelated(m.id)
 
-                        val unreadMessages = messages.values.filter { it.readDateTimeUtc == null }
+                            info { "Fetched messages, ${messages.count()} messages found" }
 
-                        if (unreadMessages.isNotEmpty()) {
-                            info { "Unread messages are present! Giving attention." }
-                            ui.subtitle.text = getString(R.string.message_you_have_unread_messages, unreadMessages.size)
-                            ui.subtitle.textColor = ContextCompat.getColor(this, R.color.primaryDark)
-                            ui.userIcon.textColor = ContextCompat.getColor(this, R.color.primaryDark)
-                        } else {
-                            info { "No unread messages found, displaying total message counts" }
-                            ui.subtitle.text = getString(R.string.message_you_have_messages, messages.count())
-                            ui.subtitle.textColor = ContextCompat.getColor(this, android.R.color.tertiary_text_dark)
-                            ui.userIcon.textColor = ContextCompat.getColor(this, android.R.color.tertiary_text_dark)
+                            val unreadMessages = messages.values.filter { it.readDateTimeUtc == null }
+
+                            if (unreadMessages.isNotEmpty()) {
+                                info { "Unread messages are present! Giving attention." }
+                                ui.subtitle.text = getString(R.string.message_you_have_unread_messages, unreadMessages.size)
+                                ui.subtitle.textColor = ContextCompat.getColor(this, R.color.primaryDark)
+                                ui.userIcon.textColor = ContextCompat.getColor(this, R.color.primaryDark)
+                            } else {
+                                info { "No unread messages found, displaying total message counts" }
+                                ui.subtitle.text = getString(R.string.message_you_have_messages, messages.count())
+                                ui.subtitle.textColor = ContextCompat.getColor(this, android.R.color.tertiary_text_dark)
+                                ui.userIcon.textColor = ContextCompat.getColor(this, android.R.color.tertiary_text_dark)
+                            }
                         }
-                    }
                 }
                 .collectOnDestroyView()
 

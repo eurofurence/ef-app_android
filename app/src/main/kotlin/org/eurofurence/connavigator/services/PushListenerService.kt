@@ -77,7 +77,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         info { "Received request to create generic notification" }
 
         // Fetch in background on receiving, also assume that the cache is invalid every time.
-        PMService.fetchInBackground(Duration.ZERO)
+        PMService.fetchInBackground()
 
         val action = HomeFragmentDirections
                 .actionFragmentViewHomeToFragmentViewMessageItem(message.relatedId!!)

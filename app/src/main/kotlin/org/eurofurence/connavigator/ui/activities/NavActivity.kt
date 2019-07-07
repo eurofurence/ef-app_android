@@ -205,7 +205,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         info { "Selecting item" }
 
-        if (!BackgroundPreferences.fetchHasSucceeded and BackgroundPreferences.isLoading){
+        if (!BackgroundPreferences.fetchHasSucceeded and BackgroundPreferences.isLoading) {
             longToast("Please wait until we've completed our initial fetch of data")
             return true
         }

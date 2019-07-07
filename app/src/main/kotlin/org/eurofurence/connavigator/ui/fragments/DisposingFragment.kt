@@ -8,7 +8,7 @@ import org.eurofurence.connavigator.util.v2.plus
 /**
  * Maintains a list of disposables that are disposed of on certain methods.
  */
-abstract class AutoDisposingFragment : Fragment() {
+abstract class DisposingFragment : Fragment() {
     /**
      * Collects all disposables that must be disposed of on destroy view.
      */

@@ -28,7 +28,7 @@ import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView
 import java.util.*
 
-class MessageItemFragment : AutoDisposingFragment(), AnkoLogger {
+class MessageItemFragment : DisposingFragment(), AnkoLogger {
     val ui = MessageItemUi()
     val args: MessageItemFragmentArgs by navArgs()
     val messageId get() = UUID.fromString(args.messageId)

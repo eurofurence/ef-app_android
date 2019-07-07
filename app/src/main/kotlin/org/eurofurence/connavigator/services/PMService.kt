@@ -19,11 +19,6 @@ import java.util.*
  */
 object PMService : AnkoLogger {
     /**
-     * The standard validFor duration.
-     */
-    val standardValidFor = Minutes.ONE.toStandardDuration()
-
-    /**
      * All messages from the last update, if it should be up to date, [fetch] must be called.
      */
     var all = emptyMap<UUID, PrivateMessageRecord>()
@@ -47,22 +42,12 @@ object PMService : AnkoLogger {
             }
 
     /**
-     * The last time the PMs were fetched.
-     */
-    private var lastFetchTime = DateTime(0L)
-
-    /**
      * Updates the data, notifies subjects.
      * @param validFor The time a fetch is considered valid for. If last fetch time is this time ago, a new fetch
      * will be issued.
      */
-    fun fetch(validFor: Duration = standardValidFor) {
-        // Skip active fetch if still in the valid duration.
-        if (lastFetchTime.plus(validFor).isAfterNow)
-            return
-
-        // Note location for debugging
-        info { "FETCHING AT:\r\n\t" + Thread.currentThread().stackTrace.joinToString("\r\n\t") }
+    fun fetch() {
+        info { "Fetching PM data." }
 
         // Call API method to get all private message records and store them.
         apiService.communications
@@ -70,9 +55,6 @@ object PMService : AnkoLogger {
         val next = apiService.communications
                 .apiCommunicationPrivateMessagesGet()
                 .associateBy(PrivateMessageRecord::getId)
-
-        // Set updated fetch time.
-        lastFetchTime = now()
 
         // Notify subject of successful messages, if they are actually different.
         if (next != all) {
@@ -90,10 +72,10 @@ object PMService : AnkoLogger {
     /**
      * Performs a fetch in the background as a task.
      */
-    fun fetchInBackground(validFor: Duration = standardValidFor): Promise<Unit, Exception> {
+    fun fetchInBackground(): Promise<Unit, Exception> {
         // Return same promise if running.
         return lastFetchPromise
-                ?: task { fetch(validFor).also { lastFetchPromise = null } }.also { lastFetchPromise = it }
+                ?: task { fetch().also { lastFetchPromise = null } }.also { lastFetchPromise = it }
     }
 
     /**

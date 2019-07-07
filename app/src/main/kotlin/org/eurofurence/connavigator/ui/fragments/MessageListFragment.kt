@@ -32,7 +32,7 @@ import org.jetbrains.anko.support.v4.UI
 /**
  * Created by requinard on 6/28/17.
  */
-class FragmentViewMessageList : AutoDisposingFragment(), AnkoLogger, HasDb {
+class FragmentViewMessageList : DisposingFragment(), AnkoLogger, HasDb {
     override val db by lazy { locateDb() }
     val ui by lazy { MessagesUi() }
 
