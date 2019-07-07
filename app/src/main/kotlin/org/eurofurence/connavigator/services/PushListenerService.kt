@@ -16,6 +16,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
+import org.joda.time.Duration
 
 /**
  * Created by David on 14-4-2016.
@@ -75,8 +76,8 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
     private fun createNotification(message: RemoteMessage) {
         info { "Received request to create generic notification" }
 
-        // TODO: Good good or bad bad?
-        pmService.fetchInBackground()
+        // Fetch in background on receiving, also assume that the cache is invalid every time.
+        PMService.fetchInBackground(Duration.ZERO)
 
         val action = HomeFragmentDirections
                 .actionFragmentViewHomeToFragmentViewMessageItem(message.relatedId!!)

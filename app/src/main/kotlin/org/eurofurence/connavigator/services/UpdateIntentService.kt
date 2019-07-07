@@ -72,7 +72,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
             info { "Retrieving sync since $date" }
 
             // Start updating in the background.
-            val pmsUpdating = pmService.fetchInBackground()
+            val pmsUpdating = PMService.fetchInBackground()
 
             // Get sync from server
             val sync = apiService.sync.apiSyncGet(date)

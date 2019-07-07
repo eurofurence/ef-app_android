@@ -20,7 +20,7 @@ import io.swagger.client.model.PrivateMessageRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.locateDb
-import org.eurofurence.connavigator.services.pmService
+import org.eurofurence.connavigator.services.PMService
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.recycler
@@ -98,10 +98,19 @@ class FragmentViewMessageList : AutoDisposingFragment(), AnkoLogger, HasDb {
     }
 
     /**
+     * The default sorting, put unread messages at the top and sorts by creation time after.
+     */
+    private val standardSorting = compareBy<PrivateMessageRecord> {
+        it.readDateTimeUtc != null
+    }.thenByDescending {
+        it.createdDateTimeUtc
+    }
+
+    /**
      * Subscribes to the PMs by piping them into the adapter (and indicating some loading time if necessary).
      */
     private fun subscribeToPMs() {
-        pmService.updated
+        PMService.updated
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     // Next item, assert proper visibility.
@@ -109,7 +118,7 @@ class FragmentViewMessageList : AutoDisposingFragment(), AnkoLogger, HasDb {
                     ui.messageList.visibility = View.VISIBLE
 
                     // Assign messages, use proper sorting.
-                    messages = it.values.sortedBy(PrivateMessageRecord::getReadDateTimeUtc)
+                    messages = it.values.sortedWith(standardSorting)
 
                     // Notify the data set of the change.
                     ui.messageList.adapter?.notifyDataSetChanged()

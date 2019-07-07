@@ -13,7 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.notifications.cancelFromRelated
 import org.eurofurence.connavigator.preferences.AuthPreferences
-import org.eurofurence.connavigator.services.pmService
+import org.eurofurence.connavigator.services.PMService
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
@@ -79,7 +79,7 @@ class UserStatusFragment : AutoDisposingFragment(), AnkoLogger {
      * of unread messages.
      */
     private fun subscribeToPMs() {
-        pmService
+        PMService
                 .updated
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe { messages ->

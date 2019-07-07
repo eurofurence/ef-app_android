@@ -3,9 +3,11 @@ package org.eurofurence.connavigator.util.extensions
 import android.content.Context
 import android.util.Base64
 import android.util.Log
+import io.swagger.client.ApiException
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.services.PMService
 import org.eurofurence.connavigator.services.apiService
 import java.util.*
 
@@ -21,8 +23,23 @@ fun PrivateMessageRecord.markAsRead() {
     if (AuthPreferences.isLoggedIn) {
         Log.i("PMR", "Marking message ${this.id} as read")
 
-        apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
-        apiService.communications.apiCommunicationPrivateMessagesByMessageIdReadPost(this.id, true)
+        try {
+            // Set read time from API and notify.
+            apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
+            readDateTimeUtc = apiService.communications.apiCommunicationPrivateMessagesByMessageIdReadPost(this.id, true)
+            PMService.notifyModified(this)
+        } catch (e: ApiException) {
+            // Actual failure, throw.
+            throw e
+        } catch (e: Throwable) {
+            // Warn for non-API errors but do not fail.
+            Log.w("PMR", "Non-API error while marking the message as read.", e)
+
+            // Set read time and notify, but from local time as a substitute.
+            readDateTimeUtc = Date()
+            PMService.notifyModified(this)
+        }
+
     } else {
         throw Exception("User is not logged in!")
     }

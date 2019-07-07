@@ -14,6 +14,7 @@ import com.pawegio.kandroid.longToast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.model.PrivateMessageRecord
 import nl.komponents.kovenant.task
+import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
@@ -21,7 +22,7 @@ import org.eurofurence.connavigator.util.extensions.markAsRead
 import org.eurofurence.connavigator.util.extensions.markdownView
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.services.pmService
+import org.eurofurence.connavigator.services.PMService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import us.feras.mdv.MarkdownView
@@ -41,17 +42,19 @@ class MessageItemFragment : AutoDisposingFragment(), AnkoLogger {
 
         // Find (or fetch) message.
         task {
-            pmService.find(messageId)
+            PMService.find(messageId)
         } successUi {
             showMessage(it)
         }
 
         // On update, set from record at ID.
-        pmService
+        PMService
                 .updated
                 .observeOn(AndroidSchedulers.mainThread())
+                .map { it[messageId] }
+                .distinct()
                 .subscribe {
-                    showMessage(it[messageId])
+                    showMessage(it)
                 }
                 .collectOnDestroyView()
     }
@@ -81,22 +84,17 @@ class MessageItemFragment : AutoDisposingFragment(), AnkoLogger {
             // If not read, mark as read.
             if (message.readDateTimeUtc == null) {
                 task {
-                    // Start marking as read.
+                    // Mark it as red.
                     info { "Marking message ${message.id} as read" }
                     message.markAsRead()
-                } success {
-                    // Markign as read finished successfully, propagate to PMs by updating.
-                    info { "Message marked as read, updating fragments depending on it." }
-                    pmService.fetch()
                 } successUi {
                     // Display message that PM was marked as read.
                     info { "Updated PMs, displaying message marked as read." }
                     longToast(getString(R.string.message_marked_as_read))
-                } fail {
-                    // Failed, update anyways. This is necessary for now, as marking status as read
-                    // returns a proper, successful response, but deserialization crashes.
+                } failUi {
+                    // Display failure to mark as read.
                     warn("Failed to update read, updating fragments depending on it.", it)
-                    pmService.fetch()
+                    longToast("Something went wrong when marking the message as read.")
                 }
             }
         }
