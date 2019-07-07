@@ -1,18 +1,15 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposables
-import nl.komponents.kovenant.task
-import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.notifications.cancelFromRelated
 import org.eurofurence.connavigator.preferences.AuthPreferences
@@ -21,8 +18,6 @@ import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
-import java.util.*
-import kotlin.concurrent.fixedRateTimer
 
 class UserStatusFragment : AutoDisposingFragment(), AnkoLogger {
     val ui = UserStatusUi()

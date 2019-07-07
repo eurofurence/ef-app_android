@@ -1,29 +1,22 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposables
 import io.swagger.client.model.PrivateMessageRecord
-import nl.komponents.kovenant.task
-import nl.komponents.kovenant.then
-import nl.komponents.kovenant.ui.failUi
-import nl.komponents.kovenant.ui.promiseOnUi
-import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.locateDb
@@ -35,9 +28,6 @@ import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.uiThread
-import java.util.*
-import kotlin.concurrent.fixedRateTimer
 
 /**
  * Created by requinard on 6/28/17.
@@ -45,11 +35,6 @@ import kotlin.concurrent.fixedRateTimer
 class FragmentViewMessageList : AutoDisposingFragment(), AnkoLogger, HasDb {
     override val db by lazy { locateDb() }
     val ui by lazy { MessagesUi() }
-
-    /**
-     * A timer that will periodically check for new messages, if the user is logged in.
-     */
-    private var timer: Timer? = null
 
     /**
      * The list of currently displayed messages.
@@ -108,33 +93,8 @@ class FragmentViewMessageList : AutoDisposingFragment(), AnkoLogger, HasDb {
         // Configure the recycler, TODO: use auto adapter.
         configureRecycler()
 
-        // Connect to the authentication status, as it is done in the user status fragment.
-        subscribeToAuthentication()
-
         // Subscribe to the actual list of PMs.
         subscribeToPMs()
-    }
-
-    /**
-     * Subscribes to authentication changes, turning on periodic refresh if any user is logged in.
-     */
-    private fun subscribeToAuthentication() {
-        AuthPreferences
-                .updated
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .map { it.isLoggedIn }
-                .distinct()
-                .subscribe {
-                    if (it) {
-                        timer?.cancel()
-                        timer = fixedRateTimer(period = 60000L) {
-                            pmService.fetchInBackground()
-                        }
-                    } else {
-                        timer?.cancel()
-                    }
-                }
-                .collectOnDestroyView()
     }
 
     /**
@@ -167,18 +127,8 @@ class FragmentViewMessageList : AutoDisposingFragment(), AnkoLogger, HasDb {
                     // Prepare by displaying loading only.
                     ui.loading.visibility = View.VISIBLE
                     ui.messageList.visibility = View.GONE
-
-                    // Do proactive fetch.
-                    pmService.fetchInBackground()
                 })
                 .collectOnDestroyView()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        // Cancel periodic fetch if active.
-        timer?.cancel()
     }
 
     private fun configureRecycler() {

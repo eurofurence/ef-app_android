@@ -71,6 +71,9 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
             RemotePreferences.update()
             info { "Retrieving sync since $date" }
 
+            // Start updating in the background.
+            val pmsUpdating = pmService.fetchInBackground()
+
             // Get sync from server
             val sync = apiService.sync.apiSyncGet(date)
 
@@ -87,7 +90,8 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
               */
             var invalidatedImages = images.items.filter {
                 sync.images.deletedEntities.contains(it.id)
-                || sync.images.changedEntities.any { rec -> rec.id == it.id } }
+                        || sync.images.changedEntities.any { rec -> rec.id == it.id }
+            }
 
             for (image in invalidatedImages)
                 ImageService.removeFromCache(image)
@@ -127,6 +131,14 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
             date = sync.currentDateTimeUtc
 
             info { "Synced, current sync time is $date" }
+
+            // Await end, catch and log errors.
+            try {
+                pmsUpdating.get()
+                info { "PMs updates successfully." }
+            } catch (t: Throwable) {
+                warn("Error while refreshing PMs.", t)
+            }
 
             // Make the success response message
             info { "Completed update successfully" }

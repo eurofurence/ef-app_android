@@ -12,7 +12,6 @@ import androidx.navigation.fragment.navArgs
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposables
 import io.swagger.client.model.PrivateMessageRecord
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.successUi
@@ -40,11 +39,19 @@ class MessageItemFragment : AutoDisposingFragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Find (or fetch) message.
+        task {
+            pmService.find(messageId)
+        } successUi {
+            showMessage(it)
+        }
+
+        // On update, set from record at ID.
         pmService
                 .updated
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    showMessage(pmService.find(messageId))
+                    showMessage(it[messageId])
                 }
                 .collectOnDestroyView()
     }
@@ -72,11 +79,22 @@ class MessageItemFragment : AutoDisposingFragment(), AnkoLogger {
             }
 
             task {
+                // Start marking as read.
                 info { "Marking message ${message.id} as read" }
                 message.markAsRead()
+            } success {
+                // Markign as read finished successfully, propagate to PMs by updating.
+                info { "Message marked as read, updating fragments depending on it." }
+                pmService.fetch()
             } successUi {
-                info { "Message marked as read" }
+                // Display message that PM was marked as read.
+                info { "Updated PMs, displaying message marked as read." }
                 longToast(getString(R.string.message_marked_as_read))
+            } fail {
+                // Failed, update anyways. This is necessary for now, as marking status as read
+                // returns a proper, successful response, but deserialization crashes.
+                warn("Failed to update read, updating fragments depending on it.", it)
+                pmService.fetch()
             }
         }
     }

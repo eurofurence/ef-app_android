@@ -7,7 +7,6 @@ import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.error
 import java.util.*
 
 /**
@@ -41,50 +40,32 @@ object pmService : AnkoLogger {
     /**
      * Updates the data, notifies subjects.
      */
-    fun fetch(): Boolean {
-        try {
-            // Call API method to get all private message records and store them.
-            apiService.communications
-                    .addHeader("Authorization", AuthPreferences.asBearer())
-            val next = apiService.communications
-                    .apiCommunicationPrivateMessagesGet()
-                    .associateBy(PrivateMessageRecord::getId)
+    fun fetch() {
+        // Call API method to get all private message records and store them.
+        apiService.communications
+                .addHeader("Authorization", AuthPreferences.asBearer())
+        val next = apiService.communications
+                .apiCommunicationPrivateMessagesGet()
+                .associateBy(PrivateMessageRecord::getId)
 
-            // Notify subject of successful messages, if they are actually different.
-            if (next != all) {
-                all = next
-                updated.onNext(all)
-            }
-
-            // Everything went well, return true.
-            return true
-        } catch (t: Throwable) {
-            // An exception occurred, return false after logging it, no
-            // notification on subject.
-            error("Exception occurred during Private Messages Update", t)
-            return false
+        // Notify subject of successful messages, if they are actually different.
+        if (next != all) {
+            all = next
+            updated.onNext(all)
         }
     }
 
     /**
      * Stores currently executing promises to prevent unnecessary calls.
      */
-    private var lastFetch: Promise<Boolean, Exception>? = null
+    private var lastFetch: Promise<Unit, Exception>? = null
 
     /**
      * Performs a fetch in the background as a task.
      */
-    fun fetchInBackground(): Promise<Boolean, Exception> {
-        // Return an existing promise if not null, otherwise create one.
-        return lastFetch ?: task {
-            // Promise was null, fetch and reset promise afterwards.
-            fetch().also {
-                lastFetch = null
-            }
-        }.also {
-            // Promise was created, assign it.
-            lastFetch = it
-        }
+    fun fetchInBackground(): Promise<Unit, Exception> {
+        // Return same promise if running.
+        return lastFetch ?: task { fetch().also { lastFetch = null } }.also { lastFetch = it }
     }
 
     /**
@@ -96,11 +77,12 @@ object pmService : AnkoLogger {
         if (existing != null)
             return existing
 
-        // If unable to fetch, return null
-        if (!fetch())
-            return null
-
-        // Return message at ID, if still not present, it is not a valid ID.
-        return all[messageId]
+        // Fetch and return value, return null if failed.
+        return try {
+            fetch()
+            all[messageId]
+        } catch (t: Throwable) {
+            null
+        }
     }
 }
