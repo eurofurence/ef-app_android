@@ -118,7 +118,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
                 }
 
         subscriptions += AuthPreferences
-                .observer
+                .updated
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     updateLoginMenuItem()
@@ -149,7 +149,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     private fun updateLoginMenuItem() {
         // Find login item, assign new text.
         ui.nav.menu.findItem(R.id.navLogin)?.let {
-            if (AuthPreferences.isLoggedIn())
+            if (AuthPreferences.isLoggedIn)
                 it.title = "Login details"
             else
                 it.title = "Login"
@@ -205,7 +205,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         info { "Selecting item" }
 
-        if (!BackgroundPreferences.fetchHasSucceeded and BackgroundPreferences.isLoading){
+        if (!BackgroundPreferences.fetchHasSucceeded and BackgroundPreferences.isLoading) {
             longToast("Please wait until we've completed our initial fetch of data")
             return true
         }
@@ -236,7 +236,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     }
 
     private fun navigateToMessages(): Boolean {
-        val action = if (AuthPreferences.isLoggedIn()) {
+        val action = if (AuthPreferences.isLoggedIn) {
             HomeFragmentDirections.actionFragmentViewHomeToFragmentViewMessageList()
         } else {
             longToast("You are not logged in yet!")
@@ -248,7 +248,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     }
 
     private fun navigateToFursuitGames(): Boolean {
-        val url = "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=false&returnPath=/collect&token=${if (AuthPreferences.isLoggedIn()) AuthPreferences.token else "empty"}"
+        val url = "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=false&returnPath=/collect&token=${AuthPreferences.tokenOrEmpty()}"
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)
@@ -261,7 +261,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     }
 
     private fun navigateToAdditionalServices(): Boolean {
-        val url = "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=false&returnPath=/&token=${if (AuthPreferences.isLoggedIn()) AuthPreferences.token else "empty"}"
+        val url = "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=false&returnPath=/&token=${AuthPreferences.tokenOrEmpty()}"
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)

@@ -6,17 +6,25 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import android.text.InputType
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.events.LoginReceiver
 import org.eurofurence.connavigator.events.LogoutReceiver
 import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.services.AnalyticsService
+import org.eurofurence.connavigator.services.PMService
+import org.eurofurence.connavigator.util.EmbeddedLocalBroadcastReceiver
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.toRelative
@@ -24,48 +32,68 @@ import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.appcompat.v7.toolbar
+import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.browse
+import org.jetbrains.anko.support.v4.intentFor
+import org.jetbrains.anko.support.v4.longToast
 import org.joda.time.DateTime
+import org.joda.time.Duration
 
 /**
  * Created by requinard on 6/26/17.
  */
-class LoginActivity : AppCompatActivity(), AnkoLogger {
+class LoginFragment : Fragment(), AnkoLogger {
+
     val ui by lazy { LoginUi() }
 
-    private val loginReceiver = localReceiver(LoginReceiver.LOGIN_RESULT) {
-        val success = it.booleans["success"]
+    private lateinit var loginReceiver: EmbeddedLocalBroadcastReceiver
 
-        info { "Received broadcast from LoginReceiver" }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            UI { ui.createView(this) }.view
 
-        runOnUiThread {
-            if (success) {
-                info { "Login was success! Closing activity" }
-                longToast(getString(R.string.login_logged_in_as, AuthPreferences.username))
-                finish()
-            } else {
-                info { "Login failed! Showing error message" }
-                longToast(getString(R.string.login_failed))
-                ui.errorText.visibility = View.VISIBLE
-                ui.layoutMain.visibility = View.VISIBLE
-                ui.layoutBusy.visibility = View.GONE
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // TODO: Replace this at some point with something not as poo.
+        loginReceiver = requireContext().localReceiver(LoginReceiver.LOGIN_RESULT) {
+            val success = it.booleans["success"]
+
+            info { "Received broadcast from LoginReceiver" }
+
+            // Just logged in, refresh messages.
+            PMService.fetchInBackground()
+
+            runOnUiThread {
+                if (success) {
+                    info { "Login was success! Closing activity" }
+                    longToast(getString(R.string.login_logged_in_as, AuthPreferences.username))
+
+                    findNavController().popBackStack(R.id.navHome, false)
+                } else {
+                    info { "Login failed! Showing error message" }
+                    longToast(getString(R.string.login_failed))
+                    ui.errorText.visibility = View.VISIBLE
+                    ui.layoutMain.visibility = View.VISIBLE
+                    ui.layoutBusy.visibility = View.GONE
+                }
             }
         }
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        AnalyticsService.screen(this, "Login")
         info { "Starting login attempt" }
-        ui.setContentView(this)
 
         ui.submit.setOnClickListener { attemptSubmit() }
 
         ui.logout.setOnClickListener {
             info { "Logging user out" }
+
+            // Invalidate cache.
+            PMService.invalidate()
+
             longToast(getString(R.string.login_logged_out))
-            sendBroadcast(intentFor<LogoutReceiver>())
-            finish()
+            context?.sendBroadcast(intentFor<LogoutReceiver>())
+
+            findNavController().popBackStack(R.id.navHome, false)
         }
 
         ui.moreInformation.setOnClickListener {
@@ -77,6 +105,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
             ui.username.setText(it.getString("username", ""))
             ui.password.setText(it.getString("password", ""))
         }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -123,7 +152,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
         ui.layoutMain.visibility = View.GONE
         ui.layoutBusy.visibility = View.VISIBLE
 
-        sendBroadcast(intentFor<LoginReceiver>(
+        context?.sendBroadcast(intentFor<LoginReceiver>(
                 LoginReceiver.REGNUMBER to ui.regNumber.text.toString(),
                 LoginReceiver.USERNAME to ui.username.text.toString(),
                 LoginReceiver.PASSWORD to ui.password.text.toString()
@@ -131,7 +160,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
     }
 }
 
-class LoginUi : AnkoComponent<LoginActivity> {
+class LoginUi : AnkoComponent<Fragment> {
     lateinit var username: EditText
     lateinit var regNumber: EditText
     lateinit var password: EditText
@@ -143,7 +172,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
     lateinit var layoutBusy: LinearLayout
     var initialized = false
 
-    override fun createView(ui: AnkoContext<LoginActivity>) = with(ui) {
+    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         scrollView {
             lparams(matchParent, matchParent)
             verticalLayout {
@@ -169,16 +198,9 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
                 layoutMain = verticalLayout {
 
-                    toolbar {
-                        titleResource = R.string.login
-                        lparams(matchParent, wrapContent)
-                        backgroundResource = R.color.primary
-                        setTitleTextAppearance(ctx, android.R.style.TextAppearance_Medium_Inverse)
-                    }
-
                     // If not logged in
                     verticalLayout {
-                        visibility = if (AuthPreferences.isLoggedIn()) View.GONE else View.VISIBLE
+                        visibility = if (AuthPreferences.isLoggedIn) View.GONE else View.VISIBLE
 
                         lparams(matchParent, matchParent)
 
@@ -239,7 +261,7 @@ class LoginUi : AnkoComponent<LoginActivity> {
 
                     // If logged in
                     verticalLayout {
-                        visibility = if (AuthPreferences.isLoggedIn()) View.VISIBLE else View.GONE
+                        visibility = if (AuthPreferences.isLoggedIn) View.VISIBLE else View.GONE
 
                         padding = dip(16)
 

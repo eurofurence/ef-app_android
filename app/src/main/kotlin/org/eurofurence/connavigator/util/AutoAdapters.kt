@@ -11,7 +11,7 @@ import kotlin.collections.AbstractList
  * Binding composer, see [from] and [into].
  * @param delegate The context to create the view with.
  */
-class AutoBehaviour<E>(delegate: AnkoContext<ViewGroup>) : AnkoContext<ViewGroup> by delegate {
+class AutoBehaviour<E, T>(delegate: AnkoContext<T>) : AnkoContext<T> by delegate {
 
     /**
      * Backing for the resetter.
@@ -86,14 +86,15 @@ class AutoBehaviour<E>(delegate: AnkoContext<ViewGroup>) : AnkoContext<ViewGroup
  * @property autoBehaviour The auto binder used to bind the view.
  * @property view The view that is bound and held.
  */
-class AutoViewHolder<E>(val autoBehaviour: AutoBehaviour<E>, view: View) : RecyclerView.ViewHolder(view)
+class AutoViewHolder<E>(val autoBehaviour: AutoBehaviour<E, ViewGroup>, view: View) : RecyclerView.ViewHolder(view)
 
 /**
  * Base class for auto adapters.
  * @property id The identity computation for the element.
  * @property create The view creation and binding composition function.
  */
-abstract class AutoAdapter<E>(val id: E.() -> Any?, val create: AutoBehaviour<E>.() -> View) : RecyclerView.Adapter<AutoViewHolder<E>>() {
+abstract class AutoAdapter<E>(val id: E.() -> Any?, val create: AutoBehaviour<E, ViewGroup>.() -> View)
+    : RecyclerView.Adapter<AutoViewHolder<E>>() {
     init {
         super.setHasStableIds(true)
     }
@@ -124,7 +125,7 @@ abstract class AutoAdapter<E>(val id: E.() -> Any?, val create: AutoBehaviour<E>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AutoViewHolder<E> {
         val context = AnkoContext.createReusable(parent.context, parent, false)
-        val autoBinder = AutoBehaviour<E>(context)
+        val autoBinder = AutoBehaviour<E, ViewGroup>(context)
         val view = autoBinder.create()
         return AutoViewHolder(autoBinder, view)
     }
@@ -158,7 +159,7 @@ abstract class AutoAdapter<E>(val id: E.() -> Any?, val create: AutoBehaviour<E>
  * @param id The identity computation for the element.
  * @param create The view creation and binding composition function.
  */
-class ListAutoAdapter<E>(id: E.() -> Any?, create: AutoBehaviour<E>.() -> View) : AutoAdapter<E>(id, create) {
+class ListAutoAdapter<E>(id: E.() -> Any?, create: AutoBehaviour<E, ViewGroup>.() -> View) : AutoAdapter<E>(id, create) {
     val list = mutableListOf<E>()
 
     override fun getItemCount() = list.size

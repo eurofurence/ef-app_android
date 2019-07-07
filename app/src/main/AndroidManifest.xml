@@ -29,8 +29,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.fragments.LoginActivity" />
-
         <!-- Service providing a detached retrieval of data from the internet. -->
         <service
             android:name=".services.UpdateIntentService"

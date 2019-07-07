@@ -1,45 +1,44 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.joanzapata.iconify.widget.IconTextView
 import com.pawegio.kandroid.longToast
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.model.PrivateMessageRecord
-import nl.komponents.kovenant.then
-import nl.komponents.kovenant.ui.failUi
-import nl.komponents.kovenant.ui.promiseOnUi
-import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.locateDb
-import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.services.PMService
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.services.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
 /**
  * Created by requinard on 6/28/17.
  */
-class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
+class FragmentViewMessageList : DisposingFragment(), AnkoLogger, HasDb {
     override val db by lazy { locateDb() }
     val ui by lazy { MessagesUi() }
 
+    /**
+     * The list of currently displayed messages.
+     */
     var messages = emptyList<PrivateMessageRecord>()
 
     inner class MessageViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -56,7 +55,8 @@ class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
             holder.title.text = message.subject
             holder.date.text = getString(R.string.misc_concat_newline,
                     getString(R.string.message_from_name, message.authorName),
-                    getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative() ?: getString(R.string.misc_not_yet))
+                    getString(R.string.message_sent_date, message.createdDateTimeUtc?.toRelative()
+                            ?: getString(R.string.misc_not_yet))
             )
 
             if (message.readDateTimeUtc != null) {
@@ -90,24 +90,54 @@ class FragmentViewMessageList : Fragment(), AnkoLogger, HasDb {
 
         info { "Filling in messages" }
 
-        promiseOnUi {
-            ui.loading.visibility = View.VISIBLE
-            ui.messageList.visibility = View.GONE
-        } then {
-            info { "Fetching messages" }
-            apiService.communications.addHeader("Authorization", AuthPreferences.asBearer())
-            apiService.communications.apiCommunicationPrivateMessagesGet().sortedByDescending { it.createdDateTimeUtc }
-        } success {
-            info("Successfully retrieved ${it.size} messages")
-            this.messages = it
-        } successUi {
-            configureRecycler()
-            ui.loading.visibility = View.GONE
-            ui.messageList.visibility = View.VISIBLE
-        } failUi {
-            warn { "Failed to retrieve messages" }
-            longToast(getString(R.string.message_failed_to_retrieve))
-        }
+        // Configure the recycler, TODO: use auto adapter.
+        configureRecycler()
+
+        // Subscribe to the actual list of PMs.
+        subscribeToPMs()
+    }
+
+    /**
+     * The default sorting, put unread messages at the top and sorts by creation time after.
+     */
+    private val standardSorting = compareBy<PrivateMessageRecord> {
+        it.readDateTimeUtc != null
+    }.thenByDescending {
+        it.createdDateTimeUtc
+    }
+
+    /**
+     * Subscribes to the PMs by piping them into the adapter (and indicating some loading time if necessary).
+     */
+    private fun subscribeToPMs() {
+        PMService.updated
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    // Next item, assert proper visibility.
+                    ui.loading.visibility = View.GONE
+                    ui.messageList.visibility = View.VISIBLE
+
+                    // Assign messages, use proper sorting.
+                    messages = it.values.sortedWith(standardSorting)
+
+                    // Notify the data set of the change.
+                    ui.messageList.adapter?.notifyDataSetChanged()
+
+                }, {
+                    // On error, display a long toast indicating error and set nothing visible.
+                    ui.loading.visibility = View.GONE
+                    ui.messageList.visibility = View.GONE
+
+                    warn { "Failed to retrieve messages" }
+                    longToast(getString(R.string.message_failed_to_retrieve))
+                }, {
+                    // Will never be completed.
+                }, {
+                    // Prepare by displaying loading only.
+                    ui.loading.visibility = View.VISIBLE
+                    ui.messageList.visibility = View.GONE
+                })
+                .collectOnDestroyView()
     }
 
     private fun configureRecycler() {

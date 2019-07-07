@@ -24,11 +24,6 @@ import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class InfoItemsTests {
-
-    @Rule
-    @JvmField
-    var mActivityTestRule = ActivityTestRule(StartActivity::class.java)
-
     @Test
     fun infoItemsTests() {
         val appCompatImageButton = onView(
