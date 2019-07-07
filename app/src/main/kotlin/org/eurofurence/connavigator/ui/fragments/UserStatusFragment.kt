@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.swagger.client.model.PrivateMessageRecord
@@ -85,12 +86,12 @@ class UserStatusFragment : DisposingFragment(), AnkoLogger {
      */
     private fun subscribeToPMs() {
 
-        AuthPreferences.updated
-                // Include update status in observable.
-                .withLatestFrom(PMService.updated,
-                        BiFunction { l: Authentication, r: Map<UUID, PrivateMessageRecord> ->
-                            l to r
-                        })
+        // Include update status in observable.
+        Observable.combineLatest(
+                AuthPreferences.updated, PMService.updated,
+                BiFunction { l: Authentication, r: Map<UUID, PrivateMessageRecord> ->
+                    l to r
+                })
 
                 // Use UI thread for subscription.
                 .subscribeOn(AndroidSchedulers.mainThread())
