@@ -2,7 +2,7 @@
 
 package org.eurofurence.connavigator.util.extensions
 
-import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.util.Choice
 import org.eurofurence.connavigator.util.Dispatcher
 import org.eurofurence.connavigator.util.left
@@ -113,7 +113,7 @@ inline infix fun <reified R, reified E : Throwable> (() -> R).catchToNull(handle
 
 /**
  * Catches an exception of type [E] in the [block]. If the [block] succeeded, uses it's return value, otherwise
- * returns null. Exceptions are just handled by logging with [Analytics].
+ * returns null. Exceptions are just handled by logging with [AnalyticsService].
  *
  * @param R Type of the shared return value
  * @param E Type of the exception

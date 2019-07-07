@@ -22,7 +22,7 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.util.extensions.*
-import org.eurofurence.connavigator.webapi.apiService
+import org.eurofurence.connavigator.services.apiService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.longToast

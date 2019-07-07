@@ -13,10 +13,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.broadcast.LoginReceiver
-import org.eurofurence.connavigator.broadcast.LogoutReceiver
-import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.events.LoginReceiver
+import org.eurofurence.connavigator.events.LogoutReceiver
+import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.toRelative
@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Analytics.screen(this, "Login")
+        AnalyticsService.screen(this, "Login")
         info { "Starting login attempt" }
         ui.setContentView(this)
 

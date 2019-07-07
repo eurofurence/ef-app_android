@@ -1,12 +1,12 @@
 package org.eurofurence.connavigator.ui.fragments
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -24,7 +24,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.glyphsFor
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.FilterChain
 import org.eurofurence.connavigator.ui.filters.start
@@ -159,7 +159,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 adjustViewBounds = true
                 visibility = View.GONE
                 from { bannerImageId } into {
-                    imageService.load(db.images[it], this)
+                    ImageService.load(db.images[it], this)
                 }
             }.lparams(
                     width = matchParent,
@@ -168,9 +168,30 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             // Horizontal stack of times and extra info.
             linearLayout {
 
+                // Display day if in a view that has no day tab.
+                textView {
+                    verticalPadding = dip(10)
+                    horizontalPadding = dip(15)
+                    setTypeface(null, Typeface.BOLD)
+
+                    backgroundColorResource = R.color.backgroundGrey
+                    isSingleLine = true
+                    gravity = Gravity.CENTER
+
+                    from { daysInsteadOfGlyphs to start.dayOfWeek().asShortText } into { (visible, day) ->
+                        visibility = if (visible) View.VISIBLE else View.GONE
+                        text = day
+                    }
+                }.lparams(
+                        width = wrapContent,
+                        height = matchParent) {
+                    rightMargin = 1
+                }
+
                 // Start time text.
                 textView {
-                    setPadding(dip(15), dip(10), dip(10), dip(10))
+                    padding = dip(10)
+                    leftPadding = dip(15)
                     backgroundColorResource = R.color.cardview_light_background
                     isSingleLine = true
                     gravity = Gravity.CENTER
@@ -196,6 +217,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 // End time text.
                 textView {
                     padding = dip(10)
+                    rightPadding = dip(15)
                     backgroundColorResource = R.color.cardview_light_background
                     isSingleLine = true
                     gravity = Gravity.CENTER
@@ -206,23 +228,6 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                         height = matchParent) {
                     rightMargin = 1
                     minimumWidth = dip(60)
-                }
-
-                // Display day if in a view that has no day tab.
-                fontAwesomeView {
-                    padding = dip(10)
-                    backgroundColorResource = R.color.cardview_light_background
-                    isSingleLine = true
-                    gravity = Gravity.CENTER
-
-                    from { daysInsteadOfGlyphs to start.dayOfWeek().asShortText } into { (visible, day) ->
-                        visibility = if (visible) View.VISIBLE else View.GONE
-                        text = day
-                    }
-                }.lparams(
-                        width = wrapContent,
-                        height = matchParent) {
-                    rightMargin = 1
                 }
 
                 fontAwesomeView {

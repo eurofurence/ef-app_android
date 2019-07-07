@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import org.eurofurence.connavigator.database.Db
-import org.eurofurence.connavigator.pref.AppPreferences
+import org.eurofurence.connavigator.preferences.AppPreferences
 import org.eurofurence.connavigator.ui.filters.*
 import org.eurofurence.connavigator.ui.fragments.EventRecyclerFragment
 import org.joda.time.DateTime

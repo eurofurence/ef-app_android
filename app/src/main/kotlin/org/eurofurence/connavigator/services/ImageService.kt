@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.net
+package org.eurofurence.connavigator.services
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -25,7 +25,7 @@ import org.jetbrains.anko.debug
 /**
  * Provides methods for obtaining images from web and caching them.
  */
-object imageService : AnkoLogger {
+object ImageService : AnkoLogger {
     /**
      * Image loading progress listener that does nothing.
      */

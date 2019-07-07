@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.joanzapata.iconify.widget.IconTextView
@@ -16,7 +15,7 @@ import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.net.imageService
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.ui.dialogs.DealerDialog
 import org.eurofurence.connavigator.ui.fragments.DealerListFragmentDirections
 import org.eurofurence.connavigator.util.delegators.view
@@ -57,7 +56,7 @@ class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, ov
 
         // If no dealer preview was provided, load the YCH icon
         if (dealer[toThumbnail] != null) {
-            imageService.load(dealer[toThumbnail], holder.dealerPreviewImage, false)
+            ImageService.load(dealer[toThumbnail], holder.dealerPreviewImage, false)
         } else {
             fragment.context?.let {
                 holder.dealerPreviewImage.setImageDrawable(

@@ -7,9 +7,9 @@ import androidx.core.content.ContextCompat.startActivity
 import com.pawegio.kandroid.IntentFor
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.broadcast.EventFavoriteBroadcast
+import org.eurofurence.connavigator.events.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.Db
-import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.ui.filters.end
 import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.util.extensions.jsonObjects
@@ -42,7 +42,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
 
                 val calendarIntent = Intent(Intent.ACTION_INSERT)
 
-                Analytics.event(Analytics.Category.EVENT, Analytics.Action.EXPORT_CALENDAR, event.title)
+                AnalyticsService.event(AnalyticsService.Category.EVENT, AnalyticsService.Action.EXPORT_CALENDAR, event.title)
 
                 calendarIntent.type = "vnd.android.cursor.item/event"
                 calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title)
@@ -57,7 +57,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
             2 -> {
                 debug { "Sharing event" }
 
-                Analytics.event(Analytics.Category.EVENT, Analytics.Action.SHARED, event.title)
+                AnalyticsService.event(AnalyticsService.Category.EVENT, AnalyticsService.Action.SHARED, event.title)
                 //share
                 context.share(event.shareString(context!!), context.getString(R.string.event_share_event))
             }

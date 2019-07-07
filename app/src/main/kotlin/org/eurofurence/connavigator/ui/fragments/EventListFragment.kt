@@ -16,7 +16,7 @@ import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.pref.BackgroundPreferences
+import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.RoomEventPagerAdapter

@@ -1,12 +1,12 @@
-package org.eurofurence.connavigator.gcm
+package org.eurofurence.connavigator.services
 
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.FirebaseInstanceIdService
 import io.swagger.client.model.PostFcmDeviceRegistrationRequest
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.BuildConfig
-import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.pref.AuthPreferences.authentication
+import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.preferences.AuthPreferences.authentication
 import org.eurofurence.connavigator.webapi.apiService
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info

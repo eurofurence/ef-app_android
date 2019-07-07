@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.gcm
+package org.eurofurence.connavigator.services
 
 import androidx.navigation.NavDeepLinkBuilder
 import com.google.firebase.iid.FirebaseInstanceId
@@ -7,8 +7,9 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.dispatchUpdate
-import org.eurofurence.connavigator.pref.RemotePreferences
+import org.eurofurence.connavigator.notifications.EFNotificationChannel
+import org.eurofurence.connavigator.notifications.NotificationFactory
+import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.eurofurence.connavigator.webapi.pmService

@@ -1,10 +1,8 @@
 package org.eurofurence.connavigator.util
 
-import org.eurofurence.connavigator.pref.DebugPreferences
+import org.eurofurence.connavigator.preferences.DebugPreferences
 import org.joda.time.DateTime
 import org.joda.time.Duration
-import org.joda.time.Period
-import org.joda.time.PeriodType
 
 /**
  * Proxy the datetime object so we can fudge the dates

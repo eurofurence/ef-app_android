@@ -1,7 +1,6 @@
 package org.eurofurence.connavigator.ui.activities
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Browser
@@ -23,15 +22,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.broadcast.ResetReceiver
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.UpdateIntentService
-import org.eurofurence.connavigator.database.dispatchUpdate
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.pref.AnalyticsPreferences
-import org.eurofurence.connavigator.pref.AuthPreferences
-import org.eurofurence.connavigator.pref.RemotePreferences
-import org.eurofurence.connavigator.tracking.Analytics
+import org.eurofurence.connavigator.events.ResetReceiver
+import org.eurofurence.connavigator.preferences.AnalyticsPreferences
+import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.preferences.BackgroundPreferences
+import org.eurofurence.connavigator.preferences.RemotePreferences
+import org.eurofurence.connavigator.services.AnalyticsService
+import org.eurofurence.connavigator.services.UpdateIntentService
+import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.extensions.booleans
@@ -81,18 +81,12 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
         info { "Starting Nav Activity" }
 
-        // Stop the rotation
-        if (!RemotePreferences.rotationEnabled) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
-
         ui.setContentView(this)
 
         supportFragmentManager.beginTransaction()
                 .replace(R.id.nav_graph, navFragment)
                 .setPrimaryNavigationFragment(navFragment)
                 .commit()
-
 
         ui.navTitle.text = RemotePreferences.eventTitle
         ui.navSubtitle.text = RemotePreferences.eventSubTitle
@@ -120,7 +114,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
                 .observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    Analytics.updateSettings()
+                    AnalyticsService.updateSettings()
                 }
 
         subscriptions += AuthPreferences
@@ -133,8 +127,6 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
         updateReceiver.register()
 
         info { "Inserted Nav Fragment" }
-
-        dispatchUpdate(this)
     }
 
     private fun updateNavCountdown() {
@@ -212,6 +204,12 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         info { "Selecting item" }
+
+        if (!BackgroundPreferences.fetchHasSucceeded and BackgroundPreferences.isLoading){
+            longToast("Please wait until we've completed our initial fetch of data")
+            return true
+        }
+
         return when (item.itemId) {
             R.id.navDevReload -> UpdateIntentService().dispatchUpdate(this, true).let { true }
             R.id.navDevClear -> alert(getString(R.string.clear_app_cache), getString(R.string.clear_database)) {
