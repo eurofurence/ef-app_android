@@ -27,15 +27,12 @@ import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.locateDb
-import org.eurofurence.connavigator.pref.AuthPreferences
+import org.eurofurence.connavigator.services.pmService
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.util.v2.plus
-import org.eurofurence.connavigator.webapi.apiService
-import org.eurofurence.connavigator.webapi.pmService
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.uiThread

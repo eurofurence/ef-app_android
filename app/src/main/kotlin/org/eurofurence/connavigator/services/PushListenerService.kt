@@ -12,7 +12,6 @@ import org.eurofurence.connavigator.notifications.NotificationFactory
 import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
-import org.eurofurence.connavigator.webapi.pmService
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info

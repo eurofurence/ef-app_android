@@ -25,11 +25,6 @@ import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class LoginActivityTest {
-
-    @Rule
-    @JvmField
-    var mActivityTestRule = ActivityTestRule(StartActivity::class.java)
-
     @Test
     fun loginActivityTest() {
         val textView = onView(

@@ -1,11 +1,11 @@
-package org.eurofurence.connavigator.webapi
+package org.eurofurence.connavigator.services
 
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.swagger.client.model.PrivateMessageRecord
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
-import org.eurofurence.connavigator.pref.AuthPreferences
+import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
 import java.util.*
