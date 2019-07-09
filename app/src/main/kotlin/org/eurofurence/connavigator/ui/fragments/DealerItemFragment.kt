@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet.END
 import androidx.constraintlayout.widget.ConstraintSet.START
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import com.joanzapata.iconify.widget.IconTextView
@@ -24,6 +25,7 @@ import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
 import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.successUi
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.findLinkFragment
@@ -39,6 +41,7 @@ import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.px2dip
 import java.util.*
@@ -56,6 +59,12 @@ class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if(args.CID != null && !args.CID.equals(BuildConfig.CONVENTION_IDENTIFIER, true)) {
+            alert("This item is not for this convention", "Wrong convention!").show()
+
+            findNavController().popBackStack()
+        }
+
         subscriptions += db.subscribe {
             fillUi()
         }

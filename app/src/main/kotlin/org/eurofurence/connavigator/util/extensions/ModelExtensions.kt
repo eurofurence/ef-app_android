@@ -5,6 +5,7 @@ import android.util.Base64
 import android.util.Log
 import io.swagger.client.ApiException
 import io.swagger.client.model.*
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.services.PMService
@@ -60,13 +61,13 @@ fun EventRecord.fullTitle(): String {
 fun EventRecord.startTimeString(): String = startDateTimeUtc.jodatime().toString("HH:mm")
 fun EventRecord.endTimeString(): String = endDateTimeUtc.jodatime().toString("HH:mm")
 fun EventRecord.ownerString(): String = "Hosted by $panelHosts"
-fun EventRecord.shareString(ctx: Context): String = ctx.getString(R.string.event_check_out_url, this.title, createUrl("event", this.id))
+fun EventRecord.shareString(ctx: Context): String = ctx.getString(R.string.event_check_out_url, this.title, createUrl("Events", this.id))
 
 fun DealerRecord.hasUniqueDisplayName() = (this.displayName.isNotEmpty() && this.displayName != this.attendeeNickname)
 fun DealerRecord.getName(): String? = if (this.hasUniqueDisplayName()) this.displayName else this.attendeeNickname
 fun DealerRecord.allDaysAvailable() = listOf(this.attendsOnThursday, this.attendsOnFriday, this.attendsOnSaturday).all { it == true }
-fun DealerRecord.shareString(ctx: Context) = ctx.getString(R.string.dealer_check_out_dealer_url, this.displayName, createUrl("dealer", this.id))
+fun DealerRecord.shareString(ctx: Context) = ctx.getString(R.string.dealer_check_out_dealer_url, this.displayName, createUrl("Dealers", this.id))
 
 fun createUrl(type: String, id: UUID): String {
-    return "eurofurence://$type//$id"
+    return "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/Web/$type/$id"
 }

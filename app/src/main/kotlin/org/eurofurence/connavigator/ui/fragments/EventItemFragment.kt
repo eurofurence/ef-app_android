@@ -16,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.pawegio.kandroid.IntentFor
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.events.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.HasDb
@@ -37,6 +38,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.alert
 import us.feras.mdv.MarkdownView
 import java.util.*
 
@@ -55,6 +57,12 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(args.CID != null && !args.CID.equals(BuildConfig.CONVENTION_IDENTIFIER, true)) {
+            alert("This item is not for this convention", "Wrong convention!").show()
+
+            findNavController().popBackStack()
+        }
 
         subscriptions += db.subscribe {
             fillUi()

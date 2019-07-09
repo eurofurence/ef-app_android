@@ -119,7 +119,7 @@ class MapFragment : Fragment(), HasDb, AnkoLogger {
 
         info { "Dealer is ${dealer?.getName()}" }
         if (dealer !== null) {
-            val action = MapListFragmentDirections.actionMapListFragmentToDealerItemFragment(dealer.id.toString())
+            val action = MapListFragmentDirections.actionMapListFragmentToDealerItemFragment(dealer.id.toString(), null)
             findNavController().navigate(action)
         } else {
             longToast(getString(R.string.dealer_could_not_navigate_to))

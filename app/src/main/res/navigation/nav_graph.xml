@@ -77,6 +77,9 @@
                 app:exitAnim="@anim/nav_default_exit_anim"
                 app:popEnterAnim="@anim/nav_default_pop_enter_anim"
                 app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        <action
+            android:id="@+id/action_navHome_to_navDealerItem"
+            app:destination="@id/navDealerItem" />
     </fragment>
     <fragment
             android:id="@+id/navEventList"
@@ -101,6 +104,13 @@
         <action
                 android:id="@+id/action_navEventItem_to_navMapList"
                 app:destination="@id/navMapList"/>
+        <argument
+            android:name="CID"
+            app:argType="string"
+            app:nullable="true" />
+        <deepLink
+            android:id="@+id/deepLink3"
+            app:uri="https://app.eurofurence.org/{CID}/Web/Events/{eventId}" />
     </fragment>
     <fragment
             android:id="@+id/navDealerList"
@@ -122,6 +132,13 @@
                 android:id="@+id/action_fragmentViewDealer_to_fragmentViewMaps"
                 app:destination="@id/navMapList"/>
         <deepLink app:uri="eurofurence://dealers/{dealerId}/"/>
+        <argument
+            android:name="CID"
+            app:argType="string"
+            app:nullable="true" />
+        <deepLink
+            android:id="@+id/deepLink2"
+            app:uri="https://app.eurofurence.org/{CID}/Web/Dealers/{dealerId}" />
     </fragment>
     <fragment
             android:id="@+id/navMapList"

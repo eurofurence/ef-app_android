@@ -89,7 +89,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
         val notificationFactory = NotificationFactory(context)
 
         val action = HomeFragmentDirections
-                .actionFragmentViewHomeToFragmentViewEvent(event.id.toString())
+                .actionFragmentViewHomeToFragmentViewEvent(event.id.toString(), null)
 
         val pendingIntent = NavDeepLinkBuilder(context)
                 .setComponentName(NavActivity::class.java)
