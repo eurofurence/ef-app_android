@@ -94,7 +94,7 @@ class UserStatusFragment : DisposingFragment(), AnkoLogger {
                 })
 
                 // Use UI thread for subscription.
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
 
                 // React to authentication and messages status.
                 .subscribe { (auth, messages) ->
