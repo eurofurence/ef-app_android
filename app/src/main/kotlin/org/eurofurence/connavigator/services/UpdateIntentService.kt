@@ -26,7 +26,8 @@ import java.util.*
 @Serializable
 data class UpdateComplete(val success: Boolean,
                           @Serializable(with = DateSerializer::class)
-                          val time: Date?, val exception: Throwable?)
+                          val time: Date?,
+                          val exceptionMessage: String?)
 
 @ImplicitReflectionSerializer
 val updateComplete = internalSpec<UpdateComplete>()
@@ -178,7 +179,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
                 booleans["success"] = false
                 objects["time"] = date
                 objects["reason"] = ex
-            } to UpdateComplete(false, date, ex)
+            } to UpdateComplete(false, date, ex.message)
         }
 
         // Send a broadcast notifying completion of this action
