@@ -5,19 +5,23 @@ import android.content.Context
 import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.Serializable
 import org.eurofurence.connavigator.BuildConfig
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.events.EventFavoriteBroadcast
+import org.eurofurence.connavigator.preferences.BackgroundPreferences
+import org.eurofurence.connavigator.preferences.LoadingState
 import org.eurofurence.connavigator.preferences.RemotePreferences
+import org.eurofurence.connavigator.util.extensions.booleans
+import org.eurofurence.connavigator.util.extensions.catchAlternative
+import org.eurofurence.connavigator.util.extensions.objects
+import org.eurofurence.connavigator.util.extensions.toIntent
+import org.eurofurence.connavigator.util.v2.DateSerializer
 import org.eurofurence.connavigator.util.v2.convert
 import org.eurofurence.connavigator.util.v2.internalSpec
 import org.jetbrains.anko.*
 import java.util.*
-import kotlinx.serialization.Serializable
-import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.preferences.BackgroundPreferences
-import org.eurofurence.connavigator.util.extensions.*
-import org.eurofurence.connavigator.util.v2.DateSerializer
 
 @Serializable
 data class UpdateComplete(val success: Boolean,
@@ -63,7 +67,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
         val showToastOnCompletion = intent?.getBooleanExtra("showToastOnCompletion", false) ?: false
         val preloadChangedImages = intent?.getBooleanExtra("preloadChangedImages", false) ?: false
 
-        BackgroundPreferences.isLoading = true
+        BackgroundPreferences.loadingState = LoadingState.LOADING_DATA
 
         // Initialize the response, the following code is net and IO oriented, it could fail
         val (response, responseObject) = {
@@ -81,28 +85,6 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
 
             if (sync.conventionIdentifier != BuildConfig.CONVENTION_IDENTIFIER) {
                 throw Exception("Convention Identifier mismatch\n\nExpected: ${BuildConfig.CONVENTION_IDENTIFIER}\nReceived: ${sync.conventionIdentifier}")
-            }
-
-            /*
-                All images that have been deleted or changed can get removed from cache to free
-                space. We need to base the query on existing (local) records so the ImageService
-                can access the cache by the "old" urls.
-              */
-            var invalidatedImages = images.items.filter {
-                sync.images.deletedEntities.contains(it.id)
-                        || sync.images.changedEntities.any { rec -> rec.id == it.id }
-            }
-
-            for (image in invalidatedImages)
-                ImageService.removeFromCache(image)
-
-            /*
-                Preload images if they changed. Only StartActivity doesn't want this, because it's
-                doing it manually with UI presentation.
-              */
-            if (preloadChangedImages) {
-                for (image in sync.images.changedEntities)
-                    ImageService.preload(image)
             }
 
             // Apply sync
@@ -127,6 +109,31 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
             // Update notifications for favorites
             EventFavoriteBroadcast().updateNotifications(applicationContext, faves)
 
+            // Update Images
+            BackgroundPreferences.loadingState = LoadingState.LOADING_IMAGES
+
+            /*
+                All images that have been deleted or changed can get removed from cache to free
+                space. We need to base the query on existing (local) records so the ImageService
+                can access the cache by the "old" urls.
+              */
+            val invalidatedImages = images.items.filter {
+                sync.images.deletedEntities.contains(it.id)
+                        || sync.images.changedEntities.any { rec -> rec.id == it.id }
+            }
+
+            for (image in invalidatedImages)
+                ImageService.removeFromCache(image)
+
+            /*
+                Preload images if they changed. Only StartActivity doesn't want this, because it's
+                doing it manually with UI presentation.
+              */
+            if (preloadChangedImages) {
+                for (image in sync.images.changedEntities)
+                    ImageService.preload(image)
+            }
+
             // Store new time
             date = sync.currentDateTimeUtc
 
@@ -143,8 +150,8 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
             // Make the success response message
             info { "Completed update successfully" }
 
-            BackgroundPreferences.isLoading = false
-            BackgroundPreferences.fetchHasSucceeded = true
+            BackgroundPreferences.loadingState = LoadingState.SUCCEEDED
+            BackgroundPreferences.hasLoadedOnce = true
 
             if (showToastOnCompletion) {
                 runOnUiThread {
@@ -156,7 +163,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
                 booleans["success"] = true
                 objects["time"] = date
             } to UpdateComplete(true, date, null)
-        } catchAlternative { ex: Throwable ->
+        } catchAlternative { ex: Exception ->
             // Make the fail response message, transfer exception
             if (showToastOnCompletion) {
                 runOnUiThread {
@@ -164,8 +171,7 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
                 }
             }
 
-            BackgroundPreferences.fetchHasSucceeded = false
-            BackgroundPreferences.isLoading = false
+            BackgroundPreferences.loadingState = LoadingState.FAILED
 
             error("Completed update with error", ex)
             UPDATE_COMPLETE.toIntent {

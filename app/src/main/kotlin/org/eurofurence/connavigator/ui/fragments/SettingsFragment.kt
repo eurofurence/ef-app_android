@@ -11,9 +11,7 @@ import androidx.fragment.app.Fragment
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.preferences.AnalyticsPreferences
-import org.eurofurence.connavigator.preferences.AppPreferences
-import org.eurofurence.connavigator.preferences.DebugPreferences
+import org.eurofurence.connavigator.preferences.*
 import org.eurofurence.connavigator.util.DatetimeProxy
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
@@ -168,6 +166,26 @@ class SettingsUi : AnkoComponent<Fragment> {
                                 DatetimeProxy.addDays(1)
                                 updateTime()
                             }
+                        }
+                    }
+
+                    // Set loading states
+                    textView("Loading states")
+                    linearLayout {
+                        button("UNIT") {
+                            setOnClickListener { BackgroundPreferences.loadingState = LoadingState.UNINITIALIZED }
+                        }
+                        button("DATA") {
+                            setOnClickListener { BackgroundPreferences.loadingState = LoadingState.LOADING_DATA }
+                        }
+                        button("IMG") {
+                            setOnClickListener { BackgroundPreferences.loadingState = LoadingState.LOADING_IMAGES }
+                        }
+                        button("OK") {
+                            setOnClickListener { BackgroundPreferences.loadingState = LoadingState.SUCCEEDED }
+                        }
+                        button("FAIL") {
+                            setOnClickListener { BackgroundPreferences.loadingState = LoadingState.FAILED }
                         }
                     }
 
