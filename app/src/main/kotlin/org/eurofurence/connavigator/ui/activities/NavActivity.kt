@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui.activities
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Browser
@@ -25,10 +26,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.events.ResetReceiver
-import org.eurofurence.connavigator.preferences.AnalyticsPreferences
-import org.eurofurence.connavigator.preferences.AuthPreferences
-import org.eurofurence.connavigator.preferences.BackgroundPreferences
-import org.eurofurence.connavigator.preferences.RemotePreferences
+import org.eurofurence.connavigator.preferences.*
 import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.services.UpdateIntentService
 import org.eurofurence.connavigator.services.dispatchUpdate
@@ -124,9 +122,24 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
                     updateLoginMenuItem()
                 }
 
+        subscriptions += BackgroundPreferences
+                .observer
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    setMenuPermissions()
+                }
+
         updateReceiver.register()
 
         info { "Inserted Nav Fragment" }
+    }
+
+    private fun setMenuPermissions() {
+        if (BackgroundPreferences.loadingState == LoadingState.UNINITIALIZED || !BackgroundPreferences.hasLoadedOnce) {
+            ui.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        } else {
+            ui.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        }
     }
 
     private fun updateNavCountdown() {
@@ -205,7 +218,10 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         info { "Selecting item" }
 
-        if (!BackgroundPreferences.fetchHasSucceeded and BackgroundPreferences.isLoading) {
+        // Exit if we're either UNINITIALIZED or when there is no data. Make an exception for the settings and update action
+        if ((BackgroundPreferences.loadingState == LoadingState.UNINITIALIZED || !BackgroundPreferences.hasLoadedOnce)
+                && !listOf(R.id.navSettings, R.id.navDevReload).contains(item.itemId)
+        ) {
             longToast("Please wait until we've completed our initial fetch of data")
             return true
         }

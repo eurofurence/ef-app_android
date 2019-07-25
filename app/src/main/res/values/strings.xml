@@ -306,4 +306,12 @@
         <item>50</item>
         <item>25</item>
     </array>
+    <string name="loading_unititialized_title">Preparing the app for first use...</string>
+    <string name="loading_unitialized_description">Bear with us - this shouldn’t take long!</string>
+    <string name="loading_data_title">Updating your data...</string>
+    <string name="loading_data_description">You can use the app normally.</string>
+    <string name="loading_img_title">Caching content for offline use...</string>
+    <string name="loading_img_description">You can use the app normally.</string>
+    <string name="loading_failed_title">Preparing the app for first use...</string>
+    <string name="loading_failed_description">Oops! This didn’t work!</string>
 </resources>
