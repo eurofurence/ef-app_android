@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
+import nl.komponents.kovenant.toVoid
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
@@ -131,8 +132,8 @@ class UpdateIntentService : IntentService("UpdateIntentService"), HasDb, AnkoLog
                 doing it manually with UI presentation.
               */
             if (preloadChangedImages) {
-                for (image in sync.images.changedEntities)
-                    ImageService.preload(image)
+                val promises = sync.images.changedEntities.map { image -> ImageService.preload(image).toVoid() }
+                promises.forEach { promise -> promise.get() }
             }
 
             // Store new time

@@ -91,9 +91,12 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
         if(isError) {
             descriptionText.textColorResource = R.color.error_color_material_light
             errorButtonsLayout.visibility = View.VISIBLE
+            progressIndicator.visibility = View.INVISIBLE
+
         } else {
             descriptionText.compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
             errorButtonsLayout.visibility = View.GONE
+            progressIndicator.visibility = View.VISIBLE
         }
     }
 
