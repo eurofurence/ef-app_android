@@ -3,6 +3,8 @@
 package org.eurofurence.connavigator.util.extensions
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.text.Layout
 import android.view.Menu
 import android.view.ViewManager
@@ -43,12 +45,17 @@ inline fun ViewManager.multitouchViewPager(init: MultitouchableViewPager.() -> U
 fun _LinearLayout.weight(weight: Float) = lparams(dip(0), wrapContent, weight)
 
 fun Menu.setFAIcon(context: Context, menuIcon: Int, faIconId: Int, isBrand: Boolean = false, white: Boolean = false) = this.findItem(menuIcon)?.let {
-    it.icon = FontDrawable(context, faIconId, !isBrand, isBrand).apply {
+
+    val icon = FontDrawable(context, faIconId, !isBrand, isBrand).apply {
         textSize = 22F
         textAlign = Layout.Alignment.ALIGN_CENTER
         setTextColor(ContextCompat.getColor(context,
                 if (white) R.color.textWhite else R.color.iconColor
         ))
-
     }
+
+    val layerDrawable = LayerDrawable(arrayOf<Drawable>(icon))
+    layerDrawable.setLayerInset(0, 32 - (icon.intrinsicWidth / 2), 32 - (icon.intrinsicHeight / 2), 0, 0)
+
+    it.icon = layerDrawable
 }
