@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.services
 
 import androidx.navigation.NavDeepLinkBuilder
+import androidx.work.WorkManager
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -12,6 +13,8 @@ import org.eurofurence.connavigator.notifications.NotificationFactory
 import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
+import org.eurofurence.connavigator.workers.DataUpdateWorker
+import org.eurofurence.connavigator.workers.FetchPrivateMessageWorker
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
@@ -51,7 +54,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
     private fun syncData() {
         info { "Received request to sync data" }
 
-        dispatchUpdate(this)
+        DataUpdateWorker.execute(this)
         RemotePreferences.update()
     }
 
@@ -77,7 +80,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         info { "Received request to create generic notification" }
 
         // Fetch in background on receiving, also assume that the cache is invalid every time.
-        PMService.fetchInBackground()
+        FetchPrivateMessageWorker.execute(this)
 
         val action = HomeFragmentDirections
                 .actionFragmentViewHomeToFragmentViewMessageItem(message.relatedId!!)

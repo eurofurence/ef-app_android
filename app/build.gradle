@@ -20,6 +20,10 @@ android {
         buildConfigField "String", "CONVENTION_IDENTIFIER", '"EF25"'
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     flavorDimensions "what"
 
     dexOptions {
@@ -100,6 +104,7 @@ ext {
     google_play_version = "12.0.1"
     fuel_version = "1.8.0"
     nav_version = "1.0.0-alpha07"
+    work_version = "2.1.0"
 }
 
 // Embedded swagger
@@ -197,6 +202,11 @@ dependencies {
     // Jetpack Nav
     implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0-rc02' // use -ktx for Kotlin
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0-rc02' // use -ktx for Kotlin
+
+    // WorkManager
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation "androidx.work:work-runtime:$work_version"
+    implementation "androidx.work:work-rxjava2:$work_version"
 }
 
 apply plugin: "com.google.gms.google-services"

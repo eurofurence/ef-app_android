@@ -6,7 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.lifecycle.Observer
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import at.grabner.circleprogress.CircleProgressView
+import com.github.lzyzsd.circleprogress.CircleProgress
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
@@ -14,12 +18,14 @@ import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.LoadingState
 import org.eurofurence.connavigator.services.UpdateIntentService
 import org.eurofurence.connavigator.services.dispatchUpdate
+import org.eurofurence.connavigator.util.extensions.circleProgress
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
+import org.eurofurence.connavigator.workers.PreloadImageWorker
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
-class LoadingIndicatorFragment : Fragment() {
+class LoadingIndicatorFragment : Fragment(), AnkoLogger {
     val ui = LoadingIndicatorFragmentUi()
     var subscriptions = Disposables.empty()
 
@@ -37,6 +43,17 @@ class LoadingIndicatorFragment : Fragment() {
                 .subscribe {
                     manageUI()
                 }
+
+        context?.let {
+            WorkManager.getInstance(it).getWorkInfosByTagLiveData(PreloadImageWorker.TAG)
+                    .observe(this, Observer {
+                        info { "Changing progress bar" }
+                        if (it != null) {
+                            ui.progressIndicator.maxValue = it.count().toFloat()
+                            ui.progressIndicator.setValue(it.filter { it.state == WorkInfo.State.SUCCEEDED }.count().toFloat())
+                        }
+                    })
+        }
     }
 
     override fun onDestroyView() {
@@ -53,9 +70,11 @@ class LoadingIndicatorFragment : Fragment() {
             ui.setText(R.string.loading_img_title, R.string.loading_img_description)
         }
         LoadingState.SUCCEEDED -> {
+            ui.progressIndicator.spin()
             ui.invisible()
         }
         LoadingState.LOADING_DATA -> {
+            ui.progressIndicator.spin()
             ui.setText(R.string.loading_data_title, R.string.loading_data_description)
         }
         else -> {
@@ -68,9 +87,9 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
     lateinit var layout: FrameLayout
     lateinit var errorButtonsLayout: LinearLayout
 
-    lateinit var titleText : TextView
+    lateinit var titleText: TextView
     lateinit var descriptionText: TextView
-    lateinit var progressIndicator: ProgressBar
+    lateinit var progressIndicator: CircleProgressView
     lateinit var quitButton: Button
 
     fun visible() {
@@ -88,7 +107,7 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
         titleText.textResource = titleRes
         descriptionText.textResource = descriptionRes
 
-        if(isError) {
+        if (isError) {
             descriptionText.textColorResource = R.color.error_color_material_light
             errorButtonsLayout.visibility = View.VISIBLE
             progressIndicator.visibility = View.INVISIBLE
@@ -111,8 +130,15 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
 
                 setPadding(dip(5), dip(15), dip(5), dip(15))
 
-                progressIndicator = progressBar {
-
+                frameLayout {
+                    progressIndicator = circleProgress {
+                        spin()
+                        textSize = 0
+                        innerContourSize = 0f
+                        outerContourSize = 0f
+                        barWidth = dip(3)
+                        rimWidth = dip(3)
+                    }
                 }.lparams(dip(0), dip(50)) {
                     weight = 3F
                 }
