@@ -52,6 +52,8 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     val eventId by lazy { UUID.fromString(args.eventId) }
     val ui by lazy { EventUi() }
 
+    var mapIsSet = false
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
@@ -148,9 +150,13 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
                 }
             }
 
-            childFragmentManager.beginTransaction()
-                    .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
-                    .commit()
+            if(!mapIsSet) {
+                childFragmentManager.beginTransaction()
+                        .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
+                        .commit()
+
+                mapIsSet = true
+            }
         }
     }
 
