@@ -89,7 +89,8 @@ class DataUpdateWorker(context: Context, workerParams: WorkerParameters) : Worke
         val workList = sync.images.changedEntities.map { PreloadImageWorker.create(it) }
         val workFinished = PreloadImageFinishedWorker.create()
 
-        WorkManager.getInstance(applicationContext).beginWith(workList)
+        WorkManager.getInstance(applicationContext)
+                .beginWith(workList)
                 .then(workFinished)
                 .enqueue()
     }

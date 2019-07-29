@@ -4,13 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import at.grabner.circleprogress.CircleProgressView
-import com.github.lzyzsd.circleprogress.CircleProgress
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
@@ -44,13 +46,24 @@ class LoadingIndicatorFragment : Fragment(), AnkoLogger {
                     manageUI()
                 }
 
+        manageUI()
+
         context?.let {
             WorkManager.getInstance(it).getWorkInfosByTagLiveData(PreloadImageWorker.TAG)
                     .observe(this, Observer {
                         info { "Changing progress bar" }
                         if (it != null) {
+                            val progress = it.filter { it.state == WorkInfo.State.SUCCEEDED }.count().toFloat()
+
                             ui.progressIndicator.maxValue = it.count().toFloat()
                             ui.progressIndicator.setValue(it.filter { it.state == WorkInfo.State.SUCCEEDED }.count().toFloat())
+
+                            info { "Finished $progress out of ${it.count().toFloat()}" }
+
+                            // todo: hack -> should be run in the FinishedImagePreloadWorker, but the next item in the chain is never called
+                            if (progress == it.count().toFloat()) {
+                                BackgroundPreferences.loadingState = LoadingState.SUCCEEDED
+                            }
                         }
                     })
         }
@@ -62,7 +75,7 @@ class LoadingIndicatorFragment : Fragment(), AnkoLogger {
         subscriptions = Disposables.empty()
     }
 
-    fun manageUI() = when (BackgroundPreferences.loadingState) {
+    private fun manageUI() = when (BackgroundPreferences.loadingState) {
         LoadingState.UNINITIALIZED -> {
             ui.setText(R.string.loading_unititialized_title, R.string.loading_unitialized_description)
         }
@@ -111,7 +124,6 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
             descriptionText.textColorResource = R.color.error_color_material_light
             errorButtonsLayout.visibility = View.VISIBLE
             progressIndicator.visibility = View.INVISIBLE
-
         } else {
             descriptionText.compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
             errorButtonsLayout.visibility = View.GONE
