@@ -27,7 +27,10 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.events.ResetReceiver
-import org.eurofurence.connavigator.preferences.*
+import org.eurofurence.connavigator.preferences.AnalyticsPreferences
+import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.preferences.BackgroundPreferences
+import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.services.UpdateIntentService
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
@@ -128,6 +131,9 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     setMenuPermissions()
+                }.apply {
+                    // manually apply menu permissions at least once
+                    setMenuPermissions()
                 }
 
         WorkManager.getInstance(this).getWorkInfosForUniqueWorkLiveData(DataUpdateWorker.TAG)
@@ -141,7 +147,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     }
 
     private fun setMenuPermissions() {
-        if (BackgroundPreferences.loadingState == LoadingState.UNINITIALIZED || !BackgroundPreferences.hasLoadedOnce) {
+        if (!BackgroundPreferences.hasLoadedOnce) {
             ui.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         } else {
             ui.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -225,8 +231,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
         info { "Selecting item" }
 
         // Exit if we're either UNINITIALIZED or when there is no data. Make an exception for the settings and update action
-        if ((BackgroundPreferences.loadingState == LoadingState.UNINITIALIZED || !BackgroundPreferences.hasLoadedOnce)
-                && !listOf(R.id.navSettings, R.id.navDevReload).contains(item.itemId)
+        if (!BackgroundPreferences.hasLoadedOnce && !listOf(R.id.navSettings, R.id.navDevReload).contains(item.itemId)
         ) {
             longToast("Please wait until we've completed our initial fetch of data")
             return true

@@ -140,6 +140,7 @@ class DataUpdateWorker(context: Context, workerParams: WorkerParameters) : Worke
             }
         }
 
+        BackgroundPreferences.hasLoadedOnce = true
         BackgroundPreferences.loadingState = LoadingState.SUCCEEDED
     }
 }
