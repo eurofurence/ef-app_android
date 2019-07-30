@@ -314,4 +314,6 @@
     <string name="loading_img_description">You can use the app normally.</string>
     <string name="loading_failed_title">Preparing the app for first use...</string>
     <string name="loading_failed_description">Oops! This didn’t work!</string>
+    <string name="loading_pending_title">Updating local data</string>
+    <string name="loading_pending_description">Waiting for an internet connection...</string>
 </resources>

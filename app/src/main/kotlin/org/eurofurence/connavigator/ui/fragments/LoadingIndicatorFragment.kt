@@ -90,6 +90,10 @@ class LoadingIndicatorFragment : Fragment(), AnkoLogger {
             ui.progressIndicator.spin()
             ui.setText(R.string.loading_data_title, R.string.loading_data_description)
         }
+        LoadingState.PENDING -> {
+            ui.progressIndicator.spin()
+            ui.setText(R.string.loading_pending_title, R.string.loading_pending_description)
+        }
         else -> {
             ui.setText(R.string.loading_failed_title, R.string.loading_failed_description, true)
         }
