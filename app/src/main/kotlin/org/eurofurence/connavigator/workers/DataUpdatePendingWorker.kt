@@ -9,7 +9,8 @@ import org.eurofurence.connavigator.preferences.LoadingState
 
 class DataUpdatePendingWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     override fun doWork(): Result {
-        BackgroundPreferences.loadingState = LoadingState.PENDING
+        if(BackgroundPreferences.loadingState != LoadingState.UNINITIALIZED)
+            BackgroundPreferences.loadingState = LoadingState.PENDING
 
         return Result.success()
     }

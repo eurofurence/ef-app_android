@@ -36,7 +36,9 @@ class LoadingIndicatorFragment : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
 
+    override fun onStart() {
         ui.quitButton.setOnClickListener { activity?.finish() }
 
         subscriptions += BackgroundPreferences
@@ -61,12 +63,14 @@ class LoadingIndicatorFragment : Fragment(), AnkoLogger {
                             info { "Finished $progress out of ${it.count().toFloat()}" }
 
                             // todo: hack -> should be run in the FinishedImagePreloadWorker, but the next item in the chain is never called
-                            if (progress == it.count().toFloat()) {
+                            if (progress == it.count().toFloat() && BackgroundPreferences.loadingState == LoadingState.LOADING_IMAGES) {
                                 BackgroundPreferences.loadingState = LoadingState.SUCCEEDED
                             }
                         }
                     })
         }
+
+        super.onStart()
     }
 
     override fun onDestroyView() {
@@ -132,6 +136,10 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
             descriptionText.compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
             errorButtonsLayout.visibility = View.GONE
             progressIndicator.visibility = View.VISIBLE
+
+            if(!BackgroundPreferences.hasLoadedOnce) {
+                descriptionText.text = "Please wait until we get a local copy of the data..."
+            }
         }
     }
 
