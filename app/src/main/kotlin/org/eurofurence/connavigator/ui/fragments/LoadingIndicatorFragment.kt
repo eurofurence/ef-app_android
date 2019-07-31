@@ -160,10 +160,10 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
                         textSize = 0
                         innerContourSize = 0f
                         outerContourSize = 0f
-                        barWidth = dip(3)
-                        rimWidth = dip(3)
+                        barWidth = dip(5)
+                        rimWidth = dip(5)
                     }
-                }.lparams(dip(0), dip(50)) {
+                }.lparams(dip(0), dip(40)) {
                     weight = 3F
                 }
 
