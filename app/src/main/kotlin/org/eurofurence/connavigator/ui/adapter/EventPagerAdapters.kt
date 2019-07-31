@@ -16,13 +16,6 @@ infix fun Date.sameDayAs(other: Date) =
         time / (24 * 60 * 60 * 1000) == other.time / (24 * 60 * 60 * 1000)
 
 abstract class EventPagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager) {
-    override fun saveState(): Parcelable? {
-        return super.saveState()
-    }
-
-    override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
-        super.restoreState(state, loader)
-    }
 }
 
 class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : EventPagerAdapter(fragmentManager) {

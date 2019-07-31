@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.pawegio.kandroid.runDelayed
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.task
@@ -299,11 +300,6 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        savedInstanceState?.getInt("first_item")?.let {
-            layoutManager.scrollToPosition(it)
-        }
-
-
         // Reading arguments
         arguments?.let {
             filters = it.getParcelable<FilterChain>("filters") ?: FilterChain.empty
@@ -326,6 +322,13 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt("first_item", layoutManager.findFirstCompletelyVisibleItemPosition())
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        runDelayed(200) {
+            layoutManager.scrollToPosition(savedInstanceState?.getInt("first_item") ?: 0)
+        }
+        super.onViewStateRestored(savedInstanceState)
     }
 
     override fun onDestroyView() {
