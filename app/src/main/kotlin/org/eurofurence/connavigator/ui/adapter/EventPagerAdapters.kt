@@ -33,7 +33,7 @@ class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fragm
     }
 
 
-    override fun getItem(position: Int): Fragment? {
+    override fun getItem(position: Int): Fragment {
         return elements.getOrPut(position) {
             EventRecyclerFragment().withArguments(
                     FilterOnDay(days[position].id) then OrderTime())

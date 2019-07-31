@@ -57,6 +57,8 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     val navFragment by lazy { NavHostFragment.create(R.navigation.nav_graph) }
     val navController by lazy { navFragment.findNavController() }
 
+    var savedState: Bundle? = null
+
     override fun onPause() {
         updateReceiver.unregister()
         super.onPause()
@@ -89,6 +91,8 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
                 .replace(R.id.nav_graph, navFragment)
                 .setPrimaryNavigationFragment(navFragment)
                 .commit()
+
+        savedState= savedInstanceState
 
         ui.navTitle.text = RemotePreferences.eventTitle
         ui.navSubtitle.text = RemotePreferences.eventSubTitle
@@ -259,6 +263,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         navController.restoreState(savedInstanceState.getBundle("nav"))
+        navController.setGraph(R.navigation.nav_graph)
         super.onRestoreInstanceState(savedInstanceState)
     }
 
