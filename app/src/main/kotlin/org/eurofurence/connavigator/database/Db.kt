@@ -355,6 +355,8 @@ class RootDb(context: Context) : Stored(context), Db {
         knowledgeEntries.delete()
         knowledgeGroups.delete()
         maps.delete()
+
+        observer.onNext(this)
     }
 
     override fun subscribe(function: (db: Db) -> Any): Disposable = observer.observeOn(AndroidSchedulers.mainThread())

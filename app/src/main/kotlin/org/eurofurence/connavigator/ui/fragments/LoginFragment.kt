@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.pawegio.kandroid.e
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.events.LoginReceiver
 import org.eurofurence.connavigator.events.LogoutReceiver
@@ -29,6 +30,7 @@ import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.toRelative
 import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.workers.FetchPrivateMessageWorker
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.appcompat.v7.toolbar
@@ -61,7 +63,7 @@ class LoginFragment : Fragment(), AnkoLogger {
             info { "Received broadcast from LoginReceiver" }
 
             // Just logged in, refresh messages.
-            PMService.fetchInBackground()
+            FetchPrivateMessageWorker.execute(this)
 
             runOnUiThread {
                 if (success) {

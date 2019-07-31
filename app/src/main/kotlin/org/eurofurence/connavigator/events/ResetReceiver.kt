@@ -6,10 +6,8 @@ import android.content.Intent
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.RootDb
+import org.eurofurence.connavigator.preferences.*
 import org.eurofurence.connavigator.services.ImageService
-import org.eurofurence.connavigator.preferences.AnalyticsPreferences
-import org.eurofurence.connavigator.preferences.AppPreferences
-import org.eurofurence.connavigator.preferences.DebugPreferences
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.longToast
@@ -35,14 +33,10 @@ class ResetReceiver : BroadcastReceiver(), AnkoLogger {
         AppPreferences.clear()
         DebugPreferences.clear()
         AnalyticsPreferences.clear()
+        BackgroundPreferences.clear()
 
         context.longToast(context.getString(R.string.clear_completed_closing))
 
-        task {
-            Thread.sleep(1000)
-        } success {
-            info { "Committing ritualistic suicide" }
-            System.exit(621)
-        }
+        BackgroundPreferences.observer.onNext(LoadingState.UNINITIALIZED)
     }
 }

@@ -5,6 +5,7 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.database.RootDb
 import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.LoadingState
+import org.eurofurence.connavigator.workers.DataUpdateWorker
 
 /**
  * Verifies database integrity and clears DB if required.
@@ -35,7 +36,7 @@ class DatabaseCheckService(val context: Context) {
 
         BackgroundPreferences.lastKnownVersion = BuildConfig.VERSION_NAME
 
-        UpdateIntentService().dispatchUpdate(context)
+        DataUpdateWorker.execute(context)
 
         return versionIsSame
     }

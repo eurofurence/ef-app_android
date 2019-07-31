@@ -1,7 +1,6 @@
 package org.eurofurence.connavigator.ui.activities
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Browser
@@ -18,6 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.google.android.material.navigation.NavigationView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
@@ -26,10 +27,12 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.events.ResetReceiver
-import org.eurofurence.connavigator.preferences.*
+import org.eurofurence.connavigator.preferences.AnalyticsPreferences
+import org.eurofurence.connavigator.preferences.AuthPreferences
+import org.eurofurence.connavigator.preferences.BackgroundPreferences
+import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.services.UpdateIntentService
-import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.extensions.booleans
@@ -37,6 +40,7 @@ import org.eurofurence.connavigator.util.extensions.localReceiver
 import org.eurofurence.connavigator.util.extensions.objects
 import org.eurofurence.connavigator.util.extensions.setFAIcon
 import org.eurofurence.connavigator.util.v2.plus
+import org.eurofurence.connavigator.workers.DataUpdateWorker
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.navigationView
@@ -127,15 +131,23 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     setMenuPermissions()
+                }.apply {
+                    // manually apply menu permissions at least once
+                    setMenuPermissions()
                 }
 
-        updateReceiver.register()
+        WorkManager.getInstance(this).getWorkInfosForUniqueWorkLiveData(DataUpdateWorker.TAG)
+                .observe(this, androidx.lifecycle.Observer { workInfo ->
+                    if (workInfo != null && workInfo.all { it.state == WorkInfo.State.SUCCEEDED }) {
+                        db.observer.onNext(db)
+                    }
+                })
 
         info { "Inserted Nav Fragment" }
     }
 
     private fun setMenuPermissions() {
-        if (BackgroundPreferences.loadingState == LoadingState.UNINITIALIZED || !BackgroundPreferences.hasLoadedOnce) {
+        if (!BackgroundPreferences.hasLoadedOnce) {
             ui.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         } else {
             ui.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -219,15 +231,14 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
         info { "Selecting item" }
 
         // Exit if we're either UNINITIALIZED or when there is no data. Make an exception for the settings and update action
-        if ((BackgroundPreferences.loadingState == LoadingState.UNINITIALIZED || !BackgroundPreferences.hasLoadedOnce)
-                && !listOf(R.id.navSettings, R.id.navDevReload).contains(item.itemId)
+        if (!BackgroundPreferences.hasLoadedOnce && !listOf(R.id.navSettings, R.id.navDevReload).contains(item.itemId)
         ) {
             longToast("Please wait until we've completed our initial fetch of data")
             return true
         }
 
         return when (item.itemId) {
-            R.id.navDevReload -> UpdateIntentService().dispatchUpdate(this, true).let { true }
+            R.id.navDevReload -> DataUpdateWorker.execute(this, true).let { true }
             R.id.navDevClear -> alert(getString(R.string.clear_app_cache), getString(R.string.clear_database)) {
                 yesButton { ResetReceiver().clearData(this@NavActivity) }
                 noButton { }

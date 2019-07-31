@@ -4,9 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.lifecycle.Observer
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import at.grabner.circleprogress.CircleProgressView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
@@ -14,12 +20,14 @@ import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.LoadingState
 import org.eurofurence.connavigator.services.UpdateIntentService
 import org.eurofurence.connavigator.services.dispatchUpdate
+import org.eurofurence.connavigator.util.extensions.circleProgress
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
+import org.eurofurence.connavigator.workers.PreloadImageWorker
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
-class LoadingIndicatorFragment : Fragment() {
+class LoadingIndicatorFragment : Fragment(), AnkoLogger {
     val ui = LoadingIndicatorFragmentUi()
     var subscriptions = Disposables.empty()
 
@@ -28,7 +36,9 @@ class LoadingIndicatorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
 
+    override fun onStart() {
         ui.quitButton.setOnClickListener { activity?.finish() }
 
         subscriptions += BackgroundPreferences
@@ -37,6 +47,30 @@ class LoadingIndicatorFragment : Fragment() {
                 .subscribe {
                     manageUI()
                 }
+
+        manageUI()
+
+        context?.let {
+            WorkManager.getInstance(it).getWorkInfosByTagLiveData(PreloadImageWorker.TAG)
+                    .observe(this, Observer {
+                        info { "Changing progress bar" }
+                        if (it != null) {
+                            val progress = it.filter { it.state == WorkInfo.State.SUCCEEDED }.count().toFloat()
+
+                            ui.progressIndicator.maxValue = it.count().toFloat()
+                            ui.progressIndicator.setValue(it.filter { it.state == WorkInfo.State.SUCCEEDED }.count().toFloat())
+
+                            info { "Finished $progress out of ${it.count().toFloat()}" }
+
+                            // todo: hack -> should be run in the FinishedImagePreloadWorker, but the next item in the chain is never called
+                            if (progress == it.count().toFloat() && BackgroundPreferences.loadingState == LoadingState.LOADING_IMAGES) {
+                                BackgroundPreferences.loadingState = LoadingState.SUCCEEDED
+                            }
+                        }
+                    })
+        }
+
+        super.onStart()
     }
 
     override fun onDestroyView() {
@@ -45,7 +79,7 @@ class LoadingIndicatorFragment : Fragment() {
         subscriptions = Disposables.empty()
     }
 
-    fun manageUI() = when (BackgroundPreferences.loadingState) {
+    private fun manageUI() = when (BackgroundPreferences.loadingState) {
         LoadingState.UNINITIALIZED -> {
             ui.setText(R.string.loading_unititialized_title, R.string.loading_unitialized_description)
         }
@@ -53,10 +87,16 @@ class LoadingIndicatorFragment : Fragment() {
             ui.setText(R.string.loading_img_title, R.string.loading_img_description)
         }
         LoadingState.SUCCEEDED -> {
+            ui.progressIndicator.spin()
             ui.invisible()
         }
         LoadingState.LOADING_DATA -> {
+            ui.progressIndicator.spin()
             ui.setText(R.string.loading_data_title, R.string.loading_data_description)
+        }
+        LoadingState.PENDING -> {
+            ui.progressIndicator.spin()
+            ui.setText(R.string.loading_pending_title, R.string.loading_pending_description)
         }
         else -> {
             ui.setText(R.string.loading_failed_title, R.string.loading_failed_description, true)
@@ -68,9 +108,9 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
     lateinit var layout: FrameLayout
     lateinit var errorButtonsLayout: LinearLayout
 
-    lateinit var titleText : TextView
+    lateinit var titleText: TextView
     lateinit var descriptionText: TextView
-    lateinit var progressIndicator: ProgressBar
+    lateinit var progressIndicator: CircleProgressView
     lateinit var quitButton: Button
 
     fun visible() {
@@ -88,15 +128,18 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
         titleText.textResource = titleRes
         descriptionText.textResource = descriptionRes
 
-        if(isError) {
+        if (isError) {
             descriptionText.textColorResource = R.color.error_color_material_light
             errorButtonsLayout.visibility = View.VISIBLE
             progressIndicator.visibility = View.INVISIBLE
-
         } else {
             descriptionText.compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
             errorButtonsLayout.visibility = View.GONE
             progressIndicator.visibility = View.VISIBLE
+
+            if(!BackgroundPreferences.hasLoadedOnce) {
+                descriptionText.text = "Please wait until we get a local copy of the data..."
+            }
         }
     }
 
@@ -111,9 +154,16 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
 
                 setPadding(dip(5), dip(15), dip(5), dip(15))
 
-                progressIndicator = progressBar {
-
-                }.lparams(dip(0), dip(50)) {
+                frameLayout {
+                    progressIndicator = circleProgress {
+                        spin()
+                        textSize = 0
+                        innerContourSize = 0f
+                        outerContourSize = 0f
+                        barWidth = dip(5)
+                        rimWidth = dip(5)
+                    }
+                }.lparams(dip(0), dip(40)) {
                     weight = 3F
                 }
 

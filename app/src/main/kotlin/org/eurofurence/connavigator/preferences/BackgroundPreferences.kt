@@ -19,6 +19,7 @@ object BackgroundPreferences : KotprefModel() {
 
 enum class LoadingState {
     UNINITIALIZED,
+    PENDING,
     LOADING_DATA,
     LOADING_IMAGES,
     SUCCEEDED,
