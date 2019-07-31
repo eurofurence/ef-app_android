@@ -54,31 +54,8 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     override val db by lazyLocateDb()
 
     var subscriptions = Disposables.empty()
-    val navFragment by lazy { NavHostFragment.create(R.navigation.nav_graph) }
+    val navFragment by lazy { NavHostFragment() }
     val navController by lazy { navFragment.findNavController() }
-
-    var savedState: Bundle? = null
-
-    override fun onPause() {
-        updateReceiver.unregister()
-        super.onPause()
-    }
-
-
-    /**
-     * Listens to update responses, since the event recycler holds database related data
-     */
-    private val updateReceiver = localReceiver(UpdateIntentService.UPDATE_COMPLETE) {
-        // Get intent extras
-        val success = it.booleans["success"]
-        val time = it.objects["time", Date::class.java]
-
-        info { "Received UPDATE_COMPLETE notification. Success: $success; Time: $time" }
-
-        if (success) {
-            db.observer.onNext(db)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,9 +67,13 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.nav_graph, navFragment)
                 .setPrimaryNavigationFragment(navFragment)
+                .runOnCommit {
+                    navController.restoreState(savedState?.getBundle("nav"))
+                    navController.setGraph(R.navigation.nav_graph)
+                }
                 .commit()
 
-        savedState= savedInstanceState
+        savedState = savedInstanceState
 
         ui.navTitle.text = RemotePreferences.eventTitle
         ui.navSubtitle.text = RemotePreferences.eventSubTitle
@@ -217,8 +198,6 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     override fun onResume() {
         info { "setting up nav toolbar" }
 
-        updateReceiver.register()
-
         val appbarConfig = AppBarConfiguration(navController.graph, ui.drawer)
 
         ui.bar.setupWithNavController(navController, appbarConfig)
@@ -259,12 +238,6 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBundle("nav", navController.saveState())
         super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        navController.restoreState(savedInstanceState.getBundle("nav"))
-        navController.setGraph(R.navigation.nav_graph)
-        super.onRestoreInstanceState(savedInstanceState)
     }
 
     private fun navigateToMessages(): Boolean {
