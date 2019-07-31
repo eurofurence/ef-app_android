@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.workers
 import android.content.Context
 import androidx.work.*
 import io.swagger.client.model.ImageRecord
+import nl.komponents.kovenant.toVoid
 import org.eurofurence.connavigator.database.RootDb
 import org.eurofurence.connavigator.services.ImageService
 import org.jetbrains.anko.AnkoLogger
@@ -40,7 +41,7 @@ class PreloadImageWorker(context: Context, workerParameters: WorkerParameters) :
 
             info { "Preloading image: ${image.id.toString()}" }
 
-            ImageService.preload(image)
+            ImageService.preload(image).toVoid().get()
 
             return Result.success()
         } catch (ex: Exception) {
