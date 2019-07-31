@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavHost
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -32,12 +33,8 @@ import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.services.AnalyticsService
-import org.eurofurence.connavigator.services.UpdateIntentService
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.eurofurence.connavigator.util.DatetimeProxy
-import org.eurofurence.connavigator.util.extensions.booleans
-import org.eurofurence.connavigator.util.extensions.localReceiver
-import org.eurofurence.connavigator.util.extensions.objects
 import org.eurofurence.connavigator.util.extensions.setFAIcon
 import org.eurofurence.connavigator.util.v2.plus
 import org.eurofurence.connavigator.workers.DataUpdateWorker
@@ -47,15 +44,15 @@ import org.jetbrains.anko.design.navigationView
 import org.jetbrains.anko.support.v4.drawerLayout
 import org.joda.time.DateTime
 import org.joda.time.Days
-import java.util.*
 
-class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
+class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
+    override fun getNavController() = navFragment.findNavController()
+
     internal val ui = NavUi()
     override val db by lazyLocateDb()
 
     var subscriptions = Disposables.empty()
-    val navFragment by lazy { NavHostFragment() }
-    val navController by lazy { navFragment.findNavController() }
+    val navFragment by lazy { NavHostFragment.create(R.navigation.nav_graph) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,16 +61,12 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
         ui.setContentView(this)
 
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_graph, navFragment)
-                .setPrimaryNavigationFragment(navFragment)
-                .runOnCommit {
-                    navController.restoreState(savedState?.getBundle("nav"))
-                    navController.setGraph(R.navigation.nav_graph)
-                }
-                .commit()
+        navFragment.setInitialSavedState(savedInstanceState?.getParcelable("fragment"))
 
-        savedState = savedInstanceState
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.nav_graph, navFragment, "navFragment")
+                .setPrimaryNavigationFragment(navFragment)
+                .commit()
 
         ui.navTitle.text = RemotePreferences.eventTitle
         ui.navSubtitle.text = RemotePreferences.eventSubTitle
@@ -237,6 +230,7 @@ class NavActivity : AppCompatActivity(), AnkoLogger, HasDb {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBundle("nav", navController.saveState())
+        outState.putParcelable("fragment", supportFragmentManager.saveFragmentInstanceState(navFragment))
         super.onSaveInstanceState(outState)
     }
 
