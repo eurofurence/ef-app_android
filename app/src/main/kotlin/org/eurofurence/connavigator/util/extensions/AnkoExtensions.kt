@@ -4,6 +4,7 @@ package org.eurofurence.connavigator.util.extensions
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.InsetDrawable
 import android.graphics.drawable.LayerDrawable
 import android.text.Layout
 import android.view.Menu
@@ -54,8 +55,5 @@ fun Menu.setFAIcon(context: Context, menuIcon: Int, faIconId: Int, isBrand: Bool
         ))
     }
 
-    val layerDrawable = LayerDrawable(arrayOf<Drawable>(icon))
-    layerDrawable.setLayerInset(0, 32 - (icon.intrinsicWidth / 2), 32 - (icon.intrinsicHeight / 2), 0, 0)
-
-    it.icon = layerDrawable
+    it.icon = InsetDrawable(icon, 32 - (icon.intrinsicWidth / 2), 32 - (icon.intrinsicHeight / 2), 0, 0)
 }
