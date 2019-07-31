@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui.adapter
 
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -14,7 +15,17 @@ import java.util.*
 infix fun Date.sameDayAs(other: Date) =
         time / (24 * 60 * 60 * 1000) == other.time / (24 * 60 * 60 * 1000)
 
-class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+abstract class EventPagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager) {
+    override fun saveState(): Parcelable? {
+        return super.saveState()
+    }
+
+    override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
+        super.restoreState(state, loader)
+    }
+}
+
+class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : EventPagerAdapter(fragmentManager) {
     private val elements = hashMapOf<Int, EventRecyclerFragment>()
 
     companion object {
@@ -47,7 +58,7 @@ class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fragm
     private val days by lazy { db.days.asc { it.date } }
 }
 
-class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : EventPagerAdapter(fragmentManager) {
     override fun getItem(position: Int): Fragment {
         return EventRecyclerFragment().withArguments(
                 FilterInRoom(rooms[position].id) then OrderTime(),
@@ -59,11 +70,10 @@ class RoomEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Frag
 
     override fun getCount() = rooms.size
 
-
     private val rooms by lazy { db.rooms.asc { it.name } }
 }
 
-class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : EventPagerAdapter(fragmentManager) {
     override fun getItem(position: Int): Fragment {
         return EventRecyclerFragment().withArguments(
                 FilterOnTrack(tracks[position].id) then OrderTime(),
@@ -78,7 +88,7 @@ class TrackEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : Fra
     private val tracks by lazy { db.tracks.asc { it.name } }
 }
 
-class FavoriteEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+class FavoriteEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : EventPagerAdapter(fragmentManager) {
     override fun getItem(position: Int) = EventRecyclerFragment().withArguments(
             FilterIsFavorited() then FilterOnDay(days[position].id) then OrderTime())
 

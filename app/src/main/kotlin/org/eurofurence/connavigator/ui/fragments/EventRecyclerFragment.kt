@@ -58,6 +58,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
     var title = ""
     var mainList = true
     var daysInsteadOfGlyphs = false
+    val layoutManager: LinearLayoutManager by lazy { if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity) }
 
     /**
      * Assigns the [arguments] with the given parameters.
@@ -298,6 +299,11 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        savedInstanceState?.getInt("first_item")?.let {
+            layoutManager.scrollToPosition(it)
+        }
+
+
         // Reading arguments
         arguments?.let {
             filters = it.getParcelable<FilterChain>("filters") ?: FilterChain.empty
@@ -315,6 +321,11 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
         // Filter the data
         subscriptions += db.subscribe { dataUpdated() }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt("first_item", layoutManager.findFirstCompletelyVisibleItemPosition())
+        super.onSaveInstanceState(outState)
     }
 
     override fun onDestroyView() {
@@ -345,28 +356,6 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
         // Add top padding only if in main list.
         ui.eventList.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
-//        ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
-//            val padding by lazy {
-//                val metrics = context!!.resources.displayMetrics
-//                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
-//            }
-//
-//            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-//                val itemPosition = parent.getChildAdapterPosition(view)
-//                if (itemPosition == RecyclerView.NO_POSITION) {
-//                    return
-//                }
-//
-//                if (itemPosition == 0 && mainList) {
-//                    outRect.top = padding
-//                }
-//
-//                val adapter = parent.adapter
-//                if (adapter != null && itemPosition == adapter.itemCount - 1) {
-//                    outRect.bottom = padding
-//                }
-//            }
-//        })
     }
 
 
