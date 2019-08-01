@@ -127,7 +127,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             // The title of the event.
             fontAwesomeView {
                 setPadding(dip(15), dip(10), dip(15), dip(5))
-                backgroundColorResource = R.color.cardview_light_background
+                backgroundColorResource = R.color.lightBackground
                 compatAppearance = android.R.style.TextAppearance_Medium
                 singleLine = true
                 ellipsize = TextUtils.TruncateAt.END
@@ -141,7 +141,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
             // The location of the event.
             textView {
                 setPadding(dip(15), dip(5), dip(15), dip(10))
-                backgroundColorResource = R.color.cardview_light_background
+                backgroundColorResource = R.color.lightBackground
                 isSingleLine = true
 
                 // Bind from room or use default.
@@ -155,7 +155,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
             // Banner, if it's present
             imageView {
-                backgroundColorResource = R.color.cardview_light_background
+                backgroundColorResource = R.color.lightBackground
                 adjustViewBounds = true
                 visibility = View.GONE
                 from { bannerImageId } into {
@@ -192,7 +192,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 textView {
                     padding = dip(10)
                     leftPadding = dip(15)
-                    backgroundColorResource = R.color.cardview_light_background
+                    backgroundColorResource = R.color.lightBackground
                     isSingleLine = true
                     gravity = Gravity.CENTER
 
@@ -207,7 +207,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 // Separator block
                 textView {
                     verticalPadding = dip(10)
-                    backgroundColorResource = R.color.cardview_light_background
+                    backgroundColorResource = R.color.lightBackground
                     gravity = Gravity.CENTER
                     text = "⋯"
                 }.lparams(
@@ -218,7 +218,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 textView {
                     padding = dip(10)
                     rightPadding = dip(15)
-                    backgroundColorResource = R.color.cardview_light_background
+                    backgroundColorResource = R.color.lightBackground
                     isSingleLine = true
                     gravity = Gravity.CENTER
 
@@ -232,7 +232,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
                 fontAwesomeView {
                     padding = dip(10)
-                    backgroundColorResource = R.color.cardview_light_background
+                    backgroundColorResource = R.color.lightBackground
                     isSingleLine = true
                     gravity = Gravity.CENTER
                     text = "{fa-heart}"
@@ -248,7 +248,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
                 fontAwesomeView {
                     setPadding(dip(10), dip(10), dip(15), dip(10))
-                    backgroundColorResource = R.color.cardview_light_background
+                    backgroundColorResource = R.color.lightBackground
                     isSingleLine = true
                     gravity = Gravity.CENTER_VERTICAL
 
@@ -402,7 +402,7 @@ class EventListView : AnkoComponent<Fragment> {
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         bigLayout = verticalLayout {
-            backgroundResource = R.color.cardview_light_background
+            backgroundResource = R.color.lightBackground
             lparams(matchParent, matchParent)
 
             title = textView("") {

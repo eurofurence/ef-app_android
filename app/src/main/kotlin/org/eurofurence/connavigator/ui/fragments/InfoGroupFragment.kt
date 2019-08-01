@@ -135,7 +135,7 @@ class InfoGroupUi : AnkoComponent<Fragment> {
             groupLayout = linearLayout {
                 isClickable = true
                 weightSum = 20F
-                backgroundResource = R.color.cardview_light_background
+                backgroundResource = R.color.lightBackground
                 layoutTransition = LayoutTransition().apply {
                     enableTransitionType(LayoutTransition.APPEARING)
                     enableTransitionType(LayoutTransition.CHANGE_APPEARING)

@@ -56,7 +56,7 @@ class AboutUi : AnkoComponent<Fragment> {
             verticalLayout {
 
                 linearLayout {
-                    backgroundResource = R.color.cardview_light_background
+                    backgroundResource = R.color.lightBackground
                     padding = dip(20)
                     weightSum = 10f
 
@@ -130,7 +130,7 @@ class AboutUi : AnkoComponent<Fragment> {
 
                 verticalLayout {
                     padding = dip(20)
-                    backgroundResource = R.color.cardview_light_background
+                    backgroundResource = R.color.lightBackground
 
                     markdownView {
                         lparams(matchParent, wrapContent)

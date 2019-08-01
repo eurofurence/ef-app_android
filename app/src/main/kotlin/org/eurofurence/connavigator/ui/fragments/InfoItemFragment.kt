@@ -134,7 +134,7 @@ class InfoUi : AnkoComponent<Fragment> {
 
                 linearLayout {
                     padding = dip(15)
-                    backgroundResource = R.color.cardview_light_background
+                    backgroundResource = R.color.lightBackground
 
                     text = markdownView {
                         lparams(matchParent, wrapContent)

@@ -138,14 +138,14 @@ class MapDetailUi : AnkoComponent<Fragment> {
         relativeLayout {
             lparams(matchParent, wrapContent)
             layout = verticalLayout {
-                backgroundResource = R.color.cardview_light_background
+                backgroundResource = R.color.lightBackground
                 title = textView {
                     textResource = R.string.misc_location
                     compatAppearance = android.R.style.TextAppearance_Small
                     padding = dip(20)
                 }
                 map = photoView {
-                    backgroundResource = R.color.cardview_dark_background
+                    backgroundResource = R.color.darkBackground
                     minimumScale = 1F
                     mediumScale = 2.5F
                     maximumScale = 5F

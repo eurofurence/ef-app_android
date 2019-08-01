@@ -132,7 +132,7 @@ class MapFragment : Fragment(), HasDb, AnkoLogger {
 
         override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
             relativeLayout {
-                backgroundResource = R.color.cardview_dark_background
+                backgroundResource = R.color.darkBackground
                 map = photoView {
                     lparams(matchParent, matchParent)
                 }

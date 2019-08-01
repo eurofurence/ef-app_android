@@ -366,7 +366,7 @@ class DealerUi : AnkoComponent<Fragment> {
                     }
 
                     locationContainer = verticalLayout {
-                        backgroundResource = R.color.cardview_light_background
+                        backgroundResource = R.color.lightBackground
                         textView {
                             textResource = R.string.dealer_location_and_availability
                             compatAppearance = R.style.TextAppearance_AppCompat_Medium
@@ -380,7 +380,7 @@ class DealerUi : AnkoComponent<Fragment> {
                             map = photoView {
                                 id = R.id.dealer_map
 
-                                backgroundResource = R.color.cardview_dark_background
+                                backgroundResource = R.color.darkBackground
                                 minimumScale = 1F
                                 mediumScale = 2.5F
                                 maximumScale = 5F
@@ -399,12 +399,12 @@ class DealerUi : AnkoComponent<Fragment> {
                             padding = dip(10)
                             availableDaysText = fontAwesomeView {
                                 text = "{fa-exclamation-triangle 24sp} ${resources.getString(R.string.dealer_only_present_on)}"
-                                compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
+                                compatAppearance = R.style.TextAppearance_AppCompat_Medium
                             }
 
                             afterDarkText = fontAwesomeView {
                                 text = "{fa-moon-o 24sp} ${resources.getString(R.string.dealer_located_in_the_after_dark)}"
-                                compatAppearance = R.style.Base_TextAppearance_AppCompat_Medium
+                                compatAppearance = R.style.TextAppearance_AppCompat_Medium
                             }
                         }
                     }.lparams(matchParent, wrapContent) {
@@ -415,7 +415,7 @@ class DealerUi : AnkoComponent<Fragment> {
                     verticalLayout {
                         // artist
                         padding = dip(20)
-                        backgroundResource = R.color.cardview_light_background
+                        backgroundResource = R.color.lightBackground
                         textView {
                             textResource = R.string.dealer_about_artist
                             compatAppearance = R.style.TextAppearance_AppCompat_Medium
@@ -432,7 +432,7 @@ class DealerUi : AnkoComponent<Fragment> {
 
                     aboutArtContainer = verticalLayout {
                         padding = dip(20)
-                        backgroundResource = R.color.cardview_light_background
+                        backgroundResource = R.color.lightBackground
 
                         textView {
                             textResource = R.string.dealer_about_art
@@ -449,7 +449,7 @@ class DealerUi : AnkoComponent<Fragment> {
                             topPadding = dip(10)
 
                             artPreview = photoView {
-                                backgroundResource = R.color.cardview_dark_background
+                                backgroundResource = R.color.darkBackground
                                 lparams(matchParent, wrapContent)
                                 scaleType = ImageView.ScaleType.FIT_CENTER
                                 adjustViewBounds = true
