@@ -23,6 +23,13 @@ data class Authentication(
         val username: String,
         val lastReportedFirebaseToken: String) {
     val isLoggedIn get() = token.isNotEmpty()
+
+    /**
+     * Manually override hashcode as `Long` does not have a hashcode implementation on all platforms
+     */
+    override fun hashCode(): Int {
+        return token.hashCode() // should be sorta unique
+    }
 }
 
 object AuthPreferences : KotprefModel() {
