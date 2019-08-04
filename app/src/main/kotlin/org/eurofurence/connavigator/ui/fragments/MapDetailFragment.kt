@@ -96,7 +96,7 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
             val oy = (entry.y ?: 0) - y
 
             ImageService.preload(mapImage) successUi {
-                if (it == null)
+                if (it == null || activity == null)
                     ui.layout.visibility = View.GONE
                 else {
                     try {

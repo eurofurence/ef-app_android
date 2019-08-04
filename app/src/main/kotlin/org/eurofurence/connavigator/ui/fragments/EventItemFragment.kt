@@ -18,15 +18,15 @@ import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.events.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.descriptionFor
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.services.ImageService
+import org.eurofurence.connavigator.events.EventFavoriteBroadcast
 import org.eurofurence.connavigator.preferences.AppPreferences
 import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.services.AnalyticsService.Action
 import org.eurofurence.connavigator.services.AnalyticsService.Category
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.start
@@ -60,14 +60,14 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(args.CID != null && !args.CID.equals(BuildConfig.CONVENTION_IDENTIFIER, true)) {
+        if (args.CID != null && !args.CID.equals(BuildConfig.CONVENTION_IDENTIFIER, true)) {
             alert("This item is not for this convention", "Wrong convention!").show()
 
             findNavController().popBackStack()
         }
 
         subscriptions += db.subscribe {
-            fillUi()
+            fillUi(savedInstanceState)
         }
     }
 
@@ -77,7 +77,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
         subscriptions = Disposables.empty()
     }
 
-    private fun fillUi() {
+    private fun fillUi(savedInstanceState: Bundle?) {
         if (eventId != null) {
             val event: EventRecord = db.events[eventId] ?: return
 
@@ -150,13 +150,10 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
                 }
             }
 
-            if(!mapIsSet) {
-                childFragmentManager.beginTransaction()
-                        .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
-                        .commit()
+            childFragmentManager.beginTransaction()
+                    .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
+                    .commit()
 
-                mapIsSet = true
-            }
         }
     }
 
