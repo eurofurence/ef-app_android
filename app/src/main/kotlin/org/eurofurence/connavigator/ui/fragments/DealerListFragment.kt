@@ -193,7 +193,7 @@ class DealersUi : AnkoComponent<Fragment> {
                 lparams(matchParent, matchParent)
                 verticalPadding = dip(10)
                 clipToPadding = false
-                backgroundResource = R.color.cardview_light_background
+                backgroundResource = R.color.lightBackground
             }
         }
     }

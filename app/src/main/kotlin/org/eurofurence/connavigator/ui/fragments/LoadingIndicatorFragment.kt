@@ -129,7 +129,7 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
         descriptionText.textResource = descriptionRes
 
         if (isError) {
-            descriptionText.textColorResource = R.color.error_color_material_light
+            descriptionText.textColorResource = R.color.error
             errorButtonsLayout.visibility = View.VISIBLE
             progressIndicator.visibility = View.INVISIBLE
         } else {
@@ -150,7 +150,7 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
 
             linearLayout {
                 weightSum = 20F
-                backgroundResource = R.color.cardview_light_background
+                backgroundResource = R.color.lightBackground
 
                 setPadding(dip(5), dip(15), dip(5), dip(15))
 

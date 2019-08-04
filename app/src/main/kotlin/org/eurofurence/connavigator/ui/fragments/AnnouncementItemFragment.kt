@@ -101,7 +101,7 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
                 lparams(matchParent, matchParent)
 
                 verticalLayout {
-                    backgroundResource = R.color.cardview_light_background
+                    backgroundResource = R.color.lightBackground
                     isClickable = true
 
                     loadingIndicator = progressBar()
@@ -131,7 +131,7 @@ class AnnouncementItemUi : AnkoComponent<Fragment> {
                     }
 
                     image = photoView {
-                        backgroundResource = R.color.cardview_dark_background
+                        backgroundResource = R.color.darkBackground
                         imageResource = R.drawable.placeholder_event
                         scaleType = ImageView.ScaleType.FIT_CENTER
                         adjustViewBounds = true

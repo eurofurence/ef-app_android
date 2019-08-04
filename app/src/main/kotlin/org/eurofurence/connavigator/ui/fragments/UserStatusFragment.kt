@@ -140,7 +140,7 @@ class UserStatusUi : AnkoComponent<Fragment> {
                 setPadding(0, dip(20), 0, dip(20))
             }
             weightSum = 100F
-            backgroundResource = R.color.cardview_light_background
+            backgroundResource = R.color.lightBackground
 
             userIcon = fontAwesomeView {
                 text = "{fa-user 30sp}"

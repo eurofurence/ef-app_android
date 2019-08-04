@@ -151,7 +151,7 @@ class FragmentViewMessageList : DisposingFragment(), AnkoLogger, HasDb {
 class SingleItemUi : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         linearLayout {
-            backgroundResource = R.color.cardview_light_background
+            backgroundResource = R.color.lightBackground
             setPadding(0, dip(10), 0, dip(10))
             weightSum = 100F
             id = R.id.layout

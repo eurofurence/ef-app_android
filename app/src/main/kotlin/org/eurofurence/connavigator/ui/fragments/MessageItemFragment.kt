@@ -158,7 +158,7 @@ class MessageItemUi : AnkoComponent<Fragment> {
                     loadMarkdown(resources.getString(R.string.misc_content))
                 }
                 padding = dip(20)
-                backgroundResource = R.color.cardview_light_background
+                backgroundResource = R.color.lightBackground
             }
         }
     }

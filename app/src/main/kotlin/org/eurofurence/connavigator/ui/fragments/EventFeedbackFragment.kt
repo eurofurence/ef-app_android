@@ -152,7 +152,7 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
                 // Event Feedback
                 verticalLayout {
                     padding = dip(LayoutConstants.MARGIN_LARGE)
-                    backgroundResource = R.color.background_material_light
+                    backgroundResource = R.color.lightBackground
 
                     dataInputLayout = verticalLayout {
                         textView(R.string.event_feedback_rate_title) {
