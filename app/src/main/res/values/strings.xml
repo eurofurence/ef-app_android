@@ -270,6 +270,8 @@
     <string name="misc_android_developers">Android Developers</string>
 
     <string name="misc_concat_newline">%1$s\n%2$s</string>
+
+    <string name="misc_info_share">Learn about %1$s.\n%2$s</string>
     <!-- Misc end -->
 
     <!-- TODO: Remove or change this placeholder text -->

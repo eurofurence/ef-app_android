@@ -2,19 +2,20 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.animation.LayoutTransition
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.joanzapata.iconify.widget.IconTextView
 import io.reactivex.disposables.Disposables
+import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
@@ -25,7 +26,6 @@ import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.longToast
 import java.util.*
 
 /**
@@ -48,8 +48,14 @@ class InfoGroupFragment : Fragment(), HasDb, AnkoLogger {
 
             holder.name.text = item.title
             holder.layout.setOnClickListener {
-                val action = InfoListFragmentDirections.actionInfoListFragmentToInfoItemFragment(item.id.toString())
+                val action = InfoListFragmentDirections.actionInfoListFragmentToInfoItemFragment(item.id.toString(), BuildConfig.CONVENTION_IDENTIFIER)
                 findNavController().navigate(action)
+            }
+
+            holder.layout.setOnLongClickListener {
+                context?.let {
+                    context?.share(item.shareString(it), "Share Info")
+                } != null
             }
         }
     }

@@ -166,6 +166,13 @@
                 android:name="itemId"
                 app:argType="string"/>
         <deepLink app:uri="eurofurence://info/{itemId}/"/>
+        <argument
+            android:name="CID"
+            app:argType="string"
+            app:nullable="true" />
+        <deepLink
+            android:id="@+id/deepLink4"
+            app:uri="https://app.eurofurence.org/{CID}/Web/KnowledgeEntries/{itemId}" />
     </fragment>
     <fragment
             android:id="@+id/navAbout"
