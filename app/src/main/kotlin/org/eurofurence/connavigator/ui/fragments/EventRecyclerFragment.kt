@@ -320,13 +320,19 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt("first_item", layoutManager.findFirstCompletelyVisibleItemPosition())
+        layoutManager.findFirstVisibleItemPosition().apply {
+            info {"saving $this as first item"}
+            outState.putInt("first_item", this)
+        }
         super.onSaveInstanceState(outState)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         runDelayed(200) {
-            layoutManager.scrollToPosition(savedInstanceState?.getInt("first_item") ?: 0)
+            savedInstanceState?.getInt("first_item")?.apply {
+                info {"restoring recyclerView to position $this"}
+                layoutManager.scrollToPosition(this)
+            }
         }
         super.onViewStateRestored(savedInstanceState)
     }

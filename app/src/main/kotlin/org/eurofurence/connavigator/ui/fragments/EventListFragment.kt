@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.pawegio.kandroid.runDelayed
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -111,6 +113,7 @@ class EventListFragment : Fragment(), HasDb, AnkoLogger {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.apply {
             putInt("current_item", ui.pager.currentItem)
+            putParcelable("viewpager", ui.pager.adapter?.saveState())
         }
         super.onSaveInstanceState(outState)
     }
@@ -118,6 +121,11 @@ class EventListFragment : Fragment(), HasDb, AnkoLogger {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         savedInstanceState?.getInt("current_item")?.apply {
             ui.pager.currentItem = this
+        }
+        savedInstanceState?.getParcelable<Parcelable>("viewpager")?.apply {
+            runDelayed(200) {
+                // todo: manually restore viewpager by retrieving the state. State is `DayEventPager` or another one of our custom adapters
+            }
         }
         super.onViewStateRestored(savedInstanceState)
     }
