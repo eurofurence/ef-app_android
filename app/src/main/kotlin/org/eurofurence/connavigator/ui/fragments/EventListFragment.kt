@@ -206,7 +206,7 @@ class EventListUi : AnkoComponent<Fragment> {
             }.lparams(matchParent, wrapContent)
 
             pager = viewPager {
-                id = 1
+                id = R.id.eventListPager
                 //offscreenPageLimit = 1
             }.lparams(matchParent, matchParent)
 
