@@ -12,17 +12,16 @@ import androidx.navigation.fragment.findNavController
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.gson.Gson
 import io.swagger.client.model.LinkFragment
+import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
+import kotlinx.serialization.internal.MapEntry
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.util.extensions.*
 import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.browse
-import org.jetbrains.anko.support.v4.longToast
-import org.jetbrains.anko.support.v4.selector
+import org.jetbrains.anko.support.v4.*
 import java.util.*
 import kotlin.properties.Delegates.notNull
 
@@ -75,11 +74,11 @@ class MapFragment : Fragment(), HasDb, AnkoLogger {
                     info { "Found matching entry" }
                     when (entry.links.size) {
                         0 -> Unit
-                        1 -> linkAction(entry.links[0])
+                        1 -> linkAction(entry, entry.links[0])
                         else -> selector(getString(R.string.misc_find_out_more), entry.links.map {
                             it.name ?: getString(R.string.misc_link_no_name_provided)
                         }) { _, position ->
-                            linkAction(entry.links[position])
+                            linkAction(entry, entry.links[position])
                         }
                     }
                 }
@@ -89,11 +88,13 @@ class MapFragment : Fragment(), HasDb, AnkoLogger {
         }
     }
 
-    private fun linkAction(link: LinkFragment) {
+    private fun linkAction(entry: MapEntryRecord, link: LinkFragment) {
         when (link.fragmentType) {
             LinkFragment.FragmentTypeEnum.DealerDetail -> launchDealer(link)
             LinkFragment.FragmentTypeEnum.MapExternal -> launchMap(link)
             LinkFragment.FragmentTypeEnum.WebExternal -> browse(link.target)
+            LinkFragment.FragmentTypeEnum.MapEntry -> showTooltip(entry, link)
+            LinkFragment.FragmentTypeEnum.EventConferenceRoom -> showTooltip(entry, link)
             else -> warn { "No items selected" }
         }
     }
@@ -118,6 +119,40 @@ class MapFragment : Fragment(), HasDb, AnkoLogger {
             findNavController().navigate(action)
         } else {
             longToast(getString(R.string.dealer_could_not_navigate_to))
+        }
+    }
+
+    private fun showTooltip(entry: MapEntryRecord, link: LinkFragment) {
+        info { "Request to show tooltip" }
+        var label: String = link.name
+        var tooltipX: Int = entry.x
+        var tooltipY: Int = entry.y
+        when (link.fragmentType) {
+            LinkFragment.FragmentTypeEnum.MapEntry -> {
+                val targetEntry = mapRecord.entries.find { it.id.equals(link.target) }
+                if (targetEntry !== null) {
+                    tooltipX = targetEntry.x
+                    tooltipY = targetEntry.y
+                }
+            }
+            LinkFragment.FragmentTypeEnum.EventConferenceRoom -> {
+                if (link.name !== null && !link.name.isEmpty()) {
+                    label = link.name
+                } else {
+                    val eventConferenceRoom = db.rooms[UUID.fromString(link.target)]
+                    if (eventConferenceRoom !== null) {
+                        label = eventConferenceRoom.name
+                    }
+                }
+            }
+        }
+
+        if (label !== null && !label.isEmpty()) {
+            info { "Displaying tooltip for ${label} at (${tooltipX}, ${tooltipY})" }
+            // TODO: Display tooltip at link.target or
+            toast(label)
+        } else {
+            info { "Failed to create label; skipping tooltip" }
         }
     }
 
