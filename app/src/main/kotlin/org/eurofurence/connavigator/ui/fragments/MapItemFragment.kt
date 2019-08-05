@@ -69,22 +69,17 @@ class MapFragment : Fragment(), HasDb, AnkoLogger {
                 val y = (image.height ?: 0) * percentY
                 info { "Tap registered at x: $x, y: $y" }
 
-                val entries = mapRecord.findMatchingEntries(x, y)
+                val entry = mapRecord.findMatchingEntry(x, y)
 
-                info { "Found ${entries.size} entries" }
-
-                if (entries.isNotEmpty()) {
-                    val links = entries
-                            .flatMap { it.links.orEmpty() }
-                            .filter { it.fragmentType !== LinkFragment.FragmentTypeEnum.MapEntry }
-
-                    when (links.size) {
+                if (entry !== null) {
+                    info { "Found matching entry" }
+                    when (entry.links.size) {
                         0 -> Unit
-                        1 -> linkAction(links[0])
-                        else -> selector(getString(R.string.misc_find_out_more), links.map {
+                        1 -> linkAction(entry.links[0])
+                        else -> selector(getString(R.string.misc_find_out_more), entry.links.map {
                             it.name ?: getString(R.string.misc_link_no_name_provided)
                         }) { _, position ->
-                            linkAction(links[position])
+                            linkAction(entry.links[position])
                         }
                     }
                 }
