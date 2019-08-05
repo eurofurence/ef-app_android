@@ -15,7 +15,7 @@ import java.util.*
 infix fun Date.sameDayAs(other: Date) =
         time / (24 * 60 * 60 * 1000) == other.time / (24 * 60 * 60 * 1000)
 
-abstract class EventPagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager) {
+abstract class EventPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 }
 
 class DayEventPagerAdapter(val db: Db, fragmentManager: FragmentManager) : EventPagerAdapter(fragmentManager) {
