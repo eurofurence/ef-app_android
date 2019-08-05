@@ -7,10 +7,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet.END
 import androidx.constraintlayout.widget.ConstraintSet.START
@@ -19,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import com.joanzapata.iconify.widget.IconTextView
+import com.pawegio.kandroid.runDelayed
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.DealerRecord
 import io.swagger.client.model.MapEntryRecord
@@ -52,14 +50,14 @@ class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
 
     val ui by lazy { DealerUi() }
     var subscriptions = Disposables.empty()
-    
+
     override val db by lazyLocateDb()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if(args.CID != null && !args.CID.equals(BuildConfig.CONVENTION_IDENTIFIER, true)) {
+        if (args.CID != null && !args.CID.equals(BuildConfig.CONVENTION_IDENTIFIER, true)) {
             alert("This item is not for this convention", "Wrong convention!").show()
 
             findNavController().popBackStack()
@@ -74,6 +72,24 @@ class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
         super.onDestroyView()
         subscriptions.dispose()
         subscriptions = Disposables.empty()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        ui.scrollview?.also { sv ->
+            outState.putInt("sv_key_x", sv.scrollX)
+            outState.putInt("sv_key_y", sv.scrollY)
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        runDelayed(200) {
+            ui.scrollview?.also { sv ->
+                savedInstanceState?.getInt("sv_key_x")?.let(sv::setScrollX)
+                savedInstanceState?.getInt("sv_key_y")?.let(sv::setScrollY)
+            }
+        }
     }
 
     private fun fillUi() {
@@ -258,6 +274,7 @@ class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
 }
 
 class DealerUi : AnkoComponent<Fragment> {
+    var scrollview: ScrollView? = null
     lateinit var primaryImage: PhotoView
     lateinit var name: TextView
     lateinit var nameSecond: TextView
@@ -283,7 +300,7 @@ class DealerUi : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         relativeLayout {
             backgroundResource = R.color.backgroundGrey
-            scrollView {
+            scrollview = scrollView {
                 verticalLayout {
                     lparams(matchParent, matchParent)
 
