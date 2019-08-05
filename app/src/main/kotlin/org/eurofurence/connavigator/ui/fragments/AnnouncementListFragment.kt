@@ -111,7 +111,7 @@ class AnnouncementsUi : AnkoComponent<Fragment> {
         verticalLayout {
             layout = this
 
-            backgroundResource = R.color.cardview_light_background
+            backgroundResource = R.color.lightBackground
             lparams(matchParent, wrapContent)
 
             title = textView {

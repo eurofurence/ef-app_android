@@ -1,10 +1,7 @@
 package org.eurofurence.connavigator.workers
 
 import android.content.Context
-import androidx.work.Constraints
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.Worker
-import androidx.work.WorkerParameters
+import androidx.work.*
 import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.LoadingState
 import org.jetbrains.anko.AnkoLogger
@@ -19,11 +16,9 @@ class PreloadImageFinishedWorker(context: Context, workerParams: WorkerParameter
 
     companion object {
         const val TAG = "IMAGE_LOADING_DONE"
-        val constraints = Constraints.Builder()
-                .build()
 
         fun create() = OneTimeWorkRequestBuilder<PreloadImageWorker>()
-                .setConstraints(constraints)
+                .setInputMerger(ArrayCreatingInputMerger::class)
                 .addTag(TAG)
                 .build()
     }

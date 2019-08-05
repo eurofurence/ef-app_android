@@ -254,7 +254,7 @@ class EventUi : AnkoComponent<Fragment> {
                     }
 
                     extras = verticalLayout {
-                        backgroundResource = R.color.cardview_light_background
+                        backgroundResource = R.color.lightBackground
                         padding = dip(15)
 
                         extrasContent = fontAwesomeView {
@@ -267,7 +267,7 @@ class EventUi : AnkoComponent<Fragment> {
                     }
 
                     verticalLayout {
-                        backgroundResource = R.color.cardview_light_background
+                        backgroundResource = R.color.lightBackground
                         padding = dip(25)
                         description = ankoView(::MarkdownView, 0) {
                         }.lparams(matchParent, wrapContent)

@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.util.extensions
 import android.content.Context
 import android.util.Base64
 import android.util.Log
+import com.pawegio.kandroid.i
 import io.swagger.client.ApiException
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.BuildConfig
@@ -67,6 +68,8 @@ fun DealerRecord.hasUniqueDisplayName() = (this.displayName.isNotEmpty() && this
 fun DealerRecord.getName(): String? = if (this.hasUniqueDisplayName()) this.displayName else this.attendeeNickname
 fun DealerRecord.allDaysAvailable() = listOf(this.attendsOnThursday, this.attendsOnFriday, this.attendsOnSaturday).all { it == true }
 fun DealerRecord.shareString(ctx: Context) = ctx.getString(R.string.dealer_check_out_dealer_url, this.displayName, createUrl("Dealers", this.id))
+
+fun KnowledgeEntryRecord.shareString(ctx: Context) = ctx.getString(R.string.misc_info_share, this.title, createUrl("KnowledgeEntries", this.id))
 
 fun createUrl(type: String, id: UUID): String {
     return "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/Web/$type/$id"

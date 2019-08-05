@@ -99,7 +99,7 @@ class DealerListItemUI : AnkoComponent<ViewGroup> {
 
         linearLayout {
             lparams(matchParent, wrapContent)
-            backgroundResource = R.color.cardview_light_background
+            backgroundResource = R.color.lightBackground
             id = R.id.layout
             weightSum = 100F
             horizontalPadding = dip(10)
