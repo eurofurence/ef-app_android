@@ -3,6 +3,7 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,6 +79,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
         ui.search.textWatcher {
             afterTextChanged { text -> searchText = text.toString(); updateFilter() }
         }
+
     }
 
     override fun onResume() {
@@ -101,16 +103,17 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt("first", (ui.dealerList.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition())
         super.onSaveInstanceState(outState)
+        outState.putParcelable("lm_key", layoutManager.onSaveInstanceState())
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         runDelayed(200) {
-            info { "REstoring view state for dealer ${savedInstanceState?.getInt("first")}" }
-            layoutManager.scrollToPosition(savedInstanceState?.getInt("first") ?: 0)
+            savedInstanceState
+                    ?.getParcelable<Parcelable>("lm_key")
+                    ?.let(layoutManager::onRestoreInstanceState)
         }
-        super.onViewStateRestored(savedInstanceState)
     }
 
     override fun onPause() {

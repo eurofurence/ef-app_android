@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.pawegio.kandroid.IntentFor
+import com.pawegio.kandroid.runDelayed
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.BuildConfig
@@ -75,6 +77,24 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
         super.onDestroyView()
         subscriptions.dispose()
         subscriptions = Disposables.empty()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        ui.scrollview?.also { sv ->
+            outState.putInt("sv_key_x", sv.scrollX)
+            outState.putInt("sv_key_y", sv.scrollY)
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        runDelayed(200) {
+            ui.scrollview?.also { sv ->
+                savedInstanceState?.getInt("sv_key_x")?.let(sv::setScrollX)
+                savedInstanceState?.getInt("sv_key_y")?.let(sv::setScrollY)
+            }
+        }
     }
 
     private fun fillUi(savedInstanceState: Bundle?) {
@@ -186,6 +206,8 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
 }
 
 class EventUi : AnkoComponent<Fragment> {
+    var scrollview: ScrollView? = null
+
     lateinit var splitter: LinearLayout
 
     lateinit var extras: LinearLayout
@@ -212,7 +234,7 @@ class EventUi : AnkoComponent<Fragment> {
             backgroundResource = R.color.backgroundGrey
             isClickable = true
 
-            scrollView {
+            scrollview = scrollView {
                 verticalLayout {
                     image = ankoView(::PhotoView, 0) {
                         contentDescription = "Event"

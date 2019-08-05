@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -59,7 +60,8 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
     var title = ""
     var mainList = true
     var daysInsteadOfGlyphs = false
-    val layoutManager: LinearLayoutManager by lazy { if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity) }
+
+    val layoutManager get() = ui.eventList?.layoutManager
 
     /**
      * Assigns the [arguments] with the given parameters.
@@ -320,21 +322,21 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        layoutManager.findFirstVisibleItemPosition().apply {
-            info {"saving $this as first item"}
-            outState.putInt("first_item", this)
-        }
         super.onSaveInstanceState(outState)
+        layoutManager?.also { lm ->
+            outState.putParcelable("lm_key", lm.onSaveInstanceState())
+        }
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        runDelayed(200) {
-            savedInstanceState?.getInt("first_item")?.apply {
-                info {"restoring recyclerView to position $this"}
-                layoutManager.scrollToPosition(this)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        layoutManager?.also { lm ->
+            runDelayed(200) {
+                savedInstanceState
+                        ?.getParcelable<Parcelable>("lm_key")
+                        ?.let(lm::onRestoreInstanceState)
             }
         }
-        super.onViewStateRestored(savedInstanceState)
     }
 
     override fun onDestroyView() {
@@ -354,9 +356,9 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
     private fun configureList() {
         info { "Configuring recycler" }
-        ui.eventList.adapter = autoAdapter
-        ui.eventList.layoutManager = if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
-        ui.eventList.itemAnimator = DefaultItemAnimator()
+        ui.eventList?.adapter = autoAdapter
+        ui.eventList?.layoutManager = if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
+        ui.eventList?.itemAnimator = DefaultItemAnimator()
 
         // Change top margins for nested lists.
         (ui.bigLayout.layoutParams as? LinearLayout.LayoutParams)
@@ -364,7 +366,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
 
         // Add top padding only if in main list.
-        ui.eventList.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
+        ui.eventList?.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
     }
 
 
@@ -395,7 +397,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
 class EventListView : AnkoComponent<Fragment> {
     lateinit var title: TextView
-    lateinit var eventList: RecyclerView
+    var eventList: RecyclerView? = null
     lateinit var bigLayout: LinearLayout
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {

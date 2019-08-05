@@ -110,26 +110,6 @@ class EventListFragment : Fragment(), HasDb, AnkoLogger {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.apply {
-            putInt("current_item", ui.pager.currentItem)
-            putParcelable("viewpager", ui.pager.adapter?.saveState())
-        }
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        savedInstanceState?.getInt("current_item")?.apply {
-            ui.pager.currentItem = this
-        }
-        savedInstanceState?.getParcelable<Parcelable>("viewpager")?.apply {
-            runDelayed(200) {
-                // todo: manually restore viewpager by retrieving the state. State is `DayEventPager` or another one of our custom adapters
-            }
-        }
-        super.onViewStateRestored(savedInstanceState)
-    }
-
     override fun onPause() {
         super.onPause()
 
