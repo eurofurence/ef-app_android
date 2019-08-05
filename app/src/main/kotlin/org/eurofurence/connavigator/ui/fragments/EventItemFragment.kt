@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,19 +15,20 @@ import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.pawegio.kandroid.IntentFor
+import com.pawegio.kandroid.runDelayed
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.events.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.descriptionFor
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.services.ImageService
+import org.eurofurence.connavigator.events.EventFavoriteBroadcast
 import org.eurofurence.connavigator.preferences.AppPreferences
 import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.services.AnalyticsService.Action
 import org.eurofurence.connavigator.services.AnalyticsService.Category
+import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.start
@@ -60,14 +62,14 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(args.CID != null && !args.CID.equals(BuildConfig.CONVENTION_IDENTIFIER, true)) {
+        if (args.CID != null && !args.CID.equals(BuildConfig.CONVENTION_IDENTIFIER, true)) {
             alert("This item is not for this convention", "Wrong convention!").show()
 
             findNavController().popBackStack()
         }
 
         subscriptions += db.subscribe {
-            fillUi()
+            fillUi(savedInstanceState)
         }
     }
 
@@ -77,7 +79,25 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
         subscriptions = Disposables.empty()
     }
 
-    private fun fillUi() {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        ui.scrollview?.also { sv ->
+            outState.putInt("sv_key_x", sv.scrollX)
+            outState.putInt("sv_key_y", sv.scrollY)
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        runDelayed(200) {
+            ui.scrollview?.also { sv ->
+                savedInstanceState?.getInt("sv_key_x")?.let(sv::setScrollX)
+                savedInstanceState?.getInt("sv_key_y")?.let(sv::setScrollY)
+            }
+        }
+    }
+
+    private fun fillUi(savedInstanceState: Bundle?) {
         if (eventId != null) {
             val event: EventRecord = db.events[eventId] ?: return
 
@@ -150,13 +170,10 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
                 }
             }
 
-            if(!mapIsSet) {
-                childFragmentManager.beginTransaction()
-                        .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
-                        .commit()
+            childFragmentManager.beginTransaction()
+                    .replace(R.id.event_map, MapDetailFragment().withArguments(conferenceRoom?.id, true), "mapDetails")
+                    .commit()
 
-                mapIsSet = true
-            }
         }
     }
 
@@ -189,6 +206,8 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
 }
 
 class EventUi : AnkoComponent<Fragment> {
+    var scrollview: ScrollView? = null
+
     lateinit var splitter: LinearLayout
 
     lateinit var extras: LinearLayout
@@ -215,7 +234,7 @@ class EventUi : AnkoComponent<Fragment> {
             backgroundResource = R.color.backgroundGrey
             isClickable = true
 
-            scrollView {
+            scrollview = scrollView {
                 verticalLayout {
                     image = ankoView(::PhotoView, 0) {
                         contentDescription = "Event"

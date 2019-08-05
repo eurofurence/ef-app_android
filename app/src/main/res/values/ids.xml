@@ -26,6 +26,8 @@
     <item name="announcementTitle" type="id"/>
     <item name="announcementContent" type="id"/>
 
+    <item name="eventListPager" type="id"/>
+
     <item name="eventSeparator" type="id"/>
     <item name="eventStartTime" type="id"/>
     <item name="eventGlyph" type="id"/>

@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.pawegio.kandroid.runDelayed
 import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.task
@@ -58,6 +60,8 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
     var title = ""
     var mainList = true
     var daysInsteadOfGlyphs = false
+
+    val layoutManager get() = ui.eventList?.layoutManager
 
     /**
      * Assigns the [arguments] with the given parameters.
@@ -317,6 +321,24 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
         subscriptions += db.subscribe { dataUpdated() }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        layoutManager?.also { lm ->
+            outState.putParcelable("lm_key", lm.onSaveInstanceState())
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        layoutManager?.also { lm ->
+            runDelayed(200) {
+                savedInstanceState
+                        ?.getParcelable<Parcelable>("lm_key")
+                        ?.let(lm::onRestoreInstanceState)
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         subscriptions.dispose()
@@ -334,9 +356,9 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
     private fun configureList() {
         info { "Configuring recycler" }
-        ui.eventList.adapter = autoAdapter
-        ui.eventList.layoutManager = if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
-        ui.eventList.itemAnimator = DefaultItemAnimator()
+        ui.eventList?.adapter = autoAdapter
+        ui.eventList?.layoutManager = if (mainList) LinearLayoutManager(activity) else NonScrollingLinearLayout(activity)
+        ui.eventList?.itemAnimator = DefaultItemAnimator()
 
         // Change top margins for nested lists.
         (ui.bigLayout.layoutParams as? LinearLayout.LayoutParams)
@@ -344,29 +366,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
 
         // Add top padding only if in main list.
-        ui.eventList.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
-//        ui.eventList.addItemDecoration(object : RecyclerView.ItemDecoration() {
-//            val padding by lazy {
-//                val metrics = context!!.resources.displayMetrics
-//                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15F, metrics).toInt()
-//            }
-//
-//            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-//                val itemPosition = parent.getChildAdapterPosition(view)
-//                if (itemPosition == RecyclerView.NO_POSITION) {
-//                    return
-//                }
-//
-//                if (itemPosition == 0 && mainList) {
-//                    outRect.top = padding
-//                }
-//
-//                val adapter = parent.adapter
-//                if (adapter != null && itemPosition == adapter.itemCount - 1) {
-//                    outRect.bottom = padding
-//                }
-//            }
-//        })
+        ui.eventList?.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
     }
 
 
@@ -397,7 +397,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
 
 class EventListView : AnkoComponent<Fragment> {
     lateinit var title: TextView
-    lateinit var eventList: RecyclerView
+    var eventList: RecyclerView? = null
     lateinit var bigLayout: LinearLayout
 
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {

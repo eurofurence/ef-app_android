@@ -1,6 +1,7 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.pawegio.kandroid.runDelayed
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -108,20 +110,6 @@ class EventListFragment : Fragment(), HasDb, AnkoLogger {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.apply {
-            putInt("current_item", ui.pager.currentItem)
-        }
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        savedInstanceState?.getInt("current_item")?.apply {
-            ui.pager.currentItem = this
-        }
-        super.onViewStateRestored(savedInstanceState)
-    }
-
     override fun onPause() {
         super.onPause()
 
@@ -198,7 +186,7 @@ class EventListUi : AnkoComponent<Fragment> {
             }.lparams(matchParent, wrapContent)
 
             pager = viewPager {
-                id = 1
+                id = R.id.eventListPager
                 //offscreenPageLimit = 1
             }.lparams(matchParent, matchParent)
 

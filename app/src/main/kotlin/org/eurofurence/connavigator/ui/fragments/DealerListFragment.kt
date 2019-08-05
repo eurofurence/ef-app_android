@@ -3,16 +3,18 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.appcompat.widget.Toolbar
 import com.google.firebase.perf.metrics.AddTrace
+import com.pawegio.kandroid.runDelayed
 import com.pawegio.kandroid.textWatcher
 import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
@@ -32,6 +34,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     val ui by lazy { DealersUi() }
+    val layoutManager get() = ui.dealerList?.layoutManager
     private var effectiveDealers = emptyList<DealerRecord>()
 
     var searchText = ""
@@ -46,9 +49,9 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
 
         info { "Rendering ${effectiveDealers.size} dealers out of ${db.dealers.items.size}" }
 
-        ui.dealerList.adapter = DealerRecyclerAdapter(effectiveDealers, db, this)
-        ui.dealerList.layoutManager = LinearLayoutManager(activity)
-        ui.dealerList.itemAnimator = DefaultItemAnimator()
+        ui.dealerList?.adapter = DealerRecyclerAdapter(effectiveDealers, db, this)
+        ui.dealerList?.layoutManager = LinearLayoutManager(activity)
+        ui.dealerList?.itemAnimator = DefaultItemAnimator()
 
         val distinctCategories = dealers.items
                 .map { it.categories ?: emptyList() }
@@ -76,6 +79,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
         ui.search.textWatcher {
             afterTextChanged { text -> searchText = text.toString(); updateFilter() }
         }
+
     }
 
     override fun onResume() {
@@ -94,6 +98,24 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
                     }
                     true
                 }
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        layoutManager?.also { lm ->
+            outState.putParcelable("lm_key", lm.onSaveInstanceState())
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        layoutManager?.also { lm ->
+            runDelayed(200) {
+                savedInstanceState
+                        ?.getParcelable<Parcelable>("lm_key")
+                        ?.let(lm::onRestoreInstanceState)
             }
         }
     }
@@ -128,8 +150,9 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
                 it.categories?.contains(searchCategory) ?: false
             }
 
-        ui.dealerList.adapter = DealerRecyclerAdapter(sortDealers(effectiveDealers), db, this)
-        (ui.dealerList.adapter as DealerRecyclerAdapter).notifyDataSetChanged()
+        ui.dealerList?.adapter = DealerRecyclerAdapter(sortDealers(effectiveDealers), db, this).also {
+            it.notifyDataSetChanged()
+        }
     }
 
     private fun sortDealers(dealers: Iterable<DealerRecord>): List<DealerRecord> =
@@ -150,7 +173,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
 }
 
 class DealersUi : AnkoComponent<Fragment> {
-    lateinit var dealerList: RecyclerView
+    var dealerList: RecyclerView? = null
     lateinit var search: EditText
     lateinit var searchLayout: LinearLayout
     lateinit var categorySpinner: Spinner
