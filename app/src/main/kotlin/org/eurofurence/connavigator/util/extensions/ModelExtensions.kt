@@ -18,6 +18,14 @@ fun MapRecord.findMatchingEntries(x: Float, y: Float) =
                 .orEmpty()
                 .filter { (x - (it.x ?: 0) power 2F) + (y - (it.y ?: 0) power 2F) < (it.tapRadius ?: 0) power 2 }
 
+fun MapRecord.findMatchingEntry(x: Float, y: Float) =
+        findMatchingEntries(x,y)
+                .takeIf { it.isNotEmpty() }
+                ?.reduce { acc, mapEntryRecord -> if (mapEntryRecord.distance2(x,y) < acc.distance2(x,y)) mapEntryRecord else acc }
+
+fun MapEntryRecord.distance2(otherX: Float, otherY: Float) =
+        ((x - otherX) power 2F) + ((y - otherY) power 2F)
+
 
 val ImageRecord.url: String get() = "${apiService.apiPath}/Api/Images/$id/Content/with-hash:${Base64.encodeToString(contentHashSha1.toByteArray(), Base64.NO_WRAP)}"
 
