@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.github.chrisbanes.photoview.PhotoView
@@ -40,6 +41,7 @@ class MapFragment : Fragment(), HasDb, AnkoLogger {
     val ui = MapUi()
     private var mapRecord by notNull<MapRecord>()
     val image by lazy { db.images[mapRecord.imageId]!! }
+    private var lastTooltipToast: Toast? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -149,7 +151,8 @@ class MapFragment : Fragment(), HasDb, AnkoLogger {
         if (label.isNotBlank()) {
             info { "Displaying tooltip for ${label} at (${tooltipX}, ${tooltipY})" }
             // TODO: Display actual tooltip at (tooltipX, tooltipY) instead of using a Toast
-            toast(label)
+            lastTooltipToast?.cancel()
+            lastTooltipToast = longToast(label)
         } else {
             info { "Failed to create label; skipping tooltip" }
         }
