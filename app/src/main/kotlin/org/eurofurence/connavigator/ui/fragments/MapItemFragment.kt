@@ -136,20 +136,19 @@ class MapFragment : Fragment(), HasDb, AnkoLogger {
                 }
             }
             LinkFragment.FragmentTypeEnum.EventConferenceRoom -> {
-                if (link.name !== null && !link.name.isEmpty()) {
-                    label = link.name
-                } else {
+                if (label.isNotBlank()) {
                     val eventConferenceRoom = db.rooms[UUID.fromString(link.target)]
                     if (eventConferenceRoom !== null) {
                         label = eventConferenceRoom.name
                     }
                 }
             }
+            else -> {}
         }
 
-        if (label !== null && !label.isEmpty()) {
+        if (label.isNotBlank()) {
             info { "Displaying tooltip for ${label} at (${tooltipX}, ${tooltipY})" }
-            // TODO: Display tooltip at link.target or
+            // TODO: Display actual tooltip at (tooltipX, tooltipY) instead of using a Toast
             toast(label)
         } else {
             info { "Failed to create label; skipping tooltip" }
