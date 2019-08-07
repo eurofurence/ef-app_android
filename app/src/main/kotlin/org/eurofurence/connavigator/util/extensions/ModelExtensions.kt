@@ -23,9 +23,6 @@ fun MapRecord.findMatchingEntry(x: Float, y: Float) =
                 .takeIf { it.isNotEmpty() }
                 ?.reduce { acc, mapEntryRecord -> if (mapEntryRecord.distance2(x,y) < acc.distance2(x,y)) mapEntryRecord else acc }
 
-fun MapEntryRecord.distance2(other: MapEntryRecord) =
-        ((x - other.x) power 2) + ((y - other.y) power 2)
-
 fun MapEntryRecord.distance2(otherX: Float, otherY: Float) =
         ((x - otherX) power 2F) + ((y - otherY) power 2F)
 
