@@ -18,6 +18,7 @@
     <color name="mutedText">#999</color>
     <color name="alert">#FFE082</color>
     <color name="iconColor">#666</color>
+    <color name="hamburgerColor">#FFF</color>
     <color name="darkBackground">#FF424242</color>
     <color name="lightBackground">#FFFFFFFF</color>
     <color name="error">#B02020</color>

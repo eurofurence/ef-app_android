@@ -12,5 +12,6 @@
         <item name="colorAccent">@color/accent</item>
         <item name="android:colorForeground">@color/textBlack</item>
         <item name="android:statusBarColor">@color/primaryDarker</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 </resources>

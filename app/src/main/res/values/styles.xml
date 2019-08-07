@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="android:colorForeground">@color/textBlack</item>
-        <item name="drawerArrowStyle">@style/DrawerHamburgerStyle</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -49,9 +49,9 @@
         <item name="android:colorForeground">@color/textBlack</item>
     </style>
 
-    <style name="DrawerHamburgerStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
-        <item name="color">@color/iconColor</item>
+        <item name="color">@color/hamburgerColor</item>
     </style>
 
 </resources>
