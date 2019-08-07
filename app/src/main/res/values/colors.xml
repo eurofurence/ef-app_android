@@ -12,13 +12,13 @@
     <color name="accent">#47A0DF</color>
     <color name="accentDark">#258BD3</color>
     <color name="accentDarker">#0976C3</color>
-    <color name="textWhite">#dcdcdc</color>
+    <color name="textWhite">#fff</color>
     <color name="textBlack">#010101</color>
     <color name="backgroundGrey">#DDD</color>
     <color name="mutedText">#999</color>
     <color name="alert">#FFE082</color>
     <color name="iconColor">#666</color>
-    <color name="hamburgerColor">#FFF</color>
+    <color name="hamburgerColor">@color/textWhite</color>
     <color name="darkBackground">#FF424242</color>
     <color name="lightBackground">#FFFFFFFF</color>
     <color name="error">#B02020</color>
