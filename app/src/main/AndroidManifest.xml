@@ -20,10 +20,10 @@
         <activity
             android:name=".ui.activities.NavActivity"
             android:label="Eurofurence"
-            android:noHistory="true"
             android:theme="@style/AppTheme">
             <nav-graph android:value="@navigation/nav_graph" />
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
