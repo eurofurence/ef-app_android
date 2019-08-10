@@ -21,8 +21,7 @@ import org.jetbrains.anko.*
  */
 fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
     val options = listOf(
-            // TODO: Re-enable once EventItemFragment can properly react to model changes
-//            if (!db.faves.contains(event.id)) context.getString(R.string.event_add_to_favorites) else context.getString(R.string.event_remove_from_favorites)
+            if (!db.faves.contains(event.id)) context.getString(R.string.event_add_to_favorites) else context.getString(R.string.event_remove_from_favorites),
             context.getString(R.string.event_share_export_to_calendar),
             context.getString(R.string.event_share_event)
     )
@@ -32,14 +31,13 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
             options
     ) { _, position ->
         when (position) {
-//            0 -> {
-//                debug { "Favouriting event for user" }
-//                context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
-//
-//                context.toast(context.getString(R.string.event_changed_status))
-//            }
             0 -> {
-//            1 -> {
+                debug { "Favouriting event for user" }
+                context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
+
+                context.toast(context.getString(R.string.event_changed_status))
+            }
+            1 -> {
                 debug { "Writing event to calendar" }
 
                 val calendarIntent = Intent(Intent.ACTION_INSERT)
@@ -56,8 +54,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
 
                 startActivity(context, calendarIntent, null)
             }
-            1 -> {
-//            2 -> {
+            2 -> {
                 debug { "Sharing event" }
 
                 AnalyticsService.event(AnalyticsService.Category.EVENT, AnalyticsService.Action.SHARED, event.title)
