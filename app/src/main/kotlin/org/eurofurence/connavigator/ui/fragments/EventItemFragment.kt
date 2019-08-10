@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.ui.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -139,7 +140,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
                 }
             }
 
-            changeFabIcon()
+            setFabIconState(db.faves.contains(eventId))
 
             ui.favoriteButton.setOnClickListener {
                 if (AppPreferences.dialogOnEventPress) {
@@ -184,6 +185,12 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     }
 
     private fun favoriteEvent(event: EventRecord) {
+        // TODO: Handle state change in a reactive instead of proactive way!
+        // Due to the receiver for EventFavoriteBroadcast events, which actually modifies the DB
+        // being the EventFavoriteBroadcast itself with its own instance of RootDb, onNext() calls
+        // from there will not propagate to this fragment, keeping us from being reactive instead of
+        // proactively predicting the expected state in this case.
+        setFabIconState(!db.faves.contains(eventId))
         context?.let {
             it.sendBroadcast(IntentFor<EventFavoriteBroadcast>(it).apply { jsonObjects["event"] = event })
         }
@@ -192,15 +199,14 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     /**
      * Changes the FAB based on if the current event is liked or not
      */
-    private fun changeFabIcon() {
-        (eventId in db.faves).let {
-            if (it != ui.favoriteButton.tag) {
-                ui.favoriteButton.tag = it
-                if (it)
-                    ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heart_solid))
-                else
-                    ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heart))
-            }
+    private fun setFabIconState(isFavorited: Boolean) {
+        info("Updating icon of FAB for ${eventId}")
+        if (isFavorited) {
+            ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heartbeat_solid))
+            ui.favoriteButton.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.accent))
+        } else {
+            ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heart))
+            ui.favoriteButton.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.primaryLight))
         }
     }
 }
