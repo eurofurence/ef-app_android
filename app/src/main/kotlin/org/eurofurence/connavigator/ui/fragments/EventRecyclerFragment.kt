@@ -288,7 +288,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                 isLongClickable = true
                 setOnLongClickListener {
                     context?.apply {
-                        eventDialog(this, record, db)
+                        eventDialog(this, record, db) { dataUpdated() }
                     }
                     true
                 }
