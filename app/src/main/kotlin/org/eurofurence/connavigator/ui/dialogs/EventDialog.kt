@@ -19,9 +19,11 @@ import org.jetbrains.anko.*
 /**
  * Shows an event dialog
  */
-fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
+fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db, favoriteCallback: ((Boolean) -> Unit)? = null) {
+    val isFavorite = db.faves.contains(event.id)
+
     val options = listOf(
-            if (!db.faves.contains(event.id)) context.getString(R.string.event_add_to_favorites) else context.getString(R.string.event_remove_from_favorites),
+            if (!isFavorite) context.getString(R.string.event_add_to_favorites) else context.getString(R.string.event_remove_from_favorites),
             context.getString(R.string.event_share_export_to_calendar),
             context.getString(R.string.event_share_event)
     )
@@ -34,7 +36,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db) {
             0 -> {
                 debug { "Favouriting event for user" }
                 context.sendBroadcast(IntentFor<EventFavoriteBroadcast>(context).apply { jsonObjects["event"] = event })
-
+                favoriteCallback?.invoke(!isFavorite)
                 context.toast(context.getString(R.string.event_changed_status))
             }
             1 -> {

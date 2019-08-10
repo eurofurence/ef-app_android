@@ -180,7 +180,7 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
 
     private fun showDialog(event: EventRecord) {
         context?.let {
-            eventDialog(it, event, db)
+            eventDialog(it, event, db) { isFavorite -> setFabIconState(isFavorite) }
         }
     }
 
@@ -199,9 +199,9 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     /**
      * Changes the FAB based on if the current event is liked or not
      */
-    private fun setFabIconState(isFavorited: Boolean) {
-        info("Updating icon of FAB for ${eventId}")
-        if (isFavorited) {
+    private fun setFabIconState(isFavorite: Boolean) {
+        info("Updating icon of FAB for $eventId")
+        if (isFavorite) {
             ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heartbeat_solid))
             ui.favoriteButton.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.accent))
         } else {
