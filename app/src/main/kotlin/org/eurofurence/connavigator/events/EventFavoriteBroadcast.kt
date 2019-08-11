@@ -61,11 +61,13 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
                 context.alarmManager.cancel(pendingIntent)
                 db.faves = db.faves.filter { it != event.id }
             }
-            notificationTime < now() -> context.longToast("This event has already occurred!")
             else -> {
                 info("Event is not yet favorited. Adding it to favorites")
                 context.longToast("Added ${event.title} to favorites")
-                context.alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
+                if (notificationTime > now()) {
+                    info("Event is far enough in the future to warrant scheduling a notification for it")
+                    context.alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
+                }
                 db.faves += event.id
             }
         }
