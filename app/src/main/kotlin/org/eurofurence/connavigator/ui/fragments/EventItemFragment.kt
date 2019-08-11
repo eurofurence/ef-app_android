@@ -202,10 +202,10 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
     private fun setFabIconState(isFavorite: Boolean) {
         info("Updating icon of FAB for $eventId")
         if (isFavorite) {
-            ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heartbeat_solid))
+            ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heart, true))
             ui.favoriteButton.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.accent))
         } else {
-            ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heart))
+            ui.favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heart, false))
             ui.favoriteButton.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.primaryLight))
         }
     }
