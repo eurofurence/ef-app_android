@@ -43,7 +43,7 @@ class DataUpdateWorker(context: Context, workerParams: WorkerParameters) : Worke
         // creates work and then executes it in the workmanager
         fun execute(context: Context, showToastOnCompletion: Boolean = false, preloadChangedImages: Boolean = true) =
                 WorkManager.getInstance(context)
-                        .beginUniqueWork(TAG, ExistingWorkPolicy.KEEP, DataUpdatePendingWorker.create())
+                        .beginUniqueWork(TAG, ExistingWorkPolicy.REPLACE, DataUpdatePendingWorker.create())
                         .then(create(showToastOnCompletion, preloadChangedImages))
                         .enqueue()
     }

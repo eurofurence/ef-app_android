@@ -22,4 +22,7 @@
     <color name="darkBackground">#FF424242</color>
     <color name="lightBackground">#FFFFFFFF</color>
     <color name="error">#B02020</color>
+    <color name="favorite">#f44336</color>
+    <color name="sponsor">#fbc02d</color>
+    <color name="supersponsor">#673ab7</color>
 </resources>

@@ -240,6 +240,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                     isSingleLine = true
                     gravity = Gravity.CENTER
                     text = "{fa-heart}"
+                    textColorResource = R.color.favorite
 
                     from { id in faves } into {
                         visibility = if (it) View.VISIBLE else View.GONE

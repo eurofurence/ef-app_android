@@ -394,9 +394,9 @@ fun HasDb.glyphsFor(eventEntry: EventRecord) =
             arrayListOf<String>().apply {
                 eventEntry.tags.orEmpty().let { tags ->
                     if ("sponsors_only" in tags)
-                        add("{fa-star-half-o}")
+                        add("{fa-star-half-o @color/sponsor}")
                     if ("supersponsors_only" in tags)
-                        add("{fa-star}")
+                        add("{fa-star @color/supersponsor}")
                     if ("kage" in tags) {
                         add("{fa-bug}")
                         add("{fa-glass}")
