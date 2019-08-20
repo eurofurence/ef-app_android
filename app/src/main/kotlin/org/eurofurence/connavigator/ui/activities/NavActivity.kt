@@ -239,14 +239,12 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
     }
 
     private fun navigateToMessages(): Boolean {
-        val action = if (AuthPreferences.isLoggedIn) {
-            HomeFragmentDirections.actionFragmentViewHomeToFragmentViewMessageList()
+        if (AuthPreferences.isLoggedIn) {
+            navController.navigate(R.id.navMessageList)
         } else {
             longToast("You are not logged in yet!")
-            HomeFragmentDirections.actionFragmentViewHomeToLoginActivity()
+            navController.navigate(R.id.navLogin)
         }
-
-        navController.navigate(action)
         return true
     }
 
