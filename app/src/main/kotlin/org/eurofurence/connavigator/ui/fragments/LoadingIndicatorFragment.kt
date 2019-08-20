@@ -18,11 +18,10 @@ import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.LoadingState
-import org.eurofurence.connavigator.services.UpdateIntentService
-import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.util.extensions.circleProgress
 import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.plus
+import org.eurofurence.connavigator.workers.DataUpdateWorker
 import org.eurofurence.connavigator.workers.PreloadImageWorker
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
@@ -184,7 +183,7 @@ class LoadingIndicatorFragmentUi : AnkoComponent<Fragment> {
                         quitButton = button("Quit")
 
                         button("Retry") {
-                            setOnClickListener { UpdateIntentService().dispatchUpdate(this.context, true) }
+                            setOnClickListener { DataUpdateWorker.execute(context, true) }
                         }
                     }
                 }.lparams(dip(0), wrapContent) {

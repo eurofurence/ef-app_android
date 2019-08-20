@@ -9,25 +9,30 @@ import androidx.navigation.NavDeepLinkBuilder
 import com.google.firebase.perf.metrics.AddTrace
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.database.*
+import org.eurofurence.connavigator.database.Db
+import org.eurofurence.connavigator.database.RootDb
+import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.notifications.EFNotificationChannel
 import org.eurofurence.connavigator.notifications.NotificationFactory
 import org.eurofurence.connavigator.notifications.NotificationPublisher
 import org.eurofurence.connavigator.preferences.AppPreferences
+import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.DebugPreferences
-import org.eurofurence.connavigator.services.dispatchUpdate
 import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
+import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.now
 import org.eurofurence.connavigator.util.extensions.startTimeString
+import org.eurofurence.connavigator.workers.DataUpdateWorker
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.alarmManager
 import org.jetbrains.anko.info
 import org.jetbrains.anko.longToast
 import org.joda.time.DateTime
 import org.joda.time.DurationFieldType
+import java.time.format.DateTimeParseException
 import java.util.*
 
 /**
@@ -45,11 +50,11 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
 
         info("Changing status of event ${event.title}")
 
-        val notificationTime = getNotificationTime(context, db, event)
+        val notificationTime = getNotificationTime(event)
 
         info("Notification time is $notificationTime")
 
-        val notificationIntent = createNotification(context, event, notificationTime)
+        val notificationIntent = createNotification(context, event)
 
         val pendingIntent = PendingIntent.getBroadcast(context, event.id.hashCode(), notificationIntent, 0)
 
@@ -74,19 +79,15 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
 
         db.observer.onNext(db)
 
-        dispatchUpdate(context)
+        DataUpdateWorker.execute(context)
     }
 
-    private fun getNotificationTime(context: Context, db: Db, event: EventRecord): DateTime {
-        return if (DebugPreferences.scheduleNotificationsForTest) {
-            context.longToast("Notification should show up in 30 seconds")
-            DateTime.now().withFieldAdded(DurationFieldType.seconds(), 30)
-        } else {
-            event.start.withFieldAdded(DurationFieldType.minutes(), -(AppPreferences.notificationMinutesBefore))
-        }
-    }
+    private fun getNotificationTime(event: EventRecord): DateTime =
+        event.start.withFieldAdded(DurationFieldType.minutes(), -(AppPreferences.notificationMinutesBefore))
+                .withFieldAdded(DurationFieldType.seconds(), -(DatetimeProxy.addedSeconds))
 
-    private fun createNotification(context: Context, event: EventRecord, time: DateTime): Intent {
+
+    private fun createNotification(context: Context, event: EventRecord): Intent {
         val notificationIntent = Intent(context, NotificationPublisher::class.java)
         val notificationFactory = NotificationFactory(context)
 
@@ -106,7 +107,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
                         "Starting at ${event.startTimeString()}")
                 .setPendingIntent(pendingIntent)
                 .setChannel(EFNotificationChannel.EVENT)
-                .countdownTo(time)
+                .countdownTo(event.start.withFieldAdded(DurationFieldType.seconds(), -(DatetimeProxy.addedSeconds)))
 
         notificationIntent.putExtra(NotificationPublisher.TAG, event.id.toString())
         notificationIntent.putExtra(NotificationPublisher.ITEM, notification.build())
@@ -119,14 +120,14 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
         val db = context.locateDb()
         val event = db.events[eventId] ?: return
         info { "Event found: ${event.title}" }
-        val notificationTime = getNotificationTime(context, db, event)
+        val notificationTime = getNotificationTime(event)
 
         if (notificationTime < now()) {
             info { "Not rescheduling notification as it was in the past" }
             return
         }
 
-        val notification = createNotification(context, event, notificationTime)
+        val notification = createNotification(context, event)
         val pendingIntent = PendingIntent.getBroadcast(context, event.id.hashCode(), notification, PendingIntent.FLAG_UPDATE_CURRENT)
 
         context.alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)

@@ -11,6 +11,7 @@ object DatetimeProxy {
     private val addedPeriodInSeconds get() = Duration(DebugPreferences.addedTimeInSeconds)
 
     fun now() = DateTime.now().plus(addedPeriodInSeconds)
+    val addedSeconds get() = addedPeriodInSeconds.standardSeconds.toInt()
 
     /**
      * Reset the internal offset.
