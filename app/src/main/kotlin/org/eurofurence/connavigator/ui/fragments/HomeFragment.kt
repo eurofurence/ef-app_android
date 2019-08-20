@@ -59,6 +59,7 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
                 .withArguments(FilterIsFavorited() then OrderDayAndTime(), getString(R.string.event_favorited), false, true)
     }
 
+    private val quickOverview by lazy { QuickOverviewFragment() }
     private val announcement by lazy { AnnouncementListFragment() }
     private val userStatus by lazy { UserStatusFragment() }
     private val loadingWidget by lazy { LoadingIndicatorFragment() }
@@ -107,6 +108,7 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
                 .replace(R.id.home_favorited, favorited)
                 .replace(R.id.home_announcement, announcement)
                 .replace(R.id.home_user_status, userStatus)
+                .replace(R.id.home_quick_overview, quickOverview)
                 .commitAllowingStateLoss()
     }
 
@@ -191,6 +193,10 @@ class HomeUi : AnkoComponent<Fragment> {
                     id = R.id.home_announcement
                 }.lparams(matchParent, wrapContent) {
                     setMargins(0, dip(10), 0, 0)
+                }
+
+                val quickOverview = linearLayout {
+                    id = R.id.home_quick_overview
                 }
 
                 upcomingFragment = linearLayout {

@@ -46,4 +46,5 @@
     <item name="navTitle" type="id" />
     <item name="navSubTitle" type="id" />
     <item name="loadingWidget" type="id" />
+    <item name="home_quick_overview" type="id" />
 </resources>
