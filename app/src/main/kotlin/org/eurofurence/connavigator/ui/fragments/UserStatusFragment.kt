@@ -11,21 +11,28 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposables
 import io.reactivex.functions.BiFunction
 import io.swagger.client.model.PrivateMessageRecord
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.notifications.cancelFromRelated
 import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.preferences.Authentication
 import org.eurofurence.connavigator.services.PMService
 import org.eurofurence.connavigator.util.extensions.fontAwesomeView
 import org.eurofurence.connavigator.util.v2.compatAppearance
+import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import java.util.*
 
-class UserStatusFragment : DisposingFragment(), AnkoLogger {
+class UserStatusFragment : DisposingFragment(), AnkoLogger, HasDb {
     val ui = UserStatusUi()
+    var subscriptions = Disposables.empty()
+    override val db by lazyLocateDb()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -36,6 +43,20 @@ class UserStatusFragment : DisposingFragment(), AnkoLogger {
 
         // Subscribe to changes in PM availability.
         subscribeToPMs()
+
+        // Subscriber to database changes
+        subscribeToDatabase()
+    }
+
+    private fun subscribeToDatabase() {
+        subscriptions += db.subscribe {
+            val state = it.state
+            val canLogin = state != null && state.toLowerCase() != "past"
+
+            ui.apply {
+                layout.visibility = if (canLogin) View.VISIBLE else View.GONE
+            }
+        }
     }
 
     /**
@@ -134,6 +155,7 @@ class UserStatusUi : AnkoComponent<Fragment> {
     override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
         linearLayout {
             this@UserStatusUi.layout = this
+            visibility = View.GONE
             isClickable = true
 
             lparams(matchParent, wrapContent) {

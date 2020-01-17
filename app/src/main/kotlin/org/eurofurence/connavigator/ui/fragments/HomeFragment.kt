@@ -62,6 +62,7 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
     private val announcement by lazy { AnnouncementListFragment() }
     private val userStatus by lazy { UserStatusFragment() }
     private val loadingWidget by lazy { LoadingIndicatorFragment() }
+    private val appStatus by lazy { AppStatusFragment() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -107,6 +108,7 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
                 .replace(R.id.home_favorited, favorited)
                 .replace(R.id.home_announcement, announcement)
                 .replace(R.id.home_user_status, userStatus)
+                .replace(R.id.appStatusWidget, appStatus)
                 .commitAllowingStateLoss()
     }
 
@@ -140,6 +142,7 @@ class HomeUi : AnkoComponent<Fragment> {
     private lateinit var favoritesFragment: ViewGroup
     private lateinit var announcementFragment: ViewGroup
     private lateinit var loginWidget: ViewGroup
+    private lateinit var appStatusWidget: ViewGroup
     private lateinit var loadingWidget: FrameLayout
 
     @SuppressLint("ResourceType")
@@ -159,9 +162,17 @@ class HomeUi : AnkoComponent<Fragment> {
                     setMargins(0, 0, 0, 0)
                 }
 
+                appStatusWidget = frameLayout {
+                    id = R.id.appStatusWidget
+                }
+
                 loadingWidget = frameLayout {
                     id = R.id.loadingWidget
                 }
+
+                currentFragment = linearLayout {
+                    id = R.id.home_upcoming
+                }.lparams(matchParent, wrapContent)
 
                 loginWidget = linearLayout {
                     id = R.id.home_user_status

@@ -37,6 +37,11 @@ interface Db {
     var version: String?
 
     /**
+     * Stored state.
+     */
+    var state: String?
+
+    /**
      * Database for [AnnouncementRecord].
      */
     val announcements: StoredSource<AnnouncementRecord>
@@ -193,6 +198,12 @@ interface HasDb : Db {
             db.version = value
         }
 
+    override var state: String?
+        get() = db.state
+        set(value) {
+            db.state = value
+        }
+
     override val announcements: StoredSource<AnnouncementRecord>
         get() = db.announcements
 
@@ -280,6 +291,8 @@ class RootDb(context: Context) : Stored(context), Db {
 
     override var version by storedValue<String>()
 
+    override var state by storedValue<String>()
+
     override val announcements = storedSource(AnnouncementRecord::getId)
 
     override val dealers = storedSource(DealerRecord::getId)
@@ -345,6 +358,7 @@ class RootDb(context: Context) : Stored(context), Db {
 
     override fun clear() {
         date = null
+        state = null
         announcements.delete()
         dealers.delete()
         days.delete()

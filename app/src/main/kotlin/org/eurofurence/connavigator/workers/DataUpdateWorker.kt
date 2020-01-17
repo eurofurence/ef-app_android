@@ -110,6 +110,8 @@ class DataUpdateWorker(context: Context, workerParams: WorkerParameters) : Worke
         db.knowledgeEntries.apply(sync.knowledgeEntries.convert())
         db.knowledgeGroups.apply(sync.knowledgeGroups.convert())
         db.maps.apply(sync.maps.convert())
+        db.state = sync.state;
+
 
         // Reconcile events with favorites
         db.faves = db.events.items.map { it.id }

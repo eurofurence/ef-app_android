@@ -22,6 +22,8 @@
     <color name="darkBackground">#FF424242</color>
     <color name="lightBackground">#FFFFFFFF</color>
     <color name="error">#B02020</color>
+    <color name="errorBackground">#FF9999</color>
+    <color name="warningBackground">#FFDD99</color>
     <color name="favorite">#f44336</color>
     <color name="sponsor">#fbc02d</color>
     <color name="supersponsor">#673ab7</color>
