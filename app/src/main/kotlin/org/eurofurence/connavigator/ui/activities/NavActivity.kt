@@ -33,7 +33,6 @@ import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.services.AnalyticsService
-import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.eurofurence.connavigator.util.DatetimeProxy
 import org.eurofurence.connavigator.util.extensions.setFAIcon
 import org.eurofurence.connavigator.util.v2.plus
@@ -205,6 +204,12 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
         }
 
         super.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        subscriptions.dispose()
+        subscriptions = Disposables.empty()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
