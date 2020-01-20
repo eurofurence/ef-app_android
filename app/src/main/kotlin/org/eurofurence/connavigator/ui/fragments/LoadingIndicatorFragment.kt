@@ -26,26 +26,22 @@ import org.eurofurence.connavigator.workers.PreloadImageWorker
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
-class LoadingIndicatorFragment : Fragment(), AnkoLogger {
+class LoadingIndicatorFragment : DisposingFragment(), AnkoLogger {
     val ui = LoadingIndicatorFragmentUi()
-    var subscriptions = Disposables.empty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun onStart() {
         ui.quitButton.setOnClickListener { activity?.finish() }
 
-        subscriptions += BackgroundPreferences
+        BackgroundPreferences
                 .observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     manageUI()
                 }
+                .collectOnDestroyView()
 
         manageUI()
 
@@ -70,12 +66,6 @@ class LoadingIndicatorFragment : Fragment(), AnkoLogger {
         }
 
         super.onStart()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
     }
 
     private fun manageUI() = when (BackgroundPreferences.loadingState) {

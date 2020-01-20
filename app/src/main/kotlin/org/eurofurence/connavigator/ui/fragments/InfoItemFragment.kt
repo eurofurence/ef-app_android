@@ -37,9 +37,8 @@ import java.util.*
 /**
  * Views an info based on an ID passed to the intent
  */
-class InfoItemFragment : Fragment(), HasDb {
+class InfoItemFragment : DisposingFragment(), HasDb {
     val ui by lazy { InfoUi() }
-    var subscriptions = Disposables.empty()
     private val args: InfoItemFragmentArgs by navArgs()
     private val infoId: UUID? by lazy { UUID.fromString(args.itemId) }
     override val db by lazyLocateDb()
@@ -51,13 +50,7 @@ class InfoItemFragment : Fragment(), HasDb {
         super.onViewCreated(view, savedInstanceState)
 
         fillUi()
-        subscriptions += db.subscribe { fillUi() }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
+        db.subscribe { fillUi() }.collectOnDestroyView()
     }
 
     private fun fillUi() {

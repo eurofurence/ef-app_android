@@ -32,13 +32,12 @@ import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.px2dip
 import java.util.*
 
-class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
+class MapDetailFragment : DisposingFragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
     val ui by lazy { MapDetailUi() }
     val id get() = arguments?.getString("id") ?: ""
     val showTitle get() = arguments!!.getBoolean("showTitle")
-    var subscriptions = Disposables.empty()
     private var linkFound = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -47,16 +46,11 @@ class MapDetailFragment : Fragment(), HasDb, AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        subscriptions += db.subscribe {
+        db.subscribe {
             ui.title.visibility = if (showTitle) View.VISIBLE else View.GONE
             findLinkFragment()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
+        .collectOnDestroyView()
     }
 
     fun withArguments(id: UUID?, showTitle: Boolean = false) = apply {

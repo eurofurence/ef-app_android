@@ -19,17 +19,15 @@ import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
-class AppStatusFragment : Fragment(), HasDb {
+class AppStatusFragment : DisposingFragment(), HasDb {
     val ui = AppStatusUi()
-    var subscriptions = Disposables.empty()
     override val db by lazyLocateDb()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        subscriptions += db.subscribe {
+        db.subscribe {
 
             val state = it.state
             if (state == null || state.toLowerCase() == "live") {
@@ -46,7 +44,7 @@ class AppStatusFragment : Fragment(), HasDb {
                     ui.stateLayout.backgroundColor = ContextCompat.getColor(context!!, R.color.warningBackground);
                 }
             }
-        }
+        }.collectOnDestroyView()
     }
 }
 

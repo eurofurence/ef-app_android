@@ -35,13 +35,12 @@ import org.joda.time.Days
 /**
  * Created by David on 5/14/2016.
  */
-class HomeFragment : Fragment(), AnkoLogger, HasDb {
+class HomeFragment : DisposingFragment(), AnkoLogger, HasDb {
     override val db by lazyLocateDb()
 
     val ui by lazy { HomeUi() }
 
     val database by lazy { locateDb() }
-    var subscriptions = Disposables.empty()
     val now: DateTime get() = DatetimeProxy.now()
 
     private val upcoming by lazy {
@@ -73,11 +72,12 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
 
         configureEventRecyclers()
 
-        subscriptions += RemotePreferences.observer
+        RemotePreferences.observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { configureProgressBar() }
+                .collectOnDestroyView()
 
-        subscriptions += db.subscribe {
+        db.subscribe {
             context!!.notificationManager.apply {
                 // Cancel all event notifications.
                 for (e in events.items)
@@ -87,14 +87,8 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
                 for (a in announcements.items)
                     cancelFromRelated(a.id)
             }
-
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
+        .collectOnDestroyView()
     }
 
     @SuppressLint("ResourceType")

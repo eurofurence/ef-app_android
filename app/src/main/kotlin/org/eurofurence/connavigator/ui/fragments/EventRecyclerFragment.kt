@@ -47,12 +47,8 @@ import org.joda.time.Minutes
  * Event view recycler to hold the viewpager items
  * TODO: Refactor the everliving fuck out of this shitty software
  */
-class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
-    //private val results = ArrayList<EventRecord>()
-
+class EventRecyclerFragment : DisposingFragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
-
-    var subscriptions = Disposables.empty()
 
     val ui by lazy { EventListView() }
 
@@ -319,7 +315,7 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
         configureTitle()
 
         // Filter the data
-        subscriptions += db.subscribe { dataUpdated() }
+        db.subscribe { dataUpdated() }.collectOnDestroyView()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -338,12 +334,6 @@ class EventRecyclerFragment : Fragment(), HasDb, AnkoLogger {
                         ?.let(lm::onRestoreInstanceState)
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
     }
 
     private fun configureTitle() {

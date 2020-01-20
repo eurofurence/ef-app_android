@@ -30,7 +30,6 @@ import java.util.*
 
 class UserStatusFragment : DisposingFragment(), AnkoLogger, HasDb {
     val ui = UserStatusUi()
-    var subscriptions = Disposables.empty()
     override val db by lazyLocateDb()
 
 
@@ -49,7 +48,7 @@ class UserStatusFragment : DisposingFragment(), AnkoLogger, HasDb {
     }
 
     private fun subscribeToDatabase() {
-        subscriptions += db.subscribe {
+        db.subscribe {
             val state = it.state
             val canLogin = state != null && state.toLowerCase() != "past"
 
@@ -57,6 +56,7 @@ class UserStatusFragment : DisposingFragment(), AnkoLogger, HasDb {
                 layout.visibility = if (canLogin) View.VISIBLE else View.GONE
             }
         }
+        .collectOnDestroyView()
     }
 
     /**
