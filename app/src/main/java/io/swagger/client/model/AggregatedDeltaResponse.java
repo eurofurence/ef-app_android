@@ -18,9 +18,11 @@ import com.google.gson.annotations.SerializedName;
 
 @ApiModel(description = "")
 public class AggregatedDeltaResponse  {
-  
+
   @SerializedName("ConventionIdentifier")
   private String conventionIdentifier = null;
+  @SerializedName("State")
+  private String state = null;
   @SerializedName("Since")
   private Date since = null;
   @SerializedName("CurrentDateTimeUtc")
@@ -54,6 +56,16 @@ public class AggregatedDeltaResponse  {
   }
   public void setConventionIdentifier(String conventionIdentifier) {
     this.conventionIdentifier = conventionIdentifier;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getState() {
+    return state;
+  }
+  public void setState(String state) {
+    this.state = state;
   }
 
   /**
@@ -187,6 +199,7 @@ public class AggregatedDeltaResponse  {
     }
     AggregatedDeltaResponse aggregatedDeltaResponse = (AggregatedDeltaResponse) o;
     return (conventionIdentifier == null ? aggregatedDeltaResponse.conventionIdentifier == null : conventionIdentifier.equals(aggregatedDeltaResponse.conventionIdentifier)) &&
+        (state == null ? aggregatedDeltaResponse.state == null : state.equals(aggregatedDeltaResponse.state)) &&
         (since == null ? aggregatedDeltaResponse.since == null : since.equals(aggregatedDeltaResponse.since)) &&
         (currentDateTimeUtc == null ? aggregatedDeltaResponse.currentDateTimeUtc == null : currentDateTimeUtc.equals(aggregatedDeltaResponse.currentDateTimeUtc)) &&
         (events == null ? aggregatedDeltaResponse.events == null : events.equals(aggregatedDeltaResponse.events)) &&
@@ -205,6 +218,7 @@ public class AggregatedDeltaResponse  {
   public int hashCode() {
     int result = 17;
     result = 31 * result + (conventionIdentifier == null ? 0: conventionIdentifier.hashCode());
+    result = 31 * result + (state == null ? 0: state.hashCode());
     result = 31 * result + (since == null ? 0: since.hashCode());
     result = 31 * result + (currentDateTimeUtc == null ? 0: currentDateTimeUtc.hashCode());
     result = 31 * result + (events == null ? 0: events.hashCode());
@@ -224,8 +238,9 @@ public class AggregatedDeltaResponse  {
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class AggregatedDeltaResponse {\n");
-    
+
     sb.append("  conventionIdentifier: ").append(conventionIdentifier).append("\n");
+    sb.append("  state: ").append(state).append("\n");
     sb.append("  since: ").append(since).append("\n");
     sb.append("  currentDateTimeUtc: ").append(currentDateTimeUtc).append("\n");
     sb.append("  events: ").append(events).append("\n");

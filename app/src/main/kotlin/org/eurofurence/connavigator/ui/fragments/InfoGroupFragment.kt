@@ -31,7 +31,7 @@ import java.util.*
 /**
  * Renders an info group element and displays it's individual items
  */
-class InfoGroupFragment : Fragment(), HasDb, AnkoLogger {
+class InfoGroupFragment : DisposingFragment(), HasDb, AnkoLogger {
     inner class InfoItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val layout: LinearLayout by view("layout")
         val name: TextView by view("title")
@@ -73,8 +73,6 @@ class InfoGroupFragment : Fragment(), HasDb, AnkoLogger {
 
     val ui = InfoGroupUi()
 
-    var subscriptions = Disposables.empty()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
 
@@ -83,9 +81,10 @@ class InfoGroupFragment : Fragment(), HasDb, AnkoLogger {
 
         fillUi()
 
-        subscriptions += db.subscribe {
+        db.subscribe {
             fillUi()
         }
+        .collectOnDestroyView()
     }
 
     private fun fillUi() {
@@ -107,12 +106,6 @@ class InfoGroupFragment : Fragment(), HasDb, AnkoLogger {
                 groupLayout.visibility = View.GONE
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
     }
 
     private fun setDropdown() {

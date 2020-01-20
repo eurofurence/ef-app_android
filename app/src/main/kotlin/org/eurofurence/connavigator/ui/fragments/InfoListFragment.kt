@@ -19,11 +19,9 @@ import org.jetbrains.anko.support.v4.withArguments
 // TODO req: fix build
 // TODO req: add state saving
 
-class InfoListFragment : Fragment(), HasDb{
+class InfoListFragment : DisposingFragment(), HasDb{
     override val db by lazyLocateDb()
     val ui = ViewInfoGroupsUi()
-
-    var subscriptions = Disposables.empty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -32,9 +30,10 @@ class InfoListFragment : Fragment(), HasDb{
         super.onViewCreated(view, savedInstanceState)
 
         fillUi()
-        subscriptions += db.subscribe {
+        db.subscribe {
             fillUi()
         }
+        .collectOnDestroyView()
     }
 
     private fun fillUi() {
@@ -54,12 +53,6 @@ class InfoListFragment : Fragment(), HasDb{
                 .forEach { transaction.add(R.id.info_group_container, it.first, it.second) }
 
         transaction.commit()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
     }
 }
 

@@ -266,6 +266,9 @@
     <string name="misc_version_code">Version Code: %1$d</string>
     <string name="misc_version_detailed">Version %1$s (%2$d) / %3$s </string>
 
+    <string name="app_state_past">You\'re using an app version that connects to data of a past convention.\n\nAn updated version will be available several weeks before the next convention start date.\n\nLogging in with current credentials/registration details will not work.</string>
+    <string name="app_state_preview">You\'re using an app version that connects to preview data of an upcoming convention.\n\nPlease do not share any content and treat it as unofficial &amp; confidential.</string>
+
     <string name="misc_working_please_wait">Working&#8230; Please wait!</string>
     <string name="misc_android_developers">Android Developers</string>
 

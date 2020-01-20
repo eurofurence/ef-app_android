@@ -48,10 +48,9 @@ import java.util.*
 /**
  * Created by David on 4/9/2016.
  */
-class EventItemFragment : Fragment(), HasDb, AnkoLogger {
+class EventItemFragment : DisposingFragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
     val args: EventItemFragmentArgs by navArgs()
-    var subscriptions = Disposables.empty()
     val eventId by lazy { UUID.fromString(args.eventId) }
     val ui by lazy { EventUi() }
 
@@ -69,15 +68,9 @@ class EventItemFragment : Fragment(), HasDb, AnkoLogger {
             findNavController().popBackStack()
         }
 
-        subscriptions += db.subscribe {
+        db.subscribe {
             fillUi(savedInstanceState)
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
+        }.collectOnDestroyView()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

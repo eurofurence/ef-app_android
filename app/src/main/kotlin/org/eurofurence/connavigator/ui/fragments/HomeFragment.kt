@@ -35,13 +35,12 @@ import org.joda.time.Days
 /**
  * Created by David on 5/14/2016.
  */
-class HomeFragment : Fragment(), AnkoLogger, HasDb {
+class HomeFragment : DisposingFragment(), AnkoLogger, HasDb {
     override val db by lazyLocateDb()
 
     val ui by lazy { HomeUi() }
 
     val database by lazy { locateDb() }
-    var subscriptions = Disposables.empty()
     val now: DateTime get() = DatetimeProxy.now()
 
     private val upcoming by lazy {
@@ -62,6 +61,7 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
     private val announcement by lazy { AnnouncementListFragment() }
     private val userStatus by lazy { UserStatusFragment() }
     private val loadingWidget by lazy { LoadingIndicatorFragment() }
+    private val appStatus by lazy { AppStatusFragment() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -72,11 +72,12 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
 
         configureEventRecyclers()
 
-        subscriptions += RemotePreferences.observer
+        RemotePreferences.observer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { configureProgressBar() }
+                .collectOnDestroyView()
 
-        subscriptions += db.subscribe {
+        db.subscribe {
             context!!.notificationManager.apply {
                 // Cancel all event notifications.
                 for (e in events.items)
@@ -86,14 +87,8 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
                 for (a in announcements.items)
                     cancelFromRelated(a.id)
             }
-
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
+        .collectOnDestroyView()
     }
 
     @SuppressLint("ResourceType")
@@ -107,6 +102,7 @@ class HomeFragment : Fragment(), AnkoLogger, HasDb {
                 .replace(R.id.home_favorited, favorited)
                 .replace(R.id.home_announcement, announcement)
                 .replace(R.id.home_user_status, userStatus)
+                .replace(R.id.appStatusWidget, appStatus)
                 .commitAllowingStateLoss()
     }
 
@@ -140,6 +136,7 @@ class HomeUi : AnkoComponent<Fragment> {
     private lateinit var favoritesFragment: ViewGroup
     private lateinit var announcementFragment: ViewGroup
     private lateinit var loginWidget: ViewGroup
+    private lateinit var appStatusWidget: ViewGroup
     private lateinit var loadingWidget: FrameLayout
 
     @SuppressLint("ResourceType")
@@ -159,9 +156,17 @@ class HomeUi : AnkoComponent<Fragment> {
                     setMargins(0, 0, 0, 0)
                 }
 
+                appStatusWidget = frameLayout {
+                    id = R.id.appStatusWidget
+                }
+
                 loadingWidget = frameLayout {
                     id = R.id.loadingWidget
                 }
+
+                currentFragment = linearLayout {
+                    id = R.id.home_upcoming
+                }.lparams(matchParent, wrapContent)
 
                 loginWidget = linearLayout {
                     id = R.id.home_user_status

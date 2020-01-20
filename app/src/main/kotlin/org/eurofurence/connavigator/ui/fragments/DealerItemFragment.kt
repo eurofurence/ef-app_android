@@ -44,12 +44,11 @@ import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.px2dip
 import java.util.*
 
-class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
+class DealerItemFragment : DisposingFragment(), HasDb, AnkoLogger {
     private val args: DealerItemFragmentArgs by navArgs()
     private val dealerId by lazy { UUID.fromString(args.dealerId) }
 
     val ui by lazy { DealerUi() }
-    var subscriptions = Disposables.empty()
 
     override val db by lazyLocateDb()
 
@@ -63,15 +62,10 @@ class DealerItemFragment : Fragment(), HasDb, AnkoLogger {
             findNavController().popBackStack()
         }
 
-        subscriptions += db.subscribe {
+        db.subscribe {
             fillUi()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
+        .collectOnDestroyView()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

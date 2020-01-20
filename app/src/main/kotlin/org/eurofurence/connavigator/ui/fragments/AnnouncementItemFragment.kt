@@ -31,14 +31,13 @@ import org.joda.time.DateTime
 import us.feras.mdv.MarkdownView
 import java.util.*
 
-class AnnouncementItemFragment : Fragment(), HasDb, AnkoLogger {
+class AnnouncementItemFragment : DisposingFragment(), HasDb, AnkoLogger {
     private val args: AnnouncementItemFragmentArgs by navArgs()
     private val announcementId by lazy { UUID.fromString(args.announcementId) }
 
     override val db by lazyLocateDb()
 
     val ui = AnnouncementItemUi()
-    var subscriptions = Disposables.empty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             UI { ui.createView(this) }.view
@@ -52,7 +51,7 @@ class AnnouncementItemFragment : Fragment(), HasDb, AnkoLogger {
             findNavController().popBackStack()
         }
 
-        subscriptions += db.subscribe {
+        db.subscribe {
             val announcement = it.announcements[announcementId]
             if (announcement != null) {
                 info { "Updating announcement item" }
@@ -78,12 +77,7 @@ class AnnouncementItemFragment : Fragment(), HasDb, AnkoLogger {
                     View.GONE
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
+        .collectOnDestroyView()
     }
 }
 

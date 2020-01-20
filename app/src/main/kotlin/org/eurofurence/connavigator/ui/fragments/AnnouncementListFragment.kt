@@ -28,7 +28,7 @@ import org.eurofurence.connavigator.util.v2.plus
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 
-class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
+class AnnouncementListFragment : DisposingFragment(), HasDb, AnkoLogger {
     inner class AnnouncementDataholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val layout: LinearLayout by view()
         val announcementTitle: TextView by view()
@@ -65,8 +65,6 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
 
     override val db by lazyLocateDb()
 
-    var subscriptions = Disposables.empty()
-
     val ui = AnnouncementsUi()
     private val announcementAdapter by lazy { AnnoucementRecyclerDataAdapter() }
 
@@ -82,18 +80,13 @@ class AnnouncementListFragment : Fragment(), HasDb, AnkoLogger {
             itemAnimator = DefaultItemAnimator()
         }
 
-        subscriptions += db.subscribe {
+        db.subscribe {
             info { "Updating items in announcement recycler" }
             ui.layout.visibility = if (getAnnouncements().count() == 0) View.GONE else View.VISIBLE
             announcementAdapter.announcements = getAnnouncements()
             announcementAdapter.notifyDataSetChanged()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        subscriptions.dispose()
-        subscriptions = Disposables.empty()
+        .collectOnDestroyView()
     }
 
     private fun getAnnouncements() = db.announcements.items
