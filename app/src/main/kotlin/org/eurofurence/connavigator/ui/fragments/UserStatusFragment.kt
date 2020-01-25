@@ -80,7 +80,7 @@ class UserStatusFragment : DisposingFragment(), AnkoLogger, HasDb {
                             title.text = getString(R.string.misc_welcome_user, username.capitalize())
                             subtitle.textResource = R.string.login_tap_to_login
                             layout.setOnClickListener {
-                                val action = HomeFragmentDirections.actionFragmentViewHomeToFragmentViewMessageList()
+                                val action = HomeFragmentDirections.actionNavMessageList()
                                 findNavController().navigate(action)
                             }
                         }

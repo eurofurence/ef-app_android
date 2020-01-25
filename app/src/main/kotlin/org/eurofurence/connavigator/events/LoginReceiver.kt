@@ -32,7 +32,7 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
 
         task {
             apiService.tokens.apiTokensRegSysPost(RegSysAuthenticationRequest().apply {
-                this.regNo = regNumber.toInt()
+                this.regNo = regNumber?.toInt() ?: 0
                 this.username = username
                 this.password = password
             })

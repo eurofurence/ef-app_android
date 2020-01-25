@@ -79,7 +79,7 @@ class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, ov
 
         holder.layout.setOnClickListener {
             val action = DealerListFragmentDirections
-                    .actionFragmentViewDealersToFragmentViewDealer(dealer.id.toString(), null)
+                    .actionNavDealerItem(dealer.id.toString(), null)
             fragment.findNavController().navigate(action)
         }
 

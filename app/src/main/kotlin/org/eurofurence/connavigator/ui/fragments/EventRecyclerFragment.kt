@@ -269,8 +269,8 @@ class EventRecyclerFragment : DisposingFragment(), HasDb, AnkoLogger {
                 isClickable = true
                 setOnClickListener {
                     val action = when (findNavController().currentDestination?.id) {
-                        R.id.navHome -> HomeFragmentDirections.actionFragmentViewHomeToFragmentViewEvent(id, null)
-                        R.id.navEventList -> EventListFragmentDirections.actionFragmentViewEventsToFragmentViewEvent(id, null)
+                        R.id.navHome -> HomeFragmentDirections.actionNavEventItem(id, null)
+                        R.id.navEventList -> EventListFragmentDirections.actionNavEventListToEventItem(id, null)
                         else -> null
                     }
 

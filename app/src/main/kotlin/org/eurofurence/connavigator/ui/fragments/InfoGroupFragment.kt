@@ -48,7 +48,7 @@ class InfoGroupFragment : DisposingFragment(), HasDb, AnkoLogger {
 
             holder.name.text = item.title
             holder.layout.setOnClickListener {
-                val action = InfoListFragmentDirections.actionInfoListFragmentToInfoItemFragment(item.id.toString(), BuildConfig.CONVENTION_IDENTIFIER)
+                val action = InfoListFragmentDirections.actionNavInfoItem(item.id.toString(), BuildConfig.CONVENTION_IDENTIFIER)
                 findNavController().navigate(action)
             }
 

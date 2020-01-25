@@ -83,7 +83,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
         FetchPrivateMessageWorker.execute(this)
 
         val action = HomeFragmentDirections
-                .actionFragmentViewHomeToFragmentViewMessageItem(message.relatedId!!)
+                .actionNavMessageItem(message.relatedId!!)
 
         val intent = NavDeepLinkBuilder(this)
                 .setComponentName(NavActivity::class.java)
@@ -108,7 +108,7 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
 
         val intent = try {
             val action = HomeFragmentDirections
-                    .actionFragmentViewHomeToFragmentViewAnnouncement(message.relatedId!!)
+                    .actionNavAccouncementItem(message.relatedId!!)
 
             NavDeepLinkBuilder(this)
                     .setComponentName(NavActivity::class.java)

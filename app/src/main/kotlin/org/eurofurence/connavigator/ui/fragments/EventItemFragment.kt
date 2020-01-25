@@ -158,7 +158,7 @@ class EventItemFragment : DisposingFragment(), HasDb, AnkoLogger {
                 setImageDrawable(context.createFADrawable(R.string.fa_comment))
 
                 setOnClickListener {
-                    val action = EventItemFragmentDirections.actionFragmentViewEventToEventFeedbackFragment(args.eventId)
+                    val action = EventItemFragmentDirections.actionNavEventItemToEventFeedback(args.eventId)
 
                     findNavController().navigate(action)
                 }
