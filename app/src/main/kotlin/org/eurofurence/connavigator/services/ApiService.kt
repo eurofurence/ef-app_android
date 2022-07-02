@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+
 
 package org.eurofurence.connavigator.services
 
@@ -11,8 +11,8 @@ import io.swagger.client.ApiInvoker
 import io.swagger.client.api.*
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.util.extensions.catchHandle
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
 import java.io.File
 
 /**
@@ -57,7 +57,7 @@ object apiService : AnkoLogger {
      * Initializes the API services
      */
     fun initialize(context: Context) {
-        {
+        try {
             debug { "Initializing" }
 
             // Create the cache
@@ -73,7 +73,7 @@ object apiService : AnkoLogger {
             // Sets up the API invoker
             ApiInvoker.initializeInstance(cache, network, 2, null, 60)
             debug { "Done initializing, ${ApiInvoker.getInstance()}" }
-        } catchHandle { t: Throwable ->
+        } catch (t: Throwable) {
             debug { "Initialization failed with ${t.message}" }
         }
     }

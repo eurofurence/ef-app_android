@@ -4,9 +4,8 @@ import android.app.Notification
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.notificationManager
+import com.pawegio.kandroid.notificationManager
+import org.eurofurence.connavigator.dropins.AnkoLogger
 
 /**
  * Notification Publisher
@@ -27,7 +26,7 @@ class NotificationPublisher : BroadcastReceiver(), AnkoLogger {
         val tag = intent.getStringExtra(TAG) ?: ""
 
         info { "Sending notification to system" }
-        context.notificationManager.notify(tag, tag.hashCode(), notification)
-        info { "Done sending notifications"}
+        context.notificationManager?.notify(tag, tag.hashCode(), notification)
+        info { "Done sending notifications" }
     }
 }

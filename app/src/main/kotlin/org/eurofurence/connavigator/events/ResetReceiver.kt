@@ -3,14 +3,13 @@ package org.eurofurence.connavigator.events
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.pawegio.kandroid.longToast
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.RootDb
 import org.eurofurence.connavigator.preferences.*
 import org.eurofurence.connavigator.services.ImageService
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.longToast
+import org.eurofurence.connavigator.dropins.AnkoLogger
 
 /**
  * Created by requinard on 7/30/17.

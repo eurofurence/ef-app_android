@@ -3,8 +3,6 @@ package org.eurofurence.connavigator.app
 import androidx.multidex.MultiDexApplication
 import com.chibatching.kotpref.Kotpref
 import com.google.firebase.perf.metrics.AddTrace
-import com.joanzapata.iconify.Iconify
-import com.joanzapata.iconify.fonts.FontAwesomeModule
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.R
@@ -50,11 +48,6 @@ class ConnavigatorApplication : MultiDexApplication() {
         // Listen to cloud updates
         PushListenerService().subscribe()
 
-        // Report token
-        InstanceIdService().reportToken()
-
-        // Icons
-        Iconify.with(FontAwesomeModule())
 
         // Check logged in tokens
         AuthPreferences.validate()

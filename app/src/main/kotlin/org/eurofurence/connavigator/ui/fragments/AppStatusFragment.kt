@@ -8,89 +8,89 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
-import org.eurofurence.connavigator.util.extensions.fontAwesomeView
-import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.util.v2.plus
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.UI
+import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.ui.views.FontAwesomeType
 
 class AppStatusFragment : DisposingFragment(), HasDb {
-    val ui = AppStatusUi()
     override val db by lazyLocateDb()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            UI { ui.createView(this) }.view
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        db.subscribe {
-
-            val state = it.state
-            if (state == null || state.toLowerCase() == "live") {
-                ui.layout.visibility = View.GONE
-            } else {
-                ui.layout.visibility = View.VISIBLE
-
-                if (state.toLowerCase() == "past") {
-                    ui.stateText.textResource = R.string.app_state_past
-                    ui.stateLayout.backgroundColor = ContextCompat.getColor(context!!, R.color.errorBackground);
-                }
-                if (state.toLowerCase() == "preview") {
-                    ui.stateText.textResource = R.string.app_state_preview
-                    ui.stateLayout.backgroundColor = ContextCompat.getColor(context!!, R.color.warningBackground);
-                }
-            }
-        }.collectOnDestroyView()
-    }
-}
-
-class AppStatusUi : AnkoComponent<Fragment> {
     lateinit var stateLayout: LinearLayout
     lateinit var stateText: TextView
     lateinit var layout: ViewGroup
 
-    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        scrollView {
-            this@AppStatusUi.layout = this
-            lparams(matchParent, matchParent)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = createView {
+        layout = scrollView {
+            layoutParams = viewGroupLayoutParams(matchParent, matchParent)
             backgroundResource = R.color.lightBackground
 
             verticalLayout {
-
                 stateLayout = linearLayout {
-                    lparams(matchParent, wrapContent) {
+                    layoutParams = linearLayoutParams(matchParent, wrapContent) {
                         setPadding(0, dip(20), 0, dip(20))
                     }
 
                     weightSum = 100f
 
                     fontAwesomeView {
-                        text = "{fa-warning 30sp}"
-                        textColor = ContextCompat.getColor(context, R.color.textBlack)
-                        lparams(dip(0), matchParent, 15F)
+                        type= FontAwesomeType.Solid
+                        text = getString(R.string.fa_exclamation_triangle_solid)
+                        textSize = 30f
+                        textColorResource = R.color.textBlack
+                        layoutParams = linearLayoutParams(dip(0), matchParent, 15F)
                         gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
                     }
 
                     verticalLayout {
+                        layoutParams = linearLayoutParams(dip(0), wrapContent) {
+                            weight = 75F
+                        }
                         stateText = textView {
                             textResource = R.string.misc_version
                             compatAppearance = android.R.style.TextAppearance_Small
-                            textColor = ContextCompat.getColor(context, R.color.textBlack)
+                            textColorResource = R.color.textBlack
                         }
-
-                    }.lparams(dip(0), wrapContent) {
-                        weight = 75F
                     }
 
-                }.lparams(matchParent, wrapContent) {
-                    topMargin = dip(20)
                 }
             }
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        db.subscribe {
+
+            val state = it.state
+            if (state == null || state.toLowerCase() == "live") {
+                layout.visibility = View.GONE
+            } else {
+                layout.visibility = View.VISIBLE
+
+                if (state.toLowerCase() == "past") {
+                    stateText.textResource = R.string.app_state_past
+                    stateLayout.setBackgroundColor(
+                        ContextCompat.getColor(
+                            context!!,
+                            R.color.errorBackground
+                        )
+                    )
+                }
+                if (state.toLowerCase() == "preview") {
+                    stateText.textResource = R.string.app_state_preview
+                    stateLayout.setBackgroundColor(
+                        ContextCompat.getColor(
+                            context!!,
+                            R.color.warningBackground
+                        )
+                    )
+                }
+            }
+        }.collectOnDestroyView()
+    }
 }

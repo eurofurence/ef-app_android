@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.navigation.NavDeepLinkBuilder
 import com.google.firebase.perf.metrics.AddTrace
+import com.pawegio.kandroid.alarmManager
+import com.pawegio.kandroid.longToast
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Db
@@ -26,10 +28,8 @@ import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.now
 import org.eurofurence.connavigator.util.extensions.startTimeString
 import org.eurofurence.connavigator.workers.DataUpdateWorker
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.alarmManager
-import org.jetbrains.anko.info
-import org.jetbrains.anko.longToast
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
 import org.joda.time.DateTime
 import org.joda.time.DurationFieldType
 import java.time.format.DateTimeParseException
@@ -63,7 +63,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
                 // Remove item from favorites
                 info("Event is already favorited. Removing from favorites")
                 context.longToast("Removed ${event.title} from favorites")
-                context.alarmManager.cancel(pendingIntent)
+                context.alarmManager?.cancel(pendingIntent)
                 db.faves = db.faves.filter { it != event.id }
             }
             else -> {
@@ -71,7 +71,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
                 context.longToast("Added ${event.title} to favorites")
                 if (notificationTime > now()) {
                     info("Event is far enough in the future to warrant scheduling a notification for it")
-                    context.alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
+                    context.alarmManager?.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
                 }
                 db.faves += event.id
             }
@@ -130,7 +130,7 @@ class EventFavoriteBroadcast : BroadcastReceiver(), AnkoLogger {
         val notification = createNotification(context, event)
         val pendingIntent = PendingIntent.getBroadcast(context, event.id.hashCode(), notification, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        context.alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
+        context.alarmManager?.set(AlarmManager.RTC_WAKEUP, notificationTime.millis, pendingIntent)
         info { "Updated pending activity" }
     }
 

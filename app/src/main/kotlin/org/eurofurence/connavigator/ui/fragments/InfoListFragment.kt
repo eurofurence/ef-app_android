@@ -9,22 +9,35 @@ import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.util.extensions.withArguments
 import org.eurofurence.connavigator.util.v2.plus
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.withArguments
 
 // TODO req: Replace null assertions in fragments
 // TODO req: port to nav graph
 // TODO req: fix build
 // TODO req: add state saving
 
-class InfoListFragment : DisposingFragment(), HasDb{
+class InfoListFragment : DisposingFragment(), HasDb {
     override val db by lazyLocateDb()
-    val ui = ViewInfoGroupsUi()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            UI { ui.createView(this) }.view
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = createView {
+        scrollView {
+            layoutParams = viewGroupLayoutParams(matchParent, matchParent)
+            relativeLayout {
+                layoutParams = viewGroupLayoutParams(matchParent, wrapContent)
+                verticalLayout {
+                    layoutParams = relativeLayoutParams(matchParent, wrapContent)
+                    setPadding(0, dip(10), 0, 0)
+                    id = R.id.info_group_container
+                }
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,7 +46,7 @@ class InfoListFragment : DisposingFragment(), HasDb{
         db.subscribe {
             fillUi()
         }
-        .collectOnDestroyView()
+            .collectOnDestroyView()
     }
 
     private fun fillUi() {
@@ -41,32 +54,24 @@ class InfoListFragment : DisposingFragment(), HasDb{
 
         // Remove existing instances
         db.knowledgeGroups.items
-                .map { it.id.toString() }
-                .map { childFragmentManager.findFragmentByTag(it) }
-                .filter { it != null }
-                .forEach { transaction.remove(it!!) }
+            .map { it.id.toString() }
+            .map { childFragmentManager.findFragmentByTag(it) }
+            .filter { it != null }
+            .forEach { transaction.remove(it!!) }
 
         // create new instances
         db.knowledgeGroups.items
-                .sortedBy { it.order }
-                .map { Pair(InfoGroupFragment().withArguments("id" to it.id.toString()), it.id.toString()) }
-                .forEach { transaction.add(R.id.info_group_container, it.first, it.second) }
+            .sortedBy { it.order }
+            .map {
+                Pair(
+                    InfoGroupFragment().withArguments {
+                        putString("id", it.id.toString())
+                    },
+                    it.id.toString()
+                )
+            }
+            .forEach { transaction.add(R.id.info_group_container, it.first, it.second) }
 
         transaction.commit()
     }
-}
-
-class ViewInfoGroupsUi : AnkoComponent<Fragment> {
-    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        scrollView {
-            lparams(matchParent, matchParent)
-            relativeLayout {
-                verticalLayout {
-                    topPadding = dip(10)
-                    id = R.id.info_group_container
-                }.lparams(matchParent, wrapContent)
-            }.lparams(matchParent, wrapContent)
-        }
-    }
-
 }

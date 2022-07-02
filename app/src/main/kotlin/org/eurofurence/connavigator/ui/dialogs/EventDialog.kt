@@ -5,16 +5,19 @@ import android.content.Intent
 import android.provider.CalendarContract
 import androidx.core.content.ContextCompat.startActivity
 import com.pawegio.kandroid.IntentFor
+import com.pawegio.kandroid.selector
+import com.pawegio.kandroid.toast
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.events.EventFavoriteBroadcast
 import org.eurofurence.connavigator.database.Db
+import org.eurofurence.connavigator.dropins.AnkoLogger
+import org.eurofurence.connavigator.dropins.share
 import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.ui.filters.end
 import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.shareString
-import org.jetbrains.anko.*
 
 /**
  * Shows an event dialog
@@ -31,7 +34,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db, favorit
     return context.selector(
             context.getString(R.string.event_options_for, event.title),
             options
-    ) { _, position ->
+    ) { position ->
         when (position) {
             0 -> {
                 debug { "Favouriting event for user" }
@@ -61,7 +64,7 @@ fun AnkoLogger.eventDialog(context: Context, event: EventRecord, db: Db, favorit
 
                 AnalyticsService.event(AnalyticsService.Category.EVENT, AnalyticsService.Action.SHARED, event.title)
                 //share
-                context.share(event.shareString(context!!), context.getString(R.string.event_share_event))
+                context.share(event.shareString(context), context.getString(R.string.event_share_event))
             }
         }
     }

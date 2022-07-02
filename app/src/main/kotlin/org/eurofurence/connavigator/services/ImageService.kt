@@ -19,8 +19,8 @@ import nl.komponents.kovenant.Deferred
 import nl.komponents.kovenant.deferred
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.util.extensions.url
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
 
 /**
  * Provides methods for obtaining images from web and caching them.

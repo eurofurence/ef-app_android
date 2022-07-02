@@ -20,12 +20,10 @@ import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.dropins.*
 import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
-import org.eurofurence.connavigator.util.extensions.recycler
 import org.eurofurence.connavigator.util.extensions.setFAIcon
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.act
+
 
 /**
  * Created by David on 15-5-2016.
@@ -33,15 +31,72 @@ import org.jetbrains.anko.support.v4.act
 class DealerListFragment : Fragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
-    val ui by lazy { DealersUi() }
-    val layoutManager get() = ui.dealerList?.layoutManager
+    lateinit var dealerList: RecyclerView
+    lateinit var search: EditText
+    lateinit var searchLayout: LinearLayout
+    lateinit var categorySpinner: Spinner
+
+
+    val layoutManager get() = dealerList?.layoutManager
     private var effectiveDealers = emptyList<DealerRecord>()
 
     var searchText = ""
     var searchCategory = ""
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            UI { ui.createView(this) }.view
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) =
+        createView {
+            verticalLayout {
+                layoutParams = viewGroupLayoutParams(matchParent, matchParent)
+                backgroundResource = R.color.backgroundGrey
+
+                verticalLayout {
+                    // Search widgets
+                    padding = dip(10)
+                    linearLayout {
+                        // Filter types
+                        weightSum = 100F
+
+                        textView {
+                            layoutParams = linearLayoutParams(dip(0), wrapContent, 20F)
+                            textResource = R.string.misc_show
+                            setPadding(dip(5), 0, 0, 0)
+                        }
+
+                        categorySpinner = spinner {
+                            layoutParams = linearLayoutParams(dip(0), wrapContent, 80F)
+                            prompt = resources.getString(R.string.misc_filter)
+                        }
+                    }
+
+                    searchLayout = linearLayout {
+                        weightSum = 100F
+                        visibility = View.GONE
+                        textView {
+                            layoutParams = linearLayoutParams(dip(0), wrapContent, 20F)
+                            textResource = R.string.misc_find
+                            setPadding(dip(5), 0, 0, 0)
+                        }
+
+                        search = editText {
+                            layoutParams = linearLayoutParams(dip(0), wrapContent, 80F)
+                            singleLine = true
+                        }
+                    }
+                }
+
+                dealerList = recycler {
+                    layoutParams = linearLayoutParams(matchParent, matchParent)
+                    setPadding(0, dip(10), 0, dip(10))
+                    clipToPadding = false
+                    backgroundResource = R.color.lightBackground
+                }
+            }
+        }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -49,24 +104,30 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
 
         info { "Rendering ${effectiveDealers.size} dealers out of ${db.dealers.items.size}" }
 
-        ui.dealerList?.adapter = DealerRecyclerAdapter(effectiveDealers, db, this)
-        ui.dealerList?.layoutManager = LinearLayoutManager(activity)
-        ui.dealerList?.itemAnimator = DefaultItemAnimator()
+        dealerList?.adapter = DealerRecyclerAdapter(effectiveDealers, db, this)
+        dealerList?.layoutManager = LinearLayoutManager(activity)
+        dealerList?.itemAnimator = DefaultItemAnimator()
 
         val distinctCategories = dealers.items
-                .map { it.categories ?: emptyList() }
-                .fold(emptyList<String>()) { a, b -> a.plus(b).distinct() }
-                .sorted()
+            .map { it.categories ?: emptyList() }
+            .fold(emptyList<String>()) { a, b -> a.plus(b).distinct() }
+            .sorted()
 
-        ui.categorySpinner.adapter =
-                ArrayAdapter<String>(this.act, android.R.layout.simple_spinner_dropdown_item,
-                        listOf("All Categories").plus(distinctCategories))
+        categorySpinner.adapter = ArrayAdapter(
+            requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            listOf("All Categories").plus(distinctCategories)
+        )
 
-        ui.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
                 searchCategory = if (position == 0) {
                     ""
                 } else {
@@ -76,7 +137,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
             }
         }
 
-        ui.search.textWatcher {
+        search.textWatcher {
             afterTextChanged { text -> searchText = text.toString(); updateFilter() }
         }
 
@@ -90,7 +151,12 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
                 this.menu.clear()
                 this.inflateMenu(R.menu.dealer_list_menu)
                 this.context?.let {
-                    this.menu.setFAIcon(it, R.id.action_search, R.string.fa_search_solid, white = true)
+                    this.menu.setFAIcon(
+                        it,
+                        R.id.action_search,
+                        R.string.fa_search_solid,
+                        white = true
+                    )
                 }
                 this.setOnMenuItemClickListener {
                     when (it.itemId) {
@@ -114,8 +180,8 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
         layoutManager?.also { lm ->
             runDelayed(200) {
                 savedInstanceState
-                        ?.getParcelable<Parcelable>("lm_key")
-                        ?.let(lm::onRestoreInstanceState)
+                    ?.getParcelable<Parcelable>("lm_key")
+                    ?.let(lm::onRestoreInstanceState)
             }
         }
     }
@@ -143,81 +209,36 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
         effectiveDealers = db.dealers.items.toList()
 
         if (!searchText.isEmpty())
-            effectiveDealers = effectiveDealers.filter { it.displayName.contains(searchText, true) or it.attendeeNickname.contains(searchText, true) }
+            effectiveDealers = effectiveDealers.filter {
+                it.displayName.contains(
+                    searchText,
+                    true
+                ) or it.attendeeNickname.contains(searchText, true)
+            }
 
         if (!searchCategory.isEmpty())
             effectiveDealers = effectiveDealers.filter {
                 it.categories?.contains(searchCategory) ?: false
             }
 
-        ui.dealerList?.adapter = DealerRecyclerAdapter(sortDealers(effectiveDealers), db, this).also {
+        dealerList?.adapter = DealerRecyclerAdapter(sortDealers(effectiveDealers), db, this).also {
             it.notifyDataSetChanged()
         }
     }
 
     private fun sortDealers(dealers: Iterable<DealerRecord>): List<DealerRecord> =
-            dealers.sortedBy { (if (it.displayName != "") it.displayName else it.attendeeNickname).toLowerCase() }
+        dealers.sortedBy { (if (it.displayName != "") it.displayName else it.attendeeNickname).toLowerCase() }
 
     fun onSearchButtonClick() {
-        if (ui.searchLayout.visibility == View.GONE) {
+        if (searchLayout.visibility == View.GONE) {
             info { "Showing search bar" }
-            ui.searchLayout.visibility = View.VISIBLE
-            ui.search.requestFocus()
+            searchLayout.visibility = View.VISIBLE
+            search.requestFocus()
         } else {
             info { "Hiding search bar" }
-            ui.searchLayout.visibility = View.GONE
+            searchLayout.visibility = View.GONE
             searchText = ""
             updateFilter()
-        }
-    }
-}
-
-class DealersUi : AnkoComponent<Fragment> {
-    var dealerList: RecyclerView? = null
-    lateinit var search: EditText
-    lateinit var searchLayout: LinearLayout
-    lateinit var categorySpinner: Spinner
-
-    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        verticalLayout {
-            lparams(matchParent, matchParent)
-            backgroundResource = R.color.backgroundGrey
-
-            verticalLayout {
-                // Search widgets
-                padding = dip(10)
-                linearLayout {
-                    // Filter types
-                    weightSum = 100F
-
-                    textView {
-                        textResource = R.string.misc_show
-                        leftPadding = dip(5)
-                    }.lparams(dip(0), wrapContent, 20F)
-
-                    categorySpinner = spinner {
-                        prompt = resources.getString(R.string.misc_filter)
-                    }.lparams(dip(0), wrapContent, 80F)
-                }
-
-                searchLayout = linearLayout {
-                    weightSum = 100F
-                    visibility = View.GONE
-                    textView {
-                        textResource = R.string.misc_find
-                        leftPadding = dip(5)
-                    }.lparams(dip(0), wrapContent, 20F)
-
-                    search = editText { singleLine = true }.lparams(dip(0), wrapContent, 80F)
-                }
-            }
-
-            dealerList = recycler {
-                lparams(matchParent, matchParent)
-                verticalPadding = dip(10)
-                clipToPadding = false
-                backgroundResource = R.color.lightBackground
-            }
         }
     }
 }

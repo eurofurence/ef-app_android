@@ -6,35 +6,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.dropins.AnkoLogger
+import org.eurofurence.connavigator.dropins.createView
+import org.eurofurence.connavigator.dropins.*
 import org.eurofurence.connavigator.preferences.*
 import org.eurofurence.connavigator.util.DatetimeProxy
-import org.jetbrains.anko.*
-import org.jetbrains.anko.appcompat.v7.titleResource
-import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.support.v4.UI
+
 
 class SettingsFragment : Fragment(), AnkoLogger {
-    val ui by lazy { SettingsUi() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            UI { ui.createView(this) }.view
-}
+    lateinit var timeText: TextView
 
-class SettingsUi : AnkoComponent<Fragment> {
     private fun updateTime() {
         timeText.text = DatetimeProxy.now().toString()
     }
 
-    lateinit var timeText: TextView
-
-    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = createView {
         scrollView {
             verticalLayout {
+                layoutParams = viewGroupLayoutParams(matchParent, matchParent)
+
                 verticalLayout {
                     padding = dip(10)
                     textView {
@@ -45,7 +44,9 @@ class SettingsUi : AnkoComponent<Fragment> {
                     checkBox {
                         textResource = R.string.settings_show_irrelevant_announcements
                         isChecked = AppPreferences.showOldAnnouncements
-                        setOnCheckedChangeListener { _, b -> AppPreferences.showOldAnnouncements = b }
+                        setOnCheckedChangeListener { _, b ->
+                            AppPreferences.showOldAnnouncements = b
+                        }
                     }
 
                     checkBox {
@@ -64,23 +65,30 @@ class SettingsUi : AnkoComponent<Fragment> {
                         weightSum = 10F
 
                         editText {
+                            layoutParams = linearLayoutParams(dip(0), wrapContent, 2f)
+
                             hintResource = R.string.settings_get_notified_minutes_before
-                            setText(AppPreferences.notificationMinutesBefore.toString(), TextView.BufferType.EDITABLE)
+                            setText(
+                                AppPreferences.notificationMinutesBefore.toString(),
+                                TextView.BufferType.EDITABLE
+                            )
                             textWatcher {
                                 afterTextChanged { text ->
-                                    if (text!!.isNotEmpty()) AppPreferences.notificationMinutesBefore = text.toString().toInt()
+                                    if (text!!.isNotEmpty()) AppPreferences.notificationMinutesBefore =
+                                        text.toString().toInt()
                                 }
                             }
                             inputType = InputType.TYPE_CLASS_NUMBER
-                        }.lparams(dip(0), wrapContent) {
-                            weight = 2F
                         }
 
                         textView {
+                            layoutParams = linearLayoutParams(dip(0), wrapContent, 8f)
+                            layoutParams = linearLayoutParams(dip(0), wrapContent) {
+                                weight = 2F
+                            }
+
                             textResource = R.string.settings_amount_of_minutes_to_get_an_alert
-                            textColor = ContextCompat.getColor(ctx, R.color.textBlack)
-                        }.lparams(dip(0), wrapContent) {
-                            weight = 8F
+                            textColorResource = R.color.textBlack
                         }
                     }
 
@@ -94,13 +102,17 @@ class SettingsUi : AnkoComponent<Fragment> {
                     checkBox {
                         textResource = R.string.settings_analytics_track_usage
                         isChecked = AnalyticsPreferences.enabled
-                        setOnCheckedChangeListener { _, value -> AnalyticsPreferences.enabled = value }
+                        setOnCheckedChangeListener { _, value ->
+                            AnalyticsPreferences.enabled = value
+                        }
                     }
 
                     checkBox {
                         textResource = R.string.settings_analytics_track_performance
                         isChecked = AnalyticsPreferences.performanceTracking
-                        setOnCheckedChangeListener { _, value -> AnalyticsPreferences.performanceTracking = value }
+                        setOnCheckedChangeListener { _, value ->
+                            AnalyticsPreferences.performanceTracking = value
+                        }
                     }
                 }
 
@@ -109,16 +121,20 @@ class SettingsUi : AnkoComponent<Fragment> {
                     visibility = if (BuildConfig.DEBUG) View.VISIBLE else View.GONE
 
                     view {
+                        layoutParams = linearLayoutParams(matchParent, dip(1)) {
+                            setMargins(0, dip(5), 0, dip(5))
+                        }
                         backgroundResource = R.color.primary
-                    }.lparams(matchParent, dip(1)) {
-                        verticalMargin = dip(5)
                     }
 
                     textView("Debug settings") {
                         padding = dip(15)
                     }
 
-                    timeText = textView(DatetimeProxy.now().toString())
+                    timeText = textView(DatetimeProxy.now().toString()) {
+
+                    }
+
                     linearLayout {
                         button("-1M") {
                             setOnClickListener {
@@ -170,22 +186,35 @@ class SettingsUi : AnkoComponent<Fragment> {
                     }
 
                     // Set loading states
-                    textView("Loading states")
+                    textView("Loading states") {
+
+                    }
+
                     linearLayout {
                         button("UNIT") {
-                            setOnClickListener { BackgroundPreferences.loadingState = LoadingState.UNINITIALIZED }
+                            setOnClickListener {
+                                BackgroundPreferences.loadingState = LoadingState.UNINITIALIZED
+                            }
                         }
                         button("DATA") {
-                            setOnClickListener { BackgroundPreferences.loadingState = LoadingState.LOADING_DATA }
+                            setOnClickListener {
+                                BackgroundPreferences.loadingState = LoadingState.LOADING_DATA
+                            }
                         }
                         button("IMG") {
-                            setOnClickListener { BackgroundPreferences.loadingState = LoadingState.LOADING_IMAGES }
+                            setOnClickListener {
+                                BackgroundPreferences.loadingState = LoadingState.LOADING_IMAGES
+                            }
                         }
                         button("OK") {
-                            setOnClickListener { BackgroundPreferences.loadingState = LoadingState.SUCCEEDED }
+                            setOnClickListener {
+                                BackgroundPreferences.loadingState = LoadingState.SUCCEEDED
+                            }
                         }
                         button("FAIL") {
-                            setOnClickListener { BackgroundPreferences.loadingState = LoadingState.FAILED }
+                            setOnClickListener {
+                                BackgroundPreferences.loadingState = LoadingState.FAILED
+                            }
                         }
                     }
 
@@ -194,11 +223,12 @@ class SettingsUi : AnkoComponent<Fragment> {
                     checkBox {
                         textResource = R.string.settings_schedule_events_in_5_minutes
                         isChecked = DebugPreferences.scheduleNotificationsForTest
-                        setOnClickListener { DebugPreferences.scheduleNotificationsForTest = !DebugPreferences.scheduleNotificationsForTest }
+                        setOnClickListener {
+                            DebugPreferences.scheduleNotificationsForTest =
+                                !DebugPreferences.scheduleNotificationsForTest
+                        }
                     }
                 }
-
-                lparams(matchParent, matchParent)
             }
         }
     }

@@ -3,8 +3,7 @@ package org.eurofurence.connavigator.events
 import android.content.Context
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import org.eurofurence.connavigator.util.extensions.toIntent
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
+import org.eurofurence.connavigator.dropins.AnkoLogger
 
 /**
  * App level broadcasts for data updates that invalidates the UI

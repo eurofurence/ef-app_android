@@ -8,27 +8,19 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
-import io.reactivex.disposables.Disposables
+import com.pawegio.kandroid.toast
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.dropins.*
 import org.eurofurence.connavigator.services.ImageService
-import org.eurofurence.connavigator.util.extensions.fontAwesomeTextView
 import org.eurofurence.connavigator.util.extensions.jodatime
-import org.eurofurence.connavigator.util.extensions.markdownView
-import org.eurofurence.connavigator.util.extensions.photoView
-import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
-import org.eurofurence.connavigator.util.v2.plus
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.toast
+
 import org.joda.time.DateTime
-import us.feras.mdv.MarkdownView
 import java.util.*
 
 class AnnouncementItemFragment : DisposingFragment(), HasDb, AnkoLogger {
@@ -37,10 +29,70 @@ class AnnouncementItemFragment : DisposingFragment(), HasDb, AnkoLogger {
 
     override val db by lazyLocateDb()
 
-    val ui = AnnouncementItemUi()
+    lateinit var title: TextView
+    lateinit var text: TextView // TODO
+    lateinit var photo: PhotoView
+    lateinit var loadingIndicator: ProgressBar
+    lateinit var warningLayout: LinearLayout
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            UI { ui.createView(this) }.view
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) =
+        createView {
+            relativeLayout {
+                backgroundResource= R.color.backgroundGrey
+                layoutParams = viewGroupLayoutParams(matchParent, matchParent)
+
+                scrollView {
+                    layoutParams = relativeLayoutParams(matchParent, matchParent)
+
+                    verticalLayout {
+                        layoutParams = linearLayoutParams(matchParent, matchParent)
+                        backgroundResource= R.color.lightBackground
+                        isClickable = true
+
+                        loadingIndicator = progressBar {}
+
+                        linearLayout {
+                            padding = dip(50)
+                            backgroundResource= R.drawable.image_fade
+                            title = textView {
+                                compatAppearance =
+                                    android.R.style.TextAppearance_DeviceDefault_Large_Inverse
+                            }
+                        }
+
+                        warningLayout = linearLayout {
+                            padding = dip(20 - 8)
+
+                            fontAwesomeView {
+                                layoutParams = linearLayoutParams(matchParent, wrapContent)
+                                text = "This announcement has expired!"
+                                textAlignment = View.TEXT_ALIGNMENT_CENTER
+
+                                compatAppearance =
+                                    android.R.style.TextAppearance_DeviceDefault_Medium
+                            }
+                        }
+
+                        text = markdownView {
+                            layoutParams = marginLayoutParams(dip(20 - 8), dip(20 - 8))
+                        }
+
+                        photo = photoView {
+                            layoutParams = marginLayoutParams(dip(20), dip(20))
+                            backgroundResource= R.color.darkBackground
+                            imageResource=R.drawable.placeholder_event
+                            scaleType = ImageView.ScaleType.FIT_CENTER
+                            adjustViewBounds = true
+                            visibility = View.GONE
+                        }
+                    }
+                }
+            }
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,86 +108,29 @@ class AnnouncementItemFragment : DisposingFragment(), HasDb, AnkoLogger {
             if (announcement != null) {
                 info { "Updating announcement item" }
 
-                ui.loadingIndicator.visibility = View.GONE
+                loadingIndicator.visibility = View.GONE
 
-                ui.title.text = announcement.title
-                ui.text.loadMarkdown(announcement.content)
+                title.text = announcement.title
+                // TODO Markdown
+                text.text = announcement.content
 
                 // Retrieve top image
                 val image = announcement.let { it[toAnnouncementImage] }
 
                 // Set image on top
                 if (image != null) {
-                    ImageService.load(image, ui.image, true)
+                    ImageService.load(image, photo, true)
                 } else {
-                    ui.image.visibility = View.GONE
+                    photo.visibility = View.GONE
                 }
 
-                ui.warningLayout.visibility = if (DateTime.now().isAfter(announcement.validUntilDateTimeUtc.jodatime()))
-                    View.VISIBLE
-                else
-                    View.GONE
+                warningLayout.visibility =
+                    if (DateTime.now().isAfter(announcement.validUntilDateTimeUtc.jodatime()))
+                        View.VISIBLE
+                    else
+                        View.GONE
             }
         }
-        .collectOnDestroyView()
+            .collectOnDestroyView()
     }
-}
-
-class AnnouncementItemUi : AnkoComponent<Fragment> {
-    lateinit var title: TextView
-    lateinit var text: MarkdownView
-    lateinit var image: PhotoView
-    lateinit var loadingIndicator: ProgressBar
-    lateinit var warningLayout: LinearLayout
-    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        relativeLayout {
-            backgroundResource = R.color.backgroundGrey
-            lparams(matchParent, matchParent)
-            scrollView {
-                lparams(matchParent, matchParent)
-
-                verticalLayout {
-                    backgroundResource = R.color.lightBackground
-                    isClickable = true
-
-                    loadingIndicator = progressBar()
-
-                    linearLayout {
-                        padding = dip(50)
-                        backgroundResource = R.drawable.image_fade
-                        title = textView {
-                            compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large_Inverse
-                        }
-                    }
-
-                    warningLayout = linearLayout {
-                        padding = dip(20 - 8)
-
-                        fontAwesomeTextView {
-                            text = "This announcement has expired!"
-                            textAlignment = View.TEXT_ALIGNMENT_CENTER
-                            textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
-                        }.lparams(matchParent, wrapContent)
-                    }
-
-                    text = markdownView {
-
-                    }.lparams(matchParent, wrapContent) {
-                        margin = dip(20 - 8)
-                    }
-
-                    image = photoView {
-                        backgroundResource = R.color.darkBackground
-                        imageResource = R.drawable.placeholder_event
-                        scaleType = ImageView.ScaleType.FIT_CENTER
-                        adjustViewBounds = true
-                        visibility = View.GONE
-                    }.lparams(matchParent, wrapContent) {
-                        margin = dip(20)
-                    }
-                }.lparams(matchParent, wrapContent)
-            }
-        }
-    }
-
 }

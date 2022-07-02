@@ -7,15 +7,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.chibatching.kotpref.bulk
 import io.swagger.client.model.RegSysAuthenticationRequest
 import nl.komponents.kovenant.task
-import org.eurofurence.connavigator.services.InstanceIdService
 import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.toIntent
 import org.eurofurence.connavigator.services.apiService
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.error
-import org.jetbrains.anko.info
-import org.jetbrains.anko.warn
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
+
+
 
 /**
  * Receives a login attempt and tries to follow through with it
@@ -32,6 +31,10 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
 
         task {
             apiService.tokens.apiTokensRegSysPost(RegSysAuthenticationRequest().apply {
+                // TODO: Verify.
+                if(regNumber == null)
+                    throw IllegalArgumentException("This field should not be null")
+
                 this.regNo = regNumber.toInt()
                 this.username = username
                 this.password = password
@@ -58,11 +61,10 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
             }
 
             LocalBroadcastManager.getInstance(context).sendBroadcastSync(responseIntent)
-            InstanceIdService().reportToken()
             DataChanged.fire(context, "Login successful")
-        } fail {
+        } fail { exception ->
             warn { "Failed to retrieve tokens" }
-            error { it.printStackTrace() }
+            error { exception.stackTraceToString() }
 
             val responseIntent = LOGIN_RESULT.toIntent {
                 booleans["success"] = false

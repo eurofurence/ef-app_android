@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.workers
 
 import android.content.Context
 import androidx.work.*
+import com.pawegio.kandroid.longToast
 import com.pawegio.kandroid.runOnUiThread
 import io.swagger.client.model.AggregatedDeltaResponse
 import org.eurofurence.connavigator.BuildConfig
@@ -14,10 +15,8 @@ import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.services.PMService
 import org.eurofurence.connavigator.services.apiService
 import org.eurofurence.connavigator.util.v2.convert
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.warn
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
 
 class DataUpdateWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams), AnkoLogger {
     val db: Db = RootDb(context)

@@ -1,5 +1,7 @@
 package org.eurofurence.connavigator.ui.adapter
 
+import android.text.Spannable
+import android.text.SpannableStringBuilder
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
 import android.view.Gravity
@@ -8,21 +10,22 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.text.scale
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.joanzapata.iconify.widget.IconTextView
 import io.swagger.client.model.DealerRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.HasDb
+import org.eurofurence.connavigator.dropins.*
 import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.ui.dialogs.DealerDialog
 import org.eurofurence.connavigator.ui.fragments.DealerListFragmentDirections
+import org.eurofurence.connavigator.ui.views.FontAwesomeType
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
-import org.eurofurence.connavigator.util.v2.compatAppearance
 import org.eurofurence.connavigator.util.v2.get
-import org.jetbrains.anko.*
+
 
 /**
  * Created by David on 15-5-2016.
@@ -31,13 +34,17 @@ class DealerDataHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val dealerName: TextView by view()
     val dealerSubText: TextView by view()
     val dealerPreviewImage: ImageView by view()
-    val danger: IconTextView by view()
-    val moon: IconTextView by view()
+    val danger: TextView by view() // TODO: Icon text view.
+    val moon: TextView by view() // TODO: Icon text view.
     val layout: LinearLayout by view()
 }
 
-class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, override val db: Db, val fragment: Fragment) :
-        RecyclerView.Adapter<DealerDataHolder>(), HasDb {
+class DealerRecyclerAdapter(
+    private val effective_events: List<DealerRecord>,
+    override val db: Db,
+    val fragment: Fragment
+) :
+    RecyclerView.Adapter<DealerDataHolder>(), HasDb {
     override fun getItemCount(): Int {
         return effective_events.count()
     }
@@ -60,7 +67,8 @@ class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, ov
         } else {
             fragment.context?.let {
                 holder.dealerPreviewImage.setImageDrawable(
-                        ContextCompat.getDrawable(it, R.drawable.dealer_frame))
+                    ContextCompat.getDrawable(it, R.drawable.dealer_frame)
+                )
 
             }
         }
@@ -79,7 +87,7 @@ class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, ov
 
         holder.layout.setOnClickListener {
             val action = DealerListFragmentDirections
-                    .actionFragmentViewDealersToFragmentViewDealer(dealer.id.toString(), null)
+                .actionFragmentViewDealersToFragmentViewDealer(dealer.id.toString(), null)
             fragment.findNavController().navigate(action)
         }
 
@@ -90,53 +98,64 @@ class DealerRecyclerAdapter(private val effective_events: List<DealerRecord>, ov
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DealerDataHolder =
-            DealerDataHolder(DealerListItemUI().createView(
-                    AnkoContext.create(parent.context.applicationContext, parent)))
-}
+        DealerDataHolder(parent.context.createView {
+            linearLayout {
+                layoutParams = viewGroupLayoutParams(matchParent, wrapContent)
 
-class DealerListItemUI : AnkoComponent<ViewGroup> {
-    override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+                backgroundResource = R.color.lightBackground
+                id = R.id.layout
+                weightSum = 100F
+                setPadding(dip(10), 0, dip(10), 0)
 
-        linearLayout {
-            lparams(matchParent, wrapContent)
-            backgroundResource = R.color.lightBackground
-            id = R.id.layout
-            weightSum = 100F
-            horizontalPadding = dip(10)
-
-            verticalLayout {
-                imageView {
-                    padding = dip(5)
-                    scaleType = ImageView.ScaleType.FIT_XY
-                    id = R.id.dealerPreviewImage
-                }.lparams(dip(75), dip(75)) { gravity = Gravity.LEFT }
-            }.lparams(dip(0), wrapContent, 20F) { gravity = Gravity.CENTER_VERTICAL }
-
-            verticalLayout {
-                textView {
-                    compatAppearance = android.R.style.TextAppearance_Large
-                    id = R.id.dealerName
-                }
-                textView {
-                    compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
-                    id = R.id.dealerSubText
-                }
-            }.lparams(dip(0), wrapContent, 70F) { gravity = Gravity.CENTER_VERTICAL }
-
-            verticalLayout {
-                fontAwesomeView {
-                    text = "{fa-exclamation-triangle 24sp}"
-                    id = R.id.danger
-                    gravity = Gravity.CENTER
-                    setPadding(0, 0, 0, dip(5))
-                }
-                fontAwesomeView {
-                    text = "{fa-moon-o 24sp}"
-                    id = R.id.moon
-                    gravity = Gravity.CENTER
+                verticalLayout {
+                    layoutParams = linearLayoutParams(0, wrapContent, 20f) {
+                        gravity = Gravity.CENTER_VERTICAL
+                    }
+                    imageView {
+                        layoutParams = linearLayoutParams(dip(75), dip(75)) {
+                            gravity = Gravity.LEFT
+                        }
+                        padding = dip(5)
+                        scaleType = ImageView.ScaleType.FIT_XY
+                        id = R.id.dealerPreviewImage
+                    }
                 }
 
-            }.lparams(dip(0), wrapContent, 10F) { gravity = Gravity.CENTER_VERTICAL }
-        }
-    }
+                verticalLayout {
+                    layoutParams = linearLayoutParams(0, wrapContent, 70f) {
+                        gravity = Gravity.CENTER_VERTICAL
+                    }
+                    textView {
+                        compatAppearance = android.R.style.TextAppearance_Large
+                        id = R.id.dealerName
+                    }
+                    textView {
+                        compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
+                        id = R.id.dealerSubText
+                    }
+                }
+
+                verticalLayout {
+                    layoutParams = linearLayoutParams(0, wrapContent, 10f) {
+                        gravity = Gravity.CENTER_VERTICAL
+                    }
+                    fontAwesomeView {
+                        type=FontAwesomeType.Solid
+                        text = context.getString(R.string.fa_exclamation_triangle_solid)
+                        textSize = 24f
+                        textSizeUnit
+                        id = R.id.danger
+                        gravity = Gravity.CENTER
+                        setPadding(0, 0, 0, dip(5))
+                    }
+                    fontAwesomeView {
+                        text = context.getString(R.string.fa_moon)
+                        textSize = 24f
+                        id = R.id.moon
+                        gravity = Gravity.CENTER
+                    }
+
+                }
+            }
+        })
 }

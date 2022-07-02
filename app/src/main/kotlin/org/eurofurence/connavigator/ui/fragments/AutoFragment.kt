@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import io.reactivex.Observable
 import org.eurofurence.connavigator.util.AutoBehaviour
-import org.eurofurence.connavigator.util.AutoViewHolder
-import org.jetbrains.anko.AnkoContext
 
 abstract class AutoFragment<E, A, S> : DisposingFragment() {
     /**
@@ -48,8 +46,7 @@ abstract class AutoFragment<E, A, S> : DisposingFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Create context and binder.
-        val context = AnkoContext.createReusable(requireContext(), container, false)
-        val autoBinder = AutoBehaviour<Triple<E, A?, S>, ViewGroup?>(context)
+        val autoBinder = AutoBehaviour<Triple<E, A?, S>, ViewGroup?>(container)
 
         // Create view, also track binding and resetting.
         val view = autoBinder.create()

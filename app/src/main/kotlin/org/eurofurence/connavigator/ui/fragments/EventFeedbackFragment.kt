@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.pawegio.kandroid.longToast
 import io.swagger.client.model.EventFeedbackRecord
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.then
@@ -19,17 +20,16 @@ import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.dropins.*
 import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.services.apiService
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.longToast
+
 import java.util.*
 
 class EventFeedbackFragment : Fragment(), HasDb {
-    val ui = EventFeedbackUi()
+
     private val args: EventFeedbackFragmentArgs by navArgs()
     val eventId by lazy { UUID.fromString(args.eventId) }
     val event: EventRecord? by lazy { db.events[eventId] }
@@ -37,58 +37,6 @@ class EventFeedbackFragment : Fragment(), HasDb {
 
     override val db by lazyLocateDb()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            UI { ui.createView(this) }.view
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        event?.let {
-            if (!it.isAcceptingFeedback && !BuildConfig.DEBUG)
-                findNavController().popBackStack()
-
-            ui.apply {
-                titleView.text = it.fullTitle()
-                dateView.text = getString(R.string.event_weekday_from_to, it.start.dayOfWeek().asText, it.startTimeString(), it.endTimeString())
-                hostView.text = it.ownerString()
-                locationView.text = getString(R.string.misc_room_number, conferenceRoom?.name
-                        ?: getString(R.string.event_unable_to_locate_room))
-
-                submitButton.setOnClickListener { submit() }
-            }
-        }
-    }
-
-    private fun submit() = promiseOnUi {
-        ui.loading()
-    } then {
-        val rating = ui.ratingBar.rating.toInt()
-        val comments = ui.textInput.text.toString()
-
-        if(rating == 0) {
-            throw Exception()
-        }
-
-        val eventFeedback = EventFeedbackRecord().apply {
-            this.eventId = this@EventFeedbackFragment.eventId
-            this.message = comments
-            this.rating = rating
-        }
-
-        apiService.feedbacks.apiEventFeedbackPost(eventFeedback)
-    } successUi {
-        ui.done()
-    } failUi {
-        if(ui.ratingBar.rating == 0f ) {
-                longToast("You have to select a rating!")
-        } else {
-            longToast("Failed to send feedback! Try again.")
-        }
-        ui.dataInput()
-    }
-}
-
-class EventFeedbackUi : AnkoComponent<Fragment> {
     lateinit var titleView: TextView
     lateinit var dateView: TextView
     lateinit var locationView: TextView
@@ -116,37 +64,56 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
         doneLayout.visibility = View.VISIBLE
     }
 
-    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = createView {
         scrollView {
             backgroundResource = R.color.backgroundGrey
 
             verticalLayout {
                 // Event Info
                 linearLayout {
+                    layoutParams = linearLayoutParams(matchParent, wrapContent)
                     weightSum = 10F
                     padding = dip(LayoutConstants.MARGIN_LARGE)
 
                     verticalLayout {
+                        layoutParams = linearLayoutParams(0, wrapContent, 2f)
+
                         fontAwesomeView {
-                            verticalPadding = dip(LayoutConstants.MARGIN_LARGE)
-                            text = "{fa-comments 30sp}"
+                            setPadding(
+                                0,
+                                dip(LayoutConstants.MARGIN_LARGE),
+                                0,
+                                dip(LayoutConstants.MARGIN_LARGE)
+                            )
+                            text = getString(R.string.fa_comment)
                             textSize = LayoutConstants.TEXT_ICON_SIZE
                             textColorResource = R.color.primaryDark
                             gravity = Gravity.CENTER
                         }
-                    }.weight(2F)
+                    }
 
                     verticalLayout {
+                        layoutParams = linearLayoutParams(0, wrapContent, 8f)
+
                         titleView = textView() {
-                            verticalPadding = dip(LayoutConstants.MARGIN_SMALL)
-                            textAppearance = android.R.style.TextAppearance_DeviceDefault_Large
+                            setPadding(
+                                0,
+                                dip(LayoutConstants.MARGIN_SMALL),
+                                0,
+                                dip(LayoutConstants.MARGIN_SMALL)
+                            )
+                            compatAppearance = android.R.style.TextAppearance_DeviceDefault_Large
                         }
 
-                        dateView = textView()
-                        locationView = textView()
-                        hostView = textView()
-                    }.weight(8F)
-                }.lparams(matchParent, wrapContent)
+                        dateView = textView {}
+                        locationView = textView {}
+                        hostView = textView {}
+                    }
+                }
                 // End Event info
 
                 // Event Feedback
@@ -157,18 +124,24 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
                     dataInputLayout = verticalLayout {
                         textView(R.string.event_feedback_rate_title) {
                             textColorResource = R.color.textBlack
-                            textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
+                            compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                         }
 
                         ratingBar = ratingBar {
-                            verticalPadding = dip(LayoutConstants.MARGIN_LARGE)
+                            layoutParams = linearLayoutParams(wrapContent, wrapContent)
+                            setPadding(
+                                0,
+                                dip(LayoutConstants.MARGIN_LARGE),
+                                0,
+                                dip(LayoutConstants.MARGIN_LARGE)
+                            )
                             numStars = 5
                             stepSize = 1F
-                        }.lparams(wrapContent, wrapContent)
+                        }
 
                         textView(R.string.event_feedback_comment_header) {
                             textColorResource = R.color.textBlack
-                            textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
+                            compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                         }
 
                         textInput = editText {
@@ -176,34 +149,43 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
                         }
 
                         textView(R.string.event_feedback_anonymous_help) {
-                            verticalPadding = dip(LayoutConstants.MARGIN_LARGE)
-                            textAppearance = android.R.style.TextAppearance_DeviceDefault_Small
+                            setPadding(
+                                0,
+                                dip(LayoutConstants.MARGIN_LARGE),
+                                0,
+                                dip(LayoutConstants.MARGIN_LARGE)
+                            )
+                            compatAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                         }
 
                         linearLayout {
+                            layoutParams = linearLayoutParams(matchParent, wrapContent) {
+                                topMargin = dip(LayoutConstants.MARGIN_LARGE)
+                            }
                             weightSum = 10F
 
-                            view().lparams(dip(0), wrapContent, 6F)
+                            view {
+                                layoutParams = linearLayoutParams(dip(0), wrapContent, 6F)
+                            }
 
                             submitButton = button(R.string.event_feedback_submit) {
-                                backgroundResource = R.color.primaryLight
+                                layoutParams = linearLayoutParams(dip(0), wrapContent, 4F)
+                                backgroundResource = (R.color.primaryLight)
                                 textColorResource = R.color.textWhite
-                            }.lparams(dip(0), wrapContent, 4F)
-                        }.lparams(matchParent, wrapContent) {
-                            topMargin = dip(LayoutConstants.MARGIN_LARGE)
+                            }
                         }
                     }
 
                     loadingLayout = verticalLayout {
                         visibility = View.GONE
-                        progressBar()
+                        progressBar {}
                     }
 
                     doneLayout = verticalLayout {
                         visibility = View.GONE
                         textView(R.string.event_feedback_thank) {
                             textColorResource = R.color.textBlack
-                            textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
+                            compatAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                         }
                     }
                 }
@@ -211,5 +193,55 @@ class EventFeedbackUi : AnkoComponent<Fragment> {
         }
     }
 
-}
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        event?.let {
+            if (!it.isAcceptingFeedback && !BuildConfig.DEBUG)
+                findNavController().popBackStack()
+
+            titleView.text = it.fullTitle()
+            dateView.text = getString(
+                R.string.event_weekday_from_to,
+                it.start.dayOfWeek().asText,
+                it.startTimeString(),
+                it.endTimeString()
+            )
+            hostView.text = it.ownerString()
+            locationView.text = getString(
+                R.string.misc_room_number, conferenceRoom?.name
+                    ?: getString(R.string.event_unable_to_locate_room)
+            )
+
+            submitButton.setOnClickListener { submit() }
+        }
+    }
+
+    private fun submit() = promiseOnUi {
+        loading()
+    } then {
+        val rating = ratingBar.rating.toInt()
+        val comments = textInput.text.toString()
+
+        if (rating == 0) {
+            throw Exception()
+        }
+
+        val eventFeedback = EventFeedbackRecord().apply {
+            this.eventId = this@EventFeedbackFragment.eventId
+            this.message = comments
+            this.rating = rating
+        }
+
+        apiService.feedbacks.apiEventFeedbackPost(eventFeedback)
+    } successUi {
+        done()
+    } failUi {
+        if (ratingBar.rating == 0f) {
+            longToast("You have to select a rating!")
+        } else {
+            longToast("Failed to send feedback! Try again.")
+        }
+        dataInput()
+    }
+}

@@ -2,13 +2,13 @@ package org.eurofurence.connavigator.services
 
 import android.app.Activity
 import android.content.Context
-import com.crashlytics.android.Crashlytics
+import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.perf.FirebasePerformance
 import org.eurofurence.connavigator.preferences.AnalyticsPreferences
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.bundleOf
-import org.jetbrains.anko.debug
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
 
 /**o
  * Created by David on 20-4-2016.
@@ -50,19 +50,20 @@ class AnalyticsService {
         /**
          * Send new screen to analytics
          */
-        fun screen(activity: Activity, fragmentName: String) = analytics.setCurrentScreen(activity, fragmentName, null)
+        fun screen(activity: Activity, fragmentName: String) =
+            analytics.setCurrentScreen(activity, fragmentName, null)
 
 
         /**
          * Send event to analytics
          */
         fun event(category: String, action: String, label: String) = analytics.logEvent(
-                FirebaseAnalytics.Event.SELECT_CONTENT,
-                bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to category,
-                        FirebaseAnalytics.Param.ITEM_CATEGORY to action,
-                        FirebaseAnalytics.Param.ITEM_NAME to label
-                )
+            FirebaseAnalytics.Event.SELECT_CONTENT,
+            Bundle().also {
+                it.putString(FirebaseAnalytics.Param.CONTENT_TYPE, category)
+                it.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, action)
+                it.putString(FirebaseAnalytics.Param.ITEM_NAME, label)
+            }
         )
 
         fun updateSettings() {
@@ -71,6 +72,7 @@ class AnalyticsService {
             performance.isPerformanceCollectionEnabled = AnalyticsPreferences.performanceTracking
         }
 
-        fun ex(exception: Exception) = Crashlytics.logException(exception)
+        // TODO Verify.
+        fun ex(exception: Exception) = FirebaseCrashlytics.getInstance().recordException(exception)
     }
 }

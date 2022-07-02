@@ -19,28 +19,17 @@
 
         <activity
             android:name=".ui.activities.NavActivity"
+            android:exported="true"
             android:label="Eurofurence"
             android:theme="@style/AppTheme">
             <nav-graph android:value="@navigation/nav_graph" />
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Service providing a detached retrieval of data from the internet. -->
-        <service
-            android:name=".services.UpdateIntentService"
-            android:exported="false" />
-
-        <service
-            android:name=".services.InstanceIdService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
 
         <service
             android:name=".services.PushListenerService"

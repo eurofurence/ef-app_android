@@ -7,11 +7,14 @@ import android.provider.Browser
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.NavHost
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -21,12 +24,15 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.google.android.material.navigation.NavigationView
+import com.pawegio.kandroid.alert
+import com.pawegio.kandroid.longToast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.dropins.*
 import org.eurofurence.connavigator.events.ResetReceiver
 import org.eurofurence.connavigator.preferences.AnalyticsPreferences
 import org.eurofurence.connavigator.preferences.AuthPreferences
@@ -34,45 +40,81 @@ import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.RemotePreferences
 import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.util.DatetimeProxy
+import org.eurofurence.connavigator.util.extensions.browse
 import org.eurofurence.connavigator.util.extensions.setFAIcon
 import org.eurofurence.connavigator.util.v2.plus
 import org.eurofurence.connavigator.workers.DataUpdateWorker
-import org.jetbrains.anko.*
-import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.design.navigationView
-import org.jetbrains.anko.support.v4.drawerLayout
+
 import org.joda.time.DateTime
 import org.joda.time.Days
 
 class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
-    override fun getNavController() = navFragment.findNavController()
+    override val navController: NavController
+        get() = navFragment.findNavController()
 
-    internal val ui = NavUi()
     override val db by lazyLocateDb()
 
     var subscriptions = Disposables.empty()
     val navFragment by lazy { NavHostFragment() }
+
+
+    lateinit var drawer: DrawerLayout
+    lateinit var bar: Toolbar
+    lateinit var nav: NavigationView
+    lateinit var header: View
+    lateinit var navDays: TextView
+    lateinit var navTitle: TextView
+    lateinit var navSubtitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         info { "Starting Nav Activity" }
 
-        ui.setContentView(this)
+        setContent {
+            drawer = drawerLayout {
+
+                frameLayout {
+                    layoutParams = drawerLayoutParams(matchParent, matchParent)
+                    backgroundResource = R.color.backgroundGrey
+                    verticalLayout {
+                        bar = toolbar {
+                            backgroundResource = R.color.primaryDark
+                            setTitleTextColor(ContextCompat.getColor(context, R.color.textWhite))
+                            setSubtitleTextColor(ContextCompat.getColor(context, R.color.textWhite))
+                            id = R.id.toolbar
+                        }
+
+                        frameLayout() {
+                            layoutParams = linearLayoutParams(matchParent, matchParent)
+                            id = R.id.nav_graph
+                        }
+                    }
+                }
+
+                nav = navigationView {
+                    layoutParams = drawerLayoutParams(wrapContent, matchParent, Gravity.START)
+                    header = inflateHeaderView(R.layout.layout_nav_header)
+                    navDays = header.findViewById(R.id.navDays)
+                    navTitle = header.findViewById(R.id.navTitle)
+                    navSubtitle = header.findViewById(R.id.navSubTitle)
+                }
+            }
+        }
 
         navFragment.setInitialSavedState(savedInstanceState?.getParcelable("fragment"))
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_graph, navFragment, "navFragment")
-                .setPrimaryNavigationFragment(navFragment)
-                .runOnCommit {
-                    navController.restoreState(savedInstanceState?.getBundle("nav"))
-                    navController.setGraph(R.navigation.nav_graph)
-                }
-                .commit()
+            .replace(R.id.nav_graph, navFragment, "navFragment")
+            .setPrimaryNavigationFragment(navFragment)
+            .runOnCommit {
+                navController.restoreState(savedInstanceState?.getBundle("nav"))
+                navController.setGraph(R.navigation.nav_graph)
+            }
+            .commit()
 
-        ui.navTitle.text = RemotePreferences.eventTitle
-        ui.navSubtitle.text = RemotePreferences.eventSubTitle
+        navTitle.text = RemotePreferences.eventTitle
+        navSubtitle.text = RemotePreferences.eventSubTitle
 
         // Calculate the days between, using the current time.
         val firstDay = DateTime(RemotePreferences.nextConStart)
@@ -80,58 +122,58 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
 
         // On con vs. before con. This should be updated on day changes
         if (days <= 0)
-            ui.navDays.text = getString(R.string.misc_current_day, 1 - days)
+            navDays.text = getString(R.string.misc_current_day, 1 - days)
         else
-            ui.navDays.text = getString(R.string.misc_days_left, days)
+            navDays.text = getString(R.string.misc_days_left, days)
 
         addNavDrawerIcons()
 
         subscriptions += RemotePreferences
-                .observer
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    updateNavCountdown()
-                }
+            .observer
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                updateNavCountdown()
+            }
 
         subscriptions += AnalyticsPreferences
-                .observer
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    AnalyticsService.updateSettings()
-                }
+            .observer
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                AnalyticsService.updateSettings()
+            }
 
         subscriptions += AuthPreferences
-                .updated
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    updateLoginMenuItem()
-                }
+            .updated
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                updateLoginMenuItem()
+            }
 
         subscriptions += BackgroundPreferences
-                .observer
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    setMenuPermissions()
-                }.apply {
-                    // manually apply menu permissions at least once
-                    setMenuPermissions()
-                }
+            .observer
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                setMenuPermissions()
+            }.apply {
+                // manually apply menu permissions at least once
+                setMenuPermissions()
+            }
 
         WorkManager.getInstance(this).getWorkInfosForUniqueWorkLiveData(DataUpdateWorker.TAG)
-                .observe(this, androidx.lifecycle.Observer { workInfo ->
-                    if (workInfo != null && workInfo.all { it.state == WorkInfo.State.SUCCEEDED }) {
-                        db.observer.onNext(db)
-                    }
-                })
+            .observe(this, androidx.lifecycle.Observer { workInfo ->
+                if (workInfo != null && workInfo.all { it.state == WorkInfo.State.SUCCEEDED }) {
+                    db.observer.onNext(db)
+                }
+            })
 
         info { "Inserted Nav Fragment" }
     }
 
     private fun setMenuPermissions() {
         if (!BackgroundPreferences.hasLoadedOnce) {
-            ui.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         } else {
-            ui.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         }
     }
 
@@ -143,29 +185,29 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
         // Calculate the days between, using the current time. Todo: timezones
         val days = Days.daysBetween(DatetimeProxy.now(), DateTime(firstDay)).days
 
-        ui.navTitle.text = RemotePreferences.eventTitle
-        ui.navSubtitle.text = RemotePreferences.eventSubTitle
+        navTitle.text = RemotePreferences.eventTitle
+        navSubtitle.text = RemotePreferences.eventSubTitle
         // On con vs. before con. This should be updated on day changes
         if (days <= 0)
-            ui.navDays.text = "Day ${1 - days}"
+            navDays.text = "Day ${1 - days}"
         else
-            ui.navDays.text = "Only $days days left!"
+            navDays.text = "Only $days days left!"
     }
 
     private fun updateLoginMenuItem() {
         // Find login item, assign new text.
-        ui.nav.menu.findItem(R.id.navLogin)?.let {
+        nav.menu.findItem(R.id.navLogin)?.let {
             if (AuthPreferences.isLoggedIn)
-                it.title = "Login details"
+                title = "Login details"
             else
-                it.title = "Login"
+                title = "Login"
         }
     }
 
     private fun addNavDrawerIcons() {
-        ui.nav.inflateMenu(R.menu.nav_drawer)
+        nav.inflateMenu(R.menu.nav_drawer)
 
-        ui.nav.menu.apply {
+        nav.menu.apply {
             // Main
             this.setFAIcon(this@NavActivity, R.id.navHome, R.string.fa_home_solid)
             this.setFAIcon(this@NavActivity, R.id.navInfoList, R.string.fa_info_solid)
@@ -177,14 +219,27 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
             this.setFAIcon(this@NavActivity, R.id.navLogin, R.string.fa_user_circle)
             this.setFAIcon(this@NavActivity, R.id.navMessages, R.string.fa_envelope)
             this.setFAIcon(this@NavActivity, R.id.navFursuitGames, R.string.fa_paw_solid)
-            this.setFAIcon(this@NavActivity, R.id.navAdditionalServices, R.string.fa_book_open_solid)
+            this.setFAIcon(
+                this@NavActivity,
+                R.id.navAdditionalServices,
+                R.string.fa_book_open_solid
+            )
 
             // Web
-            this.setFAIcon(this@NavActivity, R.id.navWebTwitter, R.string.fa_twitter, isBrand = true)
+            this.setFAIcon(
+                this@NavActivity,
+                R.id.navWebTwitter,
+                R.string.fa_twitter,
+                isBrand = true
+            )
             this.setFAIcon(this@NavActivity, R.id.navWebSite, R.string.fa_globe_solid)
 
             // App Management
-            this.setFAIcon(this@NavActivity, R.id.navDevReload, R.string.fa_cloud_download_alt_solid)
+            this.setFAIcon(
+                this@NavActivity,
+                R.id.navDevReload,
+                R.string.fa_cloud_download_alt_solid
+            )
             this.setFAIcon(this@NavActivity, R.id.navDevClear, R.string.fa_trash_solid)
             this.setFAIcon(this@NavActivity, R.id.navSettings, R.string.fa_cog_solid)
             this.setFAIcon(this@NavActivity, R.id.navAbout, R.string.fa_hands_helping_solid)
@@ -194,12 +249,12 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
     override fun onResume() {
         info { "setting up nav toolbar" }
 
-        val appbarConfig = AppBarConfiguration(navController.graph, ui.drawer)
+        val appbarConfig = AppBarConfiguration(navController.graph, drawer)
 
-        ui.bar.setupWithNavController(navController, appbarConfig)
+        bar.setupWithNavController(navController, appbarConfig)
 
-        ui.nav.setNavigationItemSelectedListener {
-            ui.drawer.closeDrawers()
+        nav.setNavigationItemSelectedListener {
+            drawer.closeDrawers()
             onOptionsItemSelected(it)
         }
 
@@ -216,7 +271,10 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
         info { "Selecting item" }
 
         // Exit if we're either UNINITIALIZED or when there is no data. Make an exception for the settings and update action
-        if (!BackgroundPreferences.hasLoadedOnce && !listOf(R.id.navSettings, R.id.navDevReload).contains(item.itemId)
+        if (!BackgroundPreferences.hasLoadedOnce && !listOf(
+                R.id.navSettings,
+                R.id.navDevReload
+            ).contains(item.itemId)
         ) {
             longToast("Please wait until we've completed our initial fetch of data")
             return true
@@ -224,9 +282,12 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
 
         return when (item.itemId) {
             R.id.navDevReload -> DataUpdateWorker.execute(this, true).let { true }
-            R.id.navDevClear -> alert(getString(R.string.clear_app_cache), getString(R.string.clear_database)) {
-                yesButton { ResetReceiver().clearData(this@NavActivity) }
-                noButton { }
+            R.id.navDevClear -> alert(
+                getString(R.string.clear_app_cache),
+                getString(R.string.clear_database)
+            ) {
+                positiveButton { ResetReceiver().clearData(this@NavActivity) }
+                negativeButton { }
             }.show().let { true }
             R.id.navMessages -> navigateToMessages()
             R.id.navWebSite -> browse("https://eurofurence.org")
@@ -239,7 +300,10 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBundle("nav", navController.saveState())
-        outState.putParcelable("fragment", supportFragmentManager.saveFragmentInstanceState(navFragment))
+        outState.putParcelable(
+            "fragment",
+            supportFragmentManager.saveFragmentInstanceState(navFragment)
+        )
         super.onSaveInstanceState(outState)
     }
 
@@ -254,7 +318,8 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
     }
 
     private fun navigateToFursuitGames(): Boolean {
-        val url = "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=false&returnPath=/collect&token=${AuthPreferences.tokenOrEmpty()}"
+        val url =
+            "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=false&returnPath=/collect&token=${AuthPreferences.tokenOrEmpty()}"
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)
@@ -267,7 +332,8 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
     }
 
     private fun navigateToAdditionalServices(): Boolean {
-        val url = "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=false&returnPath=/&token=${AuthPreferences.tokenOrEmpty()}"
+        val url =
+            "https://app.eurofurence.org/${BuildConfig.CONVENTION_IDENTIFIER}/companion/#/login?embedded=false&returnPath=/&token=${AuthPreferences.tokenOrEmpty()}"
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)
@@ -277,43 +343,5 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
         startActivity(intent)
 
         return true
-    }
-}
-
-internal class NavUi : AnkoComponent<NavActivity> {
-    lateinit var bar: Toolbar
-    lateinit var drawer: DrawerLayout
-    lateinit var nav: NavigationView
-    lateinit var header: View
-
-    val navDays get() = header.findViewById<TextView>(R.id.navDays)
-    val navTitle get() = header.findViewById<TextView>(R.id.navTitle)
-    val navSubtitle get() = header.findViewById<TextView>(R.id.navSubTitle)
-
-    override fun createView(ui: AnkoContext<NavActivity>) = with(ui) {
-        drawerLayout {
-            drawer = this
-            frameLayout {
-                backgroundResource = R.color.backgroundGrey
-                verticalLayout {
-                    bar = toolbar {
-                        backgroundResource = R.color.primaryDark
-                        setTitleTextColor(ContextCompat.getColor(context, R.color.textWhite))
-                        setSubtitleTextColor(ContextCompat.getColor(context, R.color.textWhite))
-                        id = R.id.toolbar
-                    }
-
-                    frameLayout() {
-                        id = R.id.nav_graph
-                    }.lparams(matchParent, matchParent)
-                }
-            }.lparams(matchParent, matchParent)
-
-            nav = navigationView {
-                header = inflateHeaderView(R.layout.layout_nav_header)
-            }.lparams(wrapContent, matchParent) {
-                gravity = Gravity.START
-            }
-        }
     }
 }

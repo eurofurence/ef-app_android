@@ -6,20 +6,20 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.pawegio.kandroid.notificationManager
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.notificationManager
 import org.joda.time.DateTime
 import java.util.*
 
 fun NotificationManager.cancelFromRelated(identity: UUID) =
-        cancel(identity.toString(), 0)
+    cancel(identity.toString(), 0)
 
 /**
  * Creates a basic notification
@@ -35,10 +35,10 @@ class NotificationFactory(var context: Context) {
     fun broadcast(tag: String) {
         val notification = builder.build()
 
-        val intent = context.intentFor<NotificationPublisher>(
-                NotificationPublisher.TAG to tag,
-                NotificationPublisher.ITEM to notification
-        )
+        val intent = Intent(context, NotificationPublisher::class.java).apply {
+            putExtra(NotificationPublisher.TAG, tag)
+            putExtra(NotificationPublisher.ITEM, notification)
+        }
 
         context.sendBroadcast(intent)
     }
@@ -47,9 +47,9 @@ class NotificationFactory(var context: Context) {
         EFNotificationChannel.values().map {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 // If we're debugging, remove the notification channels
-                if (BuildConfig.DEBUG) context.notificationManager.deleteNotificationChannel(it.toString())
+                if (BuildConfig.DEBUG) context.notificationManager?.deleteNotificationChannel(it.toString())
 
-                context.notificationManager.createNotificationChannel(this.getChannel(it))
+                context.notificationManager?.createNotificationChannel(this.getChannel(it))
             }
         }
     }
@@ -59,15 +59,16 @@ class NotificationFactory(var context: Context) {
      */
     fun createBasicNotification() = this.apply {
         builder = builder.setSmallIcon(R.drawable.ic_launcher_negative)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
-                .setLights(Color.argb(255, 0, 100, 89), 1000, 1000)
-                .setVibrate(longArrayOf(250, 100, 250, 100))
-                .setAutoCancel(true)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+            .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
+            .setLights(Color.argb(255, 0, 100, 89), 1000, 1000)
+            .setVibrate(longArrayOf(250, 100, 250, 100))
+            .setAutoCancel(true)
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("default", "Default", NotificationManager.IMPORTANCE_DEFAULT)
-            context.notificationManager.createNotificationChannel(channel)
+            val channel =
+                NotificationChannel("default", "Default", NotificationManager.IMPORTANCE_DEFAULT)
+            context.notificationManager?.createNotificationChannel(channel)
             builder = builder.setChannelId(channel.id)
         }
     }
@@ -80,8 +81,10 @@ class NotificationFactory(var context: Context) {
     }
 
     fun addBigText(bigText: String) = this.apply {
-        builder = builder.setStyle(NotificationCompat.BigTextStyle()
-                .bigText(bigText))
+        builder = builder.setStyle(
+            NotificationCompat.BigTextStyle()
+                .bigText(bigText)
+        )
     }
 
     fun addRegularText(title: String, text: String) = this.apply {
@@ -91,7 +94,7 @@ class NotificationFactory(var context: Context) {
 
     fun countdownTo(date: DateTime) = this.apply {
         builder = builder.setWhen(date.millis)
-                .setUsesChronometer(true)
+            .setUsesChronometer(true)
     }
 
     fun setChannel(channel: EFNotificationChannel) = this.apply {
@@ -102,16 +105,34 @@ class NotificationFactory(var context: Context) {
 
     @SuppressLint("NewApi")
     private fun getChannel(channel: EFNotificationChannel) = when (channel) {
-        EFNotificationChannel.EVENT -> NotificationChannel(channel.toString(), "Event Reminders", NotificationManager.IMPORTANCE_DEFAULT).apply {
-            description = "Receive a reminder when an event you added to your favorites is about to happen."
+        EFNotificationChannel.EVENT -> NotificationChannel(
+            channel.toString(),
+            "Event Reminders",
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+            description =
+                "Receive a reminder when an event you added to your favorites is about to happen."
         }
-        EFNotificationChannel.ANNOUNCEMENT -> NotificationChannel(channel.toString(), "Announcements", NotificationManager.IMPORTANCE_DEFAULT).apply {
+        EFNotificationChannel.ANNOUNCEMENT -> NotificationChannel(
+            channel.toString(),
+            "Announcements",
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
             description = "Receive a notification when EF sends convention wide announcements."
         }
-        EFNotificationChannel.PRIVATE_MESSAGE -> NotificationChannel(channel.toString(), "Private Messages", NotificationManager.IMPORTANCE_HIGH).apply {
-            description = "Receive a notification when you have logged in and received a private message."
+        EFNotificationChannel.PRIVATE_MESSAGE -> NotificationChannel(
+            channel.toString(),
+            "Private Messages",
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description =
+                "Receive a notification when you have logged in and received a private message."
         }
-        else -> NotificationChannel(channel.toString(), "Default", NotificationManager.IMPORTANCE_LOW)
+        else -> NotificationChannel(
+            channel.toString(),
+            "Default",
+            NotificationManager.IMPORTANCE_LOW
+        )
     }
 
 

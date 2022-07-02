@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+
 
 package org.eurofurence.connavigator.database
 
@@ -13,8 +13,8 @@ import io.reactivex.subjects.Subject
 import io.swagger.client.model.*
 import org.eurofurence.connavigator.util.v2.*
 import org.eurofurence.connavigator.util.v2.Stored.StoredSource
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.warn
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.Interval
@@ -151,7 +151,7 @@ interface Db {
     /**
      * Subscribe on main thread
      */
-    fun subscribe(function: (db: Db) -> Any): Disposable
+    fun subscribe(function: (db: Db) -> Any?): Disposable
 }
 
 /**
@@ -273,7 +273,7 @@ interface HasDb : Db {
         db.clear()
     }
 
-    override fun subscribe(function: (db: Db) -> Any) = db.subscribe(function)
+    override fun subscribe(function: (db: Db) -> Any?) = db.subscribe(function)
 
 }
 
@@ -373,7 +373,7 @@ class RootDb(context: Context) : Stored(context), Db {
         observer.onNext(this)
     }
 
-    override fun subscribe(function: (db: Db) -> Any): Disposable = observer.observeOn(AndroidSchedulers.mainThread())
+    override fun subscribe(function: (db: Db) -> Any?): Disposable = observer.observeOn(AndroidSchedulers.mainThread())
             .subscribe { function(it) }
 }
 

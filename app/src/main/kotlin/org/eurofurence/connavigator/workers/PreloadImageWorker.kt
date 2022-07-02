@@ -6,9 +6,9 @@ import io.swagger.client.model.ImageRecord
 import nl.komponents.kovenant.toVoid
 import org.eurofurence.connavigator.database.RootDb
 import org.eurofurence.connavigator.services.ImageService
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.warn
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
+
 import java.lang.Exception
 import java.util.*
 

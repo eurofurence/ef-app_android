@@ -12,8 +12,8 @@ import org.eurofurence.connavigator.util.SharingUtility
 import org.eurofurence.connavigator.util.extensions.contains
 import org.eurofurence.connavigator.util.extensions.jsonObjects
 import org.eurofurence.connavigator.util.extensions.shareString
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
 import kotlin.properties.Delegates.notNull
 
 /**

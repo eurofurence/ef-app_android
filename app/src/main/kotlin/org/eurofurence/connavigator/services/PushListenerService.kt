@@ -1,8 +1,6 @@
 package org.eurofurence.connavigator.services
 
 import androidx.navigation.NavDeepLinkBuilder
-import androidx.work.WorkManager
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -15,11 +13,7 @@ import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.ui.fragments.HomeFragmentDirections
 import org.eurofurence.connavigator.workers.DataUpdateWorker
 import org.eurofurence.connavigator.workers.FetchPrivateMessageWorker
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
-import org.jetbrains.anko.info
-import org.jetbrains.anko.warn
-import org.joda.time.Duration
+import org.eurofurence.connavigator.dropins.AnkoLogger
 
 /**
  * Created by David on 14-4-2016.
@@ -35,8 +29,11 @@ class PushListenerService : FirebaseMessagingService(), AnkoLogger {
                 "${BuildConfig.CONVENTION_IDENTIFIER}-android"
         )
         topics.forEach { messaging.subscribeToTopic(it) }
+    }
 
-        info { "Push token: " + FirebaseInstanceId.getInstance().token }
+    override fun onNewToken(token: String) {
+        // TODO: Verify.
+        info { "Push token: $token" }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {

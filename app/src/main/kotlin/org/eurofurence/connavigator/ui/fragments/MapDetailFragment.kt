@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
-import io.reactivex.disposables.Disposables
 import io.swagger.client.model.MapEntryRecord
 import io.swagger.client.model.MapRecord
 import nl.komponents.kovenant.ui.failUi
@@ -23,34 +21,59 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.findLinkFragment
 import org.eurofurence.connavigator.database.lazyLocateDb
+import org.eurofurence.connavigator.dropins.*
 import org.eurofurence.connavigator.services.ImageService
-import org.eurofurence.connavigator.util.extensions.photoView
-import org.eurofurence.connavigator.util.v2.compatAppearance
-import org.eurofurence.connavigator.util.v2.plus
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.px2dip
 import java.util.*
 
 class MapDetailFragment : DisposingFragment(), HasDb, AnkoLogger {
     override val db by lazyLocateDb()
 
-    val ui by lazy { MapDetailUi() }
+    lateinit var uiMap: PhotoView
+    lateinit var layout: LinearLayout
+    lateinit var title: TextView
+
     val id get() = arguments?.getString("id") ?: ""
     val showTitle get() = arguments!!.getBoolean("showTitle")
     private var linkFound = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            UI { ui.createView(this) }.view
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = createView {
+        relativeLayout {
+            layoutParams = viewGroupLayoutParams(matchParent, wrapContent)
+            layout = verticalLayout {
+                layoutParams = relativeLayoutParams(matchParent, wrapContent) {
+                    topMargin = dip(10)
+                }
+                backgroundResource = R.color.lightBackground
+                title = textView {
+                    textResource = R.string.misc_location
+                    compatAppearance = android.R.style.TextAppearance_Small
+                    padding = dip(20)
+                }
+                uiMap = photoView {
+                    layoutParams = linearLayoutParams(matchParent, wrapContent)
+                    backgroundResource = R.color.darkBackground
+                    minimumScale = 1F
+                    mediumScale = 2.5F
+                    maximumScale = 5F
+                    scaleType = ImageView.ScaleType.CENTER_INSIDE
+                    imageResource = R.drawable.placeholder_event
+                }
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         db.subscribe {
-            ui.title.visibility = if (showTitle) View.VISIBLE else View.GONE
+            title.visibility = if (showTitle) View.VISIBLE else View.GONE
             findLinkFragment()
         }
-        .collectOnDestroyView()
+            .collectOnDestroyView()
     }
 
     fun withArguments(id: UUID?, showTitle: Boolean = false) = apply {
@@ -69,7 +92,7 @@ class MapDetailFragment : DisposingFragment(), HasDb, AnkoLogger {
 
         if (map == null) {
             info { "No maps or deviations. Hiding location and availability" }
-            ui.layout.visibility = View.GONE
+            layout.visibility = View.GONE
             return
         }
 
@@ -91,64 +114,34 @@ class MapDetailFragment : DisposingFragment(), HasDb, AnkoLogger {
 
             ImageService.preload(mapImage) successUi {
                 if (it == null || activity == null)
-                    ui.layout.visibility = View.GONE
+                    layout.visibility = View.GONE
                 else {
                     try {
                         val bitmap = Bitmap.createBitmap(it, x, y, w, h)
 
                         Canvas(bitmap).apply {
                             drawCircle(ox.toFloat(), oy.toFloat(), (circle
-                                    ?: 0).toFloat(), Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                                ?: 0).toFloat(), Paint(Paint.ANTI_ALIAS_FLAG).apply {
                                 color = Color.RED
                                 style = Paint.Style.STROKE
-                                strokeWidth = px2dip(5)
+                                strokeWidth = uiMap.dip(5f)
                             })
                         }
 
-                        ui.map.image = BitmapDrawable(resources, bitmap)
-                        ui.layout.visibility = View.VISIBLE
+                        uiMap.setImageDrawable(BitmapDrawable(resources, bitmap))
+                        layout.visibility = View.VISIBLE
                     } catch (ex: IllegalArgumentException) {
-                        ui.layout.visibility = View.GONE
+                        layout.visibility = View.GONE
                     }
                 }
             } failUi {
-                ui.layout.visibility = View.GONE
+                layout.visibility = View.GONE
             }
         } else {
             warn { "No map or entry found!" }
-            ui.layout.visibility = View.GONE
+            layout.visibility = View.GONE
         }
 
     }
 
-}
-
-class MapDetailUi : AnkoComponent<Fragment> {
-    lateinit var map: PhotoView
-    lateinit var layout: LinearLayout
-    lateinit var title: TextView
-
-    override fun createView(ui: AnkoContext<Fragment>) = with(ui) {
-        relativeLayout {
-            lparams(matchParent, wrapContent)
-            layout = verticalLayout {
-                backgroundResource = R.color.lightBackground
-                title = textView {
-                    textResource = R.string.misc_location
-                    compatAppearance = android.R.style.TextAppearance_Small
-                    padding = dip(20)
-                }
-                map = photoView {
-                    backgroundResource = R.color.darkBackground
-                    minimumScale = 1F
-                    mediumScale = 2.5F
-                    maximumScale = 5F
-                    scaleType = ImageView.ScaleType.CENTER_INSIDE
-                    imageResource = R.drawable.placeholder_event
-                }.lparams(matchParent, wrapContent)
-            }.lparams(matchParent, wrapContent) {
-                topMargin = dip(10)
-            }
-        }
-    }
 }

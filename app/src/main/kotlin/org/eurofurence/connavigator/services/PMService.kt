@@ -8,8 +8,8 @@ import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.util.extensions.now
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
 import org.joda.time.*
 import java.util.*
 

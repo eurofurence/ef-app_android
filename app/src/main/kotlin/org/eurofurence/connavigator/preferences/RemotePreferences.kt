@@ -7,9 +7,9 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import io.reactivex.subjects.BehaviorSubject
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.warn
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
+
 import org.joda.time.DateTime
 
 /**
@@ -28,27 +28,33 @@ object RemotePreferences : AnkoLogger {
             warn { it.message ?: "No message given" }
         }.addOnSuccessListener {
             info { "Successfully updated remote configs" }
-            remoteConfig.activateFetched()
+            remoteConfig.activate()
             observer.onNext(this)
         }.addOnCompleteListener {
             info { "Update complete. Last activated config is now ${remoteConfig.info.fetchTimeMillis}" }
-            info { }
         }
     }
 
     fun init() {
         info { "Initializing remote configs" }
         val config = FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(BuildConfig.DEBUG)
-                .build()
+            .also {
+                // TODO Verify. CF. https://stackoverflow.com/questions/56693336/isdevelopermodeenabled-is-deprecated-this-no-longer-needs-to-be-set-during-d
+
+                if (BuildConfig.DEBUG)
+                    it.minimumFetchIntervalInSeconds = 0;
+            }
+            .build()
 
         info { "Develop mode enabled:  ${BuildConfig.DEBUG}" }
 
-        remoteConfig.setConfigSettings(config)
-        remoteConfig.setDefaults(R.xml.remote)
-        observer.onNext(this)
-
-        update()
+        // TODO: Verify change to async.
+        remoteConfig.setConfigSettingsAsync(config).continueWith {
+            remoteConfig.setDefaultsAsync(R.xml.remote).continueWith {
+                observer.onNext(this)
+                update()
+            }
+        }
     }
 
     val observer: BehaviorSubject<RemotePreferences> = BehaviorSubject.create<RemotePreferences>()

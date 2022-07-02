@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.work.*
 import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.preferences.LoadingState
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
+import org.eurofurence.connavigator.dropins.AnkoLogger
+
 
 class PreloadImageFinishedWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams), AnkoLogger {
     override fun doWork(): Result {
