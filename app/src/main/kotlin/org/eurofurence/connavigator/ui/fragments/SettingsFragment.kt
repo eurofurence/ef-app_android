@@ -2,11 +2,13 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.text.InputType
+import android.text.method.TransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.pawegio.kandroid.activityManager
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
@@ -14,6 +16,7 @@ import org.eurofurence.connavigator.dropins.AnkoLogger
 import org.eurofurence.connavigator.dropins.createView
 import org.eurofurence.connavigator.dropins.*
 import org.eurofurence.connavigator.preferences.*
+import org.eurofurence.connavigator.ui.activities.NavActivity
 import org.eurofurence.connavigator.util.DatetimeProxy
 
 
@@ -91,8 +94,6 @@ class SettingsFragment : Fragment(), AnkoLogger {
                             textColorResource = R.color.textBlack
                         }
                     }
-
-
 
                     textView {
                         textResource = R.string.settings_analytics_settings

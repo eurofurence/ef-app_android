@@ -7,8 +7,6 @@ import android.provider.Browser
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -33,6 +31,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
 import org.eurofurence.connavigator.events.ResetReceiver
 import org.eurofurence.connavigator.preferences.AnalyticsPreferences
 import org.eurofurence.connavigator.preferences.AuthPreferences
@@ -209,40 +208,27 @@ class NavActivity : AppCompatActivity(), NavHost, AnkoLogger, HasDb {
 
         nav.menu.apply {
             // Main
-            this.setFAIcon(this@NavActivity, R.id.navHome, R.string.fa_home_solid)
-            this.setFAIcon(this@NavActivity, R.id.navInfoList, R.string.fa_info_solid)
-            this.setFAIcon(this@NavActivity, R.id.navEventList, R.string.fa_calendar)
-            this.setFAIcon(this@NavActivity, R.id.navDealerList, R.string.fa_shopping_cart_solid)
-            this.setFAIcon(this@NavActivity, R.id.navMapList, R.string.fa_map)
+            this.setFAIcon(this@NavActivity, R.id.navHome, Fa.fa_home)
+            this.setFAIcon(this@NavActivity, R.id.navInfoList, Fa.fa_info)
+            this.setFAIcon(this@NavActivity, R.id.navEventList, Fa.fa_calendar)
+            this.setFAIcon(this@NavActivity, R.id.navDealerList, Fa.fa_shopping_cart)
+            this.setFAIcon(this@NavActivity, R.id.navMapList, Fa.fa_map)
 
             // Personal
-            this.setFAIcon(this@NavActivity, R.id.navLogin, R.string.fa_user_circle)
-            this.setFAIcon(this@NavActivity, R.id.navMessages, R.string.fa_envelope)
-            this.setFAIcon(this@NavActivity, R.id.navFursuitGames, R.string.fa_paw_solid)
-            this.setFAIcon(
-                this@NavActivity,
-                R.id.navAdditionalServices,
-                R.string.fa_book_open_solid
-            )
+            this.setFAIcon(this@NavActivity, R.id.navLogin, Fa.fa_user)
+            this.setFAIcon(this@NavActivity, R.id.navMessages, Fa.fa_envelope)
+            this.setFAIcon(this@NavActivity, R.id.navFursuitGames, Fa.fa_paw)
+            this.setFAIcon(this@NavActivity, R.id.navAdditionalServices, Fa.fa_book)
 
             // Web
-            this.setFAIcon(
-                this@NavActivity,
-                R.id.navWebTwitter,
-                R.string.fa_twitter,
-                isBrand = true
-            )
-            this.setFAIcon(this@NavActivity, R.id.navWebSite, R.string.fa_globe_solid)
+            this.setFAIcon(this@NavActivity, R.id.navWebTwitter, Fa.fa_twitter)
+            this.setFAIcon(this@NavActivity, R.id.navWebSite, Fa.fa_globe)
 
             // App Management
-            this.setFAIcon(
-                this@NavActivity,
-                R.id.navDevReload,
-                R.string.fa_cloud_download_alt_solid
-            )
-            this.setFAIcon(this@NavActivity, R.id.navDevClear, R.string.fa_trash_solid)
-            this.setFAIcon(this@NavActivity, R.id.navSettings, R.string.fa_cog_solid)
-            this.setFAIcon(this@NavActivity, R.id.navAbout, R.string.fa_hands_helping_solid)
+            this.setFAIcon(this@NavActivity, R.id.navDevReload, Fa.fa_cloud_download)
+            this.setFAIcon(this@NavActivity, R.id.navDevClear, Fa.fa_trash)
+            this.setFAIcon(this@NavActivity, R.id.navSettings, Fa.fa_cog)
+            this.setFAIcon(this@NavActivity, R.id.navAbout, Fa.fa_hand_peace_o)
         }
     }
 

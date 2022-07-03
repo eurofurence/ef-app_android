@@ -2,10 +2,12 @@ package org.eurofurence.connavigator.app
 
 import androidx.multidex.MultiDexApplication
 import com.chibatching.kotpref.Kotpref
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.perf.metrics.AddTrace
 import net.danlew.android.joda.JodaTimeAndroid
 import nl.komponents.kovenant.android.startKovenant
 import org.eurofurence.connavigator.R
+import org.eurofurence.connavigator.dropins.AnkoLogger
 import org.eurofurence.connavigator.notifications.NotificationFactory
 import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.preferences.RemotePreferences
@@ -15,7 +17,7 @@ import org.eurofurence.connavigator.services.*
  * The application initialization point.
  */
 @Suppress("unused")
-class ConnavigatorApplication : MultiDexApplication() {
+class ConnavigatorApplication : MultiDexApplication(), AnkoLogger {
     @AddTrace(name = "ConnavigatorApplication:onCreate", enabled = true)
     override fun onCreate() {
         super.onCreate()
@@ -46,8 +48,10 @@ class ConnavigatorApplication : MultiDexApplication() {
         NotificationFactory(applicationContext).setupChannels()
 
         // Listen to cloud updates
-        PushListenerService().subscribe()
-
+        PushListenerService().apply {
+            subscribe()
+            fetch()
+        }
 
         // Check logged in tokens
         AuthPreferences.validate()

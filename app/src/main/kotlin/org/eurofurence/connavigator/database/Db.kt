@@ -14,6 +14,7 @@ import io.swagger.client.model.*
 import org.eurofurence.connavigator.util.v2.*
 import org.eurofurence.connavigator.util.v2.Stored.StoredSource
 import org.eurofurence.connavigator.dropins.AnkoLogger
+import org.eurofurence.connavigator.dropins.fa.Fa
 
 import org.joda.time.DateTime
 import org.joda.time.Days
@@ -399,52 +400,3 @@ fun Db.findLinkFragment(target: String): Map<String?, Any?> {
 
     return mapOf("map" to null, "entry" to null)
 }
-
-
-fun HasDb.glyphsFor(eventEntry: EventRecord) =
-        if (eventEntry.tags == null)
-            emptyList()
-        else
-            arrayListOf<String>().apply {
-                eventEntry.tags.orEmpty().let { tags ->
-                    if ("sponsors_only" in tags)
-                        add("{fa-star-half-o @color/sponsor}")
-                    if ("supersponsors_only" in tags)
-                        add("{fa-star @color/supersponsor}")
-                    if ("kage" in tags) {
-                        add("{fa-bug}")
-                        add("{fa-glass}")
-                    }
-                    if ("art_show" in tags)
-                        add("{fa-photo}")
-                    if ("dealers_den" in tags)
-                        add("{fa-shopping-cart}")
-                    if ("main_stage" in tags)
-                        add("{fa-asterisk}")
-                    if ("photoshoot" in tags)
-                        add("{fa-camera}")
-                }
-            }.toList()
-
-fun HasDb.descriptionFor(eventEntry: EventRecord) =
-        if (eventEntry.tags == null)
-            emptyList()
-        else
-            arrayListOf<String>().apply {
-                eventEntry.tags.orEmpty().let { tags ->
-                    if ("sponsors_only" in tags)
-                        add("{fa-star-half-o} Admittance for Sponsors and Super-Sponsors only")
-                    if ("supersponsors_only" in tags)
-                        add("{fa-star} Admittance for Super-Sponsors only")
-                    if ("kage" in tags)
-                        add("{fa-bug} {fa-glass} May contain traces of cockroach and wine")
-                    if ("art_show" in tags)
-                        add("{fa-photo} Art Show")
-                    if ("dealers_den" in tags)
-                        add("{fa-shopping-cart} Dealers Den")
-                    if ("main_stage" in tags)
-                        add("{fa-asterisk} Main Stage Event")
-                    if ("photoshoot" in tags)
-                        add("{fa-camera} Photoshoot")
-                }
-            }.toList()

@@ -12,8 +12,7 @@ import org.eurofurence.connavigator.util.extensions.booleans
 import org.eurofurence.connavigator.util.extensions.toIntent
 import org.eurofurence.connavigator.services.apiService
 import org.eurofurence.connavigator.dropins.AnkoLogger
-
-
+import org.eurofurence.connavigator.services.PushListenerService
 
 
 /**
@@ -61,6 +60,7 @@ class LoginReceiver : BroadcastReceiver(), AnkoLogger {
             }
 
             LocalBroadcastManager.getInstance(context).sendBroadcastSync(responseIntent)
+            PushListenerService().fetch()
             DataChanged.fire(context, "Login successful")
         } fail { exception ->
             warn { "Failed to retrieve tokens" }

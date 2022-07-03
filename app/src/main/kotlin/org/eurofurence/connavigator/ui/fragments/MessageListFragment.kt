@@ -18,8 +18,8 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.locateDb
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
 import org.eurofurence.connavigator.services.PMService
-import org.eurofurence.connavigator.ui.views.FontAwesomeType
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.toRelative
 
@@ -60,12 +60,12 @@ class FragmentViewMessageList : DisposingFragment(), AnkoLogger, HasDb {
 
             if (message.readDateTimeUtc != null) {
                 holder.icon.textColorResource = android.R.color.tertiary_text_dark
-                holder.icon.text = getString(R.string.fa_envelope_open)
+                holder.icon.text = Fa.fa_envelope_o
                 holder.icon.textSize = 30f
 
             } else {
                 holder.icon.textColorResource = R.color.primaryDark
-                holder.icon.text = getString(R.string.fa_envelope)
+                holder.icon.text = Fa.fa_envelope
                 holder.icon.textSize = 30f
             }
 
@@ -89,7 +89,7 @@ class FragmentViewMessageList : DisposingFragment(), AnkoLogger, HasDb {
                     fontAwesomeView {
                         layoutParams = linearLayoutParams(dip(0), matchParent, 15F)
                         id = R.id.icon
-                        text = getString(R.string.fa_envelope)
+                        text = Fa.fa_envelope
                         textSize = 30f
                         gravity = Gravity.CENTER_VERTICAL
                         setPadding(dip(20), 0, 0, 0)
@@ -109,10 +109,9 @@ class FragmentViewMessageList : DisposingFragment(), AnkoLogger, HasDb {
                     }
 
                     fontAwesomeView {
-                        type= FontAwesomeType.Solid
                         layoutParams = linearLayoutParams(dip(0), matchParent, 10F)
-                        text = getString(R.string.fa_chevron_right_solid)
-                        textSize = 30f
+                        text = Fa.fa_chevron_right
+                        textSize = 24f
                         gravity = Gravity.CENTER
                     }
                 }

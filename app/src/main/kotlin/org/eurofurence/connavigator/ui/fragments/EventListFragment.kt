@@ -1,7 +1,6 @@
 package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +13,13 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.pawegio.kandroid.inputMethodManager
-import com.pawegio.kandroid.runDelayed
 import com.pawegio.kandroid.selector
 import com.pawegio.kandroid.textWatcher
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
 import org.eurofurence.connavigator.preferences.BackgroundPreferences
 import org.eurofurence.connavigator.ui.adapter.DayEventPagerAdapter
 import org.eurofurence.connavigator.ui.adapter.FavoriteEventPagerAdapter
@@ -151,18 +150,8 @@ class EventListFragment : Fragment(), HasDb, AnkoLogger {
         toolbar.inflateMenu(R.menu.event_list_menu)
         context?.apply {
             toolbar.menu.apply {
-                this.setFAIcon(
-                    context!!,
-                    R.id.action_filter,
-                    R.string.fa_filter_solid,
-                    white = true
-                )
-                this.setFAIcon(
-                    context!!,
-                    R.id.action_search,
-                    R.string.fa_search_solid,
-                    white = true
-                )
+                this.setFAIcon(context!!, R.id.action_filter, Fa.fa_filter, white = true)
+                this.setFAIcon(context!!, R.id.action_search, Fa.fa_search, white = true)
             }
         }
         toolbar.setOnMenuItemClickListener {

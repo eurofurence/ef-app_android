@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import io.noties.markwon.Markwon
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.dropins.*
@@ -145,8 +146,9 @@ class FragmentViewAbout : Fragment() {
                     markdownView {
                         layoutParams = linearLayoutParams(matchParent, wrapContent)
 //                        isFocusable = false
-                        text = (
-                                """
+                        text = Markwon
+                            .create(context)
+                            .toMarkdown("""
 **iOS:**
 
 - Fenrikur
@@ -188,8 +190,7 @@ class FragmentViewAbout : Fragment() {
 **Disclaimer**
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-                    """
-                                )
+                    """)
                     }
                 }
 

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
 import com.pawegio.kandroid.toast
+import io.noties.markwon.Markwon
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
@@ -111,8 +112,9 @@ class AnnouncementItemFragment : DisposingFragment(), HasDb, AnkoLogger {
                 loadingIndicator.visibility = View.GONE
 
                 title.text = announcement.title
-                // TODO Markdown
-                text.text = announcement.content
+                text.text = Markwon
+                    .create(requireContext())
+                    .toMarkdown(announcement.content)
 
                 // Retrieve top image
                 val image = announcement.let { it[toAnnouncementImage] }

@@ -17,11 +17,11 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.AnkoLogger
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
 import org.eurofurence.connavigator.notifications.cancelFromRelated
 import org.eurofurence.connavigator.preferences.AuthPreferences
 import org.eurofurence.connavigator.preferences.Authentication
 import org.eurofurence.connavigator.services.PMService
-import org.eurofurence.connavigator.ui.views.FontAwesomeType
 
 import java.util.*
 
@@ -51,7 +51,7 @@ class UserStatusFragment : DisposingFragment(), AnkoLogger, HasDb {
 
             userIcon = fontAwesomeView {
                 layoutParams = linearLayoutParams(dip(0), matchParent, 15F)
-                text = getString(R.string.fa_user)
+                text = Fa.fa_user
                 textSize = 30f
                 gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
             }
@@ -70,9 +70,8 @@ class UserStatusFragment : DisposingFragment(), AnkoLogger, HasDb {
             }
 
             fontAwesomeView {
-                type = FontAwesomeType.Solid
                 layoutParams = linearLayoutParams(dip(0), matchParent, 10F)
-                text = getString(R.string.fa_chevron_right_solid)
+                text = Fa.fa_chevron_right
                 textSize = 24f
                 gravity = Gravity.CENTER
             }

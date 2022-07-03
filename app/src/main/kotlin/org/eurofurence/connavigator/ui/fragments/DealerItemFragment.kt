@@ -1,9 +1,9 @@
 package org.eurofurence.connavigator.ui.fragments
 
-import android.app.Dialog
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -26,16 +26,30 @@ import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.findLinkFragment
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
 import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.services.AnalyticsService
 import org.eurofurence.connavigator.services.AnalyticsService.Action
 import org.eurofurence.connavigator.services.AnalyticsService.Category
-import org.eurofurence.connavigator.ui.views.FontAwesomeType
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
 import java.util.*
 
+
 class DealerItemFragment : DisposingFragment(), HasDb, AnkoLogger {
+
+    private fun renderAvailableDays(days: String) =
+        SpannableStringBuilder()
+            .appendFa(requireContext(), Fa.fa_warning, sp(24f))
+            .append(' ')
+            .append(resources.getString(R.string.dealer_only_present_on, days))
+
+    private fun renderAfterDark() =
+        SpannableStringBuilder()
+            .appendFa(requireContext(), Fa.fa_moon_o, sp(24f))
+            .append(' ')
+            .append(resources.getString(R.string.dealer_located_in_the_after_dark))
+
     private val args: DealerItemFragmentArgs by navArgs()
     private val dealerId by lazy { UUID.fromString(args.dealerId) }
 
@@ -122,12 +136,11 @@ class DealerItemFragment : DisposingFragment(), HasDb, AnkoLogger {
                                 visibility = View.GONE
 
                                 fontAwesomeView {
-                                    type= FontAwesomeType.Solid
                                     layoutParams = linearLayoutParams(dip(0), wrapContent, 10F) {
                                         gravity = Gravity.CENTER_VERTICAL
                                     }
                                     setTextColor(Color.WHITE)
-                                    text = getString(R.string.fa_globe_solid)
+                                    text = Fa.fa_globe
                                     textSize = 24f
                                 }
 
@@ -141,12 +154,11 @@ class DealerItemFragment : DisposingFragment(), HasDb, AnkoLogger {
                                 visibility = View.GONE
 
                                 fontAwesomeView {
-                                    type=FontAwesomeType.Brands
                                     layoutParams = linearLayoutParams(dip(0), wrapContent, 10F) {
                                         gravity = Gravity.CENTER_VERTICAL
                                     }
                                     setTextColor(Color.WHITE)
-                                    text = getString(R.string.fa_twitter)
+                                    text = Fa.fa_twitter
                                     textSize = 24f
                                 }
 
@@ -160,12 +172,11 @@ class DealerItemFragment : DisposingFragment(), HasDb, AnkoLogger {
                                 visibility = View.GONE
 
                                 fontAwesomeView {
-                                    type=FontAwesomeType.Brands
                                     layoutParams = linearLayoutParams(dip(0), wrapContent, 10F) {
                                         gravity = Gravity.CENTER_VERTICAL
                                     }
                                     setTextColor(Color.WHITE)
-                                    text = getString(R.string.fa_telegram)
+                                    text = Fa.fa_comment
                                     textSize = 24f
                                 }
 
@@ -213,16 +224,13 @@ class DealerItemFragment : DisposingFragment(), HasDb, AnkoLogger {
                             verticalLayout {
                                 padding = dip(10)
                                 availableDaysText = fontAwesomeView {
-                                    text = "${getString(R.string.fa_exclamation_triangle_solid)} ${
-                                        resources.getString(R.string.dealer_only_present_on)
-                                    }"
+                                    text = renderAvailableDays("")
                                     textSize = 24f
                                     compatAppearance = R.style.TextAppearance_AppCompat_Medium
                                 }
 
                                 afterDarkText = fontAwesomeView {
-                                    text =
-                                        "${getString(R.string.fa_moon)} ${resources.getString(R.string.dealer_located_in_the_after_dark)}"
+                                    text = renderAfterDark()
                                     textSize = 24f
                                     compatAppearance = R.style.TextAppearance_AppCompat_Medium
                                 }
@@ -453,8 +461,7 @@ class DealerItemFragment : DisposingFragment(), HasDb, AnkoLogger {
         if (dealer.attendsOnFriday == true) availableDayList.add("Fri")
         if (dealer.attendsOnSaturday == true) availableDayList.add("Sat")
 
-        availableDaysText.text =
-            getString(R.string.dealer_only_present_on, availableDayList.joinToString(", "))
+        availableDaysText.text = renderAvailableDays(availableDayList.joinToString(", "))
 
         // After dark
         afterDarkText.visibility = if (dealer.isAfterDark == true) View.VISIBLE else View.GONE

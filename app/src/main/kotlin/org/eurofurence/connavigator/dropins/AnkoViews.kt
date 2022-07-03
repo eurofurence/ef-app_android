@@ -19,7 +19,7 @@ import com.github.lzyzsd.circleprogress.ArcProgress
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
-import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
+import org.eurofurence.connavigator.dropins.fa.FaView
 import org.eurofurence.connavigator.ui.views.MultitouchableViewPager
 import java.lang.IllegalStateException
 
@@ -172,8 +172,8 @@ inline fun ViewGroup.markdownView(crossinline block: TextView.() -> Unit) =
 
 // TODO: Dropin. Verify all sites.
 inline fun ViewGroup.fontAwesomeView(
-    crossinline block: FontAwesomeTextView.() -> Unit
-) = FontAwesomeTextView(context).apply(block).also { addView(it) }
+    crossinline block: FaView.() -> Unit
+) = FaView(context).apply(block).also { addView(it) }
 
 inline fun ViewGroup.photoView(crossinline block: PhotoView.() -> Unit) =
     PhotoView(context).apply(block).also { addView(it) }

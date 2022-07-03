@@ -1,5 +1,6 @@
 package org.eurofurence.connavigator.dropins
 
+import android.app.Activity
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -85,11 +87,41 @@ fun coordinatorLayoutParams(w: Int, h: Int) =
 inline fun coordinatorLayoutParams(w: Int, h: Int, crossinline fn: CoordinatorLayoutInit) =
     CoordinatorLayout.LayoutParams(w, h).apply(fn)
 
+fun Activity.dip(value: Float) =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, resources.displayMetrics)
+
+fun Activity.dip(value: Int) =
+    dip(value.toFloat()).toInt()
+
+fun Fragment.dip(value: Float) =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, resources.displayMetrics)
+
+fun Fragment.dip(value: Int) =
+    dip(value.toFloat()).toInt()
+
 fun View.dip(value: Float) =
     TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, resources.displayMetrics)
 
 fun View.dip(value: Int) =
     dip(value.toFloat()).toInt()
+
+fun Activity.sp(value: Float) =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, resources.displayMetrics)
+
+fun Activity.sp(value: Int) =
+    sp(value.toFloat()).toInt()
+
+fun Fragment.sp(value: Float) =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, resources.displayMetrics)
+
+fun Fragment.sp(value: Int) =
+    sp(value.toFloat()).toInt()
+
+fun View.sp(value: Float) =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, resources.displayMetrics)
+
+fun View.sp(value: Int) =
+    sp(value.toFloat()).toInt()
 
 /**
  * Sets all paddings. Getting returns the left padding.

@@ -2,6 +2,7 @@ package org.eurofurence.connavigator.ui.fragments
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,13 +17,15 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.runDelayed
+import io.noties.markwon.Markwon
 import io.swagger.client.model.EventRecord
 import org.eurofurence.connavigator.BuildConfig
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.descriptionFor
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
+import org.eurofurence.connavigator.dropins.fa.FaDrawable
 import org.eurofurence.connavigator.events.EventFavoriteBroadcast
 import org.eurofurence.connavigator.preferences.AppPreferences
 import org.eurofurence.connavigator.services.AnalyticsService
@@ -138,7 +141,7 @@ class EventItemFragment : DisposingFragment(), HasDb, AnkoLogger {
 
                         extrasContent = fontAwesomeView {
                             layoutParams = linearLayoutParams(matchParent, wrapContent, 5f)
-                            text = "${getString(R.string.fa_home_solid)} Glyphs"
+                            text = "${Fa.fa_home} Glyphs"
                             singleLine = false
                             maxLines = 6
                         }
@@ -243,7 +246,9 @@ class EventItemFragment : DisposingFragment(), HasDb, AnkoLogger {
             (event.description.markdownLinks() ?: "").let {
                 if (it != description.tag) {
                     description.tag = it
-                    description.text = it//TODO Markdown
+                    description.text = Markwon
+                        .create(requireContext())
+                        .toMarkdown(it)
                 }
             }
 
@@ -270,14 +275,53 @@ class EventItemFragment : DisposingFragment(), HasDb, AnkoLogger {
                 }
             }
 
-            val description = descriptionFor(event).joinToString("\r\n\r\n")
-            description.let {
-                if (it != extrasContent.tag) {
-                    extrasContent.tag = it
-                    extrasContent.text = it
-                    extras.visibility = if (it == "") View.GONE else View.VISIBLE
-                }
+
+            // Description rendering.
+            val description = SpannableStringBuilder()
+            if ("sponsors_only" in event.tags) {
+                if (description.isNotEmpty()) description.append("\r\n\r\n")
+                description.appendFa(requireContext(), Fa.fa_star_half_o)
+                description.append(" Admittance for Sponsors and Super-Sponsors only")
             }
+
+            if ("supersponsors_only" in event.tags) {
+                if (description.isNotEmpty()) description.append("\r\n\r\n")
+                description.appendFa(requireContext(), Fa.fa_star)
+                description.append(" Admittance for Super-Sponsors only")
+            }
+
+            if ("kage" in event.tags) {
+                if (description.isNotEmpty()) description.append("\r\n\r\n")
+                description.appendFa(requireContext(), Fa.fa_bug)
+                description.append(" May contain traces of cockroach and wine")
+            }
+
+            if ("art_show" in event.tags) {
+                if (description.isNotEmpty()) description.append("\r\n\r\n")
+                description.appendFa(requireContext(), Fa.fa_photo)
+                description.append(" Art Show")
+            }
+
+            if ("dealers_den" in event.tags) {
+                if (description.isNotEmpty()) description.append("\r\n\r\n")
+                description.appendFa(requireContext(), Fa.fa_shopping_cart)
+                description.append(" Dealers Den")
+            }
+
+            if ("main_stage" in event.tags) {
+                if (description.isNotEmpty()) description.append("\r\n\r\n")
+                description.appendFa(requireContext(), Fa.fa_asterisk)
+                description.append(" Main Stage Event")
+            }
+
+            if ("photoshoot" in event.tags) {
+                if (description.isNotEmpty()) description.append("\r\n\r\n")
+                description.appendFa(requireContext(), Fa.fa_camera)
+                description.append(" Photoshoot")
+            }
+
+            extrasContent.text = description
+            extras.visibility = if (description.isEmpty()) View.GONE else View.VISIBLE
 
             setFabIconState(db.faves.contains(eventId))
 
@@ -301,7 +345,9 @@ class EventItemFragment : DisposingFragment(), HasDb, AnkoLogger {
             feedbackButton.apply {
                 visibility = if (event.isAcceptingFeedback) View.VISIBLE else View.GONE
 
-                setImageDrawable(context.createFADrawable(R.string.fa_comment))
+                setImageDrawable(FaDrawable(context).apply {
+                    text = Fa.fa_comment
+                })
 
                 setOnClickListener {
                     val action =
@@ -350,11 +396,15 @@ class EventItemFragment : DisposingFragment(), HasDb, AnkoLogger {
     private fun setFabIconState(isFavorite: Boolean) {
         info("Updating icon of FAB for $eventId")
         if (isFavorite) {
-            favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heart, true))
+            favoriteButton.setImageDrawable(FaDrawable(requireContext()).apply {
+                text = Fa.fa_heart
+            })
             favoriteButton.backgroundTintList =
                 ColorStateList.valueOf(resources.getColor(R.color.accent))
         } else {
-            favoriteButton.setImageDrawable(context?.createFADrawable(R.string.fa_heart, false))
+            favoriteButton.setImageDrawable(FaDrawable(requireContext()).apply {
+                text = Fa.fa_heart
+            })
             favoriteButton.backgroundTintList =
                 ColorStateList.valueOf(resources.getColor(R.color.primaryLight))
         }

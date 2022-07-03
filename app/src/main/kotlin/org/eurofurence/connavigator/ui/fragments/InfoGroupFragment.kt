@@ -16,8 +16,8 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
-import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
-import org.eurofurence.connavigator.ui.views.FontAwesomeType
+import org.eurofurence.connavigator.dropins.fa.Fa
+import org.eurofurence.connavigator.dropins.fa.FaView
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
@@ -38,7 +38,7 @@ class InfoGroupFragment : DisposingFragment(), HasDb, AnkoLogger {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             InfoItemViewHolder(parent.context.createView {
                 linearLayout {
-                    setPadding(0, dip(10), 0, dip(10))
+                    setPadding(0, dip(20), 0, dip(20))
                     id = R.id.layout
                     weightSum = 20F
                     layoutParams = viewGroupLayoutParams(matchParent, wrapContent)
@@ -57,9 +57,8 @@ class InfoGroupFragment : DisposingFragment(), HasDb, AnkoLogger {
                     }
 
                     fontAwesomeView {
-                        type= FontAwesomeType.Solid
                         layoutParams = linearLayoutParams(0, matchParent, 3f)
-                        text = getString(R.string.fa_chevron_right_solid)
+                        text = Fa.fa_chevron_right
                         textSize = 24f
                         gravity = Gravity.CENTER
                     }
@@ -92,7 +91,7 @@ class InfoGroupFragment : DisposingFragment(), HasDb, AnkoLogger {
     lateinit var uiDescription: TextView
     lateinit var uiRecycler: RecyclerView
     lateinit var uiGroupLayout: LinearLayout
-    lateinit var uiDropdownCaret: FontAwesomeTextView // TODO: FA View.
+    lateinit var uiDropdownCaret: FaView // TODO: FA View.
     lateinit var uiMainIcon: TextView
     lateinit var uiRecyclerLayout: LinearLayout
 
@@ -148,10 +147,9 @@ class InfoGroupFragment : DisposingFragment(), HasDb, AnkoLogger {
                 verticalLayout {
                     layoutParams = linearLayoutParams(dip(0), matchParent, 3f)
                     uiDropdownCaret = fontAwesomeView {
-                        type=FontAwesomeType.Solid
                         layoutParams = linearLayoutParams(matchParent, matchParent)
                         gravity = Gravity.CENTER
-                        text = getString(R.string.fa_chevron_down_solid)
+                        text = Fa.fa_chevron_down
                         textSize = 24f
                     }
                 }
@@ -198,11 +196,11 @@ class InfoGroupFragment : DisposingFragment(), HasDb, AnkoLogger {
     private fun setDropdown() {
         if (uiRecyclerLayout.visibility == View.GONE) {
             uiRecyclerLayout.visibility = View.VISIBLE
-            uiDropdownCaret.text = getString(R.string.fa_chevron_up_solid)
+            uiDropdownCaret.text = Fa.fa_chevron_up
             uiDropdownCaret.textSize = 24f
         } else {
             uiRecyclerLayout.visibility = View.GONE
-            uiDropdownCaret.text = getString(R.string.fa_chevron_down_solid)
+            uiDropdownCaret.text = Fa.fa_chevron_down
             uiDropdownCaret.textSize = 24f
         }
     }

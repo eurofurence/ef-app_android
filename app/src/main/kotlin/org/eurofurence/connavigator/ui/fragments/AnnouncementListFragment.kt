@@ -15,6 +15,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
 import org.eurofurence.connavigator.preferences.AppPreferences
 import org.eurofurence.connavigator.ui.views.NonScrollingLinearLayout
 import org.eurofurence.connavigator.util.delegators.view
@@ -57,7 +58,7 @@ class AnnouncementListFragment : DisposingFragment(), HasDb, AnkoLogger {
                     weightSum = 100F
 
                     fontAwesomeView {
-                        text = getString(R.string.fa_file_word)
+                        text = Fa.fa_file_text
                         textSize = 24f
                         layoutParams = linearLayoutParams(0, matchParent, 15f) {
                             setMargins(0, dip(5), 0, 0)

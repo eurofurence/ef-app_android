@@ -21,6 +21,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
 import org.eurofurence.connavigator.ui.LayoutConstants
 import org.eurofurence.connavigator.ui.filters.start
 import org.eurofurence.connavigator.util.extensions.*
@@ -89,7 +90,7 @@ class EventFeedbackFragment : Fragment(), HasDb {
                                 0,
                                 dip(LayoutConstants.MARGIN_LARGE)
                             )
-                            text = getString(R.string.fa_comment)
+                            text = Fa.fa_comment
                             textSize = LayoutConstants.TEXT_ICON_SIZE
                             textColorResource = R.color.primaryDark
                             gravity = Gravity.CENTER

@@ -3,6 +3,7 @@ package org.eurofurence.connavigator.ui.fragments
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,23 +11,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pawegio.kandroid.runDelayed
-import io.reactivex.disposables.Disposables
 import io.swagger.client.model.EventRecord
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
-import org.eurofurence.connavigator.database.glyphsFor
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
 import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.ui.dialogs.eventDialog
 import org.eurofurence.connavigator.ui.filters.FilterChain
@@ -55,6 +55,9 @@ class EventRecyclerFragment : DisposingFragment(), HasDb, AnkoLogger {
     var daysInsteadOfGlyphs = false
 
     val layoutManager get() = eventList?.layoutManager
+
+    val sponsorColor get() = ContextCompat.getColor(requireContext(), R.color.sponsor)
+    val supersponsorColor get() = ContextCompat.getColor(requireContext(), R.color.supersponsor)
 
     /**
      * Assigns the [arguments] with the given parameters.
@@ -121,7 +124,7 @@ class EventRecyclerFragment : DisposingFragment(), HasDb, AnkoLogger {
                 }
 
                 // The title of the event.
-                fontAwesomeView{
+                fontAwesomeView {
                     setPadding(dip(15), dip(10), dip(15), dip(5))
                     backgroundColorResource = R.color.lightBackground
                     compatAppearance = android.R.style.TextAppearance_Medium
@@ -130,7 +133,8 @@ class EventRecyclerFragment : DisposingFragment(), HasDb, AnkoLogger {
 
                     // Bind from event's title.
                     from { isDeviatingFromConBook to fullTitle() } into { (deviating, title) ->
-                        text = if (deviating) "${getString(R.string.fa_pencil_alt_solid)} $title" else title
+                        text =
+                            if (deviating) "${Fa.fa_pencil} $title" else title
                     }
                 }
 
@@ -233,7 +237,7 @@ class EventRecyclerFragment : DisposingFragment(), HasDb, AnkoLogger {
                         backgroundColorResource = R.color.lightBackground
                         isSingleLine = true
                         gravity = Gravity.CENTER
-                        text = getString(R.string.fa_heart)
+                        text = Fa.fa_heart
                         textColorResource = R.color.favorite
 
                         from { id in faves } into {
@@ -249,7 +253,26 @@ class EventRecyclerFragment : DisposingFragment(), HasDb, AnkoLogger {
                         gravity = Gravity.CENTER_VERTICAL
 
                         // Bind from glyphs plus some extra glyphs.
-                        from { glyphsFor(this) } into { text = it.joinToString(" ") }
+                        from { tags.orEmpty() } into {
+                            val builder = SpannableStringBuilder()
+                            if ("sponsors_only" in it)
+                                builder.appendFa(context, Fa.fa_star_half_o, color = sponsorColor)
+                            if ("supersponsors_only" in it)
+                                builder.appendFa(context, Fa.fa_star, color = supersponsorColor)
+                            if ("kage" in it) {
+                                builder.appendFa(context, Fa.fa_bug)
+                                builder.appendFa(context, Fa.fa_glass)
+                            }
+                            if ("art_show" in it)
+                                builder.appendFa(context, Fa.fa_photo)
+                            if ("dealers_den" in it)
+                                builder.appendFa(context, Fa.fa_shopping_cart)
+                            if ("main_stage" in it)
+                                builder.appendFa(context, Fa.fa_asterisk)
+                            if ("photoshoot" in it)
+                                builder.appendFa(context, Fa.fa_camera)
+                            text = builder
+                        }
                     }
                 }
 

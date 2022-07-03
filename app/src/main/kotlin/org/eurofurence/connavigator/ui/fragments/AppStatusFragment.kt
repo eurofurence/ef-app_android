@@ -12,7 +12,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
-import org.eurofurence.connavigator.ui.views.FontAwesomeType
+import org.eurofurence.connavigator.dropins.fa.Fa
 
 class AppStatusFragment : DisposingFragment(), HasDb {
     override val db by lazyLocateDb()
@@ -39,8 +39,7 @@ class AppStatusFragment : DisposingFragment(), HasDb {
                     weightSum = 100f
 
                     fontAwesomeView {
-                        type= FontAwesomeType.Solid
-                        text = getString(R.string.fa_exclamation_triangle_solid)
+                        text = Fa.fa_warning
                         textSize = 30f
                         textColorResource = R.color.textBlack
                         layoutParams = linearLayoutParams(dip(0), matchParent, 15F)

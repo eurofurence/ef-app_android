@@ -21,6 +21,7 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
 import org.eurofurence.connavigator.ui.adapter.DealerRecyclerAdapter
 import org.eurofurence.connavigator.util.extensions.setFAIcon
 
@@ -151,12 +152,7 @@ class DealerListFragment : Fragment(), HasDb, AnkoLogger {
                 this.menu.clear()
                 this.inflateMenu(R.menu.dealer_list_menu)
                 this.context?.let {
-                    this.menu.setFAIcon(
-                        it,
-                        R.id.action_search,
-                        R.string.fa_search_solid,
-                        white = true
-                    )
+                    this.menu.setFAIcon(it, R.id.action_search, Fa.fa_search, white = true)
                 }
                 this.setOnMenuItemClickListener {
                     when (it.itemId) {

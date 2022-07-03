@@ -1,18 +1,15 @@
-package org.eurofurence.connavigator.ui.views
+package org.eurofurence.connavigator.dropins.fa
 
 import android.content.Context
-import org.eurofurence.connavigator.ui.views.FontCache.get
 import android.graphics.drawable.Drawable
 import android.text.TextPaint
 import android.text.StaticLayout
 import android.text.Layout
 import android.content.res.ColorStateList
 import android.content.res.Resources
-import android.content.res.TypedArray
 import android.graphics.*
-import org.eurofurence.connavigator.R
-import org.eurofurence.connavigator.ui.views.FontCache
 import android.util.TypedValue
+import org.eurofurence.connavigator.dropins.fa.FaCache
 
 /**
  * A Drawable object that draws text.
@@ -30,8 +27,24 @@ import android.util.TypedValue
  * size based on the Path constraints.
  */
 // https://github.com/devunwired/textdrawable/blob/master/sample/src/main/java/com/example/textdrawable/drawable/TextDrawable.java
-class FontDrawable(context: Context, faIconRes: Int, isSolid: Boolean, isBrand: Boolean) :
-    Drawable() {
+class FaDrawable : Drawable {
+
+    constructor(context: Context) {
+        //Used to load and scale resource items
+        mResources = context.resources
+        //Definition of this drawables size
+        mTextBounds = Rect()
+        //Paint to use for the text
+        mTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
+        mTextPaint!!.density = mResources!!.displayMetrics.density
+        mTextPaint!!.isDither = true
+
+        setTextColor(ColorStateList.valueOf(-0x1000000))
+        setRawTextSize(textSize.toFloat())
+
+        setTypeface(FaCache.fontAwesome(context), -1)
+    }
+
     /* Resources for scaling values to the given device */
     private var mResources: Resources? = null
 
@@ -55,48 +68,7 @@ class FontDrawable(context: Context, faIconRes: Int, isSolid: Boolean, isBrand: 
 
     /* Text string to draw */
     private var mText: CharSequence = ""
-    private fun init(context: Context, faIconRes: Int, isSolid: Boolean, isBrand: Boolean) {
-        //Used to load and scale resource items
-        mResources = context.resources
-        //Definition of this drawables size
-        mTextBounds = Rect()
-        //Paint to use for the text
-        mTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-        mTextPaint!!.density = mResources!!.displayMetrics.density
-        mTextPaint!!.isDither = true
-        var textSize = 15
-        var textColor: ColorStateList? = null
-        var styleIndex = -1
-        var typefaceIndex = -1
 
-        // TODO Implement
-        //Set default parameters from the current theme
-//        val a = context.theme.obtainStyledAttributes(R.styleable.TextAppearance)
-//        for (i in 0 until a.indexCount) {
-//            val attr = a.getIndex(i)
-//            when (attr) {
-//                0 -> textSize = a.getDimensionPixelSize(attr, textSize)
-//                6 -> typefaceIndex = a.getInt(attr, typefaceIndex)
-//                4 -> styleIndex = a.getInt(attr, styleIndex)
-//                1 -> textColor = a.getColorStateList(attr)
-//                else -> {}
-//            }
-//        }
-//        a.recycle()
-
-        setTextColor(textColor ?: ColorStateList.valueOf(-0x1000000))
-        setRawTextSize(textSize.toFloat())
-        var tf: Typeface? = null
-        tf = if (isSolid) {
-            FontCache[context, FontCache.FA_FONT_SOLID]
-        } else if (isBrand) {
-            FontCache[context, FontCache.FA_FONT_BRANDS]
-        } else {
-            FontCache[context, FontCache.FA_FONT_REGULAR]
-        }
-        setTypeface(tf, styleIndex)
-        text = context.getString(faIconRes)
-    }
     /**
      * Return the text currently being displayed
      */
@@ -107,8 +79,8 @@ class FontDrawable(context: Context, faIconRes: Int, isSolid: Boolean, isBrand: 
      */
     var text: CharSequence?
         get() = mText
-        set(text) {
-            var text = text
+        set(value) {
+            var text = value
             if (text == null) text = ""
             mText = text
             measureContent()
@@ -372,16 +344,5 @@ class FontDrawable(context: Context, faIconRes: Int, isSolid: Boolean, isBrand: 
         if (mTextPaint!!.colorFilter !== cf) {
             mTextPaint!!.colorFilter = cf
         }
-    }
-
-    companion object {
-        /* Platform XML constants for typeface */
-        private const val SANS = 1
-        private const val SERIF = 2
-        private const val MONOSPACE = 3
-    }
-
-    init {
-        init(context, faIconRes, isSolid, isBrand)
     }
 }

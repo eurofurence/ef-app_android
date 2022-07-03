@@ -1,7 +1,5 @@
 package org.eurofurence.connavigator.ui.adapter
 
-import android.text.Spannable
-import android.text.SpannableStringBuilder
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
 import android.view.Gravity
@@ -10,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.text.scale
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import io.swagger.client.model.DealerRecord
@@ -18,10 +15,10 @@ import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.Db
 import org.eurofurence.connavigator.database.HasDb
 import org.eurofurence.connavigator.dropins.*
+import org.eurofurence.connavigator.dropins.fa.Fa
 import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.ui.dialogs.DealerDialog
 import org.eurofurence.connavigator.ui.fragments.DealerListFragmentDirections
-import org.eurofurence.connavigator.ui.views.FontAwesomeType
 import org.eurofurence.connavigator.util.delegators.view
 import org.eurofurence.connavigator.util.extensions.*
 import org.eurofurence.connavigator.util.v2.get
@@ -140,16 +137,14 @@ class DealerRecyclerAdapter(
                         gravity = Gravity.CENTER_VERTICAL
                     }
                     fontAwesomeView {
-                        type=FontAwesomeType.Solid
-                        text = context.getString(R.string.fa_exclamation_triangle_solid)
+                        text = Fa.fa_exclamation_triangle
                         textSize = 24f
-                        textSizeUnit
                         id = R.id.danger
                         gravity = Gravity.CENTER
                         setPadding(0, 0, 0, dip(5))
                     }
                     fontAwesomeView {
-                        text = context.getString(R.string.fa_moon)
+                        text = Fa.fa_moon_o
                         textSize = 24f
                         id = R.id.moon
                         gravity = Gravity.CENTER

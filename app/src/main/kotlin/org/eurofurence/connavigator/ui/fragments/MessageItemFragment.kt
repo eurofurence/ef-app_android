@@ -1,4 +1,4 @@
-package org.eurofurence.connavigator.fragments
+package org.eurofurence.connavigator.ui.fragments
 
 import android.os.Bundle
 import android.view.Gravity
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
 import com.pawegio.kandroid.longToast
+import io.noties.markwon.Markwon
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.swagger.client.model.PrivateMessageRecord
 import org.eurofurence.connavigator.R
@@ -18,8 +19,7 @@ import nl.komponents.kovenant.task
 import nl.komponents.kovenant.ui.failUi
 import nl.komponents.kovenant.ui.successUi
 import org.eurofurence.connavigator.dropins.*
-import org.eurofurence.connavigator.ui.fragments.DisposingFragment
-import org.eurofurence.connavigator.ui.fragments.MessageItemFragmentArgs
+import org.eurofurence.connavigator.dropins.fa.Fa
 
 import java.util.*
 
@@ -27,13 +27,13 @@ class MessageItemFragment : DisposingFragment(), AnkoLogger {
     val args: MessageItemFragmentArgs by navArgs()
     val messageId get() = UUID.fromString(args.messageId)
 
-    lateinit var icon: TextView // TODO: Icon text
+    lateinit var icon: TextView
     lateinit var title: TextView
     lateinit var author: TextView
     lateinit var sent: TextView
     lateinit var received: TextView
     lateinit var read: TextView
-    lateinit var content: TextView // TODO: Markdown
+    lateinit var content: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +52,7 @@ class MessageItemFragment : DisposingFragment(), AnkoLogger {
 
                 icon = fontAwesomeView {
                     layoutParams = linearLayoutParams(dip(0), matchParent, 15F)
-                    text = getString(R.string.fa_envelope)
+                    text = Fa.fa_envelope
                     textSize = 30f
                     gravity = Gravity.LEFT or Gravity.TOP
                     setPadding(dip(20), dip(20), 0, 0)
@@ -94,8 +94,9 @@ class MessageItemFragment : DisposingFragment(), AnkoLogger {
 
             linearLayout {
                 content = markdownView {
-                    // TODO: Markdown
-                    text = resources.getString(R.string.misc_content)
+                    text = Markwon
+                        .create(context)
+                        .toMarkdown(resources.getString(R.string.misc_content))
                 }
                 padding = dip(20)
                 backgroundResource = R.color.lightBackground
@@ -143,14 +144,16 @@ class MessageItemFragment : DisposingFragment(), AnkoLogger {
                     ?: getString(R.string.misc_not_yet)
             )
 
-            content.text = message.message // TODO: Markdown
+            content.text = Markwon
+                .create(requireContext())
+                .toMarkdown(message.message)
 
             if (message.readDateTimeUtc == null) {
-                icon.text = getString(R.string.fa_envelope)
+                icon.text = Fa.fa_envelope
                 icon.textSize = 30f
             } else {
 
-                icon.text = getString(R.string.fa_envelope_open)
+                icon.text = Fa.fa_envelope_o
                 icon.textSize = 30f
             }
 

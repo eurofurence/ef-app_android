@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
 import com.github.chrisbanes.photoview.PhotoView
+import io.noties.markwon.Markwon
 import io.swagger.client.model.KnowledgeEntryRecord
 import org.eurofurence.connavigator.R
 import org.eurofurence.connavigator.database.HasDb
@@ -18,7 +19,7 @@ import org.eurofurence.connavigator.database.lazyLocateDb
 import org.eurofurence.connavigator.dropins.*
 import org.eurofurence.connavigator.services.ImageService
 import org.eurofurence.connavigator.services.AnalyticsService
-import org.eurofurence.connavigator.ui.views.FontAwesomeTextView
+import org.eurofurence.connavigator.dropins.fa.FaView
 import org.eurofurence.connavigator.util.extensions.*
 
 import java.util.*
@@ -34,8 +35,8 @@ class InfoItemFragment : DisposingFragment(), HasDb {
     lateinit var uiLayout: LinearLayout
     lateinit var uiImage: PhotoView
     lateinit var uiTitle: TextView
-    lateinit var uiText: TextView//TODO: MArkdown
-    lateinit var uiIcon: FontAwesomeTextView
+    lateinit var uiText: TextView
+    lateinit var uiIcon: FaView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -118,7 +119,9 @@ class InfoItemFragment : DisposingFragment(), HasDb {
 
             // Set the properties of the view
             uiTitle.text = knowledgeEntry.title
-            uiText.text = knowledgeEntry.text // TODO: Load markdown
+            uiText.text = Markwon
+                .create(requireContext())
+                .toMarkdown(knowledgeEntry.text)
             uiIcon.text = knowledgeGroup.fontAwesomeIconCharacterUnicodeAddress?.toUnicode() ?: ""
 
             uiLayout.removeAllViewsInLayout()
